@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KetoLab | Lista de Compras</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","primary-container":"#ff4d00","on-primary":"#ffffff","on-primary-container":"#ffffff","surface":"#0a0a0a","surface-container":"#181717","surface-container-low":"#111010","surface-container-high":"#1e1c1c","surface-container-highest":"#242222","on-surface":"#ffffff","on-surface-variant":"#adaaaa","outline":"#767575","secondary":"#ffb300","tertiary":"#ffc107","error":"#ff7351","background":"#0a0a0a"},fontFamily:{headline:["Plus Jakarta Sans","sans-serif"],body:["Inter","sans-serif"],label:["Inter","sans-serif"]}}}};
+</script>
+<style>
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}.glass-card{background:rgba(36,34,34,0.4);backdrop-filter:blur(20px);border:1px solid rgba(255,77,0,0.1)}.sidebar-collapsed .sidebar-nav{width:72px}.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px}.sidebar-collapsed~main .main-content{margin-left:72px}.sidebar-toggle-btn{left:256px;transition:left 0.3s ease}.sidebar-collapsed~.sidebar-toggle-btn{left:72px}
+</style>
+</head>
+<body class="bg-background text-on-surface font-body">
+<nav id="sidebarNav" class="sidebar-nav hidden md:flex fixed left-0 top-0 h-full w-64 flex-col py-6 bg-surface-container-low z-50 border-r border-primary-container/10 transition-all duration-300">
+<div class="px-6 mb-8 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1">nutrition</span></div>
+<div><h1 class="text-lg font-black text-primary-container font-headline tracking-tighter">KetoLab</h1><span class="text-[9px] text-white/40 font-label tracking-[0.2em] uppercase">High-Performance Fuel</span></div>
+</div>
+</div>
+<div class="flex-1 space-y-1 px-4">
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 text-white/60 hover:text-white mx-2 font-headline text-sm font-medium tracking-wide hover:bg-surface-container-high rounded-full transition-all" href="index.html"><span class="material-symbols-outlined">dashboard</span><span class="sidebar-text">Inicio</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 text-white/60 hover:text-white mx-2 font-headline text-sm font-medium tracking-wide hover:bg-surface-container-high rounded-full transition-all" href="alimentos.html"><span class="material-symbols-outlined">restaurant</span><span class="sidebar-text">Alimentos</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 text-white/60 hover:text-white mx-2 font-headline text-sm font-medium tracking-wide hover:bg-surface-container-high rounded-full transition-all" href="plan.html"><span class="material-symbols-outlined">event_note</span><span class="sidebar-text">Plan</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 text-white/60 hover:text-white mx-2 font-headline text-sm font-medium tracking-wide hover:bg-surface-container-high rounded-full transition-all" href="recetas.html"><span class="material-symbols-outlined">menu_book</span><span class="sidebar-text">Recetas</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 text-white bg-primary-container rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all translate-x-1 shadow-lg shadow-primary-container/20" href="compras.html"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">shopping_cart</span><span class="sidebar-text">Compras</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 text-white/60 hover:text-white mx-2 font-headline text-sm font-medium tracking-wide hover:bg-surface-container-high rounded-full transition-all" href="macros.html"><span class="material-symbols-outlined">donut_small</span><span class="sidebar-text">Macros</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 text-white/60 hover:text-white mx-2 font-headline text-sm font-medium tracking-wide hover:bg-surface-container-high rounded-full transition-all" href="checklist.html"><span class="material-symbols-outlined">fact_check</span><span class="sidebar-text">Check</span></a>
+</div>
+</nav>
+<button id="sidebarToggle" onclick="toggleSidebar()" class="sidebar-toggle-btn hidden md:flex fixed top-20 z-50 w-8 h-8 bg-surface-container-low hover:bg-surface-container-high border border-white/10 rounded-r-lg items-center justify-center transition-all duration-300"><span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_left</span></button>
+<header class="topbar-desktop hidden md:flex fixed top-0 w-full h-20 px-4 md:px-8 flex items-center justify-between z-40 bg-gradient-to-b from-surface-container-low to-transparent transition-all duration-300">
+<div class="topbar-pl pl-64 transition-all duration-300"><h2 class="text-xl md:text-2xl font-black text-white tracking-tighter font-headline">Lista de Compras</h2></div>
+<div class="flex items-center gap-4"><button class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors" onclick="printList()">print</button><button class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors" onclick="toggleTheme()">dark_mode</button></div>
+</header>
+<header class="md:hidden fixed top-0 w-full h-14 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5 px-4 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2"><div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-white text-base" style="font-variation-settings:'FILL' 1">nutrition</span></div><span class="text-base font-black text-primary-container tracking-tight font-headline">KetoLab</span></a>
+<div class="flex items-center gap-3"><button class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors" onclick="printList()">print</button><button class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors" onclick="toggleTheme()">dark_mode</button></div>
+</header>
+<main class="main-content md:ml-64 pt-14 md:pt-24 px-4 md:px-6 pb-20 md:pb-12 min-h-screen transition-all duration-300">
+<div class="max-w-4xl mx-auto space-y-8">
+<section><p class="text-xs font-label text-on-surface-variant uppercase tracking-[0.2em]">Semanal</p><h1 class="text-3xl font-headline font-black text-white tracking-tighter mt-1">Tu Lista de Compras</h1><p class="text-on-surface-variant mt-2">Toca los items para marcarlos</p></section>
+<section id="shoppingList" class="space-y-4"></section>
+</div>
+</main>
+<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-16 flex justify-around items-center px-2 z-50">
+<a class="flex flex-col items-center gap-0.5 text-white/50 min-w-[52px] py-1" href="index.html"><span class="material-symbols-outlined text-lg">dashboard</span><span class="text-[9px] font-bold">Inicio</span></a>
+<a class="flex flex-col items-center gap-0.5 text-white/50 min-w-[52px] py-1" href="alimentos.html"><span class="material-symbols-outlined text-lg">restaurant</span><span class="text-[9px] font-bold">Alimentos</span></a>
+<a class="flex flex-col items-center gap-0.5 text-white/50 min-w-[52px] py-1" href="plan.html"><span class="material-symbols-outlined text-lg">event_note</span><span class="text-[9px] font-bold">Plan</span></a>
+<a class="flex flex-col items-center gap-0.5 text-white/50 min-w-[52px] py-1" href="recetas.html"><span class="material-symbols-outlined text-lg">menu_book</span><span class="text-[9px] font-bold">Recetas</span></a>
+<a class="flex flex-col items-center gap-0.5 text-primary-container min-w-[52px] py-1" href="compras.html"><span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1">shopping_cart</span><span class="text-[9px] font-bold">Compras</span></a>
+<a class="flex flex-col items-center gap-0.5 text-white/50 min-w-[52px] py-1" href="macros.html"><span class="material-symbols-outlined text-lg">donut_small</span><span class="text-[9px] font-bold">Macros</span></a>
+<a class="flex flex-col items-center gap-0.5 text-white/50 min-w-[52px] py-1" href="checklist.html"><span class="material-symbols-outlined text-lg">fact_check</span><span class="text-[9px] font-bold">Check</span></a>
+</nav>
+<script>
+function toggleTheme(){document.documentElement.classList.toggle("dark");localStorage.setItem("theme",document.documentElement.classList.contains("dark")?"dark":"light")}
+function toggleSidebar(){var b=document.body;var s=document.getElementById("sidebarNav");var t=document.getElementById("sidebarToggle");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");b.classList.toggle("sidebar-collapsed");if(b.classList.contains("sidebar-collapsed")){s.style.width="72px";p.style.paddingLeft="88px";m.style.marginLeft="72px";t.innerHTML='<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_right</span>';localStorage.setItem("sidebarCollapsed","true")}else{s.style.width="256px";p.style.paddingLeft="272px";m.style.marginLeft="256px";t.innerHTML='<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_left</span>';localStorage.setItem("sidebarCollapsed","false")}}
+if(localStorage.getItem("theme")==="dark"||!localStorage.getItem("theme")){document.documentElement.classList.add("dark")}
+if(localStorage.getItem("sidebarCollapsed")==="true"){document.body.classList.add("sidebar-collapsed");document.getElementById("sidebarNav").style.width="72px";document.querySelector(".topbar-pl").style.paddingLeft="88px";document.querySelector(".main-content").style.marginLeft="72px";document.getElementById("sidebarToggle").innerHTML='<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_right</span>'}
+</script>
+<script src="compras.js"></script>
+</body>
+</html>
