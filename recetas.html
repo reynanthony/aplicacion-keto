@@ -29,10 +29,14 @@ tailwind.config = {
 .sidebar-collapsed .sidebar-nav { width: 72px; }
 .sidebar-collapsed .sidebar-nav .sidebar-text { display: none; }
 .sidebar-collapsed .sidebar-nav .sidebar-link { justify-content: center; padding-left: 0; padding-right: 0; }
+.sidebar-collapsed .sidebar-logo-text { display: none; }
+.sidebar-collapsed .sidebar-logo { justify-content: center; }
 .sidebar-collapsed ~ .topbar-desktop .topbar-pl { padding-left: 88px; }
 .sidebar-collapsed ~ main .main-content { margin-left: 72px; }
 .sidebar-toggle-btn { left: 256px; transition: left 0.3s ease; }
 .sidebar-collapsed ~ .sidebar-toggle-btn { left: 72px; }
+.sidebar-link.active { background: #1e1c1c; }
+.sidebar-link.active .material-symbols-outlined { color: #ff4d00; }
 </style>
 </head>
 <body class="bg-background text-on-surface font-body">
@@ -43,20 +47,21 @@ tailwind.config = {
 <div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center flex-shrink-0">
 <span class="material-symbols-outlined text-white text-lg" style="font-variation-settings: 'FILL' 1;">nutrition</span>
 </div>
-<div>
+<div class="sidebar-logo-text">
 <h1 class="text-lg font-black text-primary-container font-headline tracking-tighter">KetoLab</h1>
 <span class="text-[9px] text-white/40 font-label tracking-[0.2em] uppercase">High-Performance Fuel</span>
 </div>
 </div>
 </div>
 <div class="flex-1 space-y-1 px-4">
-<a class="sidebar-link flex items-center gap-4 px-4 py-3 text-white/60 hover:text-white mx-2 font-headline text-sm font-medium tracking-wide hover:bg-surface-container-high rounded-full transition-all" href="index.html"><span class="material-symbols-outlined">dashboard</span><span class="sidebar-text">Inicio</span></a>
-<a class="sidebar-link flex items-center gap-4 px-4 py-3 text-white/60 hover:text-white mx-2 font-headline text-sm font-medium tracking-wide hover:bg-surface-container-high rounded-full transition-all" href="alimentos.html"><span class="material-symbols-outlined">restaurant</span><span class="sidebar-text">Alimentos</span></a>
-<a class="sidebar-link flex items-center gap-4 px-4 py-3 text-white/60 hover:text-white mx-2 font-headline text-sm font-medium tracking-wide hover:bg-surface-container-high rounded-full transition-all" href="plan.html"><span class="material-symbols-outlined">event_note</span><span class="sidebar-text">Plan</span></a>
-<a class="sidebar-link flex items-center gap-4 px-4 py-3 text-white bg-primary-container rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all translate-x-1 shadow-lg shadow-primary-container/20" href="recetas.html"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span><span class="sidebar-text">Recetas</span></a>
-<a class="sidebar-link flex items-center gap-4 px-4 py-3 text-white/60 hover:text-white mx-2 font-headline text-sm font-medium tracking-wide hover:bg-surface-container-high rounded-full transition-all" href="compras.html"><span class="material-symbols-outlined">shopping_cart</span><span class="sidebar-text">Compras</span></a>
-<a class="sidebar-link flex items-center gap-4 px-4 py-3 text-white/60 hover:text-white mx-2 font-headline text-sm font-medium tracking-wide hover:bg-surface-container-high rounded-full transition-all" href="macros.html"><span class="material-symbols-outlined">donut_small</span><span class="sidebar-text">Macros</span></a>
-<a class="sidebar-link flex items-center gap-4 px-4 py-3 text-white/60 hover:text-white mx-2 font-headline text-sm font-medium tracking-wide hover:bg-surface-container-high rounded-full transition-all" href="checklist.html"><span class="material-symbols-outlined">fact_check</span><span class="sidebar-text">Check</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="index.html"><span class="material-symbols-outlined">dashboard</span><span class="sidebar-text">Inicio</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="alimentos.html"><span class="material-symbols-outlined">restaurant</span><span class="sidebar-text">Alimentos</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="plan.html"><span class="material-symbols-outlined">event_note</span><span class="sidebar-text">Plan</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="recetas.html"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span><span class="sidebar-text">Recetas</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="compras.html"><span class="material-symbols-outlined">shopping_cart</span><span class="sidebar-text">Compras</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="macros.html"><span class="material-symbols-outlined">donut_small</span><span class="sidebar-text">Macros</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="checklist.html"><span class="material-symbols-outlined">fact_check</span><span class="sidebar-text">Check</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="entrenamientos.html"><span class="material-symbols-outlined">fitness_center</span><span class="sidebar-text">Gym</span></a>
 </div>
 </nav>
 
@@ -103,35 +108,15 @@ tailwind.config = {
 </div>
 </div>
 
-<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-16 flex justify-around items-center px-2 z-50">
-<a class="flex flex-col items-center gap-0.5 text-white/50 min-w-[52px] py-1" href="index.html">
-<span class="material-symbols-outlined text-lg">dashboard</span>
-<span class="text-[9px] font-bold">Inicio</span>
-</a>
-<a class="flex flex-col items-center gap-0.5 text-white/50 min-w-[52px] py-1" href="alimentos.html">
-<span class="material-symbols-outlined text-lg">restaurant</span>
-<span class="text-[9px] font-bold">Alimentos</span>
-</a>
-<a class="flex flex-col items-center gap-0.5 text-white/50 min-w-[52px] py-1" href="plan.html">
-<span class="material-symbols-outlined text-lg">event_note</span>
-<span class="text-[9px] font-bold">Plan</span>
-</a>
-<a class="flex flex-col items-center gap-0.5 text-primary-container min-w-[52px] py-1" href="recetas.html">
-<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">menu_book</span>
-<span class="text-[9px] font-bold">Recetas</span>
-</a>
-<a class="flex flex-col items-center gap-0.5 text-white/50 min-w-[52px] py-1" href="compras.html">
-<span class="material-symbols-outlined text-lg">shopping_cart</span>
-<span class="text-[9px] font-bold">Compras</span>
-</a>
-<a class="flex flex-col items-center gap-0.5 text-white/50 min-w-[52px] py-1" href="macros.html">
-<span class="material-symbols-outlined text-lg">donut_small</span>
-<span class="text-[9px] font-bold">Macros</span>
-</a>
-<a class="flex flex-col items-center gap-0.5 text-white/50 min-w-[52px] py-1" href="checklist.html">
-<span class="material-symbols-outlined text-lg">fact_check</span>
-<span class="text-[9px] font-bold">Check</span>
-</a>
+<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-16 flex items-center z-50 px-0">
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="index.html"><span class="material-symbols-outlined text-xl">dashboard</span><span class="text-[7px] font-bold">Inicio</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="alimentos.html"><span class="material-symbols-outlined text-xl">restaurant</span><span class="text-[7px] font-bold">Alimentos</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="plan.html"><span class="material-symbols-outlined text-xl">event_note</span><span class="text-[7px] font-bold">Plan</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="compras.html"><span class="material-symbols-outlined text-xl">shopping_cart</span><span class="text-[7px] font-bold">Despensa</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="macros.html"><span class="material-symbols-outlined text-xl">donut_small</span><span class="text-[7px] font-bold">Macros</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="checklist.html"><span class="material-symbols-outlined text-xl">fact_check</span><span class="text-[7px] font-bold">Check</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="entrenamientos.html"><span class="material-symbols-outlined text-xl">fitness_center</span><span class="text-[7px] font-bold">Gym</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-primary-container h-full py-2" href="recetas.html"><span class="material-symbols-outlined text-xl">menu_book</span><span class="text-[7px] font-bold">Recetas</span></a>
 </nav>
 
 <script>
@@ -145,30 +130,37 @@ function toggleSidebar() {
   body.classList.toggle('sidebar-collapsed');
   if (body.classList.contains('sidebar-collapsed')) {
     sidebar.style.width = '72px';
-    topbarPl.style.paddingLeft = '88px';
-    mainContent.style.marginLeft = '72px';
-    toggleBtn.innerHTML = '<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_right</span>';
+    sidebar.style.overflow = 'hidden';
+    if (topbarPl) topbarPl.style.paddingLeft = '88px';
+    if (mainContent) mainContent.style.marginLeft = '72px';
+    if (toggleBtn) toggleBtn.style.left = '72px';
     localStorage.setItem('sidebarCollapsed', 'true');
   } else {
     sidebar.style.width = '256px';
-    topbarPl.style.paddingLeft = '272px';
-    mainContent.style.marginLeft = '256px';
-    toggleBtn.innerHTML = '<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_left</span>';
+    sidebar.style.overflow = '';
+    if (topbarPl) topbarPl.style.paddingLeft = '272px';
+    if (mainContent) mainContent.style.marginLeft = '256px';
+    if (toggleBtn) toggleBtn.style.left = '256px';
     localStorage.setItem('sidebarCollapsed', 'false');
   }
 }
 if (localStorage.getItem('theme') === 'dark' || !localStorage.getItem('theme')) { document.documentElement.classList.add('dark'); }
-if (localStorage.getItem('sidebarCollapsed') === 'true') {
-  document.body.classList.add('sidebar-collapsed');
+function initSidebar() {
   var sidebar = document.getElementById('sidebarNav');
+  var toggleBtn = document.getElementById('sidebarToggle');
   var topbarPl = document.querySelector('.topbar-pl');
   var mainContent = document.querySelector('.main-content');
-  var toggleBtn = document.getElementById('sidebarToggle');
-  sidebar.style.width = '72px';
-  topbarPl.style.paddingLeft = '88px';
-  mainContent.style.marginLeft = '72px';
-  toggleBtn.innerHTML = '<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_right</span>';
+  if (localStorage.getItem('sidebarCollapsed') === 'true') {
+    document.body.classList.add('sidebar-collapsed');
+    sidebar.style.width = '72px';
+    sidebar.style.overflow = 'hidden';
+    if (topbarPl) topbarPl.style.paddingLeft = '88px';
+    if (mainContent) mainContent.style.marginLeft = '72px';
+    if (toggleBtn) toggleBtn.style.left = '72px';
+  }
 }
+initSidebar();
+var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
 
 var recipesDB = {
 "pure-coliflor": {title: "Pure de coliflor cremoso", icon: "soup_kitchen", color: "#4caf50", ingredients: ["1 coliflor mediana", "50-80g mantequilla", "Sal, pimienta, nuez moscada"], prep: "Cocer al vapor hasta tierna (15-20 min). Escurrir muy bien. Triturar con mantequilla y especias."},
