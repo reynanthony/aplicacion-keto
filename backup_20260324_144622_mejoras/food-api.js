@@ -4,27 +4,8 @@
 
 const FOOD_API_BASE = 'https://api.nal.usda.gov/fdc/v1';
 
-// Obtener API key desde localStorage o usar demo
-var USDA_API_KEY = (function() {
-  var savedKey = localStorage.getItem('usda_api_key');
-  if (savedKey && savedKey.trim() && savedKey !== 'DEMO_KEY') {
-    return savedKey.trim();
-  }
-  return 'DEMO_KEY';
-})();
-
 // Cache local de búsquedas
 var foodSearchCache = {};
-
-// Función para configurar API key
-function configureUSDAKey() {
-  var newKey = prompt('Ingresa tu API key de USDA FoodData Central:\n(Regístrate gratis en https://fdc.nal.usda.gov/api-guide.html)');
-  if (newKey && newKey.trim()) {
-    localStorage.setItem('usda_api_key', newKey.trim());
-    window.USDA_API_KEY = newKey.trim();
-    showToast('API key guardada correctamente');
-  }
-}
 
 // Obtener datos desde la API del USDA
 async function searchFoodsOnline(query, limit = 10) {
@@ -39,7 +20,7 @@ async function searchFoodsOnline(query, limit = 10) {
   }
   
   try {
-    var url = FOOD_API_BASE + '/foods/search?query=' + encodeURIComponent(query) + '&pageSize=' + limit + '&dataType=Foundation,SR Legacy,Branded&api_key=' + USDA_API_KEY + '';
+    var url = FOOD_API_BASE + '/foods/search?query=' + encodeURIComponent(query) + '&pageSize=' + limit + '&dataType=Foundation,SR Legacy,Branded&api_key=DEMO_KEY';
     
     var response = await fetch(url);
     

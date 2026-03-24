@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<!-- PWA Manifest y meta tags para instalación -->
+<link rel="manifest" href="/aplicacion-keto/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KetoLab">
+<link rel="apple-touch-icon" href="/aplicacion-keto/icons/icon-192x192.png">
+<meta name="theme-color" content="#ff4d00">
+<meta name="mobile-web-app-capable" content="yes">
+<title>KetoLab | Recetas</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#ffccbc", "primary-container": "#ff4d00", "on-primary": "#ffffff",
+        "surface": "#0a0a0a", "surface-container": "#181717", "surface-container-low": "#111010", "surface-container-high": "#1e1c1c", "surface-container-highest": "#242222",
+        "on-surface": "#ffffff", "on-surface-variant": "#adaaaa", "outline": "#767575",
+        "secondary": "#ffb300", "tertiary": "#ffc107", "error": "#ff7351", "background": "#0a0a0a"
+      },
+      fontFamily: { "headline": ["Plus Jakarta Sans"], "body": ["Inter"], "label": ["Inter"] }
+    }
+  }
+}
+</script>
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.glass-card { background: rgba(36, 34, 34, 0.4); backdrop-filter: blur(20px); border: 1px solid rgba(255, 77, 0, 0.1); }
+.sidebar-collapsed .sidebar-nav { width: 72px; }
+.sidebar-collapsed .sidebar-nav .sidebar-text { display: none; }
+.sidebar-collapsed .sidebar-nav .sidebar-link { justify-content: center; padding-left: 0; padding-right: 0; }
+.sidebar-collapsed .sidebar-logo-text { display: none; }
+.sidebar-collapsed .sidebar-logo { justify-content: center; }
+.sidebar-collapsed ~ .topbar-desktop .topbar-pl { padding-left: 88px; }
+.sidebar-collapsed ~ main .main-content { margin-left: 72px; }
+.sidebar-toggle-btn { left: 256px; transition: left 0.3s ease; }
+.sidebar-collapsed ~ .sidebar-toggle-btn { left: 72px; }
+.sidebar-link.active { background: #1e1c1c; }
+.sidebar-link.active .material-symbols-outlined { color: #ff4d00; }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body">
+
+<nav id="sidebarNav" class="sidebar-nav hidden md:flex fixed left-0 top-0 h-full w-64 flex-col py-6 bg-surface-container-low z-50 border-r border-primary-container/10 transition-all duration-300">
+<div class="px-6 mb-8 flex items-center justify-between">
+<div class="flex items-center gap-3 sidebar-logo">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-white text-lg" style="font-variation-settings: 'FILL' 1;">nutrition</span>
+</div>
+<div class="sidebar-logo-text">
+<h1 class="text-lg font-black text-primary-container font-headline tracking-tighter">KetoLab</h1>
+<span class="text-[9px] text-white/40 font-label tracking-[0.2em] uppercase">High-Performance Fuel</span>
+</div>
+</div>
+</div>
+<div class="flex-1 space-y-1 px-4">
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="index.html"><span class="material-symbols-outlined">dashboard</span><span class="sidebar-text">Inicio</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="alimentos.html"><span class="material-symbols-outlined">restaurant</span><span class="sidebar-text">Alimentos</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="plan.html"><span class="material-symbols-outlined">event_note</span><span class="sidebar-text">Plan</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="recetas.html"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span><span class="sidebar-text">Recetas</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="compras.html"><span class="material-symbols-outlined">shopping_cart</span><span class="sidebar-text">Compras</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="macros.html"><span class="material-symbols-outlined">donut_small</span><span class="sidebar-text">Macros</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="checklist.html"><span class="material-symbols-outlined">fact_check</span><span class="sidebar-text">Check</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="entrenamientos.html"><span class="material-symbols-outlined">fitness_center</span><span class="sidebar-text">Gym</span></a>
+</div>
+</nav>
+
+<button id="sidebarToggle" onclick="toggleSidebar()" class="sidebar-toggle-btn hidden md:flex fixed top-20 z-50 w-8 h-8 bg-surface-container-low hover:bg-surface-container-high border border-white/10 rounded-r-lg items-center justify-center transition-all duration-300 hover:border-primary-container/30">
+<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_left</span>
+</button>
+
+<header class="topbar-desktop hidden md:flex fixed top-0 w-full h-20 px-4 md:px-8 flex items-center justify-between z-40 bg-gradient-to-b from-surface-container-low to-transparent transition-all duration-300">
+<div class="topbar-pl pl-64 transition-all duration-300">
+<h2 class="text-xl md:text-2xl font-black text-white tracking-tighter font-headline">Recetas</h2>
+</div>
+<button class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors" onclick="toggleTheme()">dark_mode</button>
+</header>
+
+<!-- Mobile TopAppBar -->
+<header class="md:hidden fixed top-0 w-full h-14 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5 px-4 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-base" style="font-variation-settings: 'FILL' 1;">nutrition</span>
+</div>
+<span class="text-base font-black text-primary-container tracking-tight font-headline">KetoLab</span>
+</a>
+<button class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors" onclick="toggleTheme()">dark_mode</button>
+</header>
+
+<main class="main-content md:ml-64 pt-14 md:pt-24 px-4 md:px-6 pb-20 md:pb-12 min-h-screen transition-all duration-300">
+<div class="max-w-4xl mx-auto space-y-8">
+<section>
+<p class="text-xs font-label text-on-surface-variant uppercase tracking-[0.2em]">7 recetas</p>
+<h1 class="text-3xl font-headline font-black text-white tracking-tight mt-1">Recetas Keto</h1>
+<p class="text-on-surface-variant mt-2">Toca una receta para ver ingredientes y preparacion</p>
+</section>
+<section id="recipesList" class="space-y-3"></section>
+</div>
+</main>
+
+<div id="recipeModal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4" onclick="closeModal(event)">
+<div class="glass-card rounded-2xl p-6 w-full max-w-md max-h-[80vh] overflow-y-auto" onclick="event.stopPropagation()">
+<div class="flex justify-between items-center mb-6">
+<h2 id="modalTitle" class="font-headline font-bold text-xl text-white"></h2>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high" onclick="closeModal()"><span class="material-symbols-outlined">close</span></button>
+</div>
+<div id="modalContent"></div>
+</div>
+</div>
+
+<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-16 flex items-center z-50 px-0">
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="index.html"><span class="material-symbols-outlined text-xl">dashboard</span><span class="text-[7px] font-bold">Inicio</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="alimentos.html"><span class="material-symbols-outlined text-xl">restaurant</span><span class="text-[7px] font-bold">Alimentos</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="plan.html"><span class="material-symbols-outlined text-xl">event_note</span><span class="text-[7px] font-bold">Plan</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="compras.html"><span class="material-symbols-outlined text-xl">shopping_cart</span><span class="text-[7px] font-bold">Despensa</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="macros.html"><span class="material-symbols-outlined text-xl">donut_small</span><span class="text-[7px] font-bold">Macros</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="checklist.html"><span class="material-symbols-outlined text-xl">fact_check</span><span class="text-[7px] font-bold">Check</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="entrenamientos.html"><span class="material-symbols-outlined text-xl">fitness_center</span><span class="text-[7px] font-bold">Gym</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-primary-container h-full py-2" href="recetas.html"><span class="material-symbols-outlined text-xl">menu_book</span><span class="text-[7px] font-bold">Recetas</span></a>
+</nav>
+
+<script src="/aplicacion-keto/utils.js"></script>
+<script>
+function toggleTheme() { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); }
+function toggleSidebar() {
+  var body = document.body;
+  var sidebar = document.getElementById('sidebarNav');
+  var toggleBtn = document.getElementById('sidebarToggle');
+  var topbarPl = document.querySelector('.topbar-pl');
+  var mainContent = document.querySelector('.main-content');
+  body.classList.toggle('sidebar-collapsed');
+  if (body.classList.contains('sidebar-collapsed')) {
+    sidebar.style.width = '72px';
+    sidebar.style.overflow = 'hidden';
+    if (topbarPl) topbarPl.style.paddingLeft = '88px';
+    if (mainContent) mainContent.style.marginLeft = '72px';
+    if (toggleBtn) toggleBtn.style.left = '72px';
+    localStorage.setItem('sidebarCollapsed', 'true');
+  } else {
+    sidebar.style.width = '256px';
+    sidebar.style.overflow = '';
+    if (topbarPl) topbarPl.style.paddingLeft = '272px';
+    if (mainContent) mainContent.style.marginLeft = '256px';
+    if (toggleBtn) toggleBtn.style.left = '256px';
+    localStorage.setItem('sidebarCollapsed', 'false');
+  }
+}
+if (localStorage.getItem('theme') === 'dark' || !localStorage.getItem('theme')) { document.documentElement.classList.add('dark'); }
+function initSidebar() {
+  var sidebar = document.getElementById('sidebarNav');
+  var toggleBtn = document.getElementById('sidebarToggle');
+  var topbarPl = document.querySelector('.topbar-pl');
+  var mainContent = document.querySelector('.main-content');
+  if (localStorage.getItem('sidebarCollapsed') === 'true') {
+    document.body.classList.add('sidebar-collapsed');
+    sidebar.style.width = '72px';
+    sidebar.style.overflow = 'hidden';
+    if (topbarPl) topbarPl.style.paddingLeft = '88px';
+    if (mainContent) mainContent.style.marginLeft = '72px';
+    if (toggleBtn) toggleBtn.style.left = '72px';
+  }
+}
+initSidebar();
+var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
+
+var recipesDB = {
+"pure-coliflor": {title: "Pure de coliflor cremoso", icon: "soup_kitchen", color: "#4caf50", ingredients: ["1 coliflor mediana", "50-80g mantequilla", "Sal, pimienta, nuez moscada"], prep: "Cocer al vapor hasta tierna (15-20 min). Escurrir muy bien. Triturar con mantequilla y especias."},
+"hongos": {title: "Salteado de hongos con ajo", icon: "forest", color: "#4caf50", ingredients: ["300g champinones", "30g mantequilla", "2 dientes ajo", "Perejil"], prep: "Laminar champinones. Calentar mantequilla, dorar 5-7 min. Agregar ajo, saltear 1 min."},
+"pollo-jugoso": {title: "Pechuga de pollo jugosa", icon: "egg_alt", color: "#ffb300", ingredients: ["2 pechugas", "Sal, ajo en polvo", "Aceite de oliva"], prep: "Sazonar, sellar 2-3 min por lado. Tapar, fuego bajo 5-7 min. Reposar 5 min."},
+"carne-molida": {title: "Carne molida estilo keto", icon: "restaurant", color: "#ff4d00", ingredients: ["500g carne molida 80/20", "2 dientes ajo", "1 cdta comino", "30g mantequilla"], prep: "Dorar con mantequilla hasta crujiente. Agregar ajo y comino. 2 min mas."},
+"aderezo": {title: "Aderezo cetogenico", icon: "local_bar", color: "#00e3fd", ingredients: ["4 cdas aceite oliva", "2 cdas vinagre manzana", "1 cdta mostaza", "Sal y pimienta"], prep: "Mezclar todo en frasco. Agitar bien. Refrigerar."},
+"huevos": {title: "Huevos revueltos cremosos", icon: "egg", color: "#ffb300", ingredients: ["3-5 huevos", "20g mantequilla", "30g mozzarella", "Sal"], prep: "Batir huevos. Fuego medio-bajo, mover suavemente. Agregar mozzarella al final."},
+"arroz-coliflor": {title: "Arroz de coliflor", icon: "rice_bowl", color: "#9c27b0", ingredients: ["1 coliflor mediana", "2 cdas aceite/mantequilla", "Sal y pimienta"], prep: "Procesar coliflor. Saltear en sarten caliente 5-7 min."}
+};
+
+var container = document.getElementById("recipesList");
+Object.keys(recipesDB).forEach(function(key) {
+var recipe = recipesDB[key];
+var html = '<div class="glass-card p-4 rounded-xl flex items-center gap-4 cursor-pointer hover:bg-surface-container-high transition-all" onclick="openRecipeModal(\'' + key + '\')">';
+html += '<div class="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0" style="background:' + recipe.color + '20">';
+html += '<span class="material-symbols-outlined" style="color:' + recipe.color + '">' + recipe.icon + '</span></div>';
+html += '<div class="flex-1"><p class="font-headline font-bold text-white">' + recipe.title + '</p><p class="text-sm text-on-surface-variant">' + recipe.ingredients.length + ' ingredientes</p></div>';
+html += '<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span></div>';
+container.innerHTML += html;
+});
+
+function openRecipeModal(key) {
+var recipe = recipesDB[key];
+document.getElementById("modalTitle").textContent = recipe.title;
+var ingredientsHtml = recipe.ingredients.map(function(i) {
+return '<li class="flex items-center gap-3 py-3 border-b border-white/5"><span class="material-symbols-outlined text-primary-container text-sm">check</span><span class="font-headline font-medium text-white">' + i + '</span></li>';
+}).join('');
+document.getElementById("modalContent").innerHTML = '<div class="space-y-4">' +
+'<div class="bg-surface-container-high rounded-xl p-4"><p class="text-xs text-primary-container uppercase tracking-wider mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-sm">list</span> Ingredientes</p><ul>' + ingredientsHtml + '</ul></div>' +
+'<div class="bg-surface-container-high rounded-xl p-4"><p class="text-xs text-secondary uppercase tracking-wider mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-sm">restaurant</span> Preparacion</p><p class="text-white">' + recipe.prep + '</p></div>' +
+'</div>';
+document.getElementById("recipeModal").classList.remove("hidden");
+document.getElementById("recipeModal").classList.add("flex");
+}
+
+function closeModal(e) {
+if (!e || e.target.id === "recipeModal") {
+document.getElementById("recipeModal").classList.add("hidden");
+document.getElementById("recipeModal").classList.remove("flex");
+}
+}
+
+function showToast(message) {
+  var toast = document.getElementById('toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast';
+    toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 z-[70] hidden opacity-0 translate-y-4 pointer-events-none transition-all duration-300';
+    toast.innerHTML = '<div class="glass-card rounded-full px-6 py-3 flex items-center gap-3 shadow-lg"><span class="material-symbols-outlined text-primary-container">info</span><span class="text-white font-medium"></span></div>';
+    document.body.appendChild(toast);
+  }
+  toast.querySelector('span:last-child').textContent = message;
+  toast.classList.remove('hidden', 'opacity-0', 'translate-y-4', 'pointer-events-none');
+  toast.classList.add('opacity-100', 'translate-y-0');
+  setTimeout(function() {
+    toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+    toast.classList.remove('opacity-100', 'translate-y-0');
+  }, 3000);
+}
+</script>
+
+<script>
+// ==================== REGISTRO DE SERVICE WORKER ====================
+(function() {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/aplicacion-keto/sw.js')
+        .then(registration => {
+          console.log('[PWA] Service Worker registrado correctamente en:', registration.scope);
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                if (confirm('Nueva versión disponible. ¿Actualizar ahora?')) {
+                  window.location.reload();
+                }
+              }
+            });
+          });
+        })
+        .catch(error => {
+          console.error('[PWA] Error al registrar Service Worker:', error);
+        });
+    });
+  }
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+  });
+  window.addEventListener('online', () => {
+    if (typeof showToast === 'function') {
+      showToast('Conexión restaurada');
+    }
+  });
+  window.addEventListener('offline', () => {
+    if (typeof showToast === 'function') {
+      showToast('Modo offline - algunos datos pueden no sincronizarse');
+    }
+  });
+})();
+</script>
+</body>
+</html>

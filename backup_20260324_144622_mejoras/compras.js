@@ -184,6 +184,18 @@ toast.classList.remove("opacity-100","translate-y-0");
 },2000);
 }
 
+function getStockColor(percent){
+if(percent<=10)return"#ff7351";
+if(percent<=25)return"#ffb300";
+if(percent<=50)return"#ffc107";
+return"#4caf50";
+}
+
+function fmt(n){
+if(typeof n!=="number"||isNaN(n))return"0";
+return n.toLocaleString("en-US");
+}
+
 function loadDespensa(){
 var container=document.getElementById("despensaList");
 if(!container){console.error("Container not found");return;}

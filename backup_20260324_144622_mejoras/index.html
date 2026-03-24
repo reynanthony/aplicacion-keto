@@ -208,8 +208,6 @@ notifications
 <div class="flex items-center gap-3">
 <button class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors" onclick="showNotifications()" title="Notificaciones">notifications</button>
 <button class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors" onclick="toggleTheme()" title="Cambiar tema">dark_mode</button>
-<button onclick="downloadBackup()" class="material-symbols-outlined text-white/70 hover:text-secondary transition-colors" title="Exportar datos">download</button>
-<button onclick="triggerRestore()" class="material-symbols-outlined text-white/70 hover:text-secondary transition-colors" title="Importar datos">upload</button>
 </div>
 </header>
 
@@ -228,34 +226,6 @@ Notificaciones
 </button>
 </div>
 </div>
-
-<!-- Backup Modal -->
-<div id="backupModal" class="fixed inset-0 z-[70] hidden">
-<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeBackupModal()"></div>
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md glass-card rounded-2xl p-6 shadow-2xl">
-<div class="flex items-center justify-between mb-6">
-<h3 class="text-lg font-headline font-bold text-white flex items-center gap-2">
-<span class="material-symbols-outlined text-primary-container">backup</span>
-Backup y Restauración
-</h3>
-<button onclick="closeBackupModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
-<span class="material-symbols-outlined text-lg">close</span>
-</button>
-</div>
-<div class="space-y-4">
-<p class="text-sm text-on-surface-variant">Guarda una copia de seguridad de todos tus datos o restaura desde un archivo.</p>
-<button onclick="downloadBackup()" class="w-full py-4 bg-primary-container text-white rounded-xl font-medium hover:bg-primary-container/80 transition-all flex items-center justify-center gap-2">
-<span class="material-symbols-outlined">download</span>
-Exportar Backup
-</button>
-<button onclick="triggerRestore()" class="w-full py-4 bg-surface-container-high text-white rounded-xl font-medium hover:bg-surface-container-highest transition-all flex items-center justify-center gap-2">
-<span class="material-symbols-outlined">upload</span>
-Importar Backup
-</button>
-</div>
-</div>
-</div>
-
 <div class="p-4 md:p-2 space-y-2 max-h-[50vh] overflow-y-auto">
 <div class="p-4 rounded-xl bg-surface-container-high hover:bg-surface-container-highest transition-colors cursor-pointer group">
 <div class="flex items-start gap-3">
@@ -945,6 +915,5 @@ loadDashboard();
   });
 })();
 </script>
-<script src="/aplicacion-keto/backup.js"></script>
 </body>
 </html>
