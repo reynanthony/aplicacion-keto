@@ -88,21 +88,25 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 <section class="mt-8 glass-card p-4 rounded-xl">
 <div class="flex items-center gap-3 mb-3">
 <span class="material-symbols-outlined text-secondary">info</span>
-<h3 class="font-headline font-bold text-white">Cómo usar KetoLab</h3>
+<h3 class="font-headline font-bold text-white">Guía Keto</h3>
 </div>
 <div class="space-y-2 text-sm text-on-surface-variant">
-<p><span class="text-primary-container font-medium">1. Alimentos:</span> Base de datos de referencia</p>
-<p><span class="text-primary-container font-medium">2. Compras:</span> Selecciona qué tienes en tu despensa</p>
-<p><span class="text-primary-container font-medium">3. Plan:</span> Usa tu despensa para planificar tus comidas</p>
+<p><span class="text-green-400 font-medium">✓ Permitidos:</span> Carnes, pescados, huevos, quesos, aguacate, nueces</p>
+<p><span class="text-error font-medium">✗ Evitar:</span> Azúcares, cereales, tubérculus, frutas dulces</p>
+<p><span class="text-secondary font-medium">☁️ Online:</span> Busca alimentos en la base de datos USDA</p>
 </div>
 </section>
 
 <section class="mt-8">
-<h2 class="text-lg font-headline font-bold text-error uppercase tracking-wider mb-4 flex items-center gap-2"><span class="material-symbols-outlined">cancel</span> Evitar</h2>
+<h2 class="text-lg font-headline font-bold text-error uppercase tracking-wider mb-4 flex items-center gap-2"><span class="material-symbols-outlined">cancel</span> Evitar en Keto</h2>
 <div class="space-y-3">
-<div class="glass-card p-4 rounded-xl flex items-center gap-4 opacity-60"><div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-error">grass</span></div><div class="flex-1"><p class="font-headline font-bold text-white">Tubérculos y almidones</p><p class="text-sm text-on-surface-variant">Papa, remolacha, zanahoria, maíz</p></div></div>
-<div class="glass-card p-4 rounded-xl flex items-center gap-4 opacity-60"><div class="w-12 h-12 rounded-xl bg-pink-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-pink-400">icecream</span></div><div class="flex-1"><p class="font-headline font-bold text-white">Frutas altas en azúcar</p><p class="text-sm text-on-surface-variant">Banana, mango, piña, sandía, manzana</p></div></div>
-<div class="glass-card p-4 rounded-xl flex items-center gap-4 opacity-60"><div class="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-orange-400">bakery_dining</span></div><div class="flex-1"><p class="font-headline font-bold text-white">Cereales y pan</p><p class="text-sm text-on-surface-variant">Pan, arroz, avena, pasta, cereales</p></div></div>
+<div class="glass-card p-4 rounded-xl flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-error">grass</span></div><div class="flex-1"><p class="font-headline font-bold text-white">Tubérculos y Almidones</p><p class="text-sm text-on-surface-variant">Papa, batata, maíz, remolacha, arroz, pasta</p></div></div>
+<div class="glass-card p-4 rounded-xl flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-pink-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-pink-400">icecream</span></div><div class="flex-1"><p class="font-headline font-bold text-white">Frutas Altas en Azúcar</p><p class="text-sm text-on-surface-variant">Banana, mango, piña, sandía, manzana, uvas, naranja</p></div></div>
+<div class="glass-card p-4 rounded-xl flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-orange-400">bakery_dining</span></div><div class="flex-1"><p class="font-headline font-bold text-white">Cereales y Pan</p><p class="text-sm text-on-surface-variant">Pan, arroz, avena, trigo, cebada, quinoa, cereales</p></div></div>
+<div class="glass-card p-4 rounded-xl flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-yellow-400">cookie</span></div><div class="flex-1"><p class="font-headline font-bold text-white">Azúcares y Dulces</p><p class="text-sm text-on-surface-variant">Azúcar, miel, caramelos, chocolates, helados, refrescos</p></div></div>
+<div class="glass-card p-4 rounded-xl flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-purple-400">liquor</span></div><div class="flex-1"><p class="font-headline font-bold text-white">Bebidas Alcohólicas</p><p class="text-sm text-on-surface-variant">Cerveza, vino dulce, cócteles con azúcar, licor</p></div></div>
+<div class="glass-card p-4 rounded-xl flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-blue-400">local_drink</span></div><div class="flex-1"><p class="font-headline font-bold text-white">Bebidas Azucaradas</p><p class="text-sm text-on-surface-variant">Refrescos, jugos industriales, bebidas energéticas, té con azúcar</p></div></div>
+<div class="glass-card p-4 rounded-xl flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-amber-400">breakfast_dining</span></div><div class="flex-1"><p class="font-headline font-bold text-white">Legumbres</p><p class="text-sm text-on-surface-variant">Frijoles, lentejas, garbanzos, soja, habas</p></div></div>
 </div>
 </section>
 
