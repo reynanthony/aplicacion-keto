@@ -248,10 +248,6 @@ var checklistConfig=[
 {id:"sleep",icon:"bedtime",iconColor:"#9e9e9e",bg:"bg-gray-500/20",label:"Sueño",unit:"hrs",target:8,step:0.5}
 ];
 
-var mealIcons={desayuno:"wb_sunny",almuerzo:"light_mode",cena:"nightlight",snacks:"cookie"};
-var mealColors={desayuno:"#fbbf24",almuerzo:"#fb923c",cena:"#a855f7",snacks:"#ec4899"};
-var mealLabels={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snacks"};
-
 var currentInputItem=null;
 
 function loadChecklist(){
@@ -295,9 +291,7 @@ document.getElementById("sodioValue").textContent=(userData.sodio||0)+"g / 5g";
 document.getElementById("potasioValue").textContent=(userData.potasio||0)+"g / 3.5g";
 document.getElementById("magnesioValue").textContent=(userData.magnesio||0)+"mg / 400mg";
 var savedUserData={currentWeight:userData.currentWeight||159,goalWeight:userData.goalWeight||140,startWeight:userData.startWeight||159,waterIntake:checklistData.water||0,proteinConsumed:checklistData.protein||0,proteinGoal:159,workoutMinutes:checklistData.workout||0,walkMinutes:checklistData.walk||0,sleepHours:checklistData.sleep||0,sodiotIntake:userData.sodio||0,potasoiIntake:userData.potasio||0,magnesiomIntake:userData.magnesio||0};
-localStorage.setItem("userData",JSON.stringify(savedUserData));
-loadMealConsumption();
-updateConsumedMacros();
+localStorage.setItem("userData",JSON.stringify(savedUserData))}
 
 function openInputModal(itemId){
 currentInputItem=getEffectiveItems().find(function(c){return c.id===itemId});
@@ -363,152 +357,6 @@ function testNotification(){
   }catch(e){
     console.log("Test notification error:", e);
   }
-}
-
-var defaultFoods=[
-{id:"f1",name:"Huevos",portion:50,calories:78,protein:6,fat:5,carbs:0.6},
-{id:"f2",name:"Pechuga de pollo",portion:100,calories:165,protein:31,fat:3.6,carbs:0},
-{id:"f3",name:"Carne molida 80/20",portion:100,calories:254,protein:17,fat:20,carbs:0},
-{id:"f4",name:"Salmón",portion:100,calories:208,protein:20,fat:13,carbs:0},
-{id:"f5",name:"Bacon",portion:50,calories:270,protein:12,fat:23,carbs:1},
-{id:"f6",name:"Cerdo (lomo)",portion:100,calories:143,protein:26,fat:3.5,carbs:0},
-{id:"f7",name:"Carne de res (bistec)",portion:100,calories:271,protein:26,fat:18,carbs:0},
-{id:"f8",name:"Atún",portion:100,calories:132,protein:28,fat:1,carbs:0},
-{id:"f9",name:"Hígado de res",portion:100,calories:135,protein:20,fat:4,carbs:4},
-{id:"f10",name:"Pavo molido",portion:100,calories:149,protein:27,fat:3,carbs:0},
-{id:"f11",name:"Codornices",portion:100,calories:192,protein:25,fat:10,carbs:0},
-{id:"f12",name:"Aguacate",portion:100,calories:160,protein:2,fat:15,carbs:9},
-{id:"f13",name:"Aceite de oliva",portion:15,calories:119,protein:0,fat:13.5,carbs:0},
-{id:"f14",name:"Mantequilla",portion:15,calories:102,protein:0.1,fat:11.5,carbs:0},
-{id:"f15",name:"Aceite de coco",portion:15,calories:121,protein:0,fat:13.5,carbs:0},
-{id:"f16",name:"Ghee",portion:15,calories:130,protein:0,fat:14,carbs:0},
-{id:"f17",name:"Almendras",portion:30,calories:170,protein:6,fat:15,carbs:6},
-{id:"f18",name:"Nueces",portion:30,calories:196,protein:4.6,fat:19.5,carbs:4},
-{id:"f19",name:"Macadamia",portion:30,calories:204,protein:2.2,fat:21.5,carbs:4},
-{id:"f20",name:"Pecanas",portion:30,calories:196,protein:2.6,fat:20,carbs:4},
-{id:"f21",name:"Semillas de chía",portion:30,calories:138,protein:4.7,fat:9,carbs:12},
-{id:"f22",name:"Semillas de linaza",portion:30,calories:150,protein:5,fat:12,carbs:8},
-{id:"f23",name:"Brócoli",portion:100,calories:34,protein:2.8,fat:0.4,carbs:7},
-{id:"f24",name:"Coliflor",portion:100,calories:25,protein:2,fat:0.3,carbs:5},
-{id:"f25",name:"Espinacas",portion:100,calories:23,protein:2.9,fat:0.4,carbs:3.6},
-{id:"f26",name:"Champiñones",portion:100,calories:22,protein:3.1,fat:0.3,carbs:3.3},
-{id:"f27",name:"Pimiento rojo",portion:100,calories:31,protein:1,fat:0.3,carbs:6},
-{id:"f28",name:"Pepino",portion:100,calories:15,protein:0.7,fat:0.1,carbs:3.6},
-{id:"f29",name:"Lechuga",portion:100,calories:15,protein:1.4,fat:0.2,carbs:2.9},
-{id:"f30",name:"Tomate",portion:100,calories:18,protein:0.9,fat:0.2,carbs:3.9},
-{id:"f31",name:"Cebolla",portion:100,calories:40,protein:1.1,fat:0.1,carbs:9.3},
-{id:"f32",name:"Ajo",portion:3,calories:4,protein:0.2,fat:0,carbs:1},
-{id:"f33",name:"Calabacín",portion:100,calories:17,protein:1.2,fat:0.3,carbs:3.1},
-{id:"f34",name:"Apio",portion:100,calories:16,protein:0.7,fat:0.2,carbs:3},
-{id:"f35",name:"Queso mozzarella",portion:100,calories:280,protein:28,fat:17,carbs:3.1},
-{id:"f36",name:"Queso cheddar",portion:30,calories:120,protein:7,fat:10,carbs:0.4},
-{id:"f37",name:"Queso parmesano",portion:30,calories:111,protein:10,fat:7,carbs:0.4},
-{id:"f38",name:"Queso crema",portion:30,calories:100,protein:2,fat:10,carbs:0.4},
-{id:"f39",name:"Nata para cocinar",portion:100,calories:340,protein:2,fat:36,carbs:3},
-{id:"f40",name:"Queso feta",portion:30,calories:75,protein:4,fat:6,carbs:1},
-{id:"f41",name:"Cacao puro",portion:10,calories:23,protein:2,fat:1.4,carbs:6},
-{id:"f42",name:"Coco rallado",portion:30,calories:187,protein:2,fat:18,carbs:8},
-{id:"f43",name:"Edamame",portion:100,calories:121,protein:12,fat:5,carbs:10},
-{id:"f44",name:"Café con mantequilla",portion:240,calories:230,protein:2,fat:24,carbs:0},
-{id:"f45",name:"Chocolate negro 90%",portion:30,calories:150,protein:2,fat:13,carbs:4}
-];
-
-function calculateMealMacros(mealItems){
-var total={calories:0,protein:0,fat:0,carbs:0,count:0};
-mealItems.forEach(function(item){
-var food=defaultFoods.find(function(f){return f.id===item.id})||item;
-var itemPort=parseFloat(item.portion)||100;
-var foodPort=parseFloat(food.portion)||100;
-var ratio=itemPort/foodPort;
-total.calories+=Math.round((parseFloat(food.calories)||0)*ratio);
-total.protein+=Math.round((parseFloat(food.protein)||0)*ratio*10)/10;
-total.fat+=Math.round((parseFloat(food.fat)||0)*ratio*10)/10;
-total.carbs+=Math.round((parseFloat(food.carbs)||0)*ratio*10)/10;
-total.count++;
-});
-return total;
-}
-
-function loadMealConsumption(){
-var todayKey=new Date().toISOString().slice(0,10);
-var mealPlan=JSON.parse(localStorage.getItem("mealPlan_"+todayKey)||"{}");
-var consumedMeals=JSON.parse(localStorage.getItem("consumedMeals_"+todayKey)||"{}");
-var container=document.getElementById("mealsContainer");
-var section=document.getElementById("mealConsumption");
-var hasAnyMeals=false;
-var html="";
-["desayuno","almuerzo","cena","snacks"].forEach(function(meal){
-var items=mealPlan[meal]||[];
-if(items.length>0){hasAnyMeals=true}
-var macros=calculateMealMacros(items);
-var isConsumed=consumedMeals[meal]||false;
-var color=mealColors[meal]||"#ff4d00";
-html+='<div class="glass-card rounded-xl p-4">';
-html+='<div class="flex items-center justify-between mb-3">';
-html+='<div class="flex items-center gap-3">';
-html+='<div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:'+color+'20">';
-html+='<span class="material-symbols-outlined" style="color:'+color+'">'+mealIcons[meal]+'</span></div>';
-html+='<div>';
-html+='<p class="font-headline font-bold text-white">'+(mealLabels[meal]||meal)+'</p>';
-html+='<p class="text-xs text-on-surface-variant">'+(items.length>0?items.length+" alimentos":"Sin alimentos")+'</p></div></div>';
-if(items.length>0){
-if(isConsumed){
-html+='<button onclick="toggleMealConsumed(\''+meal+'\')" class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center">';
-html+='<span class="material-symbols-outlined text-white" style="font-variation-settings:\'FILL\' 1">check</span></button>';
-}else{
-html+='<button onclick="toggleMealConsumed(\''+meal+'\')" class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-surface-container-highest transition-all">';
-html+='<span class="material-symbols-outlined text-on-surface-variant">add</span></button>';
-}
-}
-html+='</div>';
-if(items.length>0){
-html+='<div class="bg-surface-container-high rounded-lg p-3">';
-html+='<div class="grid grid-cols-4 gap-2 text-center">';
-html+='<div><p class="text-[10px] text-on-surface-variant uppercase">Cal</p><p class="text-sm font-bold" style="color:'+(isConsumed?'#22c55e':'#fbbf24')+'">'+macros.calories+'</p></div>';
-html+='<div><p class="text-[10px] text-on-surface-variant uppercase">Prot</p><p class="text-sm font-bold" style="color:'+(isConsumed?'#22c55e':'#fb923c')+'">'+macros.protein+'g</p></div>';
-html+='<div><p class="text-[10px] text-on-surface-variant uppercase">Gras</p><p class="text-sm font-bold" style="color:'+(isConsumed?'#22c55e':'#facc15')+'">'+macros.fat+'g</p></div>';
-html+='<div><p class="text-[10px] text-on-surface-variant uppercase">Carb</p><p class="text-sm font-bold" style="color:'+(isConsumed?'#22c55e':'#22d3ee')+'">'+macros.carbs+'g</p></div>';
-html+='</div>';
-if(isConsumed){html+='<p class="text-xs text-primary-container text-center mt-2">✓ Consumido</p>'}
-html+='</div>';
-}
-html+='</div>';
-});
-if(hasAnyMeals){section.classList.remove("hidden")}else{section.classList.add("hidden")}
-container.innerHTML=html;
-}
-
-function toggleMealConsumed(meal){
-var todayKey=new Date().toISOString().slice(0,10);
-var consumedMeals=JSON.parse(localStorage.getItem("consumedMeals_"+todayKey)||"{}");
-consumedMeals[meal]=!consumedMeals[meal];
-localStorage.setItem("consumedMeals_"+todayKey,JSON.stringify(consumedMeals));
-loadMealConsumption();
-updateConsumedMacros();
-var status=consumedMeals[meal]?"marcado como consumido":"desmarcado";
-showToast(mealLabels[meal]+" "+status);
-}
-
-function updateConsumedMacros(){
-var todayKey=new Date().toISOString().slice(0,10);
-var mealPlan=JSON.parse(localStorage.getItem("mealPlan_"+todayKey)||"{}");
-var consumedMeals=JSON.parse(localStorage.getItem("consumedMeals_"+todayKey)||"{}");
-var totalConsumed={calories:0,protein:0,fat:0,carbs:0};
-["desayuno","almuerzo","cena","snacks"].forEach(function(meal){
-if(consumedMeals[meal]){
-var macros=calculateMealMacros(mealPlan[meal]||[]);
-totalConsumed.calories+=macros.calories;
-totalConsumed.protein+=macros.protein;
-totalConsumed.fat+=macros.fat;
-totalConsumed.carbs+=macros.carbs;
-}
-});
-var userData=JSON.parse(localStorage.getItem("userData")||"{}");
-userData.consumedCalories=totalConsumed.calories;
-userData.consumedProtein=totalConsumed.protein;
-userData.consumedFat=totalConsumed.fat;
-userData.consumedCarbs=totalConsumed.carbs;
-localStorage.setItem("userData",JSON.stringify(userData));
 }
 
 var editingItemIndex=null;
@@ -659,6 +507,27 @@ showToast("Item eliminado");
 }
 
 loadChecklist();
+loadMealConsumption();
+</script>
+
+<script>
+var mealIcons={desayuno:"sunny",almuerzo:"wb_sunny",cena:"nights_stay",snacks:"cookie"};
+var mealColors={desayuno:"bg-amber-500/20",almuerzo:"bg-orange-500/20",cena:"bg-indigo-500/20",snacks:"bg-pink-500/20"};
+var mealLabels={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snacks"};
+
+var defaultFoods=[{id:"f1",name:"Huevos",portion:50,calories:78,protein:6,fat:5,carbs:0.6},{id:"f2",name:"Pechuga de pollo",portion:100,calories:165,protein:31,fat:3.6,carbs:0},{id:"f3",name:"Carne molida 80/20",portion:100,calories:254,protein:17,fat:20,carbs:0},{id:"f4",name:"Salmón",portion:100,calories:208,protein:20,fat:13,carbs:0},{id:"f5",name:"Bacon",portion:50,calories:270,protein:12,fat:23,carbs:1},{id:"f6",name:"Cerdo (lomo)",portion:100,calories:143,protein:26,fat:3.5,carbs:0},{id:"f7",name:"Carne de res (bistec)",portion:100,calories:271,protein:26,fat:18,carbs:0},{id:"f8",name:"Atún",portion:100,calories:132,protein:28,fat:1,carbs:0},{id:"f9",name:"Hígado de res",portion:100,calories:135,protein:20,fat:4,carbs:4},{id:"f10",name:"Pavo molido",portion:100,calories:149,protein:27,fat:3,carbs:0},{id:"f11",name:"Codornices",portion:100,calories:192,protein:25,fat:10,carbs:0},{id:"f12",name:"Aguacate",portion:100,calories:160,protein:2,fat:15,carbs:9},{id:"f13",name:"Aceite de oliva",portion:15,calories:119,protein:0,fat:13.5,carbs:0},{id:"f14",name:"Mantequilla",portion:15,calories:102,protein:0.1,fat:11.5,carbs:0},{id:"f15",name:"Aceite de coco",portion:15,calories:121,protein:0,fat:13.5,carbs:0},{id:"f16",name:"Ghee",portion:15,calories:130,protein:0,fat:14,carbs:0},{id:"f17",name:"Almendras",portion:30,calories:170,protein:6,fat:15,carbs:6},{id:"f18",name:"Nueces",portion:30,calories:196,protein:4.6,fat:19.5,carbs:4},{id:"f19",name:"Macadamia",portion:30,calories:204,protein:2.2,fat:21.5,carbs:4},{id:"f20",name:"Pecanas",portion:30,calories:196,protein:2.6,fat:20,carbs:4},{id:"f21",name:"Semillas de chía",portion:30,calories:138,protein:4.7,fat:9,carbs:12},{id:"f22",name:"Semillas de linaza",portion:30,calories:150,protein:5,fat:12,carbs:8},{id:"f23",name:"Brócoli",portion:100,calories:34,protein:2.8,fat:0.4,carbs:7},{id:"f24",name:"Coliflor",portion:100,calories:25,protein:2,fat:0.3,carbs:5},{id:"f25",name:"Espinacas",portion:100,calories:23,protein:2.9,fat:0.4,carbs:3.6},{id:"f26",name:"Champiñones",portion:100,calories:22,protein:3.1,fat:0.3,carbs:3.3},{id:"f27",name:"Pimiento rojo",portion:100,calories:31,protein:1,fat:0.3,carbs:6},{id:"f28",name:"Pepino",portion:100,calories:15,protein:0.7,fat:0.1,carbs:3.6},{id:"f29",name:"Lechuga",portion:100,calories:15,protein:1.4,fat:0.2,carbs:2.9},{id:"f30",name:"Tomate",portion:100,calories:18,protein:0.9,fat:0.2,carbs:3.9},{id:"f31",name:"Cebolla",portion:100,calories:40,protein:1.1,fat:0.1,carbs:9.3},{id:"f32",name:"Ajo",portion:3,calories:4,protein:0.2,fat:0,carbs:1},{id:"f33",name:"Calabacín",portion:100,calories:17,protein:1.2,fat:0.3,carbs:3.1},{id:"f34",name:"Apio",portion:100,calories:16,protein:0.7,fat:0.2,carbs:3},{id:"f35",name:"Queso mozzarella",portion:100,calories:280,protein:28,fat:17,carbs:3.1},{id:"f36",name:"Queso cheddar",portion:30,calories:120,protein:7,fat:10,carbs:0.4},{id:"f37",name:"Queso parmesano",portion:30,calories:111,protein:10,fat:7,carbs:0.4},{id:"f38",name:"Queso crema",portion:30,calories:100,protein:2,fat:10,carbs:0.4},{id:"f39",name:"Nata para cocinar",portion:100,calories:340,protein:2,fat:36,carbs:3},{id:"f40",name:"Queso feta",portion:30,calories:75,protein:4,fat:6,carbs:1},{id:"f41",name:"Cacao puro",portion:10,calories:23,protein:2,fat:1.4,carbs:6},{id:"f42",name:"Coco rallado",portion:30,calories:187,protein:2,fat:18,carbs:8},{id:"f43",name:"Edamame",portion:100,calories:121,protein:12,fat:5,carbs:10},{id:"f44",name:"Café con mantequilla",portion:240,calories:230,protein:2,fat:24,carbs:0},{id:"f45",name:"Chocolate negro 90%",portion:30,calories:150,protein:2,fat:13,carbs:4}];
+
+function getToday(){return new Date().toISOString().slice(0,10)}
+function getMealPlan(dateKey){var stored=safeParseJSON(localStorage.getItem("mealPlan_"+dateKey), {});if(Object.keys(stored).length===0){stored={desayuno:[],almuerzo:[],cena:[],snacks:[]};localStorage.setItem("mealPlan_"+dateKey,JSON.stringify(stored))}return stored}
+function getUserMacros(){return JSON.parse(localStorage.getItem("keto_macros")||"{}")}
+
+function calculateMealMacros(mealItems){var total={cal:0,prot:0,fat:0,carbs:0};mealItems.forEach(function(item){var cal,prot,fat,carbs;var itemPort=parseFloat(item.portion)||100;if(item.isRecipe&&item.baseCalories){var basePort=parseFloat(item.basePortion)||100;var ratio=itemPort/basePort;cal=Math.round(item.baseCalories*ratio);prot=Math.round(item.baseProtein*ratio*10)/10;fat=Math.round(item.baseFat*ratio*10)/10;carbs=Math.round(item.baseCarbs*ratio*10)/10}else{var food=defaultFoods.find(function(f){return f.id===item.id});if(food){var foodPort=parseFloat(food.portion)||100;var ratio=itemPort/foodPort;cal=Math.round((parseFloat(food.calories)||0)*ratio);prot=Math.round((parseFloat(food.protein)||0)*ratio*10)/10;fat=Math.round((parseFloat(food.fat)||0)*ratio*10)/10;carbs=Math.round((parseFloat(food.carbs)||0)*ratio*10)/10}}total.cal+=cal||0;total.prot+=prot||0;total.fat+=fat||0;total.carbs+=carbs||0});return total}
+
+function loadMealConsumption(){var section=document.getElementById("mealConsumption");var container=document.getElementById("mealsContainer");var today=getToday();var plan=getMealPlan(today);var consumed=JSON.parse(localStorage.getItem("mealConsumed_"+today)||"{}");var html="";Object.keys(mealLabels).forEach(function(meal){var items=plan[meal]||[];var isConsumed=consumed[meal]||false;var macros=calculateMealMacros(items);var icon=mealIcons[meal]||"restaurant";var colorClass=mealColors[meal]||"bg-surface-container-high";var borderClass=isConsumed?"border-primary":"border-surface-container-high";html+='<div class="flex items-center gap-3 p-3 rounded-lg border-2 '+borderClass+' bg-surface-container-low cursor-pointer" onclick="toggleMealConsumed(\''+meal+'\')">';html+='<div class="w-10 h-10 rounded-lg '+colorClass+' flex items-center justify-center"><span class="material-symbols-outlined text-white">'+icon+'</span></div>';html+='<div class="flex-1 min-w-0">';html+='<p class="font-medium text-white">'+mealLabels[meal]+'</p>';html+='<p class="text-xs text-on-surface-variant">'+(items.length>0?items.length+" items":"Sin alimentos")+" - "+macros.cal+" kcal"+'</p>';html+='</div>';html+='<div class="text-right">';html+='<p class="text-xs text-on-surface-variant">P:'+macros.prot+'g</p>';html+='<p class="text-xs text-on-surface-variant">G:'+macros.fat+'g</p>';html+='<p class="text-xs text-on-surface-variant">C:'+macros.carbs+'g</p>';html+='</div>';html+='<span class="material-symbols-outlined '+(isConsumed?"text-primary":"text-on-surface-variant/30")+'">'+(isConsumed?"check_circle":"radio_button_unchecked")+'</span>';html+='</div>'});container.innerHTML=html;section.classList.toggle("hidden",Object.keys(plan).every(function(m){return(plan[m]||[]).length===0}))}
+
+function toggleMealConsumed(meal){var today=getToday();var consumed=JSON.parse(localStorage.getItem("mealConsumed_"+today)||"{}");consumed[meal]=!consumed[meal];localStorage.setItem("mealConsumed_"+today,JSON.stringify(consumed));updateConsumedMacros();loadMealConsumption();showToast(consumed[meal]?mealLabels[meal]+" registrado":"Marcado como no consumido")}
+
+function updateConsumedMacros(){var today=getToday();var plan=getMealPlan(today);var consumed=JSON.parse(localStorage.getItem("mealConsumed_"+today)||"{}");var totalConsumed={cal:0,prot:0,fat:0,carbs:0};Object.keys(consumed).forEach(function(meal){if(consumed[meal]){var macros=calculateMealMacros(plan[meal]||[]);totalConsumed.cal+=macros.cal;totalConsumed.prot+=macros.prot;totalConsumed.fat+=macros.fat;totalConsumed.carbs+=macros.carbs}});localStorage.setItem("consumedMacros_"+today,JSON.stringify(totalConsumed))}
 </script>
 
 <script>
