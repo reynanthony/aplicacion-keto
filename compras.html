@@ -18,6 +18,7 @@
 <script>
 tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","primary-container":"#ff4d00","on-primary":"#ffffff","on-primary-container":"#ffffff","surface":"#0a0a0a","surface-container":"#181717","surface-container-low":"#111010","surface-container-high":"#1e1c1c","surface-container-highest":"#242222","on-surface":"#ffffff","on-surface-variant":"#adaaaa","outline":"#767575","secondary":"#ffb300","tertiary":"#ffc107","error":"#ff7351","background":"#0a0a0a"},fontFamily:{headline:["Plus Jakarta Sans","sans-serif"],body:["Inter","sans-serif"],label:["Inter","sans-serif"]}}}};
 </script>
+<script src="/aplicacion-keto/utils.js"></script>
 <style>
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}.glass-card{background:rgba(36,34,34,0.4);backdrop-filter:blur(20px);border:1px solid rgba(255,77,0,0.1)}.sidebar-collapsed .sidebar-nav{width:72px}.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}.sidebar-collapsed .sidebar-logo-text{display:none}.sidebar-collapsed .sidebar-logo{justify-content:center}.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px}.sidebar-collapsed~main .main-content{margin-left:72px}.sidebar-toggle-btn{left:256px;transition:left 0.3s ease}.sidebar-collapsed~.sidebar-toggle-btn{left:72px}.sidebar-link.active{background:#1e1c1c}.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
 </style>
@@ -162,7 +163,6 @@ if(localStorage.getItem("theme")==="dark"||!localStorage.getItem("theme")){docum
 initSidebar();
 var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
 </script>
-<script src="/aplicacion-keto/utils.js"></script>
 <script src="compras.js?v=3"></script>
 
 <script>
