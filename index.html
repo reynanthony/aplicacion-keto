@@ -688,19 +688,35 @@ document.querySelectorAll('.sidebar-link').forEach(function(link) {
   }
 });
 
+function safeSetText(id, text) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+function safeSetHTML(id, html) {
+  var el = document.getElementById(id);
+  if (el) el.innerHTML = html;
+}
+
+function safeSetStyle(id, prop, value) {
+  var el = document.getElementById(id);
+  if (el) el.style[prop] = value;
+}
+
 function loadDashboard() {
-  var userData = getLocalData('userData', schemas.userData, getDefaultUserData());
-  var ketoProfile = safeParseJSON(localStorage.getItem('keto_profile'), {});
-  
-  var todayKey = new Date().toISOString().slice(0, 10);
-  var rawData = localStorage.getItem('checklist_' + todayKey);
-  var checklistData = safeParseJSON(rawData, {});
-  
-  var water = checklistData.water || userData.waterIntake || 0;
-  var workout = checklistData.workout || userData.workoutMinutes || 0;
-  var walk = checklistData.walk || userData.walkMinutes || 0;
-  var protein = checklistData.protein || userData.proteinConsumed || 0;
-  var sleep = checklistData.sleep || userData.sleepHours || 0;
+  try {
+    var userData = getLocalData('userData', schemas.userData, getDefaultUserData());
+    var ketoProfile = safeParseJSON(localStorage.getItem('keto_profile'), {});
+    
+    var todayKey = new Date().toISOString().slice(0, 10);
+    var rawData = localStorage.getItem('checklist_' + todayKey);
+    var checklistData = safeParseJSON(rawData, {});
+    
+    var water = checklistData.water !== undefined ? checklistData.water : (userData.waterIntake || 0);
+    var workout = checklistData.workout !== undefined ? checklistData.workout : (userData.workoutMinutes || 0);
+    var walk = checklistData.walk !== undefined ? checklistData.walk : (userData.walkMinutes || 0);
+    var protein = checklistData.protein !== undefined ? checklistData.protein : (userData.proteinConsumed || 0);
+    var sleep = checklistData.sleep !== undefined ? checklistData.sleep : (userData.sleepHours || 0);
   
   var macros = getLocalData('keto_macros', schemas.ketoMacros, getDefaultMacros());
   var targetCal = parseInt(macros.calories) || 1800;
@@ -732,16 +748,18 @@ function loadDashboard() {
   if (weightProgress < 0) weightProgress = 0;
   if (weightProgress > 100) weightProgress = 100;
   
-  document.getElementById('progressPercent').textContent = weightProgress + '%';
+  safeSetText('progressPercent', weightProgress + '%');
   
   var circle = document.getElementById('progressCircle');
-  var circumference = 402;
-  var offset = circumference - (circumference * weightProgress / 100);
-  circle.style.strokeDashoffset = offset;
+  if (circle) {
+    var circumference = 402;
+    var offset = circumference - (circumference * weightProgress / 100);
+    circle.style.strokeDashoffset = offset;
+  }
   
   var remaining = currentWeight - goalWeight;
-  document.getElementById('weightDisplay').innerHTML = '<a href="macros.html" class="hover:text-primary-container transition-colors">' + currentWeight + 'kg <span class="text-on-surface-variant font-light">→</span> ' + goalWeight + 'kg</a>';
-  document.getElementById('remainingKg').innerHTML = remaining > 0 ? remaining + 'kg restantes' : (remaining < 0 ? Math.abs(remaining) + 'kg bajo meta' : '¡Meta alcanzada!') + ' <a href="macros.html" class="text-primary-container text-xs ml-1">(configurar)</a>';
+  safeSetHTML('weightDisplay', '<a href="macros.html" class="hover:text-primary-container transition-colors">' + currentWeight + 'kg <span class="text-on-surface-variant font-light">→</span> ' + goalWeight + 'kg</a>');
+  safeSetHTML('remainingKg', remaining > 0 ? remaining + 'kg restantes' : (remaining < 0 ? Math.abs(remaining) + 'kg bajo meta' : '¡Meta alcanzada!') + ' <a href="macros.html" class="text-primary-container text-xs ml-1">(configurar)</a>');
   
   var weeklyLoss = '0';
   if (typeof calculateWeeklyLoss === 'function') {
@@ -749,25 +767,23 @@ function loadDashboard() {
   } else {
     weeklyLoss = localStorage.getItem('weeklyLoss') || '0';
   }
-  document.getElementById('weeklyProgress').innerHTML = '<span class="material-symbols-outlined text-primary-container text-sm">trending_down</span><span class="text-primary-container font-headline font-bold text-sm">' + weeklyLoss + 'KG ESTA SEMANA</span>';
+  safeSetHTML('weeklyProgress', '<span class="material-symbols-outlined text-primary-container text-sm">trending_down</span><span class="text-primary-container font-headline font-bold text-sm">' + weeklyLoss + 'KG ESTA SEMANA</span>');
   
   var hydrationPercent = Math.round((water / 3) * 100);
   if (hydrationPercent > 100) hydrationPercent = 100;
-  document.getElementById('hydrationDisplay').textContent = Math.round(water) + '/3L';
+  safeSetText('hydrationDisplay', Math.round(water) + '/3L');
   
   var workoutPercent = Math.round((workout / 60) * 100);
   if (workoutPercent > 100) workoutPercent = 100;
-  document.getElementById('workoutDisplay').textContent = workout + '/60min';
+  safeSetText('workoutDisplay', workout + '/60min');
   
   var walkPercent = Math.round((walk / 60) * 100);
   if (walkPercent > 100) walkPercent = 100;
-  document.getElementById('walkDisplay').textContent = walk + '/60min';
+  safeSetText('walkDisplay', walk + '/60min');
   
-  var sleepPercent = Math.round((sleep / 8) * 100);
-  if (sleepPercent > 100) sleepPercent = 100;
-  if(document.getElementById('sleepDisplay')) {
-    document.getElementById('sleepDisplay').textContent = sleep + '/8h';
-  }
+  var sleepPercentVal = Math.round((sleep / 8) * 100);
+  if (sleepPercentVal > 100) sleepPercentVal = 100;
+  safeSetText('sleepDisplay', sleep + '/8h');
   
   var proteinPercent = Math.round((consumedProt / targetProt) * 100);
   if (proteinPercent > 100) proteinPercent = 100;
@@ -782,24 +798,27 @@ function loadDashboard() {
   if (caloriesPercent > 100) caloriesPercent = 100;
   var caloriesRemaining = Math.max(0, targetCal - consumedCal);
   
-  document.getElementById('consumedCalDisplay').textContent = consumedCal;
-  document.getElementById('targetCalDisplay').textContent = targetCal;
-  document.getElementById('caloriesBar').style.width = caloriesPercent + '%';
-  document.getElementById('caloriesRemaining').textContent = caloriesRemaining;
+  safeSetText('consumedCalDisplay', consumedCal);
+  safeSetText('targetCalDisplay', targetCal);
+  safeSetStyle('caloriesBar', 'width', caloriesPercent + '%');
+  safeSetText('caloriesRemaining', caloriesRemaining);
   
-  document.getElementById('consumedProtDisplay').textContent = consumedProt;
-  document.getElementById('targetProtDisplay').textContent = targetProt;
-  document.getElementById('proteinBar').style.width = proteinPercent + '%';
+  safeSetText('consumedProtDisplay', consumedProt);
+  safeSetText('targetProtDisplay', targetProt);
+  safeSetStyle('proteinBar', 'width', proteinPercent + '%');
   
-  document.getElementById('consumedFatDisplay').textContent = consumedFat;
-  document.getElementById('targetFatDisplay').textContent = targetFat;
-  document.getElementById('fatBar').style.width = fatPercent + '%';
+  safeSetText('consumedFatDisplay', consumedFat);
+  safeSetText('targetFatDisplay', targetFat);
+  safeSetStyle('fatBar', 'width', fatPercent + '%');
   
-  document.getElementById('consumedCarbsDisplay').textContent = consumedCarbs;
-  document.getElementById('targetCarbsDisplay').textContent = targetCarbs;
-  document.getElementById('carbsBar').style.width = carbsPercent + '%';
+  safeSetText('consumedCarbsDisplay', consumedCarbs);
+  safeSetText('targetCarbsDisplay', targetCarbs);
+  safeSetStyle('carbsBar', 'width', carbsPercent + '%');
   
   renderWeightHistory();
+  } catch (e) {
+    console.error('Error loading dashboard:', e);
+  }
 }
 
 function renderWeightHistory() {
