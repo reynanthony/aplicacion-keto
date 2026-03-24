@@ -98,11 +98,11 @@ tailwind.config = {
 <main class="main-content md:ml-64 pt-14 md:pt-24 px-4 md:px-6 pb-20 md:pb-12 min-h-screen transition-all duration-300">
 <div class="max-w-4xl mx-auto space-y-8">
 <section>
-<p class="text-xs font-label text-on-surface-variant uppercase tracking-[0.2em]">7 recetas</p>
+<p class="text-xs font-label text-on-surface-variant uppercase tracking-[0.2em]">18 recetas</p>
 <h1 class="text-3xl font-headline font-black text-white tracking-tight mt-1">Recetas Keto</h1>
 <p class="text-on-surface-variant mt-2">Toca una receta para ver ingredientes y preparacion</p>
 </section>
-<section id="recipesList" class="space-y-3"></section>
+<section id="recipesList" class="grid grid-cols-2 gap-3"></section>
 </div>
 </main>
 
@@ -172,13 +172,25 @@ initSidebar();
 var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
 
 var recipesDB = {
-  "pure-coliflor": {title: "Puré de coliflor cremoso", icon: "soup_kitchen", color: "#4caf50", image: "images/recipes/pure-coliflor.svg", prepTime: "20 min", calories: 180, protein: 4, fat: 15, carbs: 8, ingredients: ["1 coliflor mediana", "50-80g mantequilla", "Sal, pimienta, nuez moscada"], prep: "Cocer al vapor hasta tierna (15-20 min). Escurrir muy bien. Triturar con mantequilla y especias."},
-  "hongos": {title: "Salteado de hongos con ajo", icon: "forest", color: "#8d6e63", image: "images/recipes/hongos.svg", prepTime: "10 min", calories: 120, protein: 3, fat: 10, carbs: 4, ingredients: ["300g champiñones", "30g mantequilla", "2 dientes ajo", "Perejil"], prep: "Laminar champiñones. Calentar mantequilla, dorar 5-7 min. Agregar ajo, saltear 1 min."},
-  "pollo-jugoso": {title: "Pechuga de pollo jugosa", icon: "egg_alt", color: "#ffb300", image: "images/recipes/pollo-jugoso.svg", prepTime: "20 min", calories: 280, protein: 45, fat: 10, carbs: 0, ingredients: ["2 pechugas", "Sal, ajo en polvo", "Aceite de oliva"], prep: "Sazonar, sellar 2-3 min por lado. Tapar, fuego bajo 5-7 min. Reposar 5 min."},
-  "carne-molida": {title: "Carne molida estilo keto", icon: "restaurant", color: "#ff4d00", image: "images/recipes/carne-molida.svg", prepTime: "15 min", calories: 450, protein: 35, fat: 32, carbs: 1, ingredients: ["500g carne molida 80/20", "2 dientes ajo", "1 cdta comino", "30g mantequilla"], prep: "Dorar con mantequilla hasta crujiente. Agregar ajo y comino. 2 min mas."},
-  "aderezo": {title: "Aderezo cetogénico", icon: "local_bar", color: "#00bcd4", image: "images/recipes/aderezo.svg", prepTime: "5 min", calories: 520, protein: 0, fat: 58, carbs: 0, ingredients: ["4 cdas aceite oliva", "2 cdas vinagre manzana", "1 cdta mostaza", "Sal y pimienta"], prep: "Mezclar todo en frasco. Agitar bien. Refrigerar."},
-  "huevos": {title: "Huevos revueltos cremosos", icon: "egg", color: "#ffc107", image: "images/recipes/huevos.svg", prepTime: "10 min", calories: 380, protein: 24, fat: 30, carbs: 2, ingredients: ["3-5 huevos", "20g mantequilla", "30g mozzarella", "Sal"], prep: "Batir huevos. Fuego medio-bajo, mover suavemente. Agregar mozzarella al final."},
-  "arroz-coliflor": {title: "Arroz de coliflor", icon: "rice_bowl", color: "#9c27b0", image: "images/recipes/arroz-coliflor.svg", prepTime: "15 min", calories: 85, protein: 3, fat: 7, carbs: 6, ingredients: ["1 coliflor mediana", "2 cdas aceite/mantequilla", "Sal y pimienta"], prep: "Procesar coliflor. Saltear en sarten caliente 5-7 min."}
+  "huevos-bacon": {title: "Huevos con Bacon", icon: "egg", prepTime: "10 min", calories: 420, protein: 22, fat: 35, carbs: 1, ingredients: ["3 huevos", "3-4 tiras bacon", "20g mantequilla", "Sal y pimienta"], prep: "Freír el bacon hasta crujiente. En la misma grasa, freír los huevos. Sazonar."},
+  "pollo-asado": {title: "Pollo Asado Crujiente", icon: "set_meal", prepTime: "45 min", calories: 380, protein: 45, fat: 20, carbs: 0, ingredients: ["1 pollo entero", "50g mantequilla", "Ajo, romero, tomillo", "Sal gruesa"], prep: "Untar pollo con mantequilla y especias. Hornear a 200°C por 40-45 min hasta dorado."},
+  "filete-salmon": {title: "Salmón a la Plancha", icon: "set_meal", prepTime: "15 min", calories: 450, protein: 40, fat: 30, carbs: 0, ingredients: ["200g filete salmón", "30g mantequilla", "Limón, eneldo", "Sal y pimienta"], prep: "Sazonar el salmón. Cocinar 4-5 min por lado en sarten caliente con mantequilla."},
+  "carbón-carne": {title: "Bistec a la Parrilla", icon: "restaurant", prepTime: "20 min", calories: 520, protein: 48, fat: 36, carbs: 0, ingredients: ["250g bistec", "30g mantequilla", "Ajo, romero", "Sal y pimienta"], prep: "Sazonar y dejar reposar 30 min. Cocinar a fuego alto 3-4 min por lado."},
+  "hamburguesa-keto": {title: "Hamburguesa Keto", icon: "fastfood", prepTime: "15 min", calories: 550, protein: 35, fat: 42, carbs: 2, ingredients: ["150g carne molida", "1 huevo", "30g queso cheddar", "Lechuga, tomate"], prep: "Mezclar carne con huevo y formar hamburguesa. Cocinar 3-4 min por lado. Agregar queso."},
+  "pasta-zucchini": {title: "Fideos de Calabacín", icon: "soup_kitchen", prepTime: "15 min", calories: 120, protein: 5, fat: 9, carbs: 6, ingredients: ["2 zucchini medianos", "30g mantequilla", "2 dientes ajo", "Parmesano"], prep: "Cortar zucchini en espiral. Saltear en mantequilla con ajo 3-4 min. Agregar parmesano."},
+  "tortilla-espinaca": {title: "Tortilla de Espinacas", icon: "egg", prepTime: "12 min", calories: 280, protein: 18, fat: 22, carbs: 3, ingredients: ["3 huevos", "50g espinacas", "30g queso feta", "20g mantequilla"], prep: "Batir huevos y agregar espinacas. Cocinar en sarten con mantequilla a fuego lento."},
+  "cafe-keto": {title: "Café Keto (Bulletproof)", icon: "local_cafe", prepTime: "5 min", calories: 320, protein: 2, fat: 34, carbs: 0, ingredients: ["200ml café negro", "20g mantequilla", "10g aceite de coco"], prep: "Licuar café con mantequilla y aceite de coco hasta espumoso."},
+  "batido-queso": {title: "Batido de Queso Cottage", icon: "local_drink", prepTime: "3 min", calories: 180, protein: 20, fat: 8, carbs: 4, ingredients: ["150g queso cottage", "50ml crema", "Canela", "Endulzante keto"], prep: "Mezclar todos los ingredientes hasta suave."},
+  "ensalada-aguacate": {title: "Ensalada de Aguacate", icon: "eco", prepTime: "8 min", calories: 350, protein: 4, fat: 32, carbs: 8, ingredients: ["1 aguacate", "60g queso feta", "Aceitunas", "Aceite de oliva", "Limón"], prep: "Cortar aguacate en cubos. Mezclar con feta, aceitunas y aderezar."},
+  "pancakes-keto": {title: "Pancakes de Queso", icon: "breakfast_dining", prepTime: "15 min", calories: 280, protein: 16, fat: 22, carbs: 3, ingredients: ["2 huevos", "60g queso ricotta", "20g mantequilla", "Canela", "Endulzante"], prep: "Mezclar ingredientes. Cocinar en sarten caliente formando pancakes pequeños."},
+  "pizza-crust": {title: "Pizza Base de Queso", icon: "local_pizza", prepTime: "20 min", calories: 380, protein: 24, fat: 28, carbs: 4, ingredients: ["100g mozzarella rallada", "2 huevos", "Salsa keto", "Toppings a elección"], prep: "Mezclar mozzarella con huevos, formar base. Hornear 10 min a 200°C. Agregar toppings y hornear 5 min más."},
+  "pure-coliflor": {title: "Puré de Coliflor", icon: "soup_kitchen", prepTime: "20 min", calories: 180, protein: 4, fat: 15, carbs: 8, ingredients: ["1 coliflor", "50g mantequilla", "Sal, pimienta, nuez moscada"], prep: "Cocer al vapor. Triturar con mantequilla y especias."},
+  "hongos-ajo": {title: "Hongos Salteados", icon: "forest", prepTime: "10 min", calories: 120, protein: 3, fat: 10, carbs: 4, ingredients: ["300g champiñones", "30g mantequilla", "2 dientes ajo", "Perejil"], prep: "Saltear champiñones en mantequilla con ajo."},
+  "pollo-jugoso": {title: "Pechuga de Pollo", icon: "egg_alt", prepTime: "20 min", calories: 280, protein: 45, fat: 10, carbs: 0, ingredients: ["2 pechugas", "Sal, ajo en polvo", "Aceite de oliva"], prep: "Sazonar, sellar y cocinar a fuego bajo."},
+  "carne-molida": {title: "Carne Molida Keto", icon: "restaurant", prepTime: "15 min", calories: 450, protein: 35, fat: 32, carbs: 1, ingredients: ["500g carne molida", "Ajo, comino", "30g mantequilla"], prep: "Dorar en mantequilla con especias."},
+  "aderezo-keto": {title: "Aderezo Cesar", icon: "local_bar", prepTime: "5 min", calories: 520, protein: 0, fat: 58, carbs: 0, ingredients: ["4 cdas aceite oliva", "Vinagre", "Mostaza", "Sal y pimienta"], prep: "Mezclar todos los ingredientes."},
+  "huevos-revueltos": {title: "Huevos Revueltos", icon: "egg", prepTime: "10 min", calories: 380, protein: 24, fat: 30, carbs: 2, ingredients: ["3-5 huevos", "20g mantequilla", "30g mozzarella"], prep: "Mover suavemente a fuego bajo."},
+  "arroz-coliflor": {title: "Arroz de Coliflor", icon: "rice_bowl", prepTime: "15 min", calories: 85, protein: 3, fat: 7, carbs: 6, ingredients: ["1 coliflor", "Aceite de oliva", "Sal y pimienta"], prep: "Procesar y saltear."}
 };
 
 function getMacroColors(recipe) {
@@ -200,26 +212,23 @@ Object.keys(recipesDB).forEach(function(key) {
 var recipe = recipesDB[key];
 var colors = getMacroColors(recipe);
 var html = '<div class="glass-card rounded-xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-all duration-300" onclick="openRecipeModal(\'' + key + '\')">';
-html += '<div class="relative h-28 w-full overflow-hidden bg-gradient-to-br from-[' + colors.from + '] to-[' + colors.to + ']">';
-html += '<div class="absolute top-2 right-2 px-2 py-1 rounded-full bg-black/30 text-[10px] font-bold text-white">' + colors.label + '</div>';
+html += '<div class="relative h-20 w-full overflow-hidden bg-gradient-to-br from-[' + colors.from + '] to-[' + colors.to + ']">';
+html += '<div class="absolute top-1 right-1 px-2 py-0.5 rounded-full bg-black/30 text-[9px] font-bold text-white">' + colors.label + '</div>';
 html += '<div class="w-full h-full flex items-center justify-center">';
-html += '<span class="material-symbols-outlined text-6xl" style="color:rgba(255,255,255,0.3)">' + recipe.icon + '</span>';
+html += '<span class="material-symbols-outlined text-4xl text-white/40">' + recipe.icon + '</span>';
 html += '</div>';
-html += '<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">';
-html += '<div class="flex items-center gap-3 text-xs">';
-html += '<span class="text-white/90 flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span>' + recipe.prepTime + '</span>';
-html += '<span class="text-white/90 flex items-center gap-1"><span class="material-symbols-outlined text-sm">local_fire_department</span>' + recipe.calories + '</span>';
+html += '<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-2">';
+html += '<div class="flex items-center justify-between text-[10px]">';
+html += '<span class="text-white/80 flex items-center gap-1"><span class="material-symbols-outlined text-xs">schedule</span>' + recipe.prepTime + '</span>';
+html += '<span class="text-white/80 flex items-center gap-1"><span class="material-symbols-outlined text-xs">local_fire_department</span>' + recipe.calories + '</span>';
 html += '</div></div></div>';
-html += '<div class="p-4 flex items-center gap-3">';
-html += '<div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:' + colors.from + '20">';
-html += '<span class="material-symbols-outlined text-lg" style="color:' + colors.icon + '">' + recipe.icon + '</span></div>';
-html += '<div class="flex-1 min-w-0"><p class="font-headline font-bold text-white truncate">' + recipe.title + '</p>';
-html += '<div class="flex gap-2 mt-1">';
-html += '<span class="text-[10px] text-orange-400">' + recipe.protein + 'g prot</span>';
-html += '<span class="text-[10px] text-yellow-400">' + recipe.fat + 'g grasa</span>';
-html += '<span class="text-[10px] text-cyan-400">' + recipe.carbs + 'g carb</span>';
-html += '</div></div>';
-html += '<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span></div></div>';
+html += '<div class="p-3">';
+html += '<p class="font-bold text-white text-sm truncate">' + recipe.title + '</p>';
+html += '<div class="flex gap-2 mt-1 text-[9px]">';
+html += '<span class="text-orange-400">' + recipe.protein + 'g</span>';
+html += '<span class="text-yellow-400">' + recipe.fat + 'g</span>';
+html += '<span class="text-cyan-400">' + recipe.carbs + 'g</span>';
+html += '</div></div></div>';
 container.innerHTML += html;
 });
 

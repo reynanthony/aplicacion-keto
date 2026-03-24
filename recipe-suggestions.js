@@ -2,13 +2,25 @@
 
 // Base de datos de recetas (reducida para sugerencias)
 var recipesDB = {
-  'pure-coliflor': { title: 'Puré de coliflor cremoso', icon: 'soup_kitchen', color: '#4caf50', protein: 4, fat: 15, carbs: 8 },
-  'hongos': { title: 'Salteado de hongos con ajo', icon: 'forest', color: '#795548', protein: 3, fat: 10, carbs: 4 },
-  'pollo-jugoso': { title: 'Pechuga de pollo jugosa', icon: 'egg_alt', color: '#ffb300', protein: 45, fat: 10, carbs: 0 },
-  'carne-molida': { title: 'Carne molida estilo keto', icon: 'restaurant', color: '#ff4d00', protein: 35, fat: 32, carbs: 1 },
-  'huevos': { title: 'Huevos revueltos cremosos', icon: 'egg', color: '#ffb300', protein: 24, fat: 30, carbs: 2 },
-  'arroz-coliflor': { title: 'Arroz de coliflor', icon: 'rice_bowl', color: '#9c27b0', protein: 3, fat: 7, carbs: 6 },
-  'aderezo': { title: 'Aderezo cetogénico', icon: 'local_bar', color: '#00e3fd', protein: 0, fat: 58, carbs: 0 }
+  'huevos-bacon': { title: 'Huevos con Bacon', icon: 'egg', color: '#ff6b35', protein: 22, fat: 35, carbs: 1 },
+  'pollo-asado': { title: 'Pollo Asado Crujiente', icon: 'set_meal', color: '#ff6b35', protein: 45, fat: 20, carbs: 0 },
+  'filete-salmon': { title: 'Salmón a la Plancha', icon: 'set_meal', color: '#ff6b35', protein: 40, fat: 30, carbs: 0 },
+  'carbón-carne': { title: 'Bistec a la Parrilla', icon: 'restaurant', color: '#ff6b35', protein: 48, fat: 36, carbs: 0 },
+  'hamburguesa-keto': { title: 'Hamburguesa Keto', icon: 'fastfood', color: '#ffc107', protein: 35, fat: 42, carbs: 2 },
+  'pasta-zucchini': { title: 'Fideos de Calabacín', icon: 'soup_kitchen', color: '#00bcd4', protein: 5, fat: 9, carbs: 6 },
+  'tortilla-espinaca': { title: 'Tortilla de Espinacas', icon: 'egg', color: '#4caf50', protein: 18, fat: 22, carbs: 3 },
+  'cafe-keto': { title: 'Café Keto', icon: 'local_cafe', color: '#ffc107', protein: 2, fat: 34, carbs: 0 },
+  'batido-queso': { title: 'Batido de Queso Cottage', icon: 'local_drink', color: '#ff6b35', protein: 20, fat: 8, carbs: 4 },
+  'ensalada-aguacate': { title: 'Ensalada de Aguacate', icon: 'eco', color: '#4caf50', protein: 4, fat: 32, carbs: 8 },
+  'pancakes-keto': { title: 'Pancakes de Queso', icon: 'breakfast_dining', color: '#ffc107', protein: 16, fat: 22, carbs: 3 },
+  'pizza-crust': { title: 'Pizza Base de Queso', icon: 'local_pizza', color: '#ffc107', protein: 24, fat: 28, carbs: 4 },
+  'pure-coliflor': { title: 'Puré de Coliflor', icon: 'soup_kitchen', color: '#4caf50', protein: 4, fat: 15, carbs: 8 },
+  'hongos-ajo': { title: 'Hongos Salteados', icon: 'forest', color: '#795548', protein: 3, fat: 10, carbs: 4 },
+  'pollo-jugoso': { title: 'Pechuga de Pollo', icon: 'egg_alt', color: '#ffb300', protein: 45, fat: 10, carbs: 0 },
+  'carne-molida': { title: 'Carne Molida Keto', icon: 'restaurant', color: '#ff4d00', protein: 35, fat: 32, carbs: 1 },
+  'aderezo-keto': { title: 'Aderezo Cesar', icon: 'local_bar', color: '#ffc107', protein: 0, fat: 58, carbs: 0 },
+  'huevos-revueltos': { title: 'Huevos Revueltos', icon: 'egg', color: '#ffc107', protein: 24, fat: 30, carbs: 2 },
+  'arroz-coliflor': { title: 'Arroz de Coliflor', icon: 'rice_bowl', color: '#9c27b0', protein: 3, fat: 7, carbs: 6 }
 };
 
 function getMacroColors(recipe) {
@@ -26,13 +38,25 @@ function getMacroColors(recipe) {
 }
 
 var recipeIngredientsDB = {
+  'huevos-bacon': ['huevos', 'bacon', 'mantequilla'],
+  'pollo-asado': ['pollo', 'mantequilla', 'ajo'],
+  'filete-salmon': ['salmon', 'mantequilla', 'limón'],
+  'carbón-carne': ['bistec', 'mantequilla', 'ajo'],
+  'hamburguesa-keto': ['carne molida', 'huevos', 'queso'],
+  'pasta-zucchini': ['calabacín', 'mantequilla', 'ajo'],
+  'tortilla-espinaca': ['huevos', 'espinacas', 'queso'],
+  'cafe-keto': ['café', 'mantequilla', 'aceite de coco'],
+  'batido-queso': ['queso cottage', 'crema'],
+  'ensalada-aguacate': ['aguacate', 'queso feta', 'aceite de oliva'],
+  'pancakes-keto': ['huevos', 'queso ricotta', 'mantequilla'],
+  'pizza-crust': ['mozzarella', 'huevos', 'salsa'],
   'pure-coliflor': ['coliflor', 'mantequilla'],
-  'hongos': ['champiñones', 'ajo', 'mantequilla'],
+  'hongos-ajo': ['champiñones', 'ajo', 'mantequilla'],
   'pollo-jugoso': ['pollo', 'aceite de oliva'],
   'carne-molida': ['carne molida', 'ajo'],
-  'huevos': ['huevos', 'mantequilla', 'queso'],
+  'huevos-revueltos': ['huevos', 'mantequilla', 'queso'],
   'arroz-coliflor': ['coliflor', 'aceite de oliva'],
-  'aderezo': ['aceite de oliva', 'vinagre', 'mostaza']
+  'aderezo-keto': ['aceite de oliva', 'vinagre', 'mostaza']
 };
 
 function getRecipeSuggestions() {
