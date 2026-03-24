@@ -98,9 +98,17 @@ tailwind.config = {
 <main class="main-content md:ml-64 pt-14 md:pt-24 px-4 md:px-6 pb-20 md:pb-12 min-h-screen transition-all duration-300">
 <div class="max-w-4xl mx-auto space-y-8">
 <section>
-<p class="text-xs font-label text-on-surface-variant uppercase tracking-[0.2em]">18 recetas</p>
+<div class="flex items-center justify-between">
+<div>
+<p class="text-xs font-label text-on-surface-variant uppercase tracking-[0.2em]"><span id="totalRecipesCount">18</span> recetas</p>
 <h1 class="text-3xl font-headline font-black text-white tracking-tight mt-1">Recetas Keto</h1>
-<p class="text-on-surface-variant mt-2">Toca una receta para ver ingredientes y preparacion</p>
+</div>
+<button onclick="openCreateRecipeModal()" class="bg-primary-container text-white px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-primary-container/80 transition-all">
+<span class="material-symbols-outlined text-lg">add</span>
+Nueva
+</button>
+</div>
+<p class="text-on-surface-variant mt-2">Toca una receta para ver ingredientes y preparación</p>
 </section>
 <section id="recipesList" class="grid grid-cols-2 gap-3"></section>
 </div>
@@ -144,6 +152,73 @@ tailwind.config = {
 <button onclick="addToMealPlan('snacks')" class="w-full py-3 rounded-xl bg-pink-500/20 text-pink-400 font-medium hover:bg-pink-500/30 transition-colors flex items-center justify-center gap-2">
 <span class="material-symbols-outlined">cookie</span> Snacks
 </button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Create Recipe Modal -->
+<div id="createRecipeModal" class="fixed inset-0 z-[80] hidden">
+<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeCreateRecipeModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+<div class="glass-card rounded-2xl p-6 w-full max-w-lg max-h-[85vh] flex flex-col pointer-events-auto">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-lg font-headline font-bold text-white">Crear Receta Personalizada</h3>
+<button onclick="closeCreateRecipeModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+</div>
+
+<div class="flex-1 overflow-y-auto space-y-4">
+<div>
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Nombre de la receta</label>
+<input type="text" id="recipeName" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary-container" placeholder="Ej: Desayuno Keto">
+</div>
+
+<div>
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Icono</label>
+<div class="flex flex-wrap gap-2">
+<button type="button" onclick="selectRecipeIcon('egg')" class="icon-option w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center hover:bg-surface-container-highest transition-all"><span class="material-symbols-outlined">egg</span></button>
+<button type="button" onclick="selectRecipeIcon('set_meal')" class="icon-option w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center hover:bg-surface-container-highest transition-all"><span class="material-symbols-outlined">set_meal</span></button>
+<button type="button" onclick="selectRecipeIcon('restaurant')" class="icon-option w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center hover:bg-surface-container-highest transition-all"><span class="material-symbols-outlined">restaurant</span></button>
+<button type="button" onclick="selectRecipeIcon('local_cafe')" class="icon-option w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center hover:bg-surface-container-highest transition-all"><span class="material-symbols-outlined">local_cafe</span></button>
+<button type="button" onclick="selectRecipeIcon('local_drink')" class="icon-option w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center hover:bg-surface-container-highest transition-all"><span class="material-symbols-outlined">local_drink</span></button>
+<button type="button" onclick="selectRecipeIcon('eco')" class="icon-option w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center hover:bg-surface-container-highest transition-all"><span class="material-symbols-outlined">eco</span></button>
+<button type="button" onclick="selectRecipeIcon('soup_kitchen')" class="icon-option w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center hover:bg-surface-container-highest transition-all"><span class="material-symbols-outlined">soup_kitchen</span></button>
+<button type="button" onclick="selectRecipeIcon('fastfood')" class="icon-option w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center hover:bg-surface-container-highest transition-all"><span class="material-symbols-outlined">fastfood</span></button>
+</div>
+</div>
+
+<div>
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Ingredientes (selecciona de tu despensa)</label>
+<div class="relative mb-2">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input type="text" id="ingredientSearch" placeholder="Buscar alimento..." class="w-full bg-surface-container text-white border border-outline rounded-xl pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-primary-container" oninput="filterIngredients()">
+</div>
+<div id="ingredientList" class="max-h-40 overflow-y-auto space-y-1 bg-surface-container-high rounded-xl p-2"></div>
+</div>
+
+<div id="selectedIngredients" class="space-y-2"></div>
+
+<div>
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Preparación</label>
+<textarea id="recipePrep" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary-container" rows="3" placeholder="Describe cómo preparar la receta..."></textarea>
+</div>
+
+<div class="bg-surface-container-high rounded-xl p-4">
+<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">Macros calculados</p>
+<div class="grid grid-cols-4 gap-2 text-center">
+<div><p id="calcCalories" class="text-lg font-bold text-yellow-400">0</p><p class="text-[10px] text-on-surface-variant">kcal</p></div>
+<div><p id="calcProtein" class="text-lg font-bold text-orange-400">0g</p><p class="text-[10px] text-on-surface-variant">proteína</p></div>
+<div><p id="calcFat" class="text-lg font-bold text-yellow-300">0g</p><p class="text-[10px] text-on-surface-variant">grasa</p></div>
+<div><p id="calcCarbs" class="text-lg font-bold text-cyan-400">0g</p><p class="text-[10px] text-on-surface-variant">carbos</p></div>
+</div>
+</div>
+</div>
+
+<div class="flex gap-3 mt-4">
+<button onclick="closeCreateRecipeModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>
+<button onclick="saveCustomRecipe()" class="flex-1 py-3 rounded-xl bg-primary-container text-white font-bold hover:bg-primary-container/80 transition-colors">Guardar</button>
 </div>
 </div>
 </div>
@@ -354,6 +429,185 @@ function showToast(message) {
     toast.classList.remove('opacity-100', 'translate-y-0');
   }, 3000);
 }
+
+var customRecipes = JSON.parse(localStorage.getItem('customRecipes') || '[]');
+var selectedIngredients = [];
+var selectedIcon = 'egg';
+
+function openCreateRecipeModal() {
+  document.getElementById('createRecipeModal').classList.remove('hidden');
+  document.getElementById('createRecipeModal').classList.add('flex');
+  document.getElementById('recipeName').value = '';
+  document.getElementById('recipePrep').value = '';
+  document.getElementById('ingredientSearch').value = '';
+  selectedIngredients = [];
+  selectedIcon = 'egg';
+  updateSelectedIngredients();
+  renderIngredientList();
+}
+
+function closeCreateRecipeModal() {
+  document.getElementById('createRecipeModal').classList.add('hidden');
+  document.getElementById('createRecipeModal').classList.remove('flex');
+}
+
+function selectRecipeIcon(icon) {
+  selectedIcon = icon;
+  document.querySelectorAll('.icon-option').forEach(function(btn) {
+    btn.classList.remove('bg-primary-container', 'text-white');
+    btn.classList.add('bg-surface-container-high');
+  });
+  event.target.closest('.icon-option').classList.add('bg-primary-container', 'text-white');
+  event.target.closest('.icon-option').classList.remove('bg-surface-container-high');
+}
+
+function getAllFoods() {
+  var stored = localStorage.getItem('ketoFoods');
+  if (stored) {
+    try { return JSON.parse(stored); } catch(e) { return []; }
+  }
+  return [];
+}
+
+function renderIngredientList() {
+  var search = document.getElementById('ingredientSearch').value.toLowerCase();
+  var foods = getAllFoods();
+  var html = '';
+  foods.forEach(function(food) {
+    if (!search || food.name.toLowerCase().includes(search)) {
+      var alreadySelected = selectedIngredients.some(function(s) { return s.id === food.id; });
+      if (!alreadySelected) {
+        html += '<div class="flex items-center justify-between p-2 rounded-lg hover:bg-surface-container-high cursor-pointer" onclick="addIngredient(\'' + food.id + '\')">';
+        html += '<span class="text-white text-sm">' + food.name + '</span>';
+        html += '<span class="material-symbols-outlined text-primary-container text-lg">add_circle</span>';
+        html += '</div>';
+      }
+    }
+  });
+  document.getElementById('ingredientList').innerHTML = html;
+}
+
+function filterIngredients() {
+  renderIngredientList();
+}
+
+function addIngredient(foodId) {
+  var foods = getAllFoods();
+  var food = foods.find(function(f) { return f.id === foodId; });
+  if (food) {
+    selectedIngredients.push({
+      id: food.id,
+      name: food.name,
+      portion: food.portion || 100,
+      calories: food.calories || 0,
+      protein: food.protein || 0,
+      fat: food.fat || 0,
+      carbs: food.carbs || 0
+    });
+    updateSelectedIngredients();
+    renderIngredientList();
+  }
+}
+
+function removeIngredient(index) {
+  selectedIngredients.splice(index, 1);
+  updateSelectedIngredients();
+  renderIngredientList();
+}
+
+function updateSelectedIngredients() {
+  var html = '';
+  var total = { calories: 0, protein: 0, fat: 0, carbs: 0 };
+  selectedIngredients.forEach(function(ing, index) {
+    total.calories += ing.calories;
+    total.protein += ing.protein;
+    total.fat += ing.fat;
+    total.carbs += ing.carbs;
+    html += '<div class="flex items-center justify-between p-2 bg-surface-container-high rounded-lg">';
+    html += '<span class="text-white text-sm">' + ing.name + '</span>';
+    html += '<button onclick="removeIngredient(' + index + ')" class="text-red-400 hover:text-red-300"><span class="material-symbols-outlined text-lg">close</span></button>';
+    html += '</div>';
+  });
+  document.getElementById('selectedIngredients').innerHTML = html;
+  document.getElementById('calcCalories').textContent = Math.round(total.calories);
+  document.getElementById('calcProtein').textContent = Math.round(total.protein) + 'g';
+  document.getElementById('calcFat').textContent = Math.round(total.fat) + 'g';
+  document.getElementById('calcCarbs').textContent = Math.round(total.carbs) + 'g';
+}
+
+function saveCustomRecipe() {
+  var name = document.getElementById('recipeName').value.trim();
+  var prep = document.getElementById('recipePrep').value.trim();
+  if (!name) { showToast('Ingresa un nombre para la receta'); return; }
+  if (selectedIngredients.length === 0) { showToast('Agrega al menos un ingrediente'); return; }
+  
+  var total = { calories: 0, protein: 0, fat: 0, carbs: 0 };
+  var ingredientNames = [];
+  selectedIngredients.forEach(function(ing) {
+    total.calories += ing.calories;
+    total.protein += ing.protein;
+    total.fat += ing.fat;
+    total.carbs += ing.carbs;
+    ingredientNames.push(ing.name);
+  });
+  
+  var recipe = {
+    id: 'custom_' + Date.now(),
+    title: name,
+    icon: selectedIcon,
+    prepTime: ' varies',
+    calories: Math.round(total.calories),
+    protein: Math.round(total.protein),
+    fat: Math.round(total.fat),
+    carbs: Math.round(total.carbs),
+    ingredients: ingredientNames,
+    prep: prep || 'Sin instrucciones',
+    isCustom: true
+  };
+  
+  customRecipes.push(recipe);
+  localStorage.setItem('customRecipes', JSON.stringify(customRecipes));
+  closeCreateRecipeModal();
+  renderAllRecipes();
+  showToast('Receta personalizada guardada!');
+}
+
+function renderAllRecipes() {
+  var container = document.getElementById('recipesList');
+  var allRecipes = Object.assign({}, recipesDB);
+  customRecipes.forEach(function(r) { allRecipes[r.id] = r; });
+  
+  var html = '';
+  Object.keys(allRecipes).forEach(function(key) {
+    var recipe = allRecipes[key];
+    var colors = getMacroColors(recipe);
+    var prep = recipe.prepTime || '10 min';
+    html += '<div class="glass-card rounded-xl overflow-hidden cursor-pointer hover:scale-102 transition-all duration-300" onclick="openRecipeModal(\'' + key + '\')">';
+    html += '<div class="h-20 md:h-28 w-full overflow-hidden flex items-center justify-center" style="background: linear-gradient(135deg, ' + colors.from + ', ' + colors.to + ');">';
+    html += '<span class="material-symbols-outlined text-4xl md:text-5xl text-white opacity-30">' + recipe.icon + '</span>';
+    if (recipe.isCustom) {
+      html += '<div class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-black bg-opacity-30 text-[9px] font-bold text-white">MIA</div>';
+    } else {
+      html += '<div class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-black bg-opacity-30 text-[9px] font-bold text-white">' + colors.label + '</div>';
+    }
+    html += '</div>';
+    html += '<div class="p-3">';
+    html += '<p class="font-bold text-white text-xs md:text-sm">' + recipe.title + '</p>';
+    html += '<div class="flex gap-1 md:gap-2 mt-1">';
+    html += '<span class="text-[9px] md:text-[10px] text-orange-400">' + recipe.protein + 'g</span>';
+    html += '<span class="text-[9px] md:text-[10px] text-yellow-400">' + recipe.fat + 'g</span>';
+    html += '<span class="text-[9px] md:text-[10px] text-cyan-400">' + recipe.carbs + 'g</span>';
+    html += '</div>';
+    html += '<p class="text-[9px] text-on-surface-variant mt-1">' + prep + '</p>';
+    html += '</div></div>';
+  });
+  container.innerHTML = html;
+  document.getElementById('totalRecipesCount').textContent = Object.keys(allRecipes).length;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  renderAllRecipes();
+});
 </script>
 
 <script>
