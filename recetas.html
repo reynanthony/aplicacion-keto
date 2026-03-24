@@ -341,7 +341,12 @@ container.innerHTML += html;
 });
 
 function openRecipeModal(key) {
+currentRecipeKey = key;
 var recipe = recipesDB[key];
+if(!recipe){
+var customRecs=JSON.parse(localStorage.getItem('customRecipes')||'[]');
+recipe=customRecs.find(function(r){return r.id===key});
+}
 var colors = getMacroColors(recipe);
 document.getElementById("modalTitle").textContent = recipe.title;
 var ingredientsHtml = recipe.ingredients.map(function(i) {
