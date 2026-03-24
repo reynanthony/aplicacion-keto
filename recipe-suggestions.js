@@ -1,20 +1,19 @@
 // ==================== SUGERENCIAS DE RECETAS ====================
 
-// Base de datos de recetas (reducida para sugerencias)
 var recipesDB = {
   'huevos-bacon': { title: 'Huevos con Bacon', icon: 'egg', color: '#ff6b35', protein: 22, fat: 35, carbs: 1 },
   'pollo-asado': { title: 'Pollo Asado Crujiente', icon: 'set_meal', color: '#ff6b35', protein: 45, fat: 20, carbs: 0 },
-  'filete-salmon': { title: 'Salmón a la Plancha', icon: 'set_meal', color: '#ff6b35', protein: 40, fat: 30, carbs: 0 },
-  'carbón-carne': { title: 'Bistec a la Parrilla', icon: 'restaurant', color: '#ff6b35', protein: 48, fat: 36, carbs: 0 },
+  'filete-salmon': { title: 'Salmon a la Plancha', icon: 'set_meal', color: '#ff6b35', protein: 40, fat: 30, carbs: 0 },
+  'carbon-carne': { title: 'Bistec a la Parrilla', icon: 'restaurant', color: '#ff6b35', protein: 48, fat: 36, carbs: 0 },
   'hamburguesa-keto': { title: 'Hamburguesa Keto', icon: 'fastfood', color: '#ffc107', protein: 35, fat: 42, carbs: 2 },
-  'pasta-zucchini': { title: 'Fideos de Calabacín', icon: 'soup_kitchen', color: '#00bcd4', protein: 5, fat: 9, carbs: 6 },
+  'pasta-zucchini': { title: 'Fideos de Calabacin', icon: 'soup_kitchen', color: '#00bcd4', protein: 5, fat: 9, carbs: 6 },
   'tortilla-espinaca': { title: 'Tortilla de Espinacas', icon: 'egg', color: '#4caf50', protein: 18, fat: 22, carbs: 3 },
-  'cafe-keto': { title: 'Café Keto', icon: 'local_cafe', color: '#ffc107', protein: 2, fat: 34, carbs: 0 },
+  'cafe-keto': { title: 'Cafe Keto', icon: 'local_cafe', color: '#ffc107', protein: 2, fat: 34, carbs: 0 },
   'batido-queso': { title: 'Batido de Queso Cottage', icon: 'local_drink', color: '#ff6b35', protein: 20, fat: 8, carbs: 4 },
   'ensalada-aguacate': { title: 'Ensalada de Aguacate', icon: 'eco', color: '#4caf50', protein: 4, fat: 32, carbs: 8 },
   'pancakes-keto': { title: 'Pancakes de Queso', icon: 'breakfast_dining', color: '#ffc107', protein: 16, fat: 22, carbs: 3 },
   'pizza-crust': { title: 'Pizza Base de Queso', icon: 'local_pizza', color: '#ffc107', protein: 24, fat: 28, carbs: 4 },
-  'pure-coliflor': { title: 'Puré de Coliflor', icon: 'soup_kitchen', color: '#4caf50', protein: 4, fat: 15, carbs: 8 },
+  'pure-coliflor': { title: 'Pure de Coliflor', icon: 'soup_kitchen', color: '#4caf50', protein: 4, fat: 15, carbs: 8 },
   'hongos-ajo': { title: 'Hongos Salteados', icon: 'forest', color: '#795548', protein: 3, fat: 10, carbs: 4 },
   'pollo-jugoso': { title: 'Pechuga de Pollo', icon: 'egg_alt', color: '#ffb300', protein: 45, fat: 10, carbs: 0 },
   'carne-molida': { title: 'Carne Molida Keto', icon: 'restaurant', color: '#ff4d00', protein: 35, fat: 32, carbs: 1 },
@@ -40,18 +39,18 @@ function getMacroColors(recipe) {
 var recipeIngredientsDB = {
   'huevos-bacon': ['huevos', 'bacon', 'mantequilla'],
   'pollo-asado': ['pollo', 'mantequilla', 'ajo'],
-  'filete-salmon': ['salmon', 'mantequilla', 'limón'],
-  'carbón-carne': ['bistec', 'mantequilla', 'ajo'],
+  'filete-salmon': ['salmon', 'mantequilla', 'limon'],
+  'carbon-carne': ['bistec', 'mantequilla', 'ajo'],
   'hamburguesa-keto': ['carne molida', 'huevos', 'queso'],
-  'pasta-zucchini': ['calabacín', 'mantequilla', 'ajo'],
+  'pasta-zucchini': ['calabacin', 'mantequilla', 'ajo'],
   'tortilla-espinaca': ['huevos', 'espinacas', 'queso'],
-  'cafe-keto': ['café', 'mantequilla', 'aceite de coco'],
+  'cafe-keto': ['cafe', 'mantequilla', 'aceite de coco'],
   'batido-queso': ['queso cottage', 'crema'],
   'ensalada-aguacate': ['aguacate', 'queso feta', 'aceite de oliva'],
   'pancakes-keto': ['huevos', 'queso ricotta', 'mantequilla'],
   'pizza-crust': ['mozzarella', 'huevos', 'salsa'],
   'pure-coliflor': ['coliflor', 'mantequilla'],
-  'hongos-ajo': ['champiñones', 'ajo', 'mantequilla'],
+  'hongos-ajo': ['champinones', 'ajo', 'mantequilla'],
   'pollo-jugoso': ['pollo', 'aceite de oliva'],
   'carne-molida': ['carne molida', 'ajo'],
   'huevos-revueltos': ['huevos', 'mantequilla', 'queso'],
@@ -73,13 +72,13 @@ function getRecipeSuggestions() {
   
   var suggestions = [];
   
-  Object.entries(recipeIngredientsDB).forEach(function(_ref) {
-    var recipeId = _ref[0];
-    var needed = _ref[1];
+  Object.entries(recipeIngredientsDB).forEach(function(entry) {
+    var recipeId = entry[0];
+    var needed = entry[1];
     
     var matchCount = needed.filter(function(ing) {
       return availableIngredients.some(function(avail) {
-        return avail.includes(ing);
+        return avail.indexOf(ing) !== -1;
       });
     }).length;
     
@@ -89,7 +88,7 @@ function getRecipeSuggestions() {
         matchPercent: Math.round((matchCount / needed.length) * 100),
         missing: needed.filter(function(ing) {
           return !availableIngredients.some(function(avail) {
-            return avail.includes(ing);
+            return avail.indexOf(ing) !== -1;
           });
         })
       });
@@ -117,10 +116,10 @@ function showRecipeSuggestions() {
     var recipe = recipesDB ? recipesDB[s.id] : null;
     if (recipe) {
       var colors = getMacroColors(recipe);
-      html += '<div class="glass-card rounded-xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-all" onclick="openRecipeModal(\'' + s.id + '\')">';
-      html += '<div class="h-28 w-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-[' + colors.from + '] to-[' + colors.to + ']">';
-      html += '<span class="material-symbols-outlined text-5xl text-white/30">' + recipe.icon + '</span>';
-      html += '<div class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-black/30 text-[9px] font-bold text-white">' + colors.label + '</div>';
+      html += '<div class="glass-card rounded-xl overflow-hidden cursor-pointer hover:scale-102 transition-all" onclick="openRecipeModal(\'' + s.id + '\')">';
+      html += '<div class="h-28 w-full overflow-hidden flex items-center justify-center" style="background: linear-gradient(135deg, ' + colors.from + ', ' + colors.to + ');">';
+      html += '<span class="material-symbols-outlined text-5xl text-white opacity-30">' + recipe.icon + '</span>';
+      html += '<div class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-black bg-opacity-30 text-[9px] font-bold text-white">' + colors.label + '</div>';
       html += '</div>';
       html += '<div class="p-3">';
       html += '<p class="font-bold text-white text-sm">' + recipe.title + '</p>';
@@ -130,7 +129,6 @@ function showRecipeSuggestions() {
       html += '<span class="text-[10px] text-cyan-400">' + recipe.carbs + 'g</span>';
       html += '</div>';
       html += '<p class="text-xs text-green-400 mt-1">' + s.matchPercent + '% ingredientes</p>';
-      }
       html += '</div></div>';
     }
   });
@@ -139,7 +137,6 @@ function showRecipeSuggestions() {
   container.innerHTML = html;
 }
 
-// Auto-inicializar en dashboard
 if (typeof document !== 'undefined') {
   document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
