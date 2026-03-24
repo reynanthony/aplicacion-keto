@@ -499,14 +499,21 @@ function addIngredient(foodId) {
       id: food.id,
       name: food.name,
       portion: food.portion || 100,
-      calories: food.calories || 0,
-      protein: food.protein || 0,
-      fat: food.fat || 0,
-      carbs: food.carbs || 0
+      basePortion: food.portion || 100,
+      baseCalories: food.calories || 0,
+      baseProtein: food.protein || 0,
+      baseFat: food.fat || 0,
+      baseCarbs: food.carbs || 0
     });
     updateSelectedIngredients();
     renderIngredientList();
   }
+}
+
+function updateIngredientPortion(index, newPortion) {
+  var portion = parseFloat(newPortion) || 0;
+  selectedIngredients[index].portion = portion;
+  updateSelectedIngredients();
 }
 
 function removeIngredient(index) {
@@ -519,13 +526,30 @@ function updateSelectedIngredients() {
   var html = '';
   var total = { calories: 0, protein: 0, fat: 0, carbs: 0 };
   selectedIngredients.forEach(function(ing, index) {
-    total.calories += ing.calories;
-    total.protein += ing.protein;
-    total.fat += ing.fat;
-    total.carbs += ing.carbs;
-    html += '<div class="flex items-center justify-between p-2 bg-surface-container-high rounded-lg">';
+    var ratio = ing.basePortion > 0 ? ing.portion / ing.basePortion : 1;
+    var calories = ing.baseCalories * ratio;
+    var protein = ing.baseProtein * ratio;
+    var fat = ing.baseFat * ratio;
+    var carbs = ing.baseCarbs * ratio;
+    
+    total.calories += calories;
+    total.protein += protein;
+    total.fat += fat;
+    total.carbs += carbs;
+    
+    html += '<div class="p-2 bg-surface-container-high rounded-lg">';
+    html += '<div class="flex items-center justify-between mb-1">';
     html += '<span class="text-white text-sm">' + ing.name + '</span>';
     html += '<button onclick="removeIngredient(' + index + ')" class="text-red-400 hover:text-red-300"><span class="material-symbols-outlined text-lg">close</span></button>';
+    html += '</div>';
+    html += '<div class="flex items-center gap-2">';
+    html += '<label class="text-[10px] text-on-surface-variant">g:</label>';
+    html += '<input type="number" value="' + ing.portion + '" min="1" class="w-16 bg-surface-container text-white text-xs px-2 py-1 rounded border border-outline focus:border-primary-container" onchange="updateIngredientPortion(' + index + ', this.value)">';
+    html += '<span class="text-[10px] text-yellow-400">' + Math.round(calories) + ' kcal</span>';
+    html += '<span class="text-[10px] text-orange-400">' + Math.round(protein) + 'g</span>';
+    html += '<span class="text-[10px] text-yellow-300">' + Math.round(fat) + 'g</span>';
+    html += '<span class="text-[10px] text-cyan-400">' + Math.round(carbs) + 'g</span>';
+    html += '</div>';
     html += '</div>';
   });
   document.getElementById('selectedIngredients').innerHTML = html;
@@ -542,13 +566,14 @@ function saveCustomRecipe() {
   if (selectedIngredients.length === 0) { showToast('Agrega al menos un ingrediente'); return; }
   
   var total = { calories: 0, protein: 0, fat: 0, carbs: 0 };
-  var ingredientNames = [];
+  var ingredientDetails = [];
   selectedIngredients.forEach(function(ing) {
-    total.calories += ing.calories;
-    total.protein += ing.protein;
-    total.fat += ing.fat;
-    total.carbs += ing.carbs;
-    ingredientNames.push(ing.name);
+    var ratio = ing.basePortion > 0 ? ing.portion / ing.basePortion : 1;
+    total.calories += ing.baseCalories * ratio;
+    total.protein += ing.baseProtein * ratio;
+    total.fat += ing.baseFat * ratio;
+    total.carbs += ing.baseCarbs * ratio;
+    ingredientDetails.push(ing.name + ' (' + Math.round(ing.portion) + 'g)');
   });
   
   var recipe = {
@@ -560,7 +585,7 @@ function saveCustomRecipe() {
     protein: Math.round(total.protein),
     fat: Math.round(total.fat),
     carbs: Math.round(total.carbs),
-    ingredients: ingredientNames,
+    ingredients: ingredientDetails,
     prep: prep || 'Sin instrucciones',
     isCustom: true
   };
