@@ -167,11 +167,11 @@ self.addEventListener('push', event => {
     const data = event.data.json();
     const options = {
       body: data.body || 'Actualiza tus macros y hábitos diarios',
-      icon: '/icons/icon-192x192.png',
-      badge: '/icons/icon-72x72.png',
+      icon: '/aplicacion-keto/icons/icon-192x192.png',
+      badge: '/aplicacion-keto/icons/icon-72x72.png',
       vibrate: [200, 100, 200],
       data: {
-        url: data.url || '/'
+        url: data.url || '/aplicacion-keto/'
       }
     };
     event.waitUntil(

@@ -4,11 +4,11 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <!-- PWA Manifest y meta tags para instalación -->
-<link rel="manifest" href="/manifest.json">
+<link rel="manifest" href="/aplicacion-keto/manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="KetoLab">
-<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+<link rel="apple-touch-icon" href="/aplicacion-keto/icons/icon-192x192.png">
 <meta name="theme-color" content="#ff4d00">
 <meta name="mobile-web-app-capable" content="yes">
 <title>KetoLab | Dashboard</title>
@@ -806,7 +806,7 @@ loadDashboard();
   // Registrar Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
+      navigator.serviceWorker.register('/aplicacion-keto/sw.js')
         .then(registration => {
           console.log('[PWA] Service Worker registrado correctamente en:', registration.scope);
           
