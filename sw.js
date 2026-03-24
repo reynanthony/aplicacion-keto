@@ -151,8 +151,9 @@ self.addEventListener('fetch', event => {
         if (networkResponse && networkResponse.status === 200 && 
             (event.request.destination === 'image' || 
              event.request.destination === 'font')) {
+          var clonedResponse = networkResponse.clone();
           caches.open(DYNAMIC_CACHE).then(cache => {
-            cache.put(event.request, networkResponse.clone());
+            cache.put(event.request, clonedResponse);
           });
         }
         return networkResponse;
