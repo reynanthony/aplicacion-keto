@@ -68,6 +68,9 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 <div class="relative">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
 <input type="text" id="searchInput" placeholder="Buscar alimento..." class="w-full bg-surface-container text-white border border-outline rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:border-primary-container" oninput="renderFoods()">
+<button onclick="openOnlineSearchModal()" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-secondary/20 hover:bg-secondary/40 rounded-lg transition-colors" title="Buscar en línea">
+<span class="material-symbols-outlined text-secondary text-lg">cloud_search</span>
+</button>
 </div>
 
 <div class="flex flex-wrap gap-2">
@@ -105,6 +108,41 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 
 </div>
 </main>
+
+<!-- Online Search Modal -->
+<div id="onlineSearchModal" class="fixed inset-0 z-[70] hidden">
+<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeOnlineSearchModal()"></div>
+<div class="absolute top-20 left-1/2 -translate-x-1/2 w-[95%] max-w-lg glass-card rounded-2xl p-4 shadow-2xl max-h-[70vh] flex flex-col">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-headline font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">cloud_search</span>
+Buscar en línea
+</h3>
+<button onclick="closeOnlineSearchModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="relative mb-4">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input type="text" id="onlineSearchInput" placeholder="Ej: chicken breast, avocado..." class="w-full bg-surface-container text-white border border-outline rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-secondary" onkeyup="if(event.key==='Enter')performOnlineSearch()">
+</div>
+<button onclick="performOnlineSearch()" class="w-full py-3 bg-secondary text-white rounded-xl font-medium hover:bg-secondary/80 transition-all">
+Buscar
+</button>
+<p class="text-xs text-on-surface-variant text-center mt-2">Busca en la base de datos del USDA</p>
+<div id="onlineSearchResults" class="mt-4 space-y-2 overflow-y-auto max-h-64">
+<p class="text-center text-on-surface-variant py-8">Ingresa un término de búsqueda</p>
+</div>
+</div>
+</div>
+
+<!-- Online Food Detail Modal -->
+<div id="onlineFoodModal" class="fixed inset-0 z-[80] hidden">
+<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeOnlineFoodModal()"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm glass-card rounded-2xl p-6 shadow-2xl">
+<div id="onlineFoodContent" class="space-y-4"></div>
+</div>
+</div>
 
 <div id="foodModal" class="fixed inset-0 z-[60] hidden">
 <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeFoodModal()"></div>
@@ -181,6 +219,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 </div>
 
 <script src="/aplicacion-keto/utils.js"></script>
+<script src="/aplicacion-keto/food-api.js"></script>
 <script>
 function toggleTheme(){document.documentElement.classList.toggle("dark");localStorage.setItem("theme",document.documentElement.classList.contains("dark")?"dark":"light")}
 function toggleSidebar(){var b=document.body;var s=document.getElementById("sidebarNav");var t=document.getElementById("sidebarToggle");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");b.classList.toggle("sidebar-collapsed");if(b.classList.contains("sidebar-collapsed")){s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px";localStorage.setItem("sidebarCollapsed","true")}else{s.style.width="256px";s.style.overflow="";if(p)p.style.paddingLeft="272px";if(m)m.style.marginLeft="256px";if(t)t.style.left="256px";localStorage.setItem("sidebarCollapsed","false")}}
@@ -261,7 +300,36 @@ function saveFood(){var id=document.getElementById("foodId").value;var name=docu
 function closeFoodModal(){document.getElementById("foodModal").classList.add("hidden");document.getElementById("foodModal").classList.remove("flex")}
 function closeDetailModal(){document.getElementById("detailModal").classList.add("hidden");document.getElementById("detailModal").classList.remove("flex");currentDetailId=null}
 
-function showToast(message){var toast=document.getElementById("toast");document.getElementById("toastMessage").textContent=message;toast.classList.remove("hidden","opacity-0","translate-y-4","pointer-events-none");toast.classList.add("opacity-100","translate-y-0");setTimeout(function(){toast.classList.add("opacity-0","translate-y-4","pointer-events-none");toast.classList.remove("opacity-100","translate-y-0")},3000)}
+// Funciones de búsqueda online
+function openOnlineSearchModal(){
+document.getElementById("onlineSearchModal").classList.remove("hidden");
+document.getElementById("onlineSearchModal").classList.add("flex");
+document.getElementById("onlineSearchInput").value="";
+document.getElementById("onlineSearchResults").innerHTML='<p class="text-center text-on-surface-variant py-8">Ingresa un término de búsqueda</p>';
+}
+
+function closeOnlineSearchModal(){
+document.getElementById("onlineSearchModal").classList.add("hidden");
+document.getElementById("onlineSearchModal").classList.remove("flex");
+}
+
+async function performOnlineSearch(){
+var query=document.getElementById("onlineSearchInput").value.trim();
+if(query.length<2){
+showToast("Ingresa al menos 2 caracteres");
+return;
+}
+var container=document.getElementById("onlineSearchResults");
+container.innerHTML='<p class="text-center text-on-surface-variant py-8">Buscando...</p>';
+var results=await searchOnlineFoods(query);
+if(results.length===0){
+container.innerHTML='<p class="text-center text-on-surface-variant py-8">No se encontraron resultados</p>';
+showToast("Sin resultados");
+}else{
+renderOnlineSearchResults("onlineSearchResults");
+showToast(results.length+" alimentos encontrados");
+}
+}
 
 loadFoods();renderFoods();
 </script>

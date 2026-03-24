@@ -283,6 +283,34 @@ Notificaciones
 </div>
 </div>
 
+<!-- Backup Modal -->
+<div id="backupModal" class="fixed inset-0 z-[70] hidden">
+<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeBackupModal()"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md glass-card rounded-2xl p-6 shadow-2xl">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-headline font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">backup</span>
+Backup y Restauración
+</h3>
+<button onclick="closeBackupModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+</div>
+<div class="space-y-4">
+<p class="text-sm text-on-surface-variant">Guarda una copia de seguridad de todos tus datos o restaura desde un archivo.</p>
+<button onclick="downloadBackup()" class="w-full py-4 bg-primary-container text-white rounded-xl font-medium hover:bg-primary-container/80 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">download</span>
+Exportar Backup
+</button>
+<button onclick="triggerRestore()" class="w-full py-4 bg-surface-container-high text-white rounded-xl font-medium hover:bg-surface-container-highest transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">upload</span>
+Importar Backup
+</button>
+<p class="text-xs text-on-surface-variant/50 text-center">Último backup: <span id="lastBackupDate">Nunca</span></p>
+</div>
+</div>
+</div>
+
 <!-- Main Canvas -->
 <main class="main-content md:ml-64 pt-14 md:pt-24 px-4 md:px-6 pb-20 md:pb-12 min-h-screen transition-all duration-300">
 <div class="max-w-7xl mx-auto space-y-8">
