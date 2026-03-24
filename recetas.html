@@ -385,19 +385,30 @@ function closeMealSelectModal() {
 function addToMealPlan(meal) {
   if (!currentRecipeKey) return;
   var recipe = recipesDB[currentRecipeKey];
+  if (!recipe) {
+    var customRecs = JSON.parse(localStorage.getItem('customRecipes') || '[]');
+    recipe = customRecs.find(function(r) { return r.id === currentRecipeKey; });
+  }
+  if (!recipe) { showToast('Receta no encontrada'); return; }
+  
   var today = new Date().toISOString().slice(0, 10);
   var planKey = 'mealPlan_' + today;
   var plan = JSON.parse(localStorage.getItem(planKey) || '{"desayuno":[],"almuerzo":[],"cena":[],"snacks":[]}');
   plan[meal].push({
-    id: recipe.id || currentRecipeKey,
+    id: recipe.id,
     name: recipe.title,
     calories: recipe.calories,
     protein: recipe.protein,
     fat: recipe.fat,
     carbs: recipe.carbs,
     portion: 100,
+    basePortion: 100,
+    baseCalories: recipe.calories,
+    baseProtein: recipe.protein,
+    baseFat: recipe.fat,
+    baseCarbs: recipe.carbs,
     icon: recipe.icon,
-    color: recipe.color
+    isRecipe: true
   });
   localStorage.setItem(planKey, JSON.stringify(plan));
   closeMealSelectModal();
