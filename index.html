@@ -357,7 +357,7 @@ Importar Backup
 </svg>
 <div class="absolute inset-0 flex flex-col items-center justify-center">
 <span id="progressPercent" class="text-4xl font-headline font-extrabold text-white tracking-tighter">0%</span>
-<span class="text-[10px] text-on-surface-variant font-label uppercase tracking-widest mt-1">Progreso</span>
+<span class="text-[10px] text-on-surface-variant font-label uppercase tracking-widest mt-1">Peso Perdido</span>
 </div>
 </div>
 <div class="flex-1 text-center md:text-left">
@@ -532,76 +532,7 @@ Editar macros
 <!-- Sugerencias de Recetas -->
 <div id="recipeSuggestions"></div>
 
-<!-- Section 3: Daily Summary -->
-<section class="space-y-4">
-<div class="flex items-center justify-between">
-<h3 class="text-sm font-label text-on-surface-variant uppercase tracking-[0.2em]">Resumen de Hoy</h3>
-</div>
-<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
-<!-- Hydration -->
-<div class="glass-card p-4 rounded-xl flex flex-col gap-3 cursor-pointer hover:bg-surface-container-high transition-colors" onclick="window.location.href='checklist.html'">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-secondary text-lg">water_drop</span>
-<span id="hydrationDisplay" class="text-xs font-bold text-secondary">0/3L</span>
-</div>
-</div>
-<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
-<div id="hydrationBar" class="h-full bg-secondary rounded-full transition-all duration-500" style="width: 0%"></div>
-</div>
-</div>
-<!-- Workout -->
-<div class="glass-card p-4 rounded-xl flex flex-col gap-3 cursor-pointer hover:bg-surface-container-high transition-colors" onclick="window.location.href='checklist.html'">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-orange-400 text-lg">fitness_center</span>
-<span id="workoutDisplay" class="text-xs font-bold text-orange-400">0/60m</span>
-</div>
-</div>
-<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
-<div id="workoutBar" class="h-full bg-orange-400 rounded-full transition-all duration-500" style="width: 0%"></div>
-</div>
-</div>
-<!-- Walk -->
-<div class="glass-card p-4 rounded-xl flex flex-col gap-3 cursor-pointer hover:bg-surface-container-high transition-colors" onclick="window.location.href='checklist.html'">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-green-400 text-lg">directions_walk</span>
-<span id="walkDisplay" class="text-xs font-bold text-green-400">0/60m</span>
-</div>
-</div>
-<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
-<div id="walkBar" class="h-full bg-green-400 rounded-full transition-all duration-500" style="width: 0%"></div>
-</div>
-</div>
-<!-- Sleep -->
-<div class="glass-card p-4 rounded-xl flex flex-col gap-3 cursor-pointer hover:bg-surface-container-high transition-colors" onclick="window.location.href='checklist.html'">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-gray-400 text-lg">bedtime</span>
-<span id="sleepDisplay" class="text-xs font-bold text-gray-400">0/8h</span>
-</div>
-</div>
-<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
-<div id="sleepBar" class="h-full bg-gray-400 rounded-full transition-all duration-500" style="width: 0%"></div>
-</div>
-</div>
-<!-- Quick Macro -->
-<div class="glass-card p-4 rounded-xl flex flex-col gap-3 cursor-pointer hover:bg-surface-container-high transition-colors" onclick="window.location.href='macros.html'">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-primary-container text-lg">local_fire_department</span>
-<span class="text-xs font-bold text-primary-container">Macros</span>
-</div>
-</div>
-<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
-<div id="caloriesBarSmall" class="h-full bg-primary-container rounded-full transition-all duration-500" style="width: 0%"></div>
-</div>
-</div>
-</div>
-</section>
-
-<!-- Section 3: Quick Links -->
+<!-- Quick Links -->
 <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
 <a href="alimentos.html" class="glass-card p-5 rounded-xl flex flex-col items-center text-center gap-3 hover:bg-surface-container-high transition-all group">
 <div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary-container group-hover:scale-110 transition-transform">
@@ -801,28 +732,11 @@ function loadDashboard() {
   if (weightProgress < 0) weightProgress = 0;
   if (weightProgress > 100) weightProgress = 100;
   
-  var totalTasks = 6;
-  var completedTasks = 0;
-  if (water >= 3) completedTasks++;
-  if (workout >= 60) completedTasks++;
-  if (walk >= 60) completedTasks++;
-  if (consumedProt >= targetProt) completedTasks++;
-  if (sleep >= 8) completedTasks++;
-  if (consumedCal >= targetCal * 0.8) completedTasks++;
-  
-  var totalPercent = 0;
-  totalPercent += Math.min(Math.round((water / 3) * 100), 100);
-  totalPercent += Math.min(Math.round((workout / 60) * 100), 100);
-  totalPercent += Math.min(Math.round((walk / 60) * 100), 100);
-  totalPercent += Math.min(Math.round((consumedProt / targetProt) * 100), 100);
-  totalPercent += Math.min(Math.round((sleep / 8) * 100), 100);
-  var progressPercent = Math.round(totalPercent / totalTasks);
-  
-  document.getElementById('progressPercent').textContent = progressPercent + '%';
+  document.getElementById('progressPercent').textContent = weightProgress + '%';
   
   var circle = document.getElementById('progressCircle');
   var circumference = 402;
-  var offset = circumference - (circumference * progressPercent / 100);
+  var offset = circumference - (circumference * weightProgress / 100);
   circle.style.strokeDashoffset = offset;
   
   var remaining = currentWeight - goalWeight;
@@ -837,22 +751,17 @@ function loadDashboard() {
   }
   document.getElementById('weeklyProgress').innerHTML = '<span class="material-symbols-outlined text-primary-container text-sm">trending_down</span><span class="text-primary-container font-headline font-bold text-sm">' + weeklyLoss + 'KG ESTA SEMANA</span>';
   
-  document.getElementById('checklistStatus').textContent = completedTasks + '/' + totalTasks + ' completadas';
-  
   var hydrationPercent = Math.round((water / 3) * 100);
   if (hydrationPercent > 100) hydrationPercent = 100;
   document.getElementById('hydrationDisplay').textContent = Math.round(water) + '/3L';
-  document.getElementById('hydrationBar').style.width = hydrationPercent + '%';
   
   var workoutPercent = Math.round((workout / 60) * 100);
   if (workoutPercent > 100) workoutPercent = 100;
   document.getElementById('workoutDisplay').textContent = workout + '/60min';
-  document.getElementById('workoutBar').style.width = workoutPercent + '%';
   
   var walkPercent = Math.round((walk / 60) * 100);
   if (walkPercent > 100) walkPercent = 100;
   document.getElementById('walkDisplay').textContent = walk + '/60min';
-  document.getElementById('walkBar').style.width = walkPercent + '%';
   
   var sleepPercent = Math.round((sleep / 8) * 100);
   if (sleepPercent > 100) sleepPercent = 100;
@@ -868,11 +777,6 @@ function loadDashboard() {
   
   var carbsPercent = Math.round((consumedCarbs / targetCarbs) * 100);
   if (carbsPercent > 100) carbsPercent = 100;
-  
-  var sleepPercent = Math.round((sleep / 8) * 100);
-  if (sleepPercent > 100) sleepPercent = 100;
-  document.getElementById('sleepDisplay').textContent = sleep + '/8h';
-  document.getElementById('sleepBar').style.width = sleepPercent + '%';
   
   var caloriesPercent = Math.round((consumedCal / targetCal) * 100);
   if (caloriesPercent > 100) caloriesPercent = 100;
@@ -894,9 +798,6 @@ function loadDashboard() {
   document.getElementById('consumedCarbsDisplay').textContent = consumedCarbs;
   document.getElementById('targetCarbsDisplay').textContent = targetCarbs;
   document.getElementById('carbsBar').style.width = carbsPercent + '%';
-  
-  var caloriesPercentSmall = caloriesPercent;
-  document.getElementById('caloriesBarSmall').style.width = caloriesPercentSmall + '%';
   
   renderWeightHistory();
 }
