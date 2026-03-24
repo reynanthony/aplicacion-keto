@@ -789,7 +789,12 @@ function loadDashboard() {
   document.getElementById('weightDisplay').innerHTML = currentWeight + 'kg <span class="text-on-surface-variant font-light">→</span> ' + goalWeight + 'kg';
   document.getElementById('remainingKg').textContent = remaining + 'kg restantes';
   
-  var weeklyLoss = localStorage.getItem('weeklyLoss') || '0';
+  var weeklyLoss = '0';
+  if (typeof calculateWeeklyLoss === 'function') {
+    weeklyLoss = calculateWeeklyLoss();
+  } else {
+    weeklyLoss = localStorage.getItem('weeklyLoss') || '0';
+  }
   document.getElementById('weeklyProgress').innerHTML = '<span class="material-symbols-outlined text-primary-container text-sm">trending_down</span><span class="text-primary-container font-headline font-bold text-sm">' + weeklyLoss + 'KG ESTA SEMANA</span>';
   
   document.getElementById('checklistStatus').textContent = completedTasks + '/' + totalTasks + ' completadas';

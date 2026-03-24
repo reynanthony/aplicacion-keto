@@ -282,6 +282,10 @@ function saveProfile(){
   localStorage.setItem("keto_profile",JSON.stringify(profile));
   localStorage.setItem("keto_macros",JSON.stringify(macros));
   localStorage.setItem("ketoMacros",JSON.stringify({calories:Math.round(adjustedCalories),protein:protein+"g",fat:fat+"g"}));
+  
+  if(typeof saveWeightToHistory==='function'){
+    saveWeightToHistory(currentWeight);
+  }
 }
 
 function calcMacros(){
