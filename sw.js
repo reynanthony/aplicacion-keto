@@ -19,7 +19,11 @@ const STATIC_ASSETS = [
   '/aplicacion-keto/entrenamientos.html',
   '/aplicacion-keto/compras.js',
   '/aplicacion-keto/manifest.json',
-  '/aplicacion-keto/offline.html'
+  '/aplicacion-keto/offline.html',
+  '/aplicacion-keto/utils.js',
+  '/aplicacion-keto/food-api.js',
+  '/aplicacion-keto/backup.js',
+  '/aplicacion-keto/recipe-suggestions.js'
 ];
 
 // ==================== INSTALACIÓN ====================

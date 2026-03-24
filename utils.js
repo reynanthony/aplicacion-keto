@@ -404,11 +404,57 @@ function calculateWeeklyLoss() {
   return '0';
 }
 
+// ==================== FEEDBACK HÁPTICO ====================
+
+// Feedback háptico para móviles
+function hapticFeedback(type) {
+  if ('vibrate' in navigator && window.matchMedia('(display-mode: standalone)').matches) {
+    var patterns = {
+      light: [10],
+      medium: [30],
+      heavy: [50],
+      success: [30, 50, 30],
+      error: [100, 50, 100]
+    };
+    navigator.vibrate(patterns[type] || patterns.light);
+  }
+}
+
+// Toast con feedback háptico
+function showToastWithHaptic(message, type) {
+  hapticFeedback(type || 'success');
+  showToast(message);
+}
+
+// ==================== MODO OSCURO AUTOMÁTICO ====================
+
+// Detectar tema del sistema
+function setThemeFromSystem() {
+  var savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark' || savedTheme === 'light') {
+    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.add('dark');
+  }
+}
+
+// Escuchar cambios del sistema
+if (typeof window !== 'undefined' && window.matchMedia) {
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    if (!localStorage.getItem('theme')) {
+      document.documentElement.classList.toggle('dark', e.matches);
+    }
+  });
+}
+
 // ==================== INICIALIZACIÓN ====================
 
 // Auto-inicializar cuando el DOM esté listo
 if (typeof document !== 'undefined') {
   document.addEventListener('DOMContentLoaded', function() {
+    setThemeFromSystem();
     console.log('[Utils] Utils loaded successfully');
   });
 }
