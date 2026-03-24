@@ -507,7 +507,6 @@ showToast("Item eliminado");
 }
 
 loadChecklist();
-loadMealConsumption();
 </script>
 
 <script>
@@ -528,6 +527,7 @@ function loadMealConsumption(){var section=document.getElementById("mealConsumpt
 function toggleMealConsumed(meal){var today=getToday();var consumed=JSON.parse(localStorage.getItem("mealConsumed_"+today)||"{}");consumed[meal]=!consumed[meal];localStorage.setItem("mealConsumed_"+today,JSON.stringify(consumed));updateConsumedMacros();loadMealConsumption();showToast(consumed[meal]?mealLabels[meal]+" registrado":"Marcado como no consumido")}
 
 function updateConsumedMacros(){var today=getToday();var plan=getMealPlan(today);var consumed=JSON.parse(localStorage.getItem("mealConsumed_"+today)||"{}");var totalConsumed={cal:0,prot:0,fat:0,carbs:0};Object.keys(consumed).forEach(function(meal){if(consumed[meal]){var macros=calculateMealMacros(plan[meal]||[]);totalConsumed.cal+=macros.cal;totalConsumed.prot+=macros.prot;totalConsumed.fat+=macros.fat;totalConsumed.carbs+=macros.carbs}});localStorage.setItem("consumedMacros_"+today,JSON.stringify(totalConsumed))}
+loadMealConsumption();
 </script>
 
 <script>
