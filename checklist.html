@@ -316,7 +316,43 @@ function closeElectrolitoModal(){document.getElementById("electrolitoModal").cla
 
 function resetChecklist(){var todayKey=new Date().toISOString().slice(0,10);var emptyData={water:0,electrolitos:0,workout:0,walk:0,protein:0,sleep:0};localStorage.setItem("checklist_"+todayKey,JSON.stringify(emptyData));loadChecklist();showToast("Checklist reiniciado")}
 
-function requestNotifications(){if("Notification"in window){Notification.requestPermission().then(function(perm){if(perm==="granted"){showToast("Notificaciones activadas")}else{showToast("Notificaciones bloqueadas")}})}}
+function requestNotifications(){
+  if(!("Notification"in window)){
+    showToast("Este navegador no soporta notificaciones");
+    return;
+  }
+  if(Notification.permission==="granted"){
+    showToast("Notificaciones ya activadas");
+    return;
+  }
+  if(Notification.permission==="denied"){
+    showToast("Notificaciones bloqueadas. Habilítalas en configuración del navegador");
+    return;
+  }
+  Notification.requestPermission().then(function(perm){
+    if(perm==="granted"){
+      showToast("Notificaciones activadas");
+      testNotification();
+    }else{
+      showToast("Notificaciones bloqueadas");
+    }
+  }).catch(function(err){
+    showToast("Error al solicitar permisos");
+    console.error("Notification error:", err);
+  });
+}
+
+function testNotification(){
+  try{
+    new Notification("KetoLab", {
+      body: "¡Notificaciones configuradas correctamente!",
+      icon: "/aplicacion-keto/icons/icon-192x192.png",
+      tag: "test"
+    });
+  }catch(e){
+    console.log("Test notification error:", e);
+  }
+}
 
 var editingItemIndex=null;
 var customItems=[];
