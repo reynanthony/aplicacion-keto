@@ -288,6 +288,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 </div>
 </div>
 
+<script src="/aplicacion-keto/utils.js"></script>
 <script>
 function toggleTheme(){document.documentElement.classList.toggle("dark");localStorage.setItem("theme",document.documentElement.classList.contains("dark")?"dark":"light")}
 function toggleSidebar(){var b=document.body;var s=document.getElementById("sidebarNav");var t=document.getElementById("sidebarToggle");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");b.classList.toggle("sidebar-collapsed");if(b.classList.contains("sidebar-collapsed")){s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px";localStorage.setItem("sidebarCollapsed","true")}else{s.style.width="256px";s.style.overflow="";if(p)p.style.paddingLeft="272px";if(m)m.style.marginLeft="256px";if(t)t.style.left="256px";localStorage.setItem("sidebarCollapsed","false")}}
@@ -312,9 +313,9 @@ var muscleColors={pecho:"#ff4d00",espalda:"#4caf50",hombros:"#2196f3",biceps:"#9
 
 var muscleNames={pecho:"Pecho",espalda:"Espalda",hombros:"Hombros",biceps:"Bíceps",triceps:"Tríceps",piernas:"Piernas",gluteos:"Glúteos",core:"Core",cardio:"Cardio"};
 
-function getExercises(){var stored=JSON.parse(localStorage.getItem("ketoExercises")||"null");return stored&&Array.isArray(stored)?stored:defaultExercises}
+function getExercises(){var stored=safeParseJSON(localStorage.getItem("ketoExercises"), null);return stored&&Array.isArray(stored)?stored:defaultExercises}
 function saveExercises(exercises){localStorage.setItem("ketoExercises",JSON.stringify(exercises))}
-function getWorkouts(){return JSON.parse(localStorage.getItem("ketoWorkouts")||"[]")}
+function getWorkouts(){return safeParseJSON(localStorage.getItem("ketoWorkouts"), [])}
 function saveWorkouts(workouts){localStorage.setItem("ketoWorkouts",JSON.stringify(workouts))}
 
 var currentWorkoutExercises=[];
@@ -556,7 +557,7 @@ loadWorkoutView();
 
 function loadWorkoutView(){
 var exercises=getExercises();
-currentWorkoutExercises=JSON.parse(localStorage.getItem('currentWorkoutDraft')||'[]');
+currentWorkoutExercises=safeParseJSON(localStorage.getItem('currentWorkoutDraft'), []);
 
 var selectorHtml='';
 exercises.forEach(function(e){

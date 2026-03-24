@@ -162,6 +162,7 @@ if(localStorage.getItem("theme")==="dark"||!localStorage.getItem("theme")){docum
 initSidebar();
 var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
 </script>
+<script src="/aplicacion-keto/utils.js"></script>
 <script src="compras.js?v=3"></script>
 
 <script>

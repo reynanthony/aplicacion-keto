@@ -237,6 +237,7 @@ Guardar macros
 <a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="entrenamientos.html"><span class="material-symbols-outlined text-xl">fitness_center</span><span class="text-[7px] font-bold">Gym</span></a>
 <a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="recetas.html"><span class="material-symbols-outlined text-xl">menu_book</span><span class="text-[7px] font-bold">Recetas</span></a>
 </nav>
+<script src="/aplicacion-keto/utils.js"></script>
 <script>
 function toggleTheme(){document.documentElement.classList.toggle("dark");localStorage.setItem("theme",document.documentElement.classList.contains("dark")?"dark":"light")}
 function toggleSidebar(){var b=document.body;var s=document.getElementById("sidebarNav");var t=document.getElementById("sidebarToggle");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");b.classList.toggle("sidebar-collapsed");if(b.classList.contains("sidebar-collapsed")){s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px";localStorage.setItem("sidebarCollapsed","true")}else{s.style.width="256px";s.style.overflow="";if(p)p.style.paddingLeft="272px";if(m)m.style.marginLeft="256px";if(t)t.style.left="256px";localStorage.setItem("sidebarCollapsed","false")}}

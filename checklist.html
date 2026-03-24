@@ -226,6 +226,7 @@ Editar
 <a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="recetas.html"><span class="material-symbols-outlined text-xl">menu_book</span><span class="text-[7px] font-bold">Recetas</span></a>
 </nav>
 
+<script src="/aplicacion-keto/utils.js"></script>
 <script>
 function toggleTheme(){document.documentElement.classList.toggle("dark");localStorage.setItem("theme",document.documentElement.classList.contains("dark")?"dark":"light")}
 function toggleSidebar(){var b=document.body;var s=document.getElementById("sidebarNav");var t=document.getElementById("sidebarToggle");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");b.classList.toggle("sidebar-collapsed");if(b.classList.contains("sidebar-collapsed")){s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px";localStorage.setItem("sidebarCollapsed","true")}else{s.style.width="256px";s.style.overflow="";if(p)p.style.paddingLeft="272px";if(m)m.style.marginLeft="256px";if(t)t.style.left="256px";localStorage.setItem("sidebarCollapsed","false")}}
@@ -247,9 +248,8 @@ var currentInputItem=null;
 function loadChecklist(){
 var todayKey=new Date().toISOString().slice(0,10);
 var rawData=localStorage.getItem("checklist_"+todayKey);
-var checklistData={};
-if(rawData){var parsed=JSON.parse(rawData);if(typeof parsed==="object"&&!Array.isArray(parsed)){checklistData=parsed}}
-var userData=JSON.parse(localStorage.getItem("userData")||"{}");
+var checklistData=safeParseJSON(rawData, {});
+var userData=getLocalData("userData", schemas.userData, getDefaultUserData());
 var container=document.getElementById("dailyChecklist");
 container.innerHTML="";
 var completedCount=0;
@@ -301,16 +301,16 @@ document.getElementById("modalContent").innerHTML='<p id="sliderValueDisplay" cl
 document.getElementById("itemSlider").addEventListener("input",function(){var val=parseFloat(this.value);var disp=currentInputItem.step<1?val.toFixed(1).replace('.0',''):val;document.getElementById("sliderValueDisplay").textContent=disp+' '+currentInputItem.unit});
 document.getElementById("inputModal").classList.remove("hidden");document.getElementById("inputModal").classList.add("flex")}
 
-function showToast(message){var toast=document.getElementById("toast");document.getElementById("toastMessage").textContent=message;toast.classList.remove("hidden","opacity-0","translate-y-4","pointer-events-none");toast.classList.add("opacity-100","translate-y-0");setTimeout(function(){toast.classList.add("opacity-0","translate-y-4","pointer-events-none");toast.classList.remove("opacity-100","translate-y-0")},2000)}
+// showToast теперь используется из utils.js
 
-function saveInputValue(){if(!currentInputItem)return;var itemId=currentInputItem.id;var itemLabel=currentInputItem.label;var itemUnit=currentInputItem.unit;var itemStep=currentInputItem.step;var newValue=parseFloat(document.getElementById("itemSlider").value);var todayKey=new Date().toISOString().slice(0,10);var rawData=localStorage.getItem("checklist_"+todayKey);var checklistData={};if(rawData){var parsed=JSON.parse(rawData);if(typeof parsed==="object"&&!Array.isArray(parsed)){checklistData=parsed}}checklistData[itemId]=newValue;localStorage.setItem("checklist_"+todayKey,JSON.stringify(checklistData));var userData=JSON.parse(localStorage.getItem("userData")||"'{}'");if(itemId==='water')userData.waterIntake=newValue;if(itemId==='protein')userData.proteinConsumed=newValue;if(itemId==='workout')userData.workoutMinutes=newValue;if(itemId==='walk')userData.walkMinutes=newValue;if(itemId==='sleep')userData.sleepHours=newValue;localStorage.setItem("userData",JSON.stringify(userData));var displayValue=itemStep<1?newValue.toFixed(1).replace('.0',''):newValue;closeInputModal();loadChecklist();showToast(itemLabel+': '+displayValue+' '+itemUnit)}
+function saveInputValue(){if(!currentInputItem)return;var itemId=currentInputItem.id;var itemLabel=currentInputItem.label;var itemUnit=currentInputItem.unit;var itemStep=currentInputItem.step;var newValue=parseFloat(document.getElementById("itemSlider").value);var todayKey=new Date().toISOString().slice(0,10);var rawData=localStorage.getItem("checklist_"+todayKey);var checklistData=safeParseJSON(rawData, {});checklistData[itemId]=newValue;localStorage.setItem("checklist_"+todayKey,JSON.stringify(checklistData));var userData=getLocalData("userData", schemas.userData, getDefaultUserData());if(itemId==='water')userData.waterIntake=newValue;if(itemId==='protein')userData.proteinConsumed=newValue;if(itemId==='workout')userData.workoutMinutes=newValue;if(itemId==='walk')userData.walkMinutes=newValue;if(itemId==='sleep')userData.sleepHours=newValue;localStorage.setItem("userData",JSON.stringify(userData));var displayValue=itemStep<1?newValue.toFixed(1).replace('.0',''):newValue;closeInputModal();loadChecklist();showToast(itemLabel+': '+displayValue+' '+itemUnit)}
 
 function closeInputModal(){document.getElementById("inputModal").classList.add("hidden");document.getElementById("inputModal").classList.remove("flex");currentInputItem=null}
 
 var currentElectrolito=null;
-function openElectrolitoModal(type){var titles={sodio:'Sodio',potasio:'Potasio',magnesio:'Magnesio'};var targets={sodio:5,potasio:3.5,magnesio:400};var units={sodio:'g',potasio:'g',magnesio:'mg'};currentElectrolito=type;var userData=JSON.parse(localStorage.getItem("userData")||"'{}'");var value=userData[type]||0;document.getElementById("electrolitoTitle").textContent=titles[type];document.getElementById("electrolitoCurrent").textContent=value+' '+units[type];document.getElementById("electrolitoTarget").textContent='Meta: '+targets[type]+' '+units[type];var slider=document.getElementById("electrolitoSlider");slider.max=targets[type];slider.value=value;slider.oninput=function(){document.getElementById("electrolitoCurrent").textContent=this.value+' '+units[type]};document.getElementById("electrolitoModal").classList.remove("hidden");document.getElementById("electrolitoModal").classList.add("flex")}
+function openElectrolitoModal(type){var titles={sodio:'Sodio',potasio:'Potasio',magnesio:'Magnesio'};var targets={sodio:5,potasio:3.5,magnesio:400};var units={sodio:'g',potasio:'g',magnesio:'mg'};currentElectrolito=type;var userData=getLocalData("userData", schemas.userData, getDefaultUserData());var value=userData[type]||0;document.getElementById("electrolitoTitle").textContent=titles[type];document.getElementById("electrolitoCurrent").textContent=value+' '+units[type];document.getElementById("electrolitoTarget").textContent='Meta: '+targets[type]+' '+units[type];var slider=document.getElementById("electrolitoSlider");slider.max=targets[type];slider.value=value;slider.oninput=function(){document.getElementById("electrolitoCurrent").textContent=this.value+' '+units[type]};document.getElementById("electrolitoModal").classList.remove("hidden");document.getElementById("electrolitoModal").classList.add("flex")}
 
-function saveElectrolito(){var userData=JSON.parse(localStorage.getItem("userData")||"'{}'");userData[currentElectrolito]=parseFloat(document.getElementById("electrolitoSlider").value);localStorage.setItem("userData",JSON.stringify(userData));closeElectrolitoModal();loadChecklist()}
+function saveElectrolito(){var userData=getLocalData("userData", schemas.userData, getDefaultUserData());userData[currentElectrolito]=parseFloat(document.getElementById("electrolitoSlider").value);localStorage.setItem("userData",JSON.stringify(userData));closeElectrolitoModal();loadChecklist()}
 
 function closeElectrolitoModal(){document.getElementById("electrolitoModal").classList.add("hidden");document.getElementById("electrolitoModal").classList.remove("flex");currentElectrolito=null}
 

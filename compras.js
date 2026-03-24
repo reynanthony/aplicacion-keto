@@ -1,3 +1,4 @@
+// Importar utilidades de seguridad (cargado antes en el HTML)
 var defaultFoods=[
 {id:"f1",name:"Huevos",portion:50,calories:78,protein:6,fat:5,carbs:0.6,category:"Proteínas",units:[{name:"unidades",grams:50},{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
 {id:"f2",name:"Pechuga de pollo",portion:100,calories:165,protein:31,fat:3.6,carbs:0,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
@@ -48,49 +49,34 @@ var defaultFoods=[
 
 function initFoods(){
 var stored=localStorage.getItem("ketoFoods");
-if(!stored||stored==="null"||stored==="undefined"){
+var foods = safeParseJSON(stored, null);
+if(!foods || !Array.isArray(foods) || foods.length === 0){
 localStorage.setItem("ketoFoods",JSON.stringify(defaultFoods));
-}else{
-try{
-var foods=JSON.parse(stored);
+console.log("[compras] Foods initialized with defaults");
+return;
+}
 var hasValidData=foods.length>0&&typeof foods[0].calories==="number";
 if(!hasValidData){
-console.log("Data corrupted, reinitializing...");
+console.log("[compras] Data corrupted, reinitializing...");
 localStorage.setItem("ketoFoods",JSON.stringify(defaultFoods));
-}
-}catch(e){
-console.log("Parse error, reinitializing...");
-localStorage.setItem("ketoFoods",JSON.stringify(defaultFoods));
-}
 }
 }
 
 function getFoods(){
 var stored=localStorage.getItem("ketoFoods");
-if(stored&&stored!=="null"&&stored!="undefined"){
-try{
-var foods=JSON.parse(stored);
-if(Array.isArray(foods)&&foods.length>0){
-var hasValidData=typeof foods[0].calories==="number";
-if(hasValidData){
+var foods = safeParseJSON(stored, null);
+if(foods && Array.isArray(foods) && foods.length > 0 && typeof foods[0].calories === "number"){
 foods.forEach(function(f){
 if(!f.units)f.units=[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}];
 });
 return foods;
-}
-}
-}catch(e){}
 }
 localStorage.setItem("ketoFoods",JSON.stringify(defaultFoods));
 return defaultFoods;
 }
 
 function getDespensa(){
-var stored=localStorage.getItem("despensa");
-if(stored){
-try{return JSON.parse(stored);}catch(e){return {};}
-}
-return {};
+return safeParseJSON(localStorage.getItem("despensa"), {});
 }
 
 function saveDespensa(data){
@@ -275,8 +261,9 @@ catData[cat].items.forEach(function(d){
 var percent=Math.min((d.stock/1000)*100,100);
 var color=getStockColor(percent);
 var stockDisplay=d.stock>=1000?fmt(d.stock/1000)+'kg':fmt(d.stock)+'g';
+var safeFoodName = escapeHtml(d.food.name);
 html+='<div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.03);border-radius:6px;padding:8px;font-size:12px;">';
-html+='<div style="flex:1;min-width:0;"><div style="color:#fff;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+d.food.name+'</div>';
+html+='<div style="flex:1;min-width:0;"><div style="color:#fff;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+safeFoodName+'</div>';
 html+='<div style="display:flex;align-items:center;gap:6px;margin-top:2px;">';
 html+='<div style="flex:1;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;">';
 html+='<div style="width:'+percent+'%;height:100%;background:'+color+';border-radius:2px;"></div></div>';
@@ -307,9 +294,10 @@ html+='<div class="w-3 h-3 rounded-full" style="background:'+catColors[cat]+'"><
 html+='<h4 class="text-sm font-medium text-on-surface-variant">'+cat+'</h4></div>';
 html+='<div class="space-y-1">';
 catFoods.forEach(function(food){
+var safeFoodName = escapeHtml(food.name);
 html+='<div class="flex items-center gap-2 p-2 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-all" onclick="openAddModal(\''+food.id+'\')">';
 html+='<span class="material-symbols-outlined text-on-surface-variant text-lg">add_circle</span>';
-html+='<span class="text-sm text-white flex-1">'+food.name+'</span>';
+html+='<span class="text-sm text-white flex-1">'+safeFoodName+'</span>';
 html+='<span class="text-xs text-on-surface-variant">'+food.portion+'g</span></div>';
 });
 html+='</div></div>';

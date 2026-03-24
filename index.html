@@ -584,6 +584,7 @@ Editar macros
   <span class="material-symbols-outlined text-2xl md:text-3xl">install_desktop</span>
 </button>
 
+<script src="/aplicacion-keto/utils.js"></script>
 <script>
 function toggleTheme() {
   document.documentElement.classList.toggle('dark');
@@ -659,19 +660,12 @@ document.querySelectorAll('.sidebar-link').forEach(function(link) {
 });
 
 function loadDashboard() {
-  var userData = JSON.parse(localStorage.getItem('userData') || '{"currentWeight": 159, "goalWeight": 140, "startWeight": 159, "waterIntake": 0, "proteinConsumed": 0, "proteinGoal": 159}');
-  var ketoProfile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+  var userData = getLocalData('userData', schemas.userData, getDefaultUserData());
+  var ketoProfile = safeParseJSON(localStorage.getItem('keto_profile'), {});
   
   var todayKey = new Date().toISOString().slice(0, 10);
   var rawData = localStorage.getItem('checklist_' + todayKey);
-  var checklistData = {};
-  
-  if (rawData) {
-    var parsed = JSON.parse(rawData);
-    if (typeof parsed === 'object' && !Array.isArray(parsed)) {
-      checklistData = parsed;
-    }
-  }
+  var checklistData = safeParseJSON(rawData, {});
   
   var water = checklistData.water || userData.waterIntake || 0;
   var workout = checklistData.workout || userData.workoutMinutes || 0;
@@ -679,13 +673,13 @@ function loadDashboard() {
   var protein = checklistData.protein || userData.proteinConsumed || 0;
   var sleep = checklistData.sleep || userData.sleepHours || 0;
   
-  var macros = JSON.parse(localStorage.getItem('keto_macros') || '{}');
+  var macros = getLocalData('keto_macros', schemas.ketoMacros, getDefaultMacros());
   var targetCal = parseInt(macros.calories) || 1800;
   var targetProt = parseInt(macros.protein) || 159;
   var targetFat = parseInt(macros.fat) || 150;
   var targetCarbs = parseInt(macros.carbs) || 25;
   
-  var mealPlan = JSON.parse(localStorage.getItem('mealPlan_' + todayKey) || '{"desayuno":[],"almuerzo":[],"cena":[],"snacks":[]}');
+  var mealPlan = getLocalData('mealPlan_' + todayKey, schemas.mealPlan, getDefaultMealPlan());
   var consumedCal = 0, consumedProt = 0, consumedFat = 0, consumedCarbs = 0;
   
   Object.keys(mealPlan).forEach(function(meal) {
