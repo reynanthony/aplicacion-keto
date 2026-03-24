@@ -449,12 +449,88 @@ if (typeof window !== 'undefined' && window.matchMedia) {
   });
 }
 
+// ==================== TOOLTIPS ====================
+
+// Crear tooltip reutilizable
+function showTooltip(element, message, position) {
+  var existing = document.querySelector('.custom-tooltip');
+  if (existing) existing.remove();
+  
+  var tooltip = document.createElement('div');
+  tooltip.className = 'custom-tooltip fixed z-[100] px-3 py-2 rounded-lg text-sm text-white bg-surface-container-high shadow-lg pointer-events-none opacity-0 transition-opacity duration-200';
+  tooltip.textContent = message;
+  
+  var rect = element.getBoundingClientRect();
+  var tooltipRect = tooltip.getBoundingClientRect();
+  
+  var pos = position || 'top';
+  if (pos === 'top') {
+    tooltip.style.left = (rect.left + rect.width / 2 - 50) + 'px';
+    tooltip.style.top = (rect.top - 40) + 'px';
+  } else if (pos === 'bottom') {
+    tooltip.style.left = (rect.left + rect.width / 2 - 50) + 'px';
+    tooltip.style.top = (rect.bottom + 10) + 'px';
+  }
+  
+  document.body.appendChild(tooltip);
+  setTimeout(function() { tooltip.classList.remove('opacity-0'); }, 10);
+  setTimeout(function() {
+    tooltip.classList.add('opacity-0');
+    setTimeout(function() { tooltip.remove(); }, 200);
+  }, 2500);
+}
+
+// Inicializar tooltips en elementos con data-tooltip
+function initTooltips() {
+  document.querySelectorAll('[data-tooltip]').forEach(function(el) {
+    el.addEventListener('mouseenter', function() {
+      showTooltip(this, this.getAttribute('data-tooltip'), this.getAttribute('data-position') || 'top');
+    });
+    el.addEventListener('touchstart', function() {
+      showTooltip(this, this.getAttribute('data-tooltip'), this.getAttribute('data-position') || 'top');
+    }, { passive: true });
+  });
+}
+
+// ==================== NOTIFICACIONES ====================
+
+// Solicitar permiso de notificaciones
+function requestNotificationPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+// Programar notificación
+function scheduleNotification(title, body, delayMinutes) {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  
+  setTimeout(function() {
+    new Notification(title, {
+      body: body,
+      icon: 'icon-192.png',
+      badge: 'icon-192.png'
+    });
+  }, delayMinutes * 60 * 1000);
+}
+
+// Notificación para recordar agua
+function remindWater() {
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification('💧 Recordatorio de Hidratación', {
+      body: 'No olvides beber agua hoy. Tu objetivo: 2L',
+      icon: 'icon-192.png'
+    });
+  }
+}
+
 // ==================== INICIALIZACIÓN ====================
 
 // Auto-inicializar cuando el DOM esté listo
 if (typeof document !== 'undefined') {
   document.addEventListener('DOMContentLoaded', function() {
     setThemeFromSystem();
+    initTooltips();
     console.log('[Utils] Utils loaded successfully');
   });
 }

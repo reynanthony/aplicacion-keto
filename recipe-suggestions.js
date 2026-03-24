@@ -2,13 +2,13 @@
 
 // Base de datos de recetas (reducida para sugerencias)
 var recipesDB = {
-  'pure-coliflor': { title: 'Puré de coliflor cremoso', icon: 'soup_kitchen', color: '#4caf50' },
-  'hongos': { title: 'Salteado de hongos con ajo', icon: 'forest', color: '#795548' },
-  'pollo-jugoso': { title: 'Pechuga de pollo jugosa', icon: 'egg_alt', color: '#ffb300' },
-  'carne-molida': { title: 'Carne molida estilo keto', icon: 'restaurant', color: '#ff4d00' },
-  'huevos': { title: 'Huevos revueltos cremosos', icon: 'egg', color: '#ffb300' },
-  'arroz-coliflor': { title: 'Arroz de coliflor', icon: 'rice_bowl', color: '#9c27b0' },
-  'aderezo': { title: 'Aderezo cetogénico', icon: 'local_bar', color: '#00e3fd' }
+  'pure-coliflor': { title: 'Puré de coliflor cremoso', icon: 'soup_kitchen', color: '#4caf50', image: 'images/recipes/pure-coliflor.svg' },
+  'hongos': { title: 'Salteado de hongos con ajo', icon: 'forest', color: '#795548', image: 'images/recipes/hongos.svg' },
+  'pollo-jugoso': { title: 'Pechuga de pollo jugosa', icon: 'egg_alt', color: '#ffb300', image: 'images/recipes/pollo-jugoso.svg' },
+  'carne-molida': { title: 'Carne molida estilo keto', icon: 'restaurant', color: '#ff4d00', image: 'images/recipes/carne-molida.svg' },
+  'huevos': { title: 'Huevos revueltos cremosos', icon: 'egg', color: '#ffb300', image: 'images/recipes/huevos.svg' },
+  'arroz-coliflor': { title: 'Arroz de coliflor', icon: 'rice_bowl', color: '#9c27b0', image: 'images/recipes/arroz-coliflor.svg' },
+  'aderezo': { title: 'Aderezo cetogénico', icon: 'local_bar', color: '#00e3fd', image: 'images/recipes/aderezo.svg' }
 };
 
 var recipeIngredientsDB = {
@@ -79,9 +79,13 @@ function showRecipeSuggestions() {
     var recipe = recipesDB ? recipesDB[s.id] : null;
     if (recipe) {
       html += '<div class="glass-card rounded-xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-all" onclick="openRecipeModal(\'' + s.id + '\')">';
-      html += '<div class="h-28 w-full overflow-hidden flex items-center justify-center" style="background: linear-gradient(135deg, ' + recipe.color + '20, ' + recipe.color + '40)">';
-      html += '<span class="material-symbols-outlined text-4xl" style="color:' + recipe.color + '">' + recipe.icon + '</span>';
-      html += '</div>';
+      if (recipe.image) {
+        html += '<img src="' + recipe.image + '" alt="' + recipe.title + '" class="h-28 w-full object-cover">';
+      } else {
+        html += '<div class="h-28 w-full overflow-hidden flex items-center justify-center" style="background: linear-gradient(135deg, ' + recipe.color + '20, ' + recipe.color + '40)">';
+        html += '<span class="material-symbols-outlined text-4xl" style="color:' + recipe.color + '">' + recipe.icon + '</span>';
+        html += '</div>';
+      }
       html += '<div class="p-3">';
       html += '<p class="font-bold text-white text-sm">' + recipe.title + '</p>';
       html += '<p class="text-xs text-green-400 mt-1">' + s.matchPercent + '% ingredientes</p>';

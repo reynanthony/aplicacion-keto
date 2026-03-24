@@ -1,10 +1,10 @@
 // sw.js - Service Worker para KetoLab
-// Versión: v1.0.1
+// Versión: v1.0.2
 // Estrategia: Cache First con actualización en background (Stale-While-Revalidate)
 
-const CACHE_NAME = 'ketolab-v1.0.1';
-const STATIC_CACHE = 'ketolab-static-v1.0.1';
-const DYNAMIC_CACHE = 'ketolab-dynamic-v1.0.1';
+const CACHE_NAME = 'ketolab-v1.0.2';
+const STATIC_CACHE = 'ketolab-static-v1.0.2';
+const DYNAMIC_CACHE = 'ketolab-dynamic-v1.0.2';
 
 // Archivos estáticos a cachear durante la instalación
 const STATIC_ASSETS = [
@@ -23,7 +23,19 @@ const STATIC_ASSETS = [
   '/aplicacion-keto/utils.js',
   '/aplicacion-keto/food-api.js',
   '/aplicacion-keto/backup.js',
-  '/aplicacion-keto/recipe-suggestions.js'
+  '/aplicacion-keto/recipe-suggestions.js',
+  // Imágenes de recetas
+  '/aplicacion-keto/images/recipes/pure-coliflor.svg',
+  '/aplicacion-keto/images/recipes/hongos.svg',
+  '/aplicacion-keto/images/recipes/pollo-jugoso.svg',
+  '/aplicacion-keto/images/recipes/carne-molida.svg',
+  '/aplicacion-keto/images/recipes/huevos.svg',
+  '/aplicacion-keto/images/recipes/arroz-coliflor.svg',
+  '/aplicacion-keto/images/recipes/aderezo.svg',
+  // Imágenes de ejercicios
+  '/aplicacion-keto/images/exercises/pecho.svg',
+  '/aplicacion-keto/images/exercises/espalda.svg',
+  '/aplicacion-keto/images/exercises/piernas.svg'
 ];
 
 // ==================== INSTALACIÓN ====================

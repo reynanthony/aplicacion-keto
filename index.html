@@ -58,6 +58,12 @@ tailwind.config = {
   background: rgba(36, 34, 34, 0.4);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 77, 0, 0.1);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  border-color: rgba(255, 77, 0, 0.3);
+  transform: translateY(-2px);
 }
 
 .progress-ring-glow {
@@ -71,6 +77,35 @@ tailwind.config = {
 .shadow-glow-strong {
   box-shadow: 0 10px 30px rgba(255, 77, 0, 0.4);
 }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+.pulse-hover:hover { animation: pulse 0.3s ease-in-out; }
+.skeleton {
+  background: linear-gradient(90deg, #1e1c1c 25%, #242222 50%, #1e1c1c 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #1e1c1c; border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: #ff4d00; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #ff7351; }
 
 .sidebar-collapsed .sidebar-nav {
   width: 72px;

@@ -172,23 +172,30 @@ initSidebar();
 var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
 
 var recipesDB = {
-"pure-coliflor": {title: "Pure de coliflor cremoso", icon: "soup_kitchen", color: "#4caf50", ingredients: ["1 coliflor mediana", "50-80g mantequilla", "Sal, pimienta, nuez moscada"], prep: "Cocer al vapor hasta tierna (15-20 min). Escurrir muy bien. Triturar con mantequilla y especias."},
-"hongos": {title: "Salteado de hongos con ajo", icon: "forest", color: "#4caf50", ingredients: ["300g champinones", "30g mantequilla", "2 dientes ajo", "Perejil"], prep: "Laminar champinones. Calentar mantequilla, dorar 5-7 min. Agregar ajo, saltear 1 min."},
-"pollo-jugoso": {title: "Pechuga de pollo jugosa", icon: "egg_alt", color: "#ffb300", ingredients: ["2 pechugas", "Sal, ajo en polvo", "Aceite de oliva"], prep: "Sazonar, sellar 2-3 min por lado. Tapar, fuego bajo 5-7 min. Reposar 5 min."},
-"carne-molida": {title: "Carne molida estilo keto", icon: "restaurant", color: "#ff4d00", ingredients: ["500g carne molida 80/20", "2 dientes ajo", "1 cdta comino", "30g mantequilla"], prep: "Dorar con mantequilla hasta crujiente. Agregar ajo y comino. 2 min mas."},
-"aderezo": {title: "Aderezo cetogenico", icon: "local_bar", color: "#00e3fd", ingredients: ["4 cdas aceite oliva", "2 cdas vinagre manzana", "1 cdta mostaza", "Sal y pimienta"], prep: "Mezclar todo en frasco. Agitar bien. Refrigerar."},
-"huevos": {title: "Huevos revueltos cremosos", icon: "egg", color: "#ffb300", ingredients: ["3-5 huevos", "20g mantequilla", "30g mozzarella", "Sal"], prep: "Batir huevos. Fuego medio-bajo, mover suavemente. Agregar mozzarella al final."},
-"arroz-coliflor": {title: "Arroz de coliflor", icon: "rice_bowl", color: "#9c27b0", ingredients: ["1 coliflor mediana", "2 cdas aceite/mantequilla", "Sal y pimienta"], prep: "Procesar coliflor. Saltear en sarten caliente 5-7 min."}
+  "pure-coliflor": {title: "Puré de coliflor cremoso", icon: "soup_kitchen", color: "#4caf50", image: "images/recipes/pure-coliflor.jpg", prepTime: "20 min", calories: 180, protein: 4, fat: 15, carbs: 8, ingredients: ["1 coliflor mediana", "50-80g mantequilla", "Sal, pimienta, nuez moscada"], prep: "Cocer al vapor hasta tierna (15-20 min). Escurrir muy bien. Triturar con mantequilla y especias."},
+  "hongos": {title: "Salteado de hongos con ajo", icon: "forest", color: "#8d6e63", image: "images/recipes/hongos.jpg", prepTime: "10 min", calories: 120, protein: 3, fat: 10, carbs: 4, ingredients: ["300g champiñones", "30g mantequilla", "2 dientes ajo", "Perejil"], prep: "Laminar champiñones. Calentar mantequilla, dorar 5-7 min. Agregar ajo, saltear 1 min."},
+  "pollo-jugoso": {title: "Pechuga de pollo jugosa", icon: "egg_alt", color: "#ffb300", image: "images/recipes/pollo-jugoso.jpg", prepTime: "20 min", calories: 280, protein: 45, fat: 10, carbs: 0, ingredients: ["2 pechugas", "Sal, ajo en polvo", "Aceite de oliva"], prep: "Sazonar, sellar 2-3 min por lado. Tapar, fuego bajo 5-7 min. Reposar 5 min."},
+  "carne-molida": {title: "Carne molida estilo keto", icon: "restaurant", color: "#ff4d00", image: "images/recipes/carne-molida.jpg", prepTime: "15 min", calories: 450, protein: 35, fat: 32, carbs: 1, ingredients: ["500g carne molida 80/20", "2 dientes ajo", "1 cdta comino", "30g mantequilla"], prep: "Dorar con mantequilla hasta crujiente. Agregar ajo y comino. 2 min mas."},
+  "aderezo": {title: "Aderezo cetogénico", icon: "local_bar", color: "#00bcd4", image: "images/recipes/aderezo.jpg", prepTime: "5 min", calories: 520, protein: 0, fat: 58, carbs: 0, ingredients: ["4 cdas aceite oliva", "2 cdas vinagre manzana", "1 cdta mostaza", "Sal y pimienta"], prep: "Mezclar todo en frasco. Agitar bien. Refrigerar."},
+  "huevos": {title: "Huevos revueltos cremosos", icon: "egg", color: "#ffc107", image: "images/recipes/huevos.jpg", prepTime: "10 min", calories: 380, protein: 24, fat: 30, carbs: 2, ingredients: ["3-5 huevos", "20g mantequilla", "30g mozzarella", "Sal"], prep: "Batir huevos. Fuego medio-bajo, mover suavemente. Agregar mozzarella al final."},
+  "arroz-coliflor": {title: "Arroz de coliflor", icon: "rice_bowl", color: "#9c27b0", image: "images/recipes/arroz-coliflor.jpg", prepTime: "15 min", calories: 85, protein: 3, fat: 7, carbs: 6, ingredients: ["1 coliflor mediana", "2 cdas aceite/mantequilla", "Sal y pimienta"], prep: "Procesar coliflor. Saltear en sarten caliente 5-7 min."}
 };
 
 var container = document.getElementById("recipesList");
 Object.keys(recipesDB).forEach(function(key) {
 var recipe = recipesDB[key];
-var html = '<div class="glass-card p-4 rounded-xl flex items-center gap-4 cursor-pointer hover:bg-surface-container-high transition-all" onclick="openRecipeModal(\'' + key + '\')">';
-html += '<div class="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0" style="background:' + recipe.color + '20">';
-html += '<span class="material-symbols-outlined" style="color:' + recipe.color + '">' + recipe.icon + '</span></div>';
-html += '<div class="flex-1"><p class="font-headline font-bold text-white">' + recipe.title + '</p><p class="text-sm text-on-surface-variant">' + recipe.ingredients.length + ' ingredientes</p></div>';
-html += '<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span></div>';
+var html = '<div class="glass-card rounded-xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-all duration-300" onclick="openRecipeModal(\'' + key + '\')">';
+html += '<div class="relative h-32 w-full overflow-hidden bg-gradient-to-br from-surface-container to-surface-container-high">';
+html += '<img src="' + recipe.image + '" alt="' + recipe.title + '" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=\\\'w-full h-full flex items-center justify-center\\\'><span class=\\\'material-symbols-outlined text-5xl text-white/30\\\'>' + recipe.icon + '</span></div>\'">';
+html += '<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">';
+html += '<p class="text-xs text-white/80">' + recipe.prepTime + ' • ' + recipe.calories + ' kcal</p>';
+html += '</div></div>';
+html += '<div class="p-4 flex items-center gap-3">';
+html += '<div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:' + recipe.color + '20">';
+html += '<span class="material-symbols-outlined text-lg" style="color:' + recipe.color + '">' + recipe.icon + '</span></div>';
+html += '<div class="flex-1 min-w-0"><p class="font-headline font-bold text-white truncate">' + recipe.title + '</p>';
+html += '<p class="text-xs text-on-surface-variant">' + recipe.ingredients.length + ' ingredientes</p></div>';
+html += '<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span></div></div>';
 container.innerHTML += html;
 });
 
@@ -196,14 +203,32 @@ function openRecipeModal(key) {
 var recipe = recipesDB[key];
 document.getElementById("modalTitle").textContent = recipe.title;
 var ingredientsHtml = recipe.ingredients.map(function(i) {
-return '<li class="flex items-center gap-3 py-3 border-b border-white/5"><span class="material-symbols-outlined text-primary-container text-sm">check</span><span class="font-headline font-medium text-white">' + i + '</span></li>';
+return '<li class="flex items-center gap-3 py-2 border-b border-white/5"><span class="material-symbols-outlined text-primary-container text-sm">check_circle</span><span class="text-white">' + i + '</span></li>';
 }).join('');
 document.getElementById("modalContent").innerHTML = '<div class="space-y-4">' +
-'<div class="bg-surface-container-high rounded-xl p-4"><p class="text-xs text-primary-container uppercase tracking-wider mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-sm">list</span> Ingredientes</p><ul>' + ingredientsHtml + '</ul></div>' +
-'<div class="bg-surface-container-high rounded-xl p-4"><p class="text-xs text-secondary uppercase tracking-wider mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-sm">restaurant</span> Preparacion</p><p class="text-white">' + recipe.prep + '</p></div>' +
+'<div class="h-40 w-full rounded-xl overflow-hidden bg-gradient-to-br from-surface-container to-surface-container-high">' +
+'<img src="' + recipe.image + '" alt="' + recipe.title + '" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display=\'none\'">' +
+'</div>' +
+'<div class="grid grid-cols-4 gap-2 text-center">' +
+'<div class="p-2 rounded-lg bg-surface-container-high"><p class="text-lg font-bold text-yellow-400">' + recipe.calories + '</p><p class="text-[10px] text-on-surface-variant">kcal</p></div>' +
+'<div class="p-2 rounded-lg bg-surface-container-high"><p class="text-lg font-bold text-orange-400">' + recipe.protein + 'g</p><p class="text-[10px] text-on-surface-variant">proteína</p></div>' +
+'<div class="p-2 rounded-lg bg-surface-container-high"><p class="text-lg font-bold text-yellow-300">' + recipe.fat + 'g</p><p class="text-[10px] text-on-surface-variant">grasa</p></div>' +
+'<div class="p-2 rounded-lg bg-surface-container-high"><p class="text-lg font-bold text-cyan-400">' + recipe.carbs + 'g</p><p class="text-[10px] text-on-surface-variant">carbos</p></div>' +
+'</div>' +
+'<div class="bg-surface-container-high rounded-xl p-4"><p class="text-xs text-primary-container uppercase tracking-wider mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-sm">schedule</span> Preparación (' + recipe.prepTime + ')</p><p class="text-white text-sm">' + recipe.prep + '</p></div>' +
+'<div class="bg-surface-container-high rounded-xl p-4"><p class="text-xs text-secondary uppercase tracking-wider mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-sm">list</span> Ingredientes</p><ul>' + ingredientsHtml + '</ul></div>' +
+'<button onclick="addRecipeToPlan(\'' + key + '\')" class="w-full py-3 rounded-xl bg-primary-container text-white font-bold hover:bg-primary-container/80 transition-all flex items-center justify-center gap-2"><span class="material-symbols-outlined">add_to_meal_plan</span>Agregar al plan</button>' +
 '</div>';
 document.getElementById("recipeModal").classList.remove("hidden");
 document.getElementById("recipeModal").classList.add("flex");
+}
+
+function addRecipeToPlan(recipeKey) {
+var recipe = recipesDB[recipeKey];
+showToast('Receta "' + recipe.title + '" agregada al plan de hoy');
+setTimeout(function() {
+window.location.href = 'plan.html';
+}, 1500);
 }
 
 function closeModal(e) {

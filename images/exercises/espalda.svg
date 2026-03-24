@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2196f3"/>
+      <stop offset="100%" style="stop-color:#1565c0"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <path d="M300 180 Q350 180 400 200 Q450 180 500 180 L550 180 L550 420 L300 420 Z" fill="rgba(255,255,255,0.15)"/>
+  <circle cx="280" cy="280" r="50" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="520" cy="280" r="50" fill="rgba(255,255,255,0.2)"/>
+  <path d="M330 220 Q400 200 470 220" stroke="rgba(255,255,255,0.3)" stroke-width="6" fill="none"/>
+  <path d="M330 280 Q400 260 470 280" stroke="rgba(255,255,255,0.25)" stroke-width="6" fill="none"/>
+  <path d="M330 340 Q400 320 470 340" stroke="rgba(255,255,255,0.2)" stroke-width="6" fill="none"/>
+  <text x="400" y="520" text-anchor="middle" fill="white" font-family="system-ui" font-size="36" font-weight="bold">Ejercicios de Espalda</text>
+  <text x="400" y="560" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="18">KETOLAB</text>
+</svg>

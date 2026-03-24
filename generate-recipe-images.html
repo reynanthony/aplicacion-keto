@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Generador de Imágenes para Recetas KetoLab</title>
+  <style>
+    body { background: #0a0a0a; font-family: monospace; padding: 20px; color: white; }
+    .preview { display: inline-block; margin: 10px; text-align: center; }
+    canvas { border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  </style>
+</head>
+<body>
+<h1>Generador de Imágenes para Recetas KetoLab</h1>
+<div id="previews"></div>
+<script>
+const recipes = [
+  { name: "pure-coliflor", title: "Puré de Coliflor Cremoso", color1: "#4caf50", color2: "#2e7d32", icon: "soup_kitchen" },
+  { name: "hongos", title: "Salteado de Hongos con Ajo", color1: "#795548", color2: "#5d4037", icon: "forest" },
+  { name: "pollo-jugoso", title: "Pechuga de Pollo Jugosa", color1: "#ffb300", color2: "#ff8f00", icon: "egg_alt" },
+  { name: "carne-molida", title: "Carne Molida Estilo Keto", color1: "#ff4d00", color2: "#c2185b", icon: "restaurant" },
+  { name: "aderezo", title: "Aderezo Cetogénico", color1: "#00bcd4", color2: "#0097a7", icon: "local_bar" },
+  { name: "huevos", title: "Huevos Revueltos Cremosos", color1: "#ffc107", color2: "#ff6f00", icon: "egg" },
+  { name: "arroz-coliflor", title: "Arroz de Coliflor", color1: "#9c27b0", color2: "#6a1b9a", icon: "rice_bowl" }
+];
+
+function generateRecipeImage(recipe) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 800;
+  canvas.height = 600;
+  const ctx = canvas.getContext('2d');
+  
+  const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+  grad.addColorStop(0, recipe.color1);
+  grad.addColorStop(1, recipe.color2);
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  ctx.fillStyle = 'rgba(255,255,255,0.1)';
+  for(let i = 0; i < 200; i++) {
+    ctx.beginPath();
+    ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  ctx.font = '200px Material Symbols Outlined';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(recipe.icon, canvas.width/2, canvas.height/2 - 40);
+  
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 40px system-ui';
+  ctx.fillText(recipe.title.toUpperCase(), canvas.width/2, canvas.height - 100);
+  
+  ctx.font = '20px Inter';
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  ctx.fillText("KETOLAB", canvas.width/2, canvas.height - 40);
+  
+  const link = document.createElement('a');
+  link.download = recipe.name + '.jpg';
+  link.href = canvas.toDataURL('image/jpeg', 0.85);
+  link.click();
+  
+  const preview = document.createElement('div');
+  preview.className = 'preview';
+  preview.innerHTML = '<p>' + recipe.title + '</p><img src="' + link.href + '" width="200">';
+  document.getElementById('previews').appendChild(preview);
+}
+
+recipes.forEach(r => generateRecipeImage(r));
+</script>
+</body>
+</html>
