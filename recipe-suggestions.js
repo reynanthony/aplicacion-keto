@@ -116,7 +116,7 @@ function showRecipeSuggestions() {
     var recipe = recipesDB ? recipesDB[s.id] : null;
     if (recipe) {
       var colors = getMacroColors(recipe);
-      html += '<div class="glass-card rounded-xl overflow-hidden cursor-pointer hover:scale-102 transition-all" onclick="openRecipeModal(\'' + s.id + '\')">';
+      html += '<a href="recetas.html" class="glass-card rounded-xl overflow-hidden block hover:scale-102 transition-all">';
       html += '<div class="h-28 w-full overflow-hidden flex items-center justify-center" style="background: linear-gradient(135deg, ' + colors.from + ', ' + colors.to + ');">';
       html += '<span class="material-symbols-outlined text-5xl text-white opacity-30">' + recipe.icon + '</span>';
       html += '<div class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-black bg-opacity-30 text-[9px] font-bold text-white">' + colors.label + '</div>';
@@ -129,7 +129,7 @@ function showRecipeSuggestions() {
       html += '<span class="text-[10px] text-cyan-400">' + recipe.carbs + 'g</span>';
       html += '</div>';
       html += '<p class="text-xs text-green-400 mt-1">' + s.matchPercent + '% ingredientes</p>';
-      html += '</div></div>';
+      html += '</div></a>';
     }
   });
   
