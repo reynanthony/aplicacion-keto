@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KetoLab | Plan de Alimentacion</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","primary-container":"#ff4d00","on-primary":"#ffffff","on-primary-container":"#ffffff","surface":"#0a0a0a","surface-container":"#181717","surface-container-low":"#111010","surface-container-high":"#1e1c1c","surface-container-highest":"#242222","on-surface":"#ffffff","on-surface-variant":"#adaaaa","outline":"#767575","secondary":"#ffb300","tertiary":"#ffc107","error":"#ff7351","background":"#0a0a0a"},fontFamily:{headline:["Plus Jakarta Sans","sans-serif"],body:["Inter","sans-serif"],label:["Inter","sans-serif"]}}}};
+</script>
+<style>
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}.glass-card{background:rgba(36,34,34,0.4);backdrop-filter:blur(20px);border:1px solid rgba(255,77,0,0.1)}.sidebar-collapsed .sidebar-nav{width:72px}.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}.sidebar-collapsed .sidebar-logo-text{display:none}.sidebar-collapsed .sidebar-logo{justify-content:center}.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px}.sidebar-collapsed~main .main-content{margin-left:72px}.sidebar-toggle-btn{left:256px;transition:left 0.3s ease}.sidebar-collapsed~.sidebar-toggle-btn{left:72px}.sidebar-link.active{background:#1e1c1c}.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
+</style>
+</head>
+<body class="bg-background text-on-surface font-body">
+<nav id="sidebarNav" class="sidebar-nav hidden md:flex fixed left-0 top-0 h-full w-64 flex-col py-6 bg-surface-container-low z-50 border-r border-primary-container/10 transition-all duration-300">
+<div class="px-6 mb-8 flex items-center justify-between">
+<div class="flex items-center gap-3 sidebar-logo">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1">nutrition</span></div>
+<div class="sidebar-logo-text"><h1 class="text-lg font-black text-primary-container font-headline tracking-tighter">KetoLab</h1><span class="text-[9px] text-white/40 font-label tracking-[0.2em] uppercase">High-Performance Fuel</span></div>
+</div>
+</div>
+<div class="flex-1 space-y-1 px-4">
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="index.html"><span class="material-symbols-outlined">dashboard</span><span class="sidebar-text">Inicio</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="alimentos.html"><span class="material-symbols-outlined">restaurant</span><span class="sidebar-text">Alimentos</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="plan.html"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">event_note</span><span class="sidebar-text">Plan</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="recetas.html"><span class="material-symbols-outlined">menu_book</span><span class="sidebar-text">Recetas</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="compras.html"><span class="material-symbols-outlined">shopping_cart</span><span class="sidebar-text">Compras</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="macros.html"><span class="material-symbols-outlined">donut_small</span><span class="sidebar-text">Macros</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="checklist.html"><span class="material-symbols-outlined">fact_check</span><span class="sidebar-text">Check</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="entrenamientos.html"><span class="material-symbols-outlined">fitness_center</span><span class="sidebar-text">Gym</span></a>
+</div>
+</nav>
+<button id="sidebarToggle" onclick="toggleSidebar()" class="sidebar-toggle-btn hidden md:flex fixed top-20 z-50 w-8 h-8 bg-surface-container-low hover:bg-surface-container-high border border-white/10 rounded-r-lg items-center justify-center transition-all duration-300"><span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_left</span></button>
+<header class="topbar-desktop hidden md:flex fixed top-0 w-full h-20 px-4 md:px-8 flex items-center justify-between z-40 bg-gradient-to-b from-surface-container-low to-transparent transition-all duration-300">
+<div class="topbar-pl pl-64 transition-all duration-300"><h2 class="text-xl md:text-2xl font-black text-white tracking-tighter font-headline">Plan de Hoy</h2><p class="text-xs text-on-surface-variant">Desde tu despensa</p></div>
+<div class="flex items-center gap-4"><button onclick="copyPlan()" class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors" title="Copiar plan">content_copy</button><button onclick="resetPlan()" class="material-symbols-outlined text-white/70 hover:text-error transition-colors" title="Reiniciar">refresh</button><button onclick="toggleTheme()" class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors">dark_mode</button></div>
+</header>
+<header class="md:hidden fixed top-0 w-full h-14 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5 px-4 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2"><div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-white text-base" style="font-variation-settings:'FILL' 1">nutrition</span></div><span class="text-base font-black text-primary-container tracking-tight font-headline">KetoLab</span></a><span class="text-xs text-on-surface-variant">Desde despensa</span>
+<div class="flex items-center gap-3"><button onclick="copyPlan()" class="material-symbols-outlined text-white/70">content_copy</button><button onclick="resetPlan()" class="material-symbols-outlined text-white/70">refresh</button><button onclick="toggleTheme()" class="material-symbols-outlined text-white/70">dark_mode</button></div>
+</header>
+<main class="main-content md:ml-64 pt-14 md:pt-24 px-4 md:px-6 pb-20 md:pb-12 min-h-screen transition-all duration-300">
+<div class="max-w-4xl mx-auto space-y-6">
+<div class="flex items-center justify-between mb-4"><div><p id="dateDisplay" class="text-xs text-on-surface-variant uppercase tracking-wider"></p><h1 class="text-2xl font-headline font-black text-white">Plan Semanal</h1></div><button onclick="openWeeklyModal()" class="bg-primary-container text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_month</span>Semana</button></div>
+<div id="weekSelector" class="flex gap-1 mb-4 overflow-x-auto pb-2"></div>
+<div class="glass-card rounded-xl p-4 mb-6">
+<div class="flex items-center justify-between mb-4"><span class="text-xs text-on-surface-variant uppercase tracking-wider">Resumen</span><button onclick="copyPlan()" class="text-xs text-primary-container hover:underline">Copiar ayer</button></div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+<div class="bg-surface-container-high rounded-xl p-3 text-center"><div class="flex items-center justify-between mb-2"><span class="text-[10px] text-on-surface-variant uppercase">Calorías</span><span id="caloriePct" class="text-xs font-bold text-yellow-400">0%</span></div><div class="text-2xl font-bold text-white mb-1"><span id="currentCal">0</span><span class="text-sm text-on-surface-variant">/</span><span id="targetCal" class="text-sm text-on-surface-variant">1800</span></div><div class="h-2 bg-surface-container-highest rounded-full overflow-hidden"><div id="calorieBar" class="h-full bg-yellow-400 rounded-full transition-all" style="width:0%"></div></div><div id="calorieRemaining" class="text-[10px] text-on-surface-variant mt-1">Restan: 1800 kcal</div></div>
+<div class="bg-surface-container-high rounded-xl p-3 text-center"><div class="flex items-center justify-between mb-2"><span class="text-[10px] text-on-surface-variant uppercase">Proteína</span><span id="proteinPct" class="text-xs font-bold text-orange-400">0%</span></div><div class="text-2xl font-bold text-white mb-1"><span id="currentProtein">0</span><span class="text-sm text-on-surface-variant">g/</span><span id="targetProtein" class="text-sm text-on-surface-variant">160g</span></div><div class="h-2 bg-surface-container-highest rounded-full overflow-hidden"><div id="proteinBar" class="h-full bg-orange-400 rounded-full transition-all" style="width:0%"></div></div><div id="proteinRemaining" class="text-[10px] text-on-surface-variant mt-1">Restan: 160g</div></div>
+<div class="bg-surface-container-high rounded-xl p-3 text-center"><div class="flex items-center justify-between mb-2"><span class="text-[10px] text-on-surface-variant uppercase">Grasa</span><span id="fatPct" class="text-xs font-bold text-yellow-300">0%</span></div><div class="text-2xl font-bold text-white mb-1"><span id="currentFat">0</span><span class="text-sm text-on-surface-variant">g/</span><span id="targetFat" class="text-sm text-on-surface-variant">150g</span></div><div class="h-2 bg-surface-container-highest rounded-full overflow-hidden"><div id="fatBar" class="h-full bg-yellow-300 rounded-full transition-all" style="width:0%"></div></div><div id="fatRemaining" class="text-[10px] text-on-surface-variant mt-1">Restan: 150g</div></div>
+<div class="bg-surface-container-high rounded-xl p-3 text-center"><div class="flex items-center justify-between mb-2"><span class="text-[10px] text-on-surface-variant uppercase">Carbos</span><span id="carbsPct" class="text-xs font-bold text-cyan-400">0%</span></div><div class="text-2xl font-bold text-white mb-1"><span id="currentCarbs">0</span><span class="text-sm text-on-surface-variant">g/</span><span id="targetCarbs" class="text-sm text-on-surface-variant">25g</span></div><div class="h-2 bg-surface-container-highest rounded-full overflow-hidden"><div id="carbsBar" class="h-full bg-cyan-400 rounded-full transition-all" style="width:0%"></div></div><div id="carbsRemaining" class="text-[10px] text-on-surface-variant mt-1">Restan: 25g</div></div>
+</div>
+<div class="flex items-center justify-between text-xs"><span class="text-on-surface-variant">Total: <span id="mealCount">0</span> alimentos</span><button onclick="resetPlan()" class="text-error hover:underline">Reiniciar plan</button></div>
+</div>
+<div class="glass-card rounded-xl overflow-hidden"><div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/5"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-yellow-400">wb_sunny</span></div><div><p class="font-headline font-bold text-white">Desayuno</p><p id="desayunoMacros" class="text-xs text-on-surface-variant">0 kcal</p></div></div><button onclick="openFoodSelector('desayuno')" class="bg-primary-container text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-primary-container/80 transition-all"><span class="material-symbols-outlined text-sm">add</span>Agregar</button></div><div id="desayunoItems" class="p-3 space-y-2 min-h-[60px]"></div></div>
+<div class="glass-card rounded-xl overflow-hidden"><div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/5"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-orange-400">light_mode</span></div><div><p class="font-headline font-bold text-white">Almuerzo</p><p id="almuerzoMacros" class="text-xs text-on-surface-variant">0 kcal</p></div></div><button onclick="openFoodSelector('almuerzo')" class="bg-primary-container text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-primary-container/80 transition-all"><span class="material-symbols-outlined text-sm">add</span>Agregar</button></div><div id="almuerzoItems" class="p-3 space-y-2 min-h-[60px]"></div></div>
+<div class="glass-card rounded-xl overflow-hidden"><div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/5"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-purple-400">nightlight</span></div><div><p class="font-headline font-bold text-white">Cena</p><p id="cenaMacros" class="text-xs text-on-surface-variant">0 kcal</p></div></div><button onclick="openFoodSelector('cena')" class="bg-primary-container text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-primary-container/80 transition-all"><span class="material-symbols-outlined text-sm">add</span>Agregar</button></div><div id="cenaItems" class="p-3 space-y-2 min-h-[60px]"></div></div>
+<div class="glass-card rounded-xl overflow-hidden"><div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/5"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-pink-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-pink-400">cookie</span></div><div><p class="font-headline font-bold text-white">Snacks</p><p id="snacksMacros" class="text-xs text-on-surface-variant">0 kcal</p></div></div><button onclick="openFoodSelector('snacks')" class="bg-primary-container text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-primary-container/80 transition-all"><span class="material-symbols-outlined text-sm">add</span>Agregar</button></div><div id="snacksItems" class="p-3 space-y-2 min-h-[60px]"></div></div>
+<div id="weeklyOverview" class="glass-card rounded-xl p-4 hidden"><h3 class="text-sm font-bold text-white mb-3">Resumen Semanal</h3><div id="weeklyStats" class="grid grid-cols-7 gap-2"></div></div>
+</div>
+</main>
+<div id="foodSelectorModal" class="fixed inset-0 z-[60] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeFoodSelector()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-2xl max-h-[85vh] flex flex-col pointer-events-auto"><div class="flex justify-between items-center mb-4"><div><h3 class="text-lg font-headline font-bold text-white">Agregar a <span id="selectedMeal"></span></h3><p class="text-xs text-on-surface-variant mt-1">Desde tu despensa</p></div><button onclick="closeFoodSelector()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div class="relative mb-4"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span><input type="text" id="foodSearch" placeholder="Buscar en despensa..." class="w-full bg-surface-container text-white border border-outline rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-primary-container" oninput="filterFoods()"></div><div id="foodList" class="flex-1 overflow-y-auto"></div></div></div></div>
+<div id="portionModal" class="fixed inset-0 z-[60] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closePortionModal()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-headline font-bold text-white" id="portionFoodName"></h3><button onclick="closePortionModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div class="bg-surface-container-high rounded-xl p-4 mb-4"><div class="grid grid-cols-4 gap-2 text-center"><div><p class="text-[10px] text-on-surface-variant uppercase">Cal</p><p id="portionCalories" class="text-lg font-bold text-yellow-400">0</p></div><div><p class="text-[10px] text-on-surface-variant uppercase">Prot</p><p id="portionProtein" class="text-lg font-bold text-orange-400">0g</p></div><div><p class="text-[10px] text-on-surface-variant uppercase">Gras</p><p id="portionFat" class="text-lg font-bold text-yellow-300">0g</p></div><div><p class="text-[10px] text-on-surface-variant uppercase">Carb</p><p id="portionCarbs" class="text-lg font-bold text-cyan-400">0g</p></div></div></div><div class="mb-3"><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Unidad de medida</label><div id="planUnitSelector" class="flex flex-wrap gap-2"></div></div><div class="mb-4"><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Cantidad</label><div class="flex items-center gap-3"><button onclick="adjustTempQty(-1)" class="w-12 h-12 rounded-xl bg-surface-container-high text-white font-bold text-xl hover:bg-surface-container-highest transition-all">−</button><input type="number" id="tempQty" value="1" min="0.1" step="0.1" class="flex-1 bg-surface-container text-white border border-outline rounded-xl px-4 py-3 text-center text-xl font-bold focus:outline-none focus:border-primary-container"><button onclick="adjustTempQty(1)" class="w-12 h-12 rounded-xl bg-surface-container-high text-white font-bold text-xl hover:bg-surface-container-highest transition-all">+</button></div></div><div class="bg-primary-container/20 rounded-xl p-3 mb-4 border border-primary-container/30"><div class="flex justify-between items-center"><span class="text-sm text-white/70">Total en gramos:</span><span id="portionPreview" class="text-2xl font-bold text-primary-container">0 g</span></div></div><div id="stockWarning" class="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3 mb-4 hidden"><div class="flex items-center gap-2 text-yellow-400 text-sm"><span class="material-symbols-outlined">warning</span><span id="stockWarningText"></span></div></div><input type="hidden" id="selectedFoodId"><input type="hidden" id="selectedMealType"><div class="flex gap-3"><button onclick="closePortionModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="addFoodToMeal()" class="flex-1 py-3 rounded-xl bg-primary-container text-white font-bold hover:bg-primary-container/80 transition-colors">Agregar</button></div></div></div></div>
+<div id="stockModal" class="fixed inset-0 z-[70] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto text-center"><div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-4xl text-yellow-400">warning</span></div><h3 class="text-xl font-headline font-bold text-white mb-2">Stock Insuficiente</h3><p class="text-white/70 mb-2">Solo tienes disponible:</p><p id="availableStock" class="text-3xl font-bold text-yellow-400 mb-4">0 g</p><p class="text-white/50 text-sm mb-6">de <span id="requestedStock" class="text-white">0 g</span></p><div class="flex gap-3"><button onclick="closeStockModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="addAvailableStock()" class="flex-1 py-3 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors">Agregar lo disponible</button></div></div></div></div>
+<div id="weeklyModal" class="fixed inset-0 z-[70] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWeeklyModal()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-md pointer-events-auto"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-headline font-bold text-white">Plan Semanal</h3><button onclick="closeWeeklyModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div id="weeklyDayList" class="space-y-2 mb-4"></div><div class="border-t border-white/10 pt-4 mb-4"><p class="text-xs text-on-surface-variant mb-3">Copiar plan de un día a otro:</p><div class="flex gap-2 mb-4"><select id="copyFromDay" class="flex-1 bg-surface-container text-white rounded-lg px-3 py-2 text-sm"></select><span class="text-white/50">→</span><select id="copyToDay" class="flex-1 bg-surface-container text-white rounded-lg px-3 py-2 text-sm"></select></div><button onclick="copyDayPlan()" class="w-full py-3 rounded-xl bg-primary-container text-white font-bold mb-3">Copiar Día</button><button onclick="resetSelectedDay()" class="w-full py-3 rounded-xl bg-red-500/20 text-red-400 font-medium hover:bg-red-500/30 transition-colors">Reiniciar Día Actual</button></div></div></div></div>
+<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-16 flex items-center z-50 px-0">
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="index.html"><span class="material-symbols-outlined text-xl">dashboard</span><span class="text-[7px] font-bold">Inicio</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="alimentos.html"><span class="material-symbols-outlined text-xl">restaurant</span><span class="text-[7px] font-bold">Alimentos</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-primary-container h-full py-2" href="plan.html"><span class="material-symbols-outlined text-xl">event_note</span><span class="text-[7px] font-bold">Plan</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="compras.html"><span class="material-symbols-outlined text-xl">shopping_cart</span><span class="text-[7px] font-bold">Despensa</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="macros.html"><span class="material-symbols-outlined text-xl">donut_small</span><span class="text-[7px] font-bold">Macros</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="checklist.html"><span class="material-symbols-outlined text-xl">fact_check</span><span class="text-[7px] font-bold">Check</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="entrenamientos.html"><span class="material-symbols-outlined text-xl">fitness_center</span><span class="text-[7px] font-bold">Gym</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="recetas.html"><span class="material-symbols-outlined text-xl">menu_book</span><span class="text-[7px] font-bold">Recetas</span></a>
+</nav>
+<script>
+function toggleTheme(){document.documentElement.classList.toggle("dark");localStorage.setItem("theme",document.documentElement.classList.contains("dark")?"dark":"light")}
+function toggleSidebar(){var b=document.body;var s=document.getElementById("sidebarNav");var t=document.getElementById("sidebarToggle");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");b.classList.toggle("sidebar-collapsed");if(b.classList.contains("sidebar-collapsed")){s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px";localStorage.setItem("sidebarCollapsed","true")}else{s.style.width="256px";s.style.overflow="";if(p)p.style.paddingLeft="272px";if(m)m.style.marginLeft="256px";if(t)t.style.left="256px";localStorage.setItem("sidebarCollapsed","false")}}
+function initSidebar(){var s=document.getElementById("sidebarNav");var t=document.getElementById("sidebarToggle");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");if(localStorage.getItem("sidebarCollapsed")==="true"){document.body.classList.add("sidebar-collapsed");s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px"}}
+if(localStorage.getItem("theme")==="dark"||!localStorage.getItem("theme")){document.documentElement.classList.add("dark")}
+initSidebar();
+var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
+var today=new Date().toISOString().slice(0,10);
+var planFoodUnits={};
+var planCurrentUnit=0;
+var defaultFoods=[
+{id:"f1",name:"Huevos",portion:50,calories:78,protein:6,fat:5,carbs:0.6,category:"Proteínas",units:[{name:"unidades",grams:50},{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f2",name:"Pechuga de pollo",portion:100,calories:165,protein:31,fat:3.6,carbs:0,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f3",name:"Carne molida 80/20",portion:100,calories:254,protein:17,fat:20,carbs:0,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f4",name:"Salmón",portion:100,calories:208,protein:20,fat:13,carbs:0,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f5",name:"Bacon",portion:50,calories:270,protein:12,fat:23,carbs:1,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f6",name:"Cerdo (lomo)",portion:100,calories:143,protein:26,fat:3.5,carbs:0,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f7",name:"Carne de res (bistec)",portion:100,calories:271,protein:26,fat:18,carbs:0,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f8",name:"Atún",portion:100,calories:132,protein:28,fat:1,carbs:0,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000},{name:"latas",grams:140}]},
+{id:"f9",name:"Hígado de res",portion:100,calories:135,protein:20,fat:4,carbs:4,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f10",name:"Pavo molido",portion:100,calories:149,protein:27,fat:3,carbs:0,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f11",name:"Codornices",portion:100,calories:192,protein:25,fat:10,carbs:0,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"unidades",grams:100},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f12",name:"Aguacate",portion:100,calories:160,protein:2,fat:15,carbs:9,category:"Grasas",units:[{name:"gramos",grams:1},{name:"unidades",grams:200},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f13",name:"Aceite de oliva",portion:15,calories:119,protein:0,fat:13.5,carbs:0,category:"Grasas",units:[{name:"ml",grams:0.9},{name:"cucharadas",grams:15},{name:"litros",grams:900}]},
+{id:"f14",name:"Mantequilla",portion:15,calories:102,protein:0.1,fat:11.5,carbs:0,category:"Grasas",units:[{name:"gramos",grams:1},{name:"cucharadas",grams:15},{name:"libras",grams:453.6}]},
+{id:"f15",name:"Aceite de coco",portion:15,calories:121,protein:0,fat:13.5,carbs:0,category:"Grasas",units:[{name:"ml",grams:0.9},{name:"cucharadas",grams:15},{name:"litros",grams:900}]},
+{id:"f16",name:"Ghee",portion:15,calories:130,protein:0,fat:14,carbs:0,category:"Grasas",units:[{name:"gramos",grams:1},{name:"cucharadas",grams:15},{name:"libras",grams:453.6}]},
+{id:"f17",name:"Almendras",portion:30,calories:170,protein:6,fat:15,carbs:6,category:"Frutos secos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f18",name:"Nueces",portion:30,calories:196,protein:4.6,fat:19.5,carbs:4,category:"Frutos secos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f19",name:"Macadamia",portion:30,calories:204,protein:2.2,fat:21.5,carbs:4,category:"Frutos secos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f20",name:"Pecanas",portion:30,calories:196,protein:2.6,fat:20,carbs:4,category:"Frutos secos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f21",name:"Semillas de chía",portion:30,calories:138,protein:4.7,fat:9,carbs:12,category:"Frutos secos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f22",name:"Semillas de linaza",portion:30,calories:150,protein:5,fat:12,carbs:8,category:"Frutos secos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f23",name:"Brócoli",portion:100,calories:34,protein:2.8,fat:0.4,carbs:7,category:"Verduras",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f24",name:"Coliflor",portion:100,calories:25,protein:2,fat:0.3,carbs:5,category:"Verduras",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f25",name:"Espinacas",portion:100,calories:23,protein:2.9,fat:0.4,carbs:3.6,category:"Verduras",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f26",name:"Champiñones",portion:100,calories:22,protein:3.1,fat:0.3,carbs:3.3,category:"Verduras",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f27",name:"Pimiento rojo",portion:100,calories:31,protein:1,fat:0.3,carbs:6,category:"Verduras",units:[{name:"gramos",grams:1},{name:"unidades",grams:120},{name:"libras",grams:453.6}]},
+{id:"f28",name:"Pepino",portion:100,calories:15,protein:0.7,fat:0.1,carbs:3.6,category:"Verduras",units:[{name:"gramos",grams:1},{name:"unidades",grams:300},{name:"libras",grams:453.6}]},
+{id:"f29",name:"Lechuga",portion:100,calories:15,protein:1.4,fat:0.2,carbs:2.9,category:"Verduras",units:[{name:"gramos",grams:1},{name:"unidades",grams:200},{name:"libras",grams:453.6}]},
+{id:"f30",name:"Tomate",portion:100,calories:18,protein:0.9,fat:0.2,carbs:3.9,category:"Verduras",units:[{name:"gramos",grams:1},{name:"unidades",grams:150},{name:"libras",grams:453.6}]},
+{id:"f31",name:"Cebolla",portion:100,calories:40,protein:1.1,fat:0.1,carbs:9.3,category:"Verduras",units:[{name:"gramos",grams:1},{name:"unidades",grams:150},{name:"libras",grams:453.6}]},
+{id:"f32",name:"Ajo",portion:3,calories:4,protein:0.2,fat:0,carbs:1,category:"Verduras",units:[{name:"gramos",grams:1},{name:"dientes",grams:4},{name:"libras",grams:453.6}]},
+{id:"f33",name:"Calabacín",portion:100,calories:17,protein:1.2,fat:0.3,carbs:3.1,category:"Verduras",units:[{name:"gramos",grams:1},{name:"unidades",grams:250},{name:"libras",grams:453.6}]},
+{id:"f34",name:"Apio",portion:100,calories:16,protein:0.7,fat:0.2,carbs:3,category:"Verduras",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f35",name:"Queso mozzarella",portion:100,calories:280,protein:28,fat:17,carbs:3.1,category:"Lácteos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f36",name:"Queso cheddar",portion:30,calories:120,protein:7,fat:10,carbs:0.4,category:"Lácteos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f37",name:"Queso parmesano",portion:30,calories:111,protein:10,fat:7,carbs:0.4,category:"Lácteos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f38",name:"Queso crema",portion:30,calories:100,protein:2,fat:10,carbs:0.4,category:"Lácteos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f39",name:"Nata para cocinar",portion:100,calories:340,protein:2,fat:36,carbs:3,category:"Lácteos",units:[{name:"ml",grams:0.9},{name:"litros",grams:900}]},
+{id:"f40",name:"Queso feta",portion:30,calories:75,protein:4,fat:6,carbs:1,category:"Lácteos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f41",name:"Cacao puro",portion:10,calories:23,protein:2,fat:1.4,carbs:6,category:"Otros",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f42",name:"Coco rallado",portion:30,calories:187,protein:2,fat:18,carbs:8,category:"Otros",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f43",name:"Edamame",portion:100,calories:121,protein:12,fat:5,carbs:10,category:"Otros",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f44",name:"Café con mantequilla",portion:240,calories:230,protein:2,fat:24,carbs:0,category:"Otros",units:[{name:"ml",grams:0.9},{name:"tazas",grams:240}]},
+{id:"f45",name:"Chocolate negro 90%",portion:30,calories:150,protein:2,fat:13,carbs:4,category:"Otros",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]}
+];
+var mealNames={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snacks"};
+function getMealPlan(){var stored=JSON.parse(localStorage.getItem("mealPlan_"+today)||"{}");if(Object.keys(stored).length===0){stored={desayuno:[],almuerzo:[],cena:[],snacks:[]};localStorage.setItem("mealPlan_"+today,JSON.stringify(stored))}return stored}
+function saveMealPlan(plan){localStorage.setItem("mealPlan_"+today,JSON.stringify(plan))}
+function renderMealPlan(){var plan=getMealPlan();var totalCal=0,totalProt=0,totalFat=0,totalCarbs=0,totalItems=0;var macros=JSON.parse(localStorage.getItem("keto_macros")||"{}");var targetCal=parseInt(macros.calories)||1800;var targetProt=parseInt(macros.protein)||160;var targetFat=parseInt(macros.fat)||150;var targetCarbs=parseInt(macros.carbs)||25;Object.keys(plan).forEach(function(meal){var container=document.getElementById(meal+"Items");var mealCal=0;if(plan[meal].length===0){container.innerHTML='<p class="text-center text-on-surface-variant text-sm py-4">Sin alimentos. Toca "Agregar" para anadir.</p>'}else{container.innerHTML="";plan[meal].forEach(function(item,idx){var food=defaultFoods.find(function(f){return f.id===item.id})||item;var itemPort=parseFloat(item.portion)||100;var foodPort=parseFloat(food.portion)||100;var ratio=itemPort/foodPort;var cal=Math.round((parseFloat(food.calories)||0)*ratio);var prot=Math.round((parseFloat(food.protein)||0)*ratio*10)/10;var fat=Math.round((parseFloat(food.fat)||0)*ratio*10)/10;var carbs=Math.round((parseFloat(food.carbs)||0)*ratio*10)/10;mealCal+=cal;totalProt+=prot;totalFat+=fat;totalCarbs+=carbs;totalItems++;var html='<div class="flex items-center gap-3 bg-surface-container-low rounded-lg p-3">';html+='<div class="flex-1 min-w-0"><p class="font-medium text-white truncate">'+food.name+'</p><p class="text-xs text-on-surface-variant">'+itemPort+'g - '+cal.toLocaleString()+' kcal</p></div>';html+='<div class="flex items-center gap-1">';html+='<button onclick="changePortion(\''+meal+'\','+idx+',-10)" class="w-7 h-7 rounded bg-surface-container-high text-white text-xs hover:bg-surface-container-highest">-</button>';html+='<span class="w-12 text-center text-xs">'+itemPort+'g</span>';html+='<button onclick="changePortion(\''+meal+'\','+idx+',10)" class="w-7 h-7 rounded bg-surface-container-high text-white text-xs hover:bg-surface-container-highest">+</button>';html+='<button onclick="removeFromMeal(\''+meal+'\','+idx+')" class="w-7 h-7 rounded bg-error/20 text-error hover:bg-error/30 ml-2"><span class="material-symbols-outlined text-sm">delete</span></button>';html+='</div></div>';container.innerHTML+=html})}document.getElementById(meal+"Macros").textContent=mealCal.toLocaleString()+" kcal";totalCal+=mealCal});var calPct=targetCal>0?Math.round((totalCal/targetCal)*100):0;var protPct=targetProt>0?Math.round((totalProt/targetProt)*100):0;var fatPct=targetFat>0?Math.round((totalFat/targetFat)*100):0;var carbsPct=targetCarbs>0?Math.round((totalCarbs/targetCarbs)*100):0;document.getElementById("currentCal").textContent=totalCal.toLocaleString();document.getElementById("targetCal").textContent=targetCal.toLocaleString();document.getElementById("calorieBar").style.width=Math.min(calPct,100)+"%";document.getElementById("caloriePct").textContent=calPct+"%";document.getElementById("calorieRemaining").textContent="Restan: "+Math.max(0,targetCal-totalCal).toLocaleString()+" kcal";document.getElementById("currentProtein").textContent=Math.round(totalProt);document.getElementById("targetProtein").textContent=targetProt+"g";document.getElementById("proteinBar").style.width=Math.min(protPct,100)+"%";document.getElementById("proteinPct").textContent=protPct+"%";document.getElementById("proteinRemaining").textContent="Restan: "+Math.max(0,targetProt-totalProt).toFixed(0)+"g";document.getElementById("currentFat").textContent=Math.round(totalFat);document.getElementById("targetFat").textContent=targetFat+"g";document.getElementById("fatBar").style.width=Math.min(fatPct,100)+"%";document.getElementById("fatPct").textContent=fatPct+"%";document.getElementById("fatRemaining").textContent="Restan: "+Math.max(0,targetFat-totalFat).toFixed(0)+"g";document.getElementById("currentCarbs").textContent=Math.round(totalCarbs);document.getElementById("targetCarbs").textContent=targetCarbs+"g";document.getElementById("carbsBar").style.width=Math.min(carbsPct,100)+"%";document.getElementById("carbsPct").textContent=carbsPct+"%";document.getElementById("carbsRemaining").textContent="Restan: "+Math.max(0,targetCarbs-totalCarbs).toFixed(0)+"g";document.getElementById("mealCount").textContent=totalItems;var userData={proteinConsumed:totalProt};localStorage.setItem("userData",JSON.stringify(userData))}
+function changePortion(meal,idx,delta){var plan=getMealPlan(currentDay);var newPortion=Math.max(10,plan[meal][idx].portion+delta);plan[meal][idx].portion=newPortion;saveMealPlanForDate(currentDay,plan);renderMealPlan();initWeekSelector()}
+function removeFromMeal(meal,idx){var plan=getMealPlan(currentDay);plan[meal].splice(idx,1);saveMealPlanForDate(currentDay,plan);renderMealPlan();initWeekSelector()}
+var currentFoods=[];
+function getAllFoodsForPlan(){
+var stored=JSON.parse(localStorage.getItem("ketoFoods")||"null");
+if(stored&&Array.isArray(stored)){
+stored.forEach(function(f){
+if(!f.units){
+var def=defaultFoods.find(function(d){return d.id===f.id});
+if(def&&def.units)f.units=def.units;
+}
+});
+return stored;
+}
+return defaultFoods;
+}
+function getDespensa(){return JSON.parse(localStorage.getItem("despensa")||"{}")}
+function getFoods(){
+var allFoods=getAllFoodsForPlan();
+var despensa=getDespensa();
+var despensaIds=Object.keys(despensa);
+currentFoods=allFoods.filter(function(f){return despensaIds.includes(f.id)});
+}
+function getStockStatus(foodId){
+var despensa=getDespensa();
+var stock=despensa[foodId]?despensa[foodId].stock:0;
+var percent=Math.min((stock/1000)*100,100);
+if(percent<=10)return{color:"#ff7351",text:"Agotado"};
+if(percent<=25)return{color:"#ffb300",text:"Bajo"};
+if(percent<=50)return{color:"#ffc107",text:"Medio"};
+return{color:"#4caf50",text:"OK"};
+}
+function openFoodSelector(meal){document.getElementById("selectedMeal").textContent=mealNames[meal];document.getElementById("selectedMealType").value=meal;document.getElementById("foodSearch").value="";filterFoods();document.getElementById("foodSelectorModal").classList.remove("hidden");document.getElementById("foodSelectorModal").classList.add("flex")}
+function closeFoodSelector(){document.getElementById("foodSelectorModal").classList.add("hidden");document.getElementById("foodSelectorModal").classList.remove("flex")}
+function filterFoods(){
+var search=document.getElementById("foodSearch").value.toLowerCase();
+var filtered=currentFoods.filter(function(f){return f.name.toLowerCase().includes(search)});
+var html="";
+if(filtered.length===0){
+html='<div class="text-center py-8">';
+html+='<span class="material-symbols-outlined text-6xl text-on-surface-variant/30 mb-4">inventory_2</span>';
+html+='<p class="text-on-surface-variant mb-2">Tu despensa está vacía</p>';
+html+='<p class="text-sm text-on-surface-variant/70">Ve a "Compras" para agregar alimentos</p>';
+html+='</div>';
+document.getElementById("foodList").innerHTML=html;
+return;
+}
+var catColors={"Proteínas":"#ff4d00","Grasas":"#ffb300","Verduras":"#4caf50","Lácteos":"#9c27b0","Frutos secos":"#ff9800","Otros":"#9c27b0"};
+var categories=["Proteínas","Grasas","Verduras","Lácteos","Frutos secos","Otros"];
+categories.forEach(function(cat){
+var catFoods=filtered.filter(function(f){return f.category===cat});
+if(catFoods.length>0){
+html+='<div class="mb-4">';
+html+='<div class="flex items-center gap-2 mb-2">';
+html+='<div class="w-3 h-3 rounded-full" style="background:'+catColors[cat]+'"></div>';
+html+='<h4 class="text-sm font-medium text-on-surface-variant">'+cat+'</h4>';
+html+='</div>';
+html+='<div class="space-y-1">';
+catFoods.forEach(function(f){
+var foodPort=parseFloat(f.portion)||100;
+var cal100=Math.round((parseFloat(f.calories)||0)/foodPort*100);
+var status=getStockStatus(f.id);
+var stock=0;
+var despensa=getDespensa();
+if(despensa[f.id])stock=despensa[f.id].stock;
+html+='<div class="flex items-center gap-3 p-2 rounded-lg bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer" onclick="selectFood(\''+f.id+'\')">';
+html+='<div class="flex-1 min-w-0">';
+html+='<p class="font-medium text-white truncate">'+f.name+'</p>';
+html+='<p class="text-xs text-on-surface-variant">'+cal100+' cal/100g · '+foodPort+'g</p>';
+html+='</div>';
+html+='<div class="text-right flex-shrink-0">';
+html+='<span class="text-xs px-2 py-0.5 rounded" style="background:'+status.color+'20;color:'+status.color+'">'+status.text+'</span>';
+html+='<p class="text-xs text-on-surface-variant mt-0.5">'+(stock>=1000?(stock/1000).toFixed(1)+"kg":stock+"g")+'</p>';
+html+='</div>';
+html+='<span class="material-symbols-outlined text-primary-container">add_circle</span>';
+html+='</div>';
+});
+html+='</div></div>';
+}
+});
+document.getElementById("foodList").innerHTML=html;
+}
+function selectFood(foodId){
+var food=currentFoods.find(function(f){return f.id===foodId});
+if(!food){
+food=defaultFoods.find(function(f){return f.id===foodId});
+}
+if(!food)return;
+document.getElementById("selectedFoodId").value=food.id;
+document.getElementById("portionFoodName").textContent=food.name;
+var units=food.units||[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}];
+planFoodUnits[foodId]=units;
+planCurrentUnit=0;
+document.getElementById("tempQty").value=1;
+renderPlanUnitSelector(foodId);
+updatePlanPreview();
+closeFoodSelector();
+document.getElementById("portionModal").classList.remove("hidden");
+document.getElementById("portionModal").classList.add("flex");
+}
+function renderPlanUnitSelector(foodId){
+var units=planFoodUnits[foodId]||[{name:"gramos",grams:1}];
+var container=document.getElementById("planUnitSelector");
+var html="";
+units.forEach(function(unit,idx){
+var active=idx===planCurrentUnit?"bg-primary-container text-white":"bg-surface-container text-white/70";
+html+='<button onclick="selectPlanUnit('+idx+')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all '+active+'">'+unit.name+'</button>';
+});
+container.innerHTML=html;
+}
+function selectPlanUnit(idx){
+planCurrentUnit=idx;
+var foodId=document.getElementById("selectedFoodId").value;
+renderPlanUnitSelector(foodId);
+updatePlanPreview();
+}
+function adjustTempQty(delta){
+var qty=parseFloat(document.getElementById("tempQty").value)||0;
+document.getElementById("tempQty").value=Math.max(0.1,qty+delta);
+updatePlanPreview();
+}
+function updatePlanPreview(){
+var foodId=document.getElementById("selectedFoodId").value;
+var food=currentFoods.find(function(f){return f.id===foodId});
+if(!food){
+food=defaultFoods.find(function(f){return f.id===foodId});
+}
+if(!food)return;
+var qty=parseFloat(document.getElementById("tempQty").value)||0;
+var units=planFoodUnits[foodId]||food.units||[{name:"gramos",grams:1}];
+var unit=units[planCurrentUnit]||units[0];
+var totalGrams=Math.round(qty*unit.grams);
+var foodPortion=parseFloat(food.portion)||100;
+var ratio=totalGrams/foodPortion;
+var calories=Math.round((parseFloat(food.calories)||0)*ratio);
+var protein=Math.round((parseFloat(food.protein)||0)*ratio*10)/10;
+var fat=Math.round((parseFloat(food.fat)||0)*ratio*10)/10;
+var carbs=Math.round((parseFloat(food.carbs)||0)*ratio*10)/10;
+document.getElementById("portionPreview").textContent=totalGrams.toLocaleString()+" g";
+document.getElementById("portionCalories").textContent=calories.toLocaleString();
+document.getElementById("portionProtein").textContent=protein+"g";
+document.getElementById("portionFat").textContent=fat+"g";
+document.getElementById("portionCarbs").textContent=carbs+"g";
+var despensa=getDespensa();
+var availableStock=despensa[foodId]?despensa[foodId].stock:0;
+var stockWarning=document.getElementById("stockWarning");
+if(availableStock>0&&totalGrams>availableStock){
+stockWarning.classList.remove("hidden");
+document.getElementById("stockWarningText").textContent="Stock disponible: "+availableStock.toLocaleString()+"g";
+}else{
+stockWarning.classList.add("hidden");
+}
+}
+function closePortionModal(){document.getElementById("portionModal").classList.add("hidden");document.getElementById("portionModal").classList.remove("flex");document.getElementById("stockWarning").classList.add("hidden")}
+var pendingAdd={meal:null,foodId:null,totalGrams:0};
+function addFoodToMeal(){
+var meal=document.getElementById("selectedMealType").value;
+var foodId=document.getElementById("selectedFoodId").value;
+var food=currentFoods.find(function(f){return f.id===foodId});
+if(!food||!meal)return;
+var qty=parseFloat(document.getElementById("tempQty").value)||0;
+var units=planFoodUnits[foodId]||[{name:"gramos",grams:1}];
+var unit=units[planCurrentUnit];
+var totalGrams=Math.round(qty*unit.grams);
+if(totalGrams<=0)return;
+var despensa=getDespensa();
+var availableStock=despensa[foodId]?despensa[foodId].stock:0;
+if(availableStock>0&&totalGrams>availableStock){
+pendingAdd={meal:meal,foodId:foodId,totalGrams:totalGrams};
+document.getElementById("availableStock").textContent=availableStock.toLocaleString()+" g";
+document.getElementById("requestedStock").textContent=totalGrams.toLocaleString()+" g";
+document.getElementById("stockModal").classList.remove("hidden");
+document.getElementById("stockModal").classList.add("flex");
+return;
+}
+executeAdd(meal,foodId,totalGrams);
+}
+function executeAdd(meal,foodId,totalGrams){
+var plan=getMealPlan(currentDay);
+plan[meal].push({id:foodId,portion:totalGrams});
+saveMealPlanForDate(currentDay,plan);
+var despensa=getDespensa();
+if(despensa[foodId]){
+despensa[foodId].stock=Math.max(0,despensa[foodId].stock-totalGrams);
+despensa[foodId].lastUpdated=new Date().toISOString();
+localStorage.setItem("despensa",JSON.stringify(despensa));
+}
+closePortionModal();
+renderMealPlan();
+initWeekSelector();
+}
+function addAvailableStock(){
+if(pendingAdd.meal&&pendingAdd.foodId){
+executeAdd(pendingAdd.meal,pendingAdd.foodId,pendingAdd.totalGrams);
+}
+closeStockModal();
+}
+function closeStockModal(){
+document.getElementById("stockModal").classList.add("hidden");
+document.getElementById("stockModal").classList.remove("flex");
+pendingAdd={meal:null,foodId:null,totalGrams:0};
+}
+function copyPlan(){var plan=getMealPlan(currentDay);var yesterday=new Date(currentDay);yesterday.setDate(yesterday.getDate()-1);var yesterdayKey=yesterday.toISOString().slice(0,10);var yesterdayPlan=getMealPlan(yesterdayKey);if(yesterdayPlan.desayuno.length>0||yesterdayPlan.almuerzo.length>0||yesterdayPlan.cena.length>0||yesterdayPlan.snacks.length>0){saveMealPlanForDate(currentDay,yesterdayPlan);renderMealPlan();alert("Plan copiado de ayer!")}else{alert("No hay plan de ayer para copiar")}}
+function resetPlan(){if(!confirm("Reiniciar el plan del día seleccionado?"))return;var plan={desayuno:[],almuerzo:[],cena:[],snacks:[]};saveMealPlanForDate(currentDay,plan);renderMealPlan();initWeekSelector()}
+document.getElementById("tempQty").addEventListener("input",updatePlanPreview);
+var dateOptions={weekday:"long",day:"numeric",month:"long"};document.getElementById("dateDisplay").textContent=new Date().toLocaleDateString("es-ES",dateOptions);
+var currentDay=new Date().toISOString().slice(0,10);
+getFoods();renderMealPlan();initWeekSelector();
+function initWeekSelector(){
+var weekDays=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+var container=document.getElementById("weekSelector");
+var today=new Date();
+var dayOfWeek=today.getDay();
+var monday=new Date(today);
+monday.setDate(today.getDate()-(dayOfWeek<=0?6:dayOfWeek-1));
+var html="";
+for(var i=0;i<7;i++){
+var d=new Date(monday);
+d.setDate(monday.getDate()+i);
+var dateKey=d.toISOString().slice(0,10);
+var isToday=dateKey===today.toISOString().slice(0,10);
+var isSelected=dateKey===currentDay;
+var bgColor=isSelected||isToday?"#ff4d00":"#181717";
+var textColor=isSelected||isToday?"#ffffff":"rgba(255,255,255,0.7)";
+var plan=getMealPlan(dateKey);
+var itemCount=(plan.desayuno?plan.desayuno.length:0)+(plan.almuerzo?plan.almuerzo.length:0)+(plan.cena?plan.cena.length:0)+(plan.snacks?plan.snacks.length:0);
+html+='<button data-date="'+dateKey+'" class="day-btn flex-shrink-0 rounded-lg p-3 text-center min-w-[60px] transition-all duration-200" style="background:'+bgColor+';color:'+textColor+'">';
+html+='<div class="text-[10px] uppercase '+(isToday||isSelected?"font-bold":"")+'">'+weekDays[i]+'</div>';
+html+='<div class="text-lg font-bold '+(isToday||isSelected?"font-bold":"")+'">'+d.getDate()+'</div>';
+html+='<div class="text-[10px] '+(itemCount>0?"":"")+'" style="color:'+(itemCount>0?"#4ade80":"rgba(255,255,255,0.4)")+'">'+(itemCount>0?itemCount+" ítems":"Vacío")+'</div>';
+html+='</button>';
+}
+container.innerHTML=html;
+container.querySelectorAll(".day-btn").forEach(function(btn){
+btn.addEventListener("click",function(){
+selectDay(this.getAttribute("data-date"));
+});
+btn.addEventListener("mouseenter",function(){
+if(this.getAttribute("data-date")!==currentDay){
+this.style.background="#1e1c1c";
+this.style.color="#ffffff";
+}
+});
+btn.addEventListener("mouseleave",function(){
+if(this.getAttribute("data-date")!==currentDay){
+this.style.background="#181717";
+this.style.color="rgba(255,255,255,0.7)";
+}
+});
+});
+renderWeeklyOverview();
+}
+function selectDay(dateKey){
+currentDay=dateKey;
+var d=new Date(dateKey);
+var dateDisplay=document.getElementById("dateDisplay");
+dateDisplay.textContent=d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"});
+document.getElementById("weekSelector").querySelectorAll("button").forEach(function(btn){
+var isSelected=btn.getAttribute("data-date")===dateKey;
+if(isSelected){
+btn.style.background="#ff4d00";
+btn.style.color="#ffffff";
+btn.querySelectorAll("div").forEach(function(div){div.style.fontWeight="bold";});
+btn.onmouseover=null;
+btn.onmouseout=null;
+}else{
+btn.style.background="#181717";
+btn.style.color="rgba(255,255,255,0.7)";
+btn.onmouseover=function(){this.style.background="#1e1c1c";this.style.color="#ffffff";};
+btn.onmouseout=function(){this.style.background="#181717";this.style.color="rgba(255,255,255,0.7)";};
+btn.querySelectorAll("div").forEach(function(div){div.style.fontWeight="normal";});
+var lastDiv=btn.querySelector("div:last-child");
+if(lastDiv){
+if(lastDiv.textContent.indexOf(" ítems")>-1){
+lastDiv.style.color="#4ade80";
+}else{
+lastDiv.style.color="rgba(255,255,255,0.4)";
+}
+}
+}
+});
+renderMealPlan();
+renderWeeklyOverview();
+}
+function getMealPlan(dateKey){
+dateKey=dateKey||currentDay;
+var stored=JSON.parse(localStorage.getItem("mealPlan_"+dateKey)||"{}");
+if(Object.keys(stored).length===0){
+stored={desayuno:[],almuerzo:[],cena:[],snacks:[]};
+localStorage.setItem("mealPlan_"+dateKey,JSON.stringify(stored));
+}
+return stored;
+}
+function saveMealPlan(plan){
+saveMealPlanForDate(currentDay,plan);
+initWeekSelector();
+}
+function renderWeeklyOverview(){
+var container=document.getElementById("weeklyStats");
+var monday=new Date();monday.setDate(monday.getDate()-(monday.getDay()<=0?6:monday.getDay()-1));
+var html="";
+var weekDays=["L","M","M","J","V","S","D"];
+for(var i=0;i<7;i++){
+var d=new Date(monday);d.setDate(monday.getDate()+i);
+var dateKey=d.toISOString().slice(0,10);
+var plan=getMealPlan(dateKey);
+var totalCal=0;
+["desayuno","almuerzo","cena","snacks"].forEach(function(meal){
+(plan[meal]||[]).forEach(function(item){
+var food=defaultFoods.find(function(f){return f.id===item.id})||item;
+var itemPort=parseFloat(item.portion)||100;
+var foodPort=parseFloat(food.portion)||100;
+var ratio=itemPort/foodPort;
+totalCal+=Math.round((parseFloat(food.calories)||0)*ratio);
+});
+});
+var isToday=dateKey===new Date().toISOString().slice(0,10);
+var bgClass=isToday?"bg-primary-container":"bg-surface-container";
+html+='<div class="'+bgClass+' rounded-lg p-2 text-center">';
+html+='<div class="text-[10px] text-white/50">'+weekDays[i]+'</div>';
+html+='<div class="text-sm font-bold text-white">'+(totalCal>0?totalCal:"-")+'</div>';
+html+='<div class="text-[9px] text-white/40">kcal</div></div>';
+}
+container.innerHTML=html;
+document.getElementById("weeklyOverview").classList.remove("hidden");
+}
+function openWeeklyModal(){
+var container=document.getElementById("weeklyDayList");
+var monday=new Date();monday.setDate(monday.getDate()-(monday.getDay()<=0?6:monday.getDay()-1));
+var weekDays=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+var dayNames=["desayuno","almuerzo","cena","snacks"];
+var html="";
+for(var i=0;i<7;i++){
+var d=new Date(monday);d.setDate(monday.getDate()+i);
+var dateKey=d.toISOString().slice(0,10);
+var plan=getMealPlan(dateKey);
+var itemCount=(plan.desayuno?plan.desayuno.length:0)+(plan.almuerzo?plan.almuerzo.length:0)+(plan.cena?plan.cena.length:0)+(plan.snacks?plan.snacks.length:0);
+var isToday=dateKey===new Date().toISOString().slice(0,10);
+html+='<div class="flex items-center justify-between p-3 rounded-lg '+(isToday?"bg-primary-container/20 border border-primary-container/30":"bg-surface-container")+'">';
+html+='<div><div class="text-sm font-medium text-white">'+(isToday?"Hoy - ":"")+weekDays[i]+" "+d.getDate()+'</div>';
+html+='<div class="text-xs text-white/50">'+(itemCount>0?itemCount+" alimentos":"Sin plan")+'</div></div>';
+html+='<div class="flex gap-2">';
+html+='<button onclick="selectDayFromModal(\''+dateKey+'\')" class="px-3 py-1 rounded bg-surface-container-high text-white text-xs">Ver</button>';
+html+='<button onclick="copyFromYesterday(\''+dateKey+'\')" class="px-3 py-1 rounded bg-primary-container/20 text-primary-container text-xs">Copiar</button>';
+html+='</div></div>';
+}
+container.innerHTML=html;
+var fromSelect=document.getElementById("copyFromDay");
+var toSelect=document.getElementById("copyToDay");
+var fromHtml="",toHtml="";
+for(var i=0;i<7;i++){
+var d=new Date(monday);d.setDate(monday.getDate()+i);
+var dateKey=d.toISOString().slice(0,10);
+var isToday=dateKey===new Date().toISOString().slice(0,10);
+fromHtml+='<option value="'+dateKey+'">'+(isToday?"Hoy - ":"")+weekDays[i]+" "+d.getDate()+'</option>';
+toHtml+='<option value="'+dateKey+'">'+(isToday?"Hoy - ":"")+weekDays[i]+" "+d.getDate()+'</option>';
+}
+fromSelect.innerHTML=fromHtml;
+toSelect.innerHTML=toHtml;
+document.getElementById("weeklyModal").classList.remove("hidden");
+document.getElementById("weeklyModal").classList.add("flex");
+}
+function closeWeeklyModal(){
+document.getElementById("weeklyModal").classList.add("hidden");
+document.getElementById("weeklyModal").classList.remove("flex");
+}
+function selectDayFromModal(dateKey){
+closeWeeklyModal();
+currentDay=dateKey;
+var d=new Date(dateKey);
+document.getElementById("dateDisplay").textContent=d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"});
+initWeekSelector();
+renderMealPlan();
+}
+function copyFromYesterday(dateKey){
+var d=new Date(dateKey);
+d.setDate(d.getDate()-1);
+var yesterdayKey=d.toISOString().slice(0,10);
+var yesterdayPlan=getMealPlan(yesterdayKey);
+saveMealPlanForDate(dateKey,yesterdayPlan);
+closeWeeklyModal();
+initWeekSelector();
+alert("Plan copiado a "+d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric"}));
+}
+function copyDayPlan(){
+var fromDay=document.getElementById("copyFromDay").value;
+var toDay=document.getElementById("copyToDay").value;
+if(fromDay===toDay){alert("Selecciona días diferentes");return;}
+var fromPlan=getMealPlan(fromDay);
+saveMealPlanForDate(toDay,fromPlan);
+closeWeeklyModal();
+initWeekSelector();
+alert("Plan copiado exitosamente");
+}
+function resetSelectedDay(){
+if(!confirm("Reiniciar el plan del día seleccionado?"))return;
+var plan={desayuno:[],almuerzo:[],cena:[],snacks:[]};
+saveMealPlanForDate(currentDay,plan);
+renderMealPlan();
+initWeekSelector();
+closeWeeklyModal();
+alert("Plan reiniciado");
+}
+function saveMealPlanForDate(dateKey,plan){
+localStorage.setItem("mealPlan_"+dateKey,JSON.stringify(plan));
+}
+</script>
+</body>
+</html>

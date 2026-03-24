@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KetoLab | Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#ffccbc",
+        "primary-container": "#ff4d00",
+        "on-primary": "#ffffff",
+        "on-primary-container": "#ffffff",
+        "surface": "#0a0a0a",
+        "surface-container": "#181717",
+        "surface-container-low": "#111010",
+        "surface-container-high": "#1e1c1c",
+        "surface-container-highest": "#242222",
+        "on-surface": "#ffffff",
+        "on-surface-variant": "#adaaaa",
+        "outline": "#767575",
+        "outline-variant": "#484847",
+        "secondary": "#ffb300",
+        "secondary-container": "#b45309",
+        "tertiary": "#ffc107",
+        "error": "#ff7351",
+        "background": "#0a0a0a"
+      },
+      fontFamily: {
+        "headline": ["Plus Jakarta Sans", "sans-serif"],
+        "body": ["Inter", "sans-serif"],
+        "label": ["Inter", "sans-serif"]
+      },
+      borderRadius: {"DEFAULT": "1rem", "lg": "2rem"}
+    }
+  }
+}
+</script>
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+
+.glass-card {
+  background: rgba(36, 34, 34, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 77, 0, 0.1);
+}
+
+.progress-ring-glow {
+  filter: drop-shadow(0 0 12px rgba(255, 77, 0, 0.4));
+}
+
+.shadow-glow {
+  box-shadow: 0 10px 30px rgba(255, 77, 0, 0.15);
+}
+
+.shadow-glow-strong {
+  box-shadow: 0 10px 30px rgba(255, 77, 0, 0.4);
+}
+
+.sidebar-collapsed .sidebar-nav {
+  width: 72px;
+}
+
+.sidebar-collapsed .sidebar-nav .sidebar-text,
+.sidebar-collapsed .sidebar-nav .sidebar-logo-text {
+  display: none;
+}
+
+.sidebar-collapsed .sidebar-nav .sidebar-logo {
+  justify-content: center;
+}
+
+.sidebar-collapsed .sidebar-nav .sidebar-link {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+  gap: 0;
+}
+
+.sidebar-collapsed .sidebar-nav .sidebar-link .material-symbols-outlined {
+  margin-right: 0;
+}
+
+.sidebar-link.active {
+  background: #1e1c1c;
+}
+
+.sidebar-link.active .material-symbols-outlined {
+  color: #ff4d00;
+}
+
+.sidebar-collapsed + .sidebar-toggle-btn {
+  left: 72px;
+}
+
+.sidebar-collapsed ~ .topbar-desktop .topbar-pl {
+  padding-left: 88px;
+}
+
+.sidebar-collapsed ~ main .main-content {
+  margin-left: 72px;
+}
+
+.sidebar-toggle-btn {
+  left: 256px;
+  transition: left 0.3s ease;
+}
+</style>
+</head>
+<body class="bg-background text-on-surface font-body overflow-x-hidden selection:bg-primary-container selection:text-on-primary">
+
+<!-- SideNavBar (Desktop) -->
+<nav id="sidebarNav" class="sidebar-nav hidden md:flex fixed left-0 top-0 h-full w-64 flex-col py-6 bg-surface-container-low z-50 border-r border-primary-container/10 transition-all duration-300">
+<div class="px-4 mb-8 flex items-center justify-center">
+<div class="flex items-center justify-center sidebar-logo">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-white text-lg" style="font-variation-settings: 'FILL' 1;">nutrition</span>
+</div>
+<div class="sidebar-logo-text">
+<h1 class="text-lg font-black text-primary-container font-headline tracking-tighter">KetoLab</h1>
+<span class="text-[9px] text-white/40 font-label tracking-[0.2em] uppercase">High-Performance Fuel</span>
+</div>
+</div>
+</div>
+<div class="flex-1 space-y-1 px-4">
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="index.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="sidebar-text">Inicio</span>
+</a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="alimentos.html">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="sidebar-text">Alimentos</span>
+</a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="plan.html">
+<span class="material-symbols-outlined">event_note</span>
+<span class="sidebar-text">Plan</span>
+</a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="recetas.html">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="sidebar-text">Recetas</span>
+</a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="compras.html">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="sidebar-text">Compras</span>
+</a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="macros.html">
+<span class="material-symbols-outlined">donut_small</span>
+<span class="sidebar-text">Macros</span>
+</a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="checklist.html">
+<span class="material-symbols-outlined">fact_check</span>
+<span class="sidebar-text">Check</span>
+</a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="entrenamientos.html">
+<span class="material-symbols-outlined">fitness_center</span>
+<span class="sidebar-text">Gym</span>
+</a>
+</div>
+</nav>
+
+<!-- Sidebar Toggle Button -->
+<button id="sidebarToggle" onclick="toggleSidebar()" class="sidebar-toggle-btn hidden md:flex fixed top-20 z-50 w-8 h-8 bg-surface-container-low hover:bg-surface-container-high border border-white/10 rounded-r-lg items-center justify-center transition-all duration-300 hover:border-primary-container/30">
+<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_left</span>
+</button>
+
+<!-- TopAppBar (Desktop) -->
+<header class="topbar-desktop hidden md:flex fixed top-0 w-full justify-between items-center px-8 h-20 z-40 bg-gradient-to-b from-surface-container-low to-transparent transition-all duration-300">
+<div class="topbar-pl pl-64 transition-all duration-300">
+<h2 class="text-2xl font-black text-primary-container tracking-tighter font-headline">KetoLab</h2>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full border border-white/5">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">search</span>
+<input class="bg-transparent border-none text-sm focus:ring-0 text-white w-48 placeholder:text-on-surface-variant" placeholder="Buscar alimentos..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors duration-300 scale-95 active:scale-90" onclick="toggleTheme()" title="Cambiar tema">dark_mode</button>
+<button class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors duration-300 scale-95 active:scale-90 relative" onclick="showNotifications()" title="Notificaciones">
+notifications
+<span class="absolute top-0 right-0 w-2 h-2 bg-primary-container rounded-full ring-2 ring-background"></span>
+</button>
+<a href="index.html" class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center font-headline font-bold text-white text-sm cursor-pointer hover:scale-105 transition-transform" title="Mi perfil">KL</a>
+</div>
+</header>
+
+<!-- TopAppBar (Mobile) -->
+<header class="md:hidden fixed top-0 w-full h-14 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5 px-4 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-base" style="font-variation-settings: 'FILL' 1;">nutrition</span>
+</div>
+<span class="text-base font-black text-primary-container tracking-tight font-headline">KetoLab</span>
+</a>
+<div class="flex items-center gap-3">
+<button class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors" onclick="showNotifications()" title="Notificaciones">notifications</button>
+<button class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors" onclick="toggleTheme()" title="Cambiar tema">dark_mode</button>
+</div>
+</header>
+
+<!-- Notifications Modal -->
+<div id="notificationsModal" class="fixed inset-0 z-[60] hidden">
+<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeNotifications()"></div>
+<div class="absolute top-20 right-4 md:right-8 w-[calc(100%-2rem)] md:w-96 max-h-[70vh] overflow-hidden glass-card rounded-2xl shadow-2xl shadow-black/50">
+<div class="p-4 md:p-6 border-b border-white/10">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-headline font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">notifications</span>
+Notificaciones
+</h3>
+<button onclick="closeNotifications()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+</div>
+</div>
+<div class="p-4 md:p-2 space-y-2 max-h-[50vh] overflow-y-auto">
+<div class="p-4 rounded-xl bg-surface-container-high hover:bg-surface-container-highest transition-colors cursor-pointer group">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-secondary text-lg">trending_down</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium text-white group-hover:text-primary-container transition-colors">Progreso semanal</p>
+<p class="text-xs text-on-surface-variant mt-1">Has perdido 1.2kg esta semana. Sigue asi!</p>
+<p class="text-[10px] text-on-surface-variant/50 mt-2">Hace 2 horas</p>
+</div>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-high hover:bg-surface-container-highest transition-colors cursor-pointer group">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-primary-container text-lg">egg_alt</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium text-white group-hover:text-primary-container transition-colors">Meta de proteina</p>
+<p class="text-xs text-on-surface-variant mt-1">Hoy has consumido 142g de 159g de proteina.</p>
+<p class="text-[10px] text-on-surface-variant/50 mt-2">Hoy 14:30</p>
+</div>
+<div class="w-2 h-2 rounded-full bg-primary-container flex-shrink-0 mt-2"></div>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-high hover:bg-surface-container-highest transition-colors cursor-pointer group">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-secondary text-lg">water_drop</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium text-white group-hover:text-primary-container transition-colors">Recordatorio de hidratacion</p>
+<p class="text-xs text-on-surface-variant mt-1">Solo te faltan 0.5L para llegar a tu meta de 3L.</p>
+<p class="text-[10px] text-on-surface-variant/50 mt-2">Hoy 12:00</p>
+</div>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-high hover:bg-surface-container-highest transition-colors cursor-pointer group">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-green-400 text-lg">check_circle</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium text-white group-hover:text-primary-container transition-colors">Checklist completado</p>
+<p class="text-xs text-on-surface-variant mt-1">Felicidades! Completaste todas las tareas del dia.</p>
+<p class="text-[10px] text-on-surface-variant/50 mt-2">Ayer 21:30</p>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-white/10">
+<button class="w-full py-3 text-center text-sm font-medium text-primary-container hover:bg-primary-container/10 rounded-xl transition-colors">Ver todas las notificaciones</button>
+</div>
+</div>
+</div>
+
+<!-- Main Canvas -->
+<main class="main-content md:ml-64 pt-14 md:pt-24 px-4 md:px-6 pb-20 md:pb-12 min-h-screen transition-all duration-300">
+<div class="max-w-7xl mx-auto space-y-8">
+
+<!-- Section 1: Progress -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<div class="lg:col-span-8 glass-card rounded-xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 md:gap-12 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary-container/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
+<div class="relative w-36 h-36 md:w-48 md:h-48 flex items-center justify-center flex-shrink-0">
+<svg id="progressSvg" class="w-full h-full -rotate-90 progress-ring-glow" viewBox="0 0 144 144">
+<circle class="text-surface-container-highest" cx="72" cy="72" fill="transparent" r="64" stroke="currentColor" stroke-width="8"/>
+<circle id="progressCircle" class="text-primary-container" cx="72" cy="72" fill="transparent" r="64" stroke="currentColor" stroke-dasharray="402" stroke-dashoffset="402" stroke-linecap="round" stroke-width="8"/>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span id="progressPercent" class="text-4xl font-headline font-extrabold text-white tracking-tighter">0%</span>
+<span class="text-[10px] text-on-surface-variant font-label uppercase tracking-widest mt-1">Progreso</span>
+</div>
+</div>
+<div class="flex-1 text-center md:text-left">
+<h3 class="text-xs font-label text-secondary font-bold uppercase tracking-[0.2em] mb-2">Tu Progreso</h3>
+<div class="flex flex-col gap-1 mb-6">
+<span id="weightDisplay" class="text-5xl font-headline font-black text-white tracking-tighter">0kg <span class="text-on-surface-variant font-light">→</span> 0kg</span>
+<p class="text-on-surface-variant font-body">Te faltan <span id="remainingKg" class="text-white font-semibold">0kg restantes</span> para tu meta</p>
+</div>
+<div id="weeklyProgress" class="inline-flex items-center gap-3 bg-primary-container/10 border border-primary-container/20 px-4 py-2 rounded-full">
+<span class="material-symbols-outlined text-primary-container text-sm">trending_down</span>
+<span class="text-primary-container font-headline font-bold text-sm">0KG ESTA SEMANA</span>
+</div>
+</div>
+</div>
+
+<!-- Quick Actions -->
+<div class="lg:col-span-4 flex flex-col gap-4 md:gap-6">
+<a href="checklist.html" class="bg-surface-container-high hover:bg-surface-container-highest transition-all p-5 md:p-6 rounded-xl border border-white/5 flex flex-col justify-between items-start group">
+<div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">fact_check</span>
+</div>
+<div>
+<p class="text-[10px] text-on-surface-variant font-label uppercase tracking-widest mb-1">ACCIONES</p>
+<h4 class="text-xl font-headline font-bold text-white">CHECKLIST</h4>
+<p id="checklistStatus" class="text-xs text-on-surface-variant mt-1">0/6 completadas</p>
+</div>
+</a>
+<a href="macros.html" class="bg-primary-container p-5 md:p-6 rounded-xl border border-primary-container/20 flex flex-col justify-between items-start group shadow-glow-strong active:scale-95 transition-all">
+<div class="w-12 h-12 rounded-full bg-black/10 flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">donut_small</span>
+</div>
+<div>
+<p class="text-[10px] text-white/70 font-label uppercase tracking-widest mb-1">ACCIONES</p>
+<h4 class="text-xl font-headline font-bold text-white">MACROS</h4>
+</div>
+</a>
+</div>
+</section>
+
+<!-- Section 2: Macros Summary -->
+<section class="glass-card rounded-xl p-6">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-lg bg-primary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">donut_small</span>
+</div>
+<div>
+<h3 class="text-lg font-headline font-bold text-white">Macros de Hoy</h3>
+<p class="text-xs text-on-surface-variant">Tu consumo diario vs objetivo</p>
+</div>
+</div>
+
+<div class="bg-gradient-to-br from-primary-container/20 to-primary-container/5 rounded-2xl p-6 mb-6 border border-primary-container/20">
+<div class="text-center">
+<p class="text-xs text-primary-container uppercase tracking-wider mb-2">Calorías</p>
+<p class="text-4xl md:text-5xl font-headline font-black text-primary-container tracking-tighter">
+<span id="consumedCalDisplay">0</span><span class="text-xl text-white/50"> / <span id="targetCalDisplay">1800</span></span>
+</p>
+<div class="w-full h-3 bg-surface-container-highest rounded-full overflow-hidden mt-4">
+<div id="caloriesBar" class="h-full bg-primary-container rounded-full transition-all duration-500" style="width: 0%"></div>
+</div>
+<p class="text-sm text-on-surface-variant mt-2"><span id="caloriesRemaining">1800</span> kcal restantes</p>
+</div>
+</div>
+
+<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+<!-- Protein -->
+<div class="bg-surface-container-high rounded-xl p-4 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-orange-400"></div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-orange-400">egg_alt</span>
+</div>
+<div class="flex-1">
+<p class="text-xs text-on-surface-variant uppercase tracking-wider">Proteína</p>
+<p class="text-xl font-headline font-bold text-white"><span id="consumedProtDisplay">0</span><span class="text-sm text-white/50">/<span id="targetProtDisplay">159</span>g</span></p>
+</div>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden mt-3">
+<div id="proteinBar" class="h-full bg-orange-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+</div>
+</div>
+<!-- Fat -->
+<div class="bg-surface-container-high rounded-xl p-4 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-yellow-400"></div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-yellow-400">local_fire_department</span>
+</div>
+<div class="flex-1">
+<p class="text-xs text-on-surface-variant uppercase tracking-wider">Grasas</p>
+<p class="text-xl font-headline font-bold text-white"><span id="consumedFatDisplay">0</span><span class="text-sm text-white/50">/<span id="targetFatDisplay">150</span>g</span></p>
+</div>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden mt-3">
+<div id="fatBar" class="h-full bg-yellow-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+</div>
+</div>
+<!-- Carbs -->
+<div class="bg-surface-container-high rounded-xl p-4 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-cyan-400"></div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-cyan-400">grain</span>
+</div>
+<div class="flex-1">
+<p class="text-xs text-on-surface-variant uppercase tracking-wider">Carbos Netos</p>
+<p class="text-xl font-headline font-bold text-white"><span id="consumedCarbsDisplay">0</span><span class="text-sm text-white/50">/<span id="targetCarbsDisplay">25</span>g</span></p>
+</div>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden mt-3">
+<div id="carbsBar" class="h-full bg-cyan-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+</div>
+</div>
+</div>
+
+<div class="mt-4 bg-surface-container-high rounded-xl p-4">
+<div class="flex items-center justify-between mb-2">
+<p class="text-xs text-on-surface-variant uppercase tracking-wider">Distribución</p>
+<span class="text-xs text-on-surface-variant">70% / 25% / 5%</span>
+</div>
+<div class="h-3 rounded-full overflow-hidden flex">
+<div id="fatDistBar" class="h-full bg-yellow-400 transition-all duration-300" style="width: 70%"></div>
+<div id="protDistBar" class="h-full bg-orange-400 transition-all duration-300" style="width: 25%"></div>
+<div id="carbsDistBar" class="h-full bg-cyan-400 transition-all duration-300" style="width: 5%"></div>
+</div>
+</div>
+
+<div class="flex justify-center mt-4">
+<a href="macros.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-white text-sm transition-all">
+<span class="material-symbols-outlined text-base">edit</span>
+Editar macros
+</a>
+</div>
+</section>
+
+<!-- Section 3: Daily Summary -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="text-sm font-label text-on-surface-variant uppercase tracking-[0.2em]">Resumen de Hoy</h3>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
+<!-- Hydration -->
+<div class="glass-card p-4 rounded-xl flex flex-col gap-3 cursor-pointer hover:bg-surface-container-high transition-colors" onclick="window.location.href='checklist.html'">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-lg">water_drop</span>
+<span id="hydrationDisplay" class="text-xs font-bold text-secondary">0/3L</span>
+</div>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div id="hydrationBar" class="h-full bg-secondary rounded-full transition-all duration-500" style="width: 0%"></div>
+</div>
+</div>
+<!-- Workout -->
+<div class="glass-card p-4 rounded-xl flex flex-col gap-3 cursor-pointer hover:bg-surface-container-high transition-colors" onclick="window.location.href='checklist.html'">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-orange-400 text-lg">fitness_center</span>
+<span id="workoutDisplay" class="text-xs font-bold text-orange-400">0/60m</span>
+</div>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div id="workoutBar" class="h-full bg-orange-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+</div>
+</div>
+<!-- Walk -->
+<div class="glass-card p-4 rounded-xl flex flex-col gap-3 cursor-pointer hover:bg-surface-container-high transition-colors" onclick="window.location.href='checklist.html'">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-green-400 text-lg">directions_walk</span>
+<span id="walkDisplay" class="text-xs font-bold text-green-400">0/60m</span>
+</div>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div id="walkBar" class="h-full bg-green-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+</div>
+</div>
+<!-- Sleep -->
+<div class="glass-card p-4 rounded-xl flex flex-col gap-3 cursor-pointer hover:bg-surface-container-high transition-colors" onclick="window.location.href='checklist.html'">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-400 text-lg">bedtime</span>
+<span id="sleepDisplay" class="text-xs font-bold text-gray-400">0/8h</span>
+</div>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div id="sleepBar" class="h-full bg-gray-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+</div>
+</div>
+<!-- Quick Macro -->
+<div class="glass-card p-4 rounded-xl flex flex-col gap-3 cursor-pointer hover:bg-surface-container-high transition-colors" onclick="window.location.href='macros.html'">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-lg">local_fire_department</span>
+<span class="text-xs font-bold text-primary-container">Macros</span>
+</div>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div id="caloriesBarSmall" class="h-full bg-primary-container rounded-full transition-all duration-500" style="width: 0%"></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Section 3: Quick Links -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<a href="alimentos.html" class="glass-card p-5 rounded-xl flex flex-col items-center text-center gap-3 hover:bg-surface-container-high transition-all group">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary-container group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<h4 class="text-sm font-bold text-white font-headline">Alimentos</h4>
+<p class="text-xs text-on-surface-variant">Guía cetogénica</p>
+</a>
+<a href="plan.html" class="glass-card p-5 rounded-xl flex flex-col items-center text-center gap-3 hover:bg-surface-container-high transition-all group">
+<div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">event_note</span>
+</div>
+<h4 class="text-sm font-bold text-white font-headline">Plan Semanal</h4>
+<p class="text-xs text-on-surface-variant">7 días de comidas</p>
+</a>
+<a href="recetas.html" class="glass-card p-5 rounded-xl flex flex-col items-center text-center gap-3 hover:bg-surface-container-high transition-all group">
+<div class="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center text-error group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">menu_book</span>
+</div>
+<h4 class="text-sm font-bold text-white font-headline">Recetas</h4>
+<p class="text-xs text-on-surface-variant">7 recetas keto</p>
+</a>
+<a href="compras.html" class="glass-card p-5 rounded-xl flex flex-col items-center text-center gap-3 hover:bg-surface-container-high transition-all group">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary-container group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">shopping_cart</span>
+</div>
+<h4 class="text-sm font-bold text-white font-headline">Compras</h4>
+<p class="text-xs text-on-surface-variant">Lista semanal</p>
+</a>
+</section>
+
+</div>
+</main>
+
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-16 flex items-center z-50 px-0">
+<a class="flex flex-col items-center justify-center gap-0.5 text-white/50 w-full h-full" href="index.html">
+<span class="material-symbols-outlined text-base">dashboard</span>
+<span class="text-[8px] font-bold">Inicio</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-0.5 text-white/50 w-full h-full" href="alimentos.html">
+<span class="material-symbols-outlined text-base">restaurant</span>
+<span class="text-[8px] font-bold">Alimentos</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-0.5 text-white/50 w-full h-full" href="plan.html">
+<span class="material-symbols-outlined text-base">event_note</span>
+<span class="text-[8px] font-bold">Plan</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-0.5 text-white/50 w-full h-full" href="compras.html">
+<span class="material-symbols-outlined text-base">shopping_cart</span>
+<span class="text-[8px] font-bold">Despensa</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-0.5 text-white/50 w-full h-full" href="macros.html">
+<span class="material-symbols-outlined text-base">donut_small</span>
+<span class="text-[8px] font-bold">Macros</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-0.5 text-white/50 w-full h-full" href="checklist.html">
+<span class="material-symbols-outlined text-base">fact_check</span>
+<span class="text-[8px] font-bold">Check</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-0.5 text-white/50 w-full h-full" href="entrenamientos.html">
+<span class="material-symbols-outlined text-base">fitness_center</span>
+<span class="text-[8px] font-bold">Gym</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-0.5 text-white/50 w-full h-full" href="recetas.html">
+<span class="material-symbols-outlined text-base">menu_book</span>
+<span class="text-[8px] font-bold">Recetas</span>
+</a>
+</nav>
+
+<!-- FAB -->
+<a href="macros.html" class="fixed bottom-24 right-4 md:bottom-8 md:right-8 w-12 h-12 md:w-14 md:h-14 bg-primary-container text-white rounded-full shadow-glow-strong flex items-center justify-center transition-transform hover:scale-110 active:scale-90 z-40">
+<span class="material-symbols-outlined text-2xl md:text-3xl">add</span>
+</a>
+
+<script>
+function toggleTheme() {
+  document.documentElement.classList.toggle('dark');
+  localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  var icon = document.querySelector('header button[onclick="toggleTheme()"]');
+  if (icon) {
+    icon.textContent = document.documentElement.classList.contains('dark') ? 'dark_mode' : 'light_mode';
+  }
+}
+
+function showNotifications() {
+  var modal = document.getElementById('notificationsModal');
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeNotifications() {
+  var modal = document.getElementById('notificationsModal');
+  modal.classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+function toggleSidebar() {
+  var body = document.body;
+  var sidebar = document.getElementById('sidebarNav');
+  var toggleBtn = document.getElementById('sidebarToggle');
+  var topbarPl = document.querySelector('.topbar-pl');
+  var mainContent = document.querySelector('.main-content');
+  
+  body.classList.toggle('sidebar-collapsed');
+  
+  if (body.classList.contains('sidebar-collapsed')) {
+    sidebar.style.width = '72px';
+    topbarPl.style.paddingLeft = '88px';
+    mainContent.style.marginLeft = '72px';
+    toggleBtn.style.left = '72px';
+    toggleBtn.innerHTML = '<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_right</span>';
+    localStorage.setItem('sidebarCollapsed', 'true');
+  } else {
+    sidebar.style.width = '256px';
+    topbarPl.style.paddingLeft = '272px';
+    mainContent.style.marginLeft = '256px';
+    toggleBtn.style.left = '256px';
+    toggleBtn.innerHTML = '<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_left</span>';
+    localStorage.setItem('sidebarCollapsed', 'false');
+  }
+}
+
+if (localStorage.getItem('theme') === 'dark' || !localStorage.getItem('theme')) {
+  document.documentElement.classList.add('dark');
+} else {
+  document.documentElement.classList.remove('dark');
+}
+
+if (localStorage.getItem('sidebarCollapsed') === 'true') {
+  document.body.classList.add('sidebar-collapsed');
+  var sidebar = document.getElementById('sidebarNav');
+  var topbarPl = document.querySelector('.topbar-pl');
+  var mainContent = document.querySelector('.main-content');
+  var toggleBtn = document.getElementById('sidebarToggle');
+  sidebar.style.width = '72px';
+  topbarPl.style.paddingLeft = '88px';
+  mainContent.style.marginLeft = '72px';
+  toggleBtn.style.left = '72px';
+  toggleBtn.innerHTML = '<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_right</span>';
+}
+
+var currentPage = window.location.pathname.split('/').pop() || 'index.html';
+document.querySelectorAll('.sidebar-link').forEach(function(link) {
+  if (link.getAttribute('href') === currentPage) {
+    link.classList.add('active');
+  }
+});
+
+function loadDashboard() {
+  var userData = JSON.parse(localStorage.getItem('userData') || '{"currentWeight": 159, "goalWeight": 140, "startWeight": 159, "waterIntake": 0, "proteinConsumed": 0, "proteinGoal": 159}');
+  var ketoProfile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+  
+  var todayKey = new Date().toISOString().slice(0, 10);
+  var rawData = localStorage.getItem('checklist_' + todayKey);
+  var checklistData = {};
+  
+  if (rawData) {
+    var parsed = JSON.parse(rawData);
+    if (typeof parsed === 'object' && !Array.isArray(parsed)) {
+      checklistData = parsed;
+    }
+  }
+  
+  var water = checklistData.water || userData.waterIntake || 0;
+  var workout = checklistData.workout || userData.workoutMinutes || 0;
+  var walk = checklistData.walk || userData.walkMinutes || 0;
+  var protein = checklistData.protein || userData.proteinConsumed || 0;
+  var sleep = checklistData.sleep || userData.sleepHours || 0;
+  
+  var macros = JSON.parse(localStorage.getItem('keto_macros') || '{}');
+  var targetCal = parseInt(macros.calories) || 1800;
+  var targetProt = parseInt(macros.protein) || 159;
+  var targetFat = parseInt(macros.fat) || 150;
+  var targetCarbs = parseInt(macros.carbs) || 25;
+  
+  var mealPlan = JSON.parse(localStorage.getItem('mealPlan_' + todayKey) || '{"desayuno":[],"almuerzo":[],"cena":[],"snacks":[]}');
+  var consumedCal = 0, consumedProt = 0, consumedFat = 0, consumedCarbs = 0;
+  
+  Object.keys(mealPlan).forEach(function(meal) {
+    mealPlan[meal].forEach(function(item) {
+      var foodPort = parseFloat(item.portion) || 100;
+      var ratio = foodPort / 100;
+      consumedCal += Math.round((parseFloat(item.calories) || 0) * ratio);
+      consumedProt += Math.round((parseFloat(item.protein) || 0) * ratio);
+      consumedFat += Math.round((parseFloat(item.fat) || 0) * ratio);
+      consumedCarbs += Math.round((parseFloat(item.carbs) || 0) * ratio);
+    });
+  });
+  
+  var startWeight = ketoProfile.weight || userData.startWeight || 159;
+  var goalWeight = ketoProfile.goalWeight || userData.goalWeight || 140;
+  var currentWeight = ketoProfile.weight || startWeight;
+  
+  var totalToLose = startWeight - goalWeight;
+  var lostSoFar = startWeight - currentWeight;
+  var weightProgress = totalToLose > 0 ? Math.round((lostSoFar / totalToLose) * 100) : 0;
+  if (weightProgress < 0) weightProgress = 0;
+  if (weightProgress > 100) weightProgress = 100;
+  
+  var totalTasks = 6;
+  var completedTasks = 0;
+  if (water >= 3) completedTasks++;
+  if (workout >= 60) completedTasks++;
+  if (walk >= 60) completedTasks++;
+  if (consumedProt >= targetProt) completedTasks++;
+  if (sleep >= 8) completedTasks++;
+  if (consumedCal >= targetCal * 0.8) completedTasks++;
+  
+  var totalPercent = 0;
+  totalPercent += Math.min(Math.round((water / 3) * 100), 100);
+  totalPercent += Math.min(Math.round((workout / 60) * 100), 100);
+  totalPercent += Math.min(Math.round((walk / 60) * 100), 100);
+  totalPercent += Math.min(Math.round((consumedProt / targetProt) * 100), 100);
+  totalPercent += Math.min(Math.round((sleep / 8) * 100), 100);
+  var progressPercent = Math.round(totalPercent / totalTasks);
+  
+  document.getElementById('progressPercent').textContent = progressPercent + '%';
+  
+  var circle = document.getElementById('progressCircle');
+  var circumference = 402;
+  var offset = circumference - (circumference * progressPercent / 100);
+  circle.style.strokeDashoffset = offset;
+  
+  var remaining = currentWeight - goalWeight;
+  document.getElementById('weightDisplay').innerHTML = currentWeight + 'kg <span class="text-on-surface-variant font-light">→</span> ' + goalWeight + 'kg';
+  document.getElementById('remainingKg').textContent = remaining + 'kg restantes';
+  
+  var weeklyLoss = localStorage.getItem('weeklyLoss') || '0';
+  document.getElementById('weeklyProgress').innerHTML = '<span class="material-symbols-outlined text-primary-container text-sm">trending_down</span><span class="text-primary-container font-headline font-bold text-sm">' + weeklyLoss + 'KG ESTA SEMANA</span>';
+  
+  document.getElementById('checklistStatus').textContent = completedTasks + '/' + totalTasks + ' completadas';
+  
+  var hydrationPercent = Math.round((water / 3) * 100);
+  if (hydrationPercent > 100) hydrationPercent = 100;
+  document.getElementById('hydrationDisplay').textContent = Math.round(water) + '/3L';
+  document.getElementById('hydrationBar').style.width = hydrationPercent + '%';
+  
+  var workoutPercent = Math.round((workout / 60) * 100);
+  if (workoutPercent > 100) workoutPercent = 100;
+  document.getElementById('workoutDisplay').textContent = workout + '/60m';
+  document.getElementById('workoutBar').style.width = workoutPercent + '%';
+  
+  var walkPercent = Math.round((walk / 60) * 100);
+  if (walkPercent > 100) walkPercent = 100;
+  document.getElementById('walkDisplay').textContent = walk + '/60m';
+  document.getElementById('walkBar').style.width = walkPercent + '%';
+  
+  var proteinPercent = Math.round((consumedProt / targetProt) * 100);
+  if (proteinPercent > 100) proteinPercent = 100;
+  
+  var fatPercent = Math.round((consumedFat / targetFat) * 100);
+  if (fatPercent > 100) fatPercent = 100;
+  
+  var carbsPercent = Math.round((consumedCarbs / targetCarbs) * 100);
+  if (carbsPercent > 100) carbsPercent = 100;
+  
+  var sleepPercent = Math.round((sleep / 8) * 100);
+  if (sleepPercent > 100) sleepPercent = 100;
+  document.getElementById('sleepDisplay').textContent = sleep + '/8h';
+  document.getElementById('sleepBar').style.width = sleepPercent + '%';
+  
+  var caloriesPercent = Math.round((consumedCal / targetCal) * 100);
+  if (caloriesPercent > 100) caloriesPercent = 100;
+  var caloriesRemaining = Math.max(0, targetCal - consumedCal);
+  
+  document.getElementById('consumedCalDisplay').textContent = consumedCal;
+  document.getElementById('targetCalDisplay').textContent = targetCal;
+  document.getElementById('caloriesBar').style.width = caloriesPercent + '%';
+  document.getElementById('caloriesRemaining').textContent = caloriesRemaining;
+  
+  document.getElementById('consumedProtDisplay').textContent = consumedProt;
+  document.getElementById('targetProtDisplay').textContent = targetProt;
+  document.getElementById('proteinBar').style.width = proteinPercent + '%';
+  
+  document.getElementById('consumedFatDisplay').textContent = consumedFat;
+  document.getElementById('targetFatDisplay').textContent = targetFat;
+  document.getElementById('fatBar').style.width = fatPercent + '%';
+  
+  document.getElementById('consumedCarbsDisplay').textContent = consumedCarbs;
+  document.getElementById('targetCarbsDisplay').textContent = targetCarbs;
+  document.getElementById('carbsBar').style.width = carbsPercent + '%';
+  
+  var caloriesPercentSmall = caloriesPercent;
+  document.getElementById('caloriesBarSmall').style.width = caloriesPercentSmall + '%';
+}
+
+loadDashboard();
+</script>
+</body>
+</html>

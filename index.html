@@ -3,6 +3,14 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<!-- PWA Manifest y meta tags para instalación -->
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KetoLab">
+<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+<meta name="theme-color" content="#ff4d00">
+<meta name="mobile-web-app-capable" content="yes">
 <title>KetoLab | Dashboard</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
@@ -570,6 +578,11 @@ Editar macros
 <span class="material-symbols-outlined text-2xl md:text-3xl">add</span>
 </a>
 
+<!-- Botón de instalación PWA (aparece solo cuando es instalable) -->
+<button id="installBtn" class="fixed bottom-24 right-20 md:bottom-8 md:right-24 w-12 h-12 md:w-14 md:h-14 bg-secondary text-white rounded-full shadow-glow-strong flex items-center justify-center transition-transform hover:scale-110 active:scale-90 z-40 hidden">
+  <span class="material-symbols-outlined text-2xl md:text-3xl">install_desktop</span>
+</button>
+
 <script>
 function toggleTheme() {
   document.documentElement.classList.toggle('dark');
@@ -783,6 +796,101 @@ function loadDashboard() {
 }
 
 loadDashboard();
+</script>
+
+<script>
+// ==================== REGISTRO DE SERVICE WORKER ====================
+// Implementación PWA para KetoLab
+
+(function() {
+  // Registrar Service Worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(registration => {
+          console.log('[PWA] Service Worker registrado correctamente en:', registration.scope);
+          
+          // Verificar actualizaciones
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            console.log('[PWA] Nueva versión del Service Worker encontrada');
+            
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                console.log('[PWA] Nueva versión disponible, actualizar para obtenerla');
+                // Mostrar notificación al usuario
+                if (confirm('Nueva versión disponible. ¿Actualizar ahora?')) {
+                  window.location.reload();
+                }
+              }
+            });
+          });
+        })
+        .catch(error => {
+          console.error('[PWA] Error al registrar Service Worker:', error);
+        });
+    });
+  }
+  
+  // Detectar si la app está instalada y mostrar prompt de instalación
+  let deferredPrompt;
+  const installBtn = document.getElementById('installBtn');
+  
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevenir que Chrome muestre el prompt automático
+    e.preventDefault();
+    deferredPrompt = e;
+    
+    // Mostrar botón de instalación personalizado si existe
+    if (installBtn) {
+      installBtn.style.display = 'flex';
+      console.log('[PWA] App instalable, botón de instalación disponible');
+    }
+  });
+  
+  // Manejar clic en botón de instalación
+  if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) {
+        console.log('[PWA] No hay prompt de instalación disponible');
+        return;
+      }
+      
+      // Mostrar prompt de instalación
+      deferredPrompt.prompt();
+      
+      // Esperar elección del usuario
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`[PWA] Usuario ${outcome === 'accepted' ? 'aceptó' : 'rechazó'} la instalación`);
+      
+      // Limpiar prompt
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
+    });
+  }
+  
+  // Detectar cuando la app se abre desde el homescreen
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    console.log('[PWA] App abierta desde el homescreen');
+    document.body.classList.add('pwa-mode');
+  }
+  
+  // Detectar cambios de conexión
+  window.addEventListener('online', () => {
+    console.log('[PWA] Conexión restaurada');
+    // Opcional: mostrar toast de reconexión
+    if (typeof showToast === 'function') {
+      showToast('Conexión restaurada');
+    }
+  });
+  
+  window.addEventListener('offline', () => {
+    console.log('[PWA] Sin conexión - modo offline');
+    if (typeof showToast === 'function') {
+      showToast('Modo offline - algunos datos pueden no sincronizarse');
+    }
+  });
+})();
 </script>
 </body>
 </html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KetoLab - Sin conexión</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#ffccbc",
+        "primary-container": "#ff4d00",
+        "on-primary": "#ffffff",
+        "surface": "#0a0a0a",
+        "surface-container": "#181717",
+        "on-surface": "#ffffff",
+        "on-surface-variant": "#adaaaa"
+      },
+      fontFamily: {
+        "headline": ["Plus Jakarta Sans", "sans-serif"],
+        "body": ["Inter", "sans-serif"]
+      }
+    }
+  }
+}
+</script>
+<style>
+.glass-card { background: rgba(36, 34, 34, 0.4); backdrop-filter: blur(20px); border: 1px solid rgba(255, 77, 0, 0.1); }
+.bg-background { background-color: #0a0a0a; }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body">
+  <div class="min-h-screen flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl p-8 text-center max-w-sm">
+      <span class="material-symbols-outlined text-6xl text-primary-container mb-4" style="font-size: 64px;">wifi_off</span>
+      <h1 class="text-2xl font-headline font-bold text-white mb-2">Sin conexión</h1>
+      <p class="text-on-surface-variant mb-6">
+        No tienes conexión a internet. KetoLab funciona offline, 
+        tus datos se guardarán localmente y se sincronizarán cuando vuelvas a conectarte.
+      </p>
+      <button onclick="window.location.href='/'" class="bg-primary-container text-white px-6 py-3 rounded-xl font-medium hover:bg-primary-container/80 transition-all inline-flex items-center gap-2">
+        <span class="material-symbols-outlined text-base">home</span>
+        Volver al inicio
+      </button>
+      <button onclick="window.location.reload()" class="mt-3 text-on-surface-variant text-sm hover:text-white transition-colors">
+        Reintentar
+      </button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KetoLab | Alimentos</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","primary-container":"#ff4d00","on-primary":"#ffffff","on-primary-container":"#ffffff","surface":"#0a0a0a","surface-container":"#181717","surface-container-low":"#111010","surface-container-high":"#1e1c1c","surface-container-highest":"#242222","on-surface":"#ffffff","on-surface-variant":"#adaaaa","outline":"#767575","secondary":"#ffb300","tertiary":"#ffc107","error":"#ff7351","background":"#0a0a0a"},fontFamily:{headline:["Plus Jakarta Sans","sans-serif"],body:["Inter","sans-serif"],label:["Inter","sans-serif"]}}}};
+</script>
+<style>
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}.glass-card{background:rgba(36,34,34,0.4);backdrop-filter:blur(20px);border:1px solid rgba(255,77,0,0.1)}.sidebar-collapsed .sidebar-nav{width:72px}.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}.sidebar-collapsed .sidebar-logo-text{display:none}.sidebar-collapsed .sidebar-logo{justify-content:center}.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px}.sidebar-collapsed~main .main-content{margin-left:72px}.sidebar-toggle-btn{left:256px;transition:left 0.3s ease}.sidebar-collapsed~.sidebar-toggle-btn{left:72px}.sidebar-link.active{background:#1e1c1c}.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}
+#toast{animation:toastIn 0.3s ease}
+</style>
+</head>
+<body class="bg-background text-on-surface font-body">
+
+<nav id="sidebarNav" class="sidebar-nav hidden md:flex fixed left-0 top-0 h-full w-64 flex-col py-6 bg-surface-container-low z-50 border-r border-primary-container/10 transition-all duration-300">
+<div class="px-6 mb-8 flex items-center justify-between">
+<div class="flex items-center gap-3 sidebar-logo">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1">nutrition</span></div>
+<div class="sidebar-logo-text"><h1 class="text-lg font-black text-primary-container font-headline tracking-tighter">KetoLab</h1><span class="text-[9px] text-white/40 font-label tracking-[0.2em] uppercase">High-Performance Fuel</span></div>
+</div>
+</div>
+<div class="flex-1 space-y-1 px-4">
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="index.html"><span class="material-symbols-outlined">dashboard</span><span class="sidebar-text">Inicio</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="alimentos.html"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">restaurant</span><span class="sidebar-text">Alimentos</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="plan.html"><span class="material-symbols-outlined">event_note</span><span class="sidebar-text">Plan</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="recetas.html"><span class="material-symbols-outlined">menu_book</span><span class="sidebar-text">Recetas</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="compras.html"><span class="material-symbols-outlined">shopping_cart</span><span class="sidebar-text">Compras</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="macros.html"><span class="material-symbols-outlined">donut_small</span><span class="sidebar-text">Macros</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="checklist.html"><span class="material-symbols-outlined">fact_check</span><span class="sidebar-text">Check</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="entrenamientos.html"><span class="material-symbols-outlined">fitness_center</span><span class="sidebar-text">Gym</span></a>
+</div>
+</nav>
+
+<button id="sidebarToggle" onclick="toggleSidebar()" class="sidebar-toggle-btn hidden md:flex fixed top-20 z-50 w-8 h-8 bg-surface-container-low hover:bg-surface-container-high border border-white/10 rounded-r-lg items-center justify-center transition-all duration-300"><span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_left</span></button>
+
+<header class="topbar-desktop hidden md:flex fixed top-0 w-full h-20 px-4 md:px-8 flex items-center justify-between z-40 bg-gradient-to-b from-surface-container-low to-transparent transition-all duration-300">
+<div class="topbar-pl pl-64 transition-all duration-300"><h2 class="text-xl md:text-2xl font-black text-white tracking-tighter font-headline">Alimentos</h2></div>
+<div class="flex items-center gap-4"><button onclick="toggleTheme()" class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors">dark_mode</button></div>
+</header>
+
+<header class="md:hidden fixed top-0 w-full h-14 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5 px-4 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2"><div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-white text-base" style="font-variation-settings:'FILL' 1">nutrition</span></div><span class="text-base font-black text-primary-container tracking-tight font-headline">KetoLab</span></a>
+<button onclick="toggleTheme()" class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors">dark_mode</button>
+</header>
+
+<main class="main-content md:ml-64 pt-14 md:pt-24 px-4 md:px-6 pb-20 md:pb-12 min-h-screen transition-all duration-300">
+<div class="max-w-4xl mx-auto space-y-6">
+
+<section class="flex items-center justify-between">
+<div><p class="text-xs font-label text-on-surface-variant uppercase tracking-[0.2em]">Base de datos</p><h1 class="text-3xl font-headline font-black text-white tracking-tight">Guía de Alimentos Keto</h1><p class="text-sm text-on-surface-variant mt-1">Referencia completa de alimentos permitidos</p></div>
+<button onclick="openAddFoodModal()" class="bg-primary-container text-white px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-primary-container/80 transition-all"><span class="material-symbols-outlined">add</span>Nuevo</button>
+</section>
+
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input type="text" id="searchInput" placeholder="Buscar alimento..." class="w-full bg-surface-container text-white border border-outline rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:border-primary-container" oninput="renderFoods()">
+</div>
+
+<div class="flex flex-wrap gap-2">
+<button onclick="setFilter('')" class="px-3 py-1.5 rounded-full text-sm font-medium bg-primary-container text-white">Todos</button>
+<button onclick="setFilter('Proteínas')" class="px-3 py-1.5 rounded-full text-sm font-medium bg-surface-container text-on-surface-variant hover:bg-surface-container-high hover:text-white">Proteínas</button>
+<button onclick="setFilter('Verduras')" class="px-3 py-1.5 rounded-full text-sm font-medium bg-surface-container text-on-surface-variant hover:bg-surface-container-high hover:text-white">Verduras</button>
+<button onclick="setFilter('Grasas')" class="px-3 py-1.5 rounded-full text-sm font-medium bg-surface-container text-on-surface-variant hover:bg-surface-container-high hover:text-white">Grasas</button>
+<button onclick="setFilter('Lácteos')" class="px-3 py-1.5 rounded-full text-sm font-medium bg-surface-container text-on-surface-variant hover:bg-surface-container-high hover:text-white">Lácteos</button>
+<button onclick="setFilter('Frutos secos')" class="px-3 py-1.5 rounded-full text-sm font-medium bg-surface-container text-on-surface-variant hover:bg-surface-container-high hover:text-white">Frutos secos</button>
+<button onclick="setFilter('Otros')" class="px-3 py-1.5 rounded-full text-sm font-medium bg-surface-container text-on-surface-variant hover:bg-surface-container-high hover:text-white">Otros</button>
+</div>
+
+<section id="foodsList" class="space-y-3"></section>
+
+<section class="mt-8 glass-card p-4 rounded-xl">
+<div class="flex items-center gap-3 mb-3">
+<span class="material-symbols-outlined text-secondary">info</span>
+<h3 class="font-headline font-bold text-white">Cómo usar KetoLab</h3>
+</div>
+<div class="space-y-2 text-sm text-on-surface-variant">
+<p><span class="text-primary-container font-medium">1. Alimentos:</span> Base de datos de referencia</p>
+<p><span class="text-primary-container font-medium">2. Compras:</span> Selecciona qué tienes en tu despensa</p>
+<p><span class="text-primary-container font-medium">3. Plan:</span> Usa tu despensa para planificar tus comidas</p>
+</div>
+</section>
+
+<section class="mt-8">
+<h2 class="text-lg font-headline font-bold text-error uppercase tracking-wider mb-4 flex items-center gap-2"><span class="material-symbols-outlined">cancel</span> Evitar</h2>
+<div class="space-y-3">
+<div class="glass-card p-4 rounded-xl flex items-center gap-4 opacity-60"><div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-error">grass</span></div><div class="flex-1"><p class="font-headline font-bold text-white">Tubérculos y almidones</p><p class="text-sm text-on-surface-variant">Papa, remolacha, zanahoria, maíz</p></div></div>
+<div class="glass-card p-4 rounded-xl flex items-center gap-4 opacity-60"><div class="w-12 h-12 rounded-xl bg-pink-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-pink-400">icecream</span></div><div class="flex-1"><p class="font-headline font-bold text-white">Frutas altas en azúcar</p><p class="text-sm text-on-surface-variant">Banana, mango, piña, sandía, manzana</p></div></div>
+<div class="glass-card p-4 rounded-xl flex items-center gap-4 opacity-60"><div class="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-orange-400">bakery_dining</span></div><div class="flex-1"><p class="font-headline font-bold text-white">Cereales y pan</p><p class="text-sm text-on-surface-variant">Pan, arroz, avena, pasta, cereales</p></div></div>
+</div>
+</section>
+
+</div>
+</main>
+
+<div id="foodModal" class="fixed inset-0 z-[60] hidden">
+<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeFoodModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+<div class="glass-card rounded-2xl p-6 w-full max-w-md pointer-events-auto">
+<div class="flex justify-between items-center mb-6">
+<h3 id="modalTitle" class="text-lg font-headline font-bold text-white">Nuevo Alimento</h3>
+<button onclick="closeFoodModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
+</div>
+<div class="space-y-4">
+<input type="hidden" id="foodId">
+<div><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Nombre</label><input type="text" id="foodName" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary-container" placeholder="Ej: Pechuga de pollo"></div>
+<div class="grid grid-cols-2 gap-4">
+<div><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Calorías</label><input type="number" id="foodCalories" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary-container" placeholder="165"></div>
+<div><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Porción (g)</label><input type="number" id="foodPortion" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary-container" placeholder="100"></div>
+</div>
+<div><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Categoría</label>
+<select id="foodCategory" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary-container">
+<option value="Proteínas">Proteínas</option><option value="Verduras">Verduras</option><option value="Grasas">Grasas</option><option value="Lácteos">Lácteos</option><option value="Frutos secos">Frutos secos</option><option value="Otros">Otros</option>
+</select></div>
+<div class="grid grid-cols-3 gap-4">
+<div><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Proteína (g)</label><input type="number" id="foodProtein" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary-container" placeholder="31"></div>
+<div><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Grasa (g)</label><input type="number" id="foodFat" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary-container" placeholder="3.6"></div>
+<div><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Carbos (g)</label><input type="number" id="foodCarbs" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary-container" placeholder="0"></div>
+</div>
+</div>
+<div class="flex gap-3 mt-6">
+<button onclick="closeFoodModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>
+<button onclick="saveFood()" class="flex-1 py-3 rounded-xl bg-primary-container text-white font-bold hover:bg-primary-container/80 transition-colors">Guardar</button>
+</div>
+</div>
+</div>
+</div>
+
+<div id="detailModal" class="fixed inset-0 z-[60] hidden">
+<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeDetailModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+<div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto">
+<div class="flex justify-between items-center mb-4">
+<h3 id="detailName" class="text-lg font-headline font-bold text-white"></h3>
+<button onclick="closeDetailModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
+</div>
+<div class="bg-surface-container-high rounded-xl p-4 mb-4">
+<div class="grid grid-cols-2 gap-3 text-center">
+<div><p class="text-xs text-on-surface-variant uppercase">Calorías</p><p id="detailCalories" class="text-xl font-bold text-yellow-400"></p></div>
+<div><p class="text-xs text-on-surface-variant uppercase">Porción</p><p id="detailPortion" class="text-xl font-bold text-white"></p></div>
+<div><p class="text-xs text-on-surface-variant uppercase">Proteína</p><p id="detailProtein" class="text-xl font-bold text-orange-400"></p></div>
+<div><p class="text-xs text-on-surface-variant uppercase">Grasa</p><p id="detailFat" class="text-xl font-bold text-yellow-300"></p></div>
+<div><p class="text-xs text-on-surface-variant uppercase">Carbos</p><p id="detailCarbs" class="text-xl font-bold text-cyan-400"></p></div>
+<div><p class="text-xs text-on-surface-variant uppercase">Categoría</p><p id="detailCategory" class="text-xl font-bold text-primary-container"></p></div>
+</div>
+</div>
+<div class="flex gap-3">
+<button onclick="editFood()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors flex items-center justify-center gap-2"><span class="material-symbols-outlined">edit</span>Editar</button>
+<button onclick="deleteFood()" class="py-3 px-4 rounded-xl bg-error/20 text-error font-medium hover:bg-error/30 transition-colors flex items-center justify-center"><span class="material-symbols-outlined">delete</span></button>
+</div>
+</div>
+</div>
+</div>
+
+<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-16 flex items-center z-50 px-0">
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="index.html"><span class="material-symbols-outlined text-xl">dashboard</span><span class="text-[7px] font-bold">Inicio</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-primary-container h-full py-2" href="alimentos.html"><span class="material-symbols-outlined text-xl">restaurant</span><span class="text-[7px] font-bold">Alimentos</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="plan.html"><span class="material-symbols-outlined text-xl">event_note</span><span class="text-[7px] font-bold">Plan</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="compras.html"><span class="material-symbols-outlined text-xl">shopping_cart</span><span class="text-[7px] font-bold">Despensa</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="macros.html"><span class="material-symbols-outlined text-xl">donut_small</span><span class="text-[7px] font-bold">Macros</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="checklist.html"><span class="material-symbols-outlined text-xl">fact_check</span><span class="text-[7px] font-bold">Check</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="entrenamientos.html"><span class="material-symbols-outlined text-xl">fitness_center</span><span class="text-[7px] font-bold">Gym</span></a>
+<a class="flex flex-col items-center justify-center flex-1 gap-0.5 text-white/50 h-full py-2" href="recetas.html"><span class="material-symbols-outlined text-xl">menu_book</span><span class="text-[7px] font-bold">Recetas</span></a>
+</nav>
+
+<div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[70] hidden opacity-0 translate-y-4 pointer-events-none transition-all duration-300">
+<div class="glass-card rounded-full px-6 py-3 flex items-center gap-3 shadow-lg"><span class="material-symbols-outlined text-primary-container">check_circle</span><span id="toastMessage" class="text-white font-medium"></span></div>
+</div>
+
+<script>
+function toggleTheme(){document.documentElement.classList.toggle("dark");localStorage.setItem("theme",document.documentElement.classList.contains("dark")?"dark":"light")}
+function toggleSidebar(){var b=document.body;var s=document.getElementById("sidebarNav");var t=document.getElementById("sidebarToggle");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");b.classList.toggle("sidebar-collapsed");if(b.classList.contains("sidebar-collapsed")){s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px";localStorage.setItem("sidebarCollapsed","true")}else{s.style.width="256px";s.style.overflow="";if(p)p.style.paddingLeft="272px";if(m)m.style.marginLeft="256px";if(t)t.style.left="256px";localStorage.setItem("sidebarCollapsed","false")}}
+if(localStorage.getItem("theme")==="dark"||!localStorage.getItem("theme")){document.documentElement.classList.add("dark")}
+if(localStorage.getItem("sidebarCollapsed")==="true"){document.body.classList.add("sidebar-collapsed");var s=document.getElementById("sidebarNav");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");var t=document.getElementById("sidebarToggle");s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px"}
+var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
+
+var defaultFoods=[
+{id:"f1",name:"Huevos",portion:"1 unidad (50g)",calories:78,protein:6,fat:5,carbs:0.6,category:"Proteínas"},
+{id:"f2",name:"Pechuga de pollo",portion:"100g",calories:165,protein:31,fat:3.6,carbs:0,category:"Proteínas"},
+{id:"f3",name:"Carne molida 80/20",portion:"100g",calories:254,protein:17,fat:20,carbs:0,category:"Proteínas"},
+{id:"f4",name:"Salmón",portion:"100g",calories:208,protein:20,fat:13,carbs:0,category:"Proteínas"},
+{id:"f5",name:"Bacon",portion:"50g",calories:270,protein:12,fat:23,carbs:1,category:"Proteínas"},
+{id:"f6",name:"Cerdo (lomo)",portion:"100g",calories:143,protein:26,fat:3.5,carbs:0,category:"Proteínas"},
+{id:"f7",name:"Carne de res (bistec)",portion:"100g",calories:271,protein:26,fat:18,carbs:0,category:"Proteínas"},
+{id:"f8",name:"Atún",portion:"100g",calories:132,protein:28,fat:1,carbs:0,category:"Proteínas"},
+{id:"f9",name:"Hígado de res",portion:"100g",calories:135,protein:20,fat:4,carbs:4,category:"Proteínas"},
+{id:"f10",name:"Pavo molido",portion:"100g",calories:149,protein:27,fat:3,carbs:0,category:"Proteínas"},
+{id:"f11",name:"Codornices",portion:"100g",calories:192,protein:25,fat:10,carbs:0,category:"Proteínas"},
+{id:"f12",name:"Aguacate",portion:"100g",calories:160,protein:2,fat:15,carbs:9,category:"Grasas"},
+{id:"f13",name:"Aceite de oliva",portion:"1 cucharada (15ml)",calories:119,protein:0,fat:13.5,carbs:0,category:"Grasas"},
+{id:"f14",name:"Mantequilla",portion:"1 cucharada (15g)",calories:102,protein:0.1,fat:11.5,carbs:0,category:"Grasas"},
+{id:"f15",name:"Aceite de coco",portion:"1 cucharada (15ml)",calories:121,protein:0,fat:13.5,carbs:0,category:"Grasas"},
+{id:"f16",name:"Ghee (mantequilla clarificada)",portion:"1 cucharada (15g)",calories:130,protein:0,fat:14,carbs:0,category:"Grasas"},
+{id:"f17",name:"Almendras",portion:"30g",calories:170,protein:6,fat:15,carbs:6,category:"Frutos secos"},
+{id:"f18",name:"Nueces",portion:"30g",calories:196,protein:4.6,fat:19.5,carbs:4,category:"Frutos secos"},
+{id:"f19",name:"Macadamia",portion:"30g",calories:204,protein:2.2,fat:21.5,carbs:4,category:"Frutos secos"},
+{id:"f20",name:"Pecanas",portion:"30g",calories:196,protein:2.6,fat:20,carbs:4,category:"Frutos secos"},
+{id:"f21",name:"Semillas de chía",portion:"30g",calories:138,protein:4.7,fat:9,carbs:12,category:"Frutos secos"},
+{id:"f22",name:"Semillas de linaza",portion:"30g",calories:150,protein:5,protein:12,fat:12,carbs:8,category:"Frutos secos"},
+{id:"f23",name:"Brócoli",portion:"100g",calories:34,protein:2.8,fat:0.4,carbs:7,category:"Verduras"},
+{id:"f24",name:"Coliflor",portion:"100g",calories:25,protein:2,fat:0.3,carbs:5,category:"Verduras"},
+{id:"f25",name:"Espinacas",portion:"100g",calories:23,protein:2.9,fat:0.4,carbs:3.6,category:"Verduras"},
+{id:"f26",name:"Champiñones",portion:"100g",calories:22,protein:3.1,fat:0.3,carbs:3.3,category:"Verduras"},
+{id:"f27",name:"Pimiento rojo",portion:"100g",calories:31,protein:1,fat:0.3,carbs:6,category:"Verduras"},
+{id:"f28",name:"Pepino",portion:"100g",calories:15,protein:0.7,fat:0.1,carbs:3.6,category:"Verduras"},
+{id:"f29",name:"Lechuga",portion:"100g",calories:15,protein:1.4,fat:0.2,carbs:2.9,category:"Verduras"},
+{id:"f30",name:"Tomate",portion:"100g",calories:18,protein:0.9,fat:0.2,carbs:3.9,category:"Verduras"},
+{id:"f31",name:"Cebolla",portion:"100g",calories:40,protein:1.1,fat:0.1,carbs:9.3,category:"Verduras"},
+{id:"f32",name:"Ajo",portion:"1 diente (3g)",calories:4,protein:0.2,fat:0,carbs:1,category:"Verduras"},
+{id:"f33",name:"Calabacín",portion:"100g",calories:17,protein:1.2,fat:0.3,carbs:3.1,category:"Verduras"},
+{id:"f34",name:"Apio",portion:"100g",calories:16,protein:0.7,fat:0.2,carbs:3,category:"Verduras"},
+{id:"f35",name:"Queso mozzarella",portion:"100g",calories:280,protein:28,fat:17,carbs:3.1,category:"Lácteos"},
+{id:"f36",name:"Queso cheddar",portion:"30g",calories:120,protein:7,fat:10,carbs:0.4,category:"Lácteos"},
+{id:"f37",name:"Queso parmesano",portion:"30g",calories:111,protein:10,fat:7,carbs:0.4,category:"Lácteos"},
+{id:"f38",name:"Queso crema",portion:"30g",calories:100,protein:2,fat:10,carbs:0.4,category:"Lácteos"},
+{id:"f39",name:"Nata para cocinar",portion:"100ml",calories:340,protein:2,fat:36,carbs:3,category:"Lácteos"},
+{id:"f40",name:"Queso feta",portion:"30g",calories:75,protein:4,fat:6,carbs:1,category:"Lácteos"},
+{id:"f41",name:"Cacao puro",portion:"1 cucharada (10g)",calories:23,protein:2,fat:1.4,carbs:6,category:"Otros"},
+{id:"f42",name:"Coco rallado",portion:"30g",calories:187,protein:2,fat:18,carbs:8,category:"Otros"},
+{id:"f43",name:"Edamame",portion:"100g",calories:121,protein:12,fat:5,carbs:10,category:"Otros"},
+{id:"f44",name:"Café con mantequilla",portion:"1 taza",calories:230,protein:2,fat:24,carbs:0,category:"Otros"},
+{id:"f45",name:"Chocolate negro 90%",portion:"30g",calories:150,protein:2,fat:13,carbs:4,category:"Otros"}
+];
+
+var currentFoods=[];
+var currentFilter="";
+var currentDetailId=null;
+
+function loadFoods(){var stored=JSON.parse(localStorage.getItem("ketoFoods")||"null");currentFoods=stored&&Array.isArray(stored)?stored:JSON.parse(JSON.stringify(defaultFoods));if(!stored){localStorage.setItem("ketoFoods",JSON.stringify(currentFoods))}}
+
+function saveFoods(){localStorage.setItem("ketoFoods",JSON.stringify(currentFoods))}
+
+function setFilter(filter){currentFilter=filter;document.querySelectorAll(".flex-wrap button").forEach(function(btn){btn.classList.remove("bg-primary-container","text-white");btn.classList.add("bg-surface-container","text-on-surface-variant")});event.target.classList.remove("bg-surface-container","text-on-surface-variant");event.target.classList.add("bg-primary-container","text-white");renderFoods()}
+
+function renderFoods(){var search=document.getElementById("searchInput").value.toLowerCase();var filtered=currentFoods.filter(function(f){var matchSearch=f.name.toLowerCase().includes(search);var matchFilter=!currentFilter||f.category===currentFilter;return matchSearch&&matchFilter});var container=document.getElementById("foodsList");if(filtered.length===0){container.innerHTML='<div class="glass-card p-8 rounded-xl text-center"><span class="material-symbols-outlined text-4xl text-on-surface-variant mb-2">search_off</span><p class="text-on-surface-variant">No se encontraron alimentos</p></div>';return}var html="";filtered.forEach(function(f){var catColors={"Proteínas":"#ff4d00","Verduras":"#4caf50","Grasas":"#ffb300","Lácteos":"#9c27b0","Frutos secos":"#e91e63","Otros":"#2196f3"};var color=catColors[f.category]||"#ff4d00";html+='<div class="glass-card p-4 rounded-xl flex items-center gap-4 cursor-pointer hover:bg-surface-container-high transition-all" onclick="openDetail(\''+f.id+'\')">';html+='<div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:'+color+'20"><span class="material-symbols-outlined" style="color:'+color+'">restaurant</span></div>';html+='<div class="flex-1 min-w-0"><p class="font-headline font-bold text-white truncate">'+f.name+'</p><p class="text-xs text-on-surface-variant">'+f.category+' - '+f.portion+'</p></div>';html+='<div class="hidden md:flex items-center gap-4 text-xs"><span class="text-yellow-400">'+f.calories+' cal</span><span class="text-orange-400">P:'+f.protein+'g</span><span class="text-yellow-300">G:'+f.fat+'g</span><span class="text-cyan-400">C:'+f.carbs+'g</span></div>';html+='<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span></div>'});container.innerHTML=html}
+
+function openAddFoodModal(){document.getElementById("modalTitle").textContent="Nuevo Alimento";document.getElementById("foodId").value="";document.getElementById("foodName").value="";document.getElementById("foodCalories").value="";document.getElementById("foodPortion").value="100";document.getElementById("foodProtein").value="";document.getElementById("foodFat").value="";document.getElementById("foodCarbs").value="";document.getElementById("foodCategory").value="Proteínas";document.getElementById("foodModal").classList.remove("hidden");document.getElementById("foodModal").classList.add("flex")}
+
+function openDetail(id){currentDetailId=id;var food=currentFoods.find(function(f){return f.id===id});if(!food)return;document.getElementById("detailName").textContent=food.name;document.getElementById("detailPortion").textContent=food.portion+"g";document.getElementById("detailCalories").textContent=food.calories+" kcal";document.getElementById("detailProtein").textContent=food.protein+"g";document.getElementById("detailFat").textContent=food.fat+"g";document.getElementById("detailCarbs").textContent=food.carbs+"g";document.getElementById("detailCategory").textContent=food.category;document.getElementById("detailModal").classList.remove("hidden");document.getElementById("detailModal").classList.add("flex")}
+
+function editFood(){var food=currentFoods.find(function(f){return f.id===currentDetailId});if(!food)return;closeDetailModal();document.getElementById("modalTitle").textContent="Editar Alimento";document.getElementById("foodId").value=food.id;document.getElementById("foodName").value=food.name;document.getElementById("foodCalories").value=food.calories;document.getElementById("foodPortion").value=food.portion;document.getElementById("foodProtein").value=food.protein;document.getElementById("foodFat").value=food.fat;document.getElementById("foodCarbs").value=food.carbs;document.getElementById("foodCategory").value=food.category;document.getElementById("foodModal").classList.remove("hidden");document.getElementById("foodModal").classList.add("flex")}
+
+function deleteFood(){if(!currentDetailId)return;if(!confirm("Eliminar este alimento?"))return;currentFoods=currentFoods.filter(function(f){return f.id!==currentDetailId});saveFoods();renderFoods();closeDetailModal();showToast("Alimento eliminado")}
+
+function saveFood(){var id=document.getElementById("foodId").value;var name=document.getElementById("foodName").value.trim();var calories=parseInt(document.getElementById("foodCalories").value)||0;var portion=parseInt(document.getElementById("foodPortion").value)||100;var protein=parseFloat(document.getElementById("foodProtein").value)||0;var fat=parseFloat(document.getElementById("foodFat").value)||0;var carbs=parseFloat(document.getElementById("foodCarbs").value)||0;var category=document.getElementById("foodCategory").value;if(!name){alert("Ingresa el nombre del alimento");return}if(id){var food=currentFoods.find(function(f){return f.id===id});if(food){food.name=name;food.calories=calories;food.portion=portion;food.protein=protein;food.fat=fat;food.carbs=carbs;food.category=category}}else{var newId="f"+Date.now();currentFoods.push({id:newId,name:name,calories:calories,portion:portion,protein:protein,fat:fat,carbs:carbs,category:category})}saveFoods();renderFoods();closeFoodModal();showToast(id?"Alimento actualizado":"Alimento guardado")}
+
+function closeFoodModal(){document.getElementById("foodModal").classList.add("hidden");document.getElementById("foodModal").classList.remove("flex")}
+function closeDetailModal(){document.getElementById("detailModal").classList.add("hidden");document.getElementById("detailModal").classList.remove("flex");currentDetailId=null}
+
+function showToast(message){var toast=document.getElementById("toast");document.getElementById("toastMessage").textContent=message;toast.classList.remove("hidden","opacity-0","translate-y-4","pointer-events-none");toast.classList.add("opacity-100","translate-y-0");setTimeout(function(){toast.classList.add("opacity-0","translate-y-4","pointer-events-none");toast.classList.remove("opacity-100","translate-y-0")},3000)}
+
+loadFoods();renderFoods();
+</script>
+</body>
+</html>
