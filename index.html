@@ -762,16 +762,25 @@ function loadDashboard() {
   var mealPlan = getLocalData('mealPlan_' + todayKey, schemas.mealPlan, getDefaultMealPlan());
   var consumedCal = 0, consumedProt = 0, consumedFat = 0, consumedCarbs = 0;
   
-  Object.keys(mealPlan).forEach(function(meal) {
-    mealPlan[meal].forEach(function(item) {
-      var foodPort = parseFloat(item.portion) || 100;
-      var ratio = foodPort / 100;
-      consumedCal += Math.round((parseFloat(item.calories) || 0) * ratio);
-      consumedProt += Math.round((parseFloat(item.protein) || 0) * ratio);
-      consumedFat += Math.round((parseFloat(item.fat) || 0) * ratio);
-      consumedCarbs += Math.round((parseFloat(item.carbs) || 0) * ratio);
+  var consumedMacrosRaw = localStorage.getItem('consumedMacros_' + todayKey);
+  if (consumedMacrosRaw) {
+    var consumedMacros = JSON.parse(consumedMacrosRaw);
+    consumedCal = consumedMacros.cal || 0;
+    consumedProt = consumedMacros.prot || 0;
+    consumedFat = consumedMacros.fat || 0;
+    consumedCarbs = consumedMacros.carbs || 0;
+  } else {
+    Object.keys(mealPlan).forEach(function(meal) {
+      mealPlan[meal].forEach(function(item) {
+        var foodPort = parseFloat(item.portion) || 100;
+        var ratio = foodPort / 100;
+        consumedCal += Math.round((parseFloat(item.calories) || 0) * ratio);
+        consumedProt += Math.round((parseFloat(item.protein) || 0) * ratio);
+        consumedFat += Math.round((parseFloat(item.fat) || 0) * ratio);
+        consumedCarbs += Math.round((parseFloat(item.carbs) || 0) * ratio);
+      });
     });
-  });
+  }
   
   var startWeight = ketoProfile.weight || userData.startWeight || 159;
   var goalWeight = ketoProfile.goalWeight || userData.goalWeight || 140;
