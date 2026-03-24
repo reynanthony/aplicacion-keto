@@ -19,10 +19,7 @@ const STATIC_ASSETS = [
   '/aplicacion-keto/entrenamientos.html',
   '/aplicacion-keto/compras.js',
   '/aplicacion-keto/manifest.json',
-  '/aplicacion-keto/offline.html',
-  'https://cdn.tailwindcss.com?plugins=forms,container-queries',
-  'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap',
-  'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap'
+  '/aplicacion-keto/offline.html'
 ];
 
 // ==================== INSTALACIÓN ====================
@@ -73,8 +70,11 @@ self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   
   // ========== EXCEPCIONES ==========
-  // No cachear peticiones a APIs externas
-  if (url.hostname.includes('api.') || url.pathname.includes('/api/')) {
+  // No cachear peticiones a APIs externas (CDN, fonts, etc)
+  if (url.hostname.includes('cdn.') || 
+      url.hostname.includes('fonts.') ||
+      url.hostname.includes('api.') || 
+      url.pathname.includes('/api/')) {
     event.respondWith(fetch(event.request));
     return;
   }
