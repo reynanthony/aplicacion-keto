@@ -181,33 +181,59 @@ var recipesDB = {
   "arroz-coliflor": {title: "Arroz de coliflor", icon: "rice_bowl", color: "#9c27b0", image: "images/recipes/arroz-coliflor.svg", prepTime: "15 min", calories: 85, protein: 3, fat: 7, carbs: 6, ingredients: ["1 coliflor mediana", "2 cdas aceite/mantequilla", "Sal y pimienta"], prep: "Procesar coliflor. Saltear en sarten caliente 5-7 min."}
 };
 
+function getMacroColors(recipe) {
+  var dominant = 'fat';
+  var maxVal = recipe.fat;
+  if (recipe.protein > maxVal) { dominant = 'protein'; maxVal = recipe.protein; }
+  if (recipe.carbs > maxVal) { dominant = 'carbs'; }
+  
+  var colors = {
+    protein: { from: '#ff6b35', to: '#c2185b', icon: '#ffb74d', label: 'PRO' },
+    fat: { from: '#ffc107', to: '#ff8f00', icon: '#ffeb3b', label: 'GRASA' },
+    carbs: { from: '#00bcd4', to: '#0097a7', icon: '#4dd0e1', label: 'CARBS' }
+  };
+  return colors[dominant];
+}
+
 var container = document.getElementById("recipesList");
 Object.keys(recipesDB).forEach(function(key) {
 var recipe = recipesDB[key];
+var colors = getMacroColors(recipe);
 var html = '<div class="glass-card rounded-xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-all duration-300" onclick="openRecipeModal(\'' + key + '\')">';
-html += '<div class="relative h-32 w-full overflow-hidden bg-gradient-to-br from-surface-container to-surface-container-high">';
-html += '<img src="' + recipe.image + '" alt="' + recipe.title + '" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=\\\'w-full h-full flex items-center justify-center\\\'><span class=\\\'material-symbols-outlined text-5xl text-white/30\\\'>' + recipe.icon + '</span></div>\'">';
-html += '<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">';
-html += '<p class="text-xs text-white/80">' + recipe.prepTime + ' • ' + recipe.calories + ' kcal</p>';
-html += '</div></div>';
+html += '<div class="relative h-28 w-full overflow-hidden bg-gradient-to-br from-[' + colors.from + '] to-[' + colors.to + ']">';
+html += '<div class="absolute top-2 right-2 px-2 py-1 rounded-full bg-black/30 text-[10px] font-bold text-white">' + colors.label + '</div>';
+html += '<div class="w-full h-full flex items-center justify-center">';
+html += '<span class="material-symbols-outlined text-6xl" style="color:rgba(255,255,255,0.3)">' + recipe.icon + '</span>';
+html += '</div>';
+html += '<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">';
+html += '<div class="flex items-center gap-3 text-xs">';
+html += '<span class="text-white/90 flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span>' + recipe.prepTime + '</span>';
+html += '<span class="text-white/90 flex items-center gap-1"><span class="material-symbols-outlined text-sm">local_fire_department</span>' + recipe.calories + '</span>';
+html += '</div></div></div>';
 html += '<div class="p-4 flex items-center gap-3">';
-html += '<div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:' + recipe.color + '20">';
-html += '<span class="material-symbols-outlined text-lg" style="color:' + recipe.color + '">' + recipe.icon + '</span></div>';
+html += '<div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:' + colors.from + '20">';
+html += '<span class="material-symbols-outlined text-lg" style="color:' + colors.icon + '">' + recipe.icon + '</span></div>';
 html += '<div class="flex-1 min-w-0"><p class="font-headline font-bold text-white truncate">' + recipe.title + '</p>';
-html += '<p class="text-xs text-on-surface-variant">' + recipe.ingredients.length + ' ingredientes</p></div>';
+html += '<div class="flex gap-2 mt-1">';
+html += '<span class="text-[10px] text-orange-400">' + recipe.protein + 'g prot</span>';
+html += '<span class="text-[10px] text-yellow-400">' + recipe.fat + 'g grasa</span>';
+html += '<span class="text-[10px] text-cyan-400">' + recipe.carbs + 'g carb</span>';
+html += '</div></div>';
 html += '<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span></div></div>';
 container.innerHTML += html;
 });
 
 function openRecipeModal(key) {
 var recipe = recipesDB[key];
+var colors = getMacroColors(recipe);
 document.getElementById("modalTitle").textContent = recipe.title;
 var ingredientsHtml = recipe.ingredients.map(function(i) {
 return '<li class="flex items-center gap-3 py-2 border-b border-white/5"><span class="material-symbols-outlined text-primary-container text-sm">check_circle</span><span class="text-white">' + i + '</span></li>';
 }).join('');
 document.getElementById("modalContent").innerHTML = '<div class="space-y-4">' +
-'<div class="h-40 w-full rounded-xl overflow-hidden bg-gradient-to-br from-surface-container to-surface-container-high">' +
-'<img src="' + recipe.image + '" alt="' + recipe.title + '" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display=\'none\'">' +
+'<div class="h-40 w-full rounded-xl overflow-hidden bg-gradient-to-br from-[' + colors.from + '] to-[' + colors.to + '] flex items-center justify-center">' +
+'<span class="material-symbols-outlined text-7xl text-white/40">' + recipe.icon + '</span>' +
+'<div class="absolute top-3 right-3 px-3 py-1 rounded-full bg-black/30 text-xs font-bold text-white">' + colors.label + '</div>' +
 '</div>' +
 '<div class="grid grid-cols-4 gap-2 text-center">' +
 '<div class="p-2 rounded-lg bg-surface-container-high"><p class="text-lg font-bold text-yellow-400">' + recipe.calories + '</p><p class="text-[10px] text-on-surface-variant">kcal</p></div>' +
@@ -217,7 +243,7 @@ document.getElementById("modalContent").innerHTML = '<div class="space-y-4">' +
 '</div>' +
 '<div class="bg-surface-container-high rounded-xl p-4"><p class="text-xs text-primary-container uppercase tracking-wider mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-sm">schedule</span> Preparación (' + recipe.prepTime + ')</p><p class="text-white text-sm">' + recipe.prep + '</p></div>' +
 '<div class="bg-surface-container-high rounded-xl p-4"><p class="text-xs text-secondary uppercase tracking-wider mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-sm">list</span> Ingredientes</p><ul>' + ingredientsHtml + '</ul></div>' +
-'<button onclick="addRecipeToPlan(\'' + key + '\')" class="w-full py-3 rounded-xl bg-primary-container text-white font-bold hover:bg-primary-container/80 transition-all flex items-center justify-center gap-2"><span class="material-symbols-outlined">add_to_meal_plan</span>Agregar al plan</button>' +
+'<button onclick="addRecipeToPlan(\'' + key + '\')" class="w-full py-4 rounded-2xl bg-gradient-to-r from-primary-container to-secondary text-white font-bold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-3"><span class="material-symbols-outlined text-2xl">add_circle</span>Agregar al Plan</button>' +
 '</div>';
 document.getElementById("recipeModal").classList.remove("hidden");
 document.getElementById("recipeModal").classList.add("flex");
