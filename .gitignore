@@ -1,0 +1,15 @@
+# Backups
+backup_*/
+*.bak
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (if needed)
+node_modules/
