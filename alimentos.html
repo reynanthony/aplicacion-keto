@@ -116,14 +116,15 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 <!-- Online Search Modal -->
 <div id="onlineSearchModal" class="fixed inset-0 z-[70] hidden">
 <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeOnlineSearchModal()"></div>
-<div class="absolute top-20 left-1/2 -translate-x-1/2 w-[95%] max-w-lg glass-card rounded-2xl p-4 shadow-2xl max-h-[70vh] flex flex-col">
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+<div class="glass-card rounded-2xl p-6 w-full max-w-lg pointer-events-auto max-h-[80vh] flex flex-col">
 <div class="flex items-center justify-between mb-4">
 <h3 class="text-lg font-headline font-bold text-white flex items-center gap-2">
 <span class="material-symbols-outlined text-secondary">cloud_search</span>
 Buscar en línea
 </h3>
-<button onclick="closeOnlineSearchModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10">
-<span class="material-symbols-outlined">close</span>
+<button onclick="closeOnlineSearchModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined text-lg">close</span>
 </button>
 </div>
 <div class="relative mb-4">
@@ -143,8 +144,10 @@ Buscar
 <!-- Online Food Detail Modal -->
 <div id="onlineFoodModal" class="fixed inset-0 z-[80] hidden">
 <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeOnlineFoodModal()"></div>
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm glass-card rounded-2xl p-6 shadow-2xl">
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+<div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto">
 <div id="onlineFoodContent" class="space-y-4"></div>
+</div>
 </div>
 </div>
 
