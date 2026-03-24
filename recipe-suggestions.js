@@ -105,30 +105,30 @@ function showRecipeSuggestions() {
   
   var suggestions = getRecipeSuggestions();
   
-  if (suggestions.length === 0) {
-    container.innerHTML = '';
-    return;
-  }
+  var recipesToShow = suggestions.length > 0 ? suggestions : [
+    { id: 'huevos-bacon', matchPercent: 0 },
+    { id: 'pollo-asado', matchPercent: 0 },
+    { id: 'filete-salmon', matchPercent: 0 }
+  ];
   
-  var html = '<div class="mt-6"><h3 class="text-sm font-bold text-secondary mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-sm">recommend</span>Recetas que puedes preparar</h3><div class="grid grid-cols-1 md:grid-cols-3 gap-3">';
+  var html = '<div class="mt-6 px-4 md:px-0"><h3 class="text-sm font-bold text-secondary mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-sm">recommend</span>Recetas Populares</h3><div class="grid grid-cols-2 md:grid-cols-3 gap-3">';
   
-  suggestions.forEach(function(s) {
+  recipesToShow.forEach(function(s) {
     var recipe = recipesDB ? recipesDB[s.id] : null;
     if (recipe) {
       var colors = getMacroColors(recipe);
       html += '<a href="recetas.html" class="glass-card rounded-xl overflow-hidden block hover:scale-102 transition-all">';
-      html += '<div class="h-28 w-full overflow-hidden flex items-center justify-center" style="background: linear-gradient(135deg, ' + colors.from + ', ' + colors.to + ');">';
-      html += '<span class="material-symbols-outlined text-5xl text-white opacity-30">' + recipe.icon + '</span>';
+      html += '<div class="h-20 md:h-28 w-full overflow-hidden flex items-center justify-center" style="background: linear-gradient(135deg, ' + colors.from + ', ' + colors.to + ');">';
+      html += '<span class="material-symbols-outlined text-4xl md:text-5xl text-white opacity-30">' + recipe.icon + '</span>';
       html += '<div class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-black bg-opacity-30 text-[9px] font-bold text-white">' + colors.label + '</div>';
       html += '</div>';
-      html += '<div class="p-3">';
-      html += '<p class="font-bold text-white text-sm">' + recipe.title + '</p>';
-      html += '<div class="flex gap-2 mt-1">';
-      html += '<span class="text-[10px] text-orange-400">' + recipe.protein + 'g</span>';
-      html += '<span class="text-[10px] text-yellow-400">' + recipe.fat + 'g</span>';
-      html += '<span class="text-[10px] text-cyan-400">' + recipe.carbs + 'g</span>';
+      html += '<div class="p-2 md:p-3">';
+      html += '<p class="font-bold text-white text-xs md:text-sm">' + recipe.title + '</p>';
+      html += '<div class="flex gap-1 md:gap-2 mt-1">';
+      html += '<span class="text-[9px] md:text-[10px] text-orange-400">' + recipe.protein + 'g</span>';
+      html += '<span class="text-[9px] md:text-[10px] text-yellow-400">' + recipe.fat + 'g</span>';
+      html += '<span class="text-[9px] md:text-[10px] text-cyan-400">' + recipe.carbs + 'g</span>';
       html += '</div>';
-      html += '<p class="text-xs text-green-400 mt-1">' + s.matchPercent + '% ingredientes</p>';
       html += '</div></a>';
     }
   });
