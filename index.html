@@ -874,40 +874,60 @@ function renderWeightHistory() {
   var container = document.getElementById('weightHistory');
   if (!container) return;
   
+  // Obtener peso actual del perfil
+  var ketoProfile = {};
+  try { ketoProfile = JSON.parse(localStorage.getItem('keto_profile') || '{}'); } catch(e) { ketoProfile = {}; }
+  var currentWeight = ketoProfile.weight || 80;
+  
+  // Obtener historial
   var stored = localStorage.getItem('keto_weight_history');
   var weightHistory = [];
   try { weightHistory = stored ? JSON.parse(stored) : []; } catch(e) { weightHistory = []; }
   
+  // Si no hay historial pero hay peso actual, guardar
+  if ((!weightHistory || weightHistory.length === 0) && currentWeight) {
+    saveWeightToHistory(currentWeight);
+    weightHistory = [{ date: new Date().toISOString().slice(0, 10), weight: currentWeight }];
+  }
+  
   if (!Array.isArray(weightHistory) || weightHistory.length === 0) {
-    container.innerHTML = '<p class="text-xs text-on-surface-variant text-center w-full py-4">Sin historial de peso. <a href="macros.html" class="text-primary-container hover:underline">Configura tu peso</a></p>';
+    container.innerHTML = '<div class="w-full text-center py-3"><p class="text-xs text-on-surface-variant">Registra tu peso en</p><a href="macros.html" class="text-sm text-primary-container hover:underline font-bold">Macros →</a></div>';
     return;
   }
   
   var sorted = weightHistory.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
   var last7 = sorted.slice(-7);
   
+  // Asegurar que el peso de hoy esté en el historial
+  var today = new Date().toISOString().slice(0, 10);
+  var hasToday = last7.some(function(e) { return e.date === today; });
+  if (!hasToday) {
+    last7.push({ date: today, weight: currentWeight });
+  }
+  
   if (last7.length === 0) {
-    container.innerHTML = '<p class="text-xs text-on-surface-variant text-center w-full">Sin datos recientes</p>';
+    container.innerHTML = '<p class="text-xs text-on-surface-variant text-center w-full">Sin datos</p>';
     return;
   }
   
   var weights = last7.map(function(e) { return e.weight; });
-  var minW = Math.min.apply(null, weights) - 1;
-  var maxW = Math.max.apply(null, weights) + 1;
+  var minW = Math.min.apply(null, weights) - 0.5;
+  var maxW = Math.max.apply(null, weights) + 0.5;
   var range = maxW - minW || 1;
   
   var html = '';
   last7.forEach(function(entry, index) {
     var height = ((entry.weight - minW) / range) * 100;
     if (height < 10) height = 10;
+    if (height > 100) height = 100;
     var isToday = index === last7.length - 1;
     var date = new Date(entry.date);
     var day = date.toLocaleDateString('es-ES', { weekday: 'short' });
     html += '<div class="flex-1 flex flex-col items-center gap-1">';
     html += '<div class="w-full bg-surface-container-high rounded-t relative" style="height: 60px;">';
-    html += '<div class="absolute bottom-0 w-full bg-' + (isToday ? 'primary-container' : 'secondary') + ' rounded-t transition-all" style="height: ' + height + '%"></div>';
+    html += '<div class="absolute bottom-0 w-full rounded-t transition-all ' + (isToday ? 'bg-primary-container' : 'bg-secondary/60') + '" style="height: ' + height + '%"></div>';
     html += '</div>';
-    html += '<span class="text-[8px] text-' + (isToday ? 'primary-container' : 'on-surface-variant') + '">' + day + '</span>';
+    html += '<span class="text-[8px] ' + (isToday ? 'text-primary-container font-bold' : 'text-on-surface-variant') + '">' + day + '</span>';
     html += '<span class="text-[8px] font-bold text-white">' + entry.weight + '</span>';
     html += '</div>';
   });
