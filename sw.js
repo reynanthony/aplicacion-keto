@@ -1,10 +1,10 @@
 // sw.js - Service Worker para KetoLab
-// Versión: v1.0.0
+// Versión: v1.0.1
 // Estrategia: Cache First con actualización en background (Stale-While-Revalidate)
 
-const CACHE_NAME = 'ketolab-v1';
-const STATIC_CACHE = 'ketolab-static-v1';
-const DYNAMIC_CACHE = 'ketolab-dynamic-v1';
+const CACHE_NAME = 'ketolab-v1.0.1';
+const STATIC_CACHE = 'ketolab-static-v1.0.1';
+const DYNAMIC_CACHE = 'ketolab-dynamic-v1.0.1';
 
 // Archivos estáticos a cachear durante la instalación
 const STATIC_ASSETS = [
