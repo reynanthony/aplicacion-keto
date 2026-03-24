@@ -8,17 +8,18 @@ const DYNAMIC_CACHE = 'ketolab-dynamic-v1';
 
 // Archivos estáticos a cachear durante la instalación
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/alimentos.html',
-  '/compras.html',
-  '/macros.html',
-  '/plan.html',
-  '/recetas.html',
-  '/checklist.html',
-  '/entrenamientos.html',
-  '/compras.js',
-  '/manifest.json',
+  '/aplicacion-keto/',
+  '/aplicacion-keto/index.html',
+  '/aplicacion-keto/alimentos.html',
+  '/aplicacion-keto/compras.html',
+  '/aplicacion-keto/macros.html',
+  '/aplicacion-keto/plan.html',
+  '/aplicacion-keto/recetas.html',
+  '/aplicacion-keto/checklist.html',
+  '/aplicacion-keto/entrenamientos.html',
+  '/aplicacion-keto/compras.js',
+  '/aplicacion-keto/manifest.json',
+  '/aplicacion-keto/offline.html',
   'https://cdn.tailwindcss.com?plugins=forms,container-queries',
   'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap',
   'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap'
@@ -112,7 +113,7 @@ self.addEventListener('fetch', event => {
         .catch(() => {
           // Fallback offline para páginas HTML
           if (event.request.destination === 'document') {
-            return caches.match('/offline.html');
+            return caches.match('/aplicacion-keto/offline.html');
           }
           return new Response('Recurso no disponible offline', {
             status: 503,
