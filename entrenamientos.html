@@ -1112,13 +1112,21 @@ function saveAndLogWorkout() {
   var totalReps = 0;
   var totalWeight = 0;
   var completedCount = 0;
+  var muscleGroups = {};
   
   if (generatedWorkout.completed) {
     generatedWorkout.routine.exercises.forEach(function(ex, idx) {
       if (generatedWorkout.completed[idx]) completedCount++;
       var data = generatedWorkout.actualData && generatedWorkout.actualData[idx] ? generatedWorkout.actualData[idx] : {};
-      totalReps += (data.reps || ex.reps) * (data.sets || ex.sets);
-      totalWeight += parseFloat(data.weight || 0) * (data.reps || ex.reps) * (data.sets || ex.sets);
+      var sets = data.sets || ex.sets;
+      var reps = data.reps || ex.reps;
+      var weight = parseFloat(data.weight) || 0;
+      
+      totalReps += reps * sets;
+      totalWeight += weight * reps * sets;
+      
+      if (!muscleGroups[ex.muscle]) muscleGroups[ex.muscle] = 0;
+      muscleGroups[ex.muscle] += weight * reps * sets;
     });
   } else {
     completedCount = generatedWorkout.routine.exercises.length;
@@ -1127,9 +1135,24 @@ function saveAndLogWorkout() {
     });
   }
   
-  var baseCalories = generatedWorkout.routine.estimatedCalories;
-  var actualCalories = Math.round(baseCalories * (duration / generatedWorkout.routine.duration));
-  actualCalories = Math.round(actualCalories * 0.8 + (totalWeight / 1000) * 5);
+  // Calorie calculation based on actual workout data
+  // Base: ~3-5 calories per minute of strength training
+  var baseBurn = duration * 4; 
+  
+  // Volume bonus: ~0.3 calories per kg lifted
+  var volumeBonus = (totalWeight / 1000) * 0.3;
+  
+  // Time under tension bonus (more reps = more burn)
+  var repsBonus = totalReps * 0.1;
+  
+  // Rest time factor (we assume ~45-60 sec rest between sets)
+  var restFactor = (completedCount * 45) / duration;
+  
+  var actualCalories = Math.round(baseBurn + volumeBonus + repsBonus);
+  
+  // Minimum reasonable calories for strength training
+  if (actualCalories < 50) actualCalories = 50;
+  if (actualCalories > 800) actualCalories = 800;
   
   generatedWorkout.routine.duration = duration;
   generatedWorkout.routine.estimatedCalories = actualCalories;

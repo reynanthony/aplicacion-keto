@@ -119,10 +119,11 @@ var autoWorkoutGenerator = (function() {
     var setsPerExercise = Math.max(3, Math.floor(prefs.duration / (selectedExercises.length * 2)));
     var reps = prefs.level === 'principiante' ? 12 : (prefs.level === 'intermedio' ? 15 : 20);
     
-    // Calcular calorías estimadas
-    var totalCalories = selectedExercises.reduce(function(sum, ex) {
-      return sum + (ex.caloriesPerMinute * prefs.duration / selectedExercises.length);
-    }, 0);
+    // Calcular calorías estimadas - más realista
+    // Base: ~4 cal/min para entrenamiento de fuerza
+    // + 0.5 cal por cada repetición estimada
+    var estimatedReps = selectedExercises.length * setsPerExercise * reps;
+    var totalCalories = (prefs.duration * 4) + (estimatedReps * 0.5);
     
     var routine = {
       date: new Date().toISOString().slice(0, 10),
