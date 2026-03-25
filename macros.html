@@ -109,6 +109,10 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 </select>
 </div>
 <div>
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Meses en keto</label>
+<input type="number" id="monthsOnKeto" value="1" min="1" max="60" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/30 transition-all">
+</div>
+<div>
 <label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Objetivo</label>
 <select id="goal" class="w-full appearance-none bg-surface-container text-white border border-outline rounded-xl px-4 py-3 pr-10 focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/30 transition-all" onchange="calcMacros()" style="background-image:url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20fill%3D%22%23adaaaa%22%20d%3D%22M7%2010l5%205%205-5z%22%2F%3E%3C%2Fsvg%3E');background-repeat:no-repeat;background-position:right 12px center;background-size:20px">
 <option value="-0.2">Perder peso (-20%)</option>
@@ -260,6 +264,7 @@ function loadProfile(){
   if(p.sex)document.getElementById("sex").value=p.sex;
   if(p.activityLevel)document.getElementById("activity").value=p.activityLevel;
   if(p.goal||p.goal===0)document.getElementById("goal").value=p.goal;
+  if(p.monthsOnKeto)document.getElementById("monthsOnKeto").value=p.monthsOnKeto;
 }
 
 function saveProfile(){
@@ -270,8 +275,9 @@ function saveProfile(){
   var sex=document.getElementById("sex").value;
   var activity=parseFloat(document.getElementById("activity").value)||1.55;
   var goal=parseFloat(document.getElementById("goal").value)||0;
+  var monthsOnKeto=parseInt(document.getElementById("monthsOnKeto").value)||1;
   
-  var profile={age:age,height:height,weight:currentWeight,goalWeight:goalWeight,sex:sex,activityLevel:activity,goal:goal};
+  var profile={age:age,height:height,weight:currentWeight,goalWeight:goalWeight,sex:sex,activityLevel:activity,goal:goal,monthsOnKeto:monthsOnKeto};
   var bmr=sex==="male"?10*currentWeight+6.25*height-5*age+5:10*currentWeight+6.25*height-5*age-161;
   var tdee=bmr*activity;
   var adjustedCalories=tdee*(1+goal);
