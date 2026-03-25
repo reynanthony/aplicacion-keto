@@ -833,11 +833,11 @@ function showAutoMealDetails(meal) {
     var recipeKey = item.id;
     var recipe = null;
     
-    if (typeof recipesDB !== 'undefined' && recipesDB[recipeKey]) {
+    if (recipeKey && typeof recipesDB !== 'undefined' && recipesDB[recipeKey]) {
       recipe = recipesDB[recipeKey];
-    } else if (typeof RECIPES_DB !== 'undefined' && RECIPES_DB[recipeKey]) {
+    } else if (recipeKey && typeof RECIPES_DB !== 'undefined' && RECIPES_DB[recipeKey]) {
       recipe = RECIPES_DB[recipeKey];
-    } else if (recipeKey.startsWith('custom_')) {
+    } else if (recipeKey && recipeKey.startsWith('custom_')) {
       var customRecs = safeParseJSON(localStorage.getItem('customRecipes'), []);
       var found = customRecs.find(function(r) { return ('custom_' + r.id) === recipeKey; });
       if (found) recipe = found;
