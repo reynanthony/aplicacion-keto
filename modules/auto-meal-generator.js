@@ -25,10 +25,14 @@ var autoMealGenerator = (function() {
   function getAllRecipes() {
     var recipes = {};
     
-    // Obtener recetas predefinidas
+    // Obtener recetas predefinidas (puede ser recipesDB o RECIPES_DB)
     if (typeof recipesDB !== 'undefined') {
       Object.keys(recipesDB).forEach(function(key) {
         recipes[key] = recipesDB[key];
+      });
+    } else if (typeof RECIPES_DB !== 'undefined') {
+      Object.keys(RECIPES_DB).forEach(function(key) {
+        recipes[key] = RECIPES_DB[key];
       });
     }
     
