@@ -809,6 +809,18 @@ function showToast(msg){
   setTimeout(function(){ toast.remove(); }, 3000);
 }
 
+document.addEventListener('visibilitychange', function(){
+  if(!document.hidden){
+    loadProfile();
+  }
+});
+
+window.addEventListener('storage', function(e){
+  if(e.key === 'keto_profile' || e.key === 'keto_macros' || e.key === 'weight_history'){
+    loadProfile();
+  }
+});
+
 loadProfile();
 </script>
 </body>
