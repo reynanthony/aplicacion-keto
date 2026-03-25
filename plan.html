@@ -799,8 +799,6 @@ function showAutoMealDetails(meal) {
   if (!generatedAutoPlan || !generatedAutoPlan.plan || !generatedAutoPlan.plan[meal]) return;
   
   var items = generatedAutoPlan.plan[meal];
-  if (items.length === 0) return;
-  
   var mealName = meal.charAt(0).toUpperCase() + meal.slice(1);
   var icons = { desayuno: 'wb_sunny', almuerzo: 'light_mode', cena: 'nightlight', snacks: 'cookie' };
   var colors = { desayuno: 'text-yellow-400', almuerzo: 'text-orange-400', cena: 'text-purple-400', snacks: 'text-pink-400' };
@@ -811,11 +809,33 @@ function showAutoMealDetails(meal) {
   html += '<h3 class="text-xl font-headline font-bold text-white">' + mealName + '</h3>';
   html += '</div>';
   
+  // Info de macros totales
+  var totalCal = items.reduce(function(s, i) { return s + (i.calories || 0); }, 0);
+  var totalProt = items.reduce(function(s, i) { return s + (i.protein || 0); }, 0);
+  var totalFat = items.reduce(function(s, i) { return s + (i.fat || 0); }, 0);
+  var totalCarbs = items.reduce(function(s, i) { return s + (i.carbs || 0); }, 0);
+  
+  html += '<div class="bg-primary-container/20 rounded-xl p-3 mb-4">';
+  html += '<div class="flex items-center justify-between text-xs text-on-surface-variant mb-2"><span>Total comida</span><button onclick="addFoodToAutoMeal(\'' + meal + '\')" class="text-primary-container hover:text-white"><span class="material-symbols-outlined text-sm">add</span> Agregar alimento</button></div>';
+  html += '<div class="grid grid-cols-4 gap-2 text-center">';
+  html += '<div><p class="text-xs text-on-surface-variant">Cal</p><p class="font-bold text-yellow-400">' + totalCal + '</p></div>';
+  html += '<div><p class="text-xs text-on-surface-variant">Prot</p><p class="font-bold text-orange-400">' + totalProt.toFixed(1) + 'g</p></div>';
+  html += '<div><p class="text-xs text-on-surface-variant">Gras</p><p class="font-bold text-yellow-300">' + totalFat.toFixed(1) + 'g</p></div>';
+  html += '<div><p class="text-xs text-on-surface-variant">Carb</p><p class="font-bold text-cyan-400">' + totalCarbs.toFixed(1) + 'g</p></div>';
+  html += '</div></div>';
+  
+  if (items.length === 0) {
+    html += '<div class="text-center py-8 text-on-surface-variant">';
+    html += '<span class="material-symbols-outlined text-4xl mb-2">restaurant</span>';
+    html += '<p>No hay alimentos en esta comida</p>';
+    html += '<button onclick="addFoodToAutoMeal(\'' + meal + '\')" class="mt-4 px-4 py-2 bg-primary-container text-white rounded-xl">Agregar alimento</button>';
+    html += '</div>';
+  }
+  
   items.forEach(function(item, idx) {
     var recipeKey = item.id;
     var recipe = null;
     
-    // Buscar en recipesDB o RECIPES_DB
     if (typeof recipesDB !== 'undefined' && recipesDB[recipeKey]) {
       recipe = recipesDB[recipeKey];
     } else if (typeof RECIPES_DB !== 'undefined' && RECIPES_DB[recipeKey]) {
@@ -829,7 +849,9 @@ function showAutoMealDetails(meal) {
     html += '<div class="bg-surface-container-high rounded-xl p-4 mb-3">';
     html += '<div class="flex items-center justify-between mb-3">';
     html += '<h4 class="font-bold text-white">' + item.name + '</h4>';
-    html += '<button onclick="removeFromAutoPlan(\'' + meal + '\',' + idx + ')" class="text-error/60 hover:text-error"><span class="material-symbols-outlined">delete</span></button>';
+    html += '<div class="flex items-center gap-2">';
+    html += '<button onclick="removeFromAutoPlan(\'' + meal + '\',' + idx + ')" class="text-error/60 hover:text-error" title="Eliminar"><span class="material-symbols-outlined">delete</span></button>';
+    html += '</div>';
     html += '</div>';
     
     html += '<div class="grid grid-cols-4 gap-2 text-center mb-3">';
@@ -839,27 +861,17 @@ function showAutoMealDetails(meal) {
     html += '<div class="bg-surface-container-low rounded-lg p-2"><p class="text-xs text-on-surface-variant">Carb</p><p class="font-bold text-cyan-400">' + item.carbs + 'g</p></div>';
     html += '</div>';
     
-    html += '<div class="flex items-center justify-between text-xs text-on-surface-variant mb-2">';
+    html += '<div class="flex items-center justify-between text-xs text-on-surface-variant">';
     html += '<span>Porción: <span class="text-white font-medium">' + item.portion + 'g</span></span>';
-    html += '<button onclick="adjustAutoPortion(\'' + meal + '\',' + idx + ',-10)" class="px-2 py-1 bg-surface-container-low rounded">-</button>';
-    html += '<button onclick="adjustAutoPortion(\'' + meal + '\',' + idx + ',10)" class="px-2 py-1 bg-surface-container-low rounded">+</button>';
-    html += '</div>';
+    html += '<div class="flex gap-1">';
+    html += '<button onclick="adjustAutoPortion(\'' + meal + '\',' + idx + ',-10)" class="px-2 py-1 bg-surface-container-low rounded hover:bg-surface-container-highest">-10g</button>';
+    html += '<button onclick="adjustAutoPortion(\'' + meal + '\',' + idx + ',10)" class="px-2 py-1 bg-surface-container-low rounded hover:bg-surface-container-highest">+10g</button>';
+    html += '</div></div>';
     
     if (recipe && recipe.prep) {
       html += '<div class="mt-3 pt-3 border-t border-white/10">';
       html += '<p class="text-xs text-primary-container uppercase tracking-wider mb-1">Preparación</p>';
       html += '<p class="text-sm text-white/80">' + recipe.prep + '</p>';
-      html += '</div>';
-    }
-    
-    if (recipe && recipe.ingredients && recipe.ingredients.length > 0) {
-      html += '<div class="mt-3 pt-3 border-t border-white/10">';
-      html += '<p class="text-xs text-secondary uppercase tracking-wider mb-1">Ingredientes</p>';
-      html += '<ul class="text-xs text-white/70 space-y-1">';
-      recipe.ingredients.forEach(function(ing) {
-        html += '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-[10px] text-green-400">check_circle</span>' + ing + '</li>';
-      });
-      html += '</ul>';
       html += '</div>';
     }
     
@@ -905,11 +917,11 @@ function adjustAutoPortion(meal, idx, delta) {
   if (!generatedAutoPlan || !generatedAutoPlan.plan || !generatedAutoPlan.plan[meal] || !generatedAutoPlan.plan[meal][idx]) return;
   
   var item = generatedAutoPlan.plan[meal][idx];
+  var oldPortion = item.portion || item.basePortion;
   item.portion = Math.max(10, item.portion + delta);
   
-  // Recalcular macros proporcionalmente
-  var ratio = item.portion / item.basePortion;
-  item.calories = Math.round((item.calories / (item.portion - delta) * item.portion) || item.calories);
+  var ratio = item.portion / oldPortion;
+  item.calories = Math.round(item.calories * ratio);
   item.protein = Math.round(item.protein * ratio * 10) / 10;
   item.fat = Math.round(item.fat * ratio * 10) / 10;
   item.carbs = Math.round(item.carbs * ratio * 10) / 10;
@@ -927,6 +939,78 @@ function adjustAutoPortion(meal, idx, delta) {
   generatedAutoPlan.resultMacros = total;
   
   // Refresh modal
+  showAutoMealDetails(meal);
+  renderAutoPlanSummary(generatedAutoPlan, document.getElementById('autoPlanSummary'));
+}
+
+function addFoodToAutoMeal(meal) {
+  var despensa = getDespensa();
+  var items = Object.keys(despensa).filter(function(k) { return despensa[k] && despensa[k].stock > 0; });
+  
+  if (items.length === 0) {
+    alert('No hay alimentos en la despensa');
+    return;
+  }
+  
+  var modal = document.createElement('div');
+  modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50';
+  modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
+  
+  var listHtml = '<div class="bg-surface p-6 rounded-2xl max-w-md w-full mx-4 max-h-[80vh] overflow-y-auto">' +
+    '<h3 class="text-lg font-bold mb-4">Agregar alimento a ' + meal + '</h3>' +
+    '<div class="space-y-2">';
+  
+  items.forEach(function(k) {
+    var item = despensa[k];
+    listHtml += '<button onclick="addFoodFromDespensa(\'' + meal + '\', \'' + k.replace(/'/g, "\\'") + '\')" class="w-full p-3 text-left bg-surface-variant rounded-xl hover:bg-primary-container transition flex justify-between items-center">' +
+      '<span>' + item.name + '</span>' +
+      '<span class="text-sm text-on-surface-variant">' + item.stock + ' ' + (item.unit || 'g') + '</span>' +
+    '</button>';
+  });
+  
+  listHtml += '</div><button onclick="this.closest(\'.fixed\').remove()" class="mt-4 w-full py-2 bg-surface-variant rounded-xl">Cancelar</button></div>';
+  modal.innerHTML = listHtml;
+  document.body.appendChild(modal);
+}
+
+function addFoodFromDespensa(meal, itemKey) {
+  var despensa = getDespensa();
+  var item = despensa[itemKey];
+  if (!item || !generatedAutoPlan || !generatedAutoPlan.plan || !generatedAutoPlan.plan[meal]) return;
+  
+  var portion = item.stock || 100;
+  var basePortion = 100;
+  
+  var newItem = {
+    name: item.name,
+    portion: portion,
+    basePortion: basePortion,
+    baseCalories: item.calories || 0,
+    baseProtein: item.protein || 0,
+    baseFat: item.fat || 0,
+    baseCarbs: item.carbs || 0,
+    calories: item.calories || 0,
+    protein: item.protein || 0,
+    fat: item.fat || 0,
+    carbs: item.carbs || 0,
+    fromDespensa: true,
+    despensaKey: itemKey
+  };
+  
+  generatedAutoPlan.plan[meal].push(newItem);
+  
+  var total = { calories: 0, protein: 0, fat: 0, carbs: 0 };
+  Object.keys(generatedAutoPlan.plan).forEach(function(m) {
+    generatedAutoPlan.plan[m].forEach(function(i) {
+      total.calories += i.calories || 0;
+      total.protein += i.protein || 0;
+      total.fat += i.fat || 0;
+      total.carbs += i.carbs || 0;
+    });
+  });
+  generatedAutoPlan.resultMacros = total;
+  
+  document.querySelector('.fixed')?.remove();
   showAutoMealDetails(meal);
   renderAutoPlanSummary(generatedAutoPlan, document.getElementById('autoPlanSummary'));
 }
