@@ -635,6 +635,7 @@ function showToast(message) {
           console.error('[PWA] Error al registrar Service Worker:', error);
         });
     });
+    navigator.serviceWorker.addEventListener('message', event => {});
   }
   let deferredPrompt;
   window.addEventListener('beforeinstallprompt', (e) => {
