@@ -67,9 +67,10 @@ body{font-family:"Inter",sans-serif;background:#0a0a0a;color:#fff}
 .shadow-glow{box-shadow:0 0 20px rgba(255,77,0,0.3)}
 .shadow-glow-strong{box-shadow:0 0 30px rgba(255,77,0,0.5)}
 .cursor-pointer{cursor:pointer}
-input,select{background:#1e1c1c;color:#fff;border:1px solid #484847;border-radius:0.5rem;padding:0.75rem 1rem;font-size:1rem}
-input:focus,select:focus{outline:none;border-color:#ff4d00;ring:2px solid #ff4d00}
+input,select{background:#1e1c1c !important;color:#fff !important;border:1px solid #484847 !important;border-radius:0.5rem;padding:0.75rem 1rem;font-size:1rem;-webkit-appearance:none;-moz-appearance:none;appearance:none}
+input:focus,select:focus{outline:none;border-color:#ff4d00 !important;ring:2px solid #ff4d00}
 input::placeholder{color:#767575}
+select option{background:#1e1c1c;color:#fff}
 .gradient-text{background:linear-gradient(135deg,#ff4d00,#ffb300);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 ::-webkit-scrollbar{width:8px}
 ::-webkit-scrollbar-track{background:#111010}
