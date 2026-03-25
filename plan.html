@@ -736,6 +736,8 @@ function renderAutoPlanSummary(result, container) {
   html += '<span class="text-sm text-on-surface-variant">Recetas disponibles: <span class="text-white font-medium">' + (result.availableRecipeCount || 0) + '</span></span></div>';
   html += '</div>';
   
+  html += '<p class="text-xs text-on-surface-variant mb-2">Toca una comida para ver detalles de las recetas</p>';
+  
   ['desayuno', 'almuerzo', 'cena', 'snacks'].forEach(function(meal) {
     var items = plan[meal];
     var mealCal = items.reduce(function(sum, i) { return sum + (i.calories || 0); }, 0);
@@ -743,11 +745,12 @@ function renderAutoPlanSummary(result, container) {
     var icons = { desayuno: 'wb_sunny', almuerzo: 'light_mode', cena: 'nightlight', snacks: 'cookie' };
     var colors = { desayuno: 'text-yellow-400', almuerzo: 'text-orange-400', cena: 'text-purple-400', snacks: 'text-pink-400' };
     
-    html += '<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-high">';
+    html += '<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-high cursor-pointer hover:bg-surface-container-highest transition-all" onclick="showAutoMealDetails(\'' + meal + '\')">';
     html += '<div class="flex items-center gap-3">';
     html += '<span class="material-symbols-outlined ' + colors[meal] + '">' + icons[meal] + '</span>';
     html += '<div><p class="font-medium text-white">' + mealName + '</p>';
     html += '<p class="text-xs text-on-surface-variant">' + items.length + ' items - ' + mealCal + ' kcal</p></div></div>';
+    html += '<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>';
     html += '</div>';
   });
   
@@ -790,6 +793,142 @@ function applyGeneratedPlan() {
 
 function regenerateAutoPlan() {
   generateAndApplyAutoPlan();
+}
+
+function showAutoMealDetails(meal) {
+  if (!generatedAutoPlan || !generatedAutoPlan.plan || !generatedAutoPlan.plan[meal]) return;
+  
+  var items = generatedAutoPlan.plan[meal];
+  if (items.length === 0) return;
+  
+  var mealName = meal.charAt(0).toUpperCase() + meal.slice(1);
+  var icons = { desayuno: 'wb_sunny', almuerzo: 'light_mode', cena: 'nightlight', snacks: 'cookie' };
+  var colors = { desayuno: 'text-yellow-400', almuerzo: 'text-orange-400', cena: 'text-purple-400', snacks: 'text-pink-400' };
+  
+  var html = '';
+  html += '<div class="flex items-center gap-3 mb-4">';
+  html += '<span class="material-symbols-outlined ' + colors[meal] + ' text-2xl">' + icons[meal] + '</span>';
+  html += '<h3 class="text-xl font-headline font-bold text-white">' + mealName + '</h3>';
+  html += '</div>';
+  
+  items.forEach(function(item, idx) {
+    var recipeKey = item.id;
+    var recipe = null;
+    
+    // Buscar en recipesDB o RECIPES_DB
+    if (typeof recipesDB !== 'undefined' && recipesDB[recipeKey]) {
+      recipe = recipesDB[recipeKey];
+    } else if (typeof RECIPES_DB !== 'undefined' && RECIPES_DB[recipeKey]) {
+      recipe = RECIPES_DB[recipeKey];
+    } else if (recipeKey.startsWith('custom_')) {
+      var customRecs = safeParseJSON(localStorage.getItem('customRecipes'), []);
+      var found = customRecs.find(function(r) { return ('custom_' + r.id) === recipeKey; });
+      if (found) recipe = found;
+    }
+    
+    html += '<div class="bg-surface-container-high rounded-xl p-4 mb-3">';
+    html += '<div class="flex items-center justify-between mb-3">';
+    html += '<h4 class="font-bold text-white">' + item.name + '</h4>';
+    html += '<button onclick="removeFromAutoPlan(\'' + meal + '\',' + idx + ')" class="text-error/60 hover:text-error"><span class="material-symbols-outlined">delete</span></button>';
+    html += '</div>';
+    
+    html += '<div class="grid grid-cols-4 gap-2 text-center mb-3">';
+    html += '<div class="bg-surface-container-low rounded-lg p-2"><p class="text-xs text-on-surface-variant">Cal</p><p class="font-bold text-yellow-400">' + item.calories + '</p></div>';
+    html += '<div class="bg-surface-container-low rounded-lg p-2"><p class="text-xs text-on-surface-variant">Prot</p><p class="font-bold text-orange-400">' + item.protein + 'g</p></div>';
+    html += '<div class="bg-surface-container-low rounded-lg p-2"><p class="text-xs text-on-surface-variant">Gras</p><p class="font-bold text-yellow-300">' + item.fat + 'g</p></div>';
+    html += '<div class="bg-surface-container-low rounded-lg p-2"><p class="text-xs text-on-surface-variant">Carb</p><p class="font-bold text-cyan-400">' + item.carbs + 'g</p></div>';
+    html += '</div>';
+    
+    html += '<div class="flex items-center justify-between text-xs text-on-surface-variant mb-2">';
+    html += '<span>Porción: <span class="text-white font-medium">' + item.portion + 'g</span></span>';
+    html += '<button onclick="adjustAutoPortion(\'' + meal + '\',' + idx + ',-10)" class="px-2 py-1 bg-surface-container-low rounded">-</button>';
+    html += '<button onclick="adjustAutoPortion(\'' + meal + '\',' + idx + ',10)" class="px-2 py-1 bg-surface-container-low rounded">+</button>';
+    html += '</div>';
+    
+    if (recipe && recipe.prep) {
+      html += '<div class="mt-3 pt-3 border-t border-white/10">';
+      html += '<p class="text-xs text-primary-container uppercase tracking-wider mb-1">Preparación</p>';
+      html += '<p class="text-sm text-white/80">' + recipe.prep + '</p>';
+      html += '</div>';
+    }
+    
+    if (recipe && recipe.ingredients && recipe.ingredients.length > 0) {
+      html += '<div class="mt-3 pt-3 border-t border-white/10">';
+      html += '<p class="text-xs text-secondary uppercase tracking-wider mb-1">Ingredientes</p>';
+      html += '<ul class="text-xs text-white/70 space-y-1">';
+      recipe.ingredients.forEach(function(ing) {
+        html += '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-[10px] text-green-400">check_circle</span>' + ing + '</li>';
+      });
+      html += '</ul>';
+      html += '</div>';
+    }
+    
+    html += '</div>';
+  });
+  
+  var modal = document.createElement('div');
+  modal.id = 'autoMealDetailModal';
+  modal.className = 'fixed inset-0 z-[70] flex items-center justify-center p-4';
+  modal.innerHTML = '<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeAutoMealModal()"></div><div class="glass-card rounded-2xl p-6 w-full max-h-[80vh] overflow-y-auto relative"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-headline font-bold text-white">Detalles de ' + mealName + '</h3><button onclick="closeAutoMealModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10"><span class="material-symbols-outlined">close</span></button></div>' + html + '</div>';
+  
+  document.body.appendChild(modal);
+}
+
+function closeAutoMealModal() {
+  var modal = document.getElementById('autoMealDetailModal');
+  if (modal) modal.remove();
+}
+
+function removeFromAutoPlan(meal, idx) {
+  if (!generatedAutoPlan || !generatedAutoPlan.plan || !generatedAutoPlan.plan[meal]) return;
+  
+  generatedAutoPlan.plan[meal].splice(idx, 1);
+  
+  // Recalcular macros
+  var total = { calories: 0, protein: 0, fat: 0, carbs: 0 };
+  Object.keys(generatedAutoPlan.plan).forEach(function(m) {
+    generatedAutoPlan.plan[m].forEach(function(item) {
+      total.calories += item.calories || 0;
+      total.protein += item.protein || 0;
+      total.fat += item.fat || 0;
+      total.carbs += item.carbs || 0;
+    });
+  });
+  generatedAutoPlan.resultMacros = total;
+  
+  // Refresh modal
+  showAutoMealDetails(meal);
+  renderAutoPlanSummary(generatedAutoPlan, document.getElementById('autoPlanSummary'));
+}
+
+function adjustAutoPortion(meal, idx, delta) {
+  if (!generatedAutoPlan || !generatedAutoPlan.plan || !generatedAutoPlan.plan[meal] || !generatedAutoPlan.plan[meal][idx]) return;
+  
+  var item = generatedAutoPlan.plan[meal][idx];
+  item.portion = Math.max(10, item.portion + delta);
+  
+  // Recalcular macros proporcionalmente
+  var ratio = item.portion / item.basePortion;
+  item.calories = Math.round((item.calories / (item.portion - delta) * item.portion) || item.calories);
+  item.protein = Math.round(item.protein * ratio * 10) / 10;
+  item.fat = Math.round(item.fat * ratio * 10) / 10;
+  item.carbs = Math.round(item.carbs * ratio * 10) / 10;
+  
+  // Recalcular total
+  var total = { calories: 0, protein: 0, fat: 0, carbs: 0 };
+  Object.keys(generatedAutoPlan.plan).forEach(function(m) {
+    generatedAutoPlan.plan[m].forEach(function(i) {
+      total.calories += i.calories || 0;
+      total.protein += i.protein || 0;
+      total.fat += i.fat || 0;
+      total.carbs += i.carbs || 0;
+    });
+  });
+  generatedAutoPlan.resultMacros = total;
+  
+  // Refresh modal
+  showAutoMealDetails(meal);
+  renderAutoPlanSummary(generatedAutoPlan, document.getElementById('autoPlanSummary'));
 }
 
 // Inicializar modo
