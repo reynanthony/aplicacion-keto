@@ -296,7 +296,7 @@ Importar Backup
 </div>
 
 <!-- Weight Update Modal -->
-<div id="weightModal" class="fixed inset-0 z-[70] hidden">
+<div id="weightModal" class="fixed inset-0 hidden" style="z-index: 9999;">
 <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWeightModal()"></div>
 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md glass-card rounded-2xl p-6 shadow-2xl">
 <div class="flex items-center justify-between mb-6">
@@ -757,16 +757,12 @@ function toggleSidebar() {
 }
 
 function showUpdateWeightModal() {
-  console.log('showUpdateWeightModal called');
   var modal = document.getElementById('weightModal');
   var input = document.getElementById('newWeightInput');
   var currentWeight = localStorage.getItem('currentWeight') || '70';
   if (input) input.value = currentWeight;
   if (modal) {
     modal.classList.remove('hidden');
-    console.log('Modal should be visible now');
-  } else {
-    console.log('Modal not found!');
   }
   document.body.style.overflow = 'hidden';
 }
