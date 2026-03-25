@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="manifest" href="/aplicacion-keto/manifest.json">
+<link rel="icon" type="image/svg+xml" href="/aplicacion-keto/favicon.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KetoLab">
+<link rel="apple-touch-icon" href="/aplicacion-keto/icons/icon-192x192.png">
+<meta name="theme-color" content="#ff4d00">
+<meta name="mobile-web-app-capable" content="yes">
+<title>KetoLab | Perfil</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#ffccbc",
+        "primary-container": "#ff4d00",
+        "on-primary": "#ffffff",
+        "on-primary-container": "#ffffff",
+        "surface": "#0a0a0a",
+        "surface-container": "#181717",
+        "surface-container-low": "#111010",
+        "surface-container-high": "#1e1c1c",
+        "surface-container-highest": "#242222",
+        "on-surface": "#ffffff",
+        "on-surface-variant": "#adaaaa",
+        "outline": "#767575",
+        "outline-variant": "#484847",
+        "secondary": "#ffb300",
+        "secondary-container": "#b45309",
+        "tertiary": "#ffc107",
+        "error": "#ff7351",
+        "background": "#0a0a0a"
+      },
+      fontFamily: {
+        "headline": ["Plus Jakarta Sans", "sans-serif"],
+        "body": ["Inter", "sans-serif"],
+        "label": ["Inter", "sans-serif"]
+      },
+      borderRadius: {"DEFAULT": "1rem", "lg": "2rem"}
+    }
+  }
+}
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Inter",sans-serif;background:#0a0a0a;color:#fff}
+.glass-card{background:rgba(30,28,28,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1)}
+.sidebar-link{display:flex;align-items:center;gap:1rem;padding:0.75rem 1rem;margin:0 0.5rem;border-radius:9999px;background:#1e1c1c;font-size:0.875rem;font-weight:700;transition:all 0.2s}
+.sidebar-link:hover{background:#242222}
+.sidebar-link.active{background:#242222}
+.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
+.sidebar-logo{display:flex;align-items:center;gap:0.75rem}
+.sidebar-logo-text h1{font-size:1.125rem;font-weight:900;color:#ff4d00;letter-spacing:-0.02em}
+.sidebar-logo-text span{font-size:0.5625rem;color:rgba(255,255,255,0.4);letter-spacing:0.2em;text-transform:uppercase}
+.sidebar-collapsed .sidebar-logo-text,.sidebar-collapsed .sidebar-text{display:none}
+.sidebar-collapsed .sidebar-link{justify-content:center;padding:0.75rem}
+.shadow-glow{box-shadow:0 0 20px rgba(255,77,0,0.3)}
+.shadow-glow-strong{box-shadow:0 0 30px rgba(255,77,0,0.5)}
+.cursor-pointer{cursor:pointer}
+input,select{background:#1e1c1c;color:#fff;border:1px solid #484847;border-radius:0.5rem;padding:0.75rem 1rem;font-size:1rem}
+input:focus,select:focus{outline:none;border-color:#ff4d00;ring:2px solid #ff4d00}
+input::placeholder{color:#767575}
+.gradient-text{background:linear-gradient(135deg,#ff4d00,#ffb300);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:#111010}
+::-webkit-scrollbar-thumb{background:#242222;border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:#484847}
+</style>
+</head>
+<body class="bg-background text-on-surface font-body overflow-x-hidden selection:bg-primary-container selection:text-on-primary">
+
+<nav id="sidebarNav" class="sidebar-nav hidden md:flex fixed left-0 top-0 h-full w-64 flex-col py-6 bg-surface-container-low z-50 border-r border-primary-container/10 transition-all duration-300">
+<div class="px-4 mb-8 flex items-center justify-center">
+<div class="flex items-center justify-center sidebar-logo">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-white text-lg" style="font-variation-settings: 'FILL' 1;">nutrition</span>
+</div>
+<div class="sidebar-logo-text">
+<h1 class="text-lg font-black text-primary-container font-headline tracking-tighter">KetoLab</h1>
+<span class="text-[9px] text-white/40 font-label tracking-[0.2em] uppercase">High-Performance Fuel</span>
+</div>
+</div>
+</div>
+<div class="flex-1 space-y-1 px-4">
+<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="index.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="sidebar-text">Inicio</span>
+</a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="alimentos.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="sidebar-text">Alimentos</span>
+</a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="plan.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+<span class="sidebar-text">Plan</span>
+</a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="recetas.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
+<span class="sidebar-text">Recetas</span>
+</a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="compras.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shopping_cart</span>
+<span class="sidebar-text">Compras</span>
+</a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="perfil.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="sidebar-text">Perfil</span>
+</a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="checklist.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">checklist</span>
+<span class="sidebar-text">Daily</span>
+</a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="entrenamientos.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+<span class="sidebar-text">Entreno</span>
+</a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="suplementos.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">medication</span>
+<span class="sidebar-text">Suplementos</span>
+</a>
+</div>
+</nav>
+
+<button id="sidebarToggle" class="sidebar-toggle-btn fixed top-6 left-64 z-50 w-8 h-8 bg-surface-container-high rounded-full flex items-center justify-center text-white/60 hover:text-primary-container transition-all" onclick="toggleSidebar()">
+<span class="material-symbols-outlined text-lg">chevron_left</span>
+</button>
+
+<div class="topbar-pl pl-72 pr-6 py-4 flex items-center justify-between bg-surface-container-low/50 backdrop-blur-sm sticky top-0 z-40 transition-all duration-300">
+<div class="flex items-center gap-4">
+<button class="md:hidden w-10 h-10 bg-surface-container-high rounded-full flex items-center justify-center" onclick="toggleMobileSidebar()">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="text-xl font-headline font-bold text-white">Mi Perfil</h2>
+</div>
+<div class="flex items-center gap-3">
+<button onclick="toggleTheme()" class="w-10 h-10 bg-surface-container-high rounded-full flex items-center justify-center hover:bg-surface-container-highest transition-all">
+<span class="material-symbols-outlined text-white/70 hover:text-white" id="themeIcon">light_mode</span>
+</button>
+</div>
+</div>
+
+<main class="main-content ml-0 md:ml-64 p-4 md:p-8 transition-all duration-300">
+<div class="max-w-7xl mx-auto space-y-8">
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 space-y-6">
+<div class="glass-card rounded-2xl p-6">
+<h3 class="text-lg font-headline font-bold text-white mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">person</span>
+Datos Personales
+</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm text-on-surface-variant mb-2">Nombre</label>
+<input type="text" id="userName" class="w-full" placeholder="Tu nombre" onchange="saveProfile()">
+</div>
+<div>
+<label class="block text-sm text-on-surface-variant mb-2">Edad</label>
+<input type="number" id="age" class="w-full" placeholder="30" onchange="saveProfile()">
+</div>
+<div>
+<label class="block text-sm text-on-surface-variant mb-2">Sexo</label>
+<select id="sex" class="w-full" onchange="saveProfile()">
+<option value="">Seleccionar</option>
+<option value="male">Masculino</option>
+<option value="female">Femenino</option>
+</select>
+</div>
+<div>
+<label class="block text-sm text-on-surface-variant mb-2">Altura (cm)</label>
+<input type="number" id="height" class="w-full" placeholder="170" onchange="saveProfile()">
+</div>
+<div>
+<label class="block text-sm text-on-surface-variant mb-2">Peso Actual (kg)</label>
+<input type="number" id="currentWeight" step="0.1" class="w-full" placeholder="70" onchange="saveProfile()">
+</div>
+<div>
+<label class="block text-sm text-on-surface-variant mb-2">Peso Meta (kg)</label>
+<input type="number" id="goalWeight" step="0.1" class="w-full" placeholder="65" onchange="saveProfile()">
+</div>
+<div>
+<label class="block text-sm text-on-surface-variant mb-2">Nivel de Actividad</label>
+<select id="activity" class="w-full" onchange="saveProfile()">
+<option value="1.2">Sedentario</option>
+<option value="1.375">Ligero (1-3 dias/semana)</option>
+<option value="1.55">Moderado (3-5 dias/semana)</option>
+<option value="1.725">Activo (6-7 dias/semana)</option>
+<option value="1.9">Muy Activo (atleta)</option>
+</select>
+</div>
+<div>
+<label class="block text-sm text-on-surface-variant mb-2">Meses en Keto</label>
+<input type="number" id="monthsOnKeto" class="w-full" placeholder="1" onchange="saveProfile()">
+</div>
+</div>
+</div>
+
+<div class="glass-card rounded-2xl p-6">
+<h3 class="text-lg font-headline font-bold text-white mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">fitness_center</span>
+Perfil de Entrenamiento
+</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm text-on-surface-variant mb-2">Tipo de Entrenamiento</label>
+<select id="trainingType" class="w-full" onchange="saveProfile()">
+<option value="bodyweight">Solo Peso Corporal</option>
+<option value="dumbbells">Mancuernas</option>
+<option value="weights">Pesas/Barra</option>
+<option value="both">Mancuernas y Pesas</option>
+<option value="machines">Maquinas</option>
+</select>
+</div>
+<div>
+<label class="block text-sm text-on-surface-variant mb-2">Frecuencia (dias/semana)</label>
+<select id="trainingFreq" class="w-full" onchange="saveProfile()">
+<option value="1">1 dia</option>
+<option value="2">2 dias</option>
+<option value="3">3 dias</option>
+<option value="4">4 dias</option>
+<option value="5">5 dias</option>
+<option value="6">6 dias</option>
+<option value="7">7 dias</option>
+</select>
+</div>
+<div>
+<label class="block text-sm text-on-surface-variant mb-2">Objetivo Principal</label>
+<select id="trainingGoal" class="w-full" onchange="saveProfile()">
+<option value="lose">Perder Grasa</option>
+<option value="maintain">Mantener</option>
+<option value="gain">Ganar Musculo</option>
+<option value="strength">Fuerza</option>
+</select>
+</div>
+<div>
+<label class="block text-sm text-on-surface-variant mb-2">Experiencia</label>
+<select id="experience" class="w-full" onchange="saveProfile()">
+<option value="beginner">Principiante</option>
+<option value="intermediate">Intermedio</option>
+<option value="advanced">Avanzado</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+
+<div class="space-y-6">
+<div class="glass-card rounded-2xl p-6">
+<h3 class="text-lg font-headline font-bold text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">monitor_weight</span>
+Registro de Peso
+</h3>
+<button onclick="showWeightModal()" class="w-full py-4 bg-primary-container text-white rounded-xl font-bold hover:bg-primary-container/80 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span>
+Registrar Peso Hoy
+</button>
+<div id="weightStats" class="mt-4 space-y-3">
+<p class="text-sm text-on-surface-variant">Peso actual: <span id="displayWeight" class="text-white font-bold">--</span> kg</p>
+<p class="text-sm text-on-surface-variant">Meta: <span id="displayGoal" class="text-white font-bold">--</span> kg</p>
+<p class="text-sm text-on-surface-variant">Diferencia: <span id="displayDiff" class="text-white font-bold">--</span> kg</p>
+</div>
+</div>
+
+<div class="glass-card rounded-2xl p-6">
+<h3 class="text-lg font-headline font-bold text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">insights</span>
+Resumen Metabólico
+</h3>
+<div id="metabolicStats" class="space-y-3">
+<div class="flex justify-between p-3 bg-surface-container-high rounded-lg">
+<span class="text-on-surface-variant text-sm">BMR</span>
+<span id="bmrValue" class="text-white font-bold">--</span>
+</div>
+<div class="flex justify-between p-3 bg-surface-container-high rounded-lg">
+<span class="text-on-surface-variant text-sm">TDEE</span>
+<span id="tdeeValue" class="text-white font-bold">--</span>
+</div>
+<div class="flex justify-between p-3 bg-surface-container-high rounded-lg">
+<span class="text-on-surface-variant text-sm">Calorías Meta</span>
+<span id="caloriesValue" class="text-primary-container font-bold">--</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="glass-card rounded-2xl p-6">
+<h3 class="text-lg font-headline font-bold text-white mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">show_chart</span>
+Progreso y Métricas
+</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="bg-surface-container-high rounded-xl p-4">
+<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">Peso Perdido</p>
+<p id="weightLost" class="text-2xl font-headline font-bold text-white">-- kg</p>
+</div>
+<div class="bg-surface-container-high rounded-xl p-4">
+<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">Semana en Keto</p>
+<p id="ketoWeeks" class="text-2xl font-headline font-bold text-white">--</p>
+</div>
+<div class="bg-surface-container-high rounded-xl p-4">
+<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">Entrenos Totales</p>
+<p id="totalWorkouts" class="text-2xl font-headline font-bold text-white">--</p>
+</div>
+<div class="bg-surface-container-high rounded-xl p-4">
+<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">Racha Actual</p>
+<p id="streakDays" class="text-2xl font-headline font-bold text-secondary">-- dias</p>
+</div>
+</div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div class="glass-card rounded-2xl p-6">
+<h3 class="text-lg font-headline font-bold text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">timeline</span>
+Historial de Peso
+</h3>
+<canvas id="weightChart" height="200"></canvas>
+</div>
+<div class="glass-card rounded-2xl p-6">
+<h3 class="text-lg font-headline font-bold text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">pie_chart</span>
+Macronutrientes
+</h3>
+<canvas id="macrosChart" height="200"></canvas>
+</div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div class="glass-card rounded-2xl p-6">
+<h3 class="text-lg font-headline font-bold text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">fitness_center</span>
+Actividad Semanal
+</h3>
+<canvas id="activityChart" height="200"></canvas>
+</div>
+<div class="glass-card rounded-2xl p-6">
+<h3 class="text-lg font-headline font-bold text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">calendar_today</span>
+Consistencia (Ultimos 30 dias)
+</h3>
+<canvas id="consistencyChart" height="200"></canvas>
+</div>
+</div>
+
+</div>
+</main>
+
+<div id="weightModal" class="fixed inset-0 hidden" style="z-index: 9999;">
+<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWeightModal()"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md glass-card rounded-2xl p-6 shadow-2xl">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-headline font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">monitor_weight</span>
+Registrar Peso
+</h3>
+<button onclick="closeWeightModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+</div>
+<div class="space-y-4">
+<p class="text-sm text-on-surface-variant">Ingresa tu peso de hoy:</p>
+<input type="number" id="newWeightInput" step="0.1" min="20" max="300" class="w-full py-4 px-4 bg-surface-container-high text-white rounded-xl font-medium text-lg focus:outline-none focus:ring-2 focus:ring-primary-container" placeholder="Peso en kg">
+<button onclick="saveWeight()" class="w-full py-4 bg-primary-container text-white rounded-xl font-bold hover:bg-primary-container/80 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">save</span>
+Guardar
+</button>
+</div>
+<div class="mt-4 pt-4 border-t border-white/10">
+<h4 class="text-sm font-bold text-white mb-2">Historial Reciente</h4>
+<div id="weightHistoryList" class="space-y-2 max-h-40 overflow-y-auto"></div>
+</div>
+</div>
+</div>
+
+<script>
+var weightChart, macrosChart, activityChart, consistencyChart;
+
+function toggleTheme(){
+  document.documentElement.classList.toggle('dark');
+  localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  var icon = document.querySelector('#themeIcon');
+  if(icon) icon.textContent = document.documentElement.classList.contains('dark') ? 'light_mode' : 'dark_mode';
+}
+
+function toggleSidebar(){
+  var body = document.body;
+  var sidebar = document.getElementById('sidebarNav');
+  var toggleBtn = document.getElementById('sidebarToggle');
+  body.classList.toggle('sidebar-collapsed');
+  if(body.classList.contains('sidebar-collapsed')){
+    sidebar.style.width = '72px';
+    toggleBtn.style.left = '72px';
+    toggleBtn.innerHTML = '<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_right</span>';
+    localStorage.setItem('sidebarCollapsed', 'true');
+  }else{
+    sidebar.style.width = '256px';
+    toggleBtn.style.left = '256px';
+    toggleBtn.innerHTML = '<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_left</span>';
+    localStorage.setItem('sidebarCollapsed', 'false');
+  }
+}
+
+if(localStorage.getItem('theme') === 'dark' || !localStorage.getItem('theme')){
+  document.documentElement.classList.add('dark');
+}
+
+if(localStorage.getItem('sidebarCollapsed') === 'true'){
+  document.body.classList.add('sidebar-collapsed');
+  var s = document.getElementById('sidebarNav');
+  var t = document.getElementById('sidebarToggle');
+  if(s) s.style.width = '72px';
+  if(t) t.style.left = '72px';
+}
+
+document.querySelectorAll('.sidebar-link').forEach(function(link){
+  if(link.getAttribute('href') === 'perfil.html'){
+    link.classList.add('active');
+  }
+});
+
+function loadProfile(){
+  var p = {};
+  try{ p = JSON.parse(localStorage.getItem('keto_profile') || '{}'); }catch(e){ p = {}; }
+  if(p.name) document.getElementById('userName').value = p.name;
+  if(p.age) document.getElementById('age').value = p.age;
+  if(p.sex) document.getElementById('sex').value = p.sex;
+  if(p.height) document.getElementById('height').value = p.height;
+  if(p.weight) document.getElementById('currentWeight').value = p.weight;
+  if(p.goalWeight) document.getElementById('goalWeight').value = p.goalWeight;
+  if(p.activityLevel) document.getElementById('activity').value = p.activityLevel;
+  if(p.monthsOnKeto) document.getElementById('monthsOnKeto').value = p.monthsOnKeto;
+  if(p.trainingType) document.getElementById('trainingType').value = p.trainingType;
+  if(p.trainingFreq) document.getElementById('trainingFreq').value = p.trainingFreq;
+  if(p.trainingGoal) document.getElementById('trainingGoal').value = p.trainingGoal;
+  if(p.experience) document.getElementById('experience').value = p.experience;
+  updateStats();
+  loadCharts();
+}
+
+function saveProfile(){
+  var name = document.getElementById('userName').value;
+  var age = parseInt(document.getElementById('age').value) || 30;
+  var sex = document.getElementById('sex').value;
+  var height = parseInt(document.getElementById('height').value) || 170;
+  var currentWeight = parseFloat(document.getElementById('currentWeight').value) || 70;
+  var goalWeight = parseFloat(document.getElementById('goalWeight').value) || 65;
+  var activity = parseFloat(document.getElementById('activity').value) || 1.55;
+  var monthsOnKeto = parseInt(document.getElementById('monthsOnKeto').value) || 1;
+  var trainingType = document.getElementById('trainingType').value || 'bodyweight';
+  var trainingFreq = document.getElementById('trainingFreq').value || '3';
+  var trainingGoal = document.getElementById('trainingGoal').value || 'lose';
+  var experience = document.getElementById('experience').value || 'beginner';
+  
+  var goal = trainingGoal === 'lose' ? -0.2 : (trainingGoal === 'gain' ? 0.1 : 0);
+  
+  var profile = {
+    name: name,
+    age: age,
+    sex: sex,
+    height: height,
+    weight: currentWeight,
+    goalWeight: goalWeight,
+    activityLevel: activity,
+    monthsOnKeto: monthsOnKeto,
+    trainingType: trainingType,
+    trainingFreq: trainingFreq,
+    trainingGoal: trainingGoal,
+    experience: experience
+  };
+  
+  var bmr = sex === 'male' ? 10 * currentWeight + 6.25 * height - 5 * age + 5 : 10 * currentWeight + 6.25 * height - 5 * age - 161;
+  var tdee = bmr * activity;
+  var adjustedCalories = tdee * (1 + goal);
+  var protein = Math.round(currentWeight * 2.2);
+  var fat = Math.round((adjustedCalories - protein * 4) / 9);
+  var carbs = Math.round((adjustedCalories * 0.05) / 4);
+  
+  var macros = {
+    calories: Math.round(adjustedCalories),
+    protein: protein,
+    fat: fat,
+    carbs: carbs,
+    bmr: Math.round(bmr),
+    tdee: Math.round(tdee)
+  };
+  
+  localStorage.setItem('keto_profile', JSON.stringify(profile));
+  localStorage.setItem('keto_macros', JSON.stringify(macros));
+  
+  saveWeightToHistory(currentWeight);
+  updateStats();
+  loadCharts();
+  
+  showToast('Perfil guardado');
+}
+
+function saveWeightToHistory(weight){
+  var today = new Date().toISOString().slice(0, 10);
+  var history = [];
+  try{ history = JSON.parse(localStorage.getItem('weight_history') || '[]'); }catch(e){ history = []; }
+  
+  var existing = history.findIndex(function(h){ return h.date === today; });
+  if(existing >= 0){
+    history[existing].weight = weight;
+  }else{
+    history.push({ date: today, weight: weight });
+  }
+  
+  history.sort(function(a, b){ return new Date(a.date) - new Date(b.date); });
+  localStorage.setItem('weight_history', JSON.stringify(history));
+  
+  localStorage.setItem('currentWeight', weight);
+}
+
+function showWeightModal(){
+  var modal = document.getElementById('weightModal');
+  var input = document.getElementById('newWeightInput');
+  var currentWeight = localStorage.getItem('currentWeight') || document.getElementById('currentWeight').value || '70';
+  input.value = currentWeight;
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  loadWeightHistoryList();
+}
+
+function closeWeightModal(){
+  var modal = document.getElementById('weightModal');
+  modal.classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+function saveWeight(){
+  var input = document.getElementById('newWeightInput');
+  var newWeight = parseFloat(input.value);
+  
+  if(!newWeight || newWeight < 20 || newWeight > 300){
+    showToast('Peso inválido');
+    return;
+  }
+  
+  saveWeightToHistory(newWeight);
+  document.getElementById('currentWeight').value = newWeight;
+  saveProfile();
+  closeWeightModal();
+  showToast('Peso registrado: ' + newWeight + ' kg');
+}
+
+function loadWeightHistoryList(){
+  var container = document.getElementById('weightHistoryList');
+  var history = [];
+  try{ history = JSON.parse(localStorage.getItem('weight_history') || '[]'); }catch(e){ history = []; }
+  
+  var recent = history.slice(-7).reverse();
+  if(recent.length === 0){
+    container.innerHTML = '<p class="text-sm text-on-surface-variant">Sin historial</p>';
+    return;
+  }
+  
+  container.innerHTML = recent.map(function(h){
+    return '<div class="flex justify-between text-sm"><span class="text-on-surface-variant">' + h.date + '</span><span class="text-white font-bold">' + h.weight + ' kg</span></div>';
+  }).join('');
+}
+
+function updateStats(){
+  var profile = {};
+  var macros = {};
+  var workouts = [];
+  
+  try{ profile = JSON.parse(localStorage.getItem('keto_profile') || '{}'); }catch(e){}
+  try{ macros = JSON.parse(localStorage.getItem('keto_macros') || '{}'); }catch(e){}
+  try{ workouts = JSON.parse(localStorage.getItem('ketoWorkouts') || '[]'); }catch(e){ workouts = []; }
+  
+  var currentWeight = parseFloat(profile.weight) || 70;
+  var goalWeight = parseFloat(profile.goalWeight) || 65;
+  var diff = currentWeight - goalWeight;
+  
+  document.getElementById('displayWeight').textContent = currentWeight;
+  document.getElementById('displayGoal').textContent = goalWeight;
+  document.getElementById('displayDiff').textContent = (diff > 0 ? '+' : '') + diff.toFixed(1);
+  
+  document.getElementById('bmrValue').textContent = (macros.bmr || '--') + ' kcal';
+  document.getElementById('tdeeValue').textContent = (macros.tdee || '--') + ' kcal';
+  document.getElementById('caloriesValue').textContent = (macros.calories || '--') + ' kcal';
+  
+  var history = [];
+  try{ history = JSON.parse(localStorage.getItem('weight_history') || '[]'); }catch(e){}
+  
+  if(history.length >= 2){
+    var first = history[0].weight;
+    var last = history[history.length - 1].weight;
+    var lost = first - last;
+    document.getElementById('weightLost').textContent = (lost > 0 ? '-' : '+') + Math.abs(lost).toFixed(1) + ' kg';
+  }else{
+    document.getElementById('weightLost').textContent = '-- kg';
+  }
+  
+  var weeks = Math.floor((profile.monthsOnKeto || 1) * 4);
+  document.getElementById('ketoWeeks').textContent = weeks;
+  
+  document.getElementById('totalWorkouts').textContent = workouts.length;
+  
+  var streak = calculateStreak();
+  document.getElementById('streakDays').textContent = streak + ' dias';
+}
+
+function calculateStreak(){
+  var today = new Date().toISOString().slice(0, 10);
+  var streak = 0;
+  var checkDate = new Date();
+  
+  for(var i = 0; i < 30; i++){
+    var dateKey = checkDate.toISOString().slice(0, 10);
+    var checklist = {};
+    try{ checklist = JSON.parse(localStorage.getItem('checklist_' + dateKey) || '{}'); }catch(e){}
+    
+    var hasActivity = checklist.workout > 0 || checklist.walk > 30;
+    if(hasActivity){
+      streak++;
+      checkDate.setDate(checkDate.getDate() - 1);
+    }else if(i === 0){
+      checkDate.setDate(checkDate.getDate() - 1);
+    }else{
+      break;
+    }
+  }
+  
+  return streak;
+}
+
+function loadCharts(){
+  loadWeightChart();
+  loadMacrosChart();
+  loadActivityChart();
+  loadConsistencyChart();
+}
+
+function loadWeightChart(){
+  var ctx = document.getElementById('weightChart').getContext('2d');
+  var history = [];
+  try{ history = JSON.parse(localStorage.getItem('weight_history') || '[]'); }catch(e){ history = []; }
+  
+  var labels = history.map(function(h){ return h.date.slice(5); });
+  var data = history.map(function(h){ return h.weight; });
+  
+  if(weightChart) weightChart.destroy();
+  
+  weightChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Peso (kg)',
+        data: data,
+        borderColor: '#ff4d00',
+        backgroundColor: 'rgba(255, 77, 0, 0.1)',
+        fill: true,
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#242222' }, ticks: { color: '#adaaaa' } },
+        y: { grid: { color: '#242222' }, ticks: { color: '#adaaaa' } }
+      }
+    }
+  });
+}
+
+function loadMacrosChart(){
+  var ctx = document.getElementById('macrosChart').getContext('2d');
+  var macros = {};
+  try{ macros = JSON.parse(localStorage.getItem('keto_macros') || '{}'); }catch(e){}
+  
+  if(macrosChart) macrosChart.destroy();
+  
+  macrosChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Proteína', 'Grasa', 'Carbs'],
+      datasets: [{
+        data: [macros.protein || 150, macros.fat || 120, macros.carbs || 20],
+        backgroundColor: ['#ff4d00', '#ffb300', '#4caf50'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } }
+    }
+  });
+}
+
+function loadActivityChart(){
+  var ctx = document.getElementById('activityChart').getContext('2d');
+  var labels = [];
+  var workoutData = [];
+  var walkData = [];
+  
+  for(var i = 6; i >= 0; i--){
+    var d = new Date();
+    d.setDate(d.getDate() - i);
+    var dateKey = d.toISOString().slice(0, 10);
+    labels.push(d.toLocaleDateString('es', { weekday: 'short' }));
+    
+    var checklist = {};
+    try{ checklist = JSON.parse(localStorage.getItem('checklist_' + dateKey) || '{}'); }catch(e){}
+    workoutData.push(checklist.workout || 0);
+    walkData.push(checklist.walk || 0);
+  }
+  
+  if(activityChart) activityChart.destroy();
+  
+  activityChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        { label: 'Entreno (min)', data: workoutData, backgroundColor: '#ff4d00' },
+        { label: 'Caminata (min)', data: walkData, backgroundColor: '#ffb300' }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } },
+      scales: {
+        x: { grid: { color: '#242222' }, ticks: { color: '#adaaaa' } },
+        y: { grid: { color: '#242222' }, ticks: { color: '#adaaaa' } }
+      }
+    }
+  });
+}
+
+function loadConsistencyChart(){
+  var ctx = document.getElementById('consistencyChart').getContext('2d');
+  var data = [];
+  var labels = [];
+  
+  for(var i = 29; i >= 0; i--){
+    var d = new Date();
+    d.setDate(d.getDate() - i);
+    var dateKey = d.toISOString().slice(0, 10);
+    labels.push(d.getDate());
+    
+    var checklist = {};
+    try{ checklist = JSON.parse(localStorage.getItem('checklist_' + dateKey) || '{}'); }catch(e){}
+    
+    var score = 0;
+    if(checklist.water >= 2.5) score += 25;
+    if(checklist.workout > 0) score += 25;
+    if(checklist.walk >= 30) score += 25;
+    if(checklist.protein >= 80) score += 25;
+    
+    data.push(score);
+  }
+  
+  if(consistencyChart) consistencyChart.destroy();
+  
+  consistencyChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Puntuación Diaria',
+        data: data,
+        borderColor: '#ffb300',
+        backgroundColor: 'rgba(255, 179, 0, 0.1)',
+        fill: true,
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#adaaaa', maxTicksLimit: 10 } },
+        y: { grid: { color: '#242222' }, ticks: { color: '#adaaaa', max: 100 } }
+      }
+    }
+  });
+}
+
+function showToast(msg){
+  var existing = document.getElementById('toast');
+  if(existing) existing.remove();
+  
+  var toast = document.createElement('div');
+  toast.id = 'toast';
+  toast.className = 'fixed bottom-8 left-1/2 -translate-x-1/2 bg-surface-container-high text-white px-6 py-3 rounded-xl shadow-glow z-[100]';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  
+  setTimeout(function(){ toast.remove(); }, 3000);
+}
+
+loadProfile();
+</script>
+</body>
+</html>
