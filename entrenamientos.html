@@ -1027,6 +1027,18 @@ function updateExerciseData(idx, field, value) {
     generatedWorkout.actualData[idx] = { sets: 0, reps: 0, weight: '' };
   }
   generatedWorkout.actualData[idx][field] = field === 'weight' ? value : parseInt(value) || 0;
+  
+  // Recalculate calories based on weight and volume
+  var exercise = generatedWorkout.routine.exercises[idx];
+  var data = generatedWorkout.actualData[idx];
+  var weight = parseFloat(data.weight) || 0;
+  var totalVolume = (data.sets || exercise.sets) * (data.reps || exercise.reps) * (weight || 1);
+  var baseVolume = exercise.sets * exercise.reps;
+  var ratio = totalVolume / baseVolume;
+  
+  generatedWorkout.routine.estimatedCalories = Math.round(generatedWorkout.routine.estimatedCalories * ratio);
+  
+  renderAutoWorkoutSummary(generatedWorkout, document.getElementById('autoWorkoutSummary'));
 }
 
 function startWorkoutTimer() {
@@ -1197,6 +1209,8 @@ function adjustExerciseReps(idx, delta) {
   
   var currentDuration = generatedWorkout.routine.duration;
   var currentCal = generatedWorkout.routine.estimatedCalories;
+  var actualData = generatedWorkout.actualData && generatedWorkout.actualData[idx] ? generatedWorkout.actualData[idx] : {};
+  var weight = parseFloat(actualData.weight) || 0;
   
   var testSets = exercise.sets;
   var testReps = exercise.reps + delta;
@@ -1204,10 +1218,13 @@ function adjustExerciseReps(idx, delta) {
   if (testReps < 1) testReps = 1;
   if (testReps > 30) testReps = 30;
   
-  var durationPerRep = currentDuration / (exercise.sets * exercise.reps);
-  var newDuration = Math.round(testSets * testReps * durationPerRep);
-  var calPerRep = currentCal / (exercise.sets * exercise.reps);
-  var newCal = Math.round(testSets * testReps * calPerRep);
+  // Calculate based on total volume (sets * reps * weight)
+  var oldVolume = exercise.sets * exercise.reps * (weight || 1);
+  var newVolume = testSets * testReps * (weight || 1);
+  var volumeRatio = newVolume / oldVolume;
+  
+  var newDuration = Math.round(currentDuration * volumeRatio);
+  var newCal = Math.round(currentCal * volumeRatio);
   
   var prefs = generatedWorkout.preferences || { duration: 30 };
   var maxDuration = prefs.duration * 1.3;
@@ -1223,7 +1240,7 @@ function adjustExerciseReps(idx, delta) {
   
   renderAutoWorkoutSummary(generatedWorkout, document.getElementById('autoWorkoutSummary'));
 }
-
+ 
 function removeExerciseFromRoutine(idx) {
   if (!generatedWorkout || !generatedWorkout.routine || !generatedWorkout.routine.exercises) return;
   
