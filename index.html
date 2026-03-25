@@ -232,7 +232,7 @@ tailwind.config = {
 notifications
 <span class="absolute top-0 right-0 w-2 h-2 bg-primary-container rounded-full ring-2 ring-background"></span>
 </button>
-<a href="index.html" class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center font-headline font-bold text-white text-sm cursor-pointer hover:scale-105 transition-transform" title="Mi perfil">KL</a>
+<a href="perfil.html" class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center font-headline font-bold text-white text-sm cursor-pointer hover:scale-105 transition-transform" id="profileBtn" title="Mi perfil">KL</a>
 </div>
 </header>
 
@@ -424,6 +424,7 @@ Importar Backup
 </div>
 </div>
 <div class="flex-1 text-center md:text-left">
+<h2 id="userGreeting" class="text-2xl font-headline font-black gradient-text mb-1">Hola</h2>
 <h3 class="text-xs font-label text-secondary font-bold uppercase tracking-[0.2em] mb-2">Tu Progreso</h3>
 <div class="flex flex-col gap-1 mb-6">
 <span id="weightDisplay" onclick="showUpdateWeightModal()" class="cursor-pointer hover:text-primary-container transition-colors text-5xl font-headline font-black text-white tracking-tighter">0kg <span class="text-on-surface-variant font-light">→</span> 0kg</span>
@@ -866,6 +867,22 @@ function loadDashboard() {
   try {
     var userData = getLocalData('userData', schemas.userData, getDefaultUserData());
     var ketoProfile = safeParseJSON(localStorage.getItem('keto_profile'), {});
+    
+    var userName = ketoProfile.name || '';
+    var greetingEl = document.getElementById('userGreeting');
+    if (greetingEl) {
+      if (userName) {
+        greetingEl.textContent = 'Hola, ' + userName;
+      } else {
+        greetingEl.textContent = 'Bienvenido';
+      }
+    }
+    
+    var profileBtn = document.getElementById('profileBtn');
+    if (profileBtn && userName) {
+      profileBtn.textContent = userName.charAt(0).toUpperCase();
+      profileBtn.title = 'Mi perfil: ' + userName;
+    }
     
     var todayKey = new Date().toISOString().slice(0, 10);
     var rawData = localStorage.getItem('checklist_' + todayKey);
