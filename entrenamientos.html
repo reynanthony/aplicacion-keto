@@ -732,10 +732,34 @@ html+='<p class="text-sm font-medium '+(isCompleted ? 'text-green-400' : 'text-w
 
 if (manualWorkoutActive) {
   html+='<div class="flex items-center gap-1 mt-1">';
-  html+='<input type="number" placeholder="kg" value="'+weight+'" onchange="updateManualExerciseData('+i+', \'weight\', this.value)" class="w-14 bg-surface rounded px-1 py-0.5 text-xs text-white text-center" min="0">';
-  html+='<input type="number" value="'+reps+'" onchange="updateManualExerciseData('+i+', \'reps\', this.value)" class="w-10 bg-surface rounded px-1 py-0.5 text-xs text-white text-center" min="0">';
+  
+  // Weight dropdown
+  html += '<select onchange="updateManualExerciseData('+i+', \'weight\', this.value)" class="w-14 bg-surface rounded px-1 py-0.5 text-xs text-white text-center">';
+  html += '<option value="">kg</option>';
+  var weightOptions = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 80, 100];
+  weightOptions.forEach(function(w) {
+    html += '<option value="'+w+'" '+(weight == w ? 'selected' : '')+'>'+w+'</option>';
+  });
+  html += '</select>';
+  
+  // Reps dropdown
+  html += '<select onchange="updateManualExerciseData('+i+', \'reps\', this.value)" class="w-10 bg-surface rounded px-1 py-0.5 text-xs text-white text-center">';
+  var repsOptions = [6, 8, 10, 12, 15, 20, 25, 30];
+  repsOptions.forEach(function(r) {
+    html += '<option value="'+r+'" '+(reps == r ? 'selected' : '')+'>'+r+'</option>';
+  });
+  html += '</select>';
+  
   html+='<span class="text-xs text-white/40">x</span>';
-  html+='<input type="number" value="'+sets+'" onchange="updateManualExerciseData('+i+', \'sets\', this.value)" class="w-10 bg-surface rounded px-1 py-0.5 text-xs text-white text-center" min="0">';
+  
+  // Sets dropdown
+  html += '<select onchange="updateManualExerciseData('+i+', \'sets\', this.value)" class="w-10 bg-surface rounded px-1 py-0.5 text-xs text-white text-center">';
+  var setsOptions = [1, 2, 3, 4, 5, 6];
+  setsOptions.forEach(function(s) {
+    html += '<option value="'+s+'" '+(sets == s ? 'selected' : '')+'>'+s+'</option>';
+  });
+  html += '</select>';
+  
   html+='</div>';
 } else {
   html+='<p class="text-[10px] md:text-xs text-on-surface-variant">'+sets+'x'+reps+' - '+ex.calories+' kcal/hr</p>';
@@ -821,24 +845,25 @@ if (manualWorkoutActive && manualWorkoutStartTime) {
   duration = 30;
 }
 
-// Calculate calories with MET formula
-var hours = duration / 60;
-var met = 4;
-var userWeight = 80;
-var baseCalories = met * userWeight * hours;
+// Calculate calories based on duration and volume
+var baseCalories = duration * 3.5;
 
 var totalReps = 0;
+var totalVolume = 0;
 if (manualWorkoutActive) {
   currentWorkoutExercises.forEach(function(e, idx) {
     var data = manualWorkoutActualData[idx] || {};
     var sets = data.sets || e.sets || 3;
     var reps = data.reps || e.reps || 10;
+    var weight = parseFloat(data.weight) || 0;
     totalReps += sets * reps;
+    totalVolume += weight * sets * reps;
   });
 }
 
-var intensityFactor = 1 + (totalReps / 100);
-var totalCalories = Math.round(baseCalories * intensityFactor);
+var volumeBonus = totalVolume * 0.02;
+var repsBonus = totalReps * 0.1;
+var totalCalories = Math.round(baseCalories + volumeBonus + repsBonus);
 if (totalCalories < 30) totalCalories = 30;
 if (totalCalories > 600) totalCalories = 600;
 
@@ -1099,10 +1124,34 @@ function renderAutoWorkoutSummary(result, container) {
     
     if (generatedWorkout.isActive) {
       html += '<div class="flex items-center gap-1">';
-      html += '<input type="number" placeholder="kg" value="' + weight + '" onchange="updateExerciseData(' + idx + ', \'weight\', this.value)" class="w-14 bg-surface rounded-lg px-2 py-1 text-xs text-white text-center" min="0">';
-      html += '<input type="number" value="' + actualReps + '" onchange="updateExerciseData(' + idx + ', \'reps\', this.value)" class="w-12 bg-surface rounded-lg px-2 py-1 text-xs text-white text-center" min="0">';
+      
+      // Weight dropdown
+      html += '<select onchange="updateExerciseData(' + idx + ', \'weight\', this.value)" class="w-14 bg-surface rounded-lg px-1 py-1 text-xs text-white text-center">';
+      html += '<option value="">kg</option>';
+      var weightOptions = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 80, 100];
+      weightOptions.forEach(function(w) {
+        html += '<option value="' + w + '" ' + (weight == w ? 'selected' : '') + '>' + w + '</option>';
+      });
+      html += '</select>';
+      
+      // Reps dropdown
+      html += '<select onchange="updateExerciseData(' + idx + ', \'reps\', this.value)" class="w-12 bg-surface rounded-lg px-1 py-1 text-xs text-white text-center">';
+      var repsOptions = [6, 8, 10, 12, 15, 20, 25, 30];
+      repsOptions.forEach(function(r) {
+        html += '<option value="' + r + '" ' + (actualReps == r ? 'selected' : '') + '>' + r + '</option>';
+      });
+      html += '</select>';
+      
       html += '<span class="text-xs text-white/40">x</span>';
-      html += '<input type="number" value="' + actualSets + '" onchange="updateExerciseData(' + idx + ', \'sets\', this.value)" class="w-12 bg-surface rounded-lg px-2 py-1 text-xs text-white text-center" min="0">';
+      
+      // Sets dropdown
+      html += '<select onchange="updateExerciseData(' + idx + ', \'sets\', this.value)" class="w-12 bg-surface rounded-lg px-1 py-1 text-xs text-white text-center">';
+      var setsOptions = [1, 2, 3, 4, 5, 6];
+      setsOptions.forEach(function(s) {
+        html += '<option value="' + s + '" ' + (actualSets == s ? 'selected' : '') + '>' + s + '</option>';
+      });
+      html += '</select>';
+      
       html += '</div>';
     } else {
       html += '<div class="flex items-center gap-1">';
@@ -1247,7 +1296,7 @@ function saveAndLogWorkout() {
   if (duration < 1) duration = 1;
   
   var totalReps = 0;
-  var totalWeight = 0;
+  var totalVolume = 0; // total kg lifted
   var completedCount = 0;
   
   if (generatedWorkout.completed) {
@@ -1259,7 +1308,8 @@ function saveAndLogWorkout() {
       var weight = parseFloat(data.weight) || 0;
       
       totalReps += reps * sets;
-      totalWeight += weight;
+      // Volume = weight × reps × sets
+      totalVolume += weight * reps * sets;
     });
   } else {
     completedCount = generatedWorkout.routine.exercises.length;
@@ -1268,21 +1318,20 @@ function saveAndLogWorkout() {
     });
   }
   
-  // Calorie calculation - realistic formula
-  // MET (Metabolic Equivalent) for strength training: ~3-5 METs
-  // Calories = MET × weight(kg) × time(hours)
-  // Using average MET of 4 for strength training
+  // Calorie calculation - realistic formula based on volume
+  // Base: ~3-4 cal/min for strength training
+  // Plus bonus for volume lifted (approximately 0.02 cal per kg lifted)
   
-  var met = 4; // MET value for weightlifting
-  var userWeight = 80; // assumed user weight in kg
-  var hours = duration / 60; // convert minutes to hours
+  var hours = duration / 60;
+  var baseCalories = duration * 3.5; // ~3.5 cal per minute
   
-  var baseCalories = met * userWeight * hours;
+  // Volume bonus: ~0.02 calories per kg lifted total
+  var volumeBonus = totalVolume * 0.02;
   
-  // Adjust for intensity based on total reps
-  var intensityFactor = 1 + (totalReps / 100);
+  // Rep bonus: more reps = more time under tension
+  var repsBonus = totalReps * 0.1;
   
-  var actualCalories = Math.round(baseCalories * intensityFactor);
+  var actualCalories = Math.round(baseCalories + volumeBonus + repsBonus);
   
   // Minimum and maximum reasonable values
   if (actualCalories < 30) actualCalories = 30;
