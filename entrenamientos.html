@@ -846,7 +846,9 @@ if (manualWorkoutActive && manualWorkoutStartTime) {
 }
 
 // Calculate calories based on duration and volume
-var baseCalories = duration * 3.5;
+var baseCalories = duration * 4; // ~4 cal per minute for strength training
+var volumeBonus = totalVolume * 0.03; // ~0.03 cal per kg lifted
+var repsBonus = totalReps * 0.15; // ~0.15 cal per rep (time under tension)
 
 var totalReps = 0;
 var totalVolume = 0;
@@ -1318,18 +1320,10 @@ function saveAndLogWorkout() {
     });
   }
   
-  // Calorie calculation - realistic formula based on volume
-  // Base: ~3-4 cal/min for strength training
-  // Plus bonus for volume lifted (approximately 0.02 cal per kg lifted)
-  
-  var hours = duration / 60;
-  var baseCalories = duration * 3.5; // ~3.5 cal per minute
-  
-  // Volume bonus: ~0.02 calories per kg lifted total
-  var volumeBonus = totalVolume * 0.02;
-  
-  // Rep bonus: more reps = more time under tension
-  var repsBonus = totalReps * 0.1;
+  // Calorie calculation - realistic formula based on duration and volume
+  var baseCalories = duration * 4; // ~4 cal per minute for strength training
+  var volumeBonus = totalVolume * 0.03; // ~0.03 cal per kg lifted
+  var repsBonus = totalReps * 0.15; // ~0.15 cal per rep (time under tension)
   
   var actualCalories = Math.round(baseCalories + volumeBonus + repsBonus);
   
