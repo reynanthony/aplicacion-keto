@@ -1028,16 +1028,7 @@ function updateExerciseData(idx, field, value) {
   }
   generatedWorkout.actualData[idx][field] = field === 'weight' ? value : parseInt(value) || 0;
   
-  // Recalculate calories based on weight and volume
-  var exercise = generatedWorkout.routine.exercises[idx];
-  var data = generatedWorkout.actualData[idx];
-  var weight = parseFloat(data.weight) || 0;
-  var totalVolume = (data.sets || exercise.sets) * (data.reps || exercise.reps) * (weight || 1);
-  var baseVolume = exercise.sets * exercise.reps;
-  var ratio = totalVolume / baseVolume;
-  
-  generatedWorkout.routine.estimatedCalories = Math.round(generatedWorkout.routine.estimatedCalories * ratio);
-  
+  // Just store the data, calculate final calories when saving
   renderAutoWorkoutSummary(generatedWorkout, document.getElementById('autoWorkoutSummary'));
 }
 
@@ -1112,7 +1103,6 @@ function saveAndLogWorkout() {
   var totalReps = 0;
   var totalWeight = 0;
   var completedCount = 0;
-  var muscleGroups = {};
   
   if (generatedWorkout.completed) {
     generatedWorkout.routine.exercises.forEach(function(ex, idx) {
@@ -1123,10 +1113,7 @@ function saveAndLogWorkout() {
       var weight = parseFloat(data.weight) || 0;
       
       totalReps += reps * sets;
-      totalWeight += weight * reps * sets;
-      
-      if (!muscleGroups[ex.muscle]) muscleGroups[ex.muscle] = 0;
-      muscleGroups[ex.muscle] += weight * reps * sets;
+      totalWeight += weight;
     });
   } else {
     completedCount = generatedWorkout.routine.exercises.length;
@@ -1135,24 +1122,25 @@ function saveAndLogWorkout() {
     });
   }
   
-  // Calorie calculation based on actual workout data
-  // Base: ~3-5 calories per minute of strength training
-  var baseBurn = duration * 4; 
+  // Calorie calculation - realistic formula
+  // MET (Metabolic Equivalent) for strength training: ~3-5 METs
+  // Calories = MET × weight(kg) × time(hours)
+  // Using average MET of 4 for strength training
   
-  // Volume bonus: ~0.3 calories per kg lifted
-  var volumeBonus = (totalWeight / 1000) * 0.3;
+  var met = 4; // MET value for weightlifting
+  var userWeight = 80; // assumed user weight in kg
+  var hours = duration / 60; // convert minutes to hours
   
-  // Time under tension bonus (more reps = more burn)
-  var repsBonus = totalReps * 0.1;
+  var baseCalories = met * userWeight * hours;
   
-  // Rest time factor (we assume ~45-60 sec rest between sets)
-  var restFactor = (completedCount * 45) / duration;
+  // Adjust for intensity based on total reps
+  var intensityFactor = 1 + (totalReps / 100);
   
-  var actualCalories = Math.round(baseBurn + volumeBonus + repsBonus);
+  var actualCalories = Math.round(baseCalories * intensityFactor);
   
-  // Minimum reasonable calories for strength training
-  if (actualCalories < 50) actualCalories = 50;
-  if (actualCalories > 800) actualCalories = 800;
+  // Minimum and maximum reasonable values
+  if (actualCalories < 30) actualCalories = 30;
+  if (actualCalories > 600) actualCalories = 600;
   
   generatedWorkout.routine.duration = duration;
   generatedWorkout.routine.estimatedCalories = actualCalories;
