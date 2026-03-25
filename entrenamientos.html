@@ -921,9 +921,13 @@ function renderAutoWorkoutSummary(result, container) {
     html += '<button onclick="startActiveWorkout()" class="w-full py-3 rounded-xl bg-green-500 text-black font-bold hover:bg-green-400 transition-all flex items-center justify-center gap-2 mb-3">';
     html += '<span class="material-symbols-outlined">play_arrow</span>Iniciar Entrenamiento</button>';
   } else {
+    var totalTime = generatedWorkout.startTime ? Math.floor((Date.now() - generatedWorkout.startTime) / 1000) : 0;
+    var mins = Math.floor(totalTime / 60);
+    var secs = totalTime % 60;
+    var timeStr = (mins < 10 ? '0' + mins : mins) + ':' + (secs < 10 ? '0' + secs : secs);
     html += '<div class="bg-green-500/10 border border-green-500/30 rounded-xl p-3 mb-3 flex items-center justify-between">';
-    html += '<div class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400">timer</span><span class="text-green-400 font-medium" id="activeTimer">00:00</span></div>';
-    html += '<button onclick="finishActiveWorkout()" class="py-2 px-4 rounded-lg bg-green-500 text-black font-bold text-sm">Terminar</button></div>';
+    html += '<div class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400">timer</span><span class="text-green-400 font-medium" id="activeTimer">' + timeStr + '</span></div>';
+    html += '<button onclick="saveAndLogWorkout()" class="py-2 px-4 rounded-lg bg-green-500 text-black font-bold text-sm">Terminar</button></div>';
   }
   
   routine.exercises.forEach(function(ex, idx) {
@@ -931,6 +935,7 @@ function renderAutoWorkoutSummary(result, container) {
     var actualSets = generatedWorkout.actualData && generatedWorkout.actualData[idx] ? generatedWorkout.actualData[idx].sets : ex.sets;
     var actualReps = generatedWorkout.actualData && generatedWorkout.actualData[idx] ? generatedWorkout.actualData[idx].reps : ex.reps;
     var weight = generatedWorkout.actualData && generatedWorkout.actualData[idx] ? generatedWorkout.actualData[idx].weight : '';
+    var exTime = generatedWorkout.exerciseTimes && generatedWorkout.exerciseTimes[idx] ? generatedWorkout.exerciseTimes[idx] : 0;
     
     var muscleIcons = { pecho: 'fitness_center', espalda: 'accessibility_new', piernas: 'directions_walk', hombros: 'sports_handball', biceps: 'sports_mma', triceps: 'sports_mma', core: 'self_improvement', cardio: 'favorite' };
     html += '<div class="flex items-center justify-between p-3 rounded-lg ' + (isCompleted ? 'bg-green-500/10 border border-green-500/20' : 'bg-surface-container-high') + '">';
@@ -940,7 +945,11 @@ function renderAutoWorkoutSummary(result, container) {
     }
     html += '<span class="material-symbols-outlined ' + (isCompleted ? 'text-green-400' : 'text-primary-container') + '">' + (muscleIcons[ex.muscle] || 'fitness_center') + '</span>';
     html += '<div><p class="font-medium ' + (isCompleted ? 'text-green-400' : 'text-white') + '">' + ex.name + '</p>';
-    html += '<p class="text-xs text-on-surface-variant">' + ex.muscle + ' • ' + ex.sets + 'x' + ex.reps + ' reps</p></div></div>';
+    html += '<p class="text-xs text-on-surface-variant">' + ex.muscle + ' • ' + ex.sets + 'x' + ex.reps + ' reps';
+    if (generatedWorkout.isActive && exTime > 0) {
+      html += ' • <span class="text-yellow-400">' + Math.floor(exTime/60) + ':' + (exTime%60<10?'0':'') + (exTime%60) + '</span>';
+    }
+    html += '</p></div></div>';
     
     if (generatedWorkout.isActive) {
       html += '<div class="flex items-center gap-1">';
@@ -980,64 +989,35 @@ function startActiveWorkout() {
   generatedWorkout.startTime = Date.now();
   generatedWorkout.completed = {};
   generatedWorkout.actualData = {};
+  generatedWorkout.exerciseTimes = {};
+  generatedWorkout.currentExerciseIndex = 0;
+  generatedWorkout.exerciseStartTime = Date.now();
   
   generatedWorkout.routine.exercises.forEach(function(ex, idx) {
     generatedWorkout.completed[idx] = false;
     generatedWorkout.actualData[idx] = { sets: ex.sets, reps: ex.reps, weight: '' };
+    generatedWorkout.exerciseTimes[idx] = 0;
   });
   
   renderAutoWorkoutSummary(generatedWorkout, document.getElementById('autoWorkoutSummary'));
-  showToast('Entrenamiento iniciado');
-}
-
-function finishActiveWorkout() {
-  if (!generatedWorkout || !generatedWorkout.routine) return;
-  
-  var duration = Math.round((Date.now() - generatedWorkout.startTime) / 60000);
-  if (duration < 1) duration = 1;
-  
-  var totalReps = 0;
-  var totalWeight = 0;
-  var completedCount = 0;
-  
-  generatedWorkout.routine.exercises.forEach(function(ex, idx) {
-    if (generatedWorkout.completed[idx]) {
-      completedCount++;
-    }
-    var data = generatedWorkout.actualData[idx] || {};
-    totalReps += (data.reps || 0) * (data.sets || ex.sets);
-    totalWeight += parseFloat(data.weight || 0) * (data.reps || ex.reps) * (data.sets || ex.sets);
-  });
-  
-  var baseCalories = generatedWorkout.routine.estimatedCalories;
-  var actualCalories = Math.round(baseCalories * (duration / generatedWorkout.routine.duration));
-  actualCalories = Math.round(actualCalories * 0.8 + (totalWeight / 1000) * 5);
-  
-  generatedWorkout.routine.duration = duration;
-  generatedWorkout.routine.estimatedCalories = actualCalories;
-  generatedWorkout.routine.completedExercises = completedCount;
-  generatedWorkout.routine.actualData = generatedWorkout.actualData;
-  generatedWorkout.routine.completedAt = new Date().toISOString();
-  
-  if (typeof autoWorkoutGenerator !== 'undefined') {
-    autoWorkoutGenerator.saveWorkoutLog(generatedWorkout.routine, true);
-  }
-  
-  generatedWorkout.isActive = false;
-  generatedWorkout.startTime = null;
-  
-  if (workoutTimerInterval) {
-    clearInterval(workoutTimerInterval);
-    workoutTimerInterval = null;
-  }
-  
-  renderAutoWorkoutSummary(generatedWorkout, document.getElementById('autoWorkoutSummary'));
-  showToast('Entrenamiento completado: ' + completedCount + '/' + generatedWorkout.routine.exercises.length + ' ejercicios, ' + actualCalories + ' kcal');
+  startWorkoutTimer();
+  showToast('Entrenamiento iniciado - controla cada ejercicio');
 }
 
 function toggleExerciseComplete(idx) {
   if (!generatedWorkout || !generatedWorkout.completed) return;
   generatedWorkout.completed[idx] = !generatedWorkout.completed[idx];
+  
+  if (generatedWorkout.completed[idx]) {
+    var now = Date.now();
+    if (generatedWorkout.exerciseStartTime) {
+      var exTime = Math.floor((now - generatedWorkout.exerciseStartTime) / 1000);
+      generatedWorkout.exerciseTimes[idx] = exTime;
+    }
+    generatedWorkout.currentExerciseIndex = idx + 1;
+    generatedWorkout.exerciseStartTime = now;
+  }
+  
   renderAutoWorkoutSummary(generatedWorkout, document.getElementById('autoWorkoutSummary'));
 }
 
@@ -1114,66 +1094,52 @@ function saveWorkoutPrefs() {
 function saveAndLogWorkout() {
   if (!generatedWorkout || !generatedWorkout.routine) return;
   
-  showWorkoutCheckModal();
-}
-
-function showWorkoutCheckModal() {
-  var existing = document.getElementById('workoutCheckModal');
-  if (existing) existing.remove();
+  var duration = generatedWorkout.startTime ? Math.round((Date.now() - generatedWorkout.startTime) / 60000) : generatedWorkout.routine.duration;
+  if (duration < 1) duration = 1;
   
-  var routine = generatedWorkout.routine;
-  var today = new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+  var totalReps = 0;
+  var totalWeight = 0;
+  var completedCount = 0;
   
-  var html = '<div class="space-y-2 mb-4 max-h-[50vh] overflow-y-auto">';
-  routine.exercises.forEach(function(ex, idx) {
-    html += '<label class="flex items-center gap-3 p-3 bg-surface-container rounded-xl cursor-pointer hover:bg-surface-container-highest transition-all">';
-    html += '<input type="checkbox" class="workout-check w-5 h-5 accent-primary-container" data-idx="' + idx + '">';
-    html += '<div class="flex-1"><p class="font-medium text-white">' + ex.name + '</p>';
-    html += '<p class="text-xs text-white/60">' + ex.sets + 'x' + ex.reps + ' reps • ' + ex.muscle + '</p></div>';
-    html += '</label>';
-  });
-  html += '</div>';
-  
-  var modal = document.createElement('div');
-  modal.id = 'workoutCheckModal';
-  modal.className = 'fixed inset-0 z-[90] flex items-center justify-center p-4 pointer-events-none';
-  modal.innerHTML = '<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWorkoutCheckModal()"></div>' +
-    '<div class="glass-card rounded-2xl p-5 w-full max-w-sm pointer-events-auto">' +
-      '<div class="flex items-center gap-3 mb-4">' +
-        '<div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-green-400">fitness_center</span></div>' +
-        '<div><h3 class="text-lg font-headline font-bold text-white">' + today + '</h3><p class="text-xs text-white/60">' + routine.duration + ' min • ' + routine.estimatedCalories + ' kcal</p></div>' +
-        '<button onclick="closeWorkoutCheckModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all ml-auto"><span class="material-symbols-outlined text-lg">close</span></button>' +
-      '</div>' +
-      html +
-      '<div class="flex gap-3">' +
-        '<button onclick="closeWorkoutCheckModal()" class="flex-1 py-3 rounded-xl bg-surface-container text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>' +
-        '<button onclick="confirmAndSaveWorkout()" class="flex-1 py-3 rounded-xl bg-green-500 text-black font-bold hover:bg-green-400 transition-colors">Completar</button>' +
-      '</div>' +
-    '</div>';
-  document.body.appendChild(modal);
-}
-
-function closeWorkoutCheckModal() {
-  var modal = document.getElementById('workoutCheckModal');
-  if (modal) modal.remove();
-}
-
-function confirmAndSaveWorkout() {
-  var checks = document.querySelectorAll('.workout-check:checked');
-  var completedCount = checks.length;
-  var routine = generatedWorkout.routine;
-  
-  routine.completedExercises = completedCount;
-  routine.completedAt = new Date().toISOString();
-  
-  if (typeof autoWorkoutGenerator !== 'undefined') {
-    autoWorkoutGenerator.saveWorkoutLog(routine, true);
+  if (generatedWorkout.completed) {
+    generatedWorkout.routine.exercises.forEach(function(ex, idx) {
+      if (generatedWorkout.completed[idx]) completedCount++;
+      var data = generatedWorkout.actualData && generatedWorkout.actualData[idx] ? generatedWorkout.actualData[idx] : {};
+      totalReps += (data.reps || ex.reps) * (data.sets || ex.sets);
+      totalWeight += parseFloat(data.weight || 0) * (data.reps || ex.reps) * (data.sets || ex.sets);
+    });
+  } else {
+    completedCount = generatedWorkout.routine.exercises.length;
+    generatedWorkout.routine.exercises.forEach(function(ex) {
+      totalReps += ex.reps * ex.sets;
+    });
   }
   
-  closeWorkoutCheckModal();
-  showToast('Entrenamiento completado: ' + completedCount + '/' + routine.exercises.length + ' ejercicios');
+  var baseCalories = generatedWorkout.routine.estimatedCalories;
+  var actualCalories = Math.round(baseCalories * (duration / generatedWorkout.routine.duration));
+  actualCalories = Math.round(actualCalories * 0.8 + (totalWeight / 1000) * 5);
+  
+  generatedWorkout.routine.duration = duration;
+  generatedWorkout.routine.estimatedCalories = actualCalories;
+  generatedWorkout.routine.completedExercises = completedCount;
+  generatedWorkout.routine.completedAt = new Date().toISOString();
+  generatedWorkout.routine.exerciseTimes = generatedWorkout.exerciseTimes || {};
+  
+  if (typeof autoWorkoutGenerator !== 'undefined') {
+    autoWorkoutGenerator.saveWorkoutLog(generatedWorkout.routine, true);
+  }
+  
+  generatedWorkout.isActive = false;
+  generatedWorkout.startTime = null;
+  
+  if (workoutTimerInterval) {
+    clearInterval(workoutTimerInterval);
+    workoutTimerInterval = null;
+  }
+  
+  renderAutoWorkoutSummary(generatedWorkout, document.getElementById('autoWorkoutSummary'));
   loadDashboard();
-  setWorkoutMode('manual');
+  showToast('Entrenamiento guardado: ' + completedCount + '/' + generatedWorkout.routine.exercises.length + ' ejercicios, ' + actualCalories + ' kcal');
 }
 
 document.addEventListener('DOMContentLoaded', function() {
