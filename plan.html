@@ -693,14 +693,19 @@ function setMealPlanMode(mode) {
 
 function generateAndApplyAutoPlan() {
   var summaryDiv = document.getElementById('autoPlanSummary');
-  summaryDiv.innerHTML = '<div class="flex items-center justify-center py-8"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div><span class="ml-3 text-on-surface-variant">Generando plan...</span></div>';
+  summaryDiv.innerHTML = '<div class="flex items-center justify-center py-8"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div><span class="ml-3 text-on-surface-variant">Generando plan desde tu despensa...</span></div>';
   
   setTimeout(function() {
     if (typeof generateAutoMealPlan === 'function') {
       var result = generateAutoMealPlan();
       
       if (!result || !result.success) {
-        summaryDiv.innerHTML = '<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-on-surface-variant/30 mb-2">restaurant_menu</span><p class="text-on-surface-variant">' + (result ? result.error : 'Error al generar plan') + '</p><p class="text-xs text-on-surface-variant/70 mt-2">Agrega recetas en la sección Recetas</p></div>';
+        var errorMsg = result.error || 'Error al generar plan';
+        if (result.despensaVacia) {
+          summaryDiv.innerHTML = '<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-yellow-400 mb-2">inventory_2</span><p class="text-white font-medium mt-2">Tu despensa está vacía</p><p class="text-on-surface-variant text-sm mt-1">' + errorMsg + '</p><p class="text-xs text-on-surface-variant/70 mt-3">Ve a Compras para agregar alimentos</p></div>';
+        } else {
+          summaryDiv.innerHTML = '<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-on-surface-variant/30 mb-2">menu_book</span><p class="text-on-surface-variant">' + errorMsg + '</p></div>';
+        }
         return;
       }
       
@@ -719,6 +724,16 @@ function renderAutoPlanSummary(result, container) {
   var warnings = result.warnings || [];
   
   var html = '';
+  
+  // Info de la despensa
+  html += '<div class="bg-surface-container-high rounded-xl p-3 mb-4 flex items-center justify-between">';
+  html += '<div class="flex items-center gap-2">';
+  html += '<span class="material-symbols-outlined text-primary-container">inventory_2</span>';
+  html += '<span class="text-sm text-on-surface-variant">Despensa: <span class="text-white font-medium">' + (result.despensaCount || 0) + ' alimentos</span></span></div>';
+  html += '<div class="flex items-center gap-2">';
+  html += '<span class="material-symbols-outlined text-green-400">menu_book</span>';
+  html += '<span class="text-sm text-on-surface-variant">Recetas disponibles: <span class="text-white font-medium">' + (result.availableRecipeCount || 0) + '</span></span></div>';
+  html += '</div>';
   
   ['desayuno', 'almuerzo', 'cena', 'snacks'].forEach(function(meal) {
     var items = plan[meal];
