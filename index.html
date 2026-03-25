@@ -757,11 +757,17 @@ function toggleSidebar() {
 }
 
 function showUpdateWeightModal() {
+  console.log('showUpdateWeightModal called');
   var modal = document.getElementById('weightModal');
   var input = document.getElementById('newWeightInput');
   var currentWeight = localStorage.getItem('currentWeight') || '70';
-  input.value = currentWeight;
-  modal.classList.remove('hidden');
+  if (input) input.value = currentWeight;
+  if (modal) {
+    modal.classList.remove('hidden');
+    console.log('Modal should be visible now');
+  } else {
+    console.log('Modal not found!');
+  }
   document.body.style.overflow = 'hidden';
 }
 
