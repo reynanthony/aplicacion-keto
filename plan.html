@@ -981,7 +981,7 @@ function addFoodToAutoMeal(meal) {
   modal.id = 'addFoodModal';
   modal.className = 'fixed inset-0 z-[80] flex items-center justify-center p-4';
   var contentDiv = document.createElement('div');
-  contentDiv.className = 'bg-surface-container-high rounded-2xl p-4 w-full max-w-sm max-h-[80vh] overflow-y-auto relative';
+  contentDiv.className = 'bg-surface-container-high rounded-2xl p-3 w-full max-w-xs max-h-[80vh] overflow-y-auto relative';
   contentDiv.innerHTML = '<div class="flex justify-between items-center mb-4"><h3 class="text-lg font-bold text-white">Agregar a ' + meal + '</h3><button onclick="closeAddFoodModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10"><span class="material-symbols-outlined">close</span></button></div><div class="space-y-2" id="addFoodList"></div>';
   
   var listContainer = contentDiv.querySelector('#addFoodList');
