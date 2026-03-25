@@ -160,7 +160,7 @@ function loadSupplementData() {
   var goalLabels = { salud: "Salud", perdida_peso: "Pérdida peso", musculo: "Ganar músculo", mantenimiento: "Mantenimiento" };
   document.getElementById('profileWeight').textContent = (data.profile.weight || '--') + ' kg';
   document.getElementById('profileGoal').textContent = goalLabels[data.profile.goal] || 'Salud';
-  document.getElementById('profileExercise').textContent = data.profile.hasExercise ? (data.profile.workoutDays + ' días/sem') : 'No';
+  document.getElementById('profileExercise').textContent = data.profile.activityLevel || (data.profile.hasExercise ? (data.profile.workoutDays + ' días/sem') : 'No');
   document.getElementById('profileKetoTime').textContent = (data.profile.monthsOnKeto || '--') + ' meses';
   
   // Current supplements

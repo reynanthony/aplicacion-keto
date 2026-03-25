@@ -37,8 +37,16 @@ var supplementRecommender = (function() {
     else if (goalValue > 0) goal = 'musculo';
     else goal = 'mantenimiento';
     
-    var hasExercise = preferredMode === 'auto' || preferredMode === 'manual';
-    var workoutDays = hasExercise ? 3 : 0;
+    var activityLevel = ketoProfile.activityLevel || 1.55;
+    var activityLabel = 'Moderado';
+    if (activityLevel <= 1.2) activityLabel = 'Sedentario';
+    else if (activityLevel <= 1.375) activityLabel = 'Ligero';
+    else if (activityLevel <= 1.55) activityLabel = 'Moderado';
+    else if (activityLevel <= 1.725) activityLabel = 'Alto';
+    else activityLabel = 'Muy Alto';
+    
+    var hasExercise = preferredMode === 'auto' || preferredMode === 'manual' || activityLevel > 1.2;
+    var workoutDays = hasExercise ? (activityLevel >= 1.55 ? 4 : 2) : 0;
     var level = 'principiante';
     if (hasExercise) {
       var prefs = safeParseJSON(localStorage.getItem('workout_preferences'), {});
@@ -51,6 +59,7 @@ var supplementRecommender = (function() {
       hasExercise: hasExercise,
       workoutDays: workoutDays,
       level: level,
+      activityLevel: activityLabel,
       monthsOnKeto: parseInt(ketoProfile.monthsOnKeto) || 1,
       calories: ketoMacros.calories || 2000,
       protein: ketoMacros.protein || 150
