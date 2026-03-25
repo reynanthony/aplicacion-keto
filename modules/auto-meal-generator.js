@@ -183,18 +183,40 @@ var autoMealGenerator = (function() {
       snacks: []
     };
     
+    var snackKeywords = ['snack', 'queso', 'nuez', 'almendra', 'cacahuate', 'maní', 'pistacho', 'pecana', 'macadamia', 'barrita', 'jerky', 'chocolate', 'batido proteico', 'prot'];
+    var breakfastKeywords = ['desayuno', 'cafe', 'batido', 'pancake', 'waffle', 'tortilla', 'omelette', 'huevo revuelto', 'pan keto', 'tostada', 'mote', 'champurrado'];
+    var dinnerKeywords = ['cena', 'sopa', 'caldo', 'ensalada principal', 'pescado', 'mariscos', 'pollo ligero', 'bistec'];
+    var lunchKeywords = ['almuerzo', 'carne', 'cerdo', 'hamburguesa', 'salchicha', 'parrilla', 'asado', 'huevo duro', 'huevos cocidos'];
+    
     Object.keys(recipes).forEach(function(key) {
       var recipe = recipes[key];
       var title = (recipe.title || '').toLowerCase();
       var category = recipe.category || '';
       
-      if (category === 'desayuno' || title.includes('desayuno') || title.includes('huevo') || title.includes('cafe') || title.includes('batido') || title.includes('pancake') || title.includes('tortilla') || title.includes('omelette')) {
+      var matched = false;
+      
+      // Snacks - solo alimentos apropiado para snacks (NO aderezos, NO ensaladas como plato principal)
+      if (!matched && (category === 'snacks' || snackKeywords.some(function(k) { return title.includes(k); }))) {
+        if (!title.includes('aderezo') && !title.includes('ensalada')) {
+          categories.snacks.push({ key: key, recipe: recipe });
+          matched = true;
+        }
+      }
+      
+      // Desayuno
+      if (!matched && (category === 'desayuno' || breakfastKeywords.some(function(k) { return title.includes(k); }))) {
         categories.desayuno.push({ key: key, recipe: recipe });
-      } else if (category === 'snacks' || title.includes('snack') || title.includes('ensalada')) {
-        categories.snacks.push({ key: key, recipe: recipe });
-      } else if (category === 'acompañamiento' || title.includes('acompañamiento') || title.includes('pure') || title.includes('arroz') || title.includes('verduras')) {
-        categories.almuerzo.push({ key: key, recipe: recipe });
-      } else {
+        matched = true;
+      }
+      
+      // Cena - más ligero
+      if (!matched && (category === 'cena' || dinnerKeywords.some(function(k) { return title.includes(k); }))) {
+        categories.cena.push({ key: key, recipe: recipe });
+        matched = true;
+      }
+      
+      // Almuerzo - lo que sobre es para almuerzo
+      if (!matched) {
         if (categories.almuerzo.length <= categories.cena.length) {
           categories.almuerzo.push({ key: key, recipe: recipe });
         } else {
