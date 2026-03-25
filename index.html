@@ -426,7 +426,7 @@ Importar Backup
 <div class="flex-1 text-center md:text-left">
 <h3 class="text-xs font-label text-secondary font-bold uppercase tracking-[0.2em] mb-2">Tu Progreso</h3>
 <div class="flex flex-col gap-1 mb-6">
-<span id="weightDisplay" class="text-5xl font-headline font-black text-white tracking-tighter">0kg <span class="text-on-surface-variant font-light">→</span> 0kg</span>
+<span id="weightDisplay" onclick="showUpdateWeightModal()" class="cursor-pointer hover:text-primary-container transition-colors text-5xl font-headline font-black text-white tracking-tighter">0kg <span class="text-on-surface-variant font-light">→</span> 0kg</span>
 <p class="text-on-surface-variant font-body">Te faltan <span id="remainingKg" class="text-white font-semibold">0kg restantes</span> para tu meta</p>
 </div>
 <div id="weeklyProgress" class="inline-flex items-center gap-3 bg-primary-container/10 border border-primary-container/20 px-4 py-2 rounded-full">
@@ -899,7 +899,10 @@ function loadDashboard() {
   }
   
   var remaining = currentWeight - goalWeight;
-  safeSetHTML('weightDisplay', '<span onclick="showUpdateWeightModal()" class="cursor-pointer hover:text-primary-container transition-colors">' + currentWeight + 'kg <span class="text-on-surface-variant font-light">→</span> ' + goalWeight + 'kg</span>');
+  var weightEl = document.getElementById('weightDisplay');
+  if (weightEl) {
+    weightEl.innerHTML = currentWeight + 'kg <span class="text-on-surface-variant font-light">→</span> ' + goalWeight + 'kg';
+  }
   safeSetHTML('remainingKg', remaining > 0 ? remaining + 'kg restantes' : (remaining < 0 ? Math.abs(remaining) + 'kg bajo meta' : '¡Meta alcanzada!') + ' <span class="text-primary-container text-xs ml-1">(click to update)</span>');
   
   var weeklyLoss = '0';
