@@ -27,16 +27,33 @@ var supplementRecommender = (function() {
 
   function getProfile() {
     var ketoProfile = safeParseJSON(localStorage.getItem('keto_profile'), {});
-    var workoutPrefs = safeParseJSON(localStorage.getItem('workout_preferences'), {});
+    var ketoMacros = safeParseJSON(localStorage.getItem('keto_macros'), {});
     var userData = safeParseJSON(localStorage.getItem('userData'), {});
+    var preferredMode = localStorage.getItem('preferred_workout_mode');
+    
+    var goalValue = ketoProfile.goal || 0;
+    var goal = 'salud';
+    if (goalValue < 0) goal = 'perdida_peso';
+    else if (goalValue > 0) goal = 'musculo';
+    else goal = 'mantenimiento';
+    
+    var hasExercise = preferredMode === 'auto' || preferredMode === 'manual';
+    var workoutDays = hasExercise ? 3 : 0;
+    var level = 'principiante';
+    if (hasExercise) {
+      var prefs = safeParseJSON(localStorage.getItem('workout_preferences'), {});
+      level = prefs.level || 'principiante';
+    }
     
     return {
-      weight: ketoProfile.weight || userData.currentWeight || 80,
-      goal: ketoProfile.goalWeight ? (ketoProfile.weight > ketoProfile.goalWeight ? 'perdida_peso' : 'mantenimiento') : 'salud',
-      hasExercise: workoutPrefs.duration > 0 || false,
-      workoutDays: workoutPrefs.daysPerWeek || 0,
-      level: workoutPrefs.level || 'principiante',
-      monthsOnKeto: parseInt(ketoProfile.monthsOnKeto) || 1
+      weight: ketoProfile.weight || ketoProfile.currentWeight || 80,
+      goal: goal,
+      hasExercise: hasExercise,
+      workoutDays: workoutDays,
+      level: level,
+      monthsOnKeto: parseInt(ketoProfile.monthsOnKeto) || 1,
+      calories: ketoMacros.calories || 2000,
+      protein: ketoMacros.protein || 150
     };
   }
 
