@@ -207,10 +207,7 @@ return defaultFoods;
 }
 function getDespensa(){return safeParseJSON(localStorage.getItem("despensa"), {})}
 function getFoods(){
-var allFoods=getAllFoodsForPlan();
-var despensa=getDespensa();
-var despensaIds=Object.keys(despensa);
-currentFoods=allFoods.filter(function(f){return despensaIds.includes(f.id)});
+return getAllFoodsForPlan();
 }
 function getStockStatus(foodId){
 var despensa=getDespensa();
