@@ -83,6 +83,46 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 </div>
 </div>
 
+<!-- Modo Manual/Automático -->
+<div class="flex items-center justify-between mb-4">
+  <div class="mode-selector glass-card p-1 rounded-full inline-flex">
+    <button id="manualWorkoutModeBtn" onclick="setWorkoutMode('manual')" class="mode-btn px-4 py-2 rounded-full text-xs font-medium transition-all flex items-center gap-2 bg-primary-container text-white">
+      <span class="material-symbols-outlined text-base">edit</span>Manual
+    </button>
+    <button id="autoWorkoutModeBtn" onclick="setWorkoutMode('auto')" class="mode-btn px-4 py-2 rounded-full text-xs font-medium transition-all text-on-surface-variant hover:text-white flex items-center gap-2">
+      <span class="material-symbols-outlined text-base">auto_awesome</span>Automático
+    </button>
+  </div>
+  <button id="generateWorkoutBtn" onclick="generateAndApplyAutoWorkout()" class="hidden bg-secondary text-black px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-secondary/80 transition-all">
+    <span class="material-symbols-outlined text-sm">refresh</span>Generar
+  </button>
+</div>
+
+<!-- Panel Automático de Workout -->
+<div id="autoWorkoutPanel" class="hidden glass-card rounded-xl p-6 mb-6">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h3 class="text-lg font-headline font-bold text-white flex items-center gap-2">
+        <span class="material-symbols-outlined text-secondary">fitness_center</span>
+        Rutina Automática
+      </h3>
+      <p class="text-xs text-on-surface-variant mt-1">Basado en tu equipamiento y nivel</p>
+    </div>
+    <button onclick="showWorkoutPreferences()" class="bg-surface-container-high text-white px-3 py-2 rounded-lg text-xs hover:bg-surface-container-highest transition-all flex items-center gap-1">
+      <span class="material-symbols-outlined text-sm">settings</span>Configurar
+    </button>
+  </div>
+  <div id="autoWorkoutSummary" class="space-y-3"></div>
+  <div class="flex gap-3 mt-4">
+    <button onclick="saveAndLogWorkout()" class="flex-1 py-3 rounded-xl bg-primary-container text-white font-bold hover:bg-primary-container/80 transition-all flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined">check</span>Guardar Entrenamiento
+    </button>
+    <button onclick="generateAndApplyAutoWorkout()" class="py-3 px-4 rounded-xl bg-surface-container-high text-white hover:bg-surface-container-highest transition-all">
+      <span class="material-symbols-outlined">refresh</span>
+    </button>
+  </div>
+</div>
+
 <!-- Weekly Progress -->
 <div class="glass-card rounded-xl p-3 md:p-4">
 <div class="flex items-center justify-between mb-3 md:mb-4">
@@ -289,6 +329,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 </div>
 
 <script src="/aplicacion-keto/utils.js"></script>
+<script src="/aplicacion-keto/modules/auto-workout-generator.js"></script>
 <script>
 function toggleTheme(){document.documentElement.classList.toggle("dark");localStorage.setItem("theme",document.documentElement.classList.contains("dark")?"dark":"light")}
 function toggleSidebar(){var b=document.body;var s=document.getElementById("sidebarNav");var t=document.getElementById("sidebarToggle");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");b.classList.toggle("sidebar-collapsed");if(b.classList.contains("sidebar-collapsed")){s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px";localStorage.setItem("sidebarCollapsed","true")}else{s.style.width="256px";s.style.overflow="";if(p)p.style.paddingLeft="272px";if(m)m.style.marginLeft="256px";if(t)t.style.left="256px";localStorage.setItem("sidebarCollapsed","false")}}
@@ -735,6 +776,146 @@ container.innerHTML=html;
 }
 
 loadDashboard();
+
+var currentWorkoutMode = localStorage.getItem('preferred_workout_mode') || 'manual';
+var generatedWorkout = null;
+
+function setWorkoutMode(mode) {
+  currentWorkoutMode = mode;
+  var manualBtn = document.getElementById('manualWorkoutModeBtn');
+  var autoBtn = document.getElementById('autoWorkoutModeBtn');
+  var autoPanel = document.getElementById('autoWorkoutPanel');
+  var generateBtn = document.getElementById('generateWorkoutBtn');
+  
+  if (mode === 'manual') {
+    manualBtn.classList.add('bg-primary-container', 'text-white');
+    manualBtn.classList.remove('text-on-surface-variant');
+    autoBtn.classList.remove('bg-primary-container', 'text-white');
+    autoBtn.classList.add('text-on-surface-variant');
+    autoPanel.classList.add('hidden');
+    generateBtn.classList.add('hidden');
+  } else {
+    autoBtn.classList.add('bg-primary-container', 'text-white');
+    autoBtn.classList.remove('text-on-surface-variant');
+    manualBtn.classList.remove('bg-primary-container', 'text-white');
+    manualBtn.classList.add('text-on-surface-variant');
+    autoPanel.classList.remove('hidden');
+    generateBtn.classList.remove('hidden');
+    generateAndApplyAutoWorkout();
+  }
+  
+  localStorage.setItem('preferred_workout_mode', mode);
+}
+
+function generateAndApplyAutoWorkout() {
+  var summaryDiv = document.getElementById('autoWorkoutSummary');
+  summaryDiv.innerHTML = '<div class="flex items-center justify-center py-8"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div><span class="ml-3 text-on-surface-variant">Generando rutina...</span></div>';
+  
+  setTimeout(function() {
+    if (typeof generateAutoWorkout === 'function') {
+      var result = generateAutoWorkout();
+      
+      if (!result || !result.success) {
+        summaryDiv.innerHTML = '<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-on-surface-variant/30 mb-2">fitness_center</span><p class="text-on-surface-variant">' + (result ? result.error : 'Error al generar rutina') + '</p></div>';
+        return;
+      }
+      
+      generatedWorkout = result;
+      renderAutoWorkoutSummary(result, summaryDiv);
+    } else {
+      summaryDiv.innerHTML = '<div class="text-center py-8"><p class="text-on-surface-variant">Cargando módulo...</p></div>';
+    }
+  }, 300);
+}
+
+function renderAutoWorkoutSummary(result, container) {
+  var routine = result.routine;
+  var prefs = result.preferences;
+  
+  var html = '';
+  
+  html += '<div class="bg-surface-container-high rounded-xl p-4 mb-4">';
+  html += '<div class="grid grid-cols-3 gap-4 text-center mb-3">';
+  html += '<div><p class="text-2xl font-bold text-secondary">' + routine.duration + '</p><p class="text-xs text-on-surface-variant">minutos</p></div>';
+  html += '<div><p class="text-2xl font-bold text-yellow-400">' + routine.estimatedCalories + '</p><p class="text-xs text-on-surface-variant">kcal</p></div>';
+  html += '<div><p class="text-2xl font-bold text-green-400">' + routine.exercises.length + '</p><p class="text-xs text-on-surface-variant">ejercicios</p></div>';
+  html += '</div>';
+  html += '<div class="text-xs text-on-surface-variant text-center">';
+  html += 'Nivel: ' + prefs.level + ' | Equipamiento: ' + prefs.equipment.join(', ');
+  html += '</div></div>';
+  
+  routine.exercises.forEach(function(ex) {
+    var muscleIcons = { pecho: 'fitness_center', espalda: 'accessibility_new', piernas: 'directions_walk', hombros: 'sports_handball', biceps: 'sports_mma', triceps: 'sports_mma', core: 'self_improvement', cardio: 'favorite' };
+    html += '<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-high">';
+    html += '<div class="flex items-center gap-3">';
+    html += '<span class="material-symbols-outlined text-primary-container">' + (muscleIcons[ex.muscle] || 'fitness_center') + '</span>';
+    html += '<div><p class="font-medium text-white">' + ex.name + '</p>';
+    html += '<p class="text-xs text-on-surface-variant">' + ex.muscle + ' • ' + ex.sets + 'x' + ex.reps + ' reps</p></div></div>';
+    html += '</div>';
+  });
+  
+  container.innerHTML = html;
+}
+
+function showWorkoutPreferences() {
+  var prefs = getWorkoutPreferences() || { equipment: ['casa'], level: 'principiante', duration: 30 };
+  
+  var equipmentOptions = '';
+  ['casa', 'mancuernas', 'gimnasio'].forEach(function(eq) {
+    var labels = { casa: '🏠 Casa (sin equipo)', mancuernas: '💪 Mancuernas', gimnasio: '🏋️ Gimnasio' };
+    var checked = prefs.equipment.includes(eq) ? 'checked' : '';
+    equipmentOptions += '<label class="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-container-high cursor-pointer"><input type="checkbox" value="' + eq + '" class="equipment-check" ' + checked + '><span>' + labels[eq] + '</span></label>';
+  });
+  
+  var content = '<div class="space-y-4">' +
+    '<div><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Equipamiento disponible</label><div class="flex flex-wrap gap-2">' + equipmentOptions + '</div></div>' +
+    '<div><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Nivel</label><select id="workoutLevel" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3"><option value="principiante" ' + (prefs.level === 'principiante' ? 'selected' : '') + '>Principiante</option><option value="intermedio" ' + (prefs.level === 'intermedio' ? 'selected' : '') + '>Intermedio</option><option value="avanzado" ' + (prefs.level === 'avanzado' ? 'selected' : '') + '>Avanzado</option></select></div>' +
+    '<div><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Duración: <span id="workoutDurationVal">' + prefs.duration + '</span> min</label><input type="range" id="workoutDuration" min="15" max="90" step="15" value="' + prefs.duration + '" class="w-full"></div>' +
+    '</div>';
+  
+  var modal = document.createElement('div');
+  modal.id = 'prefsModal';
+  modal.className = 'fixed inset-0 z-[70] flex items-center justify-center p-4';
+  modal.innerHTML = '<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWorkoutPrefs()"></div><div class="glass-card rounded-2xl p-6 w-full max-w-sm"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-headline font-bold text-white">Configurar Entrenamiento</h3><button onclick="closeWorkoutPrefs()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60"><span class="material-symbols-outlined">close</span></button></div>' + content + '<button onclick="saveWorkoutPrefs()" class="w-full py-3 rounded-xl bg-primary-container text-white font-bold mt-4">Guardar</button></div>';
+  
+  document.body.appendChild(modal);
+  
+  document.getElementById('workoutDuration').addEventListener('input', function() {
+    document.getElementById('workoutDurationVal').textContent = this.value;
+  });
+}
+
+function closeWorkoutPrefs() {
+  var modal = document.getElementById('prefsModal');
+  if (modal) modal.remove();
+}
+
+function saveWorkoutPrefs() {
+  var equipment = Array.from(document.querySelectorAll('.equipment-check:checked')).map(function(cb) { return cb.value; });
+  var level = document.getElementById('workoutLevel').value;
+  var duration = parseInt(document.getElementById('workoutDuration').value);
+  
+  saveWorkoutPreferences({ equipment: equipment, level: level, duration: duration, daysPerWeek: 3, goal: 'salud' });
+  closeWorkoutPrefs();
+  showToast('Preferencias guardadas');
+  generateAndApplyAutoWorkout();
+}
+
+function saveAndLogWorkout() {
+  if (!generatedWorkout || !generatedWorkout.routine) return;
+  
+  if (typeof autoWorkoutGenerator !== 'undefined') {
+    autoWorkoutGenerator.saveWorkoutLog(generatedWorkout.routine, true);
+  }
+  
+  showToast('Entrenamiento guardado');
+  loadDashboard();
+  setWorkoutMode('manual');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  setWorkoutMode(currentWorkoutMode);
+});
 </script>
 
 <script>
