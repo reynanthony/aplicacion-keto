@@ -367,6 +367,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 <script src="/aplicacion-keto/utils.js"></script>
 <script src="/aplicacion-keto/modules/auto-workout-generator.js"></script>
 <script>
+console.log('[Entrenamientos] Page loading...');
 function toggleTheme(){document.documentElement.classList.toggle("dark");localStorage.setItem("theme",document.documentElement.classList.contains("dark")?"dark":"light")}
 function toggleSidebar(){var b=document.body;var s=document.getElementById("sidebarNav");var t=document.getElementById("sidebarToggle");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");b.classList.toggle("sidebar-collapsed");if(b.classList.contains("sidebar-collapsed")){s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px";localStorage.setItem("sidebarCollapsed","true")}else{s.style.width="256px";s.style.overflow="";if(p)p.style.paddingLeft="272px";if(m)m.style.marginLeft="256px";if(t)t.style.left="256px";localStorage.setItem("sidebarCollapsed","false")}}
 if(localStorage.getItem("theme")==="dark"||!localStorage.getItem("theme")){document.documentElement.classList.add("dark")}
@@ -1040,7 +1041,9 @@ function confirmAndSaveWorkout() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('[Entrenamientos] DOM loaded');
   setWorkoutMode(currentWorkoutMode);
+  showView('dashboard');
 });
 
 // ==================== REGISTRO DE SERVICE WORKER ====================
