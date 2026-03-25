@@ -918,15 +918,40 @@ function adjustAutoPortion(meal, idx, delta) {
   
   var item = generatedAutoPlan.plan[meal][idx];
   var oldPortion = item.portion || item.basePortion;
-  item.portion = Math.max(10, item.portion + delta);
+  var newPortion = Math.max(10, item.portion + delta);
   
-  var ratio = item.portion / oldPortion;
+  var testTotal = { calories: 0, protein: 0, fat: 0, carbs: 0 };
+  Object.keys(generatedAutoPlan.plan).forEach(function(m) {
+    generatedAutoPlan.plan[m].forEach(function(i, iidx) {
+      if (m === meal && iidx === idx) {
+        var testRatio = newPortion / (i.basePortion || i.portion);
+        testTotal.calories += Math.round((i.baseCalories || i.calories) * testRatio);
+        testTotal.protein += Math.round((i.baseProtein || i.protein) * testRatio * 10) / 10;
+        testTotal.fat += Math.round((i.baseFat || i.fat) * testRatio * 10) / 10;
+        testTotal.carbs += Math.round((i.baseCarbs || i.carbs) * testRatio * 10) / 10;
+      } else {
+        testTotal.calories += i.calories || 0;
+        testTotal.protein += i.protein || 0;
+        testTotal.fat += i.fat || 0;
+        testTotal.carbs += i.carbs || 0;
+      }
+    });
+  });
+  
+  var target = generatedAutoPlan.targetMacros || { calories: 2000, protein: 120, fat: 150, carbs: 30 };
+  if (testTotal.calories > target.calories || testTotal.protein > target.protein * 1.1) {
+    alert('No puedes aumentar la porción. Excedería tus macros objetivo.\n\nCalorías: ' + testTotal.calories + ' / ' + target.calories + '\nProteína: ' + testTotal.protein.toFixed(1) + 'g / ' + target.protein + 'g');
+    return;
+  }
+  
+  item.portion = newPortion;
+  
+  var ratio = newPortion / oldPortion;
   item.calories = Math.round(item.calories * ratio);
   item.protein = Math.round(item.protein * ratio * 10) / 10;
   item.fat = Math.round(item.fat * ratio * 10) / 10;
   item.carbs = Math.round(item.carbs * ratio * 10) / 10;
   
-  // Recalcular total
   var total = { calories: 0, protein: 0, fat: 0, carbs: 0 };
   Object.keys(generatedAutoPlan.plan).forEach(function(m) {
     generatedAutoPlan.plan[m].forEach(function(i) {
@@ -938,7 +963,6 @@ function adjustAutoPortion(meal, idx, delta) {
   });
   generatedAutoPlan.resultMacros = total;
   
-  // Refresh modal
   showAutoMealDetails(meal);
   renderAutoPlanSummary(generatedAutoPlan, document.getElementById('autoPlanSummary'));
 }
@@ -993,24 +1017,48 @@ function closeAddFoodModal() {
 
 function addFoodFromDespensa(meal, itemKey) {
   var despensa = getDespensa();
+  var foods = getFoods();
   var item = despensa[itemKey];
+  var food = foods.find(function(f) { return f.id === itemKey; });
   if (!item || !generatedAutoPlan || !generatedAutoPlan.plan || !generatedAutoPlan.plan[meal]) return;
   
   var portion = item.stock || 100;
   var basePortion = 100;
+  var ratio = portion / basePortion;
+  
+  var newCal = Math.round((food.calories || 0) * ratio);
+  var newProt = Math.round((food.protein || 0) * ratio * 10) / 10;
+  var newFat = Math.round((food.fat || 0) * ratio * 10) / 10;
+  var newCarbs = Math.round((food.carbs || 0) * ratio * 10) / 10;
+  
+  var currentTotal = { calories: 0, protein: 0, fat: 0, carbs: 0 };
+  Object.keys(generatedAutoPlan.plan).forEach(function(m) {
+    generatedAutoPlan.plan[m].forEach(function(i) {
+      currentTotal.calories += i.calories || 0;
+      currentTotal.protein += i.protein || 0;
+      currentTotal.fat += i.fat || 0;
+      currentTotal.carbs += i.carbs || 0;
+    });
+  });
+  
+  var target = generatedAutoPlan.targetMacros || { calories: 2000, protein: 120, fat: 150, carbs: 30 };
+  if (currentTotal.calories + newCal > target.calories || currentTotal.protein + newProt > target.protein * 1.1) {
+    alert('No puedes agregar este alimento. Excedería tus macros objetivo.\n\nCalorías actuales: ' + currentTotal.calories + ' / ' + target.calories + '\nProteína actual: ' + currentTotal.protein.toFixed(1) + 'g / ' + target.protein + 'g');
+    return;
+  }
   
   var newItem = {
-    name: item.name,
+    name: food ? food.name : itemKey,
     portion: portion,
     basePortion: basePortion,
-    baseCalories: item.calories || 0,
-    baseProtein: item.protein || 0,
-    baseFat: item.fat || 0,
-    baseCarbs: item.carbs || 0,
-    calories: item.calories || 0,
-    protein: item.protein || 0,
-    fat: item.fat || 0,
-    carbs: item.carbs || 0,
+    baseCalories: food.calories || 0,
+    baseProtein: food.protein || 0,
+    baseFat: food.fat || 0,
+    baseCarbs: food.carbs || 0,
+    calories: newCal,
+    protein: newProt,
+    fat: newFat,
+    carbs: newCarbs,
     fromDespensa: true,
     despensaKey: itemKey
   };

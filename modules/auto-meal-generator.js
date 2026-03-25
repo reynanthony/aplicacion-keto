@@ -237,20 +237,27 @@ var autoMealGenerator = (function() {
     };
     
     var targets = {
-      desayuno: { cal: targetMacros.calories * 0.30, prot: targetMacros.protein * 0.30 },
-      almuerzo: { cal: targetMacros.calories * 0.35, prot: targetMacros.protein * 0.35 },
+      desayuno: { cal: targetMacros.calories * 0.28, prot: targetMacros.protein * 0.28 },
+      almuerzo: { cal: targetMacros.calories * 0.32, prot: targetMacros.protein * 0.32 },
       cena: { cal: targetMacros.calories * 0.30, prot: targetMacros.protein * 0.30 },
-      snacks: { cal: targetMacros.calories * 0.05, prot: targetMacros.protein * 0.05 }
+      snacks: { cal: targetMacros.calories * 0.10, prot: targetMacros.protein * 0.10 }
     };
     
-    ['desayuno', 'almuerzo', 'cena', 'snacks'].forEach(function(meal) {
+    var mealOrder = ['snacks', 'cena', 'almuerzo', 'desayuno'];
+    var usedKeys = {};
+    
+    mealOrder.forEach(function(meal) {
       var options = categorized[meal];
       if (options.length > 0) {
-        var selected = options[Math.floor(Math.random() * options.length)];
+        var availableOptions = options.filter(function(o) { return !usedKeys[o.key]; });
+        if (availableOptions.length === 0) availableOptions = options;
+        
+        var selected = availableOptions[Math.floor(Math.random() * availableOptions.length)];
+        usedKeys[selected.key] = true;
         var recipe = selected.recipe;
         
         var portion = Math.round((targets[meal].cal / recipe.calories) * 100);
-        portion = Math.min(Math.max(portion, 50), 200);
+        portion = Math.min(Math.max(portion, 30), 150);
         
         var ratio = portion / 100;
         
@@ -258,7 +265,11 @@ var autoMealGenerator = (function() {
           id: selected.key,
           name: recipe.title,
           portion: portion,
-          basePortion: 100,
+          basePortion: portion,
+          baseCalories: recipe.calories,
+          baseProtein: recipe.protein,
+          baseFat: recipe.fat,
+          baseCarbs: recipe.carbs,
           calories: Math.round(recipe.calories * ratio),
           protein: Math.round(recipe.protein * ratio * 10) / 10,
           fat: Math.round(recipe.fat * ratio * 10) / 10,
