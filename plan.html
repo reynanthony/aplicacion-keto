@@ -945,6 +945,7 @@ function adjustAutoPortion(meal, idx, delta) {
 
 function addFoodToAutoMeal(meal) {
   var despensa = getDespensa();
+  var foods = getFoods();
   var items = Object.keys(despensa).filter(function(k) { return despensa[k] && despensa[k].stock > 0; });
   
   if (items.length === 0) {
@@ -958,21 +959,30 @@ function addFoodToAutoMeal(meal) {
   var modal = document.createElement('div');
   modal.id = 'addFoodModal';
   modal.className = 'fixed inset-0 z-[80] flex items-center justify-center p-4';
-  modal.innerHTML = '<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeAddFoodModal()"></div><div class="bg-surface-container-high rounded-2xl p-4 w-full max-w-sm max-h-[80vh] overflow-y-auto relative"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-bold text-white">Agregar a ' + meal + '</h3><button onclick="closeAddFoodModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10"><span class="material-symbols-outlined">close</span></button></div><div class="space-y-2">';
+  var contentDiv = document.createElement('div');
+  contentDiv.className = 'bg-surface-container-high rounded-2xl p-4 w-full max-w-sm max-h-[80vh] overflow-y-auto relative';
+  contentDiv.innerHTML = '<div class="flex justify-between items-center mb-4"><h3 class="text-lg font-bold text-white">Agregar a ' + meal + '</h3><button onclick="closeAddFoodModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10"><span class="material-symbols-outlined">close</span></button></div><div class="space-y-2" id="addFoodList"></div>';
+  
+  var listContainer = contentDiv.querySelector('#addFoodList');
   
   items.forEach(function(k) {
-    var item = despensa[k];
-    var name = item.name || k;
-    var stock = item.stock || 0;
-    var unit = item.unit || 'g';
-    listHtml = '<button onclick="addFoodFromDespensa(\'' + meal + '\', \'' + k.replace(/'/g, "\\'") + '\')" class="w-full p-3 text-left bg-surface rounded-xl hover:bg-primary-container transition flex justify-between items-center text-white">' +
-      '<span class="font-medium">' + name + '</span>' +
-      '<span class="text-sm text-white/60">' + stock + ' ' + unit + '</span>' +
-    '</button>';
-    modal.querySelector('div:last-child').innerHTML += listHtml;
+    var despensaItem = despensa[k];
+    var food = foods.find(function(f) { return f.id === k; });
+    var name = food ? food.name : k;
+    var stock = despensaItem.stock || 0;
+    var cal = food ? (food.calories || 0) : 0;
+    var prot = food ? (food.protein || 0) : 0;
+    var fat = food ? (food.fat || 0) : 0;
+    var carbs = food ? (food.carbs || 0) : 0;
+    
+    var btn = document.createElement('button');
+    btn.className = 'w-full p-3 text-left bg-surface rounded-xl hover:bg-primary-container transition text-white';
+    btn.onclick = function() { addFoodFromDespensa(meal, k); };
+    btn.innerHTML = '<div class="flex justify-between items-start"><div><div class="font-medium">' + name + '</div><div class="text-xs text-white/60 mt-1">Cal: ' + cal + ' | P: ' + prot + 'g | G: ' + fat + 'g | C: ' + carbs + 'g</div></div><div class="text-sm text-white/60">' + stock + 'g</div></div>';
+    listContainer.appendChild(btn);
   });
   
-  modal.querySelector('div:last-child').innerHTML += '</div></div>';
+  modal.appendChild(contentDiv);
   document.body.appendChild(modal);
 }
 
