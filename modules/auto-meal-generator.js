@@ -301,10 +301,16 @@ var autoMealGenerator = (function() {
     console.log('[AutoMealGenerator] Generando plan basado en despensa...');
     
     var recipes = getAllRecipes();
+    console.log('[AutoMealGenerator] Recetas encontradas:', Object.keys(recipes).length);
+    
     var despensa = getDespensaStock();
-    var despensaCount = Object.keys(despensa).filter(function(k) { return despensa[k].stock > 0; }).length;
+    console.log('[AutoMealGenerator] Despensa:', despensa);
+    
+    var despensaCount = Object.keys(despensa).filter(function(k) { return despensa[k] && despensa[k].stock > 0; }).length;
+    console.log('[AutoMealGenerator] Items en despensa con stock:', despensaCount);
     
     if (Object.keys(recipes).length === 0) {
+      console.log('[AutoMealGenerator] ERROR: No hay recetas');
       return {
         success: false,
         error: 'No hay recetas disponibles. Agrega recetas en la sección Recetas.'
@@ -312,6 +318,7 @@ var autoMealGenerator = (function() {
     }
     
     if (despensaCount === 0) {
+      console.log('[AutoMealGenerator] ERROR: Despensa vacía');
       return {
         success: false,
         error: 'Tu despensa está vacía. Agrega alimentos en Compras para generar un plan.',
@@ -320,7 +327,12 @@ var autoMealGenerator = (function() {
     }
     
     var availability = filterRecipesByAvailability(recipes);
+    console.log('[AutoMealGenerator] Recetas disponibles:', Object.keys(availability.available).length);
+    console.log('[AutoMealGenerator] Recetas parciales:', Object.keys(availability.partial).length);
+    
     var categorized = categorizeRecipes(availability.available);
+    console.log('[AutoMealGenerator] Categorias - Desayuno:', categorized.desayuno.length, 'Almuerzo:', categorized.almuerzo.length, 'Cena:', categorized.cena.length, 'Snacks:', categorized.snacks.length);
+    
     var targetMacros = getTargetMacros();
     var plan = selectRecipesForPlan(categorized, targetMacros);
     var resultMacros = calculatePlanMacros(plan);
@@ -331,7 +343,7 @@ var autoMealGenerator = (function() {
     if (partialKeys.length > 0 && Object.keys(availability.available).length < 4) {
       warnings.push({
         type: 'despensa',
-        message: 'Solo ' + Object.keys(availability.available).length + ' recetas是完全原料可用。Algunas recetas requieren ingredientes que no tienes.',
+        message: 'Solo ' + Object.keys(availability.available).length + ' recetas disponibles. Algunas requieren ingredientes que no tienes.',
         severity: 'medium'
       });
     }
