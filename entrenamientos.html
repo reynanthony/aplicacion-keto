@@ -60,26 +60,60 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 
 <!-- Dashboard Stats -->
 <div id="dashboardView" class="space-y-4 md:space-y-6">
+<!-- Monthly Stats -->
+<div class="glass-card rounded-xl p-4">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-base font-bold text-white flex items-center gap-2"><span class="material-symbols-outlined text-primary-container">calendar_month</span>Este Mes</h3>
+<span id="monthLabel" class="text-xs text-on-surface-variant"></span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+<div class="bg-surface-container rounded-xl p-3 text-center">
+<p id="monthWorkouts" class="text-2xl font-bold text-primary-container">0</p>
+<p class="text-[10px] text-on-surface-variant">Entrenamientos</p>
+</div>
+<div class="bg-surface-container rounded-xl p-3 text-center">
+<p id="monthCalories" class="text-2xl font-bold text-yellow-400">0</p>
+<p class="text-[10px] text-on-surface-variant">Calorías</p>
+</div>
+<div class="bg-surface-container rounded-xl p-3 text-center">
+<p id="monthMinutes" class="text-2xl font-bold text-blue-400">0</p>
+<p class="text-[10px] text-on-surface-variant">Minutos</p>
+</div>
+<div class="bg-surface-container rounded-xl p-3 text-center">
+<p id="monthCompletions" class="text-2xl font-bold text-green-400">0%</p>
+<p class="text-[10px] text-on-surface-variant">Completado</p>
+</div>
+</div>
+<!-- Monthly Progress Bar -->
+<div class="mb-3">
+<div class="flex justify-between text-xs text-on-surface-variant mb-1"><span>Progreso mensual</span><span id="monthProgressText">0/20 entrenamientos</span></div>
+<div class="h-2 bg-surface-container rounded-full overflow-hidden">
+<div id="monthProgressBar" class="h-full bg-gradient-to-r from-primary-container to-secondary transition-all duration-500" style="width:0%"></div>
+</div>
+</div>
+</div>
+
+<!-- All Time Stats -->
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
 <div class="glass-card rounded-xl p-3 md:p-4 text-center">
 <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary-container/20 flex items-center justify-center mx-auto mb-2"><span class="material-symbols-outlined text-base md:text-lg text-primary-container">fitness_center</span></div>
 <p id="totalWorkouts" class="text-xl md:text-2xl font-headline font-bold text-white">0</p>
-<p class="text-[10px] md:text-xs text-on-surface-variant">Entrenamientos</p>
+<p class="text-[10px] md:text-xs text-on-surface-variant">Total Entrenos</p>
 </div>
 <div class="glass-card rounded-xl p-3 md:p-4 text-center">
 <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-2"><span class="material-symbols-outlined text-base md:text-lg text-yellow-400">local_fire_department</span></div>
 <p id="totalCalories" class="text-xl md:text-2xl font-headline font-bold text-white">0</p>
-<p class="text-[10px] md:text-xs text-on-surface-variant">Calorías</p>
+<p class="text-[10px] md:text-xs text-on-surface-variant">Total Calorías</p>
 </div>
 <div class="glass-card rounded-xl p-3 md:p-4 text-center">
 <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-2"><span class="material-symbols-outlined text-base md:text-lg text-blue-400">timer</span></div>
 <p id="totalMinutes" class="text-xl md:text-2xl font-headline font-bold text-white">0</p>
-<p class="text-[10px] md:text-xs text-on-surface-variant">Minutos</p>
+<p class="text-[10px] md:text-xs text-on-surface-variant">Total Minutos</p>
 </div>
 <div class="glass-card rounded-xl p-3 md:p-4 text-center">
 <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-2"><span class="material-symbols-outlined text-base md:text-lg text-green-400">trending_up</span></div>
 <p id="currentStreak" class="text-xl md:text-2xl font-headline font-bold text-white">0</p>
-<p class="text-[10px] md:text-xs text-on-surface-variant">Racha</p>
+<p class="text-[10px] md:text-xs text-on-surface-variant">Racha Actual</p>
 </div>
 </div>
 
@@ -390,6 +424,32 @@ document.getElementById('totalWorkouts').textContent=totalWorkouts;
 document.getElementById('totalCalories').textContent=totalCalories;
 document.getElementById('totalMinutes').textContent=totalMinutes;
 document.getElementById('currentStreak').textContent=streak;
+
+// Monthly stats
+var now=new Date();
+var monthNames=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+document.getElementById('monthLabel').textContent=monthNames[now.getMonth()]+' '+now.getFullYear();
+
+var monthStart=new Date(now.getFullYear(),now.getMonth(),1);
+var monthWorkouts=workouts.filter(function(w){
+var d=new Date(w.date);
+return d>=monthStart;
+});
+var mWorkouts=monthWorkouts.length;
+var mCalories=monthWorkouts.reduce(function(s,w){return s+(w.calories||0)},0);
+var mMinutes=monthWorkouts.reduce(function(s,w){return s+(w.duration||0)},0);
+var mCompleted=monthWorkouts.reduce(function(s,w){return s+(w.completedExercises||0)},0);
+var mTotal=monthWorkouts.reduce(function(s,w){return s+((w.exercises||[]).length);},0);
+var mCompletion=mTotal>0?Math.round((mCompleted/mTotal)*100):0;
+var monthGoal=20;
+var mProgress=Math.min(100,Math.round((mWorkouts/monthGoal)*100));
+
+document.getElementById('monthWorkouts').textContent=mWorkouts;
+document.getElementById('monthCalories').textContent=mCalories;
+document.getElementById('monthMinutes').textContent=mMinutes;
+document.getElementById('monthCompletions').textContent=mCompletion+'%';
+document.getElementById('monthProgressText').textContent=mWorkouts+'/'+monthGoal+' entrenamientos';
+document.getElementById('monthProgressBar').style.width=mProgress+'%';
 
 renderWeekDays(workouts);
 renderMuscleStats(workouts);

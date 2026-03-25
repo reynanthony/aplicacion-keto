@@ -414,6 +414,33 @@ Importar Backup
 
 <!-- Panel Lateral: Métricas Adicionales -->
 <div class="lg:col-span-5 flex flex-col gap-4">
+<!-- Monthly Stats -->
+<div class="glass-card rounded-xl p-4">
+<h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-base">calendar_month</span>Resumen Mensual</h4>
+<div class="grid grid-cols-2 gap-3 mb-3">
+<div class="bg-surface-container-low rounded-lg p-2 text-center">
+<p id="monthMeals" class="text-xl font-bold text-primary-container">0</p>
+<p class="text-[9px] text-on-surface-variant">Comidas</p>
+</div>
+<div class="bg-surface-container-low rounded-lg p-2 text-center">
+<p id="monthCalories" class="text-xl font-bold text-yellow-400">0</p>
+<p class="text-[9px] text-on-surface-variant">Calorías</p>
+</div>
+<div class="bg-surface-container-low rounded-lg p-2 text-center">
+<p id="monthWorkouts" class="text-xl font-bold text-secondary">0</p>
+<p class="text-[9px] text-on-surface-variant">Entrenos</p>
+</div>
+<div class="bg-surface-container-low rounded-lg p-2 text-center">
+<p id="monthMinutes" class="text-xl font-bold text-blue-400">0</p>
+<p class="text-[9px] text-on-surface-variant">Minutos</p>
+</div>
+</div>
+<div class="h-1.5 bg-surface-container rounded-full overflow-hidden mb-2">
+<div id="monthProgressBar" class="h-full bg-gradient-to-r from-primary-container to-secondary transition-all duration-500" style="width:0%"></div>
+</div>
+<p class="text-[10px] text-on-surface-variant text-center"><span id="monthProgressText">0%</span> de meta mensual</p>
+</div>
+
 <!-- Métricas del Día -->
 <div class="glass-card rounded-xl p-4 flex-1">
 <h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-4">Métricas de Hoy</h4>
@@ -868,8 +895,57 @@ function loadDashboard() {
   safeSetStyle('carbsBar', 'width', carbsPercent + '%');
   
   renderWeightHistory();
+  loadMonthlyStats();
   } catch (e) {
     console.error('Error loading dashboard:', e);
+  }
+}
+
+function loadMonthlyStats() {
+  try {
+    var now = new Date();
+    var monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    var monthKey = now.toISOString().slice(0, 7);
+    
+    var totalMeals = 0;
+    var totalMonthCalories = 0;
+    var monthMealsHtml = localStorage.getItem('monthMeals_' + monthKey);
+    if (monthMealsHtml) {
+      var monthMealsData = JSON.parse(monthMealsHtml);
+      totalMeals = monthMealsData.count || 0;
+      totalMonthCalories = monthMealsData.calories || 0;
+    } else {
+      for (var d = new Date(monthStart); d <= now; d.setDate(d.getDate() + 1)) {
+        var dateKey = d.toISOString().slice(0, 10);
+        var mealPlan = getLocalData('mealPlan_' + dateKey, null, null);
+        if (mealPlan) {
+          Object.keys(mealPlan).forEach(function(meal) {
+            totalMeals += (mealPlan[meal] || []).length;
+          });
+        }
+      }
+      localStorage.setItem('monthMeals_' + monthKey, JSON.stringify({ count: totalMeals, calories: totalMonthCalories }));
+    }
+    
+    var workouts = getLocalData('ketoWorkouts', [], []);
+    var monthWorkouts = workouts.filter(function(w) {
+      var d = new Date(w.date);
+      return d >= monthStart;
+    });
+    var mWorkouts = monthWorkouts.length;
+    var mMinutes = monthWorkouts.reduce(function(s, w) { return s + (w.duration || 0); }, 0);
+    
+    var workoutGoal = 20;
+    var workoutProgress = Math.min(100, Math.round((mWorkouts / workoutGoal) * 100));
+    
+    safeSetText('monthMeals', totalMeals);
+    safeSetText('monthCalories', totalMonthCalories || 0);
+    safeSetText('monthWorkouts', mWorkouts);
+    safeSetText('monthMinutes', mMinutes);
+    safeSetText('monthProgressText', workoutProgress + '% (' + mWorkouts + '/' + workoutGoal + ')');
+    safeSetStyle('monthProgressBar', 'width', workoutProgress + '%');
+  } catch (e) {
+    console.error('Error loading monthly stats:', e);
   }
 }
 

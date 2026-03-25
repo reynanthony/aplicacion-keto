@@ -367,6 +367,9 @@ function executeAdd(meal,foodId,totalGrams){
 var plan=getMealPlan(currentDay);
 plan[meal].push({id:foodId,portion:totalGrams});
 saveMealPlanForDate(currentDay,plan);
+
+updateMonthlyMealStats(1);
+
 var despensa=getDespensa();
 if(despensa[foodId]){
 despensa[foodId].stock=Math.max(0,despensa[foodId].stock-totalGrams);
@@ -376,6 +379,14 @@ localStorage.setItem("despensa",JSON.stringify(despensa));
 closePortionModal();
 renderMealPlan();
 initWeekSelector();
+}
+
+function updateMonthlyMealStats(mealCount) {
+  var now = new Date();
+  var monthKey = now.toISOString().slice(0, 7);
+  var monthMeals = safeParseJSON(localStorage.getItem('monthMeals_' + monthKey), { count: 0, calories: 0 });
+  monthMeals.count = (monthMeals.count || 0) + mealCount;
+  localStorage.setItem('monthMeals_' + monthKey, JSON.stringify(monthMeals));
 }
 function addAvailableStock(){
 if(pendingAdd.meal&&pendingAdd.foodId){
