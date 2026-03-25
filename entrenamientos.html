@@ -468,12 +468,15 @@ var html='';
 workouts.slice(0,5).forEach(function(w){
 var d=new Date(w.date);
 var dateStr=d.toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short'});
-html+='<div class="flex items-center gap-3 md:gap-4 p-2 md:p-3 rounded-xl bg-surface-container-high cursor-pointer hover:bg-surface-container-highest transition-all" onclick="showWorkoutDetail(\''+w.id+'\')">';
-html+='<div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary-container/20 flex items-center justify-center">';
-html+='<span class="material-symbols-outlined text-base md:text-lg text-primary-container">fitness_center</span></div>';
+var completed=w.completedExercises||0;
+var total=w.exercises?w.exercises.length:0;
+var isComplete=completed===total&&total>0;
+html+='<div class="flex items-center gap-3 md:gap-4 p-2 md:p-3 rounded-xl bg-surface-container-high cursor-pointer hover:bg-surface-container-highest transition-all'+(isComplete?' border border-green-500/30':'')+'" onclick="showWorkoutDetail(\''+w.id+'\')">';
+html+='<div class="w-10 h-10 md:w-12 md:h-12 rounded-xl '+(isComplete?'bg-green-500/20':'bg-primary-container/20')+' flex items-center justify-center">';
+html+='<span class="material-symbols-outlined text-base md:text-lg '+(isComplete?'text-green-400':'text-primary-container')+'">'+(isComplete?'check_circle':'fitness_center')+'</span></div>';
 html+='<div class="flex-1 min-w-0">';
 html+='<p class="text-sm font-medium text-white truncate">'+dateStr+'</p>';
-html+='<p class="text-[10px] md:text-xs text-on-surface-variant">'+(w.exercises||[]).length+' ej. - '+w.duration+' min</p></div>';
+html+='<p class="text-[10px] md:text-xs text-on-surface-variant">'+(isComplete?'✓ ':'')+completed+'/'+total+' ej. - '+w.duration+' min</p></div>';
 html+='<div class="text-right flex-shrink-0">';
 html+='<p class="text-base md:text-lg font-bold text-primary-container">'+w.calories+'</p>';
 html+='<p class="text-[10px] md:text-xs text-on-surface-variant">kcal</p></div></div>';
@@ -499,14 +502,15 @@ html+='<div><p class="text-xl md:text-2xl font-bold text-yellow-400">'+workout.c
 html+='<div><p class="text-xl md:text-2xl font-bold text-blue-400">'+(workout.exercises||[]).length+'</p><p class="text-[10px] md:text-xs text-on-surface-variant">ejercicios</p></div>';
 html+='</div>';
 
-(workout.exercises||[]).forEach(function(e){
+(workout.exercises||[]).forEach(function(e, idx){
 var ex=exercises.find(function(x){return x.id===e.id})||e;
 var color=muscleColors[ex.muscle]||'#ff4d00';
-html+='<div class="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-xl bg-surface-container-high">';
+var isCompleted=idx<(workout.completedExercises||0);
+html+='<div class="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-xl '+(isCompleted?'bg-green-500/10 border border-green-500/20':'bg-surface-container-high')+'">';
 html+='<div class="w-9 h-9 md:w-10 md:h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:'+color+'20">';
-html+='<span class="material-symbols-outlined text-xs md:text-sm" style="color:'+color+'">fitness_center</span></div>';
+html+='<span class="material-symbols-outlined text-xs md:text-sm '+(isCompleted?'text-green-400':'')+'" style="color:'+color+'">'+(isCompleted?'check_circle':'fitness_center')+'</span></div>';
 html+='<div class="flex-1 min-w-0">';
-html+='<p class="text-sm font-medium text-white truncate">'+ex.name+'</p>';
+html+='<p class="text-sm font-medium '+(isCompleted?'text-green-400':'text-white')+' truncate">'+ex.name+'</p>';
 html+='<p class="text-[10px] md:text-xs text-on-surface-variant">'+e.sets+'x'+e.reps+' reps</p></div>';
 html+='<p class="text-xs md:text-sm text-primary-container flex-shrink-0">'+Math.round(ex.calories*(workout.duration/60))+' kcal</p></div>';
 });
@@ -912,11 +916,64 @@ function saveWorkoutPrefs() {
 function saveAndLogWorkout() {
   if (!generatedWorkout || !generatedWorkout.routine) return;
   
+  showWorkoutCheckModal();
+}
+
+function showWorkoutCheckModal() {
+  var existing = document.getElementById('workoutCheckModal');
+  if (existing) existing.remove();
+  
+  var routine = generatedWorkout.routine;
+  var today = new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+  
+  var html = '<div class="space-y-2 mb-4 max-h-[50vh] overflow-y-auto">';
+  routine.exercises.forEach(function(ex, idx) {
+    html += '<label class="flex items-center gap-3 p-3 bg-surface-container rounded-xl cursor-pointer hover:bg-surface-container-highest transition-all">';
+    html += '<input type="checkbox" class="workout-check w-5 h-5 accent-primary-container" data-idx="' + idx + '">';
+    html += '<div class="flex-1"><p class="font-medium text-white">' + ex.name + '</p>';
+    html += '<p class="text-xs text-white/60">' + ex.sets + 'x' + ex.reps + ' reps • ' + ex.muscle + '</p></div>';
+    html += '</label>';
+  });
+  html += '</div>';
+  
+  var modal = document.createElement('div');
+  modal.id = 'workoutCheckModal';
+  modal.className = 'fixed inset-0 z-[90] flex items-center justify-center p-4 pointer-events-none';
+  modal.innerHTML = '<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWorkoutCheckModal()"></div>' +
+    '<div class="glass-card rounded-2xl p-5 w-full max-w-sm pointer-events-auto">' +
+      '<div class="flex items-center gap-3 mb-4">' +
+        '<div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-green-400">fitness_center</span></div>' +
+        '<div><h3 class="text-lg font-headline font-bold text-white">' + today + '</h3><p class="text-xs text-white/60">' + routine.duration + ' min • ' + routine.estimatedCalories + ' kcal</p></div>' +
+        '<button onclick="closeWorkoutCheckModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all ml-auto"><span class="material-symbols-outlined text-lg">close</span></button>' +
+      '</div>' +
+      html +
+      '<div class="flex gap-3">' +
+        '<button onclick="closeWorkoutCheckModal()" class="flex-1 py-3 rounded-xl bg-surface-container text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>' +
+        '<button onclick="confirmAndSaveWorkout()" class="flex-1 py-3 rounded-xl bg-green-500 text-black font-bold hover:bg-green-400 transition-colors">Completar</button>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(modal);
+}
+
+function closeWorkoutCheckModal() {
+  var modal = document.getElementById('workoutCheckModal');
+  if (modal) modal.remove();
+}
+
+function confirmAndSaveWorkout() {
+  var checks = document.querySelectorAll('.workout-check:checked');
+  var completedCount = checks.length;
+  var routine = generatedWorkout.routine;
+  
+  routine.completedExercises = completedCount;
+  routine.completedAt = new Date().toISOString();
+  
   if (typeof autoWorkoutGenerator !== 'undefined') {
-    autoWorkoutGenerator.saveWorkoutLog(generatedWorkout.routine, true);
+    autoWorkoutGenerator.saveWorkoutLog(routine, true);
   }
   
-  showToast('Entrenamiento guardado');
+  closeWorkoutCheckModal();
+  showToast('Entrenamiento completado: ' + completedCount + '/' + routine.exercises.length + ' ejercicios');
   loadDashboard();
   setWorkoutMode('manual');
 }
