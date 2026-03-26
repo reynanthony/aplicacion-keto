@@ -359,6 +359,25 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 </div>
 </div>
 
+<!-- Auto Workout Warning Modal -->
+<div id="autoWorkoutWarningModal" class="fixed inset-0 z-[110] hidden">
+<div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+<div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto text-center border-2 border-yellow-500/50">
+<div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4">
+<span class="material-symbols-outlined text-4xl text-yellow-400">warning</span>
+</div>
+<h3 class="text-xl font-headline font-bold text-yellow-400 mb-2">Advertencia</h3>
+<p class="text-white/80 mb-2">Estás modificando un entrenamiento generado automáticamente.</p>
+<p class="text-white/60 text-sm mb-6">Los resultados pueden no ser los indicados para tu objetivo. ¿Deseas continuar?</p>
+<div class="flex gap-3">
+<button onclick="closeAutoWorkoutWarning()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>
+<button onclick="confirmAutoWorkoutModification()" class="flex-1 py-3 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors">Continuar</button>
+</div>
+</div>
+</div>
+</div>
+
 <!-- Toast -->
 <div id="toast" class="fixed bottom-24 left-4 right-4 md:left-1/2 md:-translate-x-1/2 md:max-w-sm z-[110] hidden opacity-0 translate-y-4 pointer-events-none transition-all duration-300">
 <div class="glass-card rounded-full px-4 md:px-5 py-2.5 md:py-3 flex items-center gap-2 md:gap-3 shadow-lg">
@@ -942,6 +961,30 @@ document.getElementById('cancelModal').classList.add('hidden');
 document.getElementById('cancelModal').classList.remove('flex');
 }
 
+var autoWorkoutModificationCallback = null;
+function showAutoWorkoutWarning(callback) {
+  if (sessionStorage.getItem('autoWorkoutWarningAcknowledged')) {
+    if (callback) callback();
+    return;
+  }
+  autoWorkoutModificationCallback = callback;
+  document.getElementById("autoWorkoutWarningModal").classList.remove("hidden");
+  document.getElementById("autoWorkoutWarningModal").classList.add("flex");
+}
+function closeAutoWorkoutWarning() {
+  document.getElementById("autoWorkoutWarningModal").classList.add("hidden");
+  document.getElementById("autoWorkoutWarningModal").classList.remove("flex");
+  autoWorkoutModificationCallback = null;
+}
+function confirmAutoWorkoutModification() {
+  sessionStorage.setItem('autoWorkoutWarningAcknowledged', 'true');
+  closeAutoWorkoutWarning();
+  if (autoWorkoutModificationCallback) {
+    autoWorkoutModificationCallback();
+    autoWorkoutModificationCallback = null;
+  }
+}
+
 function confirmCancelWorkout(){
 currentWorkoutExercises=[];
 localStorage.removeItem('currentWorkoutDraft');
@@ -1219,13 +1262,25 @@ function toggleExerciseComplete(idx) {
 }
 
 function updateExerciseData(idx, field, value) {
+  if (!generatedWorkout || !generatedWorkout.routine) return;
+  
+  var sessionKey = 'autoWorkoutWarningAcknowledged';
+  if (!sessionStorage.getItem(sessionKey)) {
+    showAutoWorkoutWarning(function() {
+      executeUpdateExerciseData(idx, field, value);
+    });
+    return;
+  }
+  executeUpdateExerciseData(idx, field, value);
+}
+
+function executeUpdateExerciseData(idx, field, value) {
   if (!generatedWorkout || !generatedWorkout.actualData) return;
   if (!generatedWorkout.actualData[idx]) {
     generatedWorkout.actualData[idx] = { sets: 0, reps: 0, weight: '' };
   }
   generatedWorkout.actualData[idx][field] = field === 'weight' ? value : parseInt(value) || 0;
   
-  // Just store the data, calculate final calories when saving
   renderAutoWorkoutSummary(generatedWorkout, document.getElementById('autoWorkoutSummary'));
 }
 
@@ -1404,6 +1459,17 @@ document.addEventListener('DOMContentLoaded', function() {
 function adjustExerciseReps(idx, delta) {
   if (!generatedWorkout || !generatedWorkout.routine || !generatedWorkout.routine.exercises) return;
   
+  var sessionKey = 'autoWorkoutWarningAcknowledged';
+  if (!sessionStorage.getItem(sessionKey)) {
+    showAutoWorkoutWarning(function() {
+      executeAdjustExerciseReps(idx, delta);
+    });
+    return;
+  }
+  executeAdjustExerciseReps(idx, delta);
+}
+
+function executeAdjustExerciseReps(idx, delta) {
   var exercise = generatedWorkout.routine.exercises[idx];
   if (!exercise) return;
   
@@ -1418,7 +1484,6 @@ function adjustExerciseReps(idx, delta) {
   if (testReps < 1) testReps = 1;
   if (testReps > 30) testReps = 30;
   
-  // Calculate based on total volume (sets * reps * weight)
   var oldVolume = exercise.sets * exercise.reps * (weight || 1);
   var newVolume = testSets * testReps * (weight || 1);
   var volumeRatio = newVolume / oldVolume;
@@ -1444,6 +1509,17 @@ function adjustExerciseReps(idx, delta) {
 function removeExerciseFromRoutine(idx) {
   if (!generatedWorkout || !generatedWorkout.routine || !generatedWorkout.routine.exercises) return;
   
+  var sessionKey = 'autoWorkoutWarningAcknowledged';
+  if (!sessionStorage.getItem(sessionKey)) {
+    showAutoWorkoutWarning(function() {
+      executeRemoveExerciseFromRoutine(idx);
+    });
+    return;
+  }
+  executeRemoveExerciseFromRoutine(idx);
+}
+
+function executeRemoveExerciseFromRoutine(idx) {
   var exercise = generatedWorkout.routine.exercises[idx];
   var durationPerEx = generatedWorkout.routine.duration / generatedWorkout.routine.exercises.length;
   var calPerEx = generatedWorkout.routine.estimatedCalories / generatedWorkout.routine.exercises.length;
@@ -1606,6 +1682,17 @@ function getAvailableExercises() {
 function addExerciseToRoutine(exercise) {
   if (!generatedWorkout || !generatedWorkout.routine) return;
   
+  var sessionKey = 'autoWorkoutWarningAcknowledged';
+  if (!sessionStorage.getItem(sessionKey)) {
+    showAutoWorkoutWarning(function() {
+      executeAddExerciseToRoutine(exercise);
+    });
+    return;
+  }
+  executeAddExerciseToRoutine(exercise);
+}
+
+function executeAddExerciseToRoutine(exercise) {
   var prefs = generatedWorkout.preferences || { duration: 30 };
   var currentExCount = generatedWorkout.routine.exercises.length;
   var durationPerEx = prefs.duration / Math.max(1, currentExCount);

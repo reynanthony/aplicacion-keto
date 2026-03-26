@@ -1,0 +1,184 @@
+/* KetoLab Mobile Enhancements - Añadir sin romper */
+
+@media (max-width: 768px) {
+  /* Mejoras táctiles */
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+  
+  /* Prevenir zoom accidental en inputs */
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="password"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+  
+  /* Scroll suave nativo */
+  .smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Espaciado mejorado para dedos */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Botones más grandes en móvil */
+  .btn-mobile {
+    padding: 12px 24px;
+    font-size: 16px;
+  }
+  
+  /* Safe area para notch */
+  .safe-top {
+    padding-top: env(safe-area-inset-top, 20px);
+  }
+  
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+  }
+  
+  /* Pull to refresh visual */
+  .pull-indicator {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--on-surface-variant);
+    font-size: 12px;
+  }
+}
+
+/* Oscurecimiento de fondos en modales */
+.modal-backdrop {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+/* Indicador de swipe */
+.swipe-hint {
+  animation: swipe-hint-pulse 2s ease-in-out infinite;
+}
+
+@keyframes swipe-hint-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+/* Loading state para móviles */
+.mobile-loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.mobile-loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Skeleton loader para móvil */
+.skeleton-mobile {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading-mobile 1.5s infinite;
+}
+
+@keyframes skeleton-loading-mobile {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Tap highlight animado */
+.tap-highlight {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tap-highlight:active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 77, 0, 0.2);
+  border-radius: inherit;
+  animation: tap-highlight-anim 0.3s ease-out;
+}
+
+@keyframes tap-highlight-anim {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(1.2); opacity: 0; }
+}
+
+/* Bottom sheet improvements */
+.bottom-sheet {
+  max-height: 85vh;
+  border-radius: 24px 24px 0 0;
+}
+
+.bottom-sheet-handle {
+  width: 40px;
+  height: 4px;
+  background: var(--outline);
+  border-radius: 2px;
+  margin: 12px auto;
+}
+
+/* Optimización de rendimiento */
+.reduce-motion {
+  animation: none !important;
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Pull to refresh */
+.ptr-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.ptr-indicator {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  right: 0;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: top 0.3s ease;
+}
+
+.ptr-container.refreshing .ptr-indicator {
+  top: 0;
+}
+
+.ptr-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--outline);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: ptr-spin 0.8s linear infinite;
+}
+
+@keyframes ptr-spin {
+  to { transform: rotate(360deg); }
+}

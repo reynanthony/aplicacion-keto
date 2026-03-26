@@ -1,0 +1,232 @@
+/* KetoLab Animaciones - Añadir sin romper */
+
+.btn-tap-feedback:active {
+    transform: scale(0.97);
+    transition: transform 0.05s ease-out;
+}
+
+.fade-in {
+    animation: ketolab-fadeIn 0.2s ease-out forwards;
+}
+
+.fade-in-up {
+    animation: ketolab-fadeInUp 0.3s ease-out forwards;
+}
+
+.fade-in-down {
+    animation: ketolab-fadeInDown 0.3s ease-out forwards;
+}
+
+.slide-in-right {
+    animation: ketolab-slideInRight 0.25s ease-out forwards;
+}
+
+.slide-in-left {
+    animation: ketolab-slideInLeft 0.25s ease-out forwards;
+}
+
+.pulse-once {
+    animation: ketolab-pulse 0.3s ease-out;
+}
+
+.shake {
+    animation: ketolab-shake 0.4s ease-out;
+}
+
+.bounce-in {
+    animation: ketolab-bounceIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.skeleton {
+    animation: ketolab-skeleton 1.5s ease-in-out infinite;
+    background: linear-gradient(90deg, var(--surface-container) 25%, var(--surface-container-high) 50%, var(--surface-container) 75%);
+    background-size: 200% 100%;
+}
+
+.card-hover {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 77, 0, 0.15);
+}
+
+.toast-enter {
+    animation: ketolab-toastEnter 0.3s ease-out forwards;
+}
+
+.toast-exit {
+    animation: ketolab-toastExit 0.3s ease-out forwards;
+}
+
+.modal-appear {
+    animation: ketolab-modalAppear 0.2s ease-out forwards;
+}
+
+.list-item-appear {
+    animation: ketolab-listItemAppear 0.3s ease-out forwards;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.spinner {
+    animation: ketolab-spin 1s linear infinite;
+}
+
+@keyframes ketolab-fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes ketolab-fadeInUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+@keyframes ketolab-fadeInDown {
+    from { 
+        opacity: 0; 
+        transform: translateY(-20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+@keyframes ketolab-slideInRight {
+    from { 
+        opacity: 0; 
+        transform: translateX(30px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateX(0); 
+    }
+}
+
+@keyframes ketolab-slideInLeft {
+    from { 
+        opacity: 0; 
+        transform: translateX(-30px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateX(0); 
+    }
+}
+
+@keyframes ketolab-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes ketolab-shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+}
+
+@keyframes ketolab-bounceIn {
+    0% { 
+        opacity: 0; 
+        transform: scale(0.3); 
+    }
+    50% { 
+        transform: scale(1.05); 
+    }
+    70% { 
+        transform: scale(0.95); 
+    }
+    100% { 
+        opacity: 1; 
+        transform: scale(1); 
+    }
+}
+
+@keyframes ketolab-skeleton {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+@keyframes ketolab-toastEnter {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px) scale(0.9); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+    }
+}
+
+@keyframes ketolab-toastExit {
+    from { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+    }
+    to { 
+        opacity: 0; 
+        transform: translateY(20px) scale(0.9); 
+    }
+}
+
+@keyframes ketolab-modalAppear {
+    from { 
+        opacity: 0; 
+        transform: scale(0.95); 
+    }
+    to { 
+        opacity: 1; 
+        transform: scale(1); 
+    }
+}
+
+@keyframes ketolab-listItemAppear {
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+@keyframes ketolab-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Stagger delays para listas */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
+.stagger-5 { animation-delay: 0.25s; }
+.stagger-6 { animation-delay: 0.3s; }
+
+/* Transiciones suaves para elementos interactivos */
+.interactive-element {
+    transition: all 0.2s ease;
+}
+
+.interactive-element:hover {
+    transform: translateY(-1px);
+}
+
+.interactive-element:active {
+    transform: scale(0.98);
+}
+
+/* Highlight para selección */
+.selection-highlight {
+    animation: ketolab-pulse 0.2s ease-out;
+    box-shadow: 0 0 0 3px rgba(255, 77, 0, 0.3);
+}

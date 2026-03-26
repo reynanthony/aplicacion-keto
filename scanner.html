@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="manifest" href="/aplicacion-keto/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KetoLab">
+<meta name="theme-color" content="#ff4d00">
+<title>KetoLab | Escaner</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","primary-container":"#ff4d00","on-primary":"#ffffff","on-primary-container":"#ffffff","surface":"#0a0a0a","surface-container":"#181717","surface-container-low":"#111010","surface-container-high":"#1e1c1c","surface-container-highest":"#242222","on-surface":"#ffffff","on-surface-variant":"#adaaaa","outline":"#767575","secondary":"#ffb300","background":"#0a0a0a"},fontFamily:{headline:["Plus Jakarta Sans","sans-serif"],body:["Inter","sans-serif"]}}}};
+</script>
+<style>
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.glass-card{background:rgba(36,34,34,0.4);backdrop-filter:blur(20px);border:1px solid rgba(255,77,0,0.1)}
+#scanner-view{position:relative;overflow:hidden;background:#000}
+#scanner-video{width:100%;height:100%;object-fit:cover}
+.scanner-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.scanner-frame{width:280px;height:180px;border:3px solid #ff4d00;border-radius:16px;position:relative}
+.scanner-line{position:absolute;left:10px;right:10px;height:2px;background:linear-gradient(90deg,transparent,#ff4d00,transparent);animation:scan 2s linear infinite}
+@keyframes scan{0%{top:10px}50%{top:calc(100% - 10px)}100%{top:10px}}
+#result-section{transition:all 0.3s ease}
+</style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen flex flex-col">
+<header class="bg-surface-container-low p-4 flex items-center justify-between border-b border-primary-container/10">
+<a href="alimentos.html" class="flex items-center gap-2 text-white hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+<span class="font-medium">Volver</span>
+</a>
+<h1 class="text-lg font-headline font-bold">Escanear Código</h1>
+<button onclick="toggleCamera()" id="toggleBtn" class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-white/70" id="cameraIcon">flash_on</span>
+</button>
+</header>
+
+<main class="flex-1 flex flex-col">
+<div id="scanner-view" class="relative h-[300px] bg-black">
+<video id="scanner-video" autoplay playsinline muted></video>
+<div class="scanner-overlay">
+<div class="scanner-frame">
+<div class="scanner-line"></div>
+</div>
+</div>
+<div id="scanner-status" class="absolute bottom-4 left-4 right-4 text-center">
+<p class="text-white/70 text-sm">Posiciona el código de barras dentro del marco</p>
+</div>
+</div>
+
+<div id="result-section" class="p-4 hidden">
+<div class="glass-card rounded-2xl p-4">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-green-400 text-2xl">check_circle</span>
+</div>
+<div>
+<h3 class="text-white font-bold">Código detectado</h3>
+<p id="barcode-value" class="text-on-surface-variant text-sm font-mono"></p>
+</div>
+</div>
+
+<div id="product-info" class="space-y-3">
+<div>
+<label class="text-xs text-on-surface-variant uppercase">Nombre del producto</label>
+<input type="text" id="product-name" placeholder="Ej: Huevos" class="w-full bg-surface-container-high text-white rounded-lg px-3 py-2 mt-1 border border-outline focus:border-primary-container focus:outline-none">
+</div>
+
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="text-xs text-on-surface-variant uppercase">Calorías (100g)</label>
+<input type="number" id="product-calories" placeholder="0" class="w-full bg-surface-container-high text-white rounded-lg px-3 py-2 mt-1 border border-outline focus:border-primary-container focus:outline-none">
+</div>
+<div>
+<label class="text-xs text-on-surface-variant uppercase">Proteína (g)</label>
+<input type="number" id="product-protein" placeholder="0" class="w-full bg-surface-container-high text-white rounded-lg px-3 py-2 mt-1 border border-outline focus:border-primary-container focus:outline-none">
+</div>
+</div>
+
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="text-xs text-on-surface-variant uppercase">Grasa (g)</label>
+<input type="number" id="product-fat" placeholder="0" class="w-full bg-surface-container-high text-white rounded-lg px-3 py-2 mt-1 border border-outline focus:border-primary-container focus:outline-none">
+</div>
+<div>
+<label class="text-xs text-on-structure-variant uppercase">Carbs (g)</label>
+<input type="number" id="product-carbs" placeholder="0" class="w-full bg-surface-container-high text-white rounded-lg px-3 py-2 mt-1 border border-outline focus:border-primary-container focus:outline-none">
+</div>
+</div>
+
+<button onclick="addToDespensa()" class="w-full py-3 rounded-xl bg-primary-container text-white font-bold mt-4 hover:bg-primary-container/80 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+Agregar a la despensa
+</button>
+</div>
+</div>
+</div>
+
+<div class="p-4">
+<div class="glass-card rounded-2xl p-4">
+<h3 class="text-white font-bold mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">history</span>
+Escaneos recientes
+</h3>
+<div id="recent-scans" class="space-y-2">
+<p class="text-on-surface-variant text-sm text-center py-4">No hay escaneos recientes</p>
+</div>
+</div>
+</div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.8.4/dist/quagga.min.js"></script>
+<script src="/aplicacion-keto/utils.js"></script>
+<script>
+var lastScannedCode = null;
+var cameraActive = false;
+var currentStream = null;
+
+function initScanner() {
+  Quagga.init({
+    inputStream: {
+      name: 'Live',
+      type: 'LiveStream',
+      target: document.querySelector('#scanner-video'),
+      constraints: {
+        facingMode: 'environment',
+        width: { ideal: 1280 },
+        height: { ideal: 720 }
+      }
+    },
+    decoder: {
+      readers: ['ean_reader', 'ean_8_reader', 'upc_reader', 'upc_e_reader', 'code_128_reader']
+    },
+    locate: true,
+    locator: {
+      patchSize: 'medium',
+      halfSample: true
+    }
+  }, function(err) {
+    if (err) {
+      console.error('Scanner init error:', err);
+      document.getElementById('scanner-status').innerHTML = '<p class="text-red-400 text-sm">Error al iniciar cámara</p>';
+      return;
+    }
+    Quagga.start();
+    cameraActive = true;
+  });
+
+  Quagga.onDetected(onBarcodeDetected);
+}
+
+function onBarcodeDetected(result) {
+  var code = result.codeResult.code;
+  if (!code || code === lastScannedCode) return;
+  
+  lastScannedCode = code;
+  playBeep();
+  
+  document.getElementById('barcode-value').textContent = code;
+  document.getElementById('result-section').classList.remove('hidden');
+  document.getElementById('result-section').classList.add('fade-in-up');
+  
+  document.getElementById('product-name').value = '';
+  document.getElementById('product-calories').value = '';
+  document.getElementById('product-protein').value = '';
+  document.getElementById('product-fat').value = '';
+  document.getElementById('product-carbs').value = '';
+  
+  saveRecentScan(code);
+  
+  setTimeout(function() {
+    lastScannedCode = null;
+  }, 2000);
+}
+
+function playBeep() {
+  try {
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.value = 1800;
+    osc.type = 'sine';
+    gain.gain.value = 0.3;
+    osc.start();
+    osc.stop(ctx.currentTime + 0.1);
+  } catch (e) {}
+}
+
+function toggleCamera() {
+  if (cameraActive) {
+    Quagga.stop();
+    cameraActive = false;
+    document.getElementById('cameraIcon').textContent = 'flash_off';
+    document.getElementById('scanner-status').innerHTML = '<p class="text-yellow-400 text-sm">Cámara pausada</p>';
+  } else {
+    Quagga.start();
+    cameraActive = true;
+    document.getElementById('cameraIcon').textContent = 'flash_on';
+    document.getElementById('scanner-status').innerHTML = '<p class="text-white/70 text-sm">Posiciona el código de barras dentro del marco</p>';
+  }
+}
+
+function addToDespensa() {
+  var name = document.getElementById('product-name').value.trim();
+  var cal = parseFloat(document.getElementById('product-calories').value) || 0;
+  var prot = parseFloat(document.getElementById('product-protein').value) || 0;
+  var fat = parseFloat(document.getElementById('product-fat').value) || 0;
+  var carbs = parseFloat(document.getElementById('product-carbs').value) || 0;
+  
+  if (!name) {
+    alert('Por favor ingresa un nombre para el producto');
+    return;
+  }
+  
+  var id = 'p' + Date.now();
+  var newFood = {
+    id: id,
+    name: name,
+    calories: cal,
+    protein: prot,
+    fat: fat,
+    carbs: carbs,
+    portion: 100,
+    barcode: lastScannedCode,
+    addedAt: new Date().toISOString()
+  };
+  
+  var foods = safeParseJSON(localStorage.getItem('ketoFoods'), []);
+  foods.push(newFood);
+  localStorage.setItem('ketoFoods', JSON.stringify(foods));
+  
+  var despensa = safeParseJSON(localStorage.getItem('despensa'), {});
+  despensa[id] = { stock: 100, lastUpdated: new Date().toISOString() };
+  localStorage.setItem('despensa', JSON.stringify(despensa));
+  
+  showToast(name + ' agregado a la despensa');
+  
+  document.getElementById('product-name').value = '';
+  document.getElementById('product-calories').value = '';
+  document.getElementById('product-protein').value = '';
+  document.getElementById('product-fat').value = '';
+  document.getElementById('product-carbs').value = '';
+}
+
+function saveRecentScan(code) {
+  var scans = safeParseJSON(localStorage.getItem('recentScans'), []);
+  scans.unshift({ code: code, time: new Date().toISOString() });
+  if (scans.length > 10) scans = scans.slice(0, 10);
+  localStorage.setItem('recentScans', JSON.stringify(scans));
+  renderRecentScans();
+}
+
+function renderRecentScans() {
+  var scans = safeParseJSON(localStorage.getItem('recentScans'), []);
+  var container = document.getElementById('recent-scans');
+  
+  if (scans.length === 0) {
+    container.innerHTML = '<p class="text-on-surface-variant text-sm text-center py-4">No hay escaneos recientes</p>';
+    return;
+  }
+  
+  var html = '';
+  scans.forEach(function(scan, idx) {
+    var time = new Date(scan.time);
+    var timeStr = time.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    html += '<div class="flex items-center justify-between p-3 bg-surface-container rounded-xl hover:bg-surface-container-high transition-colors cursor-pointer" onclick="loadScan(\'' + scan.code + '\')">';
+    html += '<div class="flex items-center gap-3"><span class="material-symbols-outlined text-on-surface-variant">qr_code</span>';
+    html += '<div><p class="text-white text-sm font-mono">' + scan.code + '</p>';
+    html += '<p class="text-on-surface-variant text-xs">' + timeStr + '</p></div></div>';
+    html += '<span class="material-symbols-outlined text-on-surface-variant/50">chevron_right</span></div>';
+  });
+  
+  container.innerHTML = html;
+}
+
+function loadScan(code) {
+  document.getElementById('barcode-value').textContent = code;
+  lastScannedCode = code;
+  document.getElementById('result-section').classList.remove('hidden');
+  document.getElementById('result-section').classList.add('fade-in-up');
+  window.scrollTo({ top: document.getElementById('result-section').offsetTop, behavior: 'smooth' });
+}
+
+function showToast(msg) {
+  var existing = document.getElementById('toast');
+  if (existing) existing.remove();
+  
+  var toast = document.createElement('div');
+  toast.id = 'toast';
+  toast.className = 'fixed bottom-20 left-4 right-4 bg-surface-container-high text-white px-4 py-3 rounded-xl shadow-lg z-50 text-center';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  
+  setTimeout(function() {
+    toast.remove();
+  }, 3000);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    initScanner();
+    renderRecentScans();
+  });
+} else {
+  initScanner();
+  renderRecentScans();
+}
+</script>
+</body>
+</html>

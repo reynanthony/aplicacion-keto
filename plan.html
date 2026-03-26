@@ -115,6 +115,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 <div id="portionModal" class="fixed inset-0 z-[60] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closePortionModal()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-headline font-bold text-white" id="portionFoodName"></h3><button onclick="closePortionModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div class="bg-surface-container-high rounded-xl p-4 mb-4"><div class="grid grid-cols-4 gap-2 text-center"><div><p class="text-[10px] text-on-surface-variant uppercase">Cal</p><p id="portionCalories" class="text-lg font-bold text-yellow-400">0</p></div><div><p class="text-[10px] text-on-surface-variant uppercase">Prot</p><p id="portionProtein" class="text-lg font-bold text-orange-400">0g</p></div><div><p class="text-[10px] text-on-surface-variant uppercase">Gras</p><p id="portionFat" class="text-lg font-bold text-yellow-300">0g</p></div><div><p class="text-[10px] text-on-surface-variant uppercase">Carb</p><p id="portionCarbs" class="text-lg font-bold text-cyan-400">0g</p></div></div></div><div class="mb-3"><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Unidad de medida</label><div id="planUnitSelector" class="flex flex-wrap gap-2"></div></div><div class="mb-4"><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Cantidad</label><div class="flex items-center gap-3"><button onclick="adjustTempQty(-1)" class="w-12 h-12 rounded-xl bg-surface-container-high text-white font-bold text-xl hover:bg-surface-container-highest transition-all">−</button><input type="number" id="tempQty" value="1" min="0.1" step="0.1" class="flex-1 bg-surface-container text-white border border-outline rounded-xl px-4 py-3 text-center text-xl font-bold focus:outline-none focus:border-primary-container"><button onclick="adjustTempQty(1)" class="w-12 h-12 rounded-xl bg-surface-container-high text-white font-bold text-xl hover:bg-surface-container-highest transition-all">+</button></div></div><div class="bg-primary-container/20 rounded-xl p-3 mb-4 border border-primary-container/30"><div class="flex justify-between items-center"><span class="text-sm text-white/70">Total en gramos:</span><span id="portionPreview" class="text-2xl font-bold text-primary-container">0 g</span></div></div><div id="stockWarning" class="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3 mb-4 hidden"><div class="flex items-center gap-2 text-yellow-400 text-sm"><span class="material-symbols-outlined">warning</span><span id="stockWarningText"></span></div></div><input type="hidden" id="selectedFoodId"><input type="hidden" id="selectedMealType"><div class="flex gap-3"><button onclick="closePortionModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="addFoodToMeal()" class="flex-1 py-3 rounded-xl bg-primary-container text-white font-bold hover:bg-primary-container/80 transition-colors">Agregar</button></div></div></div></div>
 <div id="stockModal" class="fixed inset-0 z-[70] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto text-center"><div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-4xl text-yellow-400">warning</span></div><h3 class="text-xl font-headline font-bold text-white mb-2">Stock Insuficiente</h3><p class="text-white/70 mb-2">Solo tienes disponible:</p><p id="availableStock" class="text-3xl font-bold text-yellow-400 mb-4">0 g</p><p class="text-white/50 text-sm mb-6">de <span id="requestedStock" class="text-white">0 g</span></p><div class="flex gap-3"><button onclick="closeStockModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="addAvailableStock()" class="flex-1 py-3 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors">Agregar lo disponible</button></div></div></div></div>
 <div id="weeklyModal" class="fixed inset-0 z-[70] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWeeklyModal()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-md pointer-events-auto"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-headline font-bold text-white">Plan Semanal</h3><button onclick="closeWeeklyModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div id="weeklyDayList" class="space-y-2 mb-4"></div><div class="border-t border-white/10 pt-4 mb-4"><p class="text-xs text-on-surface-variant mb-3">Copiar plan de un día a otro:</p><div class="flex gap-2 mb-4"><select id="copyFromDay" class="flex-1 bg-surface-container text-white rounded-lg px-3 py-2 text-sm"></select><span class="text-white/50">→</span><select id="copyToDay" class="flex-1 bg-surface-container text-white rounded-lg px-3 py-2 text-sm"></select></div><button onclick="copyDayPlan()" class="w-full py-3 rounded-xl bg-primary-container text-white font-bold mb-3">Copiar Día</button><button onclick="resetSelectedDay()" class="w-full py-3 rounded-xl bg-red-500/20 text-red-400 font-medium hover:bg-red-500/30 transition-colors">Reiniciar Día Actual</button></div></div></div></div>
+<div id="autoPlanWarningModal" class="fixed inset-0 z-[80] hidden"><div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto text-center border-2 border-yellow-500/50"><div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-4xl text-yellow-400">warning</span></div><h3 class="text-xl font-headline font-bold text-yellow-400 mb-2">Advertencia</h3><p class="text-white/80 mb-2">Estás modificando un plan generado automáticamente.</p><p class="text-white/60 text-sm mb-6">Los resultados pueden no ser los indicados para tu objetivo. ¿Deseas continuar?</p><div class="flex gap-3"><button onclick="closeAutoPlanWarning()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="confirmAutoPlanModification()" class="flex-1 py-3 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors">Continuar</button></div></div></div></div>
 <nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-20 flex items-center z-50 px-0 overflow-x-auto">
 <a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="index.html"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[8px] font-bold">Inicio</span></a>
 <a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="perfil.html"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[8px] font-bold">Perfil</span></a>
@@ -189,8 +190,19 @@ var mealNames={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snack
 function getMealPlan(){var stored=safeParseJSON(localStorage.getItem("mealPlan_"+today), {});if(Object.keys(stored).length===0){stored={desayuno:[],almuerzo:[],cena:[],snacks:[]};localStorage.setItem("mealPlan_"+today,JSON.stringify(stored))}return stored}
 function saveMealPlan(plan){localStorage.setItem("mealPlan_"+today,JSON.stringify(plan))}
 function renderMealPlan(){var plan=getMealPlan(currentDay);var totalCal=0,totalProt=0,totalFat=0,totalCarbs=0,totalItems=0;var macros=JSON.parse(localStorage.getItem("keto_macros")||"{}");var targetCal=parseInt(macros.calories)||1800;var targetProt=parseInt(macros.protein)||160;var targetFat=parseInt(macros.fat)||150;var targetCarbs=parseInt(macros.carbs)||25;Object.keys(plan).forEach(function(meal){var container=document.getElementById(meal+"Items");var mealCal=0;if(plan[meal].length===0){container.innerHTML='<p class="text-center text-on-surface-variant text-sm py-4">Sin alimentos. Toca "Agregar" para anadir.</p>'}else{container.innerHTML="";plan[meal].forEach(function(item,idx){var food=defaultFoods.find(function(f){return f.id===item.id})||item;var itemPort=parseFloat(item.portion)||100;var cal,prot,fat,carbs;if(item.isRecipe&&item.baseCalories){var basePort=parseFloat(item.basePortion)||100;var ratio=itemPort/basePort;cal=Math.round(item.baseCalories*ratio);prot=Math.round(item.baseProtein*ratio*10)/10;fat=Math.round(item.baseFat*ratio*10)/10;carbs=Math.round(item.baseCarbs*ratio*10)/10}else{var foodPort=parseFloat(food.portion)||100;var ratio=itemPort/foodPort;cal=Math.round((parseFloat(food.calories)||0)*ratio);prot=Math.round((parseFloat(food.protein)||0)*ratio*10)/10;fat=Math.round((parseFloat(food.fat)||0)*ratio*10)/10;carbs=Math.round((parseFloat(food.carbs)||0)*ratio*10)/10}mealCal+=cal;totalProt+=prot;totalFat+=fat;totalCarbs+=carbs;totalItems++;var html='<div class="flex items-center gap-3 bg-surface-container-low rounded-lg p-3">';html+='<div class="flex-1 min-w-0"><p class="font-medium text-white truncate">'+food.name+'</p><p class="text-xs text-on-surface-variant">'+itemPort+'g - '+cal.toLocaleString()+' kcal</p></div>';html+='<div class="flex items-center gap-1">';html+='<button onclick="changePortion(\''+meal+'\','+idx+',-10)" class="w-7 h-7 rounded bg-surface-container-high text-white text-xs hover:bg-surface-container-highest">-</button>';html+='<span class="w-12 text-center text-xs">'+itemPort+'g</span>';html+='<button onclick="changePortion(\''+meal+'\','+idx+',10)" class="w-7 h-7 rounded bg-surface-container-high text-white text-xs hover:bg-surface-container-highest">+</button>';html+='<button onclick="removeFromMeal(\''+meal+'\','+idx+')" class="w-7 h-7 rounded bg-error/20 text-error hover:bg-error/30 ml-2"><span class="material-symbols-outlined text-sm">delete</span></button>';html+='</div></div>';container.innerHTML+=html})}document.getElementById(meal+"Macros").textContent=mealCal.toLocaleString()+" kcal";totalCal+=mealCal});var calPct=targetCal>0?Math.round((totalCal/targetCal)*100):0;var protPct=targetProt>0?Math.round((totalProt/targetProt)*100):0;var fatPct=targetFat>0?Math.round((totalFat/targetFat)*100):0;var carbsPct=targetCarbs>0?Math.round((totalCarbs/targetCarbs)*100):0;document.getElementById("currentCal").textContent=totalCal.toLocaleString();document.getElementById("targetCal").textContent=targetCal.toLocaleString();document.getElementById("calorieBar").style.width=Math.min(calPct,100)+"%";document.getElementById("caloriePct").textContent=calPct+"%";document.getElementById("calorieRemaining").textContent="Restan: "+Math.max(0,targetCal-totalCal).toLocaleString()+" kcal";document.getElementById("currentProtein").textContent=Math.round(totalProt);document.getElementById("targetProtein").textContent=targetProt+"g";document.getElementById("proteinBar").style.width=Math.min(protPct,100)+"%";document.getElementById("proteinPct").textContent=protPct+"%";document.getElementById("proteinRemaining").textContent="Restan: "+Math.max(0,targetProt-totalProt).toFixed(0)+"g";document.getElementById("currentFat").textContent=Math.round(totalFat);document.getElementById("targetFat").textContent=targetFat+"g";document.getElementById("fatBar").style.width=Math.min(fatPct,100)+"%";document.getElementById("fatPct").textContent=fatPct+"%";document.getElementById("fatRemaining").textContent="Restan: "+Math.max(0,targetFat-totalFat).toFixed(0)+"g";document.getElementById("currentCarbs").textContent=Math.round(totalCarbs);document.getElementById("targetCarbs").textContent=targetCarbs+"g";document.getElementById("carbsBar").style.width=Math.min(carbsPct,100)+"%";document.getElementById("carbsPct").textContent=carbsPct+"%";document.getElementById("carbsRemaining").textContent="Restan: "+Math.max(0,targetCarbs-totalCarbs).toFixed(0)+"g";document.getElementById("mealCount").textContent=totalItems;var userData={proteinConsumed:totalProt};localStorage.setItem("userData",JSON.stringify(userData))}
-function changePortion(meal,idx,delta){var plan=getMealPlan(currentDay);var newPortion=Math.max(10,plan[meal][idx].portion+delta);plan[meal][idx].portion=newPortion;saveMealPlanForDate(currentDay,plan);renderMealPlan();initWeekSelector()}
-function removeFromMeal(meal,idx){var plan=getMealPlan(currentDay);plan[meal].splice(idx,1);saveMealPlanForDate(currentDay,plan);renderMealPlan();initWeekSelector()}
+function changePortion(meal,idx,delta){
+var sessionKey = 'autoPlanWarningMeal_' + currentDay;
+if (!sessionStorage.getItem(sessionKey)) {
+  showAutoPlanWarning(function() {
+    executeChangePortion(meal, idx, delta);
+  });
+  return;
+}
+executeChangePortion(meal, idx, delta);
+}
+function executeChangePortion(meal,idx,delta){var plan=getMealPlan(currentDay);var newPortion=Math.max(10,plan[meal][idx].portion+delta);plan[meal][idx].portion=newPortion;saveMealPlanForDate(currentDay,plan);renderMealPlan();initWeekSelector()}
+function removeFromMeal(meal,idx){var sessionKey = 'autoPlanWarningMeal_' + currentDay;if(!sessionStorage.getItem(sessionKey)){showAutoPlanWarning(function(){executeRemoveFromMeal(meal,idx)});return;}executeRemoveFromMeal(meal,idx)}
+function executeRemoveFromMeal(meal,idx){var plan=getMealPlan(currentDay);plan[meal].splice(idx,1);saveMealPlanForDate(currentDay,plan);renderMealPlan();initWeekSelector()}
 var currentFoods=[];
 function getAllFoodsForPlan(){
 var stored=safeParseJSON(localStorage.getItem("ketoFoods"), null);
@@ -563,6 +575,31 @@ function closeWeeklyModal(){
 document.getElementById("weeklyModal").classList.add("hidden");
 document.getElementById("weeklyModal").classList.remove("flex");
 }
+var autoPlanModificationCallback = null;
+function showAutoPlanWarning(callback) {
+  var sessionKey = 'autoPlanWarningMeal_' + currentDay;
+  if (sessionStorage.getItem(sessionKey)) {
+    if (callback) callback();
+    return;
+  }
+  autoPlanModificationCallback = callback;
+  document.getElementById("autoPlanWarningModal").classList.remove("hidden");
+  document.getElementById("autoPlanWarningModal").classList.add("flex");
+}
+function closeAutoPlanWarning() {
+  document.getElementById("autoPlanWarningModal").classList.add("hidden");
+  document.getElementById("autoPlanWarningModal").classList.remove("flex");
+  autoPlanModificationCallback = null;
+}
+function confirmAutoPlanModification() {
+  var sessionKey = 'autoPlanWarningMeal_' + currentDay;
+  sessionStorage.setItem(sessionKey, 'true');
+  closeAutoPlanWarning();
+  if (autoPlanModificationCallback) {
+    autoPlanModificationCallback();
+    autoPlanModificationCallback = null;
+  }
+}
 function selectDayFromModal(dateKey){
 closeWeeklyModal();
 currentDay=dateKey;
@@ -795,6 +832,9 @@ function applyGeneratedPlan() {
     localStorage.setItem('mealPlan_' + currentDay, JSON.stringify(generatedAutoPlan.plan));
   }
   
+  var sessionKey = 'autoPlanWarningMeal_' + currentDay;
+  sessionStorage.setItem(sessionKey, 'true');
+  
   showToast('Plan automático aplicado');
   renderMealPlan();
   setMealPlanMode('manual');
@@ -986,6 +1026,17 @@ function adjustAutoPortion(meal, idx, delta) {
 }
 
 function addFoodToAutoMeal(meal) {
+  var sessionKey = 'autoPlanWarningMeal_' + currentDay;
+  if (!sessionStorage.getItem(sessionKey)) {
+    showAutoPlanWarning(function() {
+      openAddFoodModalForAutoMeal(meal);
+    });
+    return;
+  }
+  openAddFoodModalForAutoMeal(meal);
+}
+
+function openAddFoodModalForAutoMeal(meal) {
   var despensa = getDespensa();
   var foods = getFoods();
   var items = Object.keys(despensa).filter(function(k) { return despensa[k] && despensa[k].stock > 0; });
@@ -1031,6 +1082,17 @@ function closeAddFoodModal() {
 }
 
 function addFoodFromDespensa(meal, itemKey) {
+  var sessionKey = 'autoPlanWarningMeal_' + currentDay;
+  if (!sessionStorage.getItem(sessionKey)) {
+    showAutoPlanWarning(function() {
+      executeAddFoodFromDespensa(meal, itemKey);
+    });
+    return;
+  }
+  executeAddFoodFromDespensa(meal, itemKey);
+}
+
+function executeAddFoodFromDespensa(meal, itemKey) {
   var despensa = getDespensa();
   var foods = getFoods();
   var item = despensa[itemKey];
@@ -1219,6 +1281,17 @@ function applySuggestedPortion(meal, idx, portion) {
 }
 
 function addFoodWithPortion(meal, itemKey, portion) {
+  var sessionKey = 'autoPlanWarningMeal_' + currentDay;
+  if (!sessionStorage.getItem(sessionKey)) {
+    showAutoPlanWarning(function() {
+      executeAddFoodWithPortion(meal, itemKey, portion);
+    });
+    return;
+  }
+  executeAddFoodWithPortion(meal, itemKey, portion);
+}
+
+function executeAddFoodWithPortion(meal, itemKey, portion) {
   closeMacroLimitModal();
   var despensa = getDespensa();
   var foods = getFoods();
