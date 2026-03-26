@@ -712,6 +712,11 @@ Editar macros
 <link rel="stylesheet" href="/aplicacion-keto/styles/animations.css">
 <link rel="stylesheet" href="/aplicacion-keto/styles/mobile-enhancements.css">
 <script>
+if (!localStorage.getItem('ketolab_onboarding_done')) {
+  window.location.href = 'onboarding.html';
+}
+</script>
+<script>
 function toggleTheme() {
   document.documentElement.classList.toggle('dark');
   localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
