@@ -17,6 +17,10 @@ const STATIC_ASSETS = [
   '/aplicacion-keto/recetas.html',
   '/aplicacion-keto/checklist.html',
   '/aplicacion-keto/entrenamientos.html',
+  '/aplicacion-keto/perfil.html',
+  '/aplicacion-keto/suplementos.html',
+  '/aplicacion-keto/onboarding.html',
+  '/aplicacion-keto/scanner.html',
   '/aplicacion-keto/compras.js',
   '/aplicacion-keto/manifest.json',
   '/aplicacion-keto/offline.html',
@@ -24,6 +28,12 @@ const STATIC_ASSETS = [
   '/aplicacion-keto/food-api.js',
   '/aplicacion-keto/backup.js',
   '/aplicacion-keto/recipe-suggestions.js',
+  '/aplicacion-keto/modules/auto-meal-generator.js',
+  '/aplicacion-keto/modules/auto-workout-generator.js',
+  '/aplicacion-keto/modules/supplement-recommender.js',
+  '/aplicacion-keto/styles/animations.css',
+  '/aplicacion-keto/styles/mobile-enhancements.css',
+  '/aplicacion-keto/utils/touch-gestures.js',
   // Imágenes de recetas
   '/aplicacion-keto/images/recipes/pure-coliflor.svg',
   '/aplicacion-keto/images/recipes/hongos.svg',
@@ -147,14 +157,16 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     fetch(event.request)
       .then(networkResponse => {
-        // Cachear recursos externos exitosos
-        if (networkResponse && networkResponse.status === 200 && 
-            (event.request.destination === 'image' || 
-             event.request.destination === 'font')) {
-          var clonedResponse = networkResponse.clone();
-          caches.open(DYNAMIC_CACHE).then(cache => {
-            cache.put(event.request, clonedResponse);
-          });
+        // Cachear recursos externos exitosos (solo URLs válidas)
+        if (networkResponse && networkResponse.status === 200) {
+          var url = event.request.url;
+          // Solo cachear si es http/https y es imagen o fuente
+          if (url.startsWith('http') && (url.includes('/icons/') || url.includes('.png') || url.includes('.jpg') || url.includes('.svg') || url.includes('.woff') || url.includes('.ttf'))) {
+            var clonedResponse = networkResponse.clone();
+            caches.open(DYNAMIC_CACHE).then(cache => {
+              cache.put(event.request, clonedResponse);
+            });
+          }
         }
         return networkResponse;
       })
