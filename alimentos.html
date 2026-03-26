@@ -23,7 +23,8 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}
 #toast{animation:toastIn 0.3s ease}
 @media (max-width: 767px) {
-  .mobile-bottom-nav { display: flex !important; visibility: visible !important; opacity: 1 !important; }
+  #mobileNavbar { display: flex !important; }
+  .mobile-bottom-nav { display: flex !important; }
 }
 </style>
 </head>
@@ -216,7 +217,12 @@ Buscar
 </main>
 
 <!-- BottomNavBar (Mobile) - Always visible on mobile -->
-<nav id="mobileNavbar" style="position:fixed;bottom:0;left:0;width:100%;height:80px;background:#181717;display:flex;align-items:center;justify-content:space-around;z-index:9999;border-top:1px solid rgba(255,77,0,0.3);padding-bottom:env(safe-area-inset-bottom,0);">
+<nav id="mobileNavbar" style="position:fixed;bottom:0;left:0;width:100%;height:80px;background:#ff4d00;display:flex;align-items:center;justify-content:space-around;z-index:2147483647;border-top:1px solid #fff;padding-bottom:env(safe-area-inset-bottom,0);">
+<span style="color:white;font-weight:bold;font-size:12px;position:absolute;top:5px;left:50%;transform:translateX(-50%)">NAVBAR TEST</span>
+<a href="index.html" style="color:white;text-decoration:none">Inicio</a>
+<a href="plan.html" style="color:white;text-decoration:none">Plan</a>
+<a href="macros.html" style="color:white;text-decoration:none">Macros</a>
+</nav>
 <a href="index.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:rgba(255,255,255,0.5);text-decoration:none"><span class="material-symbols-outlined" style="font-size:24px">dashboard</span><span style="font-size:8px;font-weight:bold">Inicio</span></a>
 <a href="perfil.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:rgba(255,255,255,0.5);text-decoration:none"><span class="material-symbols-outlined" style="font-size:24px">person</span><span style="font-size:8px;font-weight:bold">Perfil</span></a>
 <a href="plan.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:rgba(255,255,255,0.5);text-decoration:none"><span class="material-symbols-outlined" style="font-size:24px">event_note</span><span style="font-size:8px;font-weight:bold">Plan</span></a>
