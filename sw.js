@@ -97,13 +97,14 @@ self.addEventListener('fetch', event => {
   
   // ========== EXCEPCIONES ==========
   // No cachear peticiones a APIs externas (CDN, fonts, GitHub Pages, etc)
-  if (url.hostname.includes('cdn.') || 
-      url.hostname.includes('fonts.') ||
-      url.hostname.includes('api.') ||
-      url.hostname.includes('github.') || 
+  const hostname = url.hostname;
+  if (hostname.includes('cdn.') || 
+      hostname.includes('fonts.') ||
+      hostname.includes('api.') ||
+      hostname.includes('github.') ||
+      hostname.includes('github.io') || 
       url.pathname.includes('/api/')) {
-    event.respondWith(fetch(event.request));
-    return;
+    return; // No hacer nada, dejar que el navegador maneje la solicitud normalmente
   }
   
   // ========== ESTRATEGIA: Stale-While-Revalidate ==========
