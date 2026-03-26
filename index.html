@@ -4,12 +4,12 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
 <!-- PWA Manifest y meta tags para instalación -->
-<link rel="manifest" href="/aplicacion-keto/manifest.json">
-<link rel="icon" type="image/svg+xml" href="/aplicacion-keto/favicon.svg">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="KetoLab">
-<link rel="apple-touch-icon" href="/aplicacion-keto/icons/icon-192x192.png">
+<link rel="apple-touch-icon" href="icons/icon-192x192.png">
 <meta name="theme-color" content="#ff4d00">
 <meta name="mobile-web-app-capable" content="yes">
 <title>KetoLab | Dashboard</title>
@@ -663,39 +663,15 @@ Editar macros
 </main>
 
 <!-- BottomNavBar (Mobile) -->
-<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-20 flex items-center z-50 px-0 overflow-x-auto">
-<a id="nav-perfil" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="perfil.html">
-<span class="material-symbols-outlined text-2xl">person</span>
-<span class="text-[8px] font-bold">Perfil</span>
-</a>
-<a id="nav-alimentos" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="alimentos.html">
-<span class="material-symbols-outlined text-2xl">restaurant</span>
-<span class="text-[8px] font-bold">Alim</span>
-</a>
-<a id="nav-plan" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="plan.html">
-<span class="material-symbols-outlined text-2xl">event_note</span>
-<span class="text-[8px] font-bold">Plan</span>
-</a>
-<a id="nav-compras" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="compras.html">
-<span class="material-symbols-outlined text-2xl">shopping_cart</span>
-<span class="text-[8px] font-bold">Desp</span>
-</a>
-<a id="nav-macros" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="macros.html">
-<span class="material-symbols-outlined text-2xl">donut_small</span>
-<span class="text-[8px] font-bold">Macros</span>
-</a>
-<a id="nav-checklist" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="checklist.html">
-<span class="material-symbols-outlined text-2xl">fact_check</span>
-<span class="text-[8px] font-bold">Check</span>
-</a>
-<a id="nav-entrenamientos" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="entrenamientos.html">
-<span class="material-symbols-outlined text-2xl">fitness_center</span>
-<span class="text-[8px] font-bold">Gym</span>
-</a>
-<a id="nav-suplementos" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="suplementos.html">
-<span class="material-symbols-outlined text-2xl">medication</span>
-<span class="text-[8px] font-bold">Sup</span>
-</a>
+<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-16 flex justify-around items-center z-50 px-0" style="background:rgba(24,23,23,0.95)">
+<a class="flex flex-col items-center text-white/60" href="index.html"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[10px]">Inicio</span></a>
+<a class="flex flex-col items-center text-white/60" href="perfil.html"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
+<a class="flex flex-col items-center text-white/60" href="alimentos.html"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
+<a class="flex flex-col items-center text-white/60" href="plan.html"><span class="material-symbols-outlined text-2xl">event_note</span><span class="text-[10px]">Plan</span></a>
+<a class="flex flex-col items-center text-white/60" href="compras.html"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
+<a class="flex flex-col items-center text-white/60" href="macros.html"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
+<a class="flex flex-col items-center text-white/60" href="checklist.html"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
+<a class="flex flex-col items-center text-white/60" href="entrenamientos.html"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
 </nav>
 
 <!-- FAB Group -->
@@ -715,9 +691,9 @@ Editar macros
   <span class="material-symbols-outlined text-2xl md:text-3xl">install_desktop</span>
 </button>
 
-<script src="/aplicacion-keto/utils.js"></script>
-<link rel="stylesheet" href="/aplicacion-keto/styles/animations.css">
-<link rel="stylesheet" href="/aplicacion-keto/styles/mobile-enhancements.css">
+<script src="utils.js"></script>
+<link rel="stylesheet" href="styles/animations.css">
+<link rel="stylesheet" href="styles/mobile-enhancements.css">
 <script>
 if (!localStorage.getItem('ketolab_onboarding_done')) {
   window.location.href = 'onboarding.html';
@@ -1152,7 +1128,7 @@ loadDashboard();
   // Registrar Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/aplicacion-keto/sw.js')
+      navigator.serviceWorker.register('sw.js')
         .then(registration => {
           console.log('[PWA] Service Worker registrado correctamente en:', registration.scope);
           
@@ -1238,7 +1214,7 @@ loadDashboard();
   });
 })();
 </script>
-<script src="/aplicacion-keto/backup.js"></script>
-<script src="/aplicacion-keto/recipe-suggestions.js"></script>
+<script src="backup.js"></script>
+<script src="recipe-suggestions.js"></script>
 </body>
 </html>

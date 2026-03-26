@@ -4,11 +4,11 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
 <!-- PWA Manifest y meta tags para instalación -->
-<link rel="manifest" href="/aplicacion-keto/manifest.json">
+<link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="KetoLab">
-<link rel="apple-touch-icon" href="/aplicacion-keto/icons/icon-192x192.png">
+<link rel="apple-touch-icon" href="icons/icon-192x192.png">
 <meta name="theme-color" content="#ff4d00">
 <meta name="mobile-web-app-capable" content="yes">
 <title>KetoLab | Plan de Alimentacion</title>
@@ -116,19 +116,19 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 <div id="stockModal" class="fixed inset-0 z-[70] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto text-center"><div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-4xl text-yellow-400">warning</span></div><h3 class="text-xl font-headline font-bold text-white mb-2">Stock Insuficiente</h3><p class="text-white/70 mb-2">Solo tienes disponible:</p><p id="availableStock" class="text-3xl font-bold text-yellow-400 mb-4">0 g</p><p class="text-white/50 text-sm mb-6">de <span id="requestedStock" class="text-white">0 g</span></p><div class="flex gap-3"><button onclick="closeStockModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="addAvailableStock()" class="flex-1 py-3 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors">Agregar lo disponible</button></div></div></div></div>
 <div id="weeklyModal" class="fixed inset-0 z-[70] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWeeklyModal()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-md pointer-events-auto"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-headline font-bold text-white">Plan Semanal</h3><button onclick="closeWeeklyModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div id="weeklyDayList" class="space-y-2 mb-4"></div><div class="border-t border-white/10 pt-4 mb-4"><p class="text-xs text-on-surface-variant mb-3">Copiar plan de un día a otro:</p><div class="flex gap-2 mb-4"><select id="copyFromDay" class="flex-1 bg-surface-container text-white rounded-lg px-3 py-2 text-sm"></select><span class="text-white/50">→</span><select id="copyToDay" class="flex-1 bg-surface-container text-white rounded-lg px-3 py-2 text-sm"></select></div><button onclick="copyDayPlan()" class="w-full py-3 rounded-xl bg-primary-container text-white font-bold mb-3">Copiar Día</button><button onclick="resetSelectedDay()" class="w-full py-3 rounded-xl bg-red-500/20 text-red-400 font-medium hover:bg-red-500/30 transition-colors">Reiniciar Día Actual</button></div></div></div></div>
 <div id="autoPlanWarningModal" class="fixed inset-0 z-[80] hidden"><div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto text-center border-2 border-yellow-500/50"><div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-4xl text-yellow-400">warning</span></div><h3 class="text-xl font-headline font-bold text-yellow-400 mb-2">Advertencia</h3><p class="text-white/80 mb-2">Estás modificando un plan generado automáticamente.</p><p class="text-white/60 text-sm mb-6">Los resultados pueden no ser los indicados para tu objetivo. ¿Deseas continuar?</p><div class="flex gap-3"><button onclick="closeAutoPlanWarning()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="confirmAutoPlanModification()" class="flex-1 py-3 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors">Continuar</button></div></div></div></div>
-<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-20 flex items-center z-50 px-0 overflow-x-auto">
-<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="index.html"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[8px] font-bold">Inicio</span></a>
-<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="perfil.html"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[8px] font-bold">Perfil</span></a>
-<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="alimentos.html"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[8px] font-bold">Alim</span></a>
-<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="compras.html"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[8px] font-bold">Desp</span></a>
-<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="macros.html"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[8px] font-bold">Macros</span></a>
-<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="checklist.html"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[8px] font-bold">Check</span></a>
-<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="entrenamientos.html"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[8px] font-bold">Gym</span></a>
-<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="suplementos.html"><span class="material-symbols-outlined text-2xl">medication</span><span class="text-[8px] font-bold">Sup</span></a>
+<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-16 flex justify-around items-center z-50 px-0" style="background:rgba(24,23,23,0.95)">
+<a class="flex flex-col items-center text-white/60" href="index.html"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[10px]">Inicio</span></a>
+<a class="flex flex-col items-center text-white/60" href="perfil.html"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
+<a class="flex flex-col items-center text-white/60" href="alimentos.html"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
+<a class="flex flex-col items-center text-white/60" href="plan.html"><span class="material-symbols-outlined text-2xl">event_note</span><span class="text-[10px]">Plan</span></a>
+<a class="flex flex-col items-center text-white/60" href="compras.html"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
+<a class="flex flex-col items-center text-white/60" href="macros.html"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
+<a class="flex flex-col items-center text-white/60" href="checklist.html"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
+<a class="flex flex-col items-center text-white/60" href="entrenamientos.html"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
 </nav>
-<script src="/aplicacion-keto/utils.js"></script>
-<script src="/aplicacion-keto/data/recipes-db.js"></script>
-<script src="/aplicacion-keto/modules/auto-meal-generator.js"></script>
+<script src="utils.js"></script>
+<script src="data/recipes-db.js"></script>
+<script src="modules/auto-meal-generator.js"></script>
 <script>
 function toggleTheme(){document.documentElement.classList.toggle("dark");localStorage.setItem("theme",document.documentElement.classList.contains("dark")?"dark":"light")}
 function toggleSidebar(){var b=document.body;var s=document.getElementById("sidebarNav");var t=document.getElementById("sidebarToggle");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");b.classList.toggle("sidebar-collapsed");if(b.classList.contains("sidebar-collapsed")){s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px";localStorage.setItem("sidebarCollapsed","true")}else{s.style.width="256px";s.style.overflow="";if(p)p.style.paddingLeft="272px";if(m)m.style.marginLeft="256px";if(t)t.style.left="256px";localStorage.setItem("sidebarCollapsed","false")}}
@@ -665,7 +665,7 @@ function showToast(message) {
 (function() {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/aplicacion-keto/sw.js')
+      navigator.serviceWorker.register('sw.js')
         .then(registration => {
           console.log('[PWA] Service Worker registrado correctamente en:', registration.scope);
           registration.addEventListener('updatefound', () => {

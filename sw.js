@@ -8,44 +8,44 @@ const DYNAMIC_CACHE = 'ketolab-dynamic-v1.0.4';
 
 // Archivos estáticos a cachear durante la instalación
 const STATIC_ASSETS = [
-  '/aplicacion-keto/',
-  '/aplicacion-keto/index.html',
-  '/aplicacion-keto/alimentos.html',
-  '/aplicacion-keto/compras.html',
-  '/aplicacion-keto/macros.html',
-  '/aplicacion-keto/plan.html',
-  '/aplicacion-keto/recetas.html',
-  '/aplicacion-keto/checklist.html',
-  '/aplicacion-keto/entrenamientos.html',
-  '/aplicacion-keto/perfil.html',
-  '/aplicacion-keto/suplementos.html',
-  '/aplicacion-keto/onboarding.html',
-  '/aplicacion-keto/scanner.html',
-  '/aplicacion-keto/compras.js',
-  '/aplicacion-keto/manifest.json',
-  '/aplicacion-keto/offline.html',
-  '/aplicacion-keto/utils.js',
-  '/aplicacion-keto/food-api.js',
-  '/aplicacion-keto/backup.js',
-  '/aplicacion-keto/recipe-suggestions.js',
-  '/aplicacion-keto/modules/auto-meal-generator.js',
-  '/aplicacion-keto/modules/auto-workout-generator.js',
-  '/aplicacion-keto/modules/supplement-recommender.js',
-  '/aplicacion-keto/styles/animations.css',
-  '/aplicacion-keto/styles/mobile-enhancements.css',
-  '/aplicacion-keto/utils/touch-gestures.js',
+  './',
+  './index.html',
+  './alimentos.html',
+  './compras.html',
+  './macros.html',
+  './plan.html',
+  './recetas.html',
+  './checklist.html',
+  './entrenamientos.html',
+  './perfil.html',
+  './suplementos.html',
+  './onboarding.html',
+  './scanner.html',
+  './compras.js',
+  './manifest.json',
+  './offline.html',
+  './utils.js',
+  './food-api.js',
+  './backup.js',
+  './recipe-suggestions.js',
+  './modules/auto-meal-generator.js',
+  './modules/auto-workout-generator.js',
+  './modules/supplement-recommender.js',
+  './styles/animations.css',
+  './styles/mobile-enhancements.css',
+  './utils/touch-gestures.js',
   // Imágenes de recetas
-  '/aplicacion-keto/images/recipes/pure-coliflor.svg',
-  '/aplicacion-keto/images/recipes/hongos.svg',
-  '/aplicacion-keto/images/recipes/pollo-jugoso.svg',
-  '/aplicacion-keto/images/recipes/carne-molida.svg',
-  '/aplicacion-keto/images/recipes/huevos.svg',
-  '/aplicacion-keto/images/recipes/arroz-coliflor.svg',
-  '/aplicacion-keto/images/recipes/aderezo.svg',
+  './images/recipes/pure-coliflor.svg',
+  './images/recipes/hongos.svg',
+  './images/recipes/pollo-jugoso.svg',
+  './images/recipes/carne-molida.svg',
+  './images/recipes/huevos.svg',
+  './images/recipes/arroz-coliflor.svg',
+  './images/recipes/aderezo.svg',
   // Imágenes de ejercicios
-  '/aplicacion-keto/images/exercises/pecho.svg',
-  '/aplicacion-keto/images/exercises/espalda.svg',
-  '/aplicacion-keto/images/exercises/piernas.svg'
+  './images/exercises/pecho.svg',
+  './images/exercises/espalda.svg',
+  './images/exercises/piernas.svg'
 ];
 
 // ==================== INSTALACIÓN ====================
@@ -139,7 +139,7 @@ self.addEventListener('fetch', event => {
                 return cachedResponse;
               }
               if (event.request.destination === 'document') {
-                return caches.match('/aplicacion-keto/offline.html');
+                return caches.match('./offline.html');
               }
               return new Response('Recurso no disponible', { status: 503 });
             });
@@ -152,7 +152,7 @@ self.addEventListener('fetch', event => {
             if (response) return response;
             // Si todo falla, devolver offline
             if (event.request.destination === 'document') {
-              return caches.match('/aplicacion-keto/offline.html');
+              return caches.match('./offline.html');
             }
             return new Response('No disponible', { status: 503 });
           });
@@ -160,7 +160,7 @@ self.addEventListener('fetch', event => {
         .catch(() => {
           // Fallback offline para páginas HTML
           if (event.request.destination === 'document') {
-            return caches.match('/aplicacion-keto/offline.html');
+            return caches.match('./offline.html');
           }
           return new Response('Recurso no disponible offline', {
             status: 503,
@@ -221,11 +221,11 @@ self.addEventListener('push', event => {
     const data = event.data.json();
     const options = {
       body: data.body || 'Actualiza tus macros y hábitos diarios',
-      icon: '/aplicacion-keto/icons/icon-192x192.png',
-      badge: '/aplicacion-keto/icons/icon-72x72.png',
+      icon: './icons/icon-192x192.png',
+      badge: './icons/icon-72x72.png',
       vibrate: [200, 100, 200],
       data: {
-        url: data.url || '/aplicacion-keto/'
+        url: data.url || './'
       }
     };
     event.waitUntil(

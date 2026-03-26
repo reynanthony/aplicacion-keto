@@ -2,58 +2,58 @@
   "name": "KetoLab",
   "short_name": "KetoLab",
   "description": "Gestor de dieta cetogénica, despensa inteligente y seguimiento de entrenamientos",
-  "start_url": "/aplicacion-keto/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#0a0a0a",
   "theme_color": "#ff4d00",
   "orientation": "portrait",
-  "scope": "/aplicacion-keto/",
+  "scope": "./",
   "categories": ["health", "fitness", "food", "lifestyle"],
   "icons": [
     {
-      "src": "/aplicacion-keto/icons/icon-72x72.png",
+      "src": "icons/icon-72x72.png",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/aplicacion-keto/icons/icon-96x96.png",
+      "src": "icons/icon-96x96.png",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/aplicacion-keto/icons/icon-128x128.png",
+      "src": "icons/icon-128x128.png",
       "sizes": "128x128",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/aplicacion-keto/icons/icon-144x144.png",
+      "src": "icons/icon-144x144.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/aplicacion-keto/icons/icon-152x152.png",
+      "src": "icons/icon-152x152.png",
       "sizes": "152x152",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/aplicacion-keto/icons/icon-192x192.png",
+      "src": "icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/aplicacion-keto/icons/icon-384x384.png",
+      "src": "icons/icon-384x384.png",
       "sizes": "384x384",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/aplicacion-keto/icons/icon-512x512.png",
+      "src": "icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -61,7 +61,7 @@
   ],
   "screenshots": [
     {
-      "src": "/aplicacion-keto/screenshots/mobile-home.png",
+      "src": "screenshots/mobile-home.png",
       "sizes": "1080x1920",
       "type": "image/png",
       "platform": "narrow",
@@ -74,10 +74,10 @@
       "name": "Mi Despensa",
       "short_name": "Despensa",
       "description": "Ver y gestionar tu despensa",
-      "url": "/aplicacion-keto/compras.html",
+      "url": "./compras.html",
       "icons": [
         {
-          "src": "/aplicacion-keto/icons/icon-96x96.png",
+          "src": "icons/icon-96x96.png",
           "sizes": "96x96"
         }
       ]
@@ -86,10 +86,10 @@
       "name": "Plan de Hoy",
       "short_name": "Plan",
       "description": "Plan de alimentación del día",
-      "url": "/aplicacion-keto/plan.html",
+      "url": "./plan.html",
       "icons": [
         {
-          "src": "/aplicacion-keto/icons/icon-96x96.png",
+          "src": "icons/icon-96x96.png",
           "sizes": "96x96"
         }
       ]
@@ -98,10 +98,10 @@
       "name": "Checklist",
       "short_name": "Check",
       "description": "Hábitos diarios",
-      "url": "/aplicacion-keto/checklist.html",
+      "url": "./checklist.html",
       "icons": [
         {
-          "src": "/aplicacion-keto/icons/icon-96x96.png",
+          "src": "icons/icon-96x96.png",
           "sizes": "96x96"
         }
       ]
