@@ -210,10 +210,10 @@ Buscar
 </div>
 </div>
 </div>
-</div>
+</main>
 
 <!-- BottomNavBar (Mobile) -->
-<nav id="mobileNav" style="position: fixed !important; bottom: 0 !important; left: 0 !important; width: 100% !important; display: flex !important; background: #181717 !important; height: 80px !important; z-index: 9999 !important; border-top: 1px solid rgba(255,77,0,0.3);" class="glass-card h-20 flex items-center px-0">
+<nav class="mobile-bottom-nav fixed bottom-0 left-0 w-full glass-card h-20 flex items-center z-50 px-0" style="display:flex;background:#181717;border-top:1px solid rgba(255,77,0,0.3)">
 <a id="nav-inicio" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="index.html">
 <span class="material-symbols-outlined text-2xl">dashboard</span>
 <span class="text-[8px] font-bold">Inicio</span>
@@ -418,7 +418,7 @@ loadFoods();renderFoods();
 
 // Force show mobile nav on mobile
 (function() {
-  var nav = document.getElementById('mobileNav');
+  var nav = document.querySelector('.mobile-bottom-nav');
   var fab = document.getElementById('fabGroup');
   if (nav) nav.style.display = 'flex';
   if (fab && window.innerWidth >= 768) fab.style.display = 'flex';
