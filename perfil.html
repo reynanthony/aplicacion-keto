@@ -137,20 +137,27 @@ select option{background:#1e1c1c;color:#fff}
 </div>
 </nav>
 
-<button id="sidebarToggle" class="sidebar-toggle-btn fixed top-6 left-64 z-50 w-8 h-8 bg-surface-container-high rounded-full flex items-center justify-center text-white/60 hover:text-primary-container transition-all" onclick="toggleSidebar()">
-<span class="material-symbols-outlined text-lg">chevron_left</span>
+<button id="sidebarToggle" onclick="toggleSidebar()" class="sidebar-toggle-btn hidden md:flex fixed top-20 z-50 w-8 h-8 bg-surface-container-low hover:bg-surface-container-high border border-white/10 rounded-r-lg items-center justify-center transition-all duration-300 hover:border-primary-container/30">
+<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_left</span>
 </button>
 
-<div class="topbar-pl pl-72 pr-6 py-4 flex items-center justify-between bg-surface-container-low/50 backdrop-blur-sm sticky top-0 z-40 transition-all duration-300">
-<div class="flex items-center gap-4">
-<h2 class="text-xl font-headline font-bold text-white">Mi Perfil</h2>
+<!-- TopAppBar (Desktop) -->
+<header class="topbar-desktop hidden md:flex fixed top-0 w-full justify-between items-center px-8 h-20 z-40 bg-gradient-to-b from-surface-container-low to-transparent transition-all duration-300">
+<div class="topbar-pl pl-64 transition-all duration-300">
+<h2 class="text-2xl font-black text-primary-container tracking-tighter font-headline">KetoLab</h2>
 </div>
-<div class="flex items-center gap-3">
-<button onclick="toggleTheme()" class="w-10 h-10 bg-surface-container-high rounded-full flex items-center justify-center hover:bg-surface-container-highest transition-all">
-<span class="material-symbols-outlined text-white/70 hover:text-white" id="themeIcon">light_mode</span>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full border border-white/5">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">search</span>
+<input class="bg-transparent border-none text-sm focus:ring-0 text-white w-48 placeholder:text-on-surface-variant" placeholder="Buscar alimentos..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors duration-300 scale-95 active:scale-90 relative" onclick="showNotifications()" title="Notificaciones">
+notifications
+<span class="absolute top-0 right-0 w-2 h-2 bg-primary-container rounded-full ring-2 ring-background"></span>
 </button>
+<a href="perfil.html" class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center font-headline font-bold text-white text-sm cursor-pointer hover:scale-105 transition-transform" id="profileBtn" title="Mi perfil">KL</a>
 </div>
-</div>
+</header>
 
 <main class="main-content ml-0 md:ml-64 p-4 md:p-8 transition-all duration-300">
 <div class="max-w-7xl mx-auto space-y-8">
@@ -842,13 +849,14 @@ if (activeNav) {
 <!-- BottomNavBar (Mobile) -->
 <nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-16 flex justify-around items-center z-50 px-0" style="background:rgba(24,23,23,0.95)">
 <a class="flex flex-col items-center text-white/60" href="index.html"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[10px]">Inicio</span></a>
-<a class="flex flex-col items-center text-white/60" href="perfil.html"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
+<a class="flex flex-col items-center text-primary-container" href="perfil.html"><span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">person</span><span class="text-[10px]">Perfil</span></a>
 <a class="flex flex-col items-center text-white/60" href="alimentos.html"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
 <a class="flex flex-col items-center text-white/60" href="plan.html"><span class="material-symbols-outlined text-2xl">event_note</span><span class="text-[10px]">Plan</span></a>
 <a class="flex flex-col items-center text-white/60" href="compras.html"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
 <a class="flex flex-col items-center text-white/60" href="macros.html"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
 <a class="flex flex-col items-center text-white/60" href="checklist.html"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
 <a class="flex flex-col items-center text-white/60" href="entrenamientos.html"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
+<a class="flex flex-col items-center text-white/60" href="suplementos.html"><span class="material-symbols-outlined text-2xl">medication</span><span class="text-[10px]">Sup</span></a>
 </nav>
 </body>
 </html>

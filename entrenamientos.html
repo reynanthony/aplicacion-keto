@@ -48,13 +48,11 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 <button id="sidebarToggle" onclick="toggleSidebar()" class="sidebar-toggle-btn hidden md:flex fixed top-20 z-50 w-8 h-8 bg-surface-container-low hover:bg-surface-container-high border border-white/10 rounded-r-lg items-center justify-center transition-all duration-300"><span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_left</span></button>
 
 <header class="topbar-desktop hidden md:flex fixed top-0 w-full h-20 px-4 md:px-8 flex items-center justify-between z-40 bg-gradient-to-b from-surface-container-low to-transparent transition-all duration-300">
-<div class="topbar-pl pl-64 transition-all duration-300"><h2 class="text-xl md:text-2xl font-black text-white tracking-tighter font-headline">Entrenamientos</h2></div>
-<div class="flex items-center gap-4"><button onclick="toggleTheme()" class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors">dark_mode</button></div>
+<div class="topbar-pl pl-64 transition-all duration-300"><h2 class="text-xl md:text-2xl font-black text-primary-container tracking-tighter font-headline">KetoLab</h2></div>
 </header>
 
 <header class="md:hidden fixed top-0 w-full h-14 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5 px-4 flex items-center justify-between">
 <a href="index.html" class="flex items-center gap-2"><div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-white text-base" style="font-variation-settings:'FILL' 1">nutrition</span></div><span class="text-base font-black text-primary-container tracking-tight font-headline">KetoLab</span></a>
-<button onclick="toggleTheme()" class="material-symbols-outlined text-white/70">dark_mode</button>
 </header>
 
 <main class="main-content md:ml-64 pt-14 md:pt-24 px-3 md:px-6 pb-24 md:pb-12 min-h-screen transition-all duration-300">
@@ -269,6 +267,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 <a class="flex flex-col items-center text-white/60" href="macros.html"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
 <a class="flex flex-col items-center text-white/60" href="checklist.html"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
 <a class="flex flex-col items-center text-white/60" href="entrenamientos.html"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
+<a class="flex flex-col items-center text-white/60" href="suplementos.html"><span class="material-symbols-outlined text-2xl">medication</span><span class="text-[10px]">Sup</span></a>
 </nav>
 
 <!-- Exercise Modal -->
@@ -1719,5 +1718,19 @@ function executeAddExerciseToRoutine(exercise) {
   renderAutoWorkoutSummary(generatedWorkout, document.getElementById('autoWorkoutSummary'));
 }
 </script>
+
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-16 flex justify-around items-center z-50 px-0" style="background:rgba(24,23,23,0.95)">
+<a class="flex flex-col items-center text-white/60" href="index.html"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[10px]">Inicio</span></a>
+<a class="flex flex-col items-center text-white/60" href="perfil.html"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
+<a class="flex flex-col items-center text-white/60" href="alimentos.html"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
+<a class="flex flex-col items-center text-white/60" href="plan.html"><span class="material-symbols-outlined text-2xl">event_note</span><span class="text-[10px]">Plan</span></a>
+<a class="flex flex-col items-center text-white/60" href="compras.html"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
+<a class="flex flex-col items-center text-white/60" href="macros.html"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
+<a class="flex flex-col items-center text-white/60" href="checklist.html"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
+<a class="flex flex-col items-center text-primary-container" href="entrenamientos.html"><span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">fitness_center</span><span class="text-[10px]">Gym</span></a>
+<a class="flex flex-col items-center text-white/60" href="suplementos.html"><span class="material-symbols-outlined text-2xl">medication</span><span class="text-[10px]">Sup</span></a>
+</nav>
+
 </body>
 </html>

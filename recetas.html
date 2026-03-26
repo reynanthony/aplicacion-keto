@@ -80,10 +80,7 @@ tailwind.config = {
 </button>
 
 <header class="topbar-desktop hidden md:flex fixed top-0 w-full h-20 px-4 md:px-8 flex items-center justify-between z-40 bg-gradient-to-b from-surface-container-low to-transparent transition-all duration-300">
-<div class="topbar-pl pl-64 transition-all duration-300">
-<h2 class="text-xl md:text-2xl font-black text-white tracking-tighter font-headline">Recetas</h2>
-</div>
-<button class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors" onclick="toggleTheme()">dark_mode</button>
+<div class="topbar-pl pl-64 transition-all duration-300"><h2 class="text-xl md:text-2xl font-black text-primary-container tracking-tighter font-headline">KetoLab</h2></div>
 </header>
 
 <!-- Mobile TopAppBar -->
@@ -94,7 +91,6 @@ tailwind.config = {
 </div>
 <span class="text-base font-black text-primary-container tracking-tight font-headline">KetoLab</span>
 </a>
-<button class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors" onclick="toggleTheme()">dark_mode</button>
 </header>
 
 <main class="main-content md:ml-64 pt-14 md:pt-24 px-4 md:px-6 pb-20 md:pb-12 min-h-screen transition-all duration-300">
@@ -235,6 +231,7 @@ Nueva
 <a class="flex flex-col items-center text-white/60" href="macros.html"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
 <a class="flex flex-col items-center text-white/60" href="checklist.html"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
 <a class="flex flex-col items-center text-white/60" href="entrenamientos.html"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
+<a class="flex flex-col items-center text-white/60" href="suplementos.html"><span class="material-symbols-outlined text-2xl">medication</span><span class="text-[10px]">Sup</span></a>
 </nav>
 
 <script src="utils.js"></script>
@@ -694,5 +691,19 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 })();
 </script>
+
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-16 flex justify-around items-center z-50 px-0" style="background:rgba(24,23,23,0.95)">
+<a class="flex flex-col items-center text-white/60" href="index.html"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[10px]">Inicio</span></a>
+<a class="flex flex-col items-center text-white/60" href="perfil.html"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
+<a class="flex flex-col items-center text-white/60" href="alimentos.html"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
+<a class="flex flex-col items-center text-white/60" href="plan.html"><span class="material-symbols-outlined text-2xl">event_note</span><span class="text-[10px]">Plan</span></a>
+<a class="flex flex-col items-center text-white/60" href="compras.html"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
+<a class="flex flex-col items-center text-white/60" href="macros.html"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
+<a class="flex flex-col items-center text-white/60" href="checklist.html"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
+<a class="flex flex-col items-center text-white/60" href="entrenamientos.html"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
+<a class="flex flex-col items-center text-white/60" href="suplementos.html"><span class="material-symbols-outlined text-2xl">medication</span><span class="text-[10px]">Sup</span></a>
+</nav>
+
 </body>
 </html>

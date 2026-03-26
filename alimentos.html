@@ -40,8 +40,6 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 #mobileNavbar .text-\[10px\] {
   font-size: 10px !important;
 }
-}
-}
 </style>
 </head>
 <body class="bg-background text-on-surface font-body pb-24" style="overflow-x:hidden">
@@ -50,6 +48,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 <nav id="mobileNavbar" class="flex justify-around items-center h-16" style="background:rgba(24,23,23,0.95);position:fixed;bottom:0;left:0;right:0;z-index:2147483647;border-top:1px solid rgba(255,77,0,0.3)">
 <a href="index.html" class="flex flex-col items-center text-white/60"><span class="material-symbols-outlined">dashboard</span><span class="text-[10px]">Inicio</span></a>
 <a href="perfil.html" class="flex flex-col items-center text-white/60"><span class="material-symbols-outlined">person</span><span class="text-[10px]">Perfil</span></a>
+<a href="alimentos.html" class="flex flex-col items-center text-primary-container"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">restaurant</span><span class="text-[10px]">Alim</span></a>
 <a href="plan.html" class="flex flex-col items-center text-white/60"><span class="material-symbols-outlined">event_note</span><span class="text-[10px]">Plan</span></a>
 <a href="compras.html" class="flex flex-col items-center text-white/60"><span class="material-symbols-outlined">shopping_cart</span><span class="text-[10px]">Desp</span></a>
 <a href="macros.html" class="flex flex-col items-center text-white/60"><span class="material-symbols-outlined">donut_small</span><span class="text-[10px]">Macros</span></a>
@@ -82,13 +81,11 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 <button id="sidebarToggle" onclick="toggleSidebar()" class="sidebar-toggle-btn hidden md:flex fixed top-20 z-50 w-8 h-8 bg-surface-container-low hover:bg-surface-container-high border border-white/10 rounded-r-lg items-center justify-center transition-all duration-300"><span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_left</span></button>
 
 <header class="topbar-desktop hidden md:flex fixed top-0 w-full h-20 px-4 md:px-8 flex items-center justify-between z-40 bg-gradient-to-b from-surface-container-low to-transparent transition-all duration-300">
-<div class="topbar-pl pl-64 transition-all duration-300"><h2 class="text-xl md:text-2xl font-black text-white tracking-tighter font-headline">Alimentos</h2></div>
-<div class="flex items-center gap-4"><button onclick="toggleTheme()" class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors">dark_mode</button></div>
+<div class="topbar-pl pl-64 transition-all duration-300"><h2 class="text-xl md:text-2xl font-black text-primary-container tracking-tighter font-headline">KetoLab</h2></div>
 </header>
 
 <header class="md:hidden fixed top-0 w-full h-14 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5 px-4 flex items-center justify-between">
 <a href="index.html" class="flex items-center gap-2"><div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-white text-base" style="font-variation-settings:'FILL' 1">nutrition</span></div><span class="text-base font-black text-primary-container tracking-tight font-headline">KetoLab</span></a>
-<button onclick="toggleTheme()" class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors">dark_mode</button>
 </header>
 
 <main class="main-content md:ml-64 pt-14 md:pt-24 px-4 md:px-6 pb-20 md:pb-12 min-h-screen transition-all duration-300">
