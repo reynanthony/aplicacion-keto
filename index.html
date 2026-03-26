@@ -53,11 +53,22 @@ tailwind.config = {
 </script>
 
 <script src="/aplicacion-keto/utils.js"></script>
-<link rel="stylesheet" href="styles/mobile-enhancements.css">
 <script>
-if (!localStorage.getItem('ketolab_onboarding_done')) {
-  window.location.href = 'onboarding.html';
-}
+(function() {
+  var onboardingDone = localStorage.getItem('ketolab_onboarding_done');
+  if (!onboardingDone) {
+    window.location.href = 'onboarding.html';
+    return;
+  }
+  if (onboardingDone === 'true') {
+    localStorage.setItem('ketolab_onboarding_done', 'completed');
+  }
+})();
+</script>
+<script src="utils/touch-gestures.js" defer></script>
+<link rel="stylesheet" href="/aplicacion-keto/styles/mobile-enhancements.css">
+<link rel="stylesheet" href="/aplicacion-keto/styles/animations.css">
+<script>
 function toggleTheme() {
   document.documentElement.classList.toggle('dark');
   localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
@@ -574,6 +585,5 @@ loadDashboard();
 </script>
 <script src="/aplicacion-keto/backup.js"></script>
 <script src="/aplicacion-keto/recipe-suggestions.js"></script>
-<script src="utils/touch-gestures.js" defer></script>
 </body>
 </html>
