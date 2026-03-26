@@ -1,10 +1,10 @@
 // sw.js - Service Worker para KetoLab
-// Versión: v1.0.3
+// Versión: v1.0.4
 // Estrategia: Cache First con actualización en background (Stale-While-Revalidate)
 
-const CACHE_NAME = 'ketolab-v1.0.3';
-const STATIC_CACHE = 'ketolab-static-v1.0.3';
-const DYNAMIC_CACHE = 'ketolab-dynamic-v1.0.3';
+const CACHE_NAME = 'ketolab-v1.0.4';
+const STATIC_CACHE = 'ketolab-static-v1.0.4';
+const DYNAMIC_CACHE = 'ketolab-dynamic-v1.0.4';
 
 // Archivos estáticos a cachear durante la instalación
 const STATIC_ASSETS = [
@@ -119,8 +119,12 @@ self.addEventListener('fetch', event => {
             .then(networkResponse => {
               // Actualizar cache con la respuesta de red
               if (networkResponse && networkResponse.status === 200) {
-                caches.open(STATIC_CACHE).then(cache => {
-                  cache.put(event.request, networkResponse.clone());
+                caches.open(STATIC_CACHE).then(function(cache) {
+                  try {
+                    cache.put(event.request, networkResponse.clone());
+                  } catch(e) {
+                    console.log('[SW] Static cache put error:', e.message);
+                  }
                 });
               }
               return networkResponse.clone();
@@ -177,14 +181,18 @@ self.addEventListener('fetch', event => {
           // Solo cachear si es http/https y es imagen o fuente
           if (url.startsWith('http') && (url.includes('/icons/') || url.includes('.png') || url.includes('.jpg') || url.includes('.svg') || url.includes('.woff') || url.includes('.ttf'))) {
             var clonedResponse = networkResponse.clone();
-            caches.open(DYNAMIC_CACHE).then(cache => {
-              cache.put(event.request, clonedResponse);
+            caches.open(DYNAMIC_CACHE).then(function(cache) {
+              try {
+                cache.put(event.request, clonedResponse);
+              } catch(e) {
+                console.log('[SW] Cache put error:', e.message);
+              }
             });
           }
         }
         return networkResponse;
       })
-      .catch(() => {
+      .catch(function() {
         return caches.match(event.request);
       })
   );
