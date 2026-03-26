@@ -1,10 +1,10 @@
 // sw.js - Service Worker para KetoLab
-// Versión: v1.0.2
+// Versión: v1.0.3
 // Estrategia: Cache First con actualización en background (Stale-While-Revalidate)
 
-const CACHE_NAME = 'ketolab-v1.0.2';
-const STATIC_CACHE = 'ketolab-static-v1.0.2';
-const DYNAMIC_CACHE = 'ketolab-dynamic-v1.0.2';
+const CACHE_NAME = 'ketolab-v1.0.3';
+const STATIC_CACHE = 'ketolab-static-v1.0.3';
+const DYNAMIC_CACHE = 'ketolab-dynamic-v1.0.3';
 
 // Archivos estáticos a cachear durante la instalación
 const STATIC_ASSETS = [
@@ -127,14 +127,28 @@ self.addEventListener('fetch', event => {
             })
             .catch(error => {
               console.log('[SW] Error de red para:', event.request.url);
-              return null;
+              // Devolver cache o página offline si falla
+              if (cachedResponse) {
+                return cachedResponse;
+              }
+              if (event.request.destination === 'document') {
+                return caches.match('/aplicacion-keto/offline.html');
+              }
+              return new Response('Recurso no disponible', { status: 503 });
             });
           
           // Devolver cache si existe, sino esperar respuesta de red
           if (cachedResponse) {
             return cachedResponse;
           }
-          return fetchPromise;
+          return fetchPromise.then(function(response) {
+            if (response) return response;
+            // Si todo falla, devolver offline
+            if (event.request.destination === 'document') {
+              return caches.match('/aplicacion-keto/offline.html');
+            }
+            return new Response('No disponible', { status: 503 });
+          });
         })
         .catch(() => {
           // Fallback offline para páginas HTML
