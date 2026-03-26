@@ -212,8 +212,8 @@ Buscar
 </div>
 </div>
 
-<!-- BottomNavBar (Mobile) -->
-<nav class="fixed bottom-0 left-0 w-full glass-card h-20 flex items-center z-50 px-0" style="display: flex; @media (min-width: 768px) { display: none; }">
+<!-- BottomNavBar (Mobile) - Only show on screens smaller than 768px -->
+<nav id="mobileNav" class="fixed bottom-0 left-0 w-full glass-card h-20 flex items-center z-50 px-0" style="display:none">
 <a id="nav-inicio" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="index.html">
 <span class="material-symbols-outlined text-2xl">dashboard</span>
 <span class="text-[8px] font-bold">Inicio</span>
@@ -249,7 +249,7 @@ Buscar
 </nav>
 
 <!-- FAB Group -->
-<div class="fixed bottom-20 right-4 md:bottom-8 md:right-8 flex flex-col gap-3 z-40">
+<div id="fabGroup" class="fab-group fixed bottom-20 right-4 md:bottom-8 md:right-8 flex flex-col gap-3 z-40">
   <a href="scanner.html" class="w-10 h-10 md:w-12 md:h-12 bg-surface-container-high hover:bg-surface-container-highest rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 border border-white/10">
     <span class="material-symbols-outlined text-lg md:text-xl text-on-surface-variant hover:text-blue-400">qr_code_scanner</span>
   </a>
@@ -414,6 +414,25 @@ loadFoods();renderFoods();
       showToast('Modo offline - algunos datos pueden no sincronizarse');
     }
   });
+})();
+
+// Mobile Nav visibility
+(function() {
+  var mobileNav = document.getElementById('mobileNav');
+  var fab = document.querySelector('.fab-group');
+  
+  function updateNavVisibility() {
+    var isMobile = window.innerWidth < 768;
+    if (mobileNav) {
+      mobileNav.style.display = isMobile ? 'flex' : 'none';
+    }
+    if (fab) {
+      fab.style.display = isMobile ? 'none' : 'flex';
+    }
+  }
+  
+  updateNavVisibility();
+  window.addEventListener('resize', updateNavVisibility);
 })();
 </script>
 </body>

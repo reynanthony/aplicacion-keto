@@ -13,46 +13,60 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script>
-tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","primary-container":"#ff4d00","on-primary":"#ffffff","on-primary-container":"#ffffff","surface":"#0a0a0a","surface-container":"#181717","surface-container-low":"#111010","surface-container-high":"#1e1c1c","surface-container-highest":"#242222","on-surface":"#ffffff","on-surface-variant":"#adaaaa","outline":"#767575","secondary":"#ffb300","background":"#0a0a0a"},fontFamily:{headline:["Plus Jakarta Sans","sans-serif"],body:["Inter","sans-serif"]}}}};
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","primary-container":"#ff4d00","on-primary":"#ffffff","surface":"#0a0a0a","surface-container":"#181717","surface-container-low":"#111010","surface-container-high":"#1e1c1c","surface-container-highest":"#242222","on-surface":"#ffffff","on-surface-variant":"#adaaaa","outline":"#767575","secondary":"#ffb300","background":"#0a0a0a"},fontFamily:{headline:["Plus Jakarta Sans","sans-serif"],body:["Inter","sans-serif"]}}}};
 </script>
 <style>
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
 .glass-card{background:rgba(36,34,34,0.4);backdrop-filter:blur(20px);border:1px solid rgba(255,77,0,0.1)}
-#scanner-view{position:relative;overflow:hidden;background:#000}
+#scanner-view{position:relative;width:100%;height:300px;background:#000;overflow:hidden}
 #scanner-video{width:100%;height:100%;object-fit:cover}
-.scanner-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-.scanner-frame{width:280px;height:180px;border:3px solid #ff4d00;border-radius:16px;position:relative}
-.scanner-line{position:absolute;left:10px;right:10px;height:2px;background:linear-gradient(90deg,transparent,#ff4d00,transparent);animation:scan 2s linear infinite}
-@keyframes scan{0%{top:10px}50%{top:calc(100% - 10px)}100%{top:10px}}
+.scanner-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.scanner-frame{width:70%;height:150px;border:3px solid #ff4d00;border-radius:12px;position:relative;box-shadow:0 0 0 9999px rgba(0,0,0,0.5)}
+.scanner-corners{position:absolute;width:30px;height:30px;border:4px solid #ff4d00}
+.scanner-corners.tl{top:-2px;left:-2px;border-right:none;border-bottom:none;border-radius:8px 0 0 0}
+.scanner-corners.tr{top:-2px;right:-2px;border-left:none;border-bottom:none;border-radius:0 8px 0 0}
+.scanner-corners.bl{bottom:-2px;left:-2px;border-right:none;border-top:none;border-radius:0 0 0 8px}
+.scanner-corners.br{bottom:-2px;right:-2px;border-left:none;border-top:none;border-radius:0 0 8px 0}
+.scan-line{position:absolute;left:10%;right:10%;height:2px;background:linear-gradient(90deg,transparent,#ff4d00,transparent);animation:scanMove 2s ease-in-out infinite}
+@keyframes scanMove{0%,100%{top:10%}50%{top:90%}}
 #result-section{transition:all 0.3s ease}
 </style>
 </head>
 <body class="bg-background text-on-surface font-body min-h-screen flex flex-col">
 <header class="bg-surface-container-low p-4 flex items-center justify-between border-b border-primary-container/10">
-<a href="alimentos.html" class="flex items-center gap-2 text-white hover:text-primary-container transition-colors">
+<a href="alimentos.html" class="flex items-center gap-2 text-white hover:text-primary-container">
 <span class="material-symbols-outlined">arrow_back</span>
 <span class="font-medium">Volver</span>
 </a>
-<h1 class="text-lg font-headline font-bold">Escanear Código</h1>
+<h1 class="text-lg font-headline font-bold">Escanear</h1>
 <button onclick="toggleCamera()" id="toggleBtn" class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
 <span class="material-symbols-outlined text-white/70" id="cameraIcon">flash_on</span>
 </button>
 </header>
 
-<main class="flex-1 flex flex-col">
-<div id="scanner-view" class="relative h-[300px] bg-black">
+<main class="flex-1 flex flex-col p-4 space-y-4">
+<div id="scanner-view">
 <video id="scanner-video" autoplay playsinline muted></video>
 <div class="scanner-overlay">
 <div class="scanner-frame">
-<div class="scanner-line"></div>
+<div class="scanner-corners tl"></div>
+<div class="scanner-corners tr"></div>
+<div class="scanner-corners bl"></div>
+<div class="scanner-corners br"></div>
+<div class="scan-line"></div>
 </div>
 </div>
-<div id="scanner-status" class="absolute bottom-4 left-4 right-4 text-center">
-<p class="text-white/70 text-sm">Iniciando cámara...</p>
+<div id="scanner-status" class="absolute bottom-4 left-0 right-0 text-center">
+<p class="text-white/70 text-sm bg-black/50 py-2">Toca el botón para iniciar la cámara</p>
 </div>
 </div>
 
-<div id="result-section" class="p-4 hidden">
+<button onclick="initScanner()" class="w-full py-4 bg-primary-container text-white rounded-xl font-bold flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-xl">camera_alt</span>
+Iniciar Cámara
+</button>
+
+<div id="result-section" class="hidden">
 <div class="glass-card rounded-2xl p-4">
 <div class="flex items-center gap-3 mb-4">
 <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
@@ -64,35 +78,18 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 </div>
 </div>
 
-<div id="product-info" class="space-y-3">
-<div>
-<label class="text-xs text-on-surface-variant uppercase">Nombre del producto</label>
-<input type="text" id="product-name" placeholder="Ej: Huevos" class="w-full bg-surface-container-high text-white rounded-lg px-3 py-2 mt-1 border border-outline focus:border-primary-container focus:outline-none">
-</div>
-
+<div class="space-y-3">
+<input type="text" id="product-name" placeholder="Nombre del producto" class="w-full bg-surface-container-high text-white rounded-lg px-3 py-2 border border-outline">
 <div class="grid grid-cols-2 gap-3">
-<div>
-<label class="text-xs text-on-surface-variant uppercase">Calorías (100g)</label>
-<input type="number" id="product-calories" placeholder="0" class="w-full bg-surface-container-high text-white rounded-lg px-3 py-2 mt-1 border border-outline focus:border-primary-container focus:outline-none">
+<input type="number" id="product-calories" placeholder="Calorías" class="bg-surface-container-high text-white rounded-lg px-3 py-2 border border-outline">
+<input type="number" id="product-protein" placeholder="Proteína (g)" class="bg-surface-container-high text-white rounded-lg px-3 py-2 border border-outline">
 </div>
-<div>
-<label class="text-xs text-on-surface-variant uppercase">Proteína (g)</label>
-<input type="number" id="product-protein" placeholder="0" class="w-full bg-surface-container-high text-white rounded-lg px-3 py-2 mt-1 border border-outline focus:border-primary-container focus:outline-none">
-</div>
-</div>
-
 <div class="grid grid-cols-2 gap-3">
-<div>
-<label class="text-xs text-on-surface-variant uppercase">Grasa (g)</label>
-<input type="number" id="product-fat" placeholder="0" class="w-full bg-surface-container-high text-white rounded-lg px-3 py-2 mt-1 border border-outline focus:border-primary-container focus:outline-none">
-</div>
-<div>
-<label class="text-xs text-on-surface-variant uppercase">Carbs (g)</label>
-<input type="number" id="product-carbs" placeholder="0" class="w-full bg-surface-container-high text-white rounded-lg px-3 py-2 mt-1 border border-outline focus:border-primary-container focus:outline-none">
-</div>
+<input type="number" id="product-fat" placeholder="Grasa (g)" class="bg-surface-container-high text-white rounded-lg px-3 py-2 border border-outline">
+<input type="number" id="product-carbs" placeholder="Carbs (g)" class="bg-surface-container-high text-white rounded-lg px-3 py-2 border border-outline">
 </div>
 
-<button onclick="addToDespensa()" class="w-full py-3 rounded-xl bg-primary-container text-white font-bold mt-4 hover:bg-primary-container/80 transition-all flex items-center justify-center gap-2">
+<button onclick="addToDespensa()" class="w-full py-3 rounded-xl bg-primary-container text-white font-bold mt-2 flex items-center justify-center gap-2">
 <span class="material-symbols-outlined">add_shopping_cart</span>
 Agregar a la despensa
 </button>
@@ -100,7 +97,6 @@ Agregar a la despensa
 </div>
 </div>
 
-<div class="p-4">
 <div class="glass-card rounded-2xl p-4">
 <h3 class="text-white font-bold mb-3 flex items-center gap-2">
 <span class="material-symbols-outlined text-primary-container">history</span>
@@ -110,33 +106,22 @@ Escaneos recientes
 <p class="text-on-surface-variant text-sm text-center py-4">No hay escaneos recientes</p>
 </div>
 </div>
-</div>
 </main>
 
 <script src="/aplicacion-keto/utils.js"></script>
 <script>
 var lastScannedCode = null;
 var cameraActive = false;
-var detector = null;
 var stream = null;
-var animationId = null;
+var detector = null;
 
 async function initScanner() {
   var statusEl = document.getElementById('scanner-status');
   var video = document.getElementById('scanner-video');
   
   try {
-    // Try using native BarcodeDetector API
-    if ('BarcodeDetector' in window) {
-      detector = new BarcodeDetector({
-        formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128', 'code_39', 'qr_code']
-      });
-      console.log('[Scanner] Using native BarcodeDetector API');
-    } else {
-      console.log('[Scanner] BarcodeDetector not supported, using video fallback');
-    }
+    statusEl.innerHTML = '<p class="text-yellow-400 text-sm">Solicitando acceso a cámara...</p>';
     
-    // Request camera access
     stream = await navigator.mediaDevices.getUserMedia({
       video: { 
         facingMode: 'environment',
@@ -149,37 +134,41 @@ async function initScanner() {
     await video.play();
     cameraActive = true;
     
-    statusEl.innerHTML = '<p class="text-green-400 text-sm">Cámara activa - apunta al código</p>';
+    statusEl.innerHTML = '<p class="text-green-400 text-sm">Cámara activa - apunta al código de barras</p>';
+    document.getElementById('cameraIcon').textContent = 'flash_on';
     
-    // Start scanning loop
-    scanFrame();
+    if ('BarcodeDetector' in window) {
+      detector = new BarcodeDetector({
+        formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128', 'code_39']
+      });
+      scanWithDetector();
+    } else {
+      statusEl.innerHTML = '<p class="text-yellow-400 text-sm">Cámara activa - código de barras no soportado en este navegador</p>';
+    }
     
   } catch (err) {
-    console.error('Scanner init error:', err);
+    console.error('Camera error:', err);
     statusEl.innerHTML = '<p class="text-red-400 text-sm">Error: ' + err.message + '</p>';
+    alert('No se pudo acceder a la cámara: ' + err.message);
   }
 }
 
-async function scanFrame() {
-  if (!cameraActive) return;
+async function scanWithDetector() {
+  if (!cameraActive || !detector) return;
   
   var video = document.getElementById('scanner-video');
   
-  if (detector && video.readyState === video.HAVE_ENOUGH_DATA) {
-    try {
-      var barcodes = await detector.detect(video);
-      if (barcodes.length > 0) {
-        var code = barcodes[0].rawValue;
-        if (code && code !== lastScannedCode) {
-          onBarcodeDetected(code);
-        }
+  try {
+    var barcodes = await detector.detect(video);
+    if (barcodes.length > 0) {
+      var code = barcodes[0].rawValue;
+      if (code && code !== lastScannedCode) {
+        onBarcodeDetected(code);
       }
-    } catch (e) {
-      // Ignore detection errors
     }
-  }
+  } catch (e) {}
   
-  animationId = requestAnimationFrame(scanFrame);
+  requestAnimationFrame(scanWithDetector);
 }
 
 function onBarcodeDetected(code) {
@@ -188,19 +177,11 @@ function onBarcodeDetected(code) {
   
   document.getElementById('barcode-value').textContent = code;
   document.getElementById('result-section').classList.remove('hidden');
-  document.getElementById('result-section').classList.add('fade-in-up');
-  
-  document.getElementById('product-name').value = '';
-  document.getElementById('product-calories').value = '';
-  document.getElementById('product-protein').value = '';
-  document.getElementById('product-fat').value = '';
-  document.getElementById('product-carbs').value = '';
+  document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
   
   saveRecentScan(code);
   
-  setTimeout(function() {
-    lastScannedCode = null;
-  }, 2000);
+  setTimeout(function() { lastScannedCode = null; }, 3000);
 }
 
 function playBeep() {
@@ -221,58 +202,37 @@ function playBeep() {
 function toggleCamera() {
   var video = document.getElementById('scanner-video');
   var statusEl = document.getElementById('scanner-status');
-  var iconEl = document.getElementById('cameraIcon');
   
   if (cameraActive) {
-    if (stream) {
-      stream.getTracks().forEach(track => track.stop());
-    }
-    if (animationId) {
-      cancelAnimationFrame(animationId);
-    }
+    if (stream) stream.getTracks().forEach(t => t.stop());
     cameraActive = false;
-    iconEl.textContent = 'flash_off';
-    statusEl.innerHTML = '<p class="text-yellow-400 text-sm">Cámara pausada</p>';
+    video.srcObject = null;
+    document.getElementById('cameraIcon').textContent = 'flash_off';
+    statusEl.innerHTML = '<p class="text-yellow-400 text-sm">Cámara apagada</p>';
   } else {
     initScanner();
-    iconEl.textContent = 'flash_on';
   }
 }
 
 function addToDespensa() {
   var name = document.getElementById('product-name').value.trim();
+  if (!name) { alert('Ingresa un nombre'); return; }
+  
   var cal = parseFloat(document.getElementById('product-calories').value) || 0;
   var prot = parseFloat(document.getElementById('product-protein').value) || 0;
   var fat = parseFloat(document.getElementById('product-fat').value) || 0;
   var carbs = parseFloat(document.getElementById('product-carbs').value) || 0;
   
-  if (!name) {
-    alert('Por favor ingresa un nombre para el producto');
-    return;
-  }
-  
   var id = 'p' + Date.now();
-  var newFood = {
-    id: id,
-    name: name,
-    calories: cal,
-    protein: prot,
-    fat: fat,
-    carbs: carbs,
-    portion: 100,
-    barcode: lastScannedCode,
-    addedAt: new Date().toISOString()
-  };
-  
   var foods = safeParseJSON(localStorage.getItem('ketoFoods'), []);
-  foods.push(newFood);
+  foods.push({ id: id, name: name, calories: cal, protein: prot, fat: fat, carbs: carbs, portion: 100, barcode: lastScannedCode });
   localStorage.setItem('ketoFoods', JSON.stringify(foods));
   
   var despensa = safeParseJSON(localStorage.getItem('despensa'), {});
   despensa[id] = { stock: 100, lastUpdated: new Date().toISOString() };
   localStorage.setItem('despensa', JSON.stringify(despensa));
   
-  showToast(name + ' agregado a la despensa');
+  showToast(name + ' agregado');
   
   document.getElementById('product-name').value = '';
   document.getElementById('product-calories').value = '';
@@ -292,58 +252,23 @@ function saveRecentScan(code) {
 function renderRecentScans() {
   var scans = safeParseJSON(localStorage.getItem('recentScans'), []);
   var container = document.getElementById('recent-scans');
+  if (!scans.length) { container.innerHTML = '<p class="text-on-surface-variant text-sm text-center py-4">No hay escaneos recientes</p>'; return; }
   
-  if (scans.length === 0) {
-    container.innerHTML = '<p class="text-on-surface-variant text-sm text-center py-4">No hay escaneos recientes</p>';
-    return;
-  }
-  
-  var html = '';
-  scans.forEach(function(scan, idx) {
-    var time = new Date(scan.time);
-    var timeStr = time.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-    html += '<div class="flex items-center justify-between p-3 bg-surface-container rounded-xl hover:bg-surface-container-high transition-colors cursor-pointer" onclick="loadScan(\'' + scan.code + '\')">';
-    html += '<div class="flex items-center gap-3"><span class="material-symbols-outlined text-on-surface-variant">qr_code</span>';
-    html += '<div><p class="text-white text-sm font-mono">' + scan.code + '</p>';
-    html += '<p class="text-on-surface-variant text-xs">' + timeStr + '</p></div></div>';
-    html += '<span class="material-symbols-outlined text-on-surface-variant/50">chevron_right</span></div>';
-  });
-  
-  container.innerHTML = html;
-}
-
-function loadScan(code) {
-  document.getElementById('barcode-value').textContent = code;
-  lastScannedCode = code;
-  document.getElementById('result-section').classList.remove('hidden');
-  document.getElementById('result-section').classList.add('fade-in-up');
-  window.scrollTo({ top: document.getElementById('result-section').offsetTop, behavior: 'smooth' });
+  container.innerHTML = scans.map(function(s) {
+    var t = new Date(s.time).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    return '<div class="flex items-center justify-between p-3 bg-surface-container rounded-xl"><div class="flex items-center gap-3"><span class="material-symbols-outlined text-on-surface-variant">qr_code</span><div><p class="text-white text-sm font-mono">' + s.code + '</p><p class="text-on-surface-variant text-xs">' + t + '</p></div></div></div>';
+  }).join('');
 }
 
 function showToast(msg) {
-  var existing = document.getElementById('toast');
-  if (existing) existing.remove();
-  
-  var toast = document.createElement('div');
-  toast.id = 'toast';
-  toast.className = 'fixed bottom-20 left-4 right-4 bg-surface-container-high text-white px-4 py-3 rounded-xl shadow-lg z-50 text-center';
-  toast.textContent = msg;
-  document.body.appendChild(toast);
-  
-  setTimeout(function() {
-    toast.remove();
-  }, 3000);
+  var t = document.createElement('div');
+  t.className = 'fixed bottom-20 left-4 right-4 bg-surface-container-high text-white px-4 py-3 rounded-xl shadow-lg z-50 text-center';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function() { t.remove(); }, 3000);
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', function() {
-    initScanner();
-    renderRecentScans();
-  });
-} else {
-  initScanner();
-  renderRecentScans();
-}
+renderRecentScans();
 </script>
 </body>
 </html>
