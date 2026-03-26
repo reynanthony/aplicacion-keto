@@ -2,7 +2,7 @@
 <html class="dark" lang="es">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <link rel="manifest" href="/aplicacion-keto/manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -48,7 +48,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 </div>
 </div>
 <div id="scanner-status" class="absolute bottom-4 left-4 right-4 text-center">
-<p class="text-white/70 text-sm">Posiciona el código de barras dentro del marco</p>
+<p class="text-white/70 text-sm">Iniciando cámara...</p>
 </div>
 </div>
 
@@ -87,7 +87,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 <input type="number" id="product-fat" placeholder="0" class="w-full bg-surface-container-high text-white rounded-lg px-3 py-2 mt-1 border border-outline focus:border-primary-container focus:outline-none">
 </div>
 <div>
-<label class="text-xs text-on-structure-variant uppercase">Carbs (g)</label>
+<label class="text-xs text-on-surface-variant uppercase">Carbs (g)</label>
 <input type="number" id="product-carbs" placeholder="0" class="w-full bg-surface-container-high text-white rounded-lg px-3 py-2 mt-1 border border-outline focus:border-primary-container focus:outline-none">
 </div>
 </div>
@@ -113,50 +113,76 @@ Escaneos recientes
 </div>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.8.4/dist/quagga.min.js"></script>
 <script src="/aplicacion-keto/utils.js"></script>
 <script>
 var lastScannedCode = null;
 var cameraActive = false;
-var currentStream = null;
+var detector = null;
+var stream = null;
+var animationId = null;
 
-function initScanner() {
-  Quagga.init({
-    inputStream: {
-      name: 'Live',
-      type: 'LiveStream',
-      target: document.querySelector('#scanner-video'),
-      constraints: {
+async function initScanner() {
+  var statusEl = document.getElementById('scanner-status');
+  var video = document.getElementById('scanner-video');
+  
+  try {
+    // Try using native BarcodeDetector API
+    if ('BarcodeDetector' in window) {
+      detector = new BarcodeDetector({
+        formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128', 'code_39', 'qr_code']
+      });
+      console.log('[Scanner] Using native BarcodeDetector API');
+    } else {
+      console.log('[Scanner] BarcodeDetector not supported, using video fallback');
+    }
+    
+    // Request camera access
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { 
         facingMode: 'environment',
         width: { ideal: 1280 },
         height: { ideal: 720 }
       }
-    },
-    decoder: {
-      readers: ['ean_reader', 'ean_8_reader', 'upc_reader', 'upc_e_reader', 'code_128_reader']
-    },
-    locate: true,
-    locator: {
-      patchSize: 'medium',
-      halfSample: true
-    }
-  }, function(err) {
-    if (err) {
-      console.error('Scanner init error:', err);
-      document.getElementById('scanner-status').innerHTML = '<p class="text-red-400 text-sm">Error al iniciar cámara</p>';
-      return;
-    }
-    Quagga.start();
+    });
+    
+    video.srcObject = stream;
+    await video.play();
     cameraActive = true;
-  });
-
-  Quagga.onDetected(onBarcodeDetected);
+    
+    statusEl.innerHTML = '<p class="text-green-400 text-sm">Cámara activa - apunta al código</p>';
+    
+    // Start scanning loop
+    scanFrame();
+    
+  } catch (err) {
+    console.error('Scanner init error:', err);
+    statusEl.innerHTML = '<p class="text-red-400 text-sm">Error: ' + err.message + '</p>';
+  }
 }
 
-function onBarcodeDetected(result) {
-  var code = result.codeResult.code;
-  if (!code || code === lastScannedCode) return;
+async function scanFrame() {
+  if (!cameraActive) return;
   
+  var video = document.getElementById('scanner-video');
+  
+  if (detector && video.readyState === video.HAVE_ENOUGH_DATA) {
+    try {
+      var barcodes = await detector.detect(video);
+      if (barcodes.length > 0) {
+        var code = barcodes[0].rawValue;
+        if (code && code !== lastScannedCode) {
+          onBarcodeDetected(code);
+        }
+      }
+    } catch (e) {
+      // Ignore detection errors
+    }
+  }
+  
+  animationId = requestAnimationFrame(scanFrame);
+}
+
+function onBarcodeDetected(code) {
   lastScannedCode = code;
   playBeep();
   
@@ -193,16 +219,23 @@ function playBeep() {
 }
 
 function toggleCamera() {
+  var video = document.getElementById('scanner-video');
+  var statusEl = document.getElementById('scanner-status');
+  var iconEl = document.getElementById('cameraIcon');
+  
   if (cameraActive) {
-    Quagga.stop();
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+    }
+    if (animationId) {
+      cancelAnimationFrame(animationId);
+    }
     cameraActive = false;
-    document.getElementById('cameraIcon').textContent = 'flash_off';
-    document.getElementById('scanner-status').innerHTML = '<p class="text-yellow-400 text-sm">Cámara pausada</p>';
+    iconEl.textContent = 'flash_off';
+    statusEl.innerHTML = '<p class="text-yellow-400 text-sm">Cámara pausada</p>';
   } else {
-    Quagga.start();
-    cameraActive = true;
-    document.getElementById('cameraIcon').textContent = 'flash_on';
-    document.getElementById('scanner-status').innerHTML = '<p class="text-white/70 text-sm">Posiciona el código de barras dentro del marco</p>';
+    initScanner();
+    iconEl.textContent = 'flash_on';
   }
 }
 
