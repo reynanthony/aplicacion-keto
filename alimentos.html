@@ -22,9 +22,13 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}.glass-card{background:rgba(36,34,34,0.4);backdrop-filter:blur(20px);border:1px solid rgba(255,77,0,0.1)}.sidebar-collapsed .sidebar-nav{width:72px}.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}.sidebar-collapsed .sidebar-logo-text{display:none}.sidebar-collapsed .sidebar-logo{justify-content:center}.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px}.sidebar-collapsed~main .main-content{margin-left:72px}.sidebar-toggle-btn{left:256px;transition:left 0.3s ease}.sidebar-collapsed~.sidebar-toggle-btn{left:72px}.sidebar-link.active{background:#1e1c1c}.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}
 #toast{animation:toastIn 0.3s ease}
-/* Mobile nav force display */
+/* Mobile nav - only show on mobile */
+@media (min-width: 768px) {
+  #mobileNav { display: none !important; }
+}
+
 #mobileNav { 
-  display: flex !important; 
+  display: flex;
   background: #181717 !important; 
   height: 80px !important;
   border-top: 1px solid rgba(255,77,0,0.3);
@@ -222,8 +226,8 @@ Buscar
 </div>
 </div>
 
-<!-- BottomNavBar (Mobile) - Only show on screens smaller than 768px -->
-<nav id="mobileNav" class="fixed bottom-0 left-0 w-full glass-card h-20 flex items-center z-50 px-0" style="display:none">
+<!-- BottomNavBar (Mobile) -->
+<nav id="mobileNav" class="fixed bottom-0 left-0 w-full glass-card h-20 flex items-center z-50 px-0">
 <a id="nav-inicio" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="index.html">
 <span class="material-symbols-outlined text-2xl">dashboard</span>
 <span class="text-[8px] font-bold">Inicio</span>
@@ -426,26 +430,7 @@ loadFoods();renderFoods();
   });
 })();
 
-// Mobile Nav visibility
-(function() {
-  var mobileNav = document.getElementById('mobileNav');
-  var fab = document.getElementById('fabGroup');
-  
-  function updateNavVisibility() {
-    var isMobile = window.innerWidth < 768;
-    console.log('Width:', window.innerWidth, 'isMobile:', isMobile);
-    if (mobileNav) {
-      mobileNav.style.display = isMobile ? 'flex' : 'none';
-      console.log('mobileNav display:', mobileNav.style.display);
-    }
-    if (fab) {
-      fab.style.display = isMobile ? 'none' : 'flex';
-    }
-  }
-  
-  updateNavVisibility();
-  window.addEventListener('resize', updateNavVisibility);
-})();
+// Mobile Nav visibility - handled by CSS media query now
 </script>
 </body>
 </html>
