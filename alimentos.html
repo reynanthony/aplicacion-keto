@@ -2,7 +2,7 @@
 <html class="dark" lang="es">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
 <!-- PWA Manifest y meta tags para instalación -->
 <link rel="manifest" href="/aplicacion-keto/manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -23,7 +23,14 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}
 #toast{animation:toastIn 0.3s ease}
 /* Mobile nav force display */
-#mobileNav { display: flex !important; background: #181717 !important; }
+#mobileNav { 
+  display: flex !important; 
+  background: #181717 !important; 
+  height: 80px !important;
+  border-top: 1px solid rgba(255,77,0,0.3);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+}
 </style>
 </style>
 </head>
