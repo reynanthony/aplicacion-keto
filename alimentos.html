@@ -22,20 +22,6 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}.glass-card{background:rgba(36,34,34,0.4);backdrop-filter:blur(20px);border:1px solid rgba(255,77,0,0.1)}.sidebar-collapsed .sidebar-nav{width:72px}.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}.sidebar-collapsed .sidebar-logo-text{display:none}.sidebar-collapsed .sidebar-logo{justify-content:center}.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px}.sidebar-collapsed~main .main-content{margin-left:72px}.sidebar-toggle-btn{left:256px;transition:left 0.3s ease}.sidebar-collapsed~.sidebar-toggle-btn{left:72px}.sidebar-link.active{background:#1e1c1c}.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}
 #toast{animation:toastIn 0.3s ease}
-/* Mobile nav - only show on mobile */
-@media (min-width: 768px) {
-  #mobileNav { display: none !important; }
-}
-
-#mobileNav { 
-  display: flex;
-  background: #181717 !important; 
-  height: 80px !important;
-  border-top: 1px solid rgba(255,77,0,0.3);
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
-  padding-bottom: env(safe-area-inset-bottom, 20px);
-}
-</style>
 </style>
 </head>
 <body class="bg-background text-on-surface font-body pb-20">
@@ -227,7 +213,7 @@ Buscar
 </div>
 
 <!-- BottomNavBar (Mobile) -->
-<nav id="mobileNav" class="fixed bottom-0 left-0 w-full glass-card h-20 flex items-center z-50 px-0">
+<nav id="mobileNav" style="position: fixed !important; bottom: 0 !important; left: 0 !important; width: 100% !important; display: flex !important; background: #181717 !important; height: 80px !important; z-index: 9999 !important; border-top: 1px solid rgba(255,77,0,0.3);" class="glass-card h-20 flex items-center px-0">
 <a id="nav-inicio" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="index.html">
 <span class="material-symbols-outlined text-2xl">dashboard</span>
 <span class="text-[8px] font-bold">Inicio</span>
