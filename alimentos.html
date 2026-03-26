@@ -416,7 +416,13 @@ loadFoods();renderFoods();
   });
 })();
 
-// Mobile Nav visibility - handled by CSS media query now
+// Force show mobile nav on mobile
+(function() {
+  var nav = document.getElementById('mobileNav');
+  var fab = document.getElementById('fabGroup');
+  if (nav) nav.style.display = 'flex';
+  if (fab && window.innerWidth >= 768) fab.style.display = 'flex';
+})();
 </script>
 </body>
 </html>
