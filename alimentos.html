@@ -22,6 +22,8 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}.glass-card{background:rgba(36,34,34,0.4);backdrop-filter:blur(20px);border:1px solid rgba(255,77,0,0.1)}.sidebar-collapsed .sidebar-nav{width:72px}.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}.sidebar-collapsed .sidebar-logo-text{display:none}.sidebar-collapsed .sidebar-logo{justify-content:center}.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px}.sidebar-collapsed~main .main-content{margin-left:72px}.sidebar-toggle-btn{left:256px;transition:left 0.3s ease}.sidebar-collapsed~.sidebar-toggle-btn{left:72px}.sidebar-link.active{background:#1e1c1c}.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}
 #toast{animation:toastIn 0.3s ease}
+#mobileBottomNav{display:flex !important}
+@media (max-width: 767px){.md\:hidden{display:flex !important}}
 </style>
 </head>
 <body class="bg-background text-on-surface font-body pb-20">
@@ -212,15 +214,40 @@ Buscar
 </div>
 </div>
 
-<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-20 flex items-center z-[60] px-0 overflow-x-auto" style="display:flex !important; visibility:visible !important;">
-<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="index.html"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[8px] font-bold">Inicio</span></a>
-<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="perfil.html"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[8px] font-bold">Perfil</span></a>
-<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="plan.html"><span class="material-symbols-outlined text-2xl">event_note</span><span class="text-[8px] font-bold">Plan</span></a>
-<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="compras.html"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[8px] font-bold">Desp</span></a>
-<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="macros.html"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[8px] font-bold">Macros</span></a>
-<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="checklist.html"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[8px] font-bold">Check</span></a>
-<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="entrenamientos.html"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[8px] font-bold">Gym</span></a>
-<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full py-2" href="suplementos.html"><span class="material-symbols-outlined text-2xl">medication</span><span class="text-[8px] font-bold">Sup</span></a>
+<!-- BottomNavBar (Mobile) -->
+<nav id="mobileBottomNav" class="md:hidden fixed bottom-0 left-0 w-full glass-card h-20 flex items-center z-[60] px-0">
+<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full" href="index.html">
+<span class="material-symbols-outlined text-2xl">dashboard</span>
+<span class="text-[8px] font-bold">Inicio</span>
+</a>
+<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full" href="perfil.html">
+<span class="material-symbols-outlined text-2xl">person</span>
+<span class="text-[8px] font-bold">Perfil</span>
+</a>
+<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full" href="plan.html">
+<span class="material-symbols-outlined text-2xl">event_note</span>
+<span class="text-[8px] font-bold">Plan</span>
+</a>
+<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full" href="compras.html">
+<span class="material-symbols-outlined text-2xl">shopping_cart</span>
+<span class="text-[8px] font-bold">Desp</span>
+</a>
+<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full" href="macros.html">
+<span class="material-symbols-outlined text-2xl">donut_small</span>
+<span class="text-[8px] font-bold">Macros</span>
+</a>
+<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full" href="checklist.html">
+<span class="material-symbols-outlined text-2xl">fact_check</span>
+<span class="text-[8px] font-bold">Check</span>
+</a>
+<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full" href="entrenamientos.html">
+<span class="material-symbols-outlined text-2xl">fitness_center</span>
+<span class="text-[8px] font-bold">Gym</span>
+</a>
+<a class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50 h-full" href="suplementos.html">
+<span class="material-symbols-outlined text-2xl">medication</span>
+<span class="text-[8px] font-bold">Sup</span>
+</a>
 </nav>
 
 <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[70] hidden opacity-0 translate-y-4 pointer-events-none transition-all duration-300">
