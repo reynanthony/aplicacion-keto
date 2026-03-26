@@ -96,10 +96,11 @@ self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   
   // ========== EXCEPCIONES ==========
-  // No cachear peticiones a APIs externas (CDN, fonts, etc)
+  // No cachear peticiones a APIs externas (CDN, fonts, GitHub Pages, etc)
   if (url.hostname.includes('cdn.') || 
       url.hostname.includes('fonts.') ||
-      url.hostname.includes('api.') || 
+      url.hostname.includes('api.') ||
+      url.hostname.includes('github.') || 
       url.pathname.includes('/api/')) {
     event.respondWith(fetch(event.request));
     return;
@@ -130,7 +131,8 @@ self.addEventListener('fetch', event => {
               return networkResponse.clone();
             })
             .catch(error => {
-              console.log('[SW] Error de red para:', event.request.url);
+              // Error de red esperado en algunas configuraciones - no es crítico
+              // console.log('[SW] Error de red para:', event.request.url);
               // Devolver cache o página offline si falla
               if (cachedResponse) {
                 return cachedResponse;

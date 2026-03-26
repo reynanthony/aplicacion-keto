@@ -22,6 +22,9 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}.glass-card{background:rgba(36,34,34,0.4);backdrop-filter:blur(20px);border:1px solid rgba(255,77,0,0.1)}.sidebar-collapsed .sidebar-nav{width:72px}.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}.sidebar-collapsed .sidebar-logo-text{display:none}.sidebar-collapsed .sidebar-logo{justify-content:center}.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px}.sidebar-collapsed~main .main-content{margin-left:72px}.sidebar-toggle-btn{left:256px;transition:left 0.3s ease}.sidebar-collapsed~.sidebar-toggle-btn{left:72px}.sidebar-link.active{background:#1e1c1c}.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}
 #toast{animation:toastIn 0.3s ease}
+@media (max-width: 767px) {
+  .mobile-bottom-nav { display: flex !important; visibility: visible !important; opacity: 1 !important; }
+}
 </style>
 </head>
 <body class="bg-background text-on-surface font-body pb-20">
@@ -212,40 +215,16 @@ Buscar
 </div>
 </main>
 
-<!-- BottomNavBar (Mobile) -->
-<nav class="mobile-bottom-nav fixed bottom-0 left-0 w-full glass-card h-20 flex items-center z-50 px-0" style="display:flex;background:#181717;border-top:1px solid rgba(255,77,0,0.3)">
-<a id="nav-inicio" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="index.html">
-<span class="material-symbols-outlined text-2xl">dashboard</span>
-<span class="text-[8px] font-bold">Inicio</span>
-</a>
-<a id="nav-perfil" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="perfil.html">
-<span class="material-symbols-outlined text-2xl">person</span>
-<span class="text-[8px] font-bold">Perfil</span>
-</a>
-<a id="nav-plan" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="plan.html">
-<span class="material-symbols-outlined text-2xl">event_note</span>
-<span class="text-[8px] font-bold">Plan</span>
-</a>
-<a id="nav-compras" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="compras.html">
-<span class="material-symbols-outlined text-2xl">shopping_cart</span>
-<span class="text-[8px] font-bold">Desp</span>
-</a>
-<a id="nav-macros" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="macros.html">
-<span class="material-symbols-outlined text-2xl">donut_small</span>
-<span class="text-[8px] font-bold">Macros</span>
-</a>
-<a id="nav-checklist" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="checklist.html">
-<span class="material-symbols-outlined text-2xl">fact_check</span>
-<span class="text-[8px] font-bold">Check</span>
-</a>
-<a id="nav-entrenamientos" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="entrenamientos.html">
-<span class="material-symbols-outlined text-2xl">fitness_center</span>
-<span class="text-[8px] font-bold">Gym</span>
-</a>
-<a id="nav-suplementos" class="flex flex-col items-center justify-center flex-1 min-w-[12%] gap-0.5 text-white/50" href="suplementos.html">
-<span class="material-symbols-outlined text-2xl">medication</span>
-<span class="text-[8px] font-bold">Sup</span>
-</a>
+<!-- BottomNavBar (Mobile) - Always visible on mobile -->
+<nav id="mobileNavbar" style="position:fixed;bottom:0;left:0;width:100%;height:80px;background:#181717;display:flex;align-items:center;justify-content:space-around;z-index:9999;border-top:1px solid rgba(255,77,0,0.3);padding-bottom:env(safe-area-inset-bottom,0);">
+<a href="index.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:rgba(255,255,255,0.5);text-decoration:none"><span class="material-symbols-outlined" style="font-size:24px">dashboard</span><span style="font-size:8px;font-weight:bold">Inicio</span></a>
+<a href="perfil.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:rgba(255,255,255,0.5);text-decoration:none"><span class="material-symbols-outlined" style="font-size:24px">person</span><span style="font-size:8px;font-weight:bold">Perfil</span></a>
+<a href="plan.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:rgba(255,255,255,0.5);text-decoration:none"><span class="material-symbols-outlined" style="font-size:24px">event_note</span><span style="font-size:8px;font-weight:bold">Plan</span></a>
+<a href="compras.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:rgba(255,255,255,0.5);text-decoration:none"><span class="material-symbols-outlined" style="font-size:24px">shopping_cart</span><span style="font-size:8px;font-weight:bold">Desp</span></a>
+<a href="macros.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:rgba(255,255,255,0.5);text-decoration:none"><span class="material-symbols-outlined" style="font-size:24px">donut_small</span><span style="font-size:8px;font-weight:bold">Macros</span></a>
+<a href="checklist.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:rgba(255,255,255,0.5);text-decoration:none"><span class="material-symbols-outlined" style="font-size:24px">fact_check</span><span style="font-size:8px;font-weight:bold">Check</span></a>
+<a href="entrenamientos.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:rgba(255,255,255,0.5);text-decoration:none"><span class="material-symbols-outlined" style="font-size:24px">fitness_center</span><span style="font-size:8px;font-weight:bold">Gym</span></a>
+<a href="suplementos.html" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:rgba(255,255,255,0.5);text-decoration:none"><span class="material-symbols-outlined" style="font-size:24px">medication</span><span style="font-size:8px;font-weight:bold">Sup</span></a>
 </nav>
 
 <!-- FAB Group -->
@@ -269,51 +248,51 @@ if(localStorage.getItem("sidebarCollapsed")==="true"){document.body.classList.ad
 var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
 
 var defaultFoods=[
-{id:"f1",name:"Huevos",portion:"1 unidad (50g)",calories:78,protein:6,fat:5,carbs:0.6,category:"Proteínas"},
-{id:"f2",name:"Pechuga de pollo",portion:"100g",calories:165,protein:31,fat:3.6,carbs:0,category:"Proteínas"},
-{id:"f3",name:"Carne molida 80/20",portion:"100g",calories:254,protein:17,fat:20,carbs:0,category:"Proteínas"},
-{id:"f4",name:"Salmón",portion:"100g",calories:208,protein:20,fat:13,carbs:0,category:"Proteínas"},
-{id:"f5",name:"Bacon",portion:"50g",calories:270,protein:12,fat:23,carbs:1,category:"Proteínas"},
-{id:"f6",name:"Cerdo (lomo)",portion:"100g",calories:143,protein:26,fat:3.5,carbs:0,category:"Proteínas"},
-{id:"f7",name:"Carne de res (bistec)",portion:"100g",calories:271,protein:26,fat:18,carbs:0,category:"Proteínas"},
-{id:"f8",name:"Atún",portion:"100g",calories:132,protein:28,fat:1,carbs:0,category:"Proteínas"},
-{id:"f9",name:"Hígado de res",portion:"100g",calories:135,protein:20,fat:4,carbs:4,category:"Proteínas"},
-{id:"f10",name:"Pavo molido",portion:"100g",calories:149,protein:27,fat:3,carbs:0,category:"Proteínas"},
-{id:"f11",name:"Codornices",portion:"100g",calories:192,protein:25,fat:10,carbs:0,category:"Proteínas"},
-{id:"f12",name:"Aguacate",portion:"100g",calories:160,protein:2,fat:15,carbs:9,category:"Grasas"},
-{id:"f13",name:"Aceite de oliva",portion:"1 cucharada (15ml)",calories:119,protein:0,fat:13.5,carbs:0,category:"Grasas"},
-{id:"f14",name:"Mantequilla",portion:"1 cucharada (15g)",calories:102,protein:0.1,fat:11.5,carbs:0,category:"Grasas"},
-{id:"f15",name:"Aceite de coco",portion:"1 cucharada (15ml)",calories:121,protein:0,fat:13.5,carbs:0,category:"Grasas"},
-{id:"f16",name:"Ghee (mantequilla clarificada)",portion:"1 cucharada (15g)",calories:130,protein:0,fat:14,carbs:0,category:"Grasas"},
-{id:"f17",name:"Almendras",portion:"30g",calories:170,protein:6,fat:15,carbs:6,category:"Frutos secos"},
-{id:"f18",name:"Nueces",portion:"30g",calories:196,protein:4.6,fat:19.5,carbs:4,category:"Frutos secos"},
-{id:"f19",name:"Macadamia",portion:"30g",calories:204,protein:2.2,fat:21.5,carbs:4,category:"Frutos secos"},
-{id:"f20",name:"Pecanas",portion:"30g",calories:196,protein:2.6,fat:20,carbs:4,category:"Frutos secos"},
-{id:"f21",name:"Semillas de chía",portion:"30g",calories:138,protein:4.7,fat:9,carbs:12,category:"Frutos secos"},
-{id:"f22",name:"Semillas de linaza",portion:"30g",calories:150,protein:5,fat:12,carbs:8,category:"Frutos secos"},
-{id:"f23",name:"Brócoli",portion:"100g",calories:34,protein:2.8,fat:0.4,carbs:7,category:"Verduras"},
-{id:"f24",name:"Coliflor",portion:"100g",calories:25,protein:2,fat:0.3,carbs:5,category:"Verduras"},
-{id:"f25",name:"Espinacas",portion:"100g",calories:23,protein:2.9,fat:0.4,carbs:3.6,category:"Verduras"},
-{id:"f26",name:"Champiñones",portion:"100g",calories:22,protein:3.1,fat:0.3,carbs:3.3,category:"Verduras"},
-{id:"f27",name:"Pimiento rojo",portion:"100g",calories:31,protein:1,fat:0.3,carbs:6,category:"Verduras"},
-{id:"f28",name:"Pepino",portion:"100g",calories:15,protein:0.7,fat:0.1,carbs:3.6,category:"Verduras"},
-{id:"f29",name:"Lechuga",portion:"100g",calories:15,protein:1.4,fat:0.2,carbs:2.9,category:"Verduras"},
-{id:"f30",name:"Tomate",portion:"100g",calories:18,protein:0.9,fat:0.2,carbs:3.9,category:"Verduras"},
-{id:"f31",name:"Cebolla",portion:"100g",calories:40,protein:1.1,fat:0.1,carbs:9.3,category:"Verduras"},
-{id:"f32",name:"Ajo",portion:"1 diente (3g)",calories:4,protein:0.2,fat:0,carbs:1,category:"Verduras"},
-{id:"f33",name:"Calabacín",portion:"100g",calories:17,protein:1.2,fat:0.3,carbs:3.1,category:"Verduras"},
-{id:"f34",name:"Apio",portion:"100g",calories:16,protein:0.7,fat:0.2,carbs:3,category:"Verduras"},
-{id:"f35",name:"Queso mozzarella",portion:"100g",calories:280,protein:28,fat:17,carbs:3.1,category:"Lácteos"},
-{id:"f36",name:"Queso cheddar",portion:"30g",calories:120,protein:7,fat:10,carbs:0.4,category:"Lácteos"},
-{id:"f37",name:"Queso parmesano",portion:"30g",calories:111,protein:10,fat:7,carbs:0.4,category:"Lácteos"},
-{id:"f38",name:"Queso crema",portion:"30g",calories:100,protein:2,fat:10,carbs:0.4,category:"Lácteos"},
-{id:"f39",name:"Nata para cocinar",portion:"100ml",calories:340,protein:2,fat:36,carbs:3,category:"Lácteos"},
-{id:"f40",name:"Queso feta",portion:"30g",calories:75,protein:4,fat:6,carbs:1,category:"Lácteos"},
-{id:"f41",name:"Cacao puro",portion:"1 cucharada (10g)",calories:23,protein:2,fat:1.4,carbs:6,category:"Otros"},
-{id:"f42",name:"Coco rallado",portion:"30g",calories:187,protein:2,fat:18,carbs:8,category:"Otros"},
-{id:"f43",name:"Edamame",portion:"100g",calories:121,protein:12,fat:5,carbs:10,category:"Otros"},
-{id:"f44",name:"Café con mantequilla",portion:"1 taza",calories:230,protein:2,fat:24,carbs:0,category:"Otros"},
-{id:"f45",name:"Chocolate negro 90%",portion:"30g",calories:150,protein:2,fat:13,carbs:4,category:"Otros"}
+{id:"f1",name:"Huevos",portion:50,calories:78,protein:6,fat:5,carbs:0.6,category:"Proteínas",units:[{name:"unidades",grams:50},{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f2",name:"Pechuga de pollo",portion:100,calories:165,protein:31,fat:3.6,carbs:0,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f3",name:"Carne molida 80/20",portion:100,calories:254,protein:17,fat:20,carbs:0,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f4",name:"Salmón",portion:100,calories:208,protein:20,fat:13,carbs:0,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f5",name:"Bacon",portion:50,calories:270,protein:12,fat:23,carbs:1,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f6",name:"Cerdo (lomo)",portion:100,calories:143,protein:26,fat:3.5,carbs:0,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f7",name:"Carne de res (bistec)",portion:100,calories:271,protein:26,fat:18,carbs:0,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f8",name:"Atún",portion:100,calories:132,protein:28,fat:1,carbs:0,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000},{name:"latas",grams:140}]},
+{id:"f9",name:"Hígado de res",portion:100,calories:135,protein:20,fat:4,carbs:4,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f10",name:"Pavo molido",portion:100,calories:149,protein:27,fat:3,carbs:0,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f11",name:"Codornices",portion:100,calories:192,protein:25,fat:10,carbs:0,category:"Proteínas",units:[{name:"gramos",grams:1},{name:"unidades",grams:100},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f12",name:"Aguacate",portion:100,calories:160,protein:2,fat:15,carbs:9,category:"Grasas",units:[{name:"gramos",grams:1},{name:"unidades",grams:200},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f13",name:"Aceite de oliva",portion:15,calories:119,protein:0,fat:13.5,carbs:0,category:"Grasas",units:[{name:"ml",grams:0.9},{name:"cucharadas",grams:15},{name:"litros",grams:900}]},
+{id:"f14",name:"Mantequilla",portion:15,calories:102,protein:0.1,fat:11.5,carbs:0,category:"Grasas",units:[{name:"gramos",grams:1},{name:"cucharadas",grams:15},{name:"libras",grams:453.6}]},
+{id:"f15",name:"Aceite de coco",portion:15,calories:121,protein:0,fat:13.5,carbs:0,category:"Grasas",units:[{name:"ml",grams:0.9},{name:"cucharadas",grams:15},{name:"litros",grams:900}]},
+{id:"f16",name:"Ghee (mantequilla clarificada)",portion:15,calories:130,protein:0,fat:14,carbs:0,category:"Grasas",units:[{name:"gramos",grams:1},{name:"cucharadas",grams:15},{name:"libras",grams:453.6}]},
+{id:"f17",name:"Almendras",portion:30,calories:170,protein:6,fat:15,carbs:6,category:"Frutos secos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f18",name:"Nueces",portion:30,calories:196,protein:4.6,fat:19.5,carbs:4,category:"Frutos secos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f19",name:"Macadamia",portion:30,calories:204,protein:2.2,fat:21.5,carbs:4,category:"Frutos secos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f20",name:"Pecanas",portion:30,calories:196,protein:2.6,fat:20,carbs:4,category:"Frutos secos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f21",name:"Semillas de chía",portion:30,calories:138,protein:4.7,fat:9,carbs:12,category:"Frutos secos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f22",name:"Semillas de linaza",portion:30,calories:150,protein:5,fat:12,carbs:8,category:"Frutos secos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f23",name:"Brócoli",portion:100,calories:34,protein:2.8,fat:0.4,carbs:7,category:"Verduras",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f24",name:"Coliflor",portion:100,calories:25,protein:2,fat:0.3,carbs:5,category:"Verduras",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f25",name:"Espinacas",portion:100,calories:23,protein:2.9,fat:0.4,carbs:3.6,category:"Verduras",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f26",name:"Champiñones",portion:100,calories:22,protein:3.1,fat:0.3,carbs:3.3,category:"Verduras",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f27",name:"Pimiento rojo",portion:100,calories:31,protein:1,fat:0.3,carbs:6,category:"Verduras",units:[{name:"gramos",grams:1},{name:"unidades",grams:120},{name:"libras",grams:453.6}]},
+{id:"f28",name:"Pepino",portion:100,calories:15,protein:0.7,fat:0.1,carbs:3.6,category:"Verduras",units:[{name:"gramos",grams:1},{name:"unidades",grams:300},{name:"libras",grams:453.6}]},
+{id:"f29",name:"Lechuga",portion:100,calories:15,protein:1.4,fat:0.2,carbs:2.9,category:"Verduras",units:[{name:"gramos",grams:1},{name:"unidades",grams:200},{name:"libras",grams:453.6}]},
+{id:"f30",name:"Tomate",portion:100,calories:18,protein:0.9,fat:0.2,carbs:3.9,category:"Verduras",units:[{name:"gramos",grams:1},{name:"unidades",grams:150},{name:"libras",grams:453.6}]},
+{id:"f31",name:"Cebolla",portion:100,calories:40,protein:1.1,fat:0.1,carbs:9.3,category:"Verduras",units:[{name:"gramos",grams:1},{name:"unidades",grams:150},{name:"libras",grams:453.6}]},
+{id:"f32",name:"Ajo",portion:3,calories:4,protein:0.2,fat:0,carbs:1,category:"Verduras",units:[{name:"gramos",grams:1},{name:"dientes",grams:4},{name:"libras",grams:453.6}]},
+{id:"f33",name:"Calabacín",portion:100,calories:17,protein:1.2,fat:0.3,carbs:3.1,category:"Verduras",units:[{name:"gramos",grams:1},{name:"unidades",grams:250},{name:"libras",grams:453.6}]},
+{id:"f34",name:"Apio",portion:100,calories:16,protein:0.7,fat:0.2,carbs:3,category:"Verduras",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f35",name:"Queso mozzarella",portion:100,calories:280,protein:28,fat:17,carbs:3.1,category:"Lácteos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f36",name:"Queso cheddar",portion:30,calories:120,protein:7,fat:10,carbs:0.4,category:"Lácteos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f37",name:"Queso parmesano",portion:30,calories:111,protein:10,fat:7,carbs:0.4,category:"Lácteos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f38",name:"Queso crema",portion:30,calories:100,protein:2,fat:10,carbs:0.4,category:"Lácteos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f39",name:"Nata para cocinar",portion:100,calories:340,protein:2,fat:36,carbs:3,category:"Lácteos",units:[{name:"ml",grams:0.9},{name:"litros",grams:900}]},
+{id:"f40",name:"Queso feta",portion:30,calories:75,protein:4,fat:6,carbs:1,category:"Lácteos",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f41",name:"Cacao puro",portion:10,calories:23,protein:2,fat:1.4,carbs:6,category:"Otros",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f42",name:"Coco rallado",portion:30,calories:187,protein:2,fat:18,carbs:8,category:"Otros",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f43",name:"Edamame",portion:100,calories:121,protein:12,fat:5,carbs:10,category:"Otros",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]},
+{id:"f44",name:"Café con mantequilla",portion:240,calories:230,protein:2,fat:24,carbs:0,category:"Otros",units:[{name:"ml",grams:0.9},{name:"tazas",grams:240}]},
+{id:"f45",name:"Chocolate negro 90%",portion:30,calories:150,protein:2,fat:13,carbs:4,category:"Otros",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]}
 ];
 
 var currentFoods=[];
@@ -326,7 +305,7 @@ function saveFoods(){localStorage.setItem("ketoFoods",JSON.stringify(currentFood
 
 function setFilter(filter){currentFilter=filter;document.querySelectorAll(".flex-wrap button").forEach(function(btn){btn.classList.remove("bg-primary-container","text-white");btn.classList.add("bg-surface-container","text-on-surface-variant")});event.target.classList.remove("bg-surface-container","text-on-surface-variant");event.target.classList.add("bg-primary-container","text-white");renderFoods()}
 
-function renderFoods(){var search=document.getElementById("searchInput").value.toLowerCase();var filtered=currentFoods.filter(function(f){var matchSearch=f.name.toLowerCase().includes(search);var matchFilter=!currentFilter||f.category===currentFilter;return matchSearch&&matchFilter});var container=document.getElementById("foodsList");if(filtered.length===0){container.innerHTML='<div class="glass-card p-8 rounded-xl text-center"><span class="material-symbols-outlined text-4xl text-on-surface-variant mb-2">search_off</span><p class="text-on-surface-variant">No se encontraron alimentos</p></div>';return}var html="";filtered.forEach(function(f){var catColors={"Proteínas":"#ff4d00","Verduras":"#4caf50","Grasas":"#ffb300","Lácteos":"#9c27b0","Frutos secos":"#e91e63","Otros":"#2196f3"};var color=catColors[f.category]||"#ff4d00";html+='<div class="glass-card p-4 rounded-xl flex items-center gap-4 cursor-pointer hover:bg-surface-container-high transition-all" onclick="openDetail(\''+f.id+'\')">';html+='<div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:'+color+'20"><span class="material-symbols-outlined" style="color:'+color+'">restaurant</span></div>';html+='<div class="flex-1 min-w-0"><p class="font-headline font-bold text-white truncate">'+f.name+'</p><p class="text-xs text-on-surface-variant">'+f.category+' - '+f.portion+'</p></div>';html+='<div class="hidden md:flex items-center gap-4 text-xs"><span class="text-yellow-400">'+f.calories+' cal</span><span class="text-orange-400">P:'+f.protein+'g</span><span class="text-yellow-300">G:'+f.fat+'g</span><span class="text-cyan-400">C:'+f.carbs+'g</span></div>';html+='<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span></div>'});container.innerHTML=html}
+function renderFoods(){var search=document.getElementById("searchInput").value.toLowerCase();var filtered=currentFoods.filter(function(f){var matchSearch=f.name.toLowerCase().includes(search);var matchFilter=!currentFilter||f.category===currentFilter;return matchSearch&&matchFilter});var container=document.getElementById("foodsList");if(filtered.length===0){container.innerHTML='<div class="glass-card p-8 rounded-xl text-center"><span class="material-symbols-outlined text-4xl text-on-surface-variant mb-2">search_off</span><p class="text-on-surface-variant">No se encontraron alimentos</p></div>';return}var html="";filtered.forEach(function(f){var catColors={"Proteínas":"#ff4d00","Verduras":"#4caf50","Grasas":"#ffb300","Lácteos":"#9c27b0","Frutos secos":"#e91e63","Otros":"#2196f3"};var color=catColors[f.category]||"#ff4d00";html+='<div class="glass-card p-3 rounded-xl flex items-center gap-3 cursor-pointer hover:bg-surface-container-high transition-all" onclick="openDetail(\''+f.id+'\')">';html+='<div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:'+color+'20"><span class="material-symbols-outlined" style="color:'+color+'">restaurant</span></div>';html+='<div class="flex-1 min-w-0"><p class="font-headline font-bold text-white truncate text-sm">'+f.name+'</p><p class="text-xs text-on-surface-variant">'+f.category+' - '+f.portion+'g</p></div>';html+='<div class="flex items-center gap-1 text-xs whitespace-nowrap"><span class="text-yellow-400">'+f.calories+'</span><span class="text-orange-400">P:'+f.protein+'</span><span class="text-yellow-300">G:'+f.fat+'</span><span class="text-cyan-400">C:'+f.carbs+'</span></div>';html+='<span class="material-symbols-outlined text-on-surface-variant text-lg">chevron_right</span></div>'});container.innerHTML=html}
 
 function openAddFoodModal(){document.getElementById("modalTitle").textContent="Nuevo Alimento";document.getElementById("foodId").value="";document.getElementById("foodName").value="";document.getElementById("foodCalories").value="";document.getElementById("foodPortion").value="100";document.getElementById("foodProtein").value="";document.getElementById("foodFat").value="";document.getElementById("foodCarbs").value="";document.getElementById("foodCategory").value="Proteínas";document.getElementById("foodModal").classList.remove("hidden");document.getElementById("foodModal").classList.add("flex")}
 
