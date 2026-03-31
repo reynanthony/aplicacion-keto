@@ -301,12 +301,23 @@ notifications
 <a href="suplementos.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10 transition-colors"><span class="material-symbols-outlined">medication</span><span>Suplementos</span></a>
 <a href="recetas.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10 transition-colors"><span class="material-symbols-outlined">menu_book</span><span>Recetas</span></a>
 </nav>
+<div class="border-t border-white/10 mx-2 my-2"></div>
+<button id="installBtnMenu" onclick="installApp()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-secondary hover:bg-secondary/10 transition-colors">
+<span class="material-symbols-outlined">download</span>
+<span>Instalar App</span>
+</button>
 </div>
 </div>
 </div>
 
 <script>
 function toggleHamburgerMenu(){var m=document.getElementById('hamburgerMenu');var p=document.getElementById('hamburgerPanel');if(m.classList.contains('hidden')){m.classList.remove('hidden');requestAnimationFrame(function(){p.classList.remove('translate-x-full')})}else{p.classList.add('translate-x-full');setTimeout(function(){m.classList.add('hidden')},300)}}
+
+// PWA Install
+var deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferredPrompt=e;var btn=document.getElementById('installBtn');var btnMenu=document.getElementById('installBtnMenu');if(btn)btn.classList.remove('hidden');if(btnMenu)btnMenu.classList.remove('hidden')});
+function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(function(choice){if(choice.outcome==='accepted'){console.log('User accepted install')}deferredPrompt=null;var btn=document.getElementById('installBtn');var btnMenu=document.getElementById('installBtnMenu');if(btn)btn.classList.add('hidden');if(btnMenu)btnMenu.classList.add('hidden')})}}
+window.addEventListener('appinstalled',function(){deferredPrompt=null;var btn=document.getElementById('installBtn');var btnMenu=document.getElementById('installBtnMenu');if(btn)btn.classList.add('hidden');if(btnMenu)btnMenu.classList.add('hidden');showToast('¡App instalada exitosamente!')});
 </script>
 
 <!-- Mobile Settings Modal -->
@@ -550,6 +561,22 @@ Actualizar peso
 <div class="mt-2 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
 <div id="exerciseProgressBar" class="h-full bg-green-500 transition-all duration-300" style="width: 0%"></div>
 </div>
+</div>
+</section>
+
+<!-- ========== SECTION 2.5: INSTALL APP ========== -->
+<section class="mb-4">
+<div id="installCard" class="glass-card rounded-2xl p-5 flex items-center justify-between cursor-pointer hover:bg-surface-container-high transition-all" onclick="installApp()">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-2xl">download</span>
+</div>
+<div>
+<p class="text-white font-bold">Instalar App</p>
+<p class="text-on-surface-variant text-sm">Añadir a pantalla de inicio</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
 </div>
 </section>
 

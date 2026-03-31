@@ -426,6 +426,7 @@ Con las mejoras recomendadas, KetoLab tiene potencial para convertirse en la app
 | 6 | Sistema de tracking de peso | index, macros, perfil, utils.js | ✅ Implementado |
 | 7 | Límites localStorage (4.5MB) | utils.js | ✅ Implementado |
 | 8 | ARIA labels accesibilidad | 6 archivos HTML | ✅ Implementado |
+| 9 | PWA Install en todos los HTML | 9 archivos HTML | ✅ Implementado |
 
 ### Detalle de Cambios
 
@@ -473,6 +474,20 @@ function getStorageUsage() {
 </nav>
 ```
 
+**5. PWA Install en todos los HTML**
+- Botón "Instalar App" agregado al menú hamburguesa
+- Script PWA install (`beforeinstallprompt`, `installApp`, `appinstalled`)
+- Archivos actualizados:
+  - macros.html
+  - perfil.html
+  - alimentos.html
+  - compras.html
+  - plan.html
+  - checklist.html
+  - suplementos.html
+  - recetas.html
+  - entrenamientos.html
+
 ### Pendientes (No críticas)
 - [ ] Optimizar CDNs (Tailwind warning)
 - [ ] Expandir base de datos de alimentos
@@ -491,7 +506,31 @@ function getStorageUsage() {
 | localStorage | Sin límites | 4.5MB máximo |
 | Código duplicado | totalToLose ×2 | Una declaración |
 | Console logs | Muchos | Limpiados |
+| PWA Install | Solo index.html | Todos los HTML |
 
 ---
 
-*Documento generado automáticamente. Última actualización: 31 de marzo de 2026*
+## 12. Resumen de Archivos Actualizados
+
+### HTMLs con menú hamburguesa y PWA install:
+1. `index.html` (ya tenía install)
+2. `macros.html` ✅ Actualizado
+3. `perfil.html` ✅ Actualizado
+4. `alimentos.html` ✅ Actualizado
+5. `compras.html` ✅ Actualizado
+6. `plan.html` ✅ Actualizado
+7. `checklist.html` ✅ Actualizado
+8. `suplementos.html` ✅ Actualizado
+9. `recetas.html` ✅ Actualizado
+10. `entrenamientos.html` ✅ Actualizado
+
+### HTMLs sin menú hamburguesa (no requieren cambios):
+- `guia.html` - Guía estática
+- `onboarding.html` - Solo onboarding
+- `scanner.html` - Escáner de códigos
+- `offline.html` - Página offline
+- `generate-recipe-images.html` - Utilidad
+
+---
+
+*Documento generado automáticamente. Última actualización: 31 de marzo de 2026 - Sesión tarde*
