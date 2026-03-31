@@ -6,6 +6,7 @@
 <!-- PWA Manifest y meta tags para instalación -->
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="KetoLab">
@@ -13,7 +14,10 @@
 <meta name="theme-color" content="#ff4d00">
 <meta name="mobile-web-app-capable" content="yes">
 <title>KetoLab | Dashboard</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+window.__tailwind_status_ignored = true;
+</script>
+<script src="https://cdn.tailwindcss.com/3.4.1?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script>
@@ -139,6 +143,9 @@ tailwind.config = {
   color: #ff4d00;
 }
 
+#bottomNav a.text-primary-container .material-symbols-outlined{color:#ff4d00!important}
+#bottomNav a.text-primary-container span{color:#ff4d00!important}
+
 .sidebar-collapsed + .sidebar-toggle-btn {
   left: 72px;
 }
@@ -213,6 +220,18 @@ tailwind.config = {
 <span class="material-symbols-outlined">medication</span>
 <span class="sidebar-text">Suplementos</span>
 </a>
+<button onclick="openBackupModal()" class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all w-full text-left">
+<span class="material-symbols-outlined">backup</span>
+<span class="sidebar-text">Backup</span>
+</button>
+<select id="langSelector" onchange="setLang(this.value)" class="sidebar-link flex items-center gap-2 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all w-full text-left cursor-pointer">
+<option value="es">Español</option>
+<option value="en">English</option>
+</select>
+<button onclick="requestPushPermission()" id="pushBtn" class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all w-full text-left">
+<span class="material-symbols-outlined">notifications</span>
+<span class="sidebar-text" data-i18n="settings.notificaciones">Notificaciones</span>
+</button>
 </div>
 </nav>
 
@@ -227,9 +246,12 @@ tailwind.config = {
 <h2 class="text-2xl font-black text-primary-container tracking-tighter font-headline">KetoLab</h2>
 </div>
 <div class="flex items-center gap-6">
+<div class="relative">
 <div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full border border-white/5">
 <span class="material-symbols-outlined text-on-surface-variant text-sm">search</span>
-<input class="bg-transparent border-none text-sm focus:ring-0 text-white w-48 placeholder:text-on-surface-variant" placeholder="Buscar alimentos..." type="text"/>
+<input id="headerFoodSearch" class="bg-transparent border-none text-sm focus:ring-0 text-white w-48 placeholder:text-on-surface-variant" placeholder="Buscar alimentos..." type="text" oninput="headerFoodSearch(this.value)" onfocus="headerFoodSearch(this.value)"/>
+</div>
+<div id="headerSearchResults" class="absolute top-full right-0 mt-2 w-80 max-h-80 overflow-y-auto glass-card rounded-xl shadow-xl hidden z-50"></div>
 </div>
 <button class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors duration-300 scale-95 active:scale-90 relative" onclick="showNotifications()" title="Notificaciones">
 notifications
@@ -247,7 +269,75 @@ notifications
 </div>
 <span class="text-base font-black text-primary-container tracking-tight font-headline">KetoLab</span>
 </a>
+<div class="flex items-center gap-2">
+<button onclick="document.getElementById('mobileSettingsModal').classList.remove('hidden')" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
 </header>
+
+<!-- Mobile Settings Modal -->
+<div id="mobileSettingsModal" class="fixed inset-0 z-[60] hidden">
+<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="document.getElementById('mobileSettingsModal').classList.add('hidden')"></div>
+<div class="absolute top-14 right-4 w-72 max-h-[70vh] overflow-hidden glass-card rounded-2xl shadow-2xl shadow-black/50">
+<div class="p-4 border-b border-white/10">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-headline font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">settings</span>
+Configuración
+</h3>
+<button onclick="document.getElementById('mobileSettingsModal').classList.add('hidden')" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+</div>
+</div>
+<div class="p-4 space-y-2">
+<select id="mobileLangSelector" onchange="setLang(this.value); location.reload();" class="w-full px-4 py-3 bg-surface-container-high rounded-xl text-white border border-white/10 cursor-pointer">
+<option value="es">Español</option>
+<option value="en">English</option>
+</select>
+<button onclick="requestPushPermission()" class="w-full flex items-center gap-3 px-4 py-3 bg-surface-container-high rounded-xl text-white border border-white/10">
+<span class="material-symbols-outlined">notifications</span>
+Notificaciones
+</button>
+<button onclick="openBackupModal();document.getElementById('mobileSettingsModal').classList.add('hidden')" class="w-full flex items-center gap-3 px-4 py-3 bg-surface-container-high rounded-xl text-white border border-white/10">
+<span class="material-symbols-outlined">backup</span>
+Backup
+</button>
+<a href="guia.html" class="w-full flex items-center gap-3 px-4 py-3 bg-surface-container-high rounded-xl text-white border border-white/10 hover:bg-surface-container-highest transition-all">
+<span class="material-symbols-outlined">menu_book</span>
+Guía de Uso
+</a>
+<button onclick="openResetModal()" class="w-full flex items-center gap-3 px-4 py-3 bg-red-500/10 rounded-xl text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-all">
+<span class="material-symbols-outlined">restart_alt</span>
+Reiniciar Todo
+</button>
+</div>
+</div>
+</div>
+
+<!-- Global Reset Confirmation Modal -->
+<div id="resetModal" class="fixed inset-0 z-[70] hidden flex items-center justify-center">
+<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeResetModal()"></div>
+<div class="relative w-[90%] max-w-sm glass-card rounded-2xl p-6 shadow-2xl">
+<div class="text-center mb-6">
+<div class="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
+<span class="material-symbols-outlined text-4xl text-red-400">warning</span>
+</div>
+<h3 class="text-xl font-headline font-bold text-white mb-2">Reiniciar Todo</h3>
+<p class="text-sm text-on-surface-variant">Esto borrará TODOS tus datos: perfil, plan, historial, despensa y progreso. Esta acción no se puede deshacer.</p>
+</div>
+<div class="space-y-3">
+<button onclick="confirmGlobalReset()" class="w-full py-3 rounded-xl bg-red-500 text-white font-bold hover:bg-red-600 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">delete_forever</span>
+Sí, borrar todo
+</button>
+<button onclick="closeResetModal()" class="w-full py-3 rounded-xl bg-surface-container text-white/70 font-medium hover:bg-surface-container-high transition-all">
+Cancelar
+</button>
+</div>
+</div>
+</div>
 
 <!-- Notifications Modal -->
 <div id="notificationsModal" class="fixed inset-0 z-[60] hidden">
@@ -262,33 +352,6 @@ Notificaciones
 <button onclick="closeNotifications()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
 <span class="material-symbols-outlined text-lg">close</span>
 </button>
-</div>
-</div>
-
-<!-- Backup Modal -->
-<div id="backupModal" class="fixed inset-0 z-[70] hidden">
-<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeBackupModal()"></div>
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md glass-card rounded-2xl p-6 shadow-2xl">
-<div class="flex items-center justify-between mb-6">
-<h3 class="text-lg font-headline font-bold text-white flex items-center gap-2">
-<span class="material-symbols-outlined text-primary-container">backup</span>
-Backup y Restauración
-</h3>
-<button onclick="closeBackupModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
-<span class="material-symbols-outlined text-lg">close</span>
-</button>
-</div>
-<div class="space-y-4">
-<p class="text-sm text-on-surface-variant">Guarda una copia de seguridad de todos tus datos o restaura desde un archivo.</p>
-<button onclick="downloadBackup()" class="w-full py-4 bg-primary-container text-white rounded-xl font-medium hover:bg-primary-container/80 transition-all flex items-center justify-center gap-2">
-<span class="material-symbols-outlined">download</span>
-Exportar Backup
-</button>
-<button onclick="triggerRestore()" class="w-full py-4 bg-surface-container-high text-white rounded-xl font-medium hover:bg-surface-container-highest transition-all flex items-center justify-center gap-2">
-<span class="material-symbols-outlined">upload</span>
-Importar Backup
-</button>
-</div>
 </div>
 </div>
 
@@ -316,56 +379,8 @@ Guardar Peso
 </div>
 </div>
 
-<div class="p-4 md:p-2 space-y-2 max-h-[50vh] overflow-y-auto">
-<div class="p-4 rounded-xl bg-surface-container-high hover:bg-surface-container-highest transition-colors cursor-pointer group">
-<div class="flex items-start gap-3">
-<div class="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
-<span class="material-symbols-outlined text-secondary text-lg">trending_down</span>
-</div>
-<div class="flex-1 min-w-0">
-<p class="text-sm font-medium text-white group-hover:text-primary-container transition-colors">Progreso semanal</p>
-<p class="text-xs text-on-surface-variant mt-1">Has perdido 1.2kg esta semana. Sigue asi!</p>
-<p class="text-[10px] text-on-surface-variant/50 mt-2">Hace 2 horas</p>
-</div>
-</div>
-</div>
-<div class="p-4 rounded-xl bg-surface-container-high hover:bg-surface-container-highest transition-colors cursor-pointer group">
-<div class="flex items-start gap-3">
-<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center flex-shrink-0">
-<span class="material-symbols-outlined text-primary-container text-lg">egg_alt</span>
-</div>
-<div class="flex-1 min-w-0">
-<p class="text-sm font-medium text-white group-hover:text-primary-container transition-colors">Meta de proteina</p>
-<p class="text-xs text-on-surface-variant mt-1">Hoy has consumido 142g de 159g de proteina.</p>
-<p class="text-[10px] text-on-surface-variant/50 mt-2">Hoy 14:30</p>
-</div>
-<div class="w-2 h-2 rounded-full bg-primary-container flex-shrink-0 mt-2"></div>
-</div>
-</div>
-<div class="p-4 rounded-xl bg-surface-container-high hover:bg-surface-container-highest transition-colors cursor-pointer group">
-<div class="flex items-start gap-3">
-<div class="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
-<span class="material-symbols-outlined text-secondary text-lg">water_drop</span>
-</div>
-<div class="flex-1 min-w-0">
-<p class="text-sm font-medium text-white group-hover:text-primary-container transition-colors">Recordatorio de hidratacion</p>
-<p class="text-xs text-on-surface-variant mt-1">Solo te faltan 0.5L para llegar a tu meta de 3L.</p>
-<p class="text-[10px] text-on-surface-variant/50 mt-2">Hoy 12:00</p>
-</div>
-</div>
-</div>
-<div class="p-4 rounded-xl bg-surface-container-high hover:bg-surface-container-highest transition-colors cursor-pointer group">
-<div class="flex items-start gap-3">
-<div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
-<span class="material-symbols-outlined text-green-400 text-lg">check_circle</span>
-</div>
-<div class="flex-1 min-w-0">
-<p class="text-sm font-medium text-white group-hover:text-primary-container transition-colors">Checklist completado</p>
-<p class="text-xs text-on-surface-variant mt-1">Felicidades! Completaste todas las tareas del dia.</p>
-<p class="text-[10px] text-on-surface-variant/50 mt-2">Ayer 21:30</p>
-</div>
-</div>
-</div>
+<div id="notificationsList" class="p-4 md:p-2 space-y-2 max-h-[50vh] overflow-y-auto">
+<!-- Notifications will be populated dynamically -->
 </div>
 <div class="p-4 border-t border-white/10">
 <button class="w-full py-3 text-center text-sm font-medium text-primary-container hover:bg-primary-container/10 rounded-xl transition-colors">Ver todas las notificaciones</button>
@@ -374,9 +389,9 @@ Guardar Peso
 </div>
 
 <!-- Backup Modal -->
-<div id="backupModal" class="fixed inset-0 z-[70] hidden">
+<div id="backupModal" class="fixed inset-0 z-[70] hidden items-center justify-center p-4">
 <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeBackupModal()"></div>
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md glass-card rounded-2xl p-6 shadow-2xl">
+<div class="relative glass-card rounded-2xl p-6 shadow-2xl w-full max-w-md">
 <div class="flex items-center justify-between mb-6">
 <h3 class="text-lg font-headline font-bold text-white flex items-center gap-2">
 <span class="material-symbols-outlined text-primary-container">backup</span>
@@ -402,151 +417,145 @@ Importar Backup
 </div>
 
 <!-- Main Canvas -->
-<main class="main-content md:ml-64 pt-14 md:pt-24 px-4 md:px-6 pb-20 md:pb-12 min-h-screen transition-all duration-300">
-<div class="max-w-7xl mx-auto space-y-8">
+<main class="main-content md:ml-64 pt-14 md:pt-24 px-4 md:px-6 pb-24 md:pb-12 min-h-screen transition-all duration-300">
+<div class="max-w-5xl mx-auto space-y-6">
 
-<!-- Section 1: Progress -->
-<section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-<!-- Panel Principal: Progreso y Peso -->
-<div class="lg:col-span-7 glass-card rounded-xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 md:gap-12 relative overflow-hidden">
+<!-- ========== SECTION 1: HERO - PROGRESS & WEIGHT ========== -->
+<section class="glass-card rounded-2xl p-6 relative overflow-hidden">
+<!-- Background decoration -->
 <div class="absolute top-0 right-0 w-64 h-64 bg-primary-container/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
-<div class="relative w-36 h-36 md:w-48 md:h-48 flex items-center justify-center flex-shrink-0">
-<svg id="progressSvg" class="w-full h-full -rotate-90 progress-ring-glow" viewBox="0 0 144 144">
-<circle class="text-surface-container-highest" cx="72" cy="72" fill="transparent" r="64" stroke="currentColor" stroke-width="8"/>
-<circle id="progressCircle" class="text-primary-container" cx="72" cy="72" fill="transparent" r="64" stroke="currentColor" stroke-dasharray="402" stroke-dashoffset="402" stroke-linecap="round" stroke-width="8"/>
+<div class="absolute bottom-0 left-0 w-48 h-48 bg-secondary/5 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2"></div>
+
+<div class="relative flex flex-col md:flex-row items-center gap-6">
+<!-- Progress Ring -->
+<div class="relative w-36 h-36 md:w-44 md:h-44 flex-shrink-0">
+<svg class="w-full h-full -rotate-90" viewBox="0 0 144 144">
+<circle class="text-surface-container-highest" cx="72" cy="72" fill="transparent" r="60" stroke="currentColor" stroke-width="10"/>
+<circle id="progressCircle" class="text-primary-container progress-ring-glow" cx="72" cy="72" fill="transparent" r="60" stroke="currentColor" stroke-dasharray="377" stroke-dashoffset="377" stroke-linecap="round" stroke-width="10"/>
 </svg>
 <div class="absolute inset-0 flex flex-col items-center justify-center">
-<span id="progressPercent" class="text-4xl font-headline font-extrabold text-white tracking-tighter">0%</span>
-<span class="text-[10px] text-on-surface-variant font-label uppercase tracking-widest mt-1">Peso Perdido</span>
+<span id="progressPercent" class="text-4xl md:text-5xl font-headline font-extrabold text-white tracking-tighter">0%</span>
+<span class="text-[10px] text-on-surface-variant font-label uppercase tracking-widest">Meta</span>
+</div>
+<!-- Streak Badge -->
+<div id="streakBadge" class="absolute -top-1 -right-1 bg-gradient-to-br from-orange-500 to-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg flex items-center gap-1">
+<span class="text-sm">🔥</span>
+<span id="streakCount">0</span>
 </div>
 </div>
+
+<!-- Weight Info -->
 <div class="flex-1 text-center md:text-left">
-<h2 id="userGreeting" class="text-2xl font-headline font-black gradient-text mb-1">Hola</h2>
-<h3 class="text-xs font-label text-secondary font-bold uppercase tracking-[0.2em] mb-2">Tu Progreso</h3>
-<div class="flex flex-col gap-1 mb-6">
-<span id="weightDisplay" onclick="showUpdateWeightModal()" class="cursor-pointer hover:text-primary-container transition-colors text-5xl font-headline font-black text-white tracking-tighter">0kg <span class="text-on-surface-variant font-light">→</span> 0kg</span>
-<p class="text-on-surface-variant font-body">Te faltan <span id="remainingKg" class="text-white font-semibold">0kg restantes</span> para tu meta</p>
-</div>
-<div id="weeklyProgress" class="inline-flex items-center gap-3 bg-primary-container/10 border border-primary-container/20 px-4 py-2 rounded-full">
-<span class="material-symbols-outlined text-primary-container text-sm">trending_down</span>
-<span class="text-primary-container font-headline font-bold text-sm">0KG ESTA SEMANA</span>
-</div>
-</div>
+<!-- Greeting & Motivation -->
+<div class="flex items-center gap-2 mb-3">
+<h2 id="userGreeting" class="text-2xl md:text-3xl font-headline font-black text-white">¡Hola!</h2>
+<div id="motivationIcon" class="text-2xl"></div>
 </div>
 
-<!-- Panel Lateral: Métricas Adicionales -->
-<div class="lg:col-span-5 flex flex-col gap-4">
-<!-- Monthly Stats -->
-<div class="glass-card rounded-xl p-4">
-<h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-base">calendar_month</span>Resumen Mensual</h4>
-<div class="grid grid-cols-2 gap-3 mb-3">
-<div class="bg-surface-container-low rounded-lg p-2 text-center">
-<p id="monthMeals" class="text-xl font-bold text-primary-container">0</p>
-<p class="text-[9px] text-on-surface-variant">Comidas</p>
-</div>
-<div class="bg-surface-container-low rounded-lg p-2 text-center">
-<p id="monthCalories" class="text-xl font-bold text-yellow-400">0</p>
-<p class="text-[9px] text-on-surface-variant">Calorías</p>
-</div>
-<div class="bg-surface-container-low rounded-lg p-2 text-center">
-<p id="monthWorkouts" class="text-xl font-bold text-secondary">0</p>
-<p class="text-[9px] text-on-surface-variant">Entrenos</p>
-</div>
-<div class="bg-surface-container-low rounded-lg p-2 text-center">
-<p id="monthMinutes" class="text-xl font-bold text-blue-400">0</p>
-<p class="text-[9px] text-on-surface-variant">Minutos</p>
-</div>
-</div>
-<div class="h-1.5 bg-surface-container rounded-full overflow-hidden mb-2">
-<div id="monthProgressBar" class="h-full bg-gradient-to-r from-primary-container to-secondary transition-all duration-500" style="width:0%"></div>
-</div>
-<p class="text-[10px] text-on-surface-variant text-center"><span id="monthProgressText">0%</span> de meta mensual</p>
+<!-- Weight Display -->
+<div class="mb-4">
+<span id="weightDisplay" onclick="showUpdateWeightModal()" class="cursor-pointer hover:text-primary-container transition-colors text-4xl md:text-5xl font-headline font-black text-white tracking-tighter">
+0kg <span class="text-on-surface-variant font-light">→</span> 0kg
+</span>
 </div>
 
-<!-- Métricas del Día -->
-<div class="glass-card rounded-xl p-4 flex-1">
-<h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-4">Métricas de Hoy</h4>
-<div class="grid grid-cols-2 gap-4">
-<!-- Hidratación -->
-<div class="bg-surface-container-low rounded-lg p-3 text-center">
-<span class="material-symbols-outlined text-secondary text-xl">water_drop</span>
-<p id="hydrationDisplay" class="text-lg font-bold text-white mt-1">0/3L</p>
+<!-- Progress Message -->
+<p class="text-on-surface-variant mb-4">
+<span id="remainingKg" class="text-white font-semibold">0kg restantes</span>
+<span id="lostProgressBadge" class="ml-2 inline-flex items-center gap-1 bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm font-bold">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span id="lostProgressText">-0kg (0%)</span>
+</span>
+</p>
+
+<!-- Quick Weight Update -->
+<button onclick="showUpdateWeightModal()" class="inline-flex items-center gap-2 text-sm text-primary-container hover:bg-primary-container/10 px-3 py-2 rounded-lg transition-all">
+<span class="material-symbols-outlined text-sm">update</span>
+Actualizar peso
+</button>
+</div>
+
+<!-- Achievements Mini -->
+<div class="hidden md:flex flex-col gap-2">
+<div id="achievementBadges" class="flex gap-2">
+<!-- Achievements will be populated by JS -->
+</div>
+</div>
+</div>
+</section>
+
+<!-- ========== SECTION 2: QUICK ACTIONS ========== -->
+<section class="grid grid-cols-3 gap-3">
+<!-- Water Quick Add -->
+<div id="waterAction" class="glass-card rounded-xl p-4 text-center cursor-pointer hover:bg-surface-container-high transition-all active:scale-95" onclick="openWaterModal()">
+<div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-2">
+<span class="material-symbols-outlined text-blue-400 text-2xl">water_drop</span>
+</div>
+<p id="waterActionText" class="text-lg font-bold text-white">0/3L</p>
 <p class="text-[10px] text-on-surface-variant">Agua</p>
+<div class="mt-2 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div id="waterProgressBar" class="h-full bg-blue-500 transition-all duration-300" style="width: 0%"></div>
 </div>
-<!-- Ejercicio -->
-<div class="bg-surface-container-low rounded-lg p-3 text-center">
-<span class="material-symbols-outlined text-primary-container text-xl">fitness_center</span>
-<p id="workoutDisplay" class="text-lg font-bold text-white mt-1">0/60min</p>
+</div>
+
+<!-- Food Quick Add -->
+<div id="foodAction" class="glass-card rounded-xl p-4 text-center cursor-pointer hover:bg-surface-container-high transition-all active:scale-95" onclick="quickAddFood()">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center mx-auto mb-2">
+<span class="material-symbols-outlined text-primary-container text-2xl">restaurant</span>
+</div>
+<p id="foodActionText" class="text-lg font-bold text-white">Añadir</p>
+<p class="text-[10px] text-on-surface-variant">Comida</p>
+</div>
+
+<!-- Exercise Quick Add -->
+<div id="exerciseAction" class="glass-card rounded-xl p-4 text-center cursor-pointer hover:bg-surface-container-high transition-all active:scale-95" onclick="openExerciseModal()">
+<div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-2">
+<span class="material-symbols-outlined text-green-400 text-2xl">fitness_center</span>
+</div>
+<p id="exerciseActionText" class="text-lg font-bold text-white">0/60min</p>
 <p class="text-[10px] text-on-surface-variant">Ejercicio</p>
-</div>
-<!-- Caminata -->
-<div class="bg-surface-container-low rounded-lg p-3 text-center">
-<span class="material-symbols-outlined text-green-400 text-xl">directions_walk</span>
-<p id="walkDisplay" class="text-lg font-bold text-white mt-1">0/60min</p>
-<p class="text-[10px] text-on-surface-variant">Caminata</p>
-</div>
-<!-- Sueño -->
-<div class="bg-surface-container-low rounded-lg p-3 text-center">
-<span class="material-symbols-outlined text-purple-400 text-xl">bedtime</span>
-<p id="sleepDisplay" class="text-lg font-bold text-white mt-1">0/8h</p>
-<p class="text-[10px] text-on-surface-variant">Sueño</p>
-</div>
-</div>
-</div>
-<!-- Quick Actions -->
-<div class="glass-card rounded-xl p-4">
-<div class="grid grid-cols-2 gap-3">
-<a href="checklist.html" class="bg-surface-container-high hover:bg-surface-container-highest transition-all p-3 rounded-lg text-center group">
-<span class="material-symbols-outlined text-secondary text-2xl group-hover:scale-110">fact_check</span>
-<p class="text-xs font-bold text-white mt-1">Checklist</p>
-</a>
-<a href="macros.html" class="bg-primary-container hover:bg-primary-container/80 transition-all p-3 rounded-lg text-center group">
-<span class="material-symbols-outlined text-white text-2xl group-hover:scale-110">donut_small</span>
-<p class="text-xs font-bold text-white mt-1">Macros</p>
-</a>
-</div>
+<div class="mt-2 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div id="exerciseProgressBar" class="h-full bg-green-500 transition-all duration-300" style="width: 0%"></div>
 </div>
 </div>
 </section>
 
-<!-- Historial de Peso -->
-<section class="glass-card rounded-xl p-4">
+<!-- ========== SECTION 3: MACROS TODAY ========== -->
+<section class="glass-card rounded-2xl p-6">
 <div class="flex items-center justify-between mb-4">
-<h4 class="text-sm font-bold text-white flex items-center gap-2">
-<span class="material-symbols-outlined text-secondary">monitor_weight</span>
-Historial de Peso
-</h4>
-<a href="macros.html" class="text-xs text-primary-container hover:underline">Configurar</a>
-</div>
-<div id="weightHistory" class="grid grid-cols-7 gap-2"></div>
-</section>
-
-<!-- Section 2: Macros Summary -->
-<section class="glass-card rounded-xl p-6">
-<div class="flex items-center gap-3 mb-6">
+<div class="flex items-center gap-3">
 <div class="w-10 h-10 rounded-lg bg-primary-container/20 flex items-center justify-center">
 <span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">donut_small</span>
 </div>
 <div>
 <h3 class="text-lg font-headline font-bold text-white">Macros de Hoy</h3>
-<p class="text-xs text-on-surface-variant">Tu consumo diario vs objetivo</p>
+<p class="text-xs text-on-surface-variant" id="todayDateDisplay"></p>
 </div>
 </div>
-
-<div class="bg-gradient-to-br from-primary-container/20 to-primary-container/5 rounded-2xl p-6 mb-6 border border-primary-container/20">
-<div class="text-center">
-<p class="text-xs text-primary-container uppercase tracking-wider mb-2">Calorías</p>
-<p class="text-4xl md:text-5xl font-headline font-black text-primary-container tracking-tighter">
-<span id="consumedCalDisplay">0</span><span class="text-xl text-white/50"> / <span id="targetCalDisplay">1800</span></span>
-</p>
-<div class="w-full h-3 bg-surface-container-highest rounded-full overflow-hidden mt-4">
-<div id="caloriesBar" class="h-full bg-primary-container rounded-full transition-all duration-500" style="width: 0%"></div>
-</div>
-<p class="text-sm text-on-surface-variant mt-2"><span id="caloriesRemaining">1800</span> kcal restantes</p>
-</div>
+<a href="macros.html" class="text-xs text-primary-container hover:underline flex items-center gap-1">
+Ver detalles
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
 </div>
 
-<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+<!-- Calories Main Display -->
+<div class="bg-gradient-to-br from-primary-container/15 to-transparent rounded-xl p-5 mb-5 border border-primary-container/20">
+<div class="flex items-center justify-between mb-3">
+<span class="text-xs text-primary-container uppercase tracking-wider font-bold">Calorías</span>
+<span id="calorieStatus" class="text-xs px-2 py-1 rounded-full bg-gray-500/20 text-gray-400">Sin meta</span>
+</div>
+<div class="flex items-baseline gap-2 mb-3">
+<span id="consumedCalDisplay" class="text-4xl md:text-5xl font-headline font-black text-white">0</span>
+<span class="text-xl text-white/50">/ </span><span id="targetCalDisplay" class="text-xl font-bold text-white">--</span><span class="text-xl text-white/50"> kcal</span>
+</div>
+<div class="w-full h-4 bg-surface-container-highest rounded-full overflow-hidden">
+<div id="caloriesBar" class="h-full bg-gradient-to-r from-primary-container to-secondary rounded-full transition-all duration-500" style="width: 0%"></div>
+</div>
+<p class="text-sm text-on-surface-variant mt-2"><span id="caloriesRemaining">--</span> kcal restantes</p>
+</div>
+
+<!-- Macro Details Grid -->
+<div class="grid grid-cols-3 gap-3">
 <!-- Protein -->
 <div class="bg-surface-container-high rounded-xl p-4 relative overflow-hidden">
 <div class="absolute top-0 left-0 w-full h-1 bg-orange-400"></div>
@@ -555,14 +564,15 @@ Historial de Peso
 <span class="material-symbols-outlined text-orange-400">egg_alt</span>
 </div>
 <div class="flex-1">
-<p class="text-xs text-on-surface-variant uppercase tracking-wider">Proteína</p>
-<p class="text-xl font-headline font-bold text-white"><span id="consumedProtDisplay">0</span><span class="text-sm text-white/50">/<span id="targetProtDisplay">159</span>g</span></p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Proteína</p>
+<p class="text-xl font-headline font-bold text-white"><span id="consumedProtDisplay">0</span><span class="text-sm text-white/50">/</span><span id="targetProtDisplay" class="text-sm font-bold text-orange-300">--</span><span class="text-sm text-white/50">g</span></p>
 </div>
 </div>
 <div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden mt-3">
 <div id="proteinBar" class="h-full bg-orange-400 rounded-full transition-all duration-500" style="width: 0%"></div>
 </div>
 </div>
+
 <!-- Fat -->
 <div class="bg-surface-container-high rounded-xl p-4 relative overflow-hidden">
 <div class="absolute top-0 left-0 w-full h-1 bg-yellow-400"></div>
@@ -571,14 +581,15 @@ Historial de Peso
 <span class="material-symbols-outlined text-yellow-400">local_fire_department</span>
 </div>
 <div class="flex-1">
-<p class="text-xs text-on-surface-variant uppercase tracking-wider">Grasas</p>
-<p class="text-xl font-headline font-bold text-white"><span id="consumedFatDisplay">0</span><span class="text-sm text-white/50">/<span id="targetFatDisplay">150</span>g</span></p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Grasas</p>
+<p class="text-xl font-headline font-bold text-white"><span id="consumedFatDisplay">0</span><span class="text-sm text-white/50">/</span><span id="targetFatDisplay" class="text-sm font-bold text-yellow-300">--</span><span class="text-sm text-white/50">g</span></p>
 </div>
 </div>
 <div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden mt-3">
 <div id="fatBar" class="h-full bg-yellow-400 rounded-full transition-all duration-500" style="width: 0%"></div>
 </div>
 </div>
+
 <!-- Carbs -->
 <div class="bg-surface-container-high rounded-xl p-4 relative overflow-hidden">
 <div class="absolute top-0 left-0 w-full h-1 bg-cyan-400"></div>
@@ -587,8 +598,8 @@ Historial de Peso
 <span class="material-symbols-outlined text-cyan-400">grain</span>
 </div>
 <div class="flex-1">
-<p class="text-xs text-on-surface-variant uppercase tracking-wider">Carbos Netos</p>
-<p class="text-xl font-headline font-bold text-white"><span id="consumedCarbsDisplay">0</span><span class="text-sm text-white/50">/<span id="targetCarbsDisplay">25</span>g</span></p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Carbos Net</p>
+<p class="text-xl font-headline font-bold text-white"><span id="consumedCarbsDisplay">0</span><span class="text-sm text-white/50">/</span><span id="targetCarbsDisplay" class="text-sm font-bold text-cyan-300">--</span><span class="text-sm text-white/50">g</span></p>
 </div>
 </div>
 <div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden mt-3">
@@ -597,87 +608,354 @@ Historial de Peso
 </div>
 </div>
 
+<!-- Macro Distribution -->
 <div class="mt-4 bg-surface-container-high rounded-xl p-4">
-<div class="flex items-center justify-between mb-2">
+<div class="flex items-center justify-between mb-3">
 <p class="text-xs text-on-surface-variant uppercase tracking-wider">Distribución</p>
-<span class="text-xs text-on-surface-variant">70% / 25% / 5%</span>
+<span class="text-xs text-on-surface-variant" id="macroDistributionRatio">-- / -- / --</span>
 </div>
 <div class="h-3 rounded-full overflow-hidden flex">
-<div id="fatDistBar" class="h-full bg-yellow-400 transition-all duration-300" style="width: 70%"></div>
-<div id="protDistBar" class="h-full bg-orange-400 transition-all duration-300" style="width: 25%"></div>
-<div id="carbsDistBar" class="h-full bg-cyan-400 transition-all duration-300" style="width: 5%"></div>
+<div id="fatDistBar" class="h-full bg-yellow-400 transition-all duration-300" style="width: 0%"></div>
+<div id="protDistBar" class="h-full bg-orange-400 transition-all duration-300" style="width: 0%"></div>
+<div id="carbsDistBar" class="h-full bg-cyan-400 transition-all duration-300" style="width: 0%"></div>
 </div>
+<div class="flex justify-between mt-2 text-[10px] text-on-surface-variant">
+<span>🟡 Grasas</span>
+<span>🟠 Proteína</span>
+<span>🔵 Carbos</span>
 </div>
-
-<div class="flex justify-center mt-4">
-<a href="macros.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-white text-sm transition-all">
-<span class="material-symbols-outlined text-base">edit</span>
-Editar macros
-</a>
 </div>
 </section>
 
-<!-- Sugerencias de Recetas -->
-<div id="recipeSuggestions"></div>
+<!-- ========== SECTION 4: WEIGHT TREND ========== -->
+<section class="glass-card rounded-2xl p-6">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-secondary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">show_chart</span>
+</div>
+<div>
+<h3 class="text-lg font-headline font-bold text-white">Tendencia de Peso</h3>
+<p class="text-xs text-on-surface-variant">Últimos 14 días</p>
+</div>
+</div>
+<div class="flex items-center gap-2 text-sm">
+<span class="text-on-surface-variant">Promedio:</span>
+<span id="weightAvg" class="text-white font-bold">-- kg</span>
+</div>
+</div>
 
-<!-- Quick Links -->
-<section class="grid grid-cols-2 md:grid-cols-4 gap-4">
-<a href="alimentos.html" class="glass-card p-5 rounded-xl flex flex-col items-center text-center gap-3 hover:bg-surface-container-high transition-all group">
-<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary-container group-hover:scale-110 transition-transform">
-<span class="material-symbols-outlined">restaurant</span>
+<!-- Weight Chart -->
+<div id="weightChart" class="relative h-32 md:h-40 mb-4 bg-surface-container-low rounded-xl overflow-hidden">
+<svg id="weightChartSvg" class="w-full h-full" viewBox="0 0 560 120" preserveAspectRatio="xMidYMid meet"></svg>
 </div>
-<h4 class="text-sm font-bold text-white font-headline">Alimentos</h4>
-<p class="text-xs text-on-surface-variant">Guía cetogénica</p>
-</a>
-<a href="plan.html" class="glass-card p-5 rounded-xl flex flex-col items-center text-center gap-3 hover:bg-surface-container-high transition-all group">
-<div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
-<span class="material-symbols-outlined">event_note</span>
+
+<!-- Weight Legend -->
+<div class="grid grid-cols-7 gap-2" id="weightLegend"></div>
+</section>
+
+<!-- ========== SECTION 5: TODAY'S MEALS SUMMARY ========== -->
+<section class="glass-card rounded-2xl p-6">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-error/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">restaurant</span>
 </div>
-<h4 class="text-sm font-bold text-white font-headline">Plan Semanal</h4>
-<p class="text-xs text-on-surface-variant">7 días de comidas</p>
+<div>
+<h3 class="text-lg font-headline font-bold text-white">Comidas de Hoy</h3>
+<p class="text-xs text-on-surface-variant">Resumen rápido</p>
+</div>
+</div>
+<a href="plan.html" class="text-xs text-primary-container hover:underline flex items-center gap-1">
+Ver plan
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
 </a>
-<a href="recetas.html" class="glass-card p-5 rounded-xl flex flex-col items-center text-center gap-3 hover:bg-surface-container-high transition-all group">
-<div class="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center text-error group-hover:scale-110 transition-transform">
+</div>
+
+<!-- Meals Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="todayMealsSummary">
+<!-- Meals will be populated by JS -->
+</div>
+</section>
+
+<!-- ========== SECTION 6: ACHIEVEMENTS & STREAKS ========== -->
+<section class="glass-card rounded-2xl p-6">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-yellow-400" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+</div>
+<div>
+<h3 class="text-lg font-headline font-bold text-white">Logros & Rachas</h3>
+<p class="text-xs text-on-surface-variant">Tu progreso acumulado</p>
+</div>
+</div>
+</div>
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="achievementsGrid">
+<!-- Keto Days -->
+<div class="bg-surface-container-high rounded-xl p-4 text-center">
+<div class="text-3xl mb-2">🔥</div>
+<p id="ketoDaysCount" class="text-2xl font-headline font-bold text-white">0</p>
+<p class="text-xs text-on-surface-variant">Días Keto</p>
+</div>
+
+<!-- Streak -->
+<div class="bg-surface-container-high rounded-xl p-4 text-center">
+<div class="text-3xl mb-2">⚡</div>
+<p id="streakDaysCount" class="text-2xl font-headline font-bold text-primary-container">0</p>
+<p class="text-xs text-on-surface-variant">Racha Actual</p>
+</div>
+
+<!-- Best Streak -->
+<div class="bg-surface-container-high rounded-xl p-4 text-center">
+<div class="text-3xl mb-2">🏆</div>
+<p id="bestStreakCount" class="text-2xl font-headline font-bold text-secondary">0</p>
+<p class="text-xs text-on-surface-variant">Mejor Racha</p>
+</div>
+
+<!-- Meals Logged -->
+<div class="bg-surface-container-high rounded-xl p-4 text-center">
+<div class="text-3xl mb-2">✅</div>
+<p id="mealsLoggedCount" class="text-2xl font-headline font-bold text-green-400">0</p>
+<p class="text-xs text-on-surface-variant">Comidas Registradas</p>
+</div>
+</div>
+
+<!-- Recent Achievements -->
+<div class="mt-4">
+<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-3">Logros Desbloqueados</p>
+<div id="recentAchievements" class="flex gap-3 overflow-x-auto pb-2">
+<!-- Achievements will be populated by JS -->
+</div>
+</div>
+</section>
+
+<!-- ========== SECTION 7: QUICK ACTIONS (Links) ========== -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-3">
+<a href="checklist.html" class="glass-card p-4 rounded-xl flex flex-col items-center text-center gap-2 hover:bg-surface-container-high transition-all group">
+<div class="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">fact_check</span>
+</div>
+<p class="text-sm font-bold text-white">Checklist</p>
+<p class="text-[10px] text-on-surface-variant">Tareas del día</p>
+</a>
+<a href="recetas.html" class="glass-card p-4 rounded-xl flex flex-col items-center text-center gap-2 hover:bg-surface-container-high transition-all group">
+<div class="w-10 h-10 rounded-full bg-error/20 flex items-center justify-center text-error group-hover:scale-110 transition-transform">
 <span class="material-symbols-outlined">menu_book</span>
 </div>
-<h4 class="text-sm font-bold text-white font-headline">Recetas</h4>
-<p class="text-xs text-on-surface-variant">7 recetas keto</p>
+<p class="text-sm font-bold text-white">Recetas</p>
+<p class="text-[10px] text-on-surface-variant">49 recetas keto</p>
 </a>
-<a href="compras.html" class="glass-card p-5 rounded-xl flex flex-col items-center text-center gap-3 hover:bg-surface-container-high transition-all group">
-<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary-container group-hover:scale-110 transition-transform">
+<a href="compras.html" class="glass-card p-4 rounded-xl flex flex-col items-center text-center gap-2 hover:bg-surface-container-high transition-all group">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center text-primary-container group-hover:scale-110 transition-transform">
 <span class="material-symbols-outlined">shopping_cart</span>
 </div>
-<h4 class="text-sm font-bold text-white font-headline">Compras</h4>
-<p class="text-xs text-on-surface-variant">Lista semanal</p>
+<p class="text-sm font-bold text-white">Compras</p>
+<p class="text-[10px] text-on-surface-variant">Lista semanal</p>
 </a>
+<a href="entrenamientos.html" class="glass-card p-4 rounded-xl flex flex-col items-center text-center gap-2 hover:bg-surface-container-high transition-all group">
+<div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">fitness_center</span>
+</div>
+<p class="text-sm font-bold text-white">Entrenos</p>
+<p class="text-[10px] text-on-surface-variant">Seguimiento gym</p>
+</a>
+</section>
+
+<!-- ========== DAILY INSIGHTS SECTION ========== -->
+<section class="glass-card rounded-2xl p-6">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-purple-400" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+</div>
+<div>
+<h3 class="text-lg font-headline font-bold text-white">Resumen del Día</h3>
+<p class="text-xs text-on-surface-variant">Tu progreso vs metas semanales</p>
+</div>
+</div>
+</div>
+
+<!-- Weekly Goals Progress -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4" id="weeklyGoalsGrid">
+<!-- Goals will be populated by JS -->
+</div>
+
+<!-- Daily Tips -->
+<div id="dailyTips" class="bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/20 rounded-xl p-4">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0">
+<span class="text-lg">💡</span>
+</div>
+<div class="flex-1">
+<p class="text-sm text-white font-medium mb-1">Consejo del día</p>
+<p id="dailyTipText" class="text-xs text-on-surface-variant"></p>
+</div>
+</div>
+</div>
 </section>
 
 </div>
 </main>
 
-<!-- BottomNavBar (Mobile) -->
-<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-16 flex justify-around items-center z-50 px-0" style="background:rgba(24,23,23,0.95)">
-<a class="flex flex-col items-center text-primary-container" href="index.html"><span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">dashboard</span><span class="text-[10px]">Inicio</span></a>
-<a class="flex flex-col items-center text-white/60" href="perfil.html"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
-<a class="flex flex-col items-center text-white/60" href="alimentos.html"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
-<a class="flex flex-col items-center text-white/60" href="plan.html"><span class="material-symbols-outlined text-2xl">event_note</span><span class="text-[10px]">Plan</span></a>
-<a class="flex flex-col items-center text-white/60" href="compras.html"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
-<a class="flex flex-col items-center text-white/60" href="macros.html"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
-<a class="flex flex-col items-center text-white/60" href="checklist.html"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
-<a class="flex flex-col items-center text-white/60" href="entrenamientos.html"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
-<a class="flex flex-col items-center text-white/60" href="suplementos.html"><span class="material-symbols-outlined text-2xl">medication</span><span class="text-[10px]">Sup</span></a>
+<!-- ========== WATER MODAL ========== -->
+<div id="waterModal" class="fixed inset-0 z-[80] hidden">
+<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWaterModal()"></div>
+<div class="absolute bottom-20 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-card rounded-2xl p-6 shadow-2xl">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-headline font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-400">water_drop</span>
+Añadir Agua
+</h3>
+<button onclick="closeWaterModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+
+<div class="text-center mb-6">
+<p class="text-4xl font-headline font-black text-white"><span id="modalWaterCurrent">0</span>/3L</p>
+<div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden mt-3">
+<div id="modalWaterBar" class="h-full bg-blue-500 rounded-full transition-all" style="width: 0%"></div>
+</div>
+</div>
+
+<div class="grid grid-cols-3 gap-3 mb-4">
+<button onclick="addWater(250)" class="bg-surface-container-high hover:bg-surface-container-highest p-4 rounded-xl text-center transition-all active:scale-95">
+<p class="text-2xl font-bold text-white">250ml</p>
+<p class="text-[10px] text-on-surface-variant">1 vaso</p>
+</button>
+<button onclick="addWater(500)" class="bg-surface-container-high hover:bg-surface-container-highest p-4 rounded-xl text-center transition-all active:scale-95">
+<p class="text-2xl font-bold text-white">500ml</p>
+<p class="text-[10px] text-on-surface-variant">1/2L</p>
+</button>
+<button onclick="addWater(1000)" class="bg-surface-container-high hover:bg-surface-container-highest p-4 rounded-xl text-center transition-all active:scale-95">
+<p class="text-2xl font-bold text-white">1L</p>
+<p class="text-[10px] text-on-surface-variant">1 litro</p>
+</button>
+</div>
+
+<div class="flex gap-3">
+<button onclick="addWater(-250)" class="flex-1 py-3 rounded-xl bg-surface-container text-white/70 font-medium hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined text-sm">remove</span>
+Quitar
+</button>
+<button onclick="closeWaterModal()" class="flex-1 py-3 rounded-xl bg-blue-500 text-white font-bold hover:bg-blue-600 transition-all">
+<span class="material-symbols-outlined text-sm">check</span>
+Listo
+</button>
+</div>
+</div>
+</div>
+
+<!-- ========== EXERCISE MODAL ========== -->
+<div id="exerciseModal" class="fixed inset-0 z-[80] hidden">
+<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeExerciseModal()"></div>
+<div class="absolute bottom-20 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-card rounded-2xl p-6 shadow-2xl">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-headline font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-green-400">fitness_center</span>
+Registrar Ejercicio
+</h3>
+<button onclick="closeExerciseModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+
+<div class="text-center mb-6">
+<p class="text-4xl font-headline font-black text-white"><span id="modalExerciseCurrent">0</span>/60 min</p>
+<div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden mt-3">
+<div id="modalExerciseBar" class="h-full bg-green-500 rounded-full transition-all" style="width: 0%"></div>
+</div>
+</div>
+
+<div class="grid grid-cols-3 gap-3 mb-4">
+<button onclick="addExercise(15)" class="bg-surface-container-high hover:bg-surface-container-highest p-4 rounded-xl text-center transition-all active:scale-95">
+<p class="text-2xl font-bold text-white">15</p>
+<p class="text-[10px] text-on-surface-variant">min</p>
+</button>
+<button onclick="addExercise(30)" class="bg-surface-container-high hover:bg-surface-container-highest p-4 rounded-xl text-center transition-all active:scale-95">
+<p class="text-2xl font-bold text-white">30</p>
+<p class="text-[10px] text-on-surface-variant">min</p>
+</button>
+<button onclick="addExercise(60)" class="bg-surface-container-high hover:bg-surface-container-highest p-4 rounded-xl text-center transition-all active:scale-95">
+<p class="text-2xl font-bold text-white">60</p>
+<p class="text-[10px] text-on-surface-variant">min</p>
+</button>
+</div>
+
+<div class="flex gap-3">
+<button onclick="addExercise(-15)" class="flex-1 py-3 rounded-xl bg-surface-container text-white/70 font-medium hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined text-sm">remove</span>
+Quitar
+</button>
+<button onclick="closeExerciseModal()" class="flex-1 py-3 rounded-xl bg-green-500 text-white font-bold hover:bg-green-600 transition-all">
+<span class="material-symbols-outlined text-sm">check</span>
+Listo
+</button>
+</div>
+</div>
+</div>
+
+<!-- ========== QUICK ADD FOOD MODAL ========== -->
+<div id="quickAddFoodModal" class="fixed inset-0 z-[80] hidden">
+<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeQuickAddFoodModal()"></div>
+<div class="absolute bottom-20 left-1/2 -translate-x-1/2 w-[90%] max-w-md glass-card rounded-2xl p-6 shadow-2xl max-h-[70vh] overflow-hidden flex flex-col">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-headline font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">restaurant</span>
+Añadir Alimento
+</h3>
+<button onclick="closeQuickAddFoodModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+
+<div class="relative mb-4">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input type="text" id="quickFoodSearch" class="w-full bg-surface-container-high text-white pl-10 pr-4 py-3 rounded-xl border border-white/10 focus:border-primary-container focus:outline-none" placeholder="Buscar alimento..." oninput="filterQuickFoods(this.value)">
+</div>
+
+<div id="quickFoodList" class="flex-1 overflow-y-auto space-y-2 max-h-64">
+<!-- Foods will be populated by JS -->
+</div>
+
+<div class="mt-4 pt-4 border-t border-white/10">
+<a href="plan.html" class="block w-full py-3 rounded-xl bg-primary-container text-white font-bold text-center hover:bg-primary-container/80 transition-all">
+Ver plan completo
+</a>
+</div>
+</div>
+</div>
+
+<!-- BottomNavBar (Mobile) - 9 items -->
+<nav id="bottomNav" class="md:hidden fixed bottom-0 left-0 w-full h-16 flex justify-around items-center z-50 px-0" style="background:rgba(24,23,23,0.95);border-top:1px solid rgba(255,77,0,0.3)">
+<a href="index.html" class="flex flex-col items-center text-primary-container relative"><span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">dashboard</span><span class="text-[10px]">Inicio</span><span class="absolute -top-1 -right-1 w-2 h-2 bg-primary-container rounded-full"></span></a>
+<a href="perfil.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
+<a href="alimentos.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
+<a href="plan.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">event_note</span><span class="text-[10px]">Plan</span></a>
+<a href="compras.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
+<a href="macros.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
+<a href="checklist.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
+<a href="entrenamientos.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
+<a href="suplementos.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">medication</span><span class="text-[10px]">Sup</span></a>
 </nav>
 
-<!-- FAB Group -->
-<div class="fixed bottom-20 right-4 md:bottom-8 md:right-8 flex flex-col gap-3 z-40">
-  <!-- Scanner FAB -->
-  <a href="scanner.html" class="w-10 h-10 md:w-12 md:h-12 bg-surface-container-high hover:bg-surface-container-highest rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 border border-white/10">
-    <span class="material-symbols-outlined text-lg md:text-xl text-on-surface-variant hover:text-blue-400">qr_code_scanner</span>
+<!-- Toast Container -->
+<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg z-[9999] font-medium hidden opacity-0 transition-all duration-300 transform translate-y-4">
+<span id="toastMessage"></span>
+</div>
+
+<!-- FAB Group - Quick Add -->
+<div class="fixed bottom-20 right-4 md:bottom-20 md:right-8 flex flex-col gap-3 z-40">
+  <!-- Scan FAB -->
+  <a href="scanner.html" class="w-11 h-11 md:w-12 md:h-12 bg-surface-container-high hover:bg-surface-container-highest rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 border border-white/10">
+    <span class="material-symbols-outlined text-lg md:text-xl text-on-surface-variant">qr_code_scanner</span>
   </a>
-  <!-- Add FAB -->
-  <a href="macros.html" class="w-10 h-10 md:w-12 md:h-12 bg-primary-container text-white rounded-full shadow-glow-strong flex items-center justify-center transition-all hover:scale-105 active:scale-95">
-    <span class="material-symbols-outlined text-lg md:text-xl">add</span>
-  </a>
+  <!-- Settings FAB -->
+  <button onclick="document.getElementById('mobileSettingsModal').classList.remove('hidden')" class="w-11 h-11 md:w-12 md:h-12 bg-surface-container-high hover:bg-surface-container-highest rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 border border-white/10">
+    <span class="material-symbols-outlined text-lg md:text-xl text-on-surface-variant">settings</span>
+  </button>
 </div>
 
 <!-- Botón de instalación PWA (aparece solo cuando es instalable) -->
@@ -694,19 +972,232 @@ if (!localStorage.getItem('ketolab_onboarding_done')) {
 }
 </script>
 <script>
-function toggleTheme() {
-  document.documentElement.classList.toggle('dark');
-  localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-  var icon = document.querySelector('header button[onclick="toggleTheme()"]');
-  if (icon) {
-    icon.textContent = document.documentElement.classList.contains('dark') ? 'dark_mode' : 'light_mode';
-  }
-}
+// toggleTheme() now in utils.js
 
 function showNotifications() {
+  populateNotifications();
   var modal = document.getElementById('notificationsModal');
   modal.classList.remove('hidden');
   document.body.style.overflow = 'hidden';
+}
+
+function populateNotifications() {
+  var container = document.getElementById('notificationsList');
+  if (!container) return;
+  
+  var notifications = [];
+  var todayKey = new Date().toISOString().slice(0, 10);
+  var ketoProfile = safeParseJSON(localStorage.getItem('keto_profile'), {});
+  var macros = safeParseJSON(localStorage.getItem('keto_macros'), {});
+  var checklistData = safeParseJSON(localStorage.getItem('checklist_' + todayKey), {});
+  var mealPlan = safeParseJSON(localStorage.getItem('mealPlan_' + todayKey), {});
+  var weightHistory = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
+  if (!Array.isArray(weightHistory)) weightHistory = [];
+  
+  var targetCal = parseInt(macros.calories) || 0;
+  var targetProt = parseInt(macros.protein) || 0;
+  var targetFat = parseInt(macros.fat) || 0;
+  var targetWater = 0;
+  
+  var consumedCal = 0, consumedProt = 0, consumedFat = 0;
+  Object.keys(mealPlan).forEach(function(meal) {
+    if (Array.isArray(mealPlan[meal])) {
+      mealPlan[meal].forEach(function(item) {
+        var ratio = (parseFloat(item.portion) || 100) / 100;
+        consumedCal += Math.round((parseFloat(item.calories) || 0) * ratio);
+        consumedProt += Math.round((parseFloat(item.protein) || 0) * ratio);
+        consumedFat += Math.round((parseFloat(item.fat) || 0) * ratio);
+      });
+    }
+  });
+  
+  var water = checklistData.water || 0;
+  var workout = checklistData.workout || 0;
+  var checkedItems = Object.values(checklistData).filter(function(v) { return v === true; }).length;
+  var totalItems = 5;
+  
+  if (consumedCal >= targetCal * 0.9 && consumedCal <= targetCal * 1.1) {
+    notifications.push({
+      icon: 'local_fire_department',
+      iconBg: 'bg-primary-container/20',
+      iconColor: 'text-primary-container',
+      title: 'Calorías en meta',
+      text: 'Has consumido ' + fmtNum(consumedCal) + ' de ' + fmtNum(targetCal) + ' kcal hoy.',
+      time: 'Hoy',
+      dot: false
+    });
+  } else if (consumedCal > targetCal) {
+    notifications.push({
+      icon: 'warning',
+      iconBg: 'bg-red-500/20',
+      iconColor: 'text-red-400',
+      title: 'Calorías excedidas',
+      text: 'Has consumido ' + fmtNum(consumedCal) + ' de ' + fmtNum(targetCal) + ' kcal. ' + fmtNum(consumedCal - targetCal) + ' kcal de más.',
+      time: 'Hoy',
+      dot: true
+    });
+  } else if (consumedCal > 0) {
+    notifications.push({
+      icon: 'egg_alt',
+      iconBg: 'bg-primary-container/20',
+      iconColor: 'text-primary-container',
+      title: 'Progreso calórico',
+      text: 'Has consumido ' + fmtNum(consumedCal) + ' de ' + fmtNum(targetCal) + ' kcal.',
+      time: 'Hoy',
+      dot: false
+    });
+  }
+  
+  if (consumedProt >= targetProt * 0.9) {
+    notifications.push({
+      icon: 'fitness_center',
+      iconBg: 'bg-green-500/20',
+      iconColor: 'text-green-400',
+      title: 'Meta de proteína alcanzada',
+      text: fmtNum(consumedProt) + 'g de ' + fmtNum(targetProt) + 'g consumidos.',
+      time: 'Hoy',
+      dot: false
+    });
+  } else if (consumedProt > 0) {
+    notifications.push({
+      icon: 'egg_alt',
+      iconBg: 'bg-secondary/20',
+      iconColor: 'text-secondary',
+      title: 'Progreso de proteína',
+      text: fmtNum(consumedProt) + 'g de ' + fmtNum(targetProt) + 'g consumidos.',
+      time: 'Hoy',
+      dot: false
+    });
+  }
+  
+  if (water >= targetWater) {
+    notifications.push({
+      icon: 'water_drop',
+      iconBg: 'bg-blue-500/20',
+      iconColor: 'text-blue-400',
+      title: 'Hidratación completa',
+      text: '¡Has alcanzado tu meta de ' + targetWater + 'L de agua!',
+      time: 'Hoy',
+      dot: false
+    });
+  } else if (water > 0) {
+    var remaining = (targetWater - water).toFixed(1);
+    notifications.push({
+      icon: 'water_drop',
+      iconBg: 'bg-secondary/20',
+      iconColor: 'text-secondary',
+      title: 'Recordatorio de hidratación',
+      text: 'Te faltan ' + remaining + 'L para llegar a tu meta de ' + targetWater + 'L.',
+      time: 'Hoy',
+      dot: water < targetWater * 0.5
+    });
+  }
+  
+  if (workout >= 30) {
+    notifications.push({
+      icon: 'directions_run',
+      iconBg: 'bg-green-500/20',
+      iconColor: 'text-green-400',
+      title: 'Entrenamiento completado',
+      text: fmtNum(workout) + ' minutos de ejercicio hoy.',
+      time: 'Hoy',
+      dot: false
+    });
+  } else if (workout > 0) {
+    notifications.push({
+      icon: 'directions_run',
+      iconBg: 'bg-secondary/20',
+      iconColor: 'text-secondary',
+      title: 'Progreso de ejercicio',
+      text: fmtNum(workout) + ' minutos de ' + fmtNum(60) + ' min recomendados.',
+      time: 'Hoy',
+      dot: false
+    });
+  }
+  
+  if (checkedItems >= totalItems) {
+    notifications.push({
+      icon: 'check_circle',
+      iconBg: 'bg-green-500/20',
+      iconColor: 'text-green-400',
+      title: 'Checklist completado',
+      text: '¡Felicidades! Completaste todas las tareas del día.',
+      time: 'Hoy',
+      dot: false
+    });
+  }
+  
+  if (weightHistory.length >= 2) {
+    var sorted = weightHistory.slice().sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+    var latest = sorted[0].weight;
+    var prev = sorted[1].weight;
+    if (latest && prev) {
+      var diff = (latest - prev).toFixed(1);
+      var trend = diff < 0 ? 'perdido' : diff > 0 ? 'ganado' : 'mantenido';
+      notifications.push({
+        icon: 'monitor_weight',
+        iconBg: 'bg-secondary/20',
+        iconColor: 'text-secondary',
+        title: 'Actualización de peso',
+        text: 'Tu peso actual es ' + latest + 'kg. Has ' + trend + ' ' + Math.abs(diff) + 'kg desde el último registro.',
+        time: 'Registro: ' + sorted[0].date,
+        dot: false
+      });
+    }
+  }
+  
+  var weeklyLoss = calculateWeeklyLoss();
+  if (weeklyLoss !== '0' && weeklyLoss !== '--') {
+    var lossVal = parseFloat(weeklyLoss);
+    if (lossVal > 0) {
+      notifications.push({
+        icon: 'trending_down',
+        iconBg: 'bg-green-500/20',
+        iconColor: 'text-green-400',
+        title: 'Progreso semanal',
+        text: 'Has perdido ' + weeklyLoss + 'kg esta semana. ¡Sigue así!',
+        time: 'Esta semana',
+        dot: false
+      });
+    } else if (lossVal < 0) {
+      notifications.push({
+        icon: 'trending_up',
+        iconBg: 'bg-red-500/20',
+        iconColor: 'text-red-400',
+        title: 'Atención: peso estable',
+        text: 'Esta semana has subido ' + Math.abs(weeklyLoss) + 'kg. Revisa tu alimentación.',
+        time: 'Esta semana',
+        dot: true
+      });
+    }
+  }
+  
+  if (notifications.length === 0) {
+    notifications.push({
+      icon: 'info',
+      iconBg: 'bg-surface-container-high',
+      iconColor: 'text-on-surface-variant',
+      title: 'Sin actividad reciente',
+      text: 'Comienza tu día registrando tu peso, comida y agua.',
+      time: 'Hoy',
+      dot: false
+    });
+  }
+  
+  container.innerHTML = notifications.map(function(n) {
+    return '<div class="p-4 rounded-xl bg-surface-container-high hover:bg-surface-container-highest transition-colors cursor-pointer group">' +
+      '<div class="flex items-start gap-3">' +
+      '<div class="w-10 h-10 rounded-full ' + n.iconBg + ' flex items-center justify-center flex-shrink-0">' +
+      '<span class="material-symbols-outlined ' + n.iconColor + ' text-lg">' + n.icon + '</span>' +
+      '</div>' +
+      '<div class="flex-1 min-w-0">' +
+      '<p class="text-sm font-medium text-white group-hover:text-primary-container transition-colors">' + n.title + '</p>' +
+      '<p class="text-xs text-on-surface-variant mt-1">' + n.text + '</p>' +
+      '<p class="text-[10px] text-on-surface-variant/50 mt-2">' + n.time + '</p>' +
+      '</div>' +
+      (n.dot ? '<div class="w-2 h-2 rounded-full bg-primary-container flex-shrink-0 mt-2"></div>' : '') +
+      '</div></div>';
+  }).join('');
 }
 
 function closeNotifications() {
@@ -715,31 +1206,7 @@ function closeNotifications() {
   document.body.style.overflow = '';
 }
 
-function toggleSidebar() {
-  var body = document.body;
-  var sidebar = document.getElementById('sidebarNav');
-  var toggleBtn = document.getElementById('sidebarToggle');
-  var topbarPl = document.querySelector('.topbar-pl');
-  var mainContent = document.querySelector('.main-content');
-  
-  body.classList.toggle('sidebar-collapsed');
-  
-  if (body.classList.contains('sidebar-collapsed')) {
-    sidebar.style.width = '72px';
-    topbarPl.style.paddingLeft = '88px';
-    mainContent.style.marginLeft = '72px';
-    toggleBtn.style.left = '72px';
-    toggleBtn.innerHTML = '<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_right</span>';
-    localStorage.setItem('sidebarCollapsed', 'true');
-  } else {
-    sidebar.style.width = '256px';
-    topbarPl.style.paddingLeft = '272px';
-    mainContent.style.marginLeft = '256px';
-    toggleBtn.style.left = '256px';
-    toggleBtn.innerHTML = '<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_left</span>';
-    localStorage.setItem('sidebarCollapsed', 'false');
-  }
-}
+// toggleSidebar() now in utils.js
 
 function showUpdateWeightModal() {
   var modal = document.getElementById('weightModal');
@@ -758,6 +1225,37 @@ function closeWeightModal() {
   document.body.style.overflow = '';
 }
 
+function openBackupModal() {
+  var modal = document.getElementById('backupModal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex', 'modal-appear');
+  document.body.style.overflow = 'hidden';
+  
+  // Cargar fecha del último backup
+  var lastBackupEl = document.getElementById('lastBackupDate');
+  if (lastBackupEl) {
+    var lastBackup = localStorage.getItem('lastBackupDate');
+    if (lastBackup) {
+      lastBackupEl.textContent = new Date(lastBackup).toLocaleDateString('es-ES', { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } else {
+      lastBackupEl.textContent = 'Nunca';
+    }
+  }
+}
+
+function closeBackupModal() {
+  var modal = document.getElementById('backupModal');
+  modal.classList.remove('flex', 'modal-appear');
+  modal.classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
 function saveNewWeight() {
   var input = document.getElementById('newWeightInput');
   var newWeight = parseFloat(input.value);
@@ -770,12 +1268,17 @@ function saveNewWeight() {
   var currentWeight = parseFloat(localStorage.getItem('currentWeight') || newWeight);
   localStorage.setItem('currentWeight', newWeight);
   
-  var weightHistory = JSON.parse(localStorage.getItem('weight_history') || '[]');
-  weightHistory.push({
-    weight: newWeight,
-    date: new Date().toISOString().split('T')[0]
-  });
-  localStorage.setItem('weight_history', JSON.stringify(weightHistory));
+  var today = new Date().toISOString().slice(0, 10);
+  var weightHistory = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
+  if (!Array.isArray(weightHistory)) weightHistory = [];
+  
+  var existingIndex = weightHistory.findIndex(function(e) { return e.date === today; });
+  if (existingIndex >= 0) {
+    weightHistory[existingIndex].weight = newWeight;
+  } else {
+    weightHistory.push({ date: today, weight: newWeight });
+  }
+  localStorage.setItem('keto_weight_history', JSON.stringify(weightHistory));
   
   closeWeightModal();
   updateDashboard();
@@ -799,6 +1302,9 @@ if (localStorage.getItem('sidebarCollapsed') === 'true') {
   toggleBtn.style.left = '72px';
   toggleBtn.innerHTML = '<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_right</span>';
 }
+
+// Inicializar i18n
+initI18n();
 
 var currentPage = window.location.pathname.split('/').pop() || 'index.html';
 document.querySelectorAll('.sidebar-link').forEach(function(link) {
@@ -838,34 +1344,125 @@ if (activeNavId) {
 
 function safeSetText(id, text) {
   var el = document.getElementById(id);
-  if (el) el.textContent = text;
+  if (el) {
+    el.textContent = text;
+  }
 }
 
 function safeSetHTML(id, html) {
   var el = document.getElementById(id);
-  if (el) el.innerHTML = html;
+  if (el) {
+    el.innerHTML = html;
+  }
 }
 
 function safeSetStyle(id, prop, value) {
   var el = document.getElementById(id);
-  if (el) el.style[prop] = value;
+  if (el) {
+    el.style[prop] = value;
+  }
 }
+
+// Format number with thousands separator (commas)
+function fmtNum(num) {
+  if (num === null || num === undefined || num === '') return '0';
+  var n = parseFloat(num);
+  if (isNaN(n)) return '0';
+  return n.toLocaleString('es-ES');
+}
+
+// Format number with 1 decimal place and thousands separator
+function fmtNumDec(num) {
+  if (num === null || num === undefined || num === '') return '0.0';
+  var n = parseFloat(num);
+  if (isNaN(n)) return '0.0';
+  return n.toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+}
+
+function headerFoodSearch(query) {
+  var resultsDiv = document.getElementById('headerSearchResults');
+  if (!query || query.length < 2) {
+    resultsDiv.classList.add('hidden');
+    return;
+  }
+  var foods = safeParseJSON(localStorage.getItem('ketoFoods'), []);
+  var queryLower = query.toLowerCase();
+  var filtered = foods.filter(function(f) {
+    return f.name.toLowerCase().includes(queryLower);
+  }).slice(0, 8);
+  
+  if (filtered.length === 0) {
+    resultsDiv.innerHTML = '<div class="p-4 text-center text-on-surface-variant text-sm">Sin resultados</div>';
+  } else {
+    var html = '';
+    filtered.forEach(function(f) {
+      html += '<a href="alimentos.html?search=' + encodeURIComponent(f.name) + '" class="block p-3 hover:bg-surface-container-high transition-colors border-b border-white/5 last:border-0">';
+      html += '<p class="text-white text-sm font-bold truncate">' + f.name + '</p>';
+      html += '<p class="text-xs text-on-surface-variant">' + fmtNum(f.calories) + ' cal - ' + fmtNum(f.protein) + 'g P</p>';
+      html += '</a>';
+    });
+    resultsDiv.innerHTML = html;
+  }
+  resultsDiv.classList.remove('hidden');
+}
+
+document.addEventListener('click', function(e) {
+  var searchContainer = document.querySelector('.relative');
+  if (searchContainer && !searchContainer.contains(e.target)) {
+    document.getElementById('headerSearchResults').classList.add('hidden');
+  }
+});
+
+// ==================== NEW DASHBOARD FUNCTIONS ====================
+
+// Initialize dashboard on page load
+function initDashboard() {
+  loadDashboard();
+  updateMotivationalMessage();
+  initStreakSystem();
+  initAchievements();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initDashboard);
+} else {
+  // DOM already loaded
+  initDashboard();
+}
+
+// Reload dashboard when page becomes visible (e.g., after returning from profile)
+document.addEventListener('visibilitychange', function() {
+  if (!document.hidden) {
+    loadDashboard();
+  }
+});
+
+// Listen for profile saved events
+window.addEventListener('profileSaved', function(e) {
+  loadDashboard();
+});
 
 function loadDashboard() {
   try {
-    var userData = getLocalData('userData', schemas.userData, getDefaultUserData());
     var ketoProfile = safeParseJSON(localStorage.getItem('keto_profile'), {});
+    console.log('Dashboard - ketoProfile:', ketoProfile);
+    console.log('Dashboard - startWeight:', ketoProfile.startWeight);
+    console.log('Dashboard - goalWeight:', ketoProfile.goalWeight);
+    var macros = safeParseJSON(localStorage.getItem('keto_macros'), {});
     
     var userName = ketoProfile.name || '';
+    
+    // Update greeting
     var greetingEl = document.getElementById('userGreeting');
     if (greetingEl) {
       if (userName) {
-        greetingEl.textContent = 'Hola, ' + userName;
+        greetingEl.textContent = '¡Hola, ' + userName + '!';
       } else {
-        greetingEl.textContent = 'Bienvenido';
+        greetingEl.textContent = '¡Bienvenido!';
       }
     }
     
+    // Update profile button
     var profileBtn = document.getElementById('profileBtn');
     if (profileBtn && userName) {
       profileBtn.textContent = userName.charAt(0).toUpperCase();
@@ -873,248 +1470,925 @@ function loadDashboard() {
     }
     
     var todayKey = new Date().toISOString().slice(0, 10);
+    
+    // Load checklist data
     var rawData = localStorage.getItem('checklist_' + todayKey);
     var checklistData = safeParseJSON(rawData, {});
+    var water = checklistData.water || 0;
+    var workout = checklistData.workout || 0;
     
-    var water = checklistData.water !== undefined ? checklistData.water : (userData.waterIntake || 0);
-    var workout = checklistData.workout !== undefined ? checklistData.workout : (userData.workoutMinutes || 0);
-    var walk = checklistData.walk !== undefined ? checklistData.walk : (userData.walkMinutes || 0);
-    var protein = checklistData.protein !== undefined ? checklistData.protein : (userData.proteinConsumed || 0);
-    var sleep = checklistData.sleep !== undefined ? checklistData.sleep : (userData.sleepHours || 0);
-  
-  var macros = getLocalData('keto_macros', schemas.ketoMacros, getDefaultMacros());
-  var targetCal = parseInt(macros.calories) || 1800;
-  var targetProt = parseInt(macros.protein) || 159;
-  var targetFat = parseInt(macros.fat) || 150;
-  var targetCarbs = parseInt(macros.carbs) || 25;
-  
-  var mealPlan = getLocalData('mealPlan_' + todayKey, schemas.mealPlan, getDefaultMealPlan());
-  var consumedCal = 0, consumedProt = 0, consumedFat = 0, consumedCarbs = 0;
-  
-  var consumedMacrosRaw = localStorage.getItem('consumedMacros_' + todayKey);
-  if (consumedMacrosRaw) {
-    var consumedMacros = JSON.parse(consumedMacrosRaw);
-    consumedCal = consumedMacros.cal || 0;
-    consumedProt = consumedMacros.prot || 0;
-    consumedFat = consumedMacros.fat || 0;
-    consumedCarbs = consumedMacros.carbs || 0;
-  } else {
+    // Load macros - only use stored values, don't use defaults
+    var macrosRaw = localStorage.getItem('keto_macros');
+    var macros = macrosRaw ? JSON.parse(macrosRaw) : {};
+    var hasMacros = macros && Object.keys(macros).length > 0;
+    var targetCal = macros.calories !== undefined ? parseInt(macros.calories) : 0;
+    var targetProt = macros.protein !== undefined ? parseInt(macros.protein) : 0;
+    var targetFat = macros.fat !== undefined ? parseInt(macros.fat) : 0;
+    var targetCarbs = macros.carbs !== undefined ? parseInt(macros.carbs) : 0;
+    
+    // Calculate consumed macros
+    var mealPlan = safeParseJSON(localStorage.getItem('mealPlan_' + todayKey), {});
+    var consumedCal = 0, consumedProt = 0, consumedFat = 0, consumedCarbs = 0;
+    var totalMealItems = 0;
+    
     Object.keys(mealPlan).forEach(function(meal) {
-      mealPlan[meal].forEach(function(item) {
-        var foodPort = parseFloat(item.portion) || 100;
-        var ratio = foodPort / 100;
-        consumedCal += Math.round((parseFloat(item.calories) || 0) * ratio);
-        consumedProt += Math.round((parseFloat(item.protein) || 0) * ratio);
-        consumedFat += Math.round((parseFloat(item.fat) || 0) * ratio);
-        consumedCarbs += Math.round((parseFloat(item.carbs) || 0) * ratio);
-      });
+      if (Array.isArray(mealPlan[meal])) {
+        totalMealItems += mealPlan[meal].length;
+        mealPlan[meal].forEach(function(item) {
+          var foodPort = parseFloat(item.portion) || 100;
+          var ratio = foodPort / 100;
+          consumedCal += Math.round((parseFloat(item.calories) || 0) * ratio);
+          consumedProt += Math.round((parseFloat(item.protein) || 0) * ratio);
+          consumedFat += Math.round((parseFloat(item.fat) || 0) * ratio);
+          consumedCarbs += Math.round((parseFloat(item.carbs) || 0) * ratio);
+        });
+      }
     });
-  }
-  
-  var startWeight = ketoProfile.weight || userData.startWeight || 159;
-  var goalWeight = ketoProfile.goalWeight || userData.goalWeight || 140;
-  var currentWeight = ketoProfile.weight || startWeight;
-  
-  var totalToLose = startWeight - goalWeight;
-  var lostSoFar = startWeight - currentWeight;
-  var weightProgress = totalToLose > 0 ? Math.round((lostSoFar / totalToLose) * 100) : 0;
-  if (weightProgress < 0) weightProgress = 0;
-  if (weightProgress > 100) weightProgress = 100;
-  
-  safeSetText('progressPercent', weightProgress + '%');
-  
-  var circle = document.getElementById('progressCircle');
-  if (circle) {
-    var circumference = 402;
-    var offset = circumference - (circumference * weightProgress / 100);
-    circle.style.strokeDashoffset = offset;
-  }
-  
-  var remaining = currentWeight - goalWeight;
-  var weightEl = document.getElementById('weightDisplay');
-  if (weightEl) {
-    weightEl.innerHTML = currentWeight + 'kg <span class="text-on-surface-variant font-light">→</span> ' + goalWeight + 'kg';
-  }
-  safeSetHTML('remainingKg', remaining > 0 ? remaining + 'kg restantes' : (remaining < 0 ? Math.abs(remaining) + 'kg bajo meta' : '¡Meta alcanzada!') + ' <span class="text-primary-container text-xs ml-1">(click to update)</span>');
-  
-  var weeklyLoss = '0';
-  if (typeof calculateWeeklyLoss === 'function') {
-    weeklyLoss = calculateWeeklyLoss();
-  } else {
-    weeklyLoss = localStorage.getItem('weeklyLoss') || '0';
-  }
-  safeSetHTML('weeklyProgress', '<span class="material-symbols-outlined text-primary-container text-sm">trending_down</span><span class="text-primary-container font-headline font-bold text-sm">' + weeklyLoss + 'KG ESTA SEMANA</span>');
-  
-  var hydrationPercent = Math.round((water / 3) * 100);
-  if (hydrationPercent > 100) hydrationPercent = 100;
-  safeSetText('hydrationDisplay', Math.round(water) + '/3L');
-  
-  var workoutPercent = Math.round((workout / 60) * 100);
-  if (workoutPercent > 100) workoutPercent = 100;
-  safeSetText('workoutDisplay', workout + '/60min');
-  
-  var walkPercent = Math.round((walk / 60) * 100);
-  if (walkPercent > 100) walkPercent = 100;
-  safeSetText('walkDisplay', walk + '/60min');
-  
-  var sleepPercentVal = Math.round((sleep / 8) * 100);
-  if (sleepPercentVal > 100) sleepPercentVal = 100;
-  safeSetText('sleepDisplay', sleep + '/8h');
-  
-  var proteinPercent = Math.round((consumedProt / targetProt) * 100);
-  if (proteinPercent > 100) proteinPercent = 100;
-  
-  var fatPercent = Math.round((consumedFat / targetFat) * 100);
-  if (fatPercent > 100) fatPercent = 100;
-  
-  var carbsPercent = Math.round((consumedCarbs / targetCarbs) * 100);
-  if (carbsPercent > 100) carbsPercent = 100;
-  
-  var caloriesPercent = Math.round((consumedCal / targetCal) * 100);
-  if (caloriesPercent > 100) caloriesPercent = 100;
-  var caloriesRemaining = Math.max(0, targetCal - consumedCal);
-  
-  safeSetText('consumedCalDisplay', consumedCal);
-  safeSetText('targetCalDisplay', targetCal);
-  safeSetStyle('caloriesBar', 'width', caloriesPercent + '%');
-  safeSetText('caloriesRemaining', caloriesRemaining);
-  
-  safeSetText('consumedProtDisplay', consumedProt);
-  safeSetText('targetProtDisplay', targetProt);
-  safeSetStyle('proteinBar', 'width', proteinPercent + '%');
-  
-  safeSetText('consumedFatDisplay', consumedFat);
-  safeSetText('targetFatDisplay', targetFat);
-  safeSetStyle('fatBar', 'width', fatPercent + '%');
-  
-  safeSetText('consumedCarbsDisplay', consumedCarbs);
-  safeSetText('targetCarbsDisplay', targetCarbs);
-  safeSetStyle('carbsBar', 'width', carbsPercent + '%');
-  
-  renderWeightHistory();
-  loadMonthlyStats();
+    
+    // Weight calculations - only use stored values, not defaults
+    var ketoProfileRaw = localStorage.getItem('keto_profile');
+    var ketoProfileCheck = ketoProfileRaw ? JSON.parse(ketoProfileRaw) : {};
+    
+    // Check if we have any profile data
+    var hasProfile = ketoProfileCheck && (ketoProfileCheck.startWeight || ketoProfileCheck.weight || ketoProfileCheck.goalWeight);
+    
+    // Weight data from profile
+    var startWeight = ketoProfileCheck.startWeight || 0;  // Peso inicial de Datos Personales
+    var goalWeight = ketoProfileCheck.goalWeight || 0;   // Meta de peso
+    
+    // Get current weight from history (most recent entry)
+    var weightHistoryRaw = localStorage.getItem('keto_weight_history');
+    var weightHistory = weightHistoryRaw ? JSON.parse(weightHistoryRaw) : [];
+    var currentWeight = 0;
+    
+    if (Array.isArray(weightHistory) && weightHistory.length > 0) {
+      var sortedDesc = weightHistory.slice().sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+      currentWeight = sortedDesc[0].weight || 0;
+    }
+    
+    // If no history, use weight from profile
+    if (!currentWeight && ketoProfileCheck.weight) {
+      currentWeight = ketoProfileCheck.weight;
+    }
+    
+    // Calculate progress
+    var totalToLose = startWeight - goalWeight;
+    var lostSoFar = currentWeight > 0 && startWeight > 0 ? startWeight - currentWeight : 0;
+    
+    var totalToLose = startWeight - goalWeight;
+    var lostSoFar = currentWeight > 0 && startWeight > 0 ? startWeight - currentWeight : 0;
+    var weightProgress = 0;
+    if (totalToLose > 0 && currentWeight > 0 && startWeight > 0) {
+      weightProgress = Math.round((lostSoFar / totalToLose) * 100);
+    }
+    if (weightProgress < 0) weightProgress = 0;
+    if (weightProgress > 100) weightProgress = 100;
+    
+    // Update progress ring
+    safeSetText('progressPercent', currentWeight > 0 && hasProfile ? weightProgress + '%' : '0%');
+    var circle = document.getElementById('progressCircle');
+    if (circle) {
+      var circumference = 377;
+      var offset = circumference - (circumference * weightProgress / 100);
+      circle.style.strokeDashoffset = offset;
+    }
+    
+    // Update weight display
+    var remaining = currentWeight - goalWeight;
+    var weightEl = document.getElementById('weightDisplay');
+    if (weightEl) {
+      if (currentWeight === 0) {
+        weightEl.innerHTML = '<span class="text-on-surface-variant">Registra tu peso</span>';
+      } else {
+        weightEl.innerHTML = fmtNumDec(currentWeight) + 'kg <span class="text-on-surface-variant font-light">→</span> ' + fmtNumDec(goalWeight) + 'kg';
+      }
+    }
+    
+    var remainingEl = document.getElementById('remainingKg');
+    if (remainingEl) {
+      if (currentWeight === 0) {
+        remainingEl.textContent = 'Toca para registrar';
+      } else if (remaining > 0) {
+        remainingEl.textContent = fmtNumDec(remaining) + 'kg restantes';
+      } else if (remaining < 0) {
+        remainingEl.textContent = fmtNumDec(Math.abs(remaining)) + 'kg bajo meta';
+      } else {
+        remainingEl.textContent = '¡Meta alcanzada!';
+      }
+    }
+    
+    // Update lost progress badge
+    var lostBadge = document.getElementById('lostProgressBadge');
+    var lostText = document.getElementById('lostProgressText');
+    if (lostBadge && lostText) {
+      if (lostSoFar > 0) {
+        var percentOfTotal = totalToLose > 0 ? Math.round((lostSoFar / totalToLose) * 100) : 0;
+        lostText.textContent = '-' + fmtNumDec(lostSoFar) + 'kg (' + percentOfTotal + '%)';
+        lostBadge.classList.remove('hidden');
+      } else if (lostSoFar < 0) {
+        // Gained weight
+        lostText.textContent = '+' + fmtNumDec(Math.abs(lostSoFar)) + 'kg';
+        lostBadge.classList.remove('bg-green-500/20', 'text-green-400');
+        lostBadge.classList.add('bg-red-500/20', 'text-red-400');
+        lostBadge.classList.remove('hidden');
+      } else {
+        lostBadge.classList.add('hidden');
+      }
+    }
+    
+    // Calculate weekly loss
+    var weeklyLoss = calculateWeeklyLoss();
+    safeSetText('weeklyLossText', weeklyLoss.replace('kg', ''));
+    
+    // Update Quick Actions
+    updateQuickActions(water, workout);
+    
+    // Update Macros
+    updateMacrosDisplay(consumedCal, consumedProt, consumedFat, consumedCarbs, targetCal, targetProt, targetFat, targetCarbs);
+    
+    // Update Today's date
+    var todayDateEl = document.getElementById('todayDateDisplay');
+    if (todayDateEl) {
+      var today = new Date();
+      var options = { weekday: 'long', day: 'numeric', month: 'long' };
+      todayDateEl.textContent = today.toLocaleDateString('es-ES', options);
+    }
+    
+    // Update weight chart
+    renderWeightChart();
+    
+    // Update today's meals summary
+    renderTodayMealsSummary(mealPlan);
+    
+    // Update achievements
+    updateAchievementsStats(totalMealItems);
+    
+    // Update weekly goals
+    loadWeeklyGoals();
+    
   } catch (e) {
     console.error('Error loading dashboard:', e);
   }
 }
 
-function loadMonthlyStats() {
-  try {
-    var now = new Date();
-    var monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    var monthKey = now.toISOString().slice(0, 7);
-    
-    var totalMeals = 0;
-    var totalMonthCalories = 0;
-    var monthMealsHtml = localStorage.getItem('monthMeals_' + monthKey);
-    if (monthMealsHtml) {
-      var monthMealsData = JSON.parse(monthMealsHtml);
-      totalMeals = monthMealsData.count || 0;
-      totalMonthCalories = monthMealsData.calories || 0;
+function updateQuickActions(water, workout) {
+  // Water
+  var waterPercent = Math.min(100, Math.round((water / 3) * 100));
+  safeSetText('waterActionText', fmtNum(water) + '/3L');
+  safeSetStyle('waterProgressBar', 'width', waterPercent + '%');
+  
+  // Exercise
+  var exercisePercent = Math.min(100, Math.round((workout / 60) * 100));
+  safeSetText('exerciseActionText', fmtNum(workout) + '/60min');
+  safeSetStyle('exerciseProgressBar', 'width', exercisePercent + '%');
+}
+
+function updateMacrosDisplay(consumedCal, consumedProt, consumedFat, consumedCarbs, targetCal, targetProt, targetFat, targetCarbs) {
+  var hasTargets = targetCal > 0 || targetProt > 0 || targetFat > 0 || targetCarbs > 0;
+  
+  // Calories
+  var calPercent = hasTargets && targetCal > 0 ? Math.min(100, Math.round((consumedCal / targetCal) * 100)) : 0;
+  var caloriesRemaining = hasTargets && targetCal > 0 ? Math.max(0, targetCal - consumedCal) : 0;
+  
+  safeSetText('consumedCalDisplay', fmtNum(consumedCal));
+  safeSetText('targetCalDisplay', hasTargets ? fmtNum(targetCal) : '--');
+  safeSetStyle('caloriesBar', 'width', calPercent + '%');
+  safeSetText('caloriesRemaining', hasTargets ? fmtNum(caloriesRemaining) : '--');
+  
+  // Calorie status
+  var calStatusEl = document.getElementById('calorieStatus');
+  if (calStatusEl) {
+    if (!hasTargets) {
+      calStatusEl.textContent = 'Sin meta';
+      calStatusEl.className = 'text-xs px-2 py-1 rounded-full bg-gray-500/20 text-gray-400';
+    } else if (consumedCal > targetCal) {
+      calStatusEl.textContent = 'Excedido';
+      calStatusEl.className = 'text-xs px-2 py-1 rounded-full bg-red-500/20 text-red-400';
+    } else if (consumedCal >= targetCal * 0.8) {
+      calStatusEl.textContent = 'Casi completo';
+      calStatusEl.className = 'text-xs px-2 py-1 rounded-full bg-yellow-500/20 text-yellow-400';
     } else {
-      for (var d = new Date(monthStart); d <= now; d.setDate(d.getDate() + 1)) {
-        var dateKey = d.toISOString().slice(0, 10);
-        var mealPlan = getLocalData('mealPlan_' + dateKey, null, null);
-        if (mealPlan) {
-          Object.keys(mealPlan).forEach(function(meal) {
-            totalMeals += (mealPlan[meal] || []).length;
-          });
-        }
-      }
-      localStorage.setItem('monthMeals_' + monthKey, JSON.stringify({ count: totalMeals, calories: totalMonthCalories }));
+      calStatusEl.textContent = 'En camino';
+      calStatusEl.className = 'text-xs px-2 py-1 rounded-full bg-green-500/20 text-green-400';
     }
-    
-    var workouts = getLocalData('ketoWorkouts', [], []);
-    var monthWorkouts = workouts.filter(function(w) {
-      var d = new Date(w.date);
-      return d >= monthStart;
-    });
-    var mWorkouts = monthWorkouts.length;
-    var mMinutes = monthWorkouts.reduce(function(s, w) { return s + (w.duration || 0); }, 0);
-    
-    var workoutGoal = 20;
-    var workoutProgress = Math.min(100, Math.round((mWorkouts / workoutGoal) * 100));
-    
-    safeSetText('monthMeals', totalMeals);
-    safeSetText('monthCalories', totalMonthCalories || 0);
-    safeSetText('monthWorkouts', mWorkouts);
-    safeSetText('monthMinutes', mMinutes);
-    safeSetText('monthProgressText', workoutProgress + '% (' + mWorkouts + '/' + workoutGoal + ')');
-    safeSetStyle('monthProgressBar', 'width', workoutProgress + '%');
-  } catch (e) {
-    console.error('Error loading monthly stats:', e);
+  }
+  
+  // Protein
+  var protPercent = hasTargets && targetProt > 0 ? Math.min(100, Math.round((consumedProt / targetProt) * 100)) : 0;
+  safeSetText('consumedProtDisplay', fmtNum(consumedProt));
+  safeSetText('targetProtDisplay', hasTargets ? fmtNum(targetProt) : '--');
+  safeSetStyle('proteinBar', 'width', protPercent + '%');
+  
+  // Fat
+  var fatPercent = hasTargets && targetFat > 0 ? Math.min(100, Math.round((consumedFat / targetFat) * 100)) : 0;
+  safeSetText('consumedFatDisplay', fmtNum(consumedFat));
+  safeSetText('targetFatDisplay', hasTargets ? fmtNum(targetFat) : '--');
+  safeSetStyle('fatBar', 'width', fatPercent + '%');
+  
+  // Carbs
+  var carbsPercent = hasTargets && targetCarbs > 0 ? Math.min(100, Math.round((consumedCarbs / targetCarbs) * 100)) : 0;
+  safeSetText('consumedCarbsDisplay', fmtNum(consumedCarbs));
+  safeSetText('targetCarbsDisplay', hasTargets ? fmtNum(targetCarbs) : '--');
+  safeSetStyle('carbsBar', 'width', carbsPercent + '%');
+  
+  // Distribution
+  var totalMacroCal = (consumedProt * 4) + (consumedFat * 9) + (consumedCarbs * 4);
+  if (totalMacroCal > 0) {
+    var fatDist = Math.round((consumedFat * 9 / totalMacroCal) * 100);
+    var protDist = Math.round((consumedProt * 4 / totalMacroCal) * 100);
+    var carbsDist = 100 - fatDist - protDist;
+    safeSetStyle('fatDistBar', 'width', fatDist + '%');
+    safeSetStyle('protDistBar', 'width', protDist + '%');
+    safeSetStyle('carbsDistBar', 'width', Math.max(0, carbsDist) + '%');
+    safeSetText('macroDistributionRatio', fatDist + '% / ' + protDist + '% / ' + Math.max(0, carbsDist) + '%');
   }
 }
 
-function renderWeightHistory() {
-  var container = document.getElementById('weightHistory');
-  if (!container) return;
+// ==================== WEIGHT TREND CHART ====================
+
+function renderWeightChart() {
+  var svg = document.getElementById('weightChartSvg');
+  var legend = document.getElementById('weightLegend');
+  if (!svg || !legend) return;
   
-  // Obtener peso actual del perfil
-  var ketoProfile = {};
-  try { ketoProfile = JSON.parse(localStorage.getItem('keto_profile') || '{}'); } catch(e) { ketoProfile = {}; }
-  var currentWeight = ketoProfile.weight || 80;
+  var ketoProfile = safeParseJSON(localStorage.getItem('keto_profile'), {});
+  var weightHistory = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
   
-  // Obtener historial
-  var stored = localStorage.getItem('keto_weight_history');
-  var weightHistory = [];
-  try { weightHistory = stored ? JSON.parse(stored) : []; } catch(e) { weightHistory = []; }
+  var startWeight = ketoProfile.startWeight || 0;
+  var goalWeight = ketoProfile.goalWeight || 0;
   
-  // Si no hay historial pero hay peso actual, guardar
-  if ((!weightHistory || weightHistory.length === 0) && currentWeight) {
-    saveWeightToHistory(currentWeight);
-    weightHistory = [{ date: new Date().toISOString().slice(0, 10), weight: currentWeight }];
+  var currentWeight = 0;
+  if (weightHistory && weightHistory.length > 0) {
+    var sortedDesc = weightHistory.slice().sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+    currentWeight = sortedDesc[0].weight || 0;
   }
+  if (!currentWeight) currentWeight = ketoProfile.weight || 0;
   
-  if (!Array.isArray(weightHistory) || weightHistory.length === 0) {
-    container.innerHTML = '<div class="w-full text-center py-3"><p class="text-xs text-on-surface-variant">Registra tu peso en</p><a href="macros.html" class="text-sm text-primary-container hover:underline font-bold">Macros →</a></div>';
+  // If no data, show message
+  if (!startWeight && !goalWeight) {
+    svg.innerHTML = '<text x="175" y="65" text-anchor="middle" fill="#9ca3af" font-size="13">Registra tu peso en Perfil</text>';
+    legend.innerHTML = '';
+    safeSetText('weightAvg', '-- kg');
     return;
   }
   
-  var sorted = weightHistory.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
-  var last7 = sorted.slice(-7);
+  // Calculate positions (line from start to goal)
+  var chartWidth = 500;
+  var chartHeight = 100;
+  var paddingX = 30;
+  var paddingY = 10;
   
-  // Asegurar que el peso de hoy esté en el historial
-  var today = new Date().toISOString().slice(0, 10);
-  var hasToday = last7.some(function(e) { return e.date === today; });
-  if (!hasToday) {
-    last7.push({ date: today, weight: currentWeight });
-  }
-  
-  if (last7.length === 0) {
-    container.innerHTML = '<p class="text-xs text-on-surface-variant text-center w-full">Sin datos</p>';
-    return;
-  }
-  
-  var weights = last7.map(function(e) { return e.weight; });
-  var minW = Math.min.apply(null, weights) - 0.5;
-  var maxW = Math.max.apply(null, weights) + 0.5;
+  // Scale based on weights
+  var allWeights = [startWeight, goalWeight, currentWeight].filter(function(w) { return w > 0; });
+  var minW = Math.min.apply(null, allWeights) - 3;
+  var maxW = Math.max.apply(null, allWeights) + 3;
   var range = maxW - minW || 1;
   
+  function getY(weight) {
+    return (chartHeight + paddingY) - ((weight - minW) / range) * (chartHeight - 15);
+  }
+  
+  var chartHtml = '<defs>' +
+    '<linearGradient id="weightGradient" x1="0%" y1="0%" x2="0%" y2="100%">' +
+    '<stop offset="0%" style="stop-color:#ff4d00;stop-opacity:0.4" />' +
+    '<stop offset="100%" style="stop-color:#ff4d00;stop-opacity:0" />' +
+    '</linearGradient>' +
+    '</defs>';
+  
+  // Draw ideal progress line (from start to goal)
+  var startX = paddingX;
+  var startY = getY(startWeight);
+  var goalX = chartWidth + paddingX;
+  var goalY = getY(goalWeight);
+  
+  if (startWeight > 0 && goalWeight > 0) {
+    // Dashed line showing ideal progress
+    chartHtml += '<line x1="' + startX + '" y1="' + startY + '" x2="' + goalX + '" y2="' + goalY + '" stroke="#6b7280" stroke-width="2" stroke-dasharray="6,4" opacity="0.4" />';
+    
+    // Fill area under the line
+    chartHtml += '<path d="M ' + startX + ' ' + startY + ' L ' + goalX + ' ' + goalY + ' L ' + goalX + ' ' + (chartHeight + paddingY) + ' L ' + startX + ' ' + (chartHeight + paddingY) + ' Z" fill="url(#weightGradient)" opacity="0.3" />';
+    
+    // Start point (green)
+    chartHtml += '<circle cx="' + startX + '" cy="' + startY + '" r="8" fill="#4ade80" />';
+    chartHtml += '<text x="' + (startX + 12) + '" y="' + (startY - 5) + '" fill="#4ade80" font-size="11" font-weight="bold">Inicio ' + startWeight + 'kg</text>';
+    
+    // Goal point (yellow)
+    chartHtml += '<circle cx="' + goalX + '" cy="' + goalY + '" r="8" fill="#fbbf24" />';
+    chartHtml += '<text x="' + (goalX - 12) + '" y="' + (goalY - 8) + '" text-anchor="end" fill="#fbbf24" font-size="11" font-weight="bold">Meta ' + goalWeight + 'kg</text>';
+  }
+  
+  // Current weight point (red) - positioned based on progress
+  if (currentWeight > 0) {
+    var progress = 0;
+    if (startWeight > 0 && goalWeight > 0) {
+      var totalToLose = startWeight - goalWeight;
+      var lost = startWeight - currentWeight;
+      progress = totalToLose > 0 ? Math.max(0, Math.min(1, lost / totalToLose)) : 0;
+    }
+    
+    var currentX = startX + progress * (goalX - startX);
+    var currentY = getY(currentWeight);
+    
+    // Outer ring
+    chartHtml += '<circle cx="' + currentX + '" cy="' + currentY + '" r="14" fill="none" stroke="#fff" stroke-width="3" opacity="0.6" />';
+    // Inner point
+    chartHtml += '<circle cx="' + currentX + '" cy="' + currentY + '" r="8" fill="#ff4d00" stroke="#0a0a0a" stroke-width="2" />';
+    // Label
+    chartHtml += '<text x="' + currentX + '" y="' + (currentY - 18) + '" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">AQUI: ' + currentWeight + 'kg</text>';
+  }
+  
+  svg.innerHTML = chartHtml;
+  
+  // Average
+  if (currentWeight > 0) {
+    safeSetText('weightAvg', currentWeight + ' kg');
+  } else {
+    safeSetText('weightAvg', '-- kg');
+  }
+  
+  // Legend with dates
+  var today = new Date();
+  var days = [];
+  for (var i = 6; i >= 0; i--) {
+    var d = new Date(today);
+    d.setDate(d.getDate() - i);
+    var dateStr = d.toISOString().slice(0, 10);
+    var weightEntry = weightHistory ? weightHistory.find(function(h) { return h.date === dateStr; }) : null;
+    days.push({
+      day: d.getDate(),
+      date: dateStr,
+      weight: weightEntry ? weightEntry.weight : null
+    });
+  }
+  
+  legend.innerHTML = days.map(function(d) {
+    var isToday = d.date === today.toISOString().slice(0, 10);
+    return '<div class="text-center">' +
+      '<span class="text-xs ' + (isToday ? 'text-primary-container font-bold' : 'text-on-surface-variant') + '">' + d.day + '</span>' +
+      '<p class="text-[10px] font-bold ' + (d.weight ? 'text-white' : 'text-white/30') + '">' + (d.weight ? fmtNumDec(d.weight) + 'kg' : '--') + '</p>' +
+    '</div>';
+  }).join('');
+}
+
+// ==================== TODAY'S MEALS SUMMARY ====================
+
+function renderTodayMealsSummary(mealPlan) {
+  var container = document.getElementById('todayMealsSummary');
+  if (!container) return;
+  
+  var meals = [
+    { key: 'desayuno', name: 'Desayuno', icon: 'wb_sunny', color: 'text-yellow-400', bgColor: 'bg-yellow-500/20' },
+    { key: 'almuerzo', name: 'Almuerzo', icon: 'light_mode', color: 'text-orange-400', bgColor: 'bg-orange-500/20' },
+    { key: 'cena', name: 'Cena', icon: 'nightlight', color: 'text-purple-400', bgColor: 'bg-purple-500/20' },
+    { key: 'snacks', name: 'Snacks', icon: 'cookie', color: 'text-pink-400', bgColor: 'bg-pink-500/20' }
+  ];
+  
   var html = '';
-  last7.forEach(function(entry, index) {
-    var height = ((entry.weight - minW) / range) * 100;
-    if (height < 15) height = 15;
-    if (height > 100) height = 100;
-    var isToday = index === last7.length - 1;
-    var date = new Date(entry.date);
-    var dayNum = date.getDate();
-    html += '<div class="flex flex-col items-center">';
-    html += '<div class="w-full bg-surface-container-high rounded-lg relative" style="height: 50px;">';
-    html += '<div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 rounded-t transition-all ' + (isToday ? 'bg-primary-container' : 'bg-secondary/60') + '" style="height: ' + height + '%"></div>';
-    html += '</div>';
-    html += '<span class="text-[10px] mt-1 ' + (isToday ? 'text-primary-container font-bold' : 'text-on-surface-variant') + '">' + dayNum + '</span>';
-    html += '<span class="text-[9px] font-bold text-white">' + entry.weight + 'kg</span>';
-    html += '</div>';
+  meals.forEach(function(meal) {
+    var items = mealPlan[meal.key] || [];
+    var totalCal = items.reduce(function(sum, item) {
+      var port = parseFloat(item.portion) || 100;
+      var ratio = port / 100;
+      return sum + Math.round((parseFloat(item.calories) || 0) * ratio);
+    }, 0);
+    
+    html += '<a href="plan.html" class="bg-surface-container-high rounded-xl p-4 text-center hover:bg-surface-container-highest transition-all">' +
+      '<div class="w-10 h-10 rounded-full ' + meal.bgColor + ' flex items-center justify-center mx-auto mb-2">' +
+        '<span class="material-symbols-outlined ' + meal.color + ' text-xl">' + meal.icon + '</span>' +
+      '</div>' +
+      '<p class="text-xs text-on-surface-variant mb-1">' + meal.name + '</p>' +
+      '<p class="text-lg font-bold text-white">' + fmtNum(totalCal) + '</p>' +
+      '<p class="text-[10px] text-on-surface-variant">' + fmtNum(items.length) + ' items</p>' +
+    '</a>';
   });
   
   container.innerHTML = html;
 }
 
-loadDashboard();
-</script>
+// ==================== STREAK & ACHIEVEMENTS ====================
 
-<script>
+function initStreakSystem() {
+  checkAndUpdateStreak();
+}
+
+function checkAndUpdateStreak() {
+  var streakData = safeParseJSON(localStorage.getItem('ketoStreak'), {
+    currentStreak: 0,
+    bestStreak: 0,
+    lastKetoDate: null,
+    ketoDays: 0,
+    activitiesToday: 0
+  });
+  
+  var today = new Date().toISOString().slice(0, 10);
+  var yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday = yesterday.toISOString().slice(0, 10);
+  
+  // Check if activities were logged today
+  if (streakData.lastKetoDate !== today) {
+    // First check: was yesterday logged AND we had activities?
+    if (streakData.lastKetoDate === yesterday && (streakData.activitiesToday || 0) > 0) {
+      // Continue streak only if yesterday had real activity
+      streakData.currentStreak++;
+    } else if (streakData.lastKetoDate !== today) {
+      // New day - reset activities counter (will increment when activity logged)
+      streakData.activitiesToday = 0;
+      // Only increment streak if we have actual activities today
+      // Otherwise, don't change streak - wait for activity
+    }
+    
+    streakData.lastKetoDate = today;
+    
+    // Update best streak
+    if (streakData.currentStreak > streakData.bestStreak) {
+      streakData.bestStreak = streakData.currentStreak;
+    }
+    
+    localStorage.setItem('ketoStreak', JSON.stringify(streakData));
+  }
+  
+  // Update display with actual values (starting from 0)
+  safeSetText('streakCount', fmtNum(streakData.currentStreak || 0));
+  safeSetText('streakDaysCount', fmtNum(streakData.currentStreak || 0));
+  safeSetText('bestStreakCount', fmtNum(streakData.bestStreak || 0));
+}
+
+function updateAchievementsStats(totalMealItems) {
+  var streakData = safeParseJSON(localStorage.getItem('ketoStreak'), { ketoDays: 0 });
+  var mealsLogged = safeParseJSON(localStorage.getItem('mealsLoggedTotal'), 0);
+  
+  safeSetText('ketoDaysCount', fmtNum(streakData.ketoDays || streakData.currentStreak || 0));
+  safeSetText('mealsLoggedCount', fmtNum(totalMealItems || 0));
+  
+  // Update badges
+  renderAchievementBadges();
+}
+
+function renderAchievementBadges() {
+  var container = document.getElementById('achievementBadges');
+  if (!container) return;
+  
+  var achievements = getUnlockedAchievements();
+  var badges = achievements.slice(0, 4).map(function(a) {
+    return '<div class="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border-2 border-yellow-500/30 flex items-center justify-center text-xl" title="' + a.name + '">' + a.icon + '</div>';
+  }).join('');
+  
+  container.innerHTML = badges || '<div class="text-xs text-on-surface-variant">Completa tareas para desbloquear logros</div>';
+}
+
+function getUnlockedAchievements() {
+  var streakData = safeParseJSON(localStorage.getItem('ketoStreak'), {});
+  var mealCount = safeParseJSON(localStorage.getItem('mealsLoggedTotal'), 0);
+  
+  var allAchievements = [
+    { id: 'first_meal', name: 'Primera Comida', icon: '🍽️', desc: 'Registra tu primera comida', unlocked: mealCount > 0 },
+    { id: 'keto_starter', name: 'Iniciador Keto', icon: '🌟', desc: '1 día keto', unlocked: (streakData.currentStreak || 0) >= 1 },
+    { id: 'week_warrior', name: 'Guerrero Semanal', icon: '⚔️', desc: '7 días keto', unlocked: (streakData.currentStreak || 0) >= 7 },
+    { id: 'month_master', name: 'Maestro Mensual', icon: '👑', desc: '30 días keto', unlocked: (streakData.currentStreak || 0) >= 30 },
+    { id: 'macro_master', name: 'Maestro de Macros', icon: '📊', desc: 'Cumple tus macros 7 días', unlocked: false },
+    { id: 'water_hero', name: 'Héroe del Agua', icon: '💧', desc: 'Bebe 3L de agua 7 días', unlocked: false },
+    { id: 'gym_beast', name: 'Bestia del Gym', icon: '🏋️', desc: 'Ejercítate 20 días', unlocked: false },
+    { id: 'consistent', name: 'Consistente', icon: '🎯', desc: 'Usa la app 14 días', unlocked: false }
+  ];
+  
+  return allAchievements.filter(function(a) { return a.unlocked; });
+}
+
+function initAchievements() {
+  var recentContainer = document.getElementById('recentAchievements');
+  if (!recentContainer) return;
+  
+  var achievements = getUnlockedAchievements();
+  
+  if (achievements.length === 0) {
+    recentContainer.innerHTML = '<div class="text-center py-4 text-on-surface-variant text-sm">Completa tareas para desbloquear logros</div>';
+    return;
+  }
+  
+  recentContainer.innerHTML = achievements.map(function(a) {
+    return '<div class="flex-shrink-0 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-xl p-3 text-center min-w-[100px]">' +
+      '<div class="text-2xl mb-1">' + a.icon + '</div>' +
+      '<p class="text-xs font-bold text-white">' + a.name + '</p>' +
+      '<p class="text-[10px] text-on-surface-variant">' + a.desc + '</p>' +
+    '</div>';
+  }).join('');
+}
+
+// ==================== MOTIVATIONAL MESSAGES ====================
+
+var motivationalMessages = [
+  { emoji: '💪', text: '¡Vas muy bien! Sigue así.' },
+  { emoji: '🔥', text: 'Cada día cuenta. ¡No pares!' },
+  { emoji: '⭐', text: 'Recuerda tu meta. ¡Tú puedes!' },
+  { emoji: '🌟', text: 'El discipline vence a la motivación.' },
+  { emoji: '🏆', text: 'Hoy es un gran día para avanzar.' },
+  { emoji: '💚', text: 'Tu cuerpo te lo agradecerá.' },
+  { emoji: '🎯', text: 'Enfócate en el proceso, no en el resultado.' },
+  { emoji: '🚀', text: 'Pequeños pasos, grandes cambios.' }
+];
+
+function updateMotivationalMessage() {
+  var iconEl = document.getElementById('motivationIcon');
+  if (!iconEl) return;
+  
+  var hour = new Date().getHours();
+  var message;
+  
+  if (hour < 12) {
+    message = motivationalMessages[Math.floor(Math.random() * 3)];
+  } else if (hour < 18) {
+    message = motivationalMessages[3 + Math.floor(Math.random() * 3)];
+  } else {
+    message = motivationalMessages[6 + Math.floor(Math.random() * 2)];
+  }
+  
+  iconEl.textContent = message.emoji;
+  iconEl.title = message.text;
+}
+
+// ==================== WEEKLY GOALS ====================
+
+function loadWeeklyGoals() {
+  var container = document.getElementById('weeklyGoalsGrid');
+  if (!container) return;
+  
+  var today = new Date();
+  var todayKey = today.toISOString().slice(0, 10);
+  var dayOfWeek = today.getDay();
+  
+  // Calculate weekly stats
+  var weekCalories = 0;
+  var weekWorkouts = 0;
+  var weekMeals = 0;
+  var weekWater = 0;
+  var daysWithData = 0;
+  
+  for (var i = 0; i < dayOfWeek; i++) {
+    var d = new Date(today);
+    d.setDate(d.getDate() - i);
+    var dateKey = d.toISOString().slice(0, 10);
+    
+    var mealPlan = safeParseJSON(localStorage.getItem('mealPlan_' + dateKey), {});
+    Object.keys(mealPlan).forEach(function(meal) {
+      weekMeals += (mealPlan[meal] || []).length;
+    });
+    
+    var checklist = safeParseJSON(localStorage.getItem('checklist_' + dateKey), {});
+    if (checklist.workout > 0) weekWorkouts++;
+    if (checklist.water >= 2) {
+      weekWater += checklist.water;
+      daysWithData++;
+    }
+    if ((mealPlan.desayuno && mealPlan.desayuno.length > 0) || 
+        (mealPlan.almuerzo && mealPlan.almuerzo.length > 0) || 
+        (mealPlan.cena && mealPlan.cena.length > 0)) {
+      weekCalories++;
+    }
+  }
+  
+  // Today's data
+  var todayChecklist = safeParseJSON(localStorage.getItem('checklist_' + todayKey), {});
+  var todayWater = todayChecklist.water || 0;
+  var todayMeals = 0;
+  var todayMealPlan = safeParseJSON(localStorage.getItem('mealPlan_' + todayKey), {});
+  Object.keys(todayMealPlan).forEach(function(meal) {
+    todayMeals += (todayMealPlan[meal] || []).length;
+  });
+  
+  var goals = [
+    { label: 'Comidas', value: weekMeals + todayMeals, target: (dayOfWeek + 1) * 3, icon: 'restaurant', color: 'text-primary-container' },
+    { label: 'Entrenos', value: weekWorkouts, target: Math.min(dayOfWeek + 1, 5), icon: 'fitness_center', color: 'text-green-400' },
+    { label: 'Hidratación', value: todayWater, target: 3, icon: 'water_drop', color: 'text-blue-400', unit: 'L' },
+    { label: 'Racha', value: safeParseJSON(localStorage.getItem('ketoStreak'), {currentStreak: 0}).currentStreak || 0, target: 7, icon: 'local_fire_department', color: 'text-orange-400', unit: 'días' }
+  ];
+  
+  container.innerHTML = goals.map(function(g) {
+    var percent = Math.min(100, Math.round((g.value / g.target) * 100));
+    var displayValue = g.unit === 'L' ? g.value.toFixed(1) : g.value;
+    var displayTarget = g.unit === 'L' ? g.target + 'L' : (g.unit === 'días' ? g.target + 'd' : g.target);
+    return '<div class="bg-surface-container-high rounded-xl p-4">' +
+      '<div class="flex items-center gap-2 mb-2">' +
+        '<span class="material-symbols-outlined ' + g.color + ' text-lg">' + g.icon + '</span>' +
+        '<span class="text-xs text-on-surface-variant">' + g.label + '</span>' +
+      '</div>' +
+      '<p class="text-xl font-bold text-white mb-2">' + displayValue + '<span class="text-sm text-white/50">/' + displayTarget + '</span></p>' +
+      '<div class="h-1.5 bg-surface-container-highest rounded-full overflow-hidden">' +
+        '<div class="h-full rounded-full transition-all ' + (percent >= 100 ? 'bg-green-500' : 'bg-primary-container') + '" style="width: ' + percent + '%"></div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+  
+  // Load daily tip
+  loadDailyTip();
+}
+
+function loadDailyTip() {
+  var tips = [
+    { category: 'nutricion', tips: [
+      'Recuerda distribuir tu proteína a lo largo del día para mejor absorción.',
+      'Los aguacates son tu mejor aliado: ricos en grasas saludables y fibra.',
+      'Bebe al menos 2L de agua al día, especialmente si haces ejercicio.',
+      'El ayuno intermitente puede potenciar los efectos de la dieta keto.'
+    ]},
+    { category: 'ejercicio', tips: [
+      'El ejercicio en ayunas ayuda a quemar grasa más eficientemente.',
+      'Combina entrenamiento de fuerza con cardio para mejores resultados.',
+      'DESCANSO es parte del progreso. No entrenes todos los días.',
+      'Estira después de entrenar para mejorar la flexibilidad y recuperación.'
+    ]},
+    { category: 'bienestar', tips: [
+      'Duerme 7-8 horas para optimizar la producción de hormonas.',
+      'El estrés crónico afecta tu metabolismo. Prueba técnicas de relajación.',
+      'La consistencia supera a la perfección. Un mal día no arruina tu progreso.',
+      'Lleva un diario de alimentos para identificar patrones en tu dieta.'
+    ]}
+  ];
+  
+  var allTips = tips.reduce(function(acc, cat) { return acc.concat(cat.tips); }, []);
+  var randomTip = allTips[Math.floor(Math.random() * allTips.length)];
+  
+  var tipEl = document.getElementById('dailyTipText');
+  if (tipEl) tipEl.textContent = randomTip;
+}
+
+// ==================== WATER TRACKING ====================
+
+function openWaterModal() {
+  var modal = document.getElementById('waterModal');
+  var todayKey = new Date().toISOString().slice(0, 10);
+  var checklistData = safeParseJSON(localStorage.getItem('checklist_' + todayKey), {});
+  var water = checklistData.water || 0;
+  
+  safeSetText('modalWaterCurrent', fmtNum(water));
+  safeSetStyle('modalWaterBar', 'width', Math.min(100, (water / 3) * 100) + '%');
+  
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+function closeWaterModal() {
+  document.getElementById('waterModal').classList.add('hidden');
+  document.getElementById('waterModal').classList.remove('flex');
+  loadDashboard();
+}
+
+function addWater(amount) {
+  var todayKey = new Date().toISOString().slice(0, 10);
+  var checklistData = safeParseJSON(localStorage.getItem('checklist_' + todayKey), {});
+  var water = Math.max(0, (checklistData.water || 0) + amount);
+  checklistData.water = water;
+  localStorage.setItem('checklist_' + todayKey, JSON.stringify(checklistData));
+  
+  safeSetText('modalWaterCurrent', fmtNum(water));
+  safeSetStyle('modalWaterBar', 'width', Math.min(100, (water / 3) * 100) + '%');
+  
+  // Update achievement
+  if (water >= 3000) {
+    unlockAchievement('water_hero');
+  }
+}
+
+// ==================== EXERCISE TRACKING ====================
+
+function openExerciseModal() {
+  var modal = document.getElementById('exerciseModal');
+  var todayKey = new Date().toISOString().slice(0, 10);
+  var checklistData = safeParseJSON(localStorage.getItem('checklist_' + todayKey), {});
+  var workout = checklistData.workout || 0;
+  
+  safeSetText('modalExerciseCurrent', fmtNum(workout));
+  safeSetStyle('modalExerciseBar', 'width', Math.min(100, (workout / 60) * 100) + '%');
+  
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+function closeExerciseModal() {
+  document.getElementById('exerciseModal').classList.add('hidden');
+  document.getElementById('exerciseModal').classList.remove('flex');
+  loadDashboard();
+}
+
+function addExercise(amount) {
+  var todayKey = new Date().toISOString().slice(0, 10);
+  var checklistData = safeParseJSON(localStorage.getItem('checklist_' + todayKey), {});
+  var workout = Math.max(0, (checklistData.workout || 0) + amount);
+  checklistData.workout = workout;
+  localStorage.setItem('checklist_' + todayKey, JSON.stringify(checklistData));
+  
+  safeSetText('modalExerciseCurrent', fmtNum(workout));
+  safeSetStyle('modalExerciseBar', 'width', Math.min(100, (workout / 60) * 100) + '%');
+}
+
+// ==================== QUICK ADD FOOD ====================
+
+function quickAddFood() {
+  var modal = document.getElementById('quickAddFoodModal');
+  document.getElementById('quickFoodSearch').value = '';
+  filterQuickFoods('');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+function closeQuickAddFoodModal() {
+  document.getElementById('quickAddFoodModal').classList.add('hidden');
+  document.getElementById('quickAddFoodModal').classList.remove('flex');
+}
+
+function filterQuickFoods(query) {
+  var foods = safeParseJSON(localStorage.getItem('ketoFoods'), []);
+  var container = document.getElementById('quickFoodList');
+  
+  if (!query) {
+    query = '';
+  }
+  
+  var filtered = foods.filter(function(f) {
+    return f.name.toLowerCase().includes(query.toLowerCase());
+  }).slice(0, 20);
+  
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="text-center py-8 text-on-surface-variant">' +
+      '<span class="material-symbols-outlined text-4xl mb-2">search_off</span>' +
+      '<p>No se encontraron alimentos</p>' +
+      '<a href="alimentos.html" class="text-primary-container text-sm hover:underline mt-2 block">Agregar nuevo alimento →</a>' +
+    '</div>';
+    return;
+  }
+  
+  container.innerHTML = filtered.map(function(f) {
+    return '<div class="flex items-center justify-between p-3 bg-surface-container-high rounded-xl hover:bg-surface-container-highest transition-all cursor-pointer" onclick="selectQuickFood(\'' + f.id + '\')">' +
+      '<div class="flex-1 min-w-0">' +
+        '<p class="text-white font-medium truncate">' + f.name + '</p>' +
+        '<p class="text-xs text-on-surface-variant">' + fmtNum(f.calories) + ' cal · ' + fmtNum(f.protein) + 'g P</p>' +
+      '</div>' +
+      '<span class="material-symbols-outlined text-primary-container">add_circle</span>' +
+    '</div>';
+  }).join('');
+}
+
+function selectQuickFood(foodId) {
+  // Add to today's meal plan
+  var todayKey = new Date().toISOString().slice(0, 10);
+  var mealPlan = safeParseJSON(localStorage.getItem('mealPlan_' + todayKey), {
+    desayuno: [], almuerzo: [], cena: [], snacks: []
+  });
+  
+  var foods = safeParseJSON(localStorage.getItem('ketoFoods'), []);
+  var food = foods.find(function(f) { return f.id === foodId; });
+  
+  if (food) {
+    mealPlan.snacks.push({
+      id: food.id,
+      name: food.name,
+      calories: food.calories,
+      protein: food.protein,
+      fat: food.fat,
+      carbs: food.carbs,
+      portion: 100,
+      addedAt: new Date().toISOString()
+    });
+    
+    localStorage.setItem('mealPlan_' + todayKey, JSON.stringify(mealPlan));
+    
+    // Update meals logged counter
+    var mealsLogged = safeParseJSON(localStorage.getItem('mealsLoggedTotal'), 0);
+    localStorage.setItem('mealsLoggedTotal', mealsLogged + 1);
+    
+    // Log activity for streak
+    logActivity();
+    
+    closeQuickAddFoodModal();
+    loadDashboard();
+    showToast('Alimento añadido a snacks');
+  }
+}
+
+// ==================== STREAK ACTIVITY LOGGING ====================
+
+function logActivity() {
+  var streakData = safeParseJSON(localStorage.getItem('ketoStreak'), {
+    currentStreak: 0,
+    bestStreak: 0,
+    lastKetoDate: null,
+    ketoDays: 0,
+    activitiesToday: 0
+  });
+  
+  var today = new Date().toISOString().slice(0, 10);
+  var yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday = yesterday.toISOString().slice(0, 10);
+  
+  // Increment activities for today
+  streakData.activitiesToday = (streakData.activitiesToday || 0) + 1;
+  streakData.lastKetoDate = today;
+  
+  // If it's a new streak or continuing streak
+  if (streakData.lastKetoDate !== today) {
+    // Check if yesterday had activity
+    if (streakData.lastKetoDate === yesterday && streakData.activitiesToday > 1) {
+      streakData.currentStreak++;
+    } else if (!streakData.currentStreak) {
+      streakData.currentStreak = 1;
+    }
+  }
+  
+  // Update best streak
+  if (streakData.currentStreak > streakData.bestStreak) {
+    streakData.bestStreak = streakData.currentStreak;
+  }
+  
+  // Update keto days
+  streakData.ketoDays = (streakData.ketoDays || 0) + 1;
+  
+  localStorage.setItem('ketoStreak', JSON.stringify(streakData));
+  
+  // Update display
+  safeSetText('streakCount', fmtNum(streakData.currentStreak || 0));
+  safeSetText('streakDaysCount', fmtNum(streakData.currentStreak || 0));
+  safeSetText('bestStreakCount', fmtNum(streakData.bestStreak || 0));
+}
+
+// ==================== UTILITY FUNCTIONS ====================
+
+function calculateWeeklyLoss() {
+  var ketoProfile = safeParseJSON(localStorage.getItem('keto_profile'), {});
+  var weightHistory = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
+  
+  var today = new Date();
+  var weekAgo = new Date(today);
+  weekAgo.setDate(weekAgo.getDate() - 7);
+  
+  var weekEntries = weightHistory.filter(function(e) {
+    return new Date(e.date) >= weekAgo;
+  }).sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+  
+  if (weekEntries.length >= 2) {
+    var first = weekEntries[0].weight;
+    var last = weekEntries[weekEntries.length - 1].weight;
+    var diff = (first - last).toFixed(1);
+    return diff + 'kg';
+  }
+  
+  return '0kg';
+}
+
+function unlockAchievement(achievementId) {
+  // This would trigger a notification/celebration
+}
+
+function showToast(message) {
+  // Simple toast notification
+  var toast = document.createElement('div');
+  toast.className = 'fixed top-20 left-1/2 -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-full shadow-lg z-[100] animate-pulse';
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  setTimeout(function() {
+    toast.style.opacity = '0';
+    toast.style.transition = 'opacity 0.3s';
+    setTimeout(function() { toast.remove(); }, 300);
+  }, 2000);
+}
+
+// ==================== GLOBAL RESET ====================
+
+function openResetModal() {
+  document.getElementById('mobileSettingsModal').classList.add('hidden');
+  document.getElementById('resetModal').classList.remove('hidden');
+  document.getElementById('resetModal').classList.add('flex');
+}
+
+function closeResetModal() {
+  document.getElementById('resetModal').classList.add('hidden');
+  document.getElementById('resetModal').classList.remove('flex');
+}
+
+function confirmGlobalReset() {
+  // Clear all localStorage
+  localStorage.clear();
+  
+  // Clear sessionStorage
+  sessionStorage.clear();
+  
+  // Show simple confirmation
+  closeResetModal();
+  
+  // Create and show simple toast
+  var toast = document.createElement('div');
+  toast.className = 'fixed top-20 left-1/2 -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg z-[9999] font-medium';
+  toast.textContent = '¡Datos reiniciados!';
+  toast.style.animation = 'fadeInUp 0.3s ease';
+  document.body.appendChild(toast);
+  
+  // Redirect to onboarding
+  setTimeout(function() {
+    toast.remove();
+    window.location.href = 'onboarding.html';
+  }, 1000);
+}
+
 // ==================== REGISTRO DE SERVICE WORKER ====================
 // Implementación PWA para KetoLab
 
@@ -1124,17 +2398,11 @@ loadDashboard();
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js')
         .then(registration => {
-          console.log('[PWA] Service Worker registrado correctamente en:', registration.scope);
-          
           // Verificar actualizaciones
           registration.addEventListener('updatefound', () => {
             const newWorker = registration.installing;
-            console.log('[PWA] Nueva versión del Service Worker encontrada');
-            
             newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                console.log('[PWA] Nueva versión disponible, actualizar para obtenerla');
-                // Mostrar notificación al usuario
                 if (confirm('Nueva versión disponible. ¿Actualizar ahora?')) {
                   window.location.reload();
                 }
@@ -1143,72 +2411,29 @@ loadDashboard();
           });
         })
         .catch(error => {
-          console.error('[PWA] Error al registrar Service Worker:', error);
+          // Silent fail for PWA
         });
     });
   }
-  
-  // Detectar si la app está instalada y mostrar prompt de instalación
-  let deferredPrompt;
-  const installBtn = document.getElementById('installBtn');
-  
-  window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevenir que Chrome muestre el prompt automático
-    e.preventDefault();
-    deferredPrompt = e;
-    
-    // Mostrar botón de instalación personalizado si existe
-    if (installBtn) {
-      installBtn.style.display = 'flex';
-      console.log('[PWA] App instalable, botón de instalación disponible');
+   
+  // Listen for storage changes
+  window.addEventListener('storage', function(e) {
+    if (e.key === 'keto_profile' || e.key === 'keto_weight_history') {
+      loadDashboard();
     }
   });
-  
-  // Manejar clic en botón de instalación
-  if (installBtn) {
-    installBtn.addEventListener('click', async () => {
-      if (!deferredPrompt) {
-        console.log('[PWA] No hay prompt de instalación disponible');
-        return;
-      }
-      
-      // Mostrar prompt de instalación
-      deferredPrompt.prompt();
-      
-      // Esperar elección del usuario
-      const { outcome } = await deferredPrompt.userChoice;
-      console.log(`[PWA] Usuario ${outcome === 'accepted' ? 'aceptó' : 'rechazó'} la instalación`);
-      
-      // Limpiar prompt
-      deferredPrompt = null;
-      installBtn.style.display = 'none';
-    });
-  }
-  
-  // Detectar cuando la app se abre desde el homescreen
-  if (window.matchMedia('(display-mode: standalone)').matches) {
-    console.log('[PWA] App abierta desde el homescreen');
-    document.body.classList.add('pwa-mode');
-  }
-  
-  // Detectar cambios de conexión
-  window.addEventListener('online', () => {
-    console.log('[PWA] Conexión restaurada');
-    // Opcional: mostrar toast de reconexión
-    if (typeof showToast === 'function') {
-      showToast('Conexión restaurada');
-    }
+   
+  // Also listen for custom profileSaved event
+  window.addEventListener('profileSaved', function() {
+    loadDashboard();
   });
   
-  window.addEventListener('offline', () => {
-    console.log('[PWA] Sin conexión - modo offline');
-    if (typeof showToast === 'function') {
-      showToast('Modo offline - algunos datos pueden no sincronizarse');
-    }
+  // Listen for weight updates
+  window.addEventListener('weightUpdated', function() {
+    loadDashboard();
   });
 })();
 </script>
-<script src="backup.js"></script>
 <script src="recipe-suggestions.js"></script>
 </body>
 </html>

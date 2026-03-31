@@ -186,11 +186,9 @@ toast.classList.remove("opacity-100","translate-y-0");
 
 function loadDespensa(){
 var container=document.getElementById("despensaList");
-if(!container){console.error("Container not found");return;}
+if(!container){return;}
 var foods=getFoods();
 var despensa=getDespensa();
-console.log("Despensa:", despensa);
-console.log("Foods count:", foods.length);
 var catColors={"Proteínas":"#ff4d00","Grasas":"#ffb300","Verduras":"#4caf50","Lácteos":"#9c27b0","Frutos secos":"#ff9800","Otros":"#9c27b0"};
 var catIcons={"Proteínas":"egg_alt","Grasas":"water_drop","Verduras":"eco","Lácteos":"restaurant","Frutos secos":"cookie","Otros":"shopping_bag"};
 var categories=["Proteínas","Grasas","Verduras","Lácteos","Frutos secos","Otros"];
@@ -200,14 +198,16 @@ categories.forEach(function(cat){
 catData[cat]={items:[],cal:0,stock:0};
 });
 foods.forEach(function(f){
-if(despensa[f.id]&&despensa[f.id].stock>0){
 var item=despensa[f.id];
-var stock=parseFloat(item.stock)||0;
+var stock=0;
+if(item){
+stock=parseFloat(item.stock)||parseFloat(item.quantity)||0;
+}
+if(stock>0){
 var portion=parseFloat(f.portion)||100;
 var calories=parseFloat(f.calories)||0;
 var ratio=stock/portion;
 var cal=Math.round(calories*ratio);
-console.log(f.name+": stock="+stock+", portion="+portion+", cal="+cal);
 catData[f.category].items.push({food:f,stock:stock,cal:cal});
 catData[f.category].cal+=cal;
 catData[f.category].stock+=stock;

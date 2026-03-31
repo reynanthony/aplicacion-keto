@@ -14,119 +14,213 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script>
-tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","primary-container":"#ff4d00","on-primary":"#ffffff","on-primary-container":"#ffffff","surface":"#0a0a0a","surface-container":"#181717","surface-container-low":"#111010","surface-container-high":"#1e1c1c","surface-container-highest":"#242222","on-surface":"#ffffff","on-surface-variant":"#adaaaa","outline":"#767575","secondary":"#ffb300","tertiary":"#ffc107","error":"#ff7351","background":"#0a0a0a"},fontFamily:{headline:["Plus Jakarta Sans","sans-serif"],body:["Inter","sans-serif"],label:["Inter","sans-serif"]}}}};
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ff4d00","primary-dim":"#ff7346","primary-fixed":"#ff784d","on-primary":"#ffffff","surface":"#0a0a0a","surface-container":"#181717","surface-container-low":"#111010","surface-container-high":"#1e1c1c","surface-container-highest":"#242222","surface-dim":"#0e0e0e","surface-bright":"#2c2c2c","surface-variant":"#262626","on-surface":"#ffffff","on-surface-variant":"#adaaaa","outline":"#767575","outline-variant":"#494847","secondary":"#ffb300","secondary-dim":"#eda600","tertiary":"#ffc107","error":"#ff7351","background":"#0a0a0a"},fontFamily:{headline:["Plus Jakarta Sans","sans-serif"],body:["Inter","sans-serif"],label:["Inter","sans-serif"]}}}};
 </script>
 <style>
-.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}.glass-card{background:rgba(36,34,34,0.4);backdrop-filter:blur(20px);border:1px solid rgba(255,77,0,0.1)}.sidebar-collapsed .sidebar-nav{width:72px}.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}.sidebar-collapsed .sidebar-logo-text{display:none}.sidebar-collapsed .sidebar-logo{justify-content:center}.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px}.sidebar-collapsed~main .main-content{margin-left:72px}.sidebar-toggle-btn{left:256px;transition:left 0.3s ease}.sidebar-collapsed~.sidebar-toggle-btn{left:72px}.sidebar-link.active{background:#1e1c1c}.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.glass-card{background:rgba(36,34,34,0.4);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.primary-gradient{background:linear-gradient(135deg,#ff4d00 0%,#ff7346 100%)}
+.secondary-gradient{background:linear-gradient(135deg,#ffb300 0%,#ffc94f 100%)}
+.custom-scrollbar::-webkit-scrollbar{width:4px}
+.custom-scrollbar::-webkit-scrollbar-track{background:#0e0e0e}
+.custom-scrollbar::-webkit-scrollbar-thumb{background:#494847;border-radius:10px}
+.sidebar-collapsed .sidebar-nav{width:72px}
+.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}
+.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}
+.sidebar-link.active{background:#1e1c1c}
+.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 10px currentColor}50%{box-shadow:0 0 25px currentColor}}
+.pulse-glow{animation:pulse-glow 2s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.float-animation{animation:float 3s ease-in-out infinite}
 </style>
 </head>
 <body class="bg-background text-on-surface font-body">
 
-<nav id="sidebarNav" class="sidebar-nav hidden md:flex fixed left-0 top-0 h-full w-64 flex-col py-6 bg-surface-container-low z-50 border-r border-primary-container/10 transition-all duration-300">
-<div class="px-6 mb-8 flex items-center justify-between">
-<div class="flex items-center gap-3 sidebar-logo">
-<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1">nutrition</span></div>
-<div class="sidebar-logo-text"><h1 class="text-lg font-black text-primary-container font-headline tracking-tighter">KetoLab</h1><span class="text-[9px] text-white/40 font-label tracking-[0.2em] uppercase">High-Performance Fuel</span></div>
+<nav id="sidebarNav" class="sidebar-nav hidden md:flex fixed left-0 top-0 h-full w-64 flex-col py-6 bg-surface-container-low z-50 border-r border-primary/10 transition-all duration-300">
+<div class="px-4 mb-8 flex items-center justify-center">
+<div class="flex items-center justify-center sidebar-logo">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1">nutrition</span></div>
+<div class="sidebar-logo-text"><h1 class="text-lg font-black text-primary font-headline tracking-tighter">KetoLab</h1><span class="text-[9px] text-white/40 font-label tracking-[0.2em] uppercase">High-Performance</span></div>
 </div>
 </div>
-<div class="flex-1 space-y-1 px-4">
+<div class="flex-1 space-y-1 px-4 overflow-y-auto custom-scrollbar">
 <a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="index.html"><span class="material-symbols-outlined">dashboard</span><span class="sidebar-text">Inicio</span></a>
 <a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="perfil.html"><span class="material-symbols-outlined">person</span><span class="sidebar-text">Perfil</span></a>
 <a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="alimentos.html"><span class="material-symbols-outlined">restaurant</span><span class="sidebar-text">Alimentos</span></a>
-<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="plan.html"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">event_note</span><span class="sidebar-text">Plan</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="plan.html"><span class="material-symbols-outlined">event_note</span><span class="sidebar-text">Plan</span></a>
 <a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="recetas.html"><span class="material-symbols-outlined">menu_book</span><span class="sidebar-text">Recetas</span></a>
 <a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="compras.html"><span class="material-symbols-outlined">shopping_cart</span><span class="sidebar-text">Compras</span></a>
 <a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="macros.html"><span class="material-symbols-outlined">donut_small</span><span class="sidebar-text">Macros</span></a>
-<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="checklist.html"><span class="material-symbols-outlined">fact_check</span><span class="sidebar-text">Check</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="checklist.html"><span class="material-symbols-outlined">fact_check</span><span class="sidebar-text">Checklist</span></a>
 <a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="entrenamientos.html"><span class="material-symbols-outlined">fitness_center</span><span class="sidebar-text">Gym</span></a>
+<a class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all" href="suplementos.html"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;color:#ff4d00">medication</span><span class="sidebar-text">Suplementos</span></a>
 </div>
 </nav>
 
-<button id="sidebarToggle" onclick="toggleSidebar()" class="sidebar-toggle-btn hidden md:flex fixed top-20 z-50 w-8 h-8 bg-surface-container-low hover:bg-surface-container-high border border-white/10 rounded-r-lg items-center justify-center transition-all duration-300"><span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_left</span></button>
-
-<header class="topbar-desktop hidden md:flex fixed top-0 w-full h-20 px-4 md:px-8 flex items-center justify-between z-40 bg-gradient-to-b from-surface-container-low to-transparent transition-all duration-300">
-<div class="topbar-pl pl-64 transition-all duration-300"><h2 class="text-xl md:text-2xl font-black text-primary-container tracking-tighter font-headline">KetoLab</h2></div>
-</header>
-
 <header class="md:hidden fixed top-0 w-full h-14 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5 px-4 flex items-center justify-between">
-<a href="index.html" class="flex items-center gap-2"><div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-white text-base" style="font-variation-settings:'FILL' 1">nutrition</span></div><span class="text-base font-black text-primary-container tracking-tight font-headline">KetoLab</span></a>
+<a href="index.html" class="flex items-center gap-2"><div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-white text-base" style="font-variation-settings:'FILL' 1">nutrition</span></div><span class="text-base font-black text-primary tracking-tight font-headline">KetoLab</span></a>
 </header>
 
-<main class="main-content md:ml-64 pt-14 md:pt-24 px-4 md:px-6 pb-20 md:pb-12 min-h-screen transition-all duration-300" style="position:relative;z-index:1">
-<div class="max-w-4xl mx-auto space-y-6">
+<main class="main-content md:ml-64 pt-14 md:pt-6 px-4 md:px-8 pb-24 md:pb-8 min-h-screen">
+<div class="max-w-7xl mx-auto space-y-8">
 
-<!-- Header -->
-<div class="flex items-center justify-between">
+<!-- Hero Header -->
+<div class="relative overflow-hidden bg-surface-container rounded-3xl p-8 md:p-12">
+<div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
+<div class="absolute -bottom-20 -left-20 w-48 h-48 bg-secondary/10 rounded-full blur-3xl"></div>
+<div class="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
 <div>
-<h1 class="text-2xl font-headline font-black text-white">Suplementos</h1>
-<p class="text-sm text-on-surface-variant mt-1">Recomendaciones personalizadas</p>
+<span class="text-xs font-bold text-secondary uppercase tracking-widest">Optimizacion Nutricional</span>
+<h1 class="font-headline text-4xl md:text-5xl font-black text-white tracking-tight mt-2">Tu Stack de Suplementos</h1>
+<p class="text-on-surface-variant mt-3 max-w-lg">Optimiza tu rendimiento con suplementos personalizados segun tu perfil y objetivos.</p>
 </div>
-<button onclick="refreshRecommendations()" class="bg-primary-container text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-primary-container/80 transition-all">
-<span class="material-symbols-outlined text-sm">refresh</span>Actualizar
+<button onclick="openAddSupplementModal()" class="primary-gradient px-8 py-4 rounded-2xl text-white font-bold flex items-center gap-3 hover:opacity-90 transition-all shadow-[0_10px_30px_rgba(255,77,0,0.3)] float-animation">
+<span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">add_circle</span>
+Agregar Suplemento
 </button>
 </div>
+</div>
 
-<!-- Disclaimer -->
-<div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4">
-<div class="flex items-start gap-3">
-<span class="material-symbols-outlined text-yellow-400">medical_information</span>
+<!-- Disclaimer Banner -->
+<div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-6">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-amber-400 text-2xl">medical_information</span>
+</div>
 <div>
-<p class="text-sm text-white font-medium">Información informativa</p>
-<p class="text-xs text-on-surface-variant mt-1">Estas recomendaciones son orientativas. Consulta con un profesional de la salud antes de iniciar cualquier suplementación.</p>
+<h4 class="font-headline font-bold text-white text-lg">Informacion Importante</h4>
+<p class="text-on-surface-variant mt-1">Estas recomendaciones son orientativas. Consulta siempre con un profesional de la salud antes de iniciar cualquier suplementacion.</p>
 </div>
 </div>
 </div>
 
-<!-- Tu Perfil -->
-<div class="glass-card rounded-xl p-6">
-<h3 class="text-lg font-headline font-bold text-white mb-4 flex items-center gap-2">
-<span class="material-symbols-outlined text-primary-container">person</span>
-Tu Perfil
-</h3>
-<div id="profileInfo" class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-<div class="bg-surface-container-high rounded-xl p-3">
-<p class="text-xs text-on-surface-variant uppercase">Peso</p>
-<p id="profileWeight" class="text-xl font-bold text-white">-- kg</p>
+<!-- Profile Stats Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="bg-surface-container rounded-2xl p-6 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl text-primary">monitor_weight</span>
 </div>
-<div class="bg-surface-container-high rounded-xl p-3">
-<p class="text-xs text-on-surface-variant uppercase">Objetivo</p>
-<p id="profileGoal" class="text-xl font-bold text-white">--</p>
+<div class="relative">
+<span class="text-[10px] font-bold text-primary uppercase tracking-widest">Peso</span>
+<p id="profileWeight" class="font-headline text-3xl font-black text-white mt-1">--</p>
+<span class="text-xs text-on-surface-variant">kg</span>
 </div>
-<div class="bg-surface-container-high rounded-xl p-3">
-<p class="text-xs text-on-surface-variant uppercase">Entrenamiento</p>
-<p id="profileExercise" class="text-xl font-bold text-white">--</p>
 </div>
-<div class="bg-surface-container-high rounded-xl p-3">
-<p class="text-xs text-on-surface-variant uppercase">Tiempo Keto</p>
-<p id="profileKetoTime" class="text-xl font-bold text-white">--</p>
+<div class="bg-surface-container rounded-2xl p-6 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl text-secondary">flag</span>
+</div>
+<div class="relative">
+<span class="text-[10px] font-bold text-secondary uppercase tracking-widest">Objetivo</span>
+<p id="profileGoal" class="font-headline text-xl font-black text-white mt-1">--</p>
+</div>
+</div>
+<div class="bg-surface-container rounded-2xl p-6 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl text-green-400">fitness_center</span>
+</div>
+<div class="relative">
+<span class="text-[10px] font-bold text-green-400 uppercase tracking-widest">Entrenamiento</span>
+<p id="profileExercise" class="font-headline text-xl font-black text-white mt-1">--</p>
+</div>
+</div>
+<div class="bg-surface-container rounded-2xl p-6 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl text-purple-400">schedule</span>
+</div>
+<div class="relative">
+<span class="text-[10px] font-bold text-purple-400 uppercase tracking-widest">Tiempo Keto</span>
+<p id="profileKetoTime" class="font-headline text-xl font-black text-white mt-1">--</p>
 </div>
 </div>
 </div>
 
-<!-- Suplementos que tomas -->
-<div class="glass-card rounded-xl p-6">
-<h3 class="text-lg font-headline font-bold text-white mb-4 flex items-center gap-2">
-<span class="material-symbols-outlined text-green-400">check_circle</span>
-Tus Suplementos Actuales
-</h3>
-<div id="currentSupplements" class="space-y-3">
-<p class="text-on-surface-variant text-sm py-4 text-center">No tienes suplementos registrados.</p>
+<!-- Current Supplements Section -->
+<div class="bg-surface-container rounded-2xl p-8">
+<div class="flex items-center justify-between mb-8">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-2xl bg-green-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-green-400 text-3xl" style="font-variation-settings:'FILL' 1">check_circle</span>
 </div>
-<button onclick="addSupplementFromList()" class="mt-4 text-primary-container text-sm hover:underline flex items-center gap-1">
-<span class="material-symbols-outlined text-sm">add</span>Agregar suplemento
+<div>
+<h2 class="font-headline text-2xl font-extrabold text-white">Tus Suplementos Activos</h2>
+<p class="text-on-surface-variant text-sm">Suplementos que tomas actualmente</p>
+</div>
+</div>
+<span id="currentCount" class="bg-green-500/20 text-green-400 px-4 py-2 rounded-full text-sm font-bold">0 activos</span>
+</div>
+<div id="currentSupplements" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+<p class="text-on-surface-variant text-center py-12 col-span-full">No tienes suplementos registrados.</p>
+</div>
+</div>
+
+<!-- Recommended Supplements Section -->
+<div class="bg-surface-container rounded-2xl p-8 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-secondary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+<div class="relative">
+<div class="flex items-center justify-between mb-8">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-2xl secondary-gradient flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-3xl" style="font-variation-settings:'FILL' 1">auto_awesome</span>
+</div>
+<div>
+<h2 class="font-headline text-2xl font-extrabold text-white">Recomendados para Ti</h2>
+<p class="text-on-surface-variant text-sm">Basados en tu perfil y objetivos</p>
+</div>
+</div>
+<button onclick="refreshRecommendations()" class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">refresh</span>
 </button>
 </div>
+<div id="recommendedSupplements" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+<div class="flex items-center justify-center py-12 col-span-full">
+<div class="animate-spin rounded-full h-10 w-10 border-b-2 border-secondary"></div>
+<span class="ml-4 text-on-surface-variant">Analizando tu perfil...</span>
+</div>
+</div>
+</div>
+</div>
 
-<!-- Recomendaciones -->
-<div class="glass-card rounded-xl p-6">
-<h3 class="text-lg font-headline font-bold text-white mb-4 flex items-center gap-2">
-<span class="material-symbols-outlined text-secondary">auto_awesome</span>
-Recomendaciones para Ti
-</h3>
-<div id="recommendedSupplements" class="space-y-3">
-<div class="flex items-center justify-center py-8">
-<div class="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
-<span class="ml-3 text-on-surface-variant">Analizando tu perfil...</span>
+<!-- Supplement Categories -->
+<div class="bg-surface-container rounded-2xl p-8">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-14 h-14 rounded-2xl bg-purple-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-purple-400 text-3xl" style="font-variation-settings:'FILL' 1">category</span>
+</div>
+<div>
+<h2 class="font-headline text-2xl font-extrabold text-white">Explorar por Categoria</h2>
+<p class="text-on-surface-variant text-sm">Todos los suplementos disponibles</p>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="supplementCategories">
+<div class="bg-surface-container-high rounded-2xl p-6 cursor-pointer hover:bg-surface-container-highest transition-all group" onclick="filterByCategory('essential')">
+<div class="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-orange-400 text-2xl">star</span>
+</div>
+<h4 class="font-headline font-bold text-white mb-1">Esenciales</h4>
+<p class="text-xs text-on-surface-variant">Fundamentos diarios</p>
+</div>
+<div class="bg-surface-container-high rounded-2xl p-6 cursor-pointer hover:bg-surface-container-highest transition-all group" onclick="filterByCategory('performance')">
+<div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-red-400 text-2xl">bolt</span>
+</div>
+<h4 class="font-headline font-bold text-white mb-1">Rendimiento</h4>
+<p class="text-xs text-on-surface-variant">Musculo y energia</p>
+</div>
+<div class="bg-surface-container-high rounded-2xl p-6 cursor-pointer hover:bg-surface-container-highest transition-all group" onclick="filterByCategory('weight')">
+<div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-green-400 text-2xl">trending_down</span>
+</div>
+<h4 class="font-headline font-bold text-white mb-1">Control Peso</h4>
+<p class="text-xs text-on-surface-variant">Optimizacion keto</p>
+</div>
+<div class="bg-surface-container-high rounded-2xl p-6 cursor-pointer hover:bg-surface-container-highest transition-all group" onclick="filterByCategory('general')">
+<div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-blue-400 text-2xl">health_and_safety</span>
+</div>
+<h4 class="font-headline font-bold text-white mb-1">Salud General</h4>
+<p class="text-xs text-on-surface-variant">Bienestar integral</p>
 </div>
 </div>
 </div>
@@ -134,173 +228,194 @@ Recomendaciones para Ti
 </div>
 </main>
 
-<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-16 flex justify-around items-center z-50 px-0" style="background:rgba(24,23,23,0.95)">
-<a class="flex flex-col items-center text-white/60" href="index.html"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[10px]">Inicio</span></a>
-<a class="flex flex-col items-center text-white/60" href="perfil.html"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
-<a class="flex flex-col items-center text-white/60" href="alimentos.html"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
-<a class="flex flex-col items-center text-white/60" href="plan.html"><span class="material-symbols-outlined text-2xl">event_note</span><span class="text-[10px]">Plan</span></a>
-<a class="flex flex-col items-center text-white/60" href="compras.html"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
-<a class="flex flex-col items-center text-white/60" href="macros.html"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
-<a class="flex flex-col items-center text-white/60" href="checklist.html"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
-<a class="flex flex-col items-center text-white/60" href="entrenamientos.html"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
-<a class="flex flex-col items-center text-white/60" href="suplementos.html"><span class="material-symbols-outlined text-2xl">medication</span><span class="text-[10px]">Sup</span></a>
+<!-- Add Supplement Modal -->
+<div id="addSupplementModal" class="fixed inset-0 z-[60] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeAddSupplementModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none overflow-y-auto">
+<div class="glass-card rounded-3xl p-8 w-full max-w-lg max-h-[90vh] overflow-y-auto pointer-events-auto border border-primary/20">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-2xl font-headline font-black text-white">Agregar Suplemento</h3>
+<button onclick="closeAddSupplementModal()" class="w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
+</div>
+<div id="supplementListModal" class="space-y-3 max-h-96 overflow-y-auto custom-scrollbar"></div>
+<div class="mt-6 pt-6 border-t border-white/10">
+<button onclick="closeAddSupplementModal()" class="w-full py-4 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cerrar</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-28 left-1/2 -translate-x-1/2 z-[70] hidden">
+<div class="glass-card rounded-full px-6 py-3 flex items-center gap-3 shadow-lg border border-primary/20">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1">check_circle</span>
+<span id="toastMessage" class="text-white font-bold">Guardado!</span>
+</div>
+</div>
+
+<nav class="md:hidden fixed bottom-0 w-full bg-surface-container-low/95 backdrop-blur-xl h-16 flex justify-around items-center z-50 border-t border-white/5">
+<a href="index.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[10px]">Inicio</span></a>
+<a href="perfil.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
+<a href="alimentos.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
+<a href="plan.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">event_note</span><span class="text-[10px]">Plan</span></a>
+<a href="compras.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
+<a href="macros.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
+<a href="checklist.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
+<a href="entrenamientos.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
+<a href="suplementos.html" class="flex flex-col items-center text-primary"><span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">medication</span><span class="text-[10px]">Sup</span></a>
 </nav>
 
 <script src="utils.js"></script>
 <script src="modules/supplement-recommender.js"></script>
 <script>
-function toggleTheme(){document.documentElement.classList.toggle("dark");localStorage.setItem("theme",document.documentElement.classList.contains("dark")?"dark":"light")}
-function toggleSidebar(){var b=document.body;var s=document.getElementById("sidebarNav");var t=document.getElementById("sidebarToggle");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");b.classList.toggle("sidebar-collapsed");if(b.classList.contains("sidebar-collapsed")){s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px";localStorage.setItem("sidebarCollapsed","true")}else{s.style.width="256px";s.style.overflow="";if(p)p.style.paddingLeft="272px";if(m)m.style.marginLeft="256px";if(t)t.style.left="256px";localStorage.setItem("sidebarCollapsed","false")}}
-function initSidebar(){var s=document.getElementById("sidebarNav");var t=document.getElementById("sidebarToggle");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");if(localStorage.getItem("sidebarCollapsed")==="true"){document.body.classList.add("sidebar-collapsed");s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px"}}
-if(localStorage.getItem("theme")==="dark"||!localStorage.getItem("theme")){document.documentElement.classList.add("dark")}
-initSidebar();
+if(localStorage.getItem("sidebarCollapsed")==="true"){document.body.classList.add("sidebar-collapsed");var s=document.getElementById("sidebarNav");s.style.width="72px";s.style.overflow="hidden"}
 var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
 
-function loadSupplementData() {
-  var data = getSupplementRecommendations();
-  
-  // Profile
-  var goalLabels = { salud: "Salud", perdida_peso: "Pérdida peso", musculo: "Ganar músculo", mantenimiento: "Mantenimiento" };
-  document.getElementById('profileWeight').textContent = (data.profile.weight || '--') + ' kg';
-  document.getElementById('profileGoal').textContent = goalLabels[data.profile.goal] || 'Salud';
-  document.getElementById('profileExercise').textContent = data.profile.activityLevel || (data.profile.hasExercise ? (data.profile.workoutDays + ' días/sem') : 'No');
-  document.getElementById('profileKetoTime').textContent = (data.profile.monthsOnKeto || '--') + ' meses';
-  
-  // Current supplements
-  var currentHtml = '';
-  if (data.current && data.current.length > 0) {
-    data.current.forEach(function(sup) {
-      currentHtml += renderSupplementCard(sup, true);
-    });
-  } else {
-    currentHtml = '<p class="text-on-surface-variant text-sm py-4 text-center">No tienes suplementos registrados.</p>';
-  }
-  document.getElementById('currentSupplements').innerHTML = currentHtml;
-  
-  // Recommendations
-  var recHtml = '';
-  if (data.recommended && data.recommended.length > 0) {
-    data.recommended.forEach(function(sup) {
-      recHtml += renderSupplementCard(sup, false);
-    });
-  } else {
-    recHtml = '<p class="text-on-surface-variant text-sm py-4 text-center">¡Genial! Tienes todas las recomendaciones cubiertas.</p>';
-  }
-  document.getElementById('recommendedSupplements').innerHTML = recHtml;
+var supplementColors={
+esencial:{icon:"star",color:"#ff9800",bg:"bg-orange-500/20"},
+rendimiento:{icon:"bolt",color:"#ff5722",bg:"bg-red-500/20"},
+control:{icon:"trending_down",color:"#4caf50",bg:"bg-green-500/20"},
+salud:{icon:"health_and_safety",color:"#2196f3",bg:"bg-blue-500/20"}
+};
+
+function loadSupplementData(){
+var data=getSupplementRecommendations();
+var goalLabels={salud:"Salud",perdida_peso:"Perdida peso",musculo:"Ganar musculo",mantenimiento:"Mantenimiento",lose:"Perder grasa",gain:"Ganar musculo",maintain:"Mantener",strength:"Fuerza"};
+document.getElementById("profileWeight").textContent=(data.profile.weight||"--")+" kg";
+document.getElementById("profileGoal").textContent=goalLabels[data.profile.goal]||"Salud";
+document.getElementById("profileExercise").textContent=data.profile.activityLevel||(data.profile.hasExercise?(data.profile.workoutDays+" dias/sem"):"No");
+document.getElementById("profileKetoTime").textContent=(data.profile.monthsOnKeto||"--")+" meses";
+var currentHtml="";
+if(data.current&&data.current.length>0){
+document.getElementById("currentCount").textContent=data.current.length+" activos";
+data.current.forEach(function(sup){
+currentHtml+=renderSupplementCard(sup,true);
+});
+}else{
+document.getElementById("currentCount").textContent="0 activos";
+currentHtml='<p class="text-on-surface-variant text-center py-12 col-span-full">No tienes suplementos registrados.</p>';
+}
+document.getElementById("currentSupplements").innerHTML=currentHtml;
+var recHtml="";
+if(data.recommended&&data.recommended.length>0){
+data.recommended.forEach(function(sup){
+recHtml+=renderSupplementCard(sup,false);
+});
+}else{
+recHtml='<p class="text-on-surface-variant text-center py-12 col-span-full">Genial! Tienes todas las recomendaciones cubiertas.</p>';
+}
+document.getElementById("recommendedSupplements").innerHTML=recHtml;
 }
 
-function renderSupplementCard(sup, isCurrent) {
-  var priorityColors = { alta: 'border-yellow-500', media: 'border-secondary', baja: 'border-white/20' };
-  var borderColor = priorityColors[sup.priority] || 'border-white/20';
-  
-  var html = '<div class="flex items-start gap-4 p-4 rounded-xl bg-surface-container-high border-l-4 ' + borderColor + '">';
-  html += '<div class="w-10 h-10 rounded-lg bg-primary-container/20 flex items-center justify-center flex-shrink-0">';
-  html += '<span class="material-symbols-outlined text-primary-container">' + (sup.icon || 'medication') + '</span></div>';
-  html += '<div class="flex-1 min-w-0">';
-  html += '<div class="flex items-center justify-between">';
-  html += '<h4 class="font-headline font-bold text-white">' + sup.name + '</h4>';
-  if (isCurrent) {
-    html += '<button onclick="removeUserSupplement(\'' + sup.id + '\')" class="text-error/60 hover:text-error"><span class="material-symbols-outlined text-sm">delete</span></button>';
-  } else {
-    html += '<button onclick="addUserSupplement(\'' + sup.id + '\')" class="text-primary-container hover:text-white"><span class="material-symbols-outlined text-sm">add_circle</span></button>';
-  }
-  html += '</div>';
-  html += '<p class="text-xs text-on-surface-variant mt-1">' + sup.description + '</p>';
-  html += '<div class="grid grid-cols-2 gap-2 mt-2 text-xs">';
-  html += '<div><span class="text-on-surface-variant">Dosis:</span> <span class="text-white">' + sup.dosage + '</span></div>';
-  html += '<div><span class="text-on-surface-variant">Momento:</span> <span class="text-white">' + sup.timing + '</span></div>';
-  html += '</div></div></div>';
-  
-  return html;
+function renderSupplementCard(sup,isCurrent){
+var priorityColors={alta:{border:"border-l-amber-500",badge:"bg-amber-500/20 text-amber-400",glow:"shadow-amber-500/20"},media:{border:"border-l-amber-400",badge:"bg-amber-400/20 text-amber-300",glow:"shadow-amber-400/20"},baja:{border:"border-l-white/20",badge:"bg-white/10 text-white/70",glow:""}};
+var colors=priorityColors[sup.priority]||priorityColors.baja;
+var catInfo=supplementColors[sup.category]||supplementColors.salud;
+var html='<div class="bg-surface-container-low rounded-2xl p-6 border-l-4 '+colors.border+' hover:bg-surface-container-high transition-all group shadow-lg '+colors.glow+'">';
+html+='<div class="flex items-start justify-between mb-4">';
+html+='<div class="flex items-center gap-4">';
+html+='<div class="w-14 h-14 rounded-2xl '+catInfo.bg+' flex items-center justify-center group-hover:scale-110 transition-transform">';
+html+='<span class="material-symbols-outlined text-2xl" style="color:'+catInfo.color+'">'+catInfo.icon+'</span></div>';
+html+='<div>';
+html+='<h4 class="font-headline font-bold text-white text-lg">'+sup.name+'</h4>';
+html+='<span class="text-[10px] font-bold uppercase tracking-wider '+colors.badge+' px-2 py-1 rounded-full">Prioridad '+sup.priority+'</span>';
+html+='</div></div>';
+if(isCurrent){
+html+='<button onclick="removeUserSupplement(\''+sup.id+'\')" class="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all">';
+html+='<span class="material-symbols-outlined text-lg">delete</span></button>';
+}else{
+html+='<button onclick="addUserSupplement(\''+sup.id+'\')" class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary hover:bg-primary/30 hover:text-white transition-all">';
+html+='<span class="material-symbols-outlined text-lg" style="font-variation-settings:\'FILL\' 1">add_circle</span></button>';
+}
+html+='</div>';
+html+='<p class="text-on-surface-variant text-sm mb-4">'+sup.description+'</p>';
+html+='<div class="grid grid-cols-2 gap-4">';
+html+='<div class="bg-surface-container-high rounded-xl p-3">';
+html+='<p class="text-[10px] text-on-surface-variant uppercase tracking-wider mb-1">Dosis</p>';
+html+='<p class="font-bold text-white">'+sup.dosage+'</p></div>';
+html+='<div class="bg-surface-container-high rounded-xl p-3">';
+html+='<p class="text-[10px] text-on-surface-variant uppercase tracking-wider mb-1">Momento</p>';
+html+='<p class="font-bold text-white">'+sup.timing+'</p></div>';
+html+='</div></div>';
+return html;
 }
 
-function addUserSupplement(supId) {
-  var data = getSupplementRecommendations();
-  var sup = data.recommended.find(function(s) { return s.id === supId; });
-  if (sup) {
-    addSupplementToUserList(sup);
-    loadSupplementData();
-    showToast(sup.name + ' agregado');
-  }
+function addUserSupplement(supId){
+var data=getSupplementRecommendations();
+var sup=data.recommended.find(function(s){return s.id===supId;});
+if(sup){
+addSupplementToUserList(sup);
+loadSupplementData();
+showToast(sup.name+" agregado");
+}else{
+showToast("Suplemento no encontrado");
+}
 }
 
-function removeUserSupplement(supId) {
-  removeSupplementFromUserList(supId);
-  loadSupplementData();
-  showToast('Suplemento eliminado');
+function removeUserSupplement(supId){
+removeSupplementFromUserList(supId);
+loadSupplementData();
+showToast("Suplemento eliminado");
 }
 
-function refreshRecommendations() {
-  loadSupplementData();
-  showToast('Recomendaciones actualizadas');
+function refreshRecommendations(){
+loadSupplementData();
+showToast("Recomendaciones actualizadas");
 }
 
-function addSupplementFromList() {
-  var data = getSupplementRecommendations();
-  var allSupplements = [];
-  
-  if (typeof supplementRecommender !== 'undefined') {
-    var db = supplementRecommender.supplementsDB;
-    Object.values(db.essential).forEach(function(s) { allSupplements.push(s); });
-    Object.values(db.performance).forEach(function(s) { allSupplements.push(s); });
-    Object.values(db.weight).forEach(function(s) { allSupplements.push(s); });
-    Object.values(db.general).forEach(function(s) { allSupplements.push(s); });
-  }
-  
-  var options = allSupplements.map(function(s) { return s.name; }).join('\n');
-  var choice = prompt('Selecciona un suplemento:\n\n' + options);
-  
-  if (choice) {
-    var selected = allSupplements.find(function(s) { return s.name.toLowerCase() === choice.toLowerCase(); });
-    if (selected) {
-      addUserSupplement(selected.id);
-    } else {
-      showToast('Suplemento no encontrado');
-    }
-  }
+function filterByCategory(category){
+showToast("Filtrando: "+category);
+}
+
+function openAddSupplementModal(){
+var data=getSupplementRecommendations();
+var allSupplements=[];
+if(typeof supplementRecommender!=='undefined'){
+var db=supplementRecommender.supplementsDB;
+if(db.essential)Object.values(db.essential).forEach(function(s){allSupplements.push(s);});
+if(db.performance)Object.values(db.performance).forEach(function(s){allSupplements.push(s);});
+if(db.weight)Object.values(db.weight).forEach(function(s){allSupplements.push(s);});
+if(db.general)Object.values(db.general).forEach(function(s){allSupplements.push(s);});
+}
+var html="";
+allSupplements.forEach(function(sup){
+var catInfo=supplementColors[sup.category]||supplementColors.salud;
+html+='<div onclick="addUserSupplement(\''+sup.id+'\');closeAddSupplementModal();" class="flex items-center gap-4 p-4 bg-surface-container-high rounded-xl cursor-pointer hover:bg-surface-container-highest transition-all">';
+html+='<div class="w-12 h-12 rounded-xl '+catInfo.bg+' flex items-center justify-center flex-shrink-0">';
+html+='<span class="material-symbols-outlined text-xl" style="color:'+catInfo.color+'">'+catInfo.icon+'</span></div>';
+html+='<div class="flex-1">';
+html+='<p class="font-bold text-white">'+sup.name+'</p>';
+html+='<p class="text-xs text-on-surface-variant">'+sup.dosage+' - '+sup.timing+'</p></div>';
+html+='<span class="material-symbols-outlined text-primary">add_circle</span></div>';
+});
+document.getElementById("supplementListModal").innerHTML=html||'<p class="text-center text-on-surface-variant py-8">No hay suplementos disponibles</p>';
+document.getElementById("addSupplementModal").classList.remove("hidden");
+document.getElementById("addSupplementModal").classList.add("flex");
+}
+
+function closeAddSupplementModal(){
+document.getElementById("addSupplementModal").classList.add("hidden");
+document.getElementById("addSupplementModal").classList.remove("flex");
+}
+
+function showToast(msg){
+var toast=document.getElementById("toast");
+var toastMessage=document.getElementById("toastMessage");
+toastMessage.textContent=msg;
+toast.classList.remove("hidden");
+setTimeout(function(){
+toast.classList.add("hidden");
+},3000);
 }
 
 loadSupplementData();
+
+document.addEventListener('visibilitychange',function(){
+if(!document.hidden){
+loadSupplementData();
+}
+});
 </script>
-
-<script>
-(function() {
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js')
-        .then(registration => {
-          console.log('[PWA] Service Worker registrado correctamente en:', registration.scope);
-        })
-        .catch(error => {
-          console.error('[PWA] Error al registrar Service Worker:', error);
-        });
-    });
-  }
-  window.addEventListener('online', () => {
-    if (typeof showToast === 'function') {
-      showToast('Conexión restaurada');
-    }
-  });
-  window.addEventListener('offline', () => {
-    if (typeof showToast === 'function') {
-      showToast('Modo offline');
-    }
-  });
-})();
-</script>
-
-<!-- BottomNavBar (Mobile) -->
-<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-16 flex justify-around items-center z-50 px-0" style="background:rgba(24,23,23,0.95)">
-<a class="flex flex-col items-center text-white/60" href="index.html"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[10px]">Inicio</span></a>
-<a class="flex flex-col items-center text-white/60" href="perfil.html"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
-<a class="flex flex-col items-center text-white/60" href="alimentos.html"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
-<a class="flex flex-col items-center text-white/60" href="plan.html"><span class="material-symbols-outlined text-2xl">event_note</span><span class="text-[10px]">Plan</span></a>
-<a class="flex flex-col items-center text-white/60" href="compras.html"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
-<a class="flex flex-col items-center text-white/60" href="macros.html"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
-<a class="flex flex-col items-center text-white/60" href="checklist.html"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
-<a class="flex flex-col items-center text-white/60" href="entrenamientos.html"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
-<a class="flex flex-col items-center text-primary-container" href="suplementos.html"><span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">medication</span><span class="text-[10px]">Sup</span></a>
-</nav>
-
 </body>
 </html>

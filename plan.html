@@ -16,10 +16,35 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script>
-tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","primary-container":"#ff4d00","on-primary":"#ffffff","on-primary-container":"#ffffff","surface":"#0a0a0a","surface-container":"#181717","surface-container-low":"#111010","surface-container-high":"#1e1c1c","surface-container-highest":"#242222","on-surface":"#ffffff","on-surface-variant":"#adaaaa","outline":"#767575","secondary":"#ffb300","tertiary":"#ffc107","error":"#ff7351","background":"#0a0a0a"},fontFamily:{headline:["Plus Jakarta Sans","sans-serif"],body:["Inter","sans-serif"],label:["Inter","sans-serif"]}}}};
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","primary-container":"#ff4d00","on-primary":"#ffffff","on-primary-container":"#ffffff","surface":"#0a0a0a","surface-container":"#181717","surface-container-low":"#111010","surface-container-high":"#1e1c1c","surface-container-highest":"#242222","on-surface":"#ffffff","on-surface-variant":"#adaaaa","outline":"#767575","secondary":"#ffb300","tertiary":"#ffc107","error":"#ff7351","background":"#0a0a0a"},fontFamily:{headline:["Plus Jakarta Sans","sans-serif"],body:["Inter","sans-serif"],label:["Inter","sans-serif"]},boxShadow:{'primary-container/20':'0 10px 15px -3px rgba(255,77,0,0.2)'}}}};
 </script>
 <style>
-.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}.glass-card{background:rgba(36,34,34,0.4);backdrop-filter:blur(20px);border:1px solid rgba(255,77,0,0.1)}.sidebar-collapsed .sidebar-nav{width:72px}.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}.sidebar-collapsed .sidebar-logo-text{display:none}.sidebar-collapsed .sidebar-logo{justify-content:center}.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px}.sidebar-collapsed~main .main-content{margin-left:72px}.sidebar-toggle-btn{left:256px;transition:left 0.3s ease}.sidebar-collapsed~.sidebar-toggle-btn{left:72px}.sidebar-link.active{background:#1e1c1c}.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.glass-card{background:rgba(26,26,26,0.6);backdrop-filter:blur(16px);border:1px solid rgba(255,77,0,0.15)}
+.sidebar-collapsed .sidebar-nav{width:72px}.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}.sidebar-collapsed .sidebar-logo-text{display:none}.sidebar-collapsed .sidebar-logo{justify-content:center}.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px}.sidebar-collapsed~main .main-content{margin-left:72px}.sidebar-toggle-btn{left:256px;transition:left 0.3s ease}.sidebar-collapsed~.sidebar-toggle-btn{left:72px}.sidebar-link.active{background:#1e1c1c}.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
+#bottomNav a.text-primary-container .material-symbols-outlined{color:#ff4d00!important}
+#bottomNav a.text-primary-container span{color:#ff4d00!important}
+.glow-orange{box-shadow:0 0 20px rgba(255,77,0,0.25)}
+.meal-card{transition:transform 0.2s ease,box-shadow 0.2s ease}.meal-card:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,0.3)}
+.macro-bar{transition:width 0.5s cubic-bezier(0.4,0,0.2,1)}
+.day-btn{transition:all 0.2s ease}.day-btn:hover{transform:scale(1.05)}
+.mode-btn.active{background:linear-gradient(135deg,#ff4d00,#ff6b00);box-shadow:0 4px 15px rgba(255,77,0,0.4)}
+.meal-section{position:relative;overflow:hidden}.meal-section::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,77,0,0.3),transparent)}
+.meal-item{transition:all 0.2s ease}.meal-item:hover{background:rgba(255,77,0,0.05);border-color:rgba(255,77,0,0.2)}
+.meal-item .remove-btn{opacity:0;transition:opacity 0.2s}.meal-item:hover .remove-btn{opacity:1}
+.portion-btn{transition:all 0.15s ease}.portion-btn:hover{background:#ff4d00;color:#fff}
+.summary-card{background:linear-gradient(135deg,rgba(26,26,26,0.8),rgba(30,28,28,0.9));border:1px solid rgba(255,77,0,0.1)}
+.empty-state{background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(255,77,0,0.02) 10px,rgba(255,77,0,0.02) 20px)}
+.food-selector-item{transition:all 0.15s ease}.food-selector-item:hover{background:rgba(255,77,0,0.1);border-color:rgba(255,77,0,0.3)}.food-selector-item:active{transform:scale(0.98)}
+.progress-ring{transform:rotate(-90deg)}
+.stock-indicator{height:3px;border-radius:2px;background:rgba(255,255,255,0.1)}
+.stock-fill{height:100%;border-radius:2px;transition:width 0.3s ease}
+.weekly-plan-modal{height:100vh;max-height:100vh}.weekly-plan-modal>div:nth-child(2){height:calc(100vh - 80px);max-height:calc(100vh - 80px)}
+.meal-card-preview{transition:all 0.2s ease}.meal-card-preview:hover{background:rgba(255,77,0,0.05)}
+.recipe-detail{border-left:2px solid var(--primary-container)}
+.ingredient-item{transition:background 0.15s}.ingredient-item:hover{background:rgba(255,255,255,0.05)}
+@keyframes pulse-green{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.4)}50%{box-shadow:0 0 0 15px rgba(34,197,94,0)}}
+.animate-pulse-green{animation:pulse-green 2s infinite}
 </style>
 </head>
 <body class="bg-background text-on-surface font-body">
@@ -53,7 +78,11 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 </header>
 <main class="main-content md:ml-64 pt-14 md:pt-24 px-4 md:px-6 pb-20 md:pb-12 min-h-screen transition-all duration-300">
 <div class="max-w-4xl mx-auto space-y-6">
-<div class="flex items-center justify-between mb-4"><div><p id="dateDisplay" class="text-xs text-on-surface-variant uppercase tracking-wider"></p><h1 class="text-2xl font-headline font-black text-white">Plan Semanal</h1></div><button onclick="openWeeklyModal()" class="bg-primary-container text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_month</span>Semana</button></div>
+<div class="flex items-center justify-between mb-4"><div><p id="dateDisplay" class="text-xs text-on-surface-variant uppercase tracking-wider"></p><h1 class="text-2xl font-headline font-black text-white">Plan Semanal</h1></div><div class="flex items-center gap-2"><span id="planStatusBadge" class="hidden px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1"></span><button onclick="openWeeklyModal()" class="bg-primary-container text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_month</span>Semana</button></div></div>
+
+<!-- Plan Status Banner -->
+<div id="activePlanBanner" class="hidden glass-card rounded-xl p-4 mb-4 border-l-4 border-green-500">
+</div>
 <div id="weekSelector" class="flex gap-1 mb-4 overflow-x-auto pb-2"></div>
 
 <!-- Toggle Modo Manual/Automático -->
@@ -93,7 +122,30 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
   </div>
 </div>
 
-<div class="glass-card rounded-xl p-4 mb-6">
+<!-- Botón Generar Plan Semanal -->
+<div class="glass-card rounded-xl p-4 mb-4 summary-card">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-container to-secondary flex items-center justify-center">
+        <span class="material-symbols-outlined text-white text-2xl" style="font-variation-settings:'FILL' 1">auto_awesome</span>
+      </div>
+      <div>
+        <h3 class="text-white font-headline font-bold">Plan Semanal IA</h3>
+        <p class="text-xs text-on-surface-variant">Generado automáticamente según tu perfil</p>
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <button id="btnVerPlanSemanal" onclick="openWeeklyPlanPreview()" class="hidden bg-surface-container-high text-white px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-1 hover:bg-surface-container-highest transition-all">
+        <span class="material-symbols-outlined text-sm">visibility</span>Ver Plan
+      </button>
+      <button onclick="openWeeklyPlanGenerator()" class="bg-gradient-to-r from-primary-container to-secondary text-white px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-lg">
+        <span class="material-symbols-outlined text-sm">auto_awesome</span>Generar Plan Semanal
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="glass-card rounded-xl p-4 mb-6 summary-card">
 <div class="flex items-center justify-between mb-4"><span class="text-xs text-on-surface-variant uppercase tracking-wider">Resumen</span><button onclick="copyPlan()" class="text-xs text-primary-container hover:underline">Copiar ayer</button></div>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
 <div class="bg-surface-container-high rounded-xl p-3 text-center"><div class="flex items-center justify-between mb-2"><span class="text-[10px] text-on-surface-variant uppercase">Calorías</span><span id="caloriePct" class="text-xs font-bold text-yellow-400">0%</span></div><div class="text-2xl font-bold text-white mb-1"><span id="currentCal">0</span><span class="text-sm text-on-surface-variant">/</span><span id="targetCal" class="text-sm text-on-surface-variant">1800</span></div><div class="h-2 bg-surface-container-highest rounded-full overflow-hidden"><div id="calorieBar" class="h-full bg-yellow-400 rounded-full transition-all" style="width:0%"></div></div><div id="calorieRemaining" class="text-[10px] text-on-surface-variant mt-1">Restan: 1800 kcal</div></div>
@@ -103,31 +155,34 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 </div>
 <div class="flex items-center justify-between text-xs"><span class="text-on-surface-variant">Total: <span id="mealCount">0</span> alimentos</span><button onclick="resetPlan()" class="text-error hover:underline">Reiniciar plan</button></div>
 </div>
-<div class="glass-card rounded-xl overflow-hidden"><div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/5"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-yellow-400">wb_sunny</span></div><div><p class="font-headline font-bold text-white">Desayuno</p><p id="desayunoMacros" class="text-xs text-on-surface-variant">0 kcal</p></div></div><button onclick="openFoodSelector('desayuno')" class="bg-primary-container text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-primary-container/80 transition-all"><span class="material-symbols-outlined text-sm">add</span>Agregar</button></div><div id="desayunoItems" class="p-3 space-y-2 min-h-[60px]"></div></div>
-<div class="glass-card rounded-xl overflow-hidden"><div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/5"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-orange-400">light_mode</span></div><div><p class="font-headline font-bold text-white">Almuerzo</p><p id="almuerzoMacros" class="text-xs text-on-surface-variant">0 kcal</p></div></div><button onclick="openFoodSelector('almuerzo')" class="bg-primary-container text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-primary-container/80 transition-all"><span class="material-symbols-outlined text-sm">add</span>Agregar</button></div><div id="almuerzoItems" class="p-3 space-y-2 min-h-[60px]"></div></div>
-<div class="glass-card rounded-xl overflow-hidden"><div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/5"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-purple-400">nightlight</span></div><div><p class="font-headline font-bold text-white">Cena</p><p id="cenaMacros" class="text-xs text-on-surface-variant">0 kcal</p></div></div><button onclick="openFoodSelector('cena')" class="bg-primary-container text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-primary-container/80 transition-all"><span class="material-symbols-outlined text-sm">add</span>Agregar</button></div><div id="cenaItems" class="p-3 space-y-2 min-h-[60px]"></div></div>
-<div class="glass-card rounded-xl overflow-hidden"><div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/5"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-pink-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-pink-400">cookie</span></div><div><p class="font-headline font-bold text-white">Snacks</p><p id="snacksMacros" class="text-xs text-on-surface-variant">0 kcal</p></div></div><button onclick="openFoodSelector('snacks')" class="bg-primary-container text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-primary-container/80 transition-all"><span class="material-symbols-outlined text-sm">add</span>Agregar</button></div><div id="snacksItems" class="p-3 space-y-2 min-h-[60px]"></div></div>
+<div class="glass-card rounded-xl overflow-hidden meal-section"><div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/5"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-yellow-400">wb_sunny</span></div><div><p class="font-headline font-bold text-white">Desayuno</p><p id="desayunoMacros" class="text-xs text-on-surface-variant">0 kcal</p></div></div><button onclick="openFoodSelector('desayuno')" class="bg-primary-container text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-primary-container/80 transition-all hover:shadow-lg hover:shadow-primary-container/20"><span class="material-symbols-outlined text-sm">add</span>Agregar</button></div><div id="desayunoItems" class="p-3 space-y-2 min-h-[60px] empty-state"></div></div>
+<div class="glass-card rounded-xl overflow-hidden meal-section"><div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/5"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-orange-400">light_mode</span></div><div><p class="font-headline font-bold text-white">Almuerzo</p><p id="almuerzoMacros" class="text-xs text-on-surface-variant">0 kcal</p></div></div><button onclick="openFoodSelector('almuerzo')" class="bg-primary-container text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-primary-container/80 transition-all hover:shadow-lg hover:shadow-primary-container/20"><span class="material-symbols-outlined text-sm">add</span>Agregar</button></div><div id="almuerzoItems" class="p-3 space-y-2 min-h-[60px] empty-state"></div></div>
+<div class="glass-card rounded-xl overflow-hidden meal-section"><div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/5"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-purple-400">nightlight</span></div><div><p class="font-headline font-bold text-white">Cena</p><p id="cenaMacros" class="text-xs text-on-surface-variant">0 kcal</p></div></div><button onclick="openFoodSelector('cena')" class="bg-primary-container text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-primary-container/80 transition-all hover:shadow-lg hover:shadow-primary-container/20"><span class="material-symbols-outlined text-sm">add</span>Agregar</button></div><div id="cenaItems" class="p-3 space-y-2 min-h-[60px] empty-state"></div></div>
+<div class="glass-card rounded-xl overflow-hidden meal-section"><div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/5"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-pink-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-pink-400">cookie</span></div><div><p class="font-headline font-bold text-white">Snacks</p><p id="snacksMacros" class="text-xs text-on-surface-variant">0 kcal</p></div></div><button onclick="openFoodSelector('snacks')" class="bg-primary-container text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-primary-container/80 transition-all hover:shadow-lg hover:shadow-primary-container/20"><span class="material-symbols-outlined text-sm">add</span>Agregar</button></div><div id="snacksItems" class="p-3 space-y-2 min-h-[60px] empty-state"></div></div>
 <div id="weeklyOverview" class="glass-card rounded-xl p-4 hidden"><h3 class="text-sm font-bold text-white mb-3">Resumen Semanal</h3><div id="weeklyStats" class="grid grid-cols-7 gap-2"></div></div>
 </div>
 </main>
 <div id="foodSelectorModal" class="fixed inset-0 z-[60] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeFoodSelector()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-2xl max-h-[85vh] flex flex-col pointer-events-auto"><div class="flex justify-between items-center mb-4"><div><h3 class="text-lg font-headline font-bold text-white">Agregar a <span id="selectedMeal"></span></h3><p class="text-xs text-on-surface-variant mt-1">Desde tu despensa</p></div><button onclick="closeFoodSelector()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div class="relative mb-4"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span><input type="text" id="foodSearch" placeholder="Buscar en despensa..." class="w-full bg-surface-container text-white border border-outline rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-primary-container" oninput="filterFoods()"></div><div id="foodList" class="flex-1 overflow-y-auto"></div></div></div></div>
 <div id="portionModal" class="fixed inset-0 z-[60] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closePortionModal()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-headline font-bold text-white" id="portionFoodName"></h3><button onclick="closePortionModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div class="bg-surface-container-high rounded-xl p-4 mb-4"><div class="grid grid-cols-4 gap-2 text-center"><div><p class="text-[10px] text-on-surface-variant uppercase">Cal</p><p id="portionCalories" class="text-lg font-bold text-yellow-400">0</p></div><div><p class="text-[10px] text-on-surface-variant uppercase">Prot</p><p id="portionProtein" class="text-lg font-bold text-orange-400">0g</p></div><div><p class="text-[10px] text-on-surface-variant uppercase">Gras</p><p id="portionFat" class="text-lg font-bold text-yellow-300">0g</p></div><div><p class="text-[10px] text-on-surface-variant uppercase">Carb</p><p id="portionCarbs" class="text-lg font-bold text-cyan-400">0g</p></div></div></div><div class="mb-3"><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Unidad de medida</label><div id="planUnitSelector" class="flex flex-wrap gap-2"></div></div><div class="mb-4"><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Cantidad</label><div class="flex items-center gap-3"><button onclick="adjustTempQty(-1)" class="w-12 h-12 rounded-xl bg-surface-container-high text-white font-bold text-xl hover:bg-surface-container-highest transition-all">−</button><input type="number" id="tempQty" value="1" min="0.1" step="0.1" class="flex-1 bg-surface-container text-white border border-outline rounded-xl px-4 py-3 text-center text-xl font-bold focus:outline-none focus:border-primary-container"><button onclick="adjustTempQty(1)" class="w-12 h-12 rounded-xl bg-surface-container-high text-white font-bold text-xl hover:bg-surface-container-highest transition-all">+</button></div></div><div class="bg-primary-container/20 rounded-xl p-3 mb-4 border border-primary-container/30"><div class="flex justify-between items-center"><span class="text-sm text-white/70">Total en gramos:</span><span id="portionPreview" class="text-2xl font-bold text-primary-container">0 g</span></div></div><div id="stockWarning" class="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3 mb-4 hidden"><div class="flex items-center gap-2 text-yellow-400 text-sm"><span class="material-symbols-outlined">warning</span><span id="stockWarningText"></span></div></div><input type="hidden" id="selectedFoodId"><input type="hidden" id="selectedMealType"><div class="flex gap-3"><button onclick="closePortionModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="addFoodToMeal()" class="flex-1 py-3 rounded-xl bg-primary-container text-white font-bold hover:bg-primary-container/80 transition-colors">Agregar</button></div></div></div></div>
 <div id="stockModal" class="fixed inset-0 z-[70] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto text-center"><div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-4xl text-yellow-400">warning</span></div><h3 class="text-xl font-headline font-bold text-white mb-2">Stock Insuficiente</h3><p class="text-white/70 mb-2">Solo tienes disponible:</p><p id="availableStock" class="text-3xl font-bold text-yellow-400 mb-4">0 g</p><p class="text-white/50 text-sm mb-6">de <span id="requestedStock" class="text-white">0 g</span></p><div class="flex gap-3"><button onclick="closeStockModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="addAvailableStock()" class="flex-1 py-3 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors">Agregar lo disponible</button></div></div></div></div>
-<div id="weeklyModal" class="fixed inset-0 z-[70] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWeeklyModal()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-md pointer-events-auto"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-headline font-bold text-white">Plan Semanal</h3><button onclick="closeWeeklyModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div id="weeklyDayList" class="space-y-2 mb-4"></div><div class="border-t border-white/10 pt-4 mb-4"><p class="text-xs text-on-surface-variant mb-3">Copiar plan de un día a otro:</p><div class="flex gap-2 mb-4"><select id="copyFromDay" class="flex-1 bg-surface-container text-white rounded-lg px-3 py-2 text-sm"></select><span class="text-white/50">→</span><select id="copyToDay" class="flex-1 bg-surface-container text-white rounded-lg px-3 py-2 text-sm"></select></div><button onclick="copyDayPlan()" class="w-full py-3 rounded-xl bg-primary-container text-white font-bold mb-3">Copiar Día</button><button onclick="resetSelectedDay()" class="w-full py-3 rounded-xl bg-red-500/20 text-red-400 font-medium hover:bg-red-500/30 transition-colors">Reiniciar Día Actual</button></div></div></div></div>
+<div id="weeklyModal" class="fixed inset-0 z-[70] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWeeklyModal()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-md pointer-events-auto max-h-[90vh] overflow-y-auto"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-headline font-bold text-white">Plan Semanal</h3><button onclick="closeWeeklyModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div id="weeklyDayList" class="space-y-2 mb-4"></div><div class="border-t border-white/10 pt-4 mb-4"><p class="text-xs text-on-surface-variant mb-3">Copiar plan de un día a otro:</p><div class="flex gap-2 mb-4"><select id="copyFromDay" class="flex-1 bg-surface-container text-white rounded-lg px-3 py-2 text-sm"></select><span class="text-white/50">→</span><select id="copyToDay" class="flex-1 bg-surface-container text-white rounded-lg px-3 py-2 text-sm"></select></div><button onclick="copyDayPlan()" class="w-full py-3 rounded-xl bg-primary-container text-white font-bold mb-3">Copiar Día</button><button onclick="resetSelectedDay()" class="w-full py-3 rounded-xl bg-red-500/20 text-red-400 font-medium hover:bg-red-500/30 transition-colors mb-2">Reiniciar Día Actual</button></div><div class="border-t border-white/10 pt-4"><p class="text-xs text-on-surface-variant mb-3">¿Terminaste la semana?</p><button onclick="openFinalizePlanModal()" class="w-full py-3 rounded-xl bg-green-500/20 text-green-400 font-bold hover:bg-green-500/30 transition-colors mb-2">Finalizar Plan Semanal</button><button onclick="confirmResetWeeklyPlan()" class="w-full py-2 rounded-xl bg-red-500/10 text-red-400 font-medium hover:bg-red-500/20 transition-colors text-xs">Borrar Plan Semanal</button></div></div></div></div>
 <div id="autoPlanWarningModal" class="fixed inset-0 z-[80] hidden"><div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto text-center border-2 border-yellow-500/50"><div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-4xl text-yellow-400">warning</span></div><h3 class="text-xl font-headline font-bold text-yellow-400 mb-2">Advertencia</h3><p class="text-white/80 mb-2">Estás modificando un plan generado automáticamente.</p><p class="text-white/60 text-sm mb-6">Los resultados pueden no ser los indicados para tu objetivo. ¿Deseas continuar?</p><div class="flex gap-3"><button onclick="closeAutoPlanWarning()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="confirmAutoPlanModification()" class="flex-1 py-3 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors">Continuar</button></div></div></div></div>
-<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-16 flex justify-around items-center z-50 px-0" style="background:rgba(24,23,23,0.95)">
-<a class="flex flex-col items-center text-white/60" href="index.html"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[10px]">Inicio</span></a>
-<a class="flex flex-col items-center text-white/60" href="perfil.html"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
-<a class="flex flex-col items-center text-white/60" href="alimentos.html"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
-<a class="flex flex-col items-center text-white/60" href="plan.html"><span class="material-symbols-outlined text-2xl">event_note</span><span class="text-[10px]">Plan</span></a>
-<a class="flex flex-col items-center text-white/60" href="compras.html"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
-<a class="flex flex-col items-center text-white/60" href="macros.html"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
-<a class="flex flex-col items-center text-white/60" href="checklist.html"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
-<a class="flex flex-col items-center text-white/60" href="entrenamientos.html"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
-<a class="flex flex-col items-center text-white/60" href="suplementos.html"><span class="material-symbols-outlined text-2xl">medication</span><span class="text-[10px]">Sup</span></a>
+<!-- BottomNavBar (Mobile) - 9 items -->
+<nav id="bottomNav" class="md:hidden fixed bottom-0 left-0 w-full h-16 flex justify-around items-center z-50 px-0" style="background:rgba(24,23,23,0.95);border-top:1px solid rgba(255,77,0,0.3)">
+<a href="index.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[10px]">Inicio</span></a>
+<a href="perfil.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
+<a href="alimentos.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
+<a href="plan.html" class="flex flex-col items-center text-primary-container relative"><span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">event_note</span><span class="text-[10px]">Plan</span><span class="absolute -top-1 -right-1 w-2 h-2 bg-primary-container rounded-full"></span></a>
+<a href="compras.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
+<a href="macros.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
+<a href="checklist.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
+<a href="entrenamientos.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
+<a href="suplementos.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">medication</span><span class="text-[10px]">Sup</span></a>
 </nav>
 <script src="utils.js"></script>
 <script src="data/recipes-db.js"></script>
+<script src="data/recipe-details.js"></script>
+<script src="modules/weekly-meal-generator.js"></script>
 <script src="modules/auto-meal-generator.js"></script>
 <script>
 function toggleTheme(){document.documentElement.classList.toggle("dark");localStorage.setItem("theme",document.documentElement.classList.contains("dark")?"dark":"light")}
@@ -189,7 +244,7 @@ var defaultFoods=[
 var mealNames={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snacks"};
 function getMealPlan(){var stored=safeParseJSON(localStorage.getItem("mealPlan_"+today), {});if(Object.keys(stored).length===0){stored={desayuno:[],almuerzo:[],cena:[],snacks:[]};localStorage.setItem("mealPlan_"+today,JSON.stringify(stored))}return stored}
 function saveMealPlan(plan){localStorage.setItem("mealPlan_"+today,JSON.stringify(plan))}
-function renderMealPlan(){var plan=getMealPlan(currentDay);var totalCal=0,totalProt=0,totalFat=0,totalCarbs=0,totalItems=0;var macros=JSON.parse(localStorage.getItem("keto_macros")||"{}");var targetCal=parseInt(macros.calories)||1800;var targetProt=parseInt(macros.protein)||160;var targetFat=parseInt(macros.fat)||150;var targetCarbs=parseInt(macros.carbs)||25;Object.keys(plan).forEach(function(meal){var container=document.getElementById(meal+"Items");var mealCal=0;if(plan[meal].length===0){container.innerHTML='<p class="text-center text-on-surface-variant text-sm py-4">Sin alimentos. Toca "Agregar" para anadir.</p>'}else{container.innerHTML="";plan[meal].forEach(function(item,idx){var food=defaultFoods.find(function(f){return f.id===item.id})||item;var itemPort=parseFloat(item.portion)||100;var cal,prot,fat,carbs;if(item.isRecipe&&item.baseCalories){var basePort=parseFloat(item.basePortion)||100;var ratio=itemPort/basePort;cal=Math.round(item.baseCalories*ratio);prot=Math.round(item.baseProtein*ratio*10)/10;fat=Math.round(item.baseFat*ratio*10)/10;carbs=Math.round(item.baseCarbs*ratio*10)/10}else{var foodPort=parseFloat(food.portion)||100;var ratio=itemPort/foodPort;cal=Math.round((parseFloat(food.calories)||0)*ratio);prot=Math.round((parseFloat(food.protein)||0)*ratio*10)/10;fat=Math.round((parseFloat(food.fat)||0)*ratio*10)/10;carbs=Math.round((parseFloat(food.carbs)||0)*ratio*10)/10}mealCal+=cal;totalProt+=prot;totalFat+=fat;totalCarbs+=carbs;totalItems++;var html='<div class="flex items-center gap-3 bg-surface-container-low rounded-lg p-3">';html+='<div class="flex-1 min-w-0"><p class="font-medium text-white truncate">'+food.name+'</p><p class="text-xs text-on-surface-variant">'+itemPort+'g - '+cal.toLocaleString()+' kcal</p></div>';html+='<div class="flex items-center gap-1">';html+='<button onclick="changePortion(\''+meal+'\','+idx+',-10)" class="w-7 h-7 rounded bg-surface-container-high text-white text-xs hover:bg-surface-container-highest">-</button>';html+='<span class="w-12 text-center text-xs">'+itemPort+'g</span>';html+='<button onclick="changePortion(\''+meal+'\','+idx+',10)" class="w-7 h-7 rounded bg-surface-container-high text-white text-xs hover:bg-surface-container-highest">+</button>';html+='<button onclick="removeFromMeal(\''+meal+'\','+idx+')" class="w-7 h-7 rounded bg-error/20 text-error hover:bg-error/30 ml-2"><span class="material-symbols-outlined text-sm">delete</span></button>';html+='</div></div>';container.innerHTML+=html})}document.getElementById(meal+"Macros").textContent=mealCal.toLocaleString()+" kcal";totalCal+=mealCal});var calPct=targetCal>0?Math.round((totalCal/targetCal)*100):0;var protPct=targetProt>0?Math.round((totalProt/targetProt)*100):0;var fatPct=targetFat>0?Math.round((totalFat/targetFat)*100):0;var carbsPct=targetCarbs>0?Math.round((totalCarbs/targetCarbs)*100):0;document.getElementById("currentCal").textContent=totalCal.toLocaleString();document.getElementById("targetCal").textContent=targetCal.toLocaleString();document.getElementById("calorieBar").style.width=Math.min(calPct,100)+"%";document.getElementById("caloriePct").textContent=calPct+"%";document.getElementById("calorieRemaining").textContent="Restan: "+Math.max(0,targetCal-totalCal).toLocaleString()+" kcal";document.getElementById("currentProtein").textContent=Math.round(totalProt);document.getElementById("targetProtein").textContent=targetProt+"g";document.getElementById("proteinBar").style.width=Math.min(protPct,100)+"%";document.getElementById("proteinPct").textContent=protPct+"%";document.getElementById("proteinRemaining").textContent="Restan: "+Math.max(0,targetProt-totalProt).toFixed(0)+"g";document.getElementById("currentFat").textContent=Math.round(totalFat);document.getElementById("targetFat").textContent=targetFat+"g";document.getElementById("fatBar").style.width=Math.min(fatPct,100)+"%";document.getElementById("fatPct").textContent=fatPct+"%";document.getElementById("fatRemaining").textContent="Restan: "+Math.max(0,targetFat-totalFat).toFixed(0)+"g";document.getElementById("currentCarbs").textContent=Math.round(totalCarbs);document.getElementById("targetCarbs").textContent=targetCarbs+"g";document.getElementById("carbsBar").style.width=Math.min(carbsPct,100)+"%";document.getElementById("carbsPct").textContent=carbsPct+"%";document.getElementById("carbsRemaining").textContent="Restan: "+Math.max(0,targetCarbs-totalCarbs).toFixed(0)+"g";document.getElementById("mealCount").textContent=totalItems;var userData={proteinConsumed:totalProt};localStorage.setItem("userData",JSON.stringify(userData))}
+function renderMealPlan(){var plan=getMealPlan(currentDay);var totalCal=0,totalProt=0,totalFat=0,totalCarbs=0,totalItems=0;var macros=JSON.parse(localStorage.getItem("keto_macros")||"{}");var targetCal=parseInt(macros.calories)||1800;var targetProt=parseInt(macros.protein)||160;var targetFat=parseInt(macros.fat)||150;var targetCarbs=parseInt(macros.carbs)||25;Object.keys(plan).forEach(function(meal){var container=document.getElementById(meal+"Items");if(!container)return;var mealCal=0;if(plan[meal].length===0){container.innerHTML='<p class="text-center text-on-surface-variant text-sm py-4">Sin alimentos. Toca "Agregar" para anadir.</p>'}else{container.innerHTML="";plan[meal].forEach(function(item,idx){var food=defaultFoods.find(function(f){return f.id===item.id})||item;var itemPort=parseFloat(item.portion)||100;var cal,prot,fat,carbs;if(item.isRecipe&&item.baseCalories){var basePort=parseFloat(item.basePortion)||100;var ratio=itemPort/basePort;cal=Math.round(item.baseCalories*ratio);prot=Math.round(item.baseProtein*ratio*10)/10;fat=Math.round(item.baseFat*ratio*10)/10;carbs=Math.round(item.baseCarbs*ratio*10)/10}else{var foodPort=parseFloat(food.portion)||100;var ratio=itemPort/foodPort;cal=Math.round((parseFloat(food.calories)||0)*ratio);prot=Math.round((parseFloat(food.protein)||0)*ratio*10)/10;fat=Math.round((parseFloat(food.fat)||0)*ratio*10)/10;carbs=Math.round((parseFloat(food.carbs)||0)*ratio*10)/10}mealCal+=cal;totalProt+=prot;totalFat+=fat;totalCarbs+=carbs;totalItems++;var html='<div class="flex items-center gap-3 bg-surface-container-low rounded-lg p-3">';html+='<div class="flex-1 min-w-0"><p class="font-medium text-white truncate">'+food.name+'</p><p class="text-xs text-on-surface-variant">'+itemPort+'g - '+cal.toLocaleString()+' kcal</p></div>';html+='<div class="flex items-center gap-1">';html+='<button onclick="changePortion(\''+meal+'\','+idx+',-10)" class="portion-btn w-7 h-7 rounded bg-surface-container-high text-white text-xs hover:bg-surface-container-highest">-</button>';html+='<span class="w-12 text-center text-xs">'+itemPort+'g</span>';html+='<button onclick="changePortion(\''+meal+'\','+idx+',10)" class="portion-btn w-7 h-7 rounded bg-surface-container-high text-white text-xs hover:bg-surface-container-highest">+</button>';html+='<button onclick="removeFromMeal(\''+meal+'\','+idx+')" class="w-7 h-7 rounded bg-error/20 text-error hover:bg-error/30 ml-2"><span class="material-symbols-outlined text-sm">delete</span></button>';html+='</div></div>';container.innerHTML+=html})}document.getElementById(meal+"Macros").textContent=mealCal.toLocaleString()+" kcal";totalCal+=mealCal});var calPct=targetCal>0?Math.round((totalCal/targetCal)*100):0;var protPct=targetProt>0?Math.round((totalProt/targetProt)*100):0;var fatPct=targetFat>0?Math.round((totalFat/targetFat)*100):0;var carbsPct=targetCarbs>0?Math.round((totalCarbs/targetCarbs)*100):0;document.getElementById("currentCal").textContent=totalCal.toLocaleString();document.getElementById("targetCal").textContent=targetCal.toLocaleString();document.getElementById("calorieBar").style.width=Math.min(calPct,100)+"%";document.getElementById("caloriePct").textContent=calPct+"%";document.getElementById("calorieRemaining").textContent="Restan: "+Math.max(0,targetCal-totalCal).toLocaleString()+" kcal";document.getElementById("currentProtein").textContent=Math.round(totalProt);document.getElementById("targetProtein").textContent=targetProt+"g";document.getElementById("proteinBar").style.width=Math.min(protPct,100)+"%";document.getElementById("proteinPct").textContent=protPct+"%";document.getElementById("proteinRemaining").textContent="Restan: "+Math.max(0,targetProt-totalProt).toFixed(0)+"g";document.getElementById("currentFat").textContent=Math.round(totalFat);document.getElementById("targetFat").textContent=targetFat+"g";document.getElementById("fatBar").style.width=Math.min(fatPct,100)+"%";document.getElementById("fatPct").textContent=fatPct+"%";document.getElementById("fatRemaining").textContent="Restan: "+Math.max(0,targetFat-totalFat).toFixed(0)+"g";document.getElementById("currentCarbs").textContent=Math.round(totalCarbs);document.getElementById("targetCarbs").textContent=targetCarbs+"g";document.getElementById("carbsBar").style.width=Math.min(carbsPct,100)+"%";document.getElementById("carbsPct").textContent=carbsPct+"%";document.getElementById("carbsRemaining").textContent="Restan: "+Math.max(0,targetCarbs-totalCarbs).toFixed(0)+"g";document.getElementById("mealCount").textContent=totalItems;var userData={proteinConsumed:totalProt};localStorage.setItem("userData",JSON.stringify(userData))}
 function changePortion(meal,idx,delta){
 var sessionKey = 'autoPlanWarningMeal_' + currentDay;
 if (!sessionStorage.getItem(sessionKey)) {
@@ -233,6 +288,7 @@ return{color:"#4caf50",text:"OK"};
 function openFoodSelector(meal){document.getElementById("selectedMeal").textContent=mealNames[meal];document.getElementById("selectedMealType").value=meal;document.getElementById("foodSearch").value="";filterFoods();document.getElementById("foodSelectorModal").classList.remove("hidden");document.getElementById("foodSelectorModal").classList.add("flex")}
 function closeFoodSelector(){document.getElementById("foodSelectorModal").classList.add("hidden");document.getElementById("foodSelectorModal").classList.remove("flex")}
 function filterFoods(){
+if(currentFoods.length===0){currentFoods=getAllFoodsForPlan();}
 var search=document.getElementById("foodSearch").value.toLowerCase();
 var filtered=currentFoods.filter(function(f){return f.name.toLowerCase().includes(search)});
 var html="";
@@ -420,6 +476,7 @@ getFoods();renderMealPlan();initWeekSelector();
 function initWeekSelector(){
 var weekDays=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
 var container=document.getElementById("weekSelector");
+if(!container)return;
 var today=new Date();
 var dayOfWeek=today.getDay();
 var monday=new Date(today);
@@ -537,27 +594,39 @@ document.getElementById("weeklyOverview").classList.remove("hidden");
 }
 function openWeeklyModal(){
 var container=document.getElementById("weeklyDayList");
+if(!container)return;
 var monday=new Date();monday.setDate(monday.getDate()-(monday.getDay()<=0?6:monday.getDay()-1));
 var weekDays=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
-var dayNames=["desayuno","almuerzo","cena","snacks"];
+var weekPlan=typeof loadWeeklyPlan==="function"?loadWeeklyPlan():null;
 var html="";
 for(var i=0;i<7;i++){
 var d=new Date(monday);d.setDate(monday.getDate()+i);
 var dateKey=d.toISOString().slice(0,10);
-var plan=getMealPlan(dateKey);
-var itemCount=(plan.desayuno?plan.desayuno.length:0)+(plan.almuerzo?plan.almuerzo.length:0)+(plan.cena?plan.cena.length:0)+(plan.snacks?plan.snacks.length:0);
+var manualPlan=getMealPlan(dateKey);
+var weeklyDayData=weekPlan&&weekPlan.days&&weekPlan.days[dateKey]?weekPlan.days[dateKey]:null;
+var manualCount=(manualPlan.desayuno?manualPlan.desayuno.length:0)+(manualPlan.almuerzo?manualPlan.almuerzo.length:0)+(manualPlan.cena?manualPlan.cena.length:0)+(manualPlan.snacks?manualPlan.snacks.length:0);
+var weeklyCount=weeklyDayData?Object.keys(weeklyDayData.meals||{}).length:0;
+var itemCount=manualCount+weeklyCount;
 var isToday=dateKey===new Date().toISOString().slice(0,10);
+var hasPlan=itemCount>0;
+var planLabel=hasPlan?(manualCount>0&&weeklyCount>0?manualCount+"+":(manualCount>0?manualCount:weeklyCount))+" recetas":"Sin plan";
+var planStatus="";
+if(weekPlan&&weekPlan.confirmed&&weeklyDayData&&weeklyDayData.meals){
+var mealTypes=Object.keys(weeklyDayData.meals);
+var macros=weeklyDayData.dayMacros||{};
+planStatus='<div class="text-xs text-green-400">'+(macros.calories||0)+' kcal</div>';
+}
 html+='<div class="flex items-center justify-between p-3 rounded-lg '+(isToday?"bg-primary-container/20 border border-primary-container/30":"bg-surface-container")+'">';
 html+='<div><div class="text-sm font-medium text-white">'+(isToday?"Hoy - ":"")+weekDays[i]+" "+d.getDate()+'</div>';
-html+='<div class="text-xs text-white/50">'+(itemCount>0?itemCount+" alimentos":"Sin plan")+'</div></div>';
+html+='<div class="text-xs '+(hasPlan?"text-green-400":"text-white/50")+'">'+planLabel+'</div>'+planStatus+'</div>';
 html+='<div class="flex gap-2">';
 html+='<button onclick="selectDayFromModal(\''+dateKey+'\')" class="px-3 py-1 rounded bg-surface-container-high text-white text-xs">Ver</button>';
-html+='<button onclick="copyFromYesterday(\''+dateKey+'\')" class="px-3 py-1 rounded bg-primary-container/20 text-primary-container text-xs">Copiar</button>';
 html+='</div></div>';
 }
 container.innerHTML=html;
 var fromSelect=document.getElementById("copyFromDay");
 var toSelect=document.getElementById("copyToDay");
+if(fromSelect&&toSelect){
 var fromHtml="",toHtml="";
 for(var i=0;i<7;i++){
 var d=new Date(monday);d.setDate(monday.getDate()+i);
@@ -568,13 +637,128 @@ toHtml+='<option value="'+dateKey+'">'+(isToday?"Hoy - ":"")+weekDays[i]+" "+d.g
 }
 fromSelect.innerHTML=fromHtml;
 toSelect.innerHTML=toHtml;
-document.getElementById("weeklyModal").classList.remove("hidden");
-document.getElementById("weeklyModal").classList.add("flex");
+}
+var modal=document.getElementById("weeklyModal");
+if(modal){modal.classList.remove("hidden");modal.classList.add("flex");}
 }
 function closeWeeklyModal(){
 document.getElementById("weeklyModal").classList.add("hidden");
 document.getElementById("weeklyModal").classList.remove("flex");
 }
+
+function openFinalizePlanModal(){
+closeWeeklyModal();
+var modal=document.getElementById("finalizePlanModal");
+if(!modal){
+modal=document.createElement("div");
+modal.id="finalizePlanModal";
+modal.className="fixed inset-0 z-[85] hidden";
+document.body.appendChild(modal);
+}
+modal.innerHTML='<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeFinalizePlanModal()"></div>'+
+'<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">'+
+'<div class="glass-card rounded-2xl p-6 w-full max-w-md pointer-events-auto">'+
+'<div class="text-center mb-6">'+
+'<div class="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">'+
+'<span class="material-symbols-outlined text-4xl text-green-400">check_circle</span>'+
+'</div>'+
+'<h3 class="text-xl font-headline font-bold text-white mb-2">Finalizar Semana</h3>'+
+'<p class="text-sm text-on-surface-variant">Registra tus avances para mejorar tu siguiente plan</p>'+
+'</div>'+
+'<div class="space-y-4 mb-6">'+
+'<div><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Peso actual (kg)</label>'+
+'<input type="number" id="finalizeWeight" step="0.1" class="w-full bg-surface-container text-white rounded-xl px-4 py-3 text-lg" placeholder="Ej: 75.5"></div>'+
+'<div><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Nivel de energía (1-5)</label>'+
+'<div class="flex gap-2">'+
+'<button onclick="selectEnergy(1)" class="energy-btn flex-1 py-3 rounded-xl bg-surface-container text-white/50 hover:bg-surface-container-high" data-energy="1">1</button>'+
+'<button onclick="selectEnergy(2)" class="energy-btn flex-1 py-3 rounded-xl bg-surface-container text-white/50 hover:bg-surface-container-high" data-energy="2">2</button>'+
+'<button onclick="selectEnergy(3)" class="energy-btn flex-1 py-3 rounded-xl bg-surface-container text-white/50 hover:bg-surface-container-high" data-energy="3">3</button>'+
+'<button onclick="selectEnergy(4)" class="energy-btn flex-1 py-3 rounded-xl bg-surface-container text-white/50 hover:bg-surface-container-high" data-energy="4">4</button>'+
+'<button onclick="selectEnergy(5)" class="energy-btn flex-1 py-3 rounded-xl bg-surface-container text-white/50 hover:bg-surface-container-high" data-energy="5">5</button>'+
+'</div></div>'+
+'<div><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Notas (opcional)</label>'+
+'<textarea id="finalizeNotes" rows="3" class="w-full bg-surface-container text-white rounded-xl px-4 py-3 text-sm resize-none" placeholder="¿Cómo te sentiste? ¿Cumpliste el plan?"></textarea></div>'+
+'</div>'+
+'<button onclick="confirmFinalizePlan()" class="w-full py-4 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold hover:opacity-90 transition-all">Guardar y Cerrar Plan</button>'+
+'<button onclick="closeFinalizePlanModal()" class="w-full py-2 rounded-xl text-white/60 font-medium mt-2">Cancelar</button>'+
+'</div></div></div>';
+modal.classList.remove("hidden");
+modal.classList.add("flex");
+window.selectedEnergy=3;
+updateEnergyButtons();
+}
+
+function selectEnergy(level){
+window.selectedEnergy=level;
+updateEnergyButtons();
+}
+
+function updateEnergyButtons(){
+document.querySelectorAll(".energy-btn").forEach(function(btn){
+var level=parseInt(btn.getAttribute("data-energy"));
+if(level<=window.selectedEnergy){
+btn.classList.add("bg-green-500","text-white");
+btn.classList.remove("bg-surface-container","text-white/50");
+}else{
+btn.classList.remove("bg-green-500","text-white");
+btn.classList.add("bg-surface-container","text-white/50");
+}
+});
+}
+
+function closeFinalizePlanModal(){
+var modal=document.getElementById("finalizePlanModal");
+if(modal){modal.classList.add("hidden");modal.classList.remove("flex");}
+}
+
+function confirmFinalizePlan(){
+var weight=document.getElementById("finalizeWeight").value;
+var notes=document.getElementById("finalizeNotes").value;
+var energy=window.selectedEnergy||3;
+var weekPlan=typeof loadWeeklyPlan==="function"?loadWeeklyPlan():null;
+var progressData={
+date:new Date().toISOString(),
+weight:weight?parseFloat(weight):null,
+energy:energy,
+notes:notes,
+planCompleted:weekPlan?weekPlan.confirmed:false,
+averageMacros:weekPlan?weekPlan.averageMacros:null
+};
+var progress=JSON.parse(localStorage.getItem("weeklyProgress")||"[]");
+progress.push(progressData);
+localStorage.setItem("weeklyProgress",JSON.stringify(progress));
+if(weekPlan){
+weekPlan.completed=true;
+weekPlan.completedAt=new Date().toISOString();
+weekPlan.progress=progressData;
+if(typeof saveWeeklyPlan==="function")saveWeeklyPlan(weekPlan);
+}
+closeFinalizePlanModal();
+clearWeeklyPlan();
+initPlanStatus();
+showWeeklyPlanToast("Progreso guardado. ¡Nueva semana!");
+}
+
+function confirmResetWeeklyPlan(){
+if(!confirm("¿Estás seguro de borrar todo el plan semanal? Esta acción no se puede deshacer."))return;
+clearWeeklyPlanData();
+clearWeeklyPlan();
+closeWeeklyModal();
+initPlanStatus();
+showWeeklyPlanToast("Plan semanal borrado");
+}
+
+function clearWeeklyPlanData(){
+for(var i=0;i<7;i++){
+var d=new Date();
+d.setDate(d.getDate()-d.getDay()+(i===0?1:i+1));
+var dateKey=d.toISOString().slice(0,10);
+localStorage.removeItem("mealPlan_"+dateKey);
+}
+localStorage.removeItem("weeklyPlan");
+localStorage.removeItem("weeklyPlanGenerated");
+}
+
 var autoPlanModificationCallback = null;
 function showAutoPlanWarning(callback) {
   var sessionKey = 'autoPlanWarningMeal_' + currentDay;
@@ -607,6 +791,59 @@ var d=new Date(dateKey);
 document.getElementById("dateDisplay").textContent=d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"});
 initWeekSelector();
 renderMealPlan();
+var weekPlan=typeof loadWeeklyPlan==="function"?loadWeeklyPlan():null;
+if(weekPlan&&weekPlan.days&&weekPlan.days[dateKey]){
+var dayData=weekPlan.days[dateKey];
+if(dayData.meals&&Object.keys(dayData.meals).length>0){
+showDayWeeklyPlanModal(dayData,dateKey);
+}
+}
+}
+
+function showDayWeeklyPlanModal(dayData,dateKey){
+var modal=document.getElementById("dayWeeklyPlanModal");
+if(!modal){
+modal=document.createElement("div");
+modal.id="dayWeeklyPlanModal";
+modal.className="fixed inset-0 z-[75] hidden";
+document.body.appendChild(modal);
+}
+var d=new Date(dateKey);
+var mealIcons={desayuno:"wb_sunny",almuerzo:"light_mode",cena:"nightlight",snacks:"cookie"};
+var mealColors={desayuno:"text-yellow-400",almuerzo:"text-orange-400",cena:"text-purple-400",snacks:"text-pink-400"};
+var html='<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeDayWeeklyPlanModal()"></div>'+
+'<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none overflow-y-auto">'+
+'<div class="bg-surface-container rounded-2xl p-5 w-full max-w-lg pointer-events-auto max-h-[85vh] overflow-y-auto">'+
+'<div class="flex justify-between items-center mb-4">'+
+'<div><h3 class="text-lg font-headline font-bold text-white">'+d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"})+'</h3><p class="text-xs text-green-400">Plan Semanal IA</p></div>'+
+'<button onclick="closeDayWeeklyPlanModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10"><span class="material-symbols-outlined">close</span></button>'+
+'</div>';
+Object.keys(dayData.meals).forEach(function(mealType){
+var meal=dayData.meals[mealType];
+if(meal&&meal.recipe){
+html+='<div class="bg-surface-container-high rounded-xl p-4 mb-3">';
+html+='<div class="flex items-center gap-2 mb-2">'+
+'<span class="material-symbols-outlined '+mealColors[mealType]+'">'+mealIcons[mealType]+'</span>'+
+'<span class="text-xs text-on-surface-variant uppercase">'+mealType+'</span>'+
+'</div>';
+html+='<p class="font-medium text-white mb-1">'+meal.recipe.title+'</p>';
+html+='<div class="flex gap-3 text-xs text-on-surface-variant mb-2">';
+html+='<span>'+meal.recipe.calories+' kcal</span><span>'+meal.recipe.protein+'g P</span><span>'+meal.recipe.fat+'g G</span><span>'+meal.recipe.netCarbs+'g CN</span>';
+html+='</div>';
+html+='<button onclick="openRecipeDetail(\''+(meal.recipe.id||'')+'\')" class="text-xs text-primary-container hover:text-white">Ver receta completa</button>';
+html+='</div>';
+}
+});
+html+='<button onclick="closeDayWeeklyPlanModal()" class="w-full py-3 rounded-xl bg-surface-container-high text-white font-medium mt-2">Cerrar</button>';
+html+='</div></div>';
+modal.innerHTML=html;
+modal.classList.remove("hidden");
+modal.classList.add("flex");
+}
+
+function closeDayWeeklyPlanModal(){
+var modal=document.getElementById("dayWeeklyPlanModal");
+if(modal){modal.classList.add("hidden");modal.classList.remove("flex");}
 }
 function copyFromYesterday(dateKey){
 var d=new Date(dateKey);
@@ -1338,8 +1575,807 @@ function executeAddFoodWithPortion(meal, itemKey, portion) {
 
 // Inicializar modo
 document.addEventListener('DOMContentLoaded', function() {
+  currentFoods = getAllFoodsForPlan();
   setMealPlanMode(currentMealPlanMode);
+  checkExistingWeeklyPlan();
+  initPlanStatus();
 });
+
+function initPlanStatus() {
+  var weekPlan = typeof loadWeeklyPlan === 'function' ? loadWeeklyPlan() : null;
+  var btnVer = document.getElementById('btnVerPlanSemanal');
+  var badge = document.getElementById('planStatusBadge');
+  var banner = document.getElementById('activePlanBanner');
+  
+  if (weekPlan) {
+    var isConfirmed = weekPlan.confirmed || false;
+    var generatedDate = weekPlan.generatedAt ? new Date(weekPlan.generatedAt).toLocaleDateString('es-ES', {day:'numeric', month:'short'}) : '';
+    
+    if (btnVer) btnVer.classList.remove('hidden');
+    
+    if (badge) {
+      badge.classList.remove('hidden');
+      if (isConfirmed) {
+        badge.className = 'px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 bg-green-500/20 text-green-400 border border-green-500/30';
+        badge.innerHTML = '<span class="material-symbols-outlined text-sm">check_circle</span>Plan Activo';
+      } else {
+        badge.className = 'px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 bg-yellow-500/20 text-yellow-400 border border-yellow-500/30';
+        badge.innerHTML = '<span class="material-symbols-outlined text-sm">schedule</span>Sin Confirmar';
+      }
+    }
+    
+    if (banner && isConfirmed) {
+      banner.classList.remove('hidden');
+      banner.innerHTML = '<div class="flex items-center gap-3">' +
+        '<div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">' +
+          '<span class="material-symbols-outlined text-green-400">calendar_today</span>' +
+        '</div>' +
+        '<div class="flex-1">' +
+          '<p class="font-bold text-white">Plan Semanal Activo</p>' +
+          '<p class="text-xs text-on-surface-variant">Generado el ' + generatedDate + ' - ' + weekPlan.averageMacros.calories + ' kcal/dia promedio</p>' +
+        '</div>' +
+        '<button onclick="openWeeklyPlanPreview()" class="px-4 py-2 rounded-lg bg-green-500/20 text-green-400 text-xs font-bold hover:bg-green-500/30 transition-all">Ver Plan</button>' +
+      '</div>';
+    }
+  } else {
+    if (badge) {
+      badge.classList.add('hidden');
+    }
+    if (banner) {
+      banner.classList.add('hidden');
+    }
+    if (btnVer) {
+      btnVer.classList.add('hidden');
+    }
+  }
+}
+
+function checkExistingWeeklyPlan() {
+  var weekPlan = typeof loadWeeklyPlan === 'function' ? loadWeeklyPlan() : null;
+  var btnVer = document.getElementById('btnVerPlanSemanal');
+  if (weekPlan && btnVer) {
+    btnVer.classList.remove('hidden');
+  }
+}
+
+// ==================== SEMANAL PLAN GENERATOR UI ====================
+
+function openWeeklyPlanGenerator() {
+  var modal = document.getElementById('weeklyPlanGeneratorModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'weeklyPlanGeneratorModal';
+    modal.className = 'fixed inset-0 z-[80] hidden';
+    modal.innerHTML = getWeeklyPlanGeneratorHTML();
+    document.body.appendChild(modal);
+  }
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+  
+  loadProfileSummary();
+}
+
+function getWeeklyPlanGeneratorHTML() {
+  return '<div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeWeeklyPlanGenerator()"></div>' +
+    '<div class="relative ma-w-4xl w-full h-full md:h-auto md:max-w-4xl md:max-h-[90vh] mx-auto mt-0 md:mt-10 bg-surface-container rounded-none md:rounded-2xl overflow-hidden flex flex-col">' +
+      '<div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/10">' +
+        '<div class="flex items-center gap-3">' +
+          '<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-container to-secondary flex items-center justify-center">' +
+            '<span class="material-symbols-outlined text-white">auto_awesome</span>' +
+          '</div>' +
+          '<div>' +
+            '<h2 class="text-lg font-headline font-bold text-white">Generar Plan Semanal</h2>' +
+            '<p class="text-xs text-on-surface-variant">Basado en tu perfil y preferencias</p>' +
+          '</div>' +
+        '</div>' +
+        '<button onclick="closeWeeklyPlanGenerator()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">' +
+          '<span class="material-symbols-outlined text-lg">close</span>' +
+        '</button>' +
+      '</div>' +
+      '<div class="flex-1 overflow-y-auto p-4" id="weeklyPlanGeneratorContent">' +
+        '<div class="space-y-4">' +
+          '<div class="bg-surface-container-high rounded-xl p-4">' +
+            '<h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-sm">person</span>Tu Perfil Objetivo</h3>' +
+            '<div class="grid grid-cols-4 gap-3 text-center" id="profileSummary"></div>' +
+          '</div>' +
+          '<div class="bg-surface-container-high rounded-xl p-4">' +
+            '<h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-sm">restaurant</span>Ingredientes Disponibles</h3>' +
+            '<p class="text-xs text-on-surface-variant" id="pantryStatus">Verificando despensa...</p>' +
+          '</div>' +
+          '<div class="bg-surface-container-high rounded-xl p-4">' +
+            '<h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-yellow-400 text-sm">info</span>¿Qué incluye el plan?</h3>' +
+            '<ul class="text-xs text-on-surface-variant space-y-2">' +
+              '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-sm">check_circle</span> 7 días completos de comidas (desayuno, almuerzo, cena, snacks)</li>' +
+              '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-sm">check_circle</span> Recetas detalladas con preparación paso a paso</li>' +
+              '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-sm">check_circle</span> Lista de compras personalizada</li>' +
+              '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-sm">check_circle</span> Macros balanceados según tu objetivo</li>' +
+            '</ul>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="p-4 bg-surface-container-high border-t border-white/10">' +
+        '<button onclick="generateWeeklyPlanAI()" class="w-full py-3 rounded-xl bg-gradient-to-r from-primary-container to-secondary text-white font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2">' +
+          '<span class="material-symbols-outlined">auto_awesome</span>Generar Plan con IA' +
+        '</button>' +
+      '</div>' +
+    '</div>';
+}
+
+function closeWeeklyPlanGenerator() {
+  var modal = document.getElementById('weeklyPlanGeneratorModal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+}
+
+function loadProfileSummary() {
+  // Read macros from keto_macros
+  var macros = {};
+  try { macros = JSON.parse(localStorage.getItem('keto_macros') || '{}'); } catch(e) { macros = {}; }
+  
+  var profile = {
+    calories: macros.calories || 1800,
+    protein: macros.protein || 150,
+    fat: macros.fat || 140,
+    netCarbs: macros.carbs || 25
+  };
+  
+  var container = document.getElementById('profileSummary');
+  if (container) {
+    container.innerHTML = 
+      '<div><p class="text-[10px] text-on-surface-variant uppercase">Calorías</p><p class="font-bold text-yellow-400">' + profile.calories + '</p></div>' +
+      '<div><p class="text-[10px] text-on-surface-variant uppercase">Proteína</p><p class="font-bold text-orange-400">' + profile.protein + 'g</p></div>' +
+      '<div><p class="text-[10px] text-on-surface-variant uppercase">Grasa</p><p class="font-bold text-yellow-300">' + profile.fat + 'g</p></div>' +
+      '<div><p class="text-[10px] text-on-surface-variant uppercase">Carbos Net</p><p class="font-bold text-cyan-400">' + profile.netCarbs + 'g</p></div>';
+  }
+  
+  var pantryStatus = document.getElementById('pantryStatus');
+  if (pantryStatus) {
+    var pantry = typeof getPantry === 'function' ? getPantry() : {};
+    var count = Object.keys(pantry).filter(function(k) { return pantry[k] && pantry[k].stock > 0; }).length;
+    pantryStatus.innerHTML = count > 0 
+      ? '<span class="text-green-400">' + count + ' alimentos en tu despensa</span>. Se generará lista de compras para lo que falte.'
+      : '<span class="text-yellow-400">Tu despensa está vacía</span>. Se generará lista de compras completa.';
+  }
+}
+
+function generateWeeklyPlanAI() {
+  closeWeeklyPlanGenerator();
+  
+  var loadingModal = document.getElementById('weeklyPlanLoadingModal');
+  if (!loadingModal) {
+    loadingModal = document.createElement('div');
+    loadingModal.id = 'weeklyPlanLoadingModal';
+    loadingModal.className = 'fixed inset-0 z-[90] flex items-center justify-center bg-black/80 backdrop-blur-sm';
+    loadingModal.innerHTML = '<div class="text-center">' +
+      '<div class="w-16 h-16 mx-auto mb-4 rounded-full border-4 border-primary-container border-t-transparent animate-spin"></div>' +
+      '<p class="text-white font-headline font-bold">Generando tu plan semanal...</p>' +
+      '<p class="text-on-surface-variant text-sm mt-1">Analizando recetas y calculando macros</p>' +
+    '</div>';
+    document.body.appendChild(loadingModal);
+  }
+  loadingModal.classList.remove('hidden');
+  
+  setTimeout(function() {
+    var weekPlan = typeof generateWeeklyPlan === 'function' ? generateWeeklyPlan() : null;
+    
+    loadingModal.classList.add('hidden');
+    
+    if (weekPlan) {
+      if (typeof saveWeeklyPlan === 'function') {
+        saveWeeklyPlan(weekPlan);
+      }
+      openWeeklyPlanPreview(weekPlan);
+    } else {
+      alert('Error al generar el plan. Por favor intenta de nuevo.');
+    }
+  }, 1500);
+}
+
+function openWeeklyPlanPreview(weekPlan) {
+  if (!weekPlan) {
+    weekPlan = typeof loadWeeklyPlan === 'function' ? loadWeeklyPlan() : null;
+  }
+  if (!weekPlan) {
+    alert('No hay plan semanal guardado. Genera uno nuevo.');
+    return;
+  }
+  
+  var modal = document.getElementById('weeklyPlanPreviewModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'weeklyPlanPreviewModal';
+    modal.className = 'fixed inset-0 z-[80] hidden';
+    document.body.appendChild(modal);
+  }
+  
+  modal.innerHTML = getWeeklyPlanPreviewHTML(weekPlan);
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+  
+  var btnVer = document.getElementById('btnVerPlanSemanal');
+  if (btnVer) {
+    btnVer.classList.remove('hidden');
+  }
+}
+
+function getWeeklyPlanPreviewHTML(weekPlan) {
+  var html = '<div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeWeeklyPlanPreview()"></div>' +
+    '<div class="relative ma-w-4xl w-full h-full md:h-auto md:max-w-4xl md:max-h-[90vh] mx-auto mt-0 md:mt-10 bg-surface-container rounded-none md:rounded-2xl overflow-hidden flex flex-col">' +
+      '<div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/10 sticky top-0 z-10">' +
+        '<div class="flex items-center gap-3">' +
+          '<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-container to-secondary flex items-center justify-center">' +
+            '<span class="material-symbols-outlined text-white">calendar_month</span>' +
+          '</div>' +
+          '<div>' +
+            '<h2 class="text-lg font-headline font-bold text-white">Tu Plan Semanal</h2>' +
+            '<p class="text-xs text-on-surface-variant">Promedio diario: <span class="text-yellow-400">' + weekPlan.averageMacros.calories + ' kcal</span></p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="flex items-center gap-2">' +
+          '<button onclick="openModifyPlanModal()" class="px-3 py-1.5 rounded-lg bg-surface-container-high text-white text-xs font-medium flex items-center gap-1 hover:bg-surface-container-highest transition-all">' +
+            '<span class="material-symbols-outlined text-sm">edit</span>Modificar' +
+          '</button>' +
+          '<button onclick="closeWeeklyPlanPreview()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">' +
+            '<span class="material-symbols-outlined text-lg">close</span>' +
+          '</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="flex-1 overflow-y-auto p-4 space-y-4" id="weeklyPlanContent">';
+  
+  Object.keys(weekPlan.days).forEach(function(dateKey) {
+    var day = weekPlan.days[dateKey];
+    var dayName = formatDate ? formatDate(dateKey) : dateKey;
+    var isToday = dateKey === new Date().toISOString().slice(0, 10);
+    
+    html += '<div class="bg-surface-container-high rounded-xl overflow-hidden ' + (isToday ? 'ring-2 ring-primary-container' : '') + '">';
+    html += '<div class="flex items-center justify-between p-3 bg-surface-container border-b border-white/5">';
+    html += '<div class="flex items-center gap-2">';
+    if (isToday) html += '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-primary-container text-white">HOY</span>';
+    html += '<span class="font-headline font-bold text-white">' + dayName + '</span>';
+    html += '</div>';
+    html += '<div class="flex items-center gap-3 text-xs">';
+    html += '<span class="text-yellow-400">' + day.dayMacros.calories + ' kcal</span>';
+    html += '<span class="text-orange-400">' + day.dayMacros.protein + 'g P</span>';
+    html += '<span class="text-cyan-400">' + day.dayMacros.netCarbs + 'g CN</span>';
+    html += '</div></div>';
+    
+    Object.keys(day.meals).forEach(function(mealType) {
+      var meal = day.meals[mealType];
+      if (meal.recipe) {
+        var mealIcons = { desayuno: 'wb_sunny', almuerzo: 'light_mode', cena: 'nightlight', snacks: 'cookie' };
+        var mealColors = { desayuno: 'text-yellow-400', almuerzo: 'text-orange-400', cena: 'text-purple-400', snacks: 'text-pink-400' };
+        var mealName = mealType.charAt(0).toUpperCase() + mealType.slice(1);
+        
+        html += '<div class="p-3 border-b border-white/5 last:border-0 recipe-card" data-recipe-id="' + (meal.recipe.id || 'unknown') + '">';
+        html += '<div class="flex items-center justify-between mb-2">';
+        html += '<div class="flex items-center gap-2">';
+        html += '<span class="material-symbols-outlined ' + mealColors[mealType] + ' text-sm">' + mealIcons[mealType] + '</span>';
+        html += '<span class="text-xs text-on-surface-variant uppercase">' + mealName + '</span>';
+        if (meal.recipe.basePortion && meal.recipe.basePortion !== 100) {
+          html += '<span class="text-[10px] text-secondary bg-secondary/20 px-1.5 py-0.5 rounded">x' + Math.round(meal.recipe.basePortion / 100 * 10) / 10 + '</span>';
+        }
+        html += '</div>';
+        html += '<button onclick="openRecipeDetail(\'' + (meal.recipe.id || '') + '\')" class="text-xs text-primary-container hover:text-white flex items-center gap-1">';
+        html += '<span class="material-symbols-outlined text-sm">visibility</span>Ver receta';
+        html += '</button>';
+        html += '</div>';
+        
+        html += '<div class="flex items-start gap-3">';
+        html += '<div class="flex-1">';
+        html += '<p class="font-medium text-white text-sm mb-1">' + meal.recipe.title + '</p>';
+        
+        html += '<div class="flex items-center gap-2 text-xs text-on-surface-variant mb-2">';
+        if (meal.recipe.prepTime) {
+          html += '<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">schedule</span>' + meal.recipe.prepTime + '</span>';
+        }
+        if (meal.recipe.difficulty) {
+          html += '<span class="px-2 py-0.5 rounded bg-surface-container-high">' + meal.recipe.difficulty + '</span>';
+        }
+        if (meal.recipe.basePortion) {
+          html += '<span class="text-secondary">Porcion: ' + meal.recipe.basePortion + 'g</span>';
+        }
+        html += '</div>';
+        
+        html += '<div class="flex items-center gap-3 text-xs mb-2">';
+        html += '<span class="text-yellow-400 font-medium">' + meal.recipe.calories + ' kcal</span>';
+        html += '<span class="text-orange-400">' + meal.recipe.protein + 'g P</span>';
+        html += '<span class="text-yellow-300">' + meal.recipe.fat + 'g G</span>';
+        html += '<span class="text-cyan-400">' + meal.recipe.netCarbs + 'g CN</span>';
+        html += '</div>';
+        
+        html += '<div class="text-xs text-on-surface-variant">';
+        html += '<span class="text-on-surface-variant/60">Ingredientes: </span>';
+        if (meal.recipe.ingredients) {
+          var ingNames = meal.recipe.ingredients.slice(0, 4).map(function(i) { return i.name; }).join(', ');
+          html += '<span class="text-white/80">' + ingNames + '</span>';
+          if (meal.recipe.ingredients.length > 4) {
+            html += ' +' + (meal.recipe.ingredients.length - 4) + ' más';
+          }
+        }
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+      }
+    });
+    html += '</div>';
+  });
+  
+  html += '</div>';
+  
+  html += '<div class="p-4 bg-surface-container-high border-t border-white/10 space-y-3">';
+  html += '<div class="bg-surface-container rounded-xl p-3">';
+  html += '<h4 class="text-sm font-bold text-white mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-sm">shopping_cart</span>Lista de Compras</h4>';
+  
+  var shoppingList = weekPlan.shoppingList || {};
+  var itemCount = Object.keys(shoppingList).length;
+  
+  html += '<p class="text-xs text-on-surface-variant mb-2">' + itemCount + ' ingredientes necesarios</p>';
+  html += '<div class="space-y-1 max-h-32 overflow-y-auto">';
+  
+  Object.keys(shoppingList).slice(0, 8).forEach(function(foodId) {
+    var item = shoppingList[foodId];
+    html += '<div class="flex items-center justify-between text-xs">';
+    html += '<span class="text-white">' + item.name + '</span>';
+    html += '<span class="text-on-surface-variant">' + Math.round(item.quantity) + ' ' + (item.unit || 'g') + '</span>';
+    html += '</div>';
+  });
+  
+  if (itemCount > 8) {
+    html += '<p class="text-xs text-on-surface-variant text-center">...y ' + (itemCount - 8) + ' más</p>';
+  }
+  html += '</div></div>';
+  
+  html += '<div class="bg-green-500/10 border border-green-500/30 rounded-xl p-3 mb-3">';
+  html += '<p class="text-xs text-green-400 mb-2">Paso final: Confirma para activar el plan y agregar ingredientes a tu despensa.</p>';
+  html += '</div>';
+  
+  html += '<button onclick="openShoppingConfirmation()" class="w-full py-4 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2 text-base">' +
+    '<span class="material-symbols-outlined">check_circle</span>Confirmar Plan Semanal' +
+  '</button>';
+  html += '<button onclick="closeWeeklyPlanPreview()" class="w-full py-2 rounded-xl bg-surface-container text-white font-medium hover:bg-surface-container-highest transition-all text-sm">' +
+    'Volver sin confirmar' +
+  '</button>';
+  html += '</div></div>';
+  
+  return html;
+}
+
+function closeWeeklyPlanPreview() {
+  var modal = document.getElementById('weeklyPlanPreviewModal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+}
+
+function openShoppingConfirmation() {
+  closeWeeklyPlanPreview();
+  
+  var weekPlan = typeof loadWeeklyPlan === 'function' ? loadWeeklyPlan() : null;
+  if (!weekPlan) return;
+  
+  var pantry = typeof getPantry === 'function' ? getPantry() : {};
+  var shoppingList = typeof calculateShoppingList === 'function' 
+    ? calculateShoppingList(weekPlan, pantry) 
+    : weekPlan.shoppingList;
+  
+  var modal = document.getElementById('shoppingConfirmationModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'shoppingConfirmationModal';
+    modal.className = 'fixed inset-0 z-[85] hidden';
+    document.body.appendChild(modal);
+  }
+  
+  var toBuy = Object.keys(shoppingList).filter(function(k) { return shoppingList[k].toBuy > 0; });
+  var totalToBuy = toBuy.length;
+  
+  modal.innerHTML = '<div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeShoppingConfirmation()"></div>' +
+    '<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">' +
+      '<div class="bg-surface-container rounded-2xl p-5 w-full max-w-md pointer-events-auto max-h-[80vh] overflow-y-auto">' +
+        '<div class="flex items-center gap-3 mb-4">' +
+          '<div class="w-14 h-14 rounded-full bg-green-500/20 flex items-center justify-center">' +
+            '<span class="material-symbols-outlined text-green-400 text-3xl">check_circle</span>' +
+          '</div>' +
+          '<div>' +
+            '<h3 class="text-xl font-headline font-bold text-white">Ultimo Paso</h3>' +
+            '<p class="text-sm text-on-surface-variant">' + totalToBuy + ' ingredientes seran agregados a tu despensa</p>' +
+          '</div>' +
+        '</div>' +
+        
+        '<div class="bg-surface-container-high rounded-xl p-3 mb-4">' +
+          '<p class="text-xs text-on-surface-variant mb-2 font-bold">Lo que obtendras:</p>' +
+          '<ul class="text-xs text-on-surface-variant space-y-2">' +
+            '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-sm">calendar_today</span>Plan semanal completo listo</li>' +
+            '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-sm">kitchen</span>Ingredientes en tu despensa</li>' +
+            '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-sm">menu_book</span>Recetas con preparacion detallada</li>' +
+          '</ul>' +
+        '</div>' +
+        
+        '<div class="bg-surface-container-high rounded-xl p-3 mb-4 max-h-48 overflow-y-auto space-y-2">' +
+          '<p class="text-xs text-on-surface-variant mb-2 font-bold">Ingredientes a agregar:</p>' +
+          toBuy.slice(0, 20).map(function(foodId) {
+            var item = shoppingList[foodId];
+            return '<div class="flex items-center justify-between text-sm py-1 border-b border-white/5">' +
+              '<span class="text-white">' + item.name + '</span>' +
+              '<span class="text-secondary font-medium">' + Math.round(item.toBuy) + ' ' + (item.unit || 'g') + '</span>' +
+            '</div>';
+          }).join('') +
+          (totalToBuy > 20 ? '<p class="text-xs text-on-surface-variant text-center py-2">...y ' + (totalToBuy - 20) + ' mas</p>' : '') +
+        '</div>' +
+        
+        '<div class="flex gap-3">' +
+          '<button onclick="closeShoppingConfirmation()" class="flex-1 py-3 rounded-xl bg-surface-container text-white font-medium hover:bg-surface-container-highest transition-colors">Volver</button>' +
+          '<button onclick="confirmShoppingAndApplyPlan()" class="flex-1 py-4 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold hover:opacity-90 transition-colors flex items-center justify-center gap-2 text-base">' +
+            '<span class="material-symbols-outlined text-sm">check</span>Activar Plan' +
+          '</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+function closeShoppingConfirmation() {
+  var modal = document.getElementById('shoppingConfirmationModal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+}
+
+function confirmShoppingAndApplyPlan() {
+  var weekPlan = typeof loadWeeklyPlan === 'function' ? loadWeeklyPlan() : null;
+  if (!weekPlan) return;
+  
+  var pantry = typeof getPantry === 'function' ? getPantry() : {};
+  var shoppingList = typeof calculateShoppingList === 'function' 
+    ? calculateShoppingList(weekPlan, pantry) 
+    : weekPlan.shoppingList;
+  
+  if (typeof addShoppingToPantry === 'function') {
+    addShoppingToPantry(shoppingList);
+  }
+  
+  weekPlan.confirmed = true;
+  weekPlan.confirmedAt = new Date().toISOString();
+  
+  if (typeof saveWeeklyPlan === 'function') {
+    saveWeeklyPlan(weekPlan);
+  }
+  
+  closeShoppingConfirmation();
+  closeWeeklyPlanPreview();
+  
+  var successModal = document.createElement('div');
+  successModal.id = 'successModal';
+  successModal.className = 'fixed inset-0 z-[95] flex items-center justify-center bg-black/80 backdrop-blur-sm';
+  successModal.innerHTML = '<div class="text-center max-w-sm mx-auto px-6">' +
+    '<div class="w-24 h-24 mx-auto mb-6 rounded-full bg-green-500/20 flex items-center justify-center animate-pulse">' +
+      '<span class="material-symbols-outlined text-green-400 text-6xl" style="font-variation-settings:\'FILL\' 1">check_circle</span>' +
+    '</div>' +
+    '<h3 class="text-2xl font-headline font-bold text-white mb-3">¡Plan Activado!</h3>' +
+    '<p class="text-on-surface-variant mb-6">Tu plan semanal esta listo. Los ingredientes estan en tu despensa.</p>' +
+    '<div class="bg-surface-container-high rounded-xl p-4 mb-6 text-left">' +
+      '<p class="text-xs text-on-surface-variant mb-2">Resumen:</p>' +
+      '<div class="grid grid-cols-2 gap-3 text-center">' +
+        '<div><p class="text-2xl font-bold text-yellow-400">' + weekPlan.averageMacros.calories + '</p><p class="text-xs text-on-surface-variant">kcal/dia</p></div>' +
+        '<div><p class="text-2xl font-bold text-cyan-400">' + weekPlan.averageMacros.netCarbs + 'g</p><p class="text-xs text-on-surface-variant">carbos netos</p></div>' +
+      '</div>' +
+    '</div>' +
+    '<p class="text-sm text-on-surface-variant">El plan estara visible en tu calendario diario.</p>' +
+  '</div>';
+  document.body.appendChild(successModal);
+  
+  setTimeout(function() {
+    var modal = document.getElementById('successModal');
+    if (modal) modal.remove();
+    initPlanStatus();
+  }, 3500);
+}
+
+function showWeeklyPlanToast(message) {
+  var toast = document.getElementById('weeklyPlanToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'weeklyPlanToast';
+    toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 z-[90] transition-all duration-300';
+    toast.innerHTML = '<div class="glass-card rounded-full px-6 py-3 flex items-center gap-3 shadow-lg">' +
+      '<span class="material-symbols-outlined text-secondary">check_circle</span>' +
+      '<span class="text-white font-medium"></span>' +
+    '</div>';
+    document.body.appendChild(toast);
+  }
+  toast.querySelector('span:last-child').textContent = message;
+  toast.classList.remove('opacity-0', 'translate-y-4');
+  toast.classList.add('opacity-100', 'translate-y-0');
+  
+  setTimeout(function() {
+    toast.classList.add('opacity-0', 'translate-y-4');
+    toast.classList.remove('opacity-100', 'translate-y-0');
+  }, 3000);
+}
+
+function openModifyPlanModal() {
+  var weekPlan = typeof loadWeeklyPlan === 'function' ? loadWeeklyPlan() : null;
+  if (!weekPlan) {
+    alert('No hay plan para modificar');
+    return;
+  }
+  
+  var modal = document.getElementById('modifyPlanModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'modifyPlanModal';
+    modal.className = 'fixed inset-0 z-[85] hidden';
+    document.body.appendChild(modal);
+  }
+  
+  modal.innerHTML = getModifyPlanHTML(weekPlan);
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+function getModifyPlanHTML(weekPlan) {
+  var allIngredients = {};
+  
+  Object.keys(weekPlan.days).forEach(function(dateKey) {
+    var day = weekPlan.days[dateKey];
+    Object.keys(day.meals).forEach(function(mealType) {
+      var meal = day.meals[mealType];
+      if (meal.recipe && meal.recipe.ingredients) {
+        meal.recipe.ingredients.forEach(function(ing) {
+          if (!allIngredients[ing.id]) {
+            allIngredients[ing.id] = {
+              ...ing,
+              recipes: [],
+              days: []
+            };
+          }
+          allIngredients[ing.id].recipes.push(meal.recipe.title);
+          if (!allIngredients[ing.id].days.includes(dateKey)) {
+            allIngredients[ing.id].days.push(dateKey);
+          }
+        });
+      }
+    });
+  });
+  
+  var excludedList = typeof userExcludedIngredients !== 'undefined' ? userExcludedIngredients : [];
+  
+  var html = '<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeModifyPlanModal()"></div>' +
+    '<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">' +
+      '<div class="bg-surface-container rounded-2xl p-5 w-full max-w-lg max-h-[85vh] overflow-hidden flex flex-col pointer-events-auto">' +
+        '<div class="flex items-center justify-between mb-4">' +
+          '<div class="flex items-center gap-3">' +
+            '<div class="w-10 h-10 rounded-xl bg-yellow-500/20 flex items-center justify-center">' +
+              '<span class="material-symbols-outlined text-yellow-400">edit</span>' +
+            '</div>' +
+            '<div>' +
+              '<h3 class="text-lg font-headline font-bold text-white">Modificar Plan</h3>' +
+              '<p class="text-xs text-on-surface-variant">Excluye alimentos que no comes</p>' +
+            '</div>' +
+          '</div>' +
+          '<button onclick="closeModifyPlanModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">' +
+            '<span class="material-symbols-outlined text-lg">close</span>' +
+          '</button>' +
+        '</div>' +
+        
+        '<div class="flex gap-2 mb-4">' +
+          '<button onclick="showExcludedIngredients()" class="flex-1 py-2 px-3 rounded-lg text-xs font-medium bg-surface-container-high text-white border border-yellow-500/50">' +
+            '<span class="material-symbols-outlined text-sm align-middle mr-1">block</span>Excluidos (<span id="excludedCount">' + excludedList.length + '</span>)' +
+          '</button>' +
+        '</div>' +
+        
+        '<div class="flex-1 overflow-y-auto space-y-2 max-h-[50vh] pr-1" id="ingredientList">';
+  
+  var ingredientArray = Object.keys(allIngredients).map(function(id) { return allIngredients[id]; });
+  ingredientArray.sort(function(a, b) { return a.name.localeCompare(b.name); });
+  
+  ingredientArray.forEach(function(ing) {
+    var isExcluded = excludedList.includes(ing.id);
+    var catColor = getCategoryColor(ing.category);
+    
+    html += '<div class="ingredient-item flex items-center justify-between p-3 rounded-xl ' + (isExcluded ? 'bg-red-500/10 border border-red-500/30' : 'bg-surface-container-high') + '">';
+    html += '<div class="flex-1 min-w-0">';
+    html += '<div class="flex items-center gap-2">';
+    if (!isExcluded) {
+      html += '<span class="w-3 h-3 rounded-full flex-shrink-0" style="background:' + catColor + '"></span>';
+    } else {
+      html += '<span class="material-symbols-outlined text-red-400 text-sm flex-shrink-0">block</span>';
+    }
+    html += '<span class="font-medium text-sm ' + (isExcluded ? 'text-white/50 line-through' : 'text-white') + '">' + ing.name + '</span>';
+    html += '</div>';
+    html += '<p class="text-xs text-on-surface-variant ml-5">' + ing.recipes.slice(0, 2).join(', ') + (ing.recipes.length > 2 ? '...' : '') + '</p>';
+    html += '<p class="text-[10px] text-white/40 ml-5">' + ing.quantity + ' ' + (ing.unit || 'g') + ' x ' + ing.days.length + ' dia(s)</p>';
+    html += '</div>';
+    
+    if (isExcluded) {
+      html += '<button onclick="includeIngredient(\'' + ing.id + '\'); openModifyPlanModal();" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-500/20 text-green-400 hover:bg-green-500/30 transition-all">Incluir</button>';
+    } else {
+      html += '<button onclick="excludeIngredient(\'' + ing.id + '\'); openModifyPlanModal();" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-all">Excluir</button>';
+    }
+    html += '</div>';
+  });
+  
+  html += '</div>';
+  
+  html += '<div class="mt-4 pt-4 border-t border-white/10 space-y-2">';
+  html += '<p class="text-xs text-on-surface-variant mb-2">Si excluyes un alimento, el plan se regenerara con recetas alternativas.</p>';
+  html += '<button onclick="regeneratePlanWithExclusionsUI(); closeModifyPlanModal();" class="w-full py-3 rounded-xl bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2">' +
+    '<span class="material-symbols-outlined text-sm">refresh</span>Regenerar Plan' +
+  '</button>';
+  html += '<button onclick="closeModifyPlanModal()" class="w-full py-2 rounded-xl bg-surface-container text-white font-medium hover:bg-surface-container-highest transition-all">' +
+    'Cancelar' +
+  '</button>';
+  html += '</div></div></div>';
+  
+  return html;
+}
+
+function getCategoryColor(category) {
+  var colors = {
+    'Proteínas': '#ff4d00',
+    'Grasas': '#ffb300',
+    'Verduras': '#22c55e',
+    'Lacteos': '#a855f7',
+    'Frutos secos': '#84cc16',
+    'Otros': '#6b7280'
+  };
+  return colors[category] || '#ff4d00';
+}
+
+function closeModifyPlanModal() {
+  var modal = document.getElementById('modifyPlanModal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+}
+
+function regeneratePlanWithExclusionsUI() {
+  var weekPlan = typeof loadWeeklyPlan === 'function' ? loadWeeklyPlan() : null;
+  if (!weekPlan) return;
+  
+  if (typeof regeneratePlanWithExclusions === 'function') {
+    weekPlan = regeneratePlanWithExclusions(weekPlan);
+  }
+  
+  if (typeof saveWeeklyPlan === 'function') {
+    saveWeeklyPlan(weekPlan);
+  }
+  
+  openWeeklyPlanPreview(weekPlan);
+  
+  showWeeklyPlanToast('Plan actualizado segun tus preferencias');
+}
+
+function openRecipeDetail(recipeId) {
+  var recipe = null;
+  
+  if (typeof getRecipeById === 'function') {
+    recipe = getRecipeById(recipeId);
+  }
+  
+  if (!recipe) {
+    var weekPlan = typeof loadWeeklyPlan === 'function' ? loadWeeklyPlan() : null;
+    if (weekPlan) {
+      Object.keys(weekPlan.days).forEach(function(dateKey) {
+        var day = weekPlan.days[dateKey];
+        Object.keys(day.meals).forEach(function(mealType) {
+          var meal = day.meals[mealType];
+          if (meal.recipe && (meal.recipe.id === recipeId || meal.recipe.title === recipeId)) {
+            recipe = meal.recipe;
+          }
+        });
+      });
+    }
+  }
+  
+  if (!recipe) {
+    alert('Receta no encontrada');
+    return;
+  }
+  
+  var modal = document.getElementById('recipeDetailModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'recipeDetailModal';
+    modal.className = 'fixed inset-0 z-[90] hidden';
+    document.body.appendChild(modal);
+  }
+  
+  var html = '<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeRecipeDetail()"></div>' +
+    '<div class="absolute inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-lg md:max-h-[85vh] bg-surface-container rounded-2xl overflow-hidden flex flex-col">' +
+      '<div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/10">' +
+        '<div>' +
+          '<h3 class="text-lg font-headline font-bold text-white">' + recipe.title + '</h3>' +
+          '<div class="flex items-center gap-2 text-xs text-on-surface-variant mt-1">';
+  
+  if (recipe.prepTime) {
+    html += '<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">schedule</span>' + recipe.prepTime + '</span>';
+  }
+  if (recipe.difficulty) {
+    html += '<span class="px-2 py-0.5 rounded bg-surface-container-high">' + recipe.difficulty + '</span>';
+  }
+  if (recipe.servings) {
+    html += '<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">people</span>' + recipe.servings + ' porcion</span>';
+  }
+  
+  html += '</div></div>' +
+        '<button onclick="closeRecipeDetail()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">' +
+          '<span class="material-symbols-outlined text-lg">close</span>' +
+        '</button>' +
+      '</div>' +
+      
+      '<div class="flex-1 overflow-y-auto p-4 space-y-4">';
+      
+      html += '<div class="bg-surface-container-high rounded-xl p-4">';
+      html += '<h4 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-sm">nutrition</span>Informacion Nutricional</h4>';
+      html += '<div class="grid grid-cols-4 gap-3 text-center">';
+      html += '<div><p class="text-[10px] text-on-surface-variant uppercase">Calorias</p><p class="font-bold text-yellow-400">' + recipe.calories + '</p></div>';
+      html += '<div><p class="text-[10px] text-on-surface-variant uppercase">Proteina</p><p class="font-bold text-orange-400">' + recipe.protein + 'g</p></div>';
+      html += '<div><p class="text-[10px] text-on-surface-variant uppercase">Grasa</p><p class="font-bold text-yellow-300">' + recipe.fat + 'g</p></div>';
+      html += '<div><p class="text-[10px] text-on-surface-variant uppercase">Carbos Net</p><p class="font-bold text-cyan-400">' + recipe.netCarbs + 'g</p></div>';
+      html += '</div>';
+      html += '</div>';
+      
+      if (recipe.ingredients && recipe.ingredients.length > 0) {
+        html += '<div class="bg-surface-container-high rounded-xl p-4">';
+        html += '<h4 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-sm">list</span>Ingredientes</h4>';
+        html += '<ul class="space-y-2">';
+        recipe.ingredients.forEach(function(ing) {
+          html += '<li class="flex items-center justify-between text-sm">';
+          html += '<span class="text-white">' + (ing.optional ? '<span class="text-on-surface-variant/50">Opcional:</span> ' : '') + ing.name + '</span>';
+          html += '<span class="text-secondary font-medium">' + ing.quantity + ' ' + (ing.unit || 'g') + '</span>';
+          html += '</li>';
+        });
+        html += '</ul>';
+        html += '</div>';
+      }
+      
+      if (recipe.instructions && recipe.instructions.length > 0) {
+        html += '<div class="bg-surface-container-high rounded-xl p-4">';
+        html += '<h4 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-sm">menu_book</span>Preparacion</h4>';
+        html += '<ol class="space-y-3">';
+        recipe.instructions.forEach(function(step, idx) {
+          html += '<li class="flex gap-3">';
+          html += '<span class="flex-shrink-0 w-6 h-6 rounded-full bg-primary-container text-white text-xs font-bold flex items-center justify-center">' + (idx + 1) + '</span>';
+          html += '<span class="text-sm text-white/90 pt-0.5">' + step + '</span>';
+          html += '</li>';
+        });
+        html += '</ol>';
+        html += '</div>';
+      }
+      
+      if (recipe.tips) {
+        html += '<div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4">';
+        html += '<h4 class="text-sm font-bold text-yellow-400 mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-sm">lightbulb</span>Consejos</h4>';
+        html += '<p class="text-sm text-white/80">' + recipe.tips + '</p>';
+        html += '</div>';
+      }
+      
+      html += '</div>' +
+      '<div class="p-4 bg-surface-container-high border-t border-white/10">';
+      html += '<button onclick="closeRecipeDetail()" class="w-full py-3 rounded-xl bg-surface-container text-white font-medium hover:bg-surface-container-highest transition-all">Cerrar</button>';
+      html += '</div></div>';
+  
+  modal.innerHTML = html;
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+function closeRecipeDetail() {
+  var modal = document.getElementById('recipeDetailModal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+}
 </script>
 
 <!-- FAB Group -->

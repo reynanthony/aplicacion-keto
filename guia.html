@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KetoLab">
+<link rel="apple-touch-icon" href="icons/icon-192x192.png">
+<meta name="theme-color" content="#ff4d00">
+<title>KetoLab | Guía de Uso</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","primary-container":"#ff4d00","on-primary":"#ffffff","on-primary-container":"#ffffff","surface":"#0a0a0a","surface-container":"#181717","surface-container-low":"#111010","surface-container-high":"#1e1c1c","surface-container-highest":"#242222","on-surface":"#ffffff","on-surface-variant":"#adaaaa","outline":"#767575","secondary":"#ffb300","tertiary":"#ffc107","error":"#ff7351","background":"#0a0a0a"},fontFamily:{headline:["Plus Jakarta Sans","sans-serif"],body:["Inter","sans-serif"]}}}};
+</script>
+<style>
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.glass-card{background:rgba(36,34,34,0.4);backdrop-filter:blur(20px);border:1px solid rgba(255,77,0,0.1)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.step-card{animation:fadeIn 0.4s ease forwards}
+.step-number{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.25rem}
+</style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen">
+<!-- Header -->
+<header class="fixed top-0 left-0 right-0 bg-surface/90 backdrop-blur-xl z-50 border-b border-white/5">
+<div class="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2 text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+<span class="text-sm font-medium">Volver</span>
+</a>
+<h1 class="text-lg font-headline font-bold text-white">Guía de Uso</h1>
+<div class="w-20"></div>
+</div>
+</header>
+
+<main class="pt-20 pb-8 px-4 max-w-2xl mx-auto">
+<!-- Intro -->
+<div class="text-center mb-8">
+<div class="w-16 h-16 rounded-full bg-primary-container/20 flex items-center justify-center mx-auto mb-4">
+<span class="material-symbols-outlined text-4xl text-primary-container" style="font-variation-settings:'FILL' 1">menu_book</span>
+</div>
+<h2 class="text-2xl font-headline font-bold text-white mb-2">Aprende a usar KetoLab</h2>
+<p class="text-on-surface-variant">Sigue estos pasos para sacar el máximo provecho de la app</p>
+</div>
+
+<!-- Steps -->
+<div class="space-y-4">
+
+<!-- Step 1: Perfil -->
+<div class="step-card glass-card rounded-2xl p-5">
+<div class="flex items-start gap-4">
+<div class="step-number bg-primary-container text-white flex-shrink-0">1</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary-container">person</span>
+<h3 class="text-lg font-headline font-bold text-white">Completa tu Perfil</h3>
+</div>
+<p class="text-sm text-on-surface-variant mb-3">Configura tus datos para calcular tus macros personalizados.</p>
+<div class="bg-surface-container-high rounded-xl p-3 space-y-2 text-sm">
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-lg">check</span>Peso actual y meta de peso</div>
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-lg">check</span>Altura, edad y sexo</div>
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-lg">check</span>Nivel de actividad física</div>
+</div>
+<div class="mt-3">
+<a href="perfil.html" class="inline-flex items-center gap-2 text-primary-container text-sm font-medium hover:underline">
+<span>Ir al Perfil</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Step 2: Checklist -->
+<div class="step-card glass-card rounded-2xl p-5" style="animation-delay:0.1s">
+<div class="flex items-start gap-4">
+<div class="step-number bg-primary-container text-white flex-shrink-0">2</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary-container">fact_check</span>
+<h3 class="text-lg font-headline font-bold text-white">Usa el Checklist Diario</h3>
+</div>
+<p class="text-sm text-on-surface-variant mb-3">Registra tu agua, electrolitos, ejercicio y más cada día.</p>
+<div class="bg-surface-container-high rounded-xl p-3 space-y-2 text-sm">
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-blue-400 text-lg">water_drop</span>Agua: 3L diarios</div>
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-yellow-400 text-lg">science</span>Electrolitos: 500ml</div>
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-lg">fitness_center</span>Ejercicio: 60 minutos</div>
+</div>
+<div class="mt-3">
+<a href="checklist.html" class="inline-flex items-center gap-2 text-primary-container text-sm font-medium hover:underline">
+<span>Ir al Checklist</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Step 3: Plan Semanal -->
+<div class="step-card glass-card rounded-2xl p-5" style="animation-delay:0.2s">
+<div class="flex items-start gap-4">
+<div class="step-number bg-primary-container text-white flex-shrink-0">3</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary-container">event_note</span>
+<h3 class="text-lg font-headline font-bold text-white">Planifica tu Semana</h3>
+</div>
+<p class="text-sm text-on-surface-variant mb-3">Genera un plan de comidas automático o crea el tuyo manualmente.</p>
+<div class="bg-surface-container-high rounded-xl p-3 space-y-2 text-sm">
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-lg">auto_awesome</span>Generador automático de planes</div>
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-yellow-400 text-lg">block</span>Excluye ingredientes no deseados</div>
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-lg">swap_horiz</span>Substitución automática de recetas</div>
+</div>
+<div class="mt-3">
+<a href="plan.html" class="inline-flex items-center gap-2 text-primary-container text-sm font-medium hover:underline">
+<span>Ir al Plan</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Step 4: Alimentos -->
+<div class="step-card glass-card rounded-2xl p-5" style="animation-delay:0.3s">
+<div class="flex items-start gap-4">
+<div class="step-number bg-primary-container text-white flex-shrink-0">4</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary-container">restaurant</span>
+<h3 class="text-lg font-headline font-bold text-white">Gestiona tu Despensa</h3>
+</div>
+<p class="text-sm text-on-surface-variant mb-3">Añade alimentos disponibles y genera tu lista de compras.</p>
+<div class="bg-surface-container-high rounded-xl p-3 space-y-2 text-sm">
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-lg">add_circle</span>Añade alimentos con código de barras</div>
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-blue-400 text-lg">shopping_cart</span>Genera lista de compras semanal</div>
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-lg">category</span>Organiza por categorías</div>
+</div>
+<div class="mt-3">
+<a href="alimentos.html" class="inline-flex items-center gap-2 text-primary-container text-sm font-medium hover:underline">
+<span>Ir a Alimentos</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Step 5: Macros -->
+<div class="step-card glass-card rounded-2xl p-5" style="animation-delay:0.4s">
+<div class="flex items-start gap-4">
+<div class="step-number bg-primary-container text-white flex-shrink-0">5</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary-container">donut_small</span>
+<h3 class="text-lg font-headline font-bold text-white">Sigue tus Macros</h3>
+</div>
+<p class="text-sm text-on-surface-variant mb-3">Visualiza tu progreso calórico y de nutrientes.</p>
+<div class="bg-surface-container-high rounded-xl p-3 space-y-2 text-sm">
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-orange-400 text-lg">local_fire_department</span>Calorías diarias</div>
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-lg">egg_alt</span>Proteína, grasas y carbos</div>
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-lg">monitor_weight</span>Evolución de peso</div>
+</div>
+<div class="mt-3">
+<a href="macros.html" class="inline-flex items-center gap-2 text-primary-container text-sm font-medium hover:underline">
+<span>Ir a Macros</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Step 6: Entrenamientos -->
+<div class="step-card glass-card rounded-2xl p-5" style="animation-delay:0.5s">
+<div class="flex items-start gap-4">
+<div class="step-number bg-green-500 text-white flex-shrink-0">6</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-green-400">fitness_center</span>
+<h3 class="text-lg font-headline font-bold text-white">Entrenamientos</h3>
+</div>
+<p class="text-sm text-on-surface-variant mb-3">Rutinas personalizadas para casa o gimnasio.</p>
+<div class="bg-surface-container-high rounded-xl p-3 space-y-2 text-sm">
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-lg">home</span>Ejercicios sin equipamiento</div>
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-lg">fitness_center</span>Rutinas con pesas</div>
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-lg">bar_chart</span>Historial de progreso</div>
+</div>
+<div class="mt-3">
+<a href="entrenamientos.html" class="inline-flex items-center gap-2 text-primary-container text-sm font-medium hover:underline">
+<span>Ir a Entrenamientos</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- Tips Section -->
+<div class="mt-8">
+<h3 class="text-lg font-headline font-bold text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">lightbulb</span>
+Consejos Rápidos
+</h3>
+<div class="space-y-3">
+<div class="glass-card rounded-xl p-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-yellow-400 flex-shrink-0">touch_app</span>
+<div>
+<p class="text-white font-medium text-sm">Toca el donut chart</p>
+<p class="text-on-surface-variant text-xs mt-1">En el dashboard puedes tocar el progreso para ver detalles de macros.</p>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-xl p-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-blue-400 flex-shrink-0">water_drop</span>
+<div>
+<p class="text-white font-medium text-sm">Registra el agua inmediatamente</p>
+<p class="text-on-surface-variant text-xs mt-1">Usa el modal rápido de agua desde el dashboard.</p>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-xl p-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container flex-shrink-0">block</span>
+<div>
+<p class="text-white font-medium text-sm">Usa exclusiones inteligentes</p>
+<p class="text-on-surface-variant text-xs mt-1">En Plan puedes excluir ingredientes y el sistema substituye automáticamente.</p>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-xl p-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary flex-shrink-0">qr_code_scanner</span>
+<div>
+<p class="text-white font-medium text-sm">Escanea códigos de barras</p>
+<p class="text-on-surface-variant text-xs mt-1">Añade alimentos rápidamente escaneando el producto.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Navigation -->
+<div class="mt-8 flex gap-3">
+<a href="perfil.html" class="flex-1 py-4 bg-primary-container text-white rounded-xl font-bold text-center hover:bg-primary-container/80 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">person</span>
+Empezar Ahora
+</a>
+<button onclick="closeGuide()" class="py-4 px-6 bg-surface-container-high text-white/70 rounded-xl font-medium hover:bg-surface-container-highest transition-all">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+
+<!-- Remember checkbox -->
+<div class="mt-4 text-center">
+<label class="flex items-center justify-center gap-2 text-sm text-on-surface-variant cursor-pointer">
+<input type="checkbox" id="dontShowAgain" class="w-4 h-4 rounded border-outline accent-primary-container">
+No mostrar de nuevo
+</label>
+</div>
+
+</main>
+
+<script>
+function closeGuide() {
+  if (document.getElementById('dontShowAgain').checked) {
+    localStorage.setItem('ketolab_guide_seen', 'true');
+  }
+  window.location.href = 'index.html';
+}
+
+// Check if already seen
+if (localStorage.getItem('ketolab_guide_seen')) {
+  window.location.href = 'index.html';
+}
+</script>
+</body>
+</html>

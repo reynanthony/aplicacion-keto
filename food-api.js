@@ -210,7 +210,8 @@ async function searchOnlineFoods(query) {
   currentOnlineSearch = query;
   onlineSearchResults = [];
   
-  var results = await searchFoodsOnline(query, 15);
+  // Usar función unificada que busca en ambas APIs
+  var results = await searchAllFoodSources(query, 10);
   
   // Filtrar solo si la búsqueda no cambió
   if (currentOnlineSearch === query) {
@@ -289,8 +290,7 @@ function showOnlineFoodDetail(index) {
   
   content.innerHTML = html;
   
-  modal.classList.remove('hidden');
-  modal.classList.add('flex');
+  modal.style.display = 'flex';
 }
 
 // Agregar alimento de búsqueda online
@@ -315,8 +315,7 @@ function addOnlineFood(index) {
 function closeOnlineFoodModal() {
   var modal = document.getElementById('onlineFoodModal');
   if (modal) {
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
+    modal.style.display = 'none';
   }
 }
 
@@ -338,4 +337,151 @@ function getCategoryColor(category) {
 function clearFoodCache() {
   foodSearchCache = {};
   console.log('[FoodAPI] Cache limpiado');
+}
+
+// ==================== OPENFOODFACTS API ====================
+// API gratuita y abierta de alimentos
+// Documentación: https://world.openfoodfacts.org/api
+
+const OPENFOODFACTS_BASE = 'https://world.openfoodfacts.org/cgi/search.pl';
+
+// Cache para OpenFoodFacts
+var openFoodFactsCache = {};
+
+// Buscar alimentos en OpenFoodFacts
+async function searchOpenFoodFacts(query, limit = 15) {
+  if (!query || query.trim().length < 2) {
+    return [];
+  }
+  
+  var cacheKey = query.toLowerCase().trim();
+  if (openFoodFactsCache[cacheKey]) {
+    console.log('[OpenFoodFacts] Usando cache para:', query);
+    return openFoodFactsCache[cacheKey];
+  }
+  
+  try {
+    var url = OPENFOODFACTS_BASE + '?search_terms=' + encodeURIComponent(query) + 
+              '&search_simple=1&action=process&json=1&page_size=' + limit + '&fields=code,product_name,nutriments,brands,categories';
+    
+    var response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error('OpenFoodFacts error: ' + response.status);
+    }
+    
+    var data = await response.json();
+    
+    if (!data.products || data.products.length === 0) {
+      return [];
+    }
+    
+    // Transformar al formato de KetoLab
+    var formatted = data.products
+      .filter(function(p) {
+        return p.product_name && p.nutriments;
+      })
+      .map(function(product) {
+        var nutriments = product.nutriments || {};
+        
+        // Obtener valores por 100g
+        var calories = nutriments['energy-kcal_100g'] || nutriments['energy-kcal'] || 0;
+        var protein = nutriments['proteins_100g'] || nutriments['proteins'] || 0;
+        var fat = nutriments['fat_100g'] || nutriments['fat'] || 0;
+        var carbs = nutriments['carbohydrates_100g'] || nutriments['carbohydrates'] || 0;
+        
+        // Calcular net carbs (total - fibra)
+        var fiber = nutriments['fiber_100g'] || nutriments['fiber'] || 0;
+        var netCarbs = Math.max(0, carbs - fiber);
+        
+        return {
+          id: 'off_' + product.code,
+          name: product.product_name,
+          portion: 100,
+          calories: Math.round(calories),
+          protein: Math.round(protein * 10) / 10,
+          fat: Math.round(fat * 10) / 10,
+          carbs: Math.round(netCarbs * 10) / 10,
+          fiber: Math.round(fiber * 10) / 10,
+          category: mapOpenFoodFactsCategory(product.categories),
+          brand: product.brands || null,
+          source: 'OpenFoodFacts'
+        };
+      })
+      .filter(function(f) {
+        return f.calories > 0;
+      });
+    
+    // Guardar en cache
+    openFoodFactsCache[cacheKey] = formatted;
+    
+    console.log('[OpenFoodFacts] Encontrados:', formatted.length, 'alimentos para:', query);
+    return formatted;
+    
+  } catch (error) {
+    console.error('[OpenFoodFacts] Error:', error);
+    return [];
+  }
+}
+
+// Mapear categoría de OpenFoodFacts a categorías de KetoLab
+function mapOpenFoodFactsCategory(categories) {
+  if (!categories) return 'Otros';
+  
+  var cat = categories.toLowerCase();
+  
+  if (cat.includes('meat') || cat.includes('poultry') || cat.includes('fish') || cat.includes('egg') || cat.includes('chicken') || cat.includes('beef') || cat.includes('pork')) {
+    return 'Proteínas';
+  }
+  if (cat.includes('dairy') || cat.includes('cheese') || cat.includes('milk') || cat.includes('yugurt') || cat.includes('butter') || cat.includes('cream')) {
+    return 'Lácteos';
+  }
+  if (cat.includes('vegetable') || cat.includes('legume') || cat.includes('plant') || cat.includes('broccoli') || cat.includes('spinach')) {
+    return 'Verduras';
+  }
+  if (cat.includes('nut') || cat.includes('almond') || cat.includes('walnut') || cat.includes('seed')) {
+    return 'Frutos secos';
+  }
+  if (cat.includes('fruit') || cat.includes('apple') || cat.includes('banana') || cat.includes('berry')) {
+    return 'Frutas';
+  }
+  if (cat.includes('oil') || cat.includes('fat') || cat.includes('butter') || cat.includes('lard')) {
+    return 'Grasas';
+  }
+  
+  return 'Otros';
+}
+
+// Función unificada para buscar en todas las APIs
+async function searchAllFoodSources(query, limit = 10) {
+  var results = [];
+  
+  try {
+    // Buscar en USDA
+    var usdaResults = await searchFoodsOnline(query, limit);
+    results = results.concat(usdaResults);
+  } catch (e) {
+    console.warn('[searchAllFoodSources] USDA error:', e);
+  }
+  
+  try {
+    // Buscar en OpenFoodFacts
+    var offResults = await searchOpenFoodFacts(query, limit);
+    results = results.concat(offResults);
+  } catch (e) {
+    console.warn('[searchAllFoodSources] OpenFoodFacts error:', e);
+  }
+  
+  // Eliminar duplicados por nombre
+  var seen = {};
+  var uniqueResults = results.filter(function(item) {
+    var key = item.name.toLowerCase().trim();
+    if (seen[key]) {
+      return false;
+    }
+    seen[key] = true;
+    return true;
+  });
+  
+  return uniqueResults.slice(0, limit * 2);
 }

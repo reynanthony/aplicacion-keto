@@ -3,145 +3,371 @@
 var autoWorkoutGenerator = (function() {
   'use strict';
 
-  var exercisesDB = {
-    casa: [
-      { id: "sentadillas", name: "Sentadillas", muscle: "piernas", difficulty: "principiante", caloriesPerMinute: 8, instructions: "Pies al ancho de hombros, espalda recta, baja como si fueras a sentarte", alternatives: ["sentadillas búlgaras", "zancadas"] },
-      { id: "flexiones", name: "Flexiones de pecho", muscle: "pecho", difficulty: "principiante", caloriesPerMinute: 7, instructions: "Manos al ancho de hombros, cuerpo recto, baja hasta que el pecho casi toque el suelo", alternatives: ["flexiones rodillas", "flexiones inclinadas"] },
-      { id: "plancha", name: "Plancha abdominal", muscle: "core", difficulty: "principiante", caloriesPerMinute: 5, instructions: "Apoya antebrazos y puntas de pies, cuerpo recto, contrae abdomen", alternatives: ["plancha lateral", "plancha con elevación"] },
-      { id: "zancadas", name: "Zancadas", muscle: "piernas", difficulty: "principiante", caloriesPerMinute: 9, instructions: "Da un paso largo hacia adelante, baja la cadera hasta que ambas rodillas estén a 90°", alternatives: ["zancadas laterales", "zancadas reversas"] },
-      { id: "burpees", name: "Burpees", muscle: "cardio", difficulty: "intermedio", caloriesPerMinute: 12, instructions: "Desde posición de pie, baja en cuclillas, lanza pies atrás, haz flexión, salta", alternatives: ["burpees sin flexión"] },
-      { id: "mountain-climbers", name: "Mountain Climbers", muscle: "cardio", difficulty: "intermedio", caloriesPerMinute: 11, instructions: "En posición de plancha, lleva las rodillas al pecho alternadamente", alternatives: ["step touch"] },
-      { id: "saltos-comba", name: "Saltos de comba", muscle: "cardio", difficulty: "intermedio", caloriesPerMinute: 10, instructions: "Salta alternando pies, mantenimiento durante 1 minuto", alternatives: ["saltos lateral"] },
-      { id: "puentes", name: "Puentes de glúteos", muscle: "piernas", difficulty: "principiante", caloriesPerMinute: 4, instructions: "Acostado boca arriba, levanta las cadera contrae gluteos abajo", alternatives: ["puente unilateral"] }
-    ],
-    mancuernas: [
-      { id: "press-mancuernas", name: "Press de hombros", muscle: "hombros", difficulty: "principiante", caloriesPerMinute: 8, instructions: "De pie, mancuernas a la altura de hombros, sube hasta extender brazos", alternatives: ["press militar", "elevaciones laterales"] },
-      { id: "curl-biceps", name: "Curl de bíceps", muscle: "biceps", difficulty: "principiante", caloriesPerMinute: 6, instructions: "Mancuernas en cada mano, palmas hacia adelante, flexiona codos sin mover brazos", alternatives: ["curl concentrado", "curl martillo"] },
-      { id: "remo-mancuerna", name: "Remo con mancuerna", muscle: "espalda", difficulty: "intermedio", caloriesPerMinute: 8, instructions: "Apoya una rodilla y mano en banco, con la otra mano tira la mancuerna hacia la cadera", alternatives: ["remo con barra", "jalón al pecho"] },
-      { id: "sentadilla-copa", name: "Sentadilla copa", muscle: "piernas", difficulty: "principiante", caloriesPerMinute: 9, instructions: "Sujeta una mancuerna contra el pecho, baja en sentadilla manteniendo espalda recta", alternatives: ["sentadilla goblet", "sentadilla búlgara"] },
-      { id: "press-banca-mancuerna", name: "Press de banca", muscle: "pecho", difficulty: "intermedio", caloriesPerMinute: 9, instructions: "Acostado en banco/suelo, baja mancuernas hasta el pecho y empuja hacia arriba", alternatives: ["flexiones", "press inclinado"] },
-      { id: "extension-triceps", name: "Extensión de tríceps", muscle: "triceps", difficulty: "principiante", caloriesPerMinute: 5, instructions: "Mancuerna con ambas manos detrás de la cabeza, extiende hacia arriba", alternatives: ["fondos"] }
-    ],
-    gimnasiototal: [
-      { id: "press-banca-barra", name: "Press de banca", muscle: "pecho", difficulty: "intermedio", caloriesPerMinute: 10, instructions: "Acostado en banco, agarra la barra, baja hasta el pecho, empuja", alternatives: ["press banca mancuernas", "fondos"] },
-      { id: "sentadilla-barra", name: "Sentadilla con barra", muscle: "piernas", difficulty: "intermedio", caloriesPerMinute: 11, instructions: "Barra en trapecio, baja manteniendo espalda recta, sube con fuerza", alternatives: ["sentadilla hack", "prensa"] },
-      { id: "peso-muerto", name: "Peso muerto", muscle: "espalda", difficulty: "avanzado", caloriesPerMinute: 12, instructions: "Pies al ancho de hombros, agarra la barra, espalda recta, levanta con piernas", alternativas: ["peso muerto rumano", "hiperextensiones"] },
-      { id: "jalon-polea", name: "Jalón al pecho", muscle: "espalda", difficulty: "principiante", caloriesPerMinute: 8, instructions: "Sentado, agarre amplio, tira la barra hacia el pecho, controla subida", alternatives: ["dominadas asistidas", "remo polea"] }
-    ]
-  };
+  var muscleGroups = ['pecho', 'espalda', 'piernas', 'hombros', 'biceps', 'triceps', 'abdomen'];
+  var weekDays = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
+
+  function getAllExercises() {
+    if (typeof getExercises === 'function') {
+      return getExercises();
+    }
+    return [];
+  }
 
   function getPreferences() {
-    return safeParseJSON(localStorage.getItem('workout_preferences'), {
+    // Always read fresh from profile to get latest values
+    var profile = safeParseJSON(localStorage.getItem('keto_profile'), null);
+    
+    if (profile) {
+      var equipment = ['casa'];
+      if (profile.trainingType === 'dumbbells') {
+        equipment = ['mancuernas'];
+      } else if (profile.trainingType === 'weights' || profile.trainingType === 'both' || profile.trainingType === 'machines') {
+        equipment = ['gimnasiototal'];
+      }
+      
+      var level = 'principiante';
+      if (profile.experience === 'intermediate') {
+        level = 'intermedio';
+      } else if (profile.experience === 'advanced') {
+        level = 'avanzado';
+      }
+      
+      var trainingFreq = parseInt(profile.trainingFreq) || 3;
+      var duration = 30;
+      if (trainingFreq === 4 || trainingFreq === 5) {
+        duration = 45;
+      } else if (trainingFreq >= 6) {
+        duration = 60;
+      }
+      
+      return {
+        equipment: equipment,
+        level: level,
+        duration: duration,
+        daysPerWeek: trainingFreq,
+        goal: profile.trainingGoal || 'salud'
+      };
+    }
+    
+    return {
       equipment: ['casa'],
       level: 'principiante',
       duration: 30,
       daysPerWeek: 3,
       goal: 'salud'
-    });
+    };
   }
 
   function savePreferences(prefs) {
     localStorage.setItem('workout_preferences', JSON.stringify(prefs));
   }
 
-  function getAvailableExercises(prefs) {
-    var all = [];
+  function getAvailableExercises(prefs, muscleGroup, categories) {
+    var all = getAllExercises();
     
-    if (prefs.equipment.includes('casa')) {
-      all = all.concat(exercisesDB.casa);
+    // Use specified categories or fall back to equipment mapping
+    var categoryFilter = categories || [];
+    
+    if (categoryFilter.length === 0) {
+      // Map equipment to categories
+      if (prefs.equipment.includes('casa')) {
+        categoryFilter.push('calistenia');
+      }
+      if (prefs.equipment.includes('mancuernas')) {
+        categoryFilter.push('fuerza');
+      }
+      if (prefs.equipment.includes('gimnasio')) {
+        categoryFilter.push('fuerza', 'maquina');
+      }
     }
-    if (prefs.equipment.includes('mancuernas')) {
-      all = all.concat(exercisesDB.mancuernas);
+    
+    // If no mapping and no categories, use all categories
+    if (categoryFilter.length === 0) {
+      categoryFilter = ['calistenia', 'fuerza', 'maquina'];
     }
-    if (prefs.equipment.includes('gimnasio')) {
-      all = all.concat(exercisesDB.gimnasiototal);
+    
+    if (categoryFilter.length > 0) {
+      all = all.filter(function(e) { return categoryFilter.includes(e.category); });
     }
+    
+    // Filter by muscle group for the day
+    if (muscleGroup && muscleGroup !== 'descanso') {
+      all = all.filter(function(e) { return e.muscle === muscleGroup; });
+    }
+    
+    all = all.filter(function(e) { return e.category !== 'cardio'; });
     
     return all;
   }
 
-  function filterByLevel(exercises, level) {
+  function getIntensityParams(level, goal, daysPerWeek) {
+    // Base parameters by experience level
+    var params = {
+      sets: 3,
+      reps: 12,
+      restSeconds: 90
+    };
+    
+    // Adjust based on experience level
     if (level === 'principiante') {
-      return exercises.filter(function(e) { return e.difficulty === 'principiante'; });
+      params.sets = 3;
+      params.reps = 15;
+      params.restSeconds = 90;
     } else if (level === 'intermedio') {
-      return exercises.filter(function(e) { return ['principiante', 'intermedio'].includes(e.difficulty); });
+      params.sets = 4;
+      params.reps = 12;
+      params.restSeconds = 60;
+    } else if (level === 'avanzado') {
+      params.sets = 5;
+      params.reps = 8;
+      params.restSeconds = 45;
     }
-    return exercises;
+    
+    // Adjust based on goal
+    if (goal === 'fuerza') {
+      // More sets, fewer reps, more rest
+      params.sets += 1;
+      params.reps -= 2;
+      params.restSeconds += 30;
+    } else if (goal === 'perder_grasa' || goal === 'perdida_grasa') {
+      // More reps, less rest, moderate sets
+      params.reps += 3;
+      params.restSeconds -= 15;
+    } else if (goal === 'salud') {
+      // Balanced approach - no changes
+    }
+    
+    // Adjust based on frequency (recovery)
+    if (daysPerWeek >= 5) {
+      // High frequency - reduce intensity slightly
+      params.sets -= 1;
+      params.restSeconds += 15;
+    } else if (daysPerWeek <= 2) {
+      // Low frequency - can push harder
+      params.sets += 1;
+      params.restSeconds -= 15;
+    }
+    
+    // Ensure minimum values
+    params.sets = Math.max(2, params.sets);
+    params.reps = Math.max(6, params.reps);
+    params.restSeconds = Math.max(30, params.restSeconds);
+    
+    return params;
   }
 
-  function selectBalancedExercises(exercises, count) {
-    var muscleGroups = ['pecho', 'espalda', 'piernas', 'hombros', 'core', 'biceps', 'triceps', 'cardio'];
+  function selectExercisesForDay(exercises, count, level, preferCategory, intensityParams) {
+    if (exercises.length === 0) return [];
+    
+    // Separate exercises by category for mixing
+    var byCategory = {
+      calistenia: exercises.filter(function(e) { return e.category === 'calistenia'; }),
+      fuerza: exercises.filter(function(e) { return e.category === 'fuerza'; }),
+      maquina: exercises.filter(function(e) { return e.category === 'maquina'; })
+    };
+    
     var selected = [];
-    var usedMuscles = {};
+    var categories = ['calistenia', 'fuerza', 'maquina'];
+    var usedCategories = {};
     
-    // Primero priorizar grupos musculares diferentes
-    var shuffled = exercises.sort(function() { return Math.random() - 0.5; });
+    // If preferCategory is specified, try to include it
+    if (preferCategory && byCategory[preferCategory] && byCategory[preferCategory].length > 0) {
+      var prefShuffled = byCategory[preferCategory].sort(function() { return Math.random() - 0.5; });
+      selected.push(prefShuffled[0]);
+      usedCategories[preferCategory] = true;
+    }
     
-    shuffled.forEach(function(ex) {
-      if (selected.length >= count) return;
-      
-      if (!usedMuscles[ex.muscle] || (ex.muscle === 'cardio' && selected.filter(function(s) { return s.muscle === 'cardio'; }).length < 2)) {
-        selected.push(ex);
-        usedMuscles[ex.muscle] = true;
+    // Fill remaining slots by mixing categories
+    var remaining = count - selected.length;
+    var allRemaining = [];
+    
+    categories.forEach(function(cat) {
+      if (!usedCategories[cat]) {
+        allRemaining = allRemaining.concat(byCategory[cat] || []);
       }
     });
     
-    // Si necesitamos más, agregar cardio
-    while (selected.length < count) {
-      var cardioEx = exercises.find(function(e) { return e.muscle === 'cardio' && !selected.includes(e); });
-      if (cardioEx) {
-        selected.push(cardioEx);
-      } else {
-        break;
-      }
+    var shuffled = allRemaining.sort(function() { return Math.random() - 0.5; });
+    for (var i = 0; i < remaining && i < shuffled.length; i++) {
+      selected.push(shuffled[i]);
     }
     
-    return selected;
+    // Final shuffle of selected exercises
+    selected = selected.sort(function() { return Math.random() - 0.5; });
+    
+    var sets = intensityParams ? intensityParams.sets : 3;
+    var reps = intensityParams ? intensityParams.reps : 12;
+    var rest = intensityParams ? intensityParams.restSeconds : 90;
+    
+    return selected.map(function(ex) {
+      return {
+        id: ex.id,
+        name: ex.name,
+        muscle: ex.muscle,
+        sets: sets,
+        reps: reps,
+        restSeconds: rest,
+        category: ex.category || 'calistenia'
+      };
+    });
   }
 
-  function generateRoutine() {
+  function generateWeeklyPlan() {
     var prefs = getPreferences();
-    var allExercises = getAvailableExercises(prefs);
-    var filteredExercises = filterByLevel(allExercises, prefs.level);
+    var daysPerWeek = prefs.daysPerWeek || 3;
+    var duration = prefs.duration || 30;
+    var level = prefs.level || 'principiante';
+    var goal = prefs.goal || 'salud';
+    var workoutType = prefs.workoutType || localStorage.getItem('workoutType') || 'mixto';
     
-    if (filteredExercises.length === 0) {
+    // Calculate intensity parameters based on experience, goal, and frequency
+    var intensityParams = getIntensityParams(level, goal, daysPerWeek);
+    
+    // Determine which days to train based on daysPerWeek
+    var trainingDays = [];
+    var restDays = [];
+    
+    // Always use Monday as start, spread workouts evenly
+    var dayIndices = [];
+    var days = parseInt(daysPerWeek) || 3;
+    
+    if (days === 1) {
+      dayIndices = [0]; // Monday
+    } else if (days === 2) {
+      dayIndices = [0, 3]; // Mon, Thu
+    } else if (days === 3) {
+      dayIndices = [0, 2, 4]; // Mon, Wed, Fri
+    } else if (days === 4) {
+      dayIndices = [0, 1, 3, 4]; // Mon, Tue, Thu, Fri
+    } else if (days === 5) {
+      dayIndices = [0, 1, 2, 3, 4]; // Mon-Fri
+    } else if (days === 6) {
+      dayIndices = [0, 1, 2, 3, 4, 5]; // Mon-Sat
+    } else if (days >= 7) {
+      dayIndices = [0, 1, 2, 3, 4, 5, 6]; // All days
+    }
+    
+    // Determine categories based on workout type
+    var categoryCycle;
+    if (workoutType === 'calistenia') {
+      categoryCycle = ['calistenia', 'calistenia', 'calistenia', 'calistenia'];
+    } else if (workoutType === 'fuerza') {
+      categoryCycle = ['fuerza', 'fuerza', 'fuerza', 'fuerza'];
+    } else if (workoutType === 'maquina') {
+      categoryCycle = ['maquina', 'maquina', 'maquina', 'maquina'];
+    } else {
+      // Mixto - alternate all categories
+      categoryCycle = ['calistenia', 'fuerza', 'maquina', 'fuerza'];
+    }
+    
+    // Assign muscle groups to training days with rotation
+    var muscleIndex = 0;
+    var weeklyPlan = {};
+    
+    weekDays.forEach(function(day, idx) {
+      if (dayIndices.includes(idx)) {
+        var muscle = muscleGroups[muscleIndex % muscleGroups.length];
+        var preferCategory = categoryCycle[muscleIndex % categoryCycle.length];
+        var exercises = getAvailableExercises(prefs, muscle);
+        var exerciseCount = Math.max(3, Math.floor(duration / 8));
+        var selectedExercises = selectExercisesForDay(exercises, exerciseCount, level, preferCategory, intensityParams);
+        
+        weeklyPlan[day] = {
+          training: true,
+          muscle: muscle,
+          exercises: selectedExercises,
+          duration: duration,
+          estimatedCalories: Math.round(duration * 5),
+          mainCategory: preferCategory,
+          workoutType: workoutType,
+          intensity: intensityParams
+        };
+        
+        muscleIndex++;
+      } else {
+        weeklyPlan[day] = {
+          training: false,
+          muscle: 'descanso',
+          exercises: [],
+          duration: 0,
+          estimatedCalories: 0
+        };
+      }
+    });
+    
+    var plan = {
+      startDate: new Date().toISOString().slice(0, 10),
+      preferences: prefs,
+      weekPlan: weeklyPlan,
+      intensity: intensityParams,
+      generatedAt: new Date().toISOString()
+    };
+    
+    // Save the weekly plan
+    localStorage.setItem('weeklyWorkoutPlan', JSON.stringify(plan));
+    
+    return {
+      success: true,
+      plan: plan
+    };
+  }
+
+  function getWeeklyPlan() {
+    return safeParseJSON(localStorage.getItem('weeklyWorkoutPlan'), null);
+  }
+
+  function getTodayWorkout() {
+    var plan = getWeeklyPlan();
+    if (!plan || !plan.weekPlan) return null;
+    
+    var today = new Date();
+    var dayName = weekDays[today.getDay() === 0 ? 6 : today.getDay() - 1];
+    
+    return plan.weekPlan[dayName] || null;
+  }
+
+  function markDayCompleted(dayName) {
+    var plan = getWeeklyPlan();
+    if (!plan || !plan.weekPlan || !plan.weekPlan[dayName]) return;
+    
+    plan.weekPlan[dayName].completed = true;
+    plan.weekPlan[dayName].completedAt = new Date().toISOString();
+    
+    localStorage.setItem('weeklyWorkoutPlan', JSON.stringify(plan));
+  }
+
+  function generateSingleRoutine() {
+    var prefs = getPreferences();
+    var allExercises = getAvailableExercises(prefs, null);
+    var duration = prefs.duration || 30;
+    var level = prefs.level || 'principiante';
+    
+    if (allExercises.length === 0) {
       return {
         success: false,
-        error: 'No hay ejercicios disponibles para tu nivel y equipamiento.'
+        error: 'No hay ejercicios disponibles.'
       };
     }
     
-    // Número de ejercicios según duración
-    var exerciseCount = Math.max(4, Math.floor(prefs.duration / 7));
-    var selectedExercises = selectBalancedExercises(filteredExercises, exerciseCount);
-    
-    // Calcular series y repeticiones
-    var setsPerExercise = Math.max(3, Math.floor(prefs.duration / (selectedExercises.length * 2)));
-    var reps = prefs.level === 'principiante' ? 12 : (prefs.level === 'intermedio' ? 15 : 20);
-    
-    // Calcular calorías estimadas - más realista
-    // Base: ~4 cal/min para entrenamiento de fuerza
-    // + 0.5 cal por cada repetición estimada
-    var estimatedReps = selectedExercises.length * setsPerExercise * reps;
-    var totalCalories = (prefs.duration * 4) + (estimatedReps * 0.5);
+    var exerciseCount = Math.max(4, Math.floor(duration / 7));
+    var shuffled = allExercises.sort(function() { return Math.random() - 0.5; });
+    var selected = shuffled.slice(0, exerciseCount);
     
     var routine = {
       date: new Date().toISOString().slice(0, 10),
-      duration: prefs.duration,
-      level: prefs.level,
+      duration: duration,
+      level: level,
       equipment: prefs.equipment,
-      estimatedCalories: Math.round(totalCalories),
-      exercises: selectedExercises.map(function(ex, index) {
+      estimatedCalories: Math.round(duration * 5),
+      exercises: selected.map(function(ex) {
         return {
           id: ex.id,
           name: ex.name,
           muscle: ex.muscle,
-          sets: setsPerExercise,
-          reps: reps,
-          restSeconds: prefs.level === 'principiante' ? 60 : 45,
-          instructions: ex.instructions,
-          alternatives: ex.alternatives || [],
-          order: index + 1
+          sets: ex.sets || 3,
+          reps: ex.reps || 12,
+          restSeconds: level === 'principiante' ? 90 : 60,
+          category: ex.category || 'calistenia'
         };
       }),
       isAutoGenerated: true
@@ -173,34 +399,48 @@ var autoWorkoutGenerator = (function() {
     
     logs.push(workoutData);
     
-    // Also save to ketoWorkouts for dashboard/historical display
     var ketoWorkouts = safeParseJSON(localStorage.getItem('ketoWorkouts'), []);
     ketoWorkouts.push(workoutData);
     
-    // Keep only last 30 days
-    if (logs.length > 30) {
-      logs = logs.slice(-30);
-    }
-    if (ketoWorkouts.length > 30) {
-      ketoWorkouts = ketoWorkouts.slice(-30);
-    }
+    if (logs.length > 30) logs = logs.slice(-30);
+    if (ketoWorkouts.length > 30) ketoWorkouts = ketoWorkouts.slice(-30);
     
     localStorage.setItem('workout_logs', JSON.stringify(logs));
     localStorage.setItem('ketoWorkouts', JSON.stringify(ketoWorkouts));
+    
+    // Mark today as completed in weekly plan
+    var dayIndex = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1;
+    markDayCompleted(weekDays[dayIndex]);
   }
 
   return {
-    generate: generateRoutine,
+    generate: generateSingleRoutine,
+    generateWeekly: generateWeeklyPlan,
+    getWeeklyPlan: getWeeklyPlan,
+    getTodayWorkout: getTodayWorkout,
     getPreferences: getPreferences,
     savePreferences: savePreferences,
     getAvailableExercises: getAvailableExercises,
-    saveWorkoutLog: saveWorkoutLog
+    saveWorkoutLog: saveWorkoutLog,
+    markDayCompleted: markDayCompleted
   };
 })();
 
 // Funciones globales
 function generateAutoWorkout() {
   return autoWorkoutGenerator.generate();
+}
+
+function generateWeeklyWorkoutPlan() {
+  return autoWorkoutGenerator.generateWeekly();
+}
+
+function getWeeklyWorkoutPlan() {
+  return autoWorkoutGenerator.getWeeklyPlan();
+}
+
+function getTodayWorkout() {
+  return autoWorkoutGenerator.getTodayWorkout();
 }
 
 function getWorkoutPreferences() {
