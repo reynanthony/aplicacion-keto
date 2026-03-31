@@ -143,6 +143,8 @@ tailwind.config = {
   color: #ff4d00;
 }
 
+#bottomNav a{transition:all 0.2s}
+#bottomNav a:active{transform:scale(0.95)}
 #bottomNav a.text-primary-container .material-symbols-outlined{color:#ff4d00!important}
 #bottomNav a.text-primary-container span{color:#ff4d00!important}
 
@@ -270,11 +272,42 @@ notifications
 <span class="text-base font-black text-primary-container tracking-tight font-headline">KetoLab</span>
 </a>
 <div class="flex items-center gap-2">
+<button onclick="toggleHamburgerMenu()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined">menu</span>
+</button>
 <button onclick="document.getElementById('mobileSettingsModal').classList.remove('hidden')" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
 <span class="material-symbols-outlined">settings</span>
 </button>
 </div>
 </header>
+
+<!-- Hamburger Menu (Mobile) -->
+<div id="hamburgerMenu" class="fixed inset-0 z-[70] hidden">
+<div class="absolute inset-0 bg-black/70" onclick="toggleHamburgerMenu()"></div>
+<div class="absolute top-0 right-0 h-full w-72 bg-surface-container-low shadow-2xl transform transition-transform duration-300 translate-x-full" id="hamburgerPanel">
+<div class="p-4 border-b border-white/10">
+<div class="flex items-center justify-between">
+<span class="text-lg font-bold text-white">Más opciones</span>
+<button onclick="toggleHamburgerMenu()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</div>
+<div class="overflow-y-auto h-[calc(100%-64px)] pb-20">
+<nav class="p-2 space-y-1">
+<a href="alimentos.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10 transition-colors"><span class="material-symbols-outlined">restaurant</span><span>Alimentos</span></a>
+<a href="plan.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10 transition-colors"><span class="material-symbols-outlined">event_note</span><span>Plan Semanal</span></a>
+<a href="checklist.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10 transition-colors"><span class="material-symbols-outlined">task_alt</span><span>Checklist</span></a>
+<a href="suplementos.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10 transition-colors"><span class="material-symbols-outlined">medication</span><span>Suplementos</span></a>
+<a href="recetas.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10 transition-colors"><span class="material-symbols-outlined">menu_book</span><span>Recetas</span></a>
+</nav>
+</div>
+</div>
+</div>
+
+<script>
+function toggleHamburgerMenu(){var m=document.getElementById('hamburgerMenu');var p=document.getElementById('hamburgerPanel');if(m.classList.contains('hidden')){m.classList.remove('hidden');requestAnimationFrame(function(){p.classList.remove('translate-x-full')})}else{p.classList.add('translate-x-full');setTimeout(function(){m.classList.add('hidden')},300)}}
+</script>
 
 <!-- Mobile Settings Modal -->
 <div id="mobileSettingsModal" class="fixed inset-0 z-[60] hidden">
@@ -928,17 +961,18 @@ Ver plan completo
 </div>
 </div>
 
-<!-- BottomNavBar (Mobile) - 9 items -->
-<nav id="bottomNav" class="md:hidden fixed bottom-0 left-0 w-full h-16 flex justify-around items-center z-50 px-0" style="background:rgba(24,23,23,0.95);border-top:1px solid rgba(255,77,0,0.3)">
-<a href="index.html" class="flex flex-col items-center text-primary-container relative"><span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">dashboard</span><span class="text-[10px]">Inicio</span><span class="absolute -top-1 -right-1 w-2 h-2 bg-primary-container rounded-full"></span></a>
-<a href="perfil.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
-<a href="alimentos.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
-<a href="plan.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">event_note</span><span class="text-[10px]">Plan</span></a>
-<a href="compras.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
-<a href="macros.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
-<a href="checklist.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
-<a href="entrenamientos.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
-<a href="suplementos.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">medication</span><span class="text-[10px]">Sup</span></a>
+<!-- BottomNavBar (Mobile) - 5 items optimizado -->
+<nav id="bottomNav" class="md:hidden fixed bottom-0 left-0 w-full h-20 flex justify-around items-end pb-3 z-50 px-2" style="background:rgba(24,23,23,0.98);border-top:1px solid rgba(255,77,0,0.3)" role="navigation" aria-label="Navegación principal">
+<a href="perfil.html" class="flex flex-col items-center text-white/60 hover:text-white transition-all" aria-label="Perfil"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px] mt-1">Perfil</span></a>
+<a href="macros.html" class="flex flex-col items-center text-white/60 hover:text-white transition-all" aria-label="Macros"><span class="material-symbols-outlined text-2xl">monitoring</span><span class="text-[10px] mt-1">Macros</span></a>
+<a href="index.html" class="flex flex-col items-center -mt-5" aria-label="Inicio" aria-current="page">
+<div class="w-12 h-12 rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);box-shadow:0 0 20px rgba(255,77,0,0.6),0 0 40px rgba(255,77,0,0.3)">
+<span class="material-symbols-outlined text-white text-2xl" style="font-variation-settings:'FILL' 1">cottage</span>
+</div>
+<span class="text-[10px] mt-1 text-primary-container font-bold">Inicio</span>
+</a>
+<a href="compras.html" class="flex flex-col items-center text-white/60 hover:text-white transition-all" aria-label="Despensa"><span class="material-symbols-outlined text-2xl">shopping_basket</span><span class="text-[10px] mt-1">Despensa</span></a>
+<a href="entrenamientos.html" class="flex flex-col items-center text-white/60 hover:text-white transition-all" aria-label="Entrenamiento"><span class="material-symbols-outlined text-2xl">sports_gymnastics</span><span class="text-[10px] mt-1">Gym</span></a>
 </nav>
 
 <!-- Toast Container -->
@@ -1532,9 +1566,6 @@ function loadDashboard() {
     }
     
     // Calculate progress
-    var totalToLose = startWeight - goalWeight;
-    var lostSoFar = currentWeight > 0 && startWeight > 0 ? startWeight - currentWeight : 0;
-    
     var totalToLose = startWeight - goalWeight;
     var lostSoFar = currentWeight > 0 && startWeight > 0 ? startWeight - currentWeight : 0;
     var weightProgress = 0;

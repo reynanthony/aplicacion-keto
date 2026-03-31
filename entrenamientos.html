@@ -85,7 +85,42 @@ button:active{transform:scale(0.97)}
 <!-- Mobile Header -->
 <header class="md:hidden fixed top-0 w-full h-14 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5 px-4 flex items-center justify-between">
 <a href="index.html" class="flex items-center gap-2"><div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-white text-base" style="font-variation-settings:'FILL' 1">nutrition</span></div><span class="text-base font-black text-primary tracking-tight font-headline">KetoLab</span></a>
+<div class="flex items-center gap-2">
+<button onclick="toggleHamburgerMenu()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined">menu</span></button>
+</div>
 </header>
+
+<!-- Hamburger Menu (Mobile) -->
+<div id="hamburgerMenu" class="fixed inset-0 z-[70] hidden">
+<div class="absolute inset-0 bg-black/70" onclick="toggleHamburgerMenu()"></div>
+<div class="absolute top-0 right-0 h-full w-72 bg-surface-container-low shadow-2xl transform transition-transform duration-300 translate-x-full" id="hamburgerPanel">
+<div class="p-4 border-b border-white/10">
+<div class="flex items-center justify-between"><span class="text-lg font-bold text-white">Menú</span>
+<button onclick="toggleHamburgerMenu()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined">close</span></button>
+</div>
+</div>
+<div class="overflow-y-auto h-[calc(100%-64px)] pb-20">
+<nav class="p-2 space-y-1">
+<a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10 transition-colors"><span class="material-symbols-outlined">dashboard</span><span>Inicio</span></a>
+<a href="alimentos.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10 transition-colors"><span class="material-symbols-outlined">restaurant</span><span>Alimentos</span></a>
+<a href="plan.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10 transition-colors"><span class="material-symbols-outlined">event_note</span><span>Plan Semanal</span></a>
+<a href="compras.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10 transition-colors"><span class="material-symbols-outlined">shopping_cart</span><span>Despensa</span></a>
+<a href="checklist.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10 transition-colors"><span class="material-symbols-outlined">fact_check</span><span>Checklist</span></a>
+<a href="suplementos.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10 transition-colors"><span class="material-symbols-outlined">medication</span><span>Suplementos</span></a>
+</nav>
+<div class="border-t border-white/10 mx-2 my-2"></div>
+<nav class="p-2 space-y-1">
+<a href="entrenamientos.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-primary-container hover:bg-white/10 transition-colors"><span class="material-symbols-outlined">fitness_center</span><span>Entrenamientos</span></a>
+<a href="macros.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10 transition-colors"><span class="material-symbols-outlined">donut_small</span><span>Macros</span></a>
+<a href="perfil.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/10 transition-colors"><span class="material-symbols-outlined">person</span><span>Perfil</span></a>
+</nav>
+</div>
+</div>
+</div>
+
+<script>
+function toggleHamburgerMenu(){var m=document.getElementById('hamburgerMenu');var p=document.getElementById('hamburgerPanel');if(m.classList.contains('hidden')){m.classList.remove('hidden');requestAnimationFrame(function(){p.classList.remove('translate-x-full')})}else{p.classList.add('translate-x-full');setTimeout(function(){m.classList.add('hidden')},300)}}
+</script>
 
 <main class="main-content md:ml-64 pt-14 md:pt-6 px-4 md:px-8 pb-24 md:pb-8 min-h-screen">
 <div class="max-w-7xl mx-auto">
@@ -94,171 +129,169 @@ button:active{transform:scale(0.97)}
 <div id="dashboardView">
 
 <!-- Hero Card -->
-<div class="relative h-64 md:h-80 rounded-3xl overflow-hidden mb-8 group">
+<div class="relative h-48 md:h-80 rounded-2xl md:rounded-3xl overflow-hidden mb-6 md:mb-8 group">
 <div class="absolute inset-0 bg-gradient-to-br from-primary via-red-900/40 to-background"></div>
 <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djJoLTJ2LTJoMnptLTItNHYyaC0ydi0yaDJ6bTQtOGgydjJoLTJ2LTJ6bS04LTR2MmgtMnYtMmgydjJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-30"></div>
 <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-background to-transparent"></div>
-<div class="relative h-full flex flex-col justify-end p-6 md:p-10">
-<span class="inline-block px-3 py-1 bg-primary/30 text-primary text-xs font-bold tracking-widest uppercase rounded-full mb-3 w-fit">Sistema Online</span>
-<h2 class="text-4xl md:text-6xl font-headline font-black tracking-tighter text-white leading-none mb-3">¿Listo para <span class="text-primary">Entrenar?</span></h2>
-<p class="text-on-surface-variant text-sm md:text-base max-w-md mb-6">Tu sesión optimizada por IA está lista. Mantén la consistencia para alcanzar tus metas.</p>
-<div class="flex flex-wrap gap-4">
-<button onclick="startNewWorkout()" class="primary-gradient px-8 py-4 text-on-primary font-black uppercase tracking-widest text-sm rounded-xl flex items-center gap-2 hover:scale-105 transition-all shadow-[0_0_25px_rgba(255,144,109,0.5)]">
-<span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">play_arrow</span>
-Iniciar Sesión
+<div class="relative h-full flex flex-col justify-end p-4 md:p-10">
+<span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-primary/30 text-primary text-[10px] md:text-xs font-bold tracking-widest uppercase rounded-full mb-2 md:mb-3 w-fit">Sistema Online</span>
+<h2 class="text-2xl md:text-6xl font-headline font-black tracking-tighter text-white leading-tight mb-2 md:mb-3">¿Listo para <span class="text-primary">Entrenar?</span></h2>
+<p class="text-on-surface-variant text-xs md:text-base max-w-md hidden md:block mb-4 md:mb-6">Tu sesión optimizada por IA está lista. Mantén la consistencia para alcanzar tus metas.</p>
+<div class="flex flex-wrap gap-2 md:gap-4">
+<button onclick="startNewWorkout()" class="primary-gradient px-4 py-2.5 md:px-8 md:py-4 text-on-primary font-black uppercase tracking-wider text-xs md:text-sm rounded-xl flex items-center gap-2 hover:scale-105 transition-all shadow-[0_0_25px_rgba(255,144,109,0.5)]">
+<span class="material-symbols-outlined text-sm md:text-base" style="font-variation-settings:'FILL' 1">play_arrow</span>
+<span class="hidden md:inline">Iniciar Sesión</span><span class="md:hidden">Iniciar</span>
 </button>
-<button onclick="showView('history')" class="bg-white/10 backdrop-blur-md px-6 py-4 text-white font-bold uppercase tracking-widest text-sm rounded-xl border border-white/10 hover:bg-white/20 transition-all">
-Ver Progreso
+<button onclick="showView('history')" class="bg-white/10 backdrop-blur-md px-4 py-2.5 md:px-6 md:py-4 text-white font-bold uppercase tracking-wider text-xs md:text-sm rounded-xl border border-white/10 hover:bg-white/20 transition-all">
+<span class="hidden md:inline">Ver Progreso</span><span class="md:hidden">Progreso</span>
 </button>
 </div>
 </div>
 </div>
 
 <!-- Mode Selection -->
-<div class="grid grid-cols-2 gap-4 mb-8">
-<button onclick="startManualWorkout()" class="bg-surface-container-high rounded-2xl p-6 hover:bg-surface-container-highest transition-all group text-left">
-<div class="flex items-center gap-4">
-<div class="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-<span class="material-symbols-outlined text-2xl text-primary" style="font-variation-settings:'FILL' 1">edit</span>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-8">
+<button onclick="startManualWorkout()" class="bg-surface-container-high rounded-xl md:rounded-2xl p-4 md:p-6 hover:bg-surface-container-highest transition-all group text-left">
+<div class="flex items-center gap-3 md:gap-4">
+<div class="w-10 h-10 md:w-14 md:h-14 rounded-lg md:rounded-xl bg-primary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-lg md:text-2xl text-primary" style="font-variation-settings:'FILL' 1">edit</span>
 </div>
 <div>
-<h3 class="text-lg font-bold text-white">Manual</h3>
-<p class="text-sm text-on-surface-variant">Tú decides ejercicios</p>
+<h3 class="text-base md:text-lg font-bold text-white">Manual</h3>
+<p class="text-xs md:text-sm text-on-surface-variant">Tú decides ejercicios</p>
 </div>
 </div>
 </button>
-<button onclick="generateAIWorkout()" class="bg-gradient-to-br from-secondary/20 to-primary/10 rounded-2xl p-6 hover:from-secondary/30 hover:to-primary/20 transition-all group text-left border border-secondary/20">
-<div class="flex items-center gap-4">
-<div class="w-14 h-14 rounded-xl bg-secondary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-<span class="material-symbols-outlined text-2xl text-secondary" style="font-variation-settings:'FILL' 1">auto_awesome</span>
+<button onclick="generateAIWorkout()" class="bg-gradient-to-br from-secondary/20 to-primary/10 rounded-xl md:rounded-2xl p-4 md:p-6 hover:from-secondary/30 hover:to-primary/20 transition-all group text-left border border-secondary/20">
+<div class="flex items-center gap-3 md:gap-4">
+<div class="w-10 h-10 md:w-14 md:h-14 rounded-lg md:rounded-xl bg-secondary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-lg md:text-2xl text-secondary" style="font-variation-settings:'FILL' 1">auto_awesome</span>
 </div>
 <div>
-<h3 class="text-lg font-bold text-white">AI Generator</h3>
-<p class="text-sm text-on-surface-variant">Rutina inteligente</p>
+<h3 class="text-base md:text-lg font-bold text-white">AI Generator</h3>
+<p class="text-xs md:text-sm text-on-surface-variant">Rutina inteligente</p>
 </div>
 </div>
 </button>
 </div>
 
 <!-- Tipo de Entrenamiento -->
-<div class="mb-6">
-<div class="flex items-center gap-3 mb-3">
-<span class="material-symbols-outlined text-secondary">fitness_center</span>
-<span class="text-sm font-bold text-white">Tipo de Entrenamiento</span>
+<div class="mb-4 md:mb-6">
+<div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+<span class="material-symbols-outlined text-secondary text-lg md:text-xl">fitness_center</span>
+<span class="text-xs md:text-sm font-bold text-white">Tipo de Entrenamiento</span>
 </div>
-<div class="grid grid-cols-4 gap-2">
-<button onclick="setWorkoutType('calistenia')" id="btn-calistenia" class="workout-type-btn px-3 py-3 rounded-xl text-xs font-bold uppercase tracking-wider bg-surface-container-high text-white/70 border border-transparent hover:border-primary/30 transition-all">
-🏃 Calistenia
+<div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+<button onclick="setWorkoutType('calistenia')" id="btn-calistenia" class="workout-type-btn px-2 py-2 md:px-3 md:py-3 rounded-lg md:rounded-xl text-[10px] md:text-xs font-bold uppercase tracking-wider bg-surface-container-high text-white/70 border border-transparent hover:border-primary/30 transition-all">
+🏃 <span class="hidden md:inline">Calistenia</span><span class="md:hidden">Calis.</span>
 </button>
-<button onclick="setWorkoutType('fuerza')" id="btn-fuerza" class="workout-type-btn px-3 py-3 rounded-xl text-xs font-bold uppercase tracking-wider bg-surface-container-high text-white/70 border border-transparent hover:border-primary/30 transition-all">
-💪 Fuerza
+<button onclick="setWorkoutType('fuerza')" id="btn-fuerza" class="workout-type-btn px-2 py-2 md:px-3 md:py-3 rounded-lg md:rounded-xl text-[10px] md:text-xs font-bold uppercase tracking-wider bg-surface-container-high text-white/70 border border-transparent hover:border-primary/30 transition-all">
+💪 <span class="hidden md:inline">Fuerza</span><span class="md:hidden">Fuerza</span>
 </button>
-<button onclick="setWorkoutType('maquina')" id="btn-maquina" class="workout-type-btn px-3 py-3 rounded-xl text-xs font-bold uppercase tracking-wider bg-surface-container-high text-white/70 border border-transparent hover:border-primary/30 transition-all">
-⚙️ Máquinas
+<button onclick="setWorkoutType('maquina')" id="btn-maquina" class="workout-type-btn px-2 py-2 md:px-3 md:py-3 rounded-lg md:rounded-xl text-[10px] md:text-xs font-bold uppercase tracking-wider bg-surface-container-high text-white/70 border border-transparent hover:border-primary/30 transition-all">
+⚙️ <span class="hidden md:inline">Máquinas</span><span class="md:hidden">Máq.</span>
 </button>
-<button onclick="setWorkoutType('mixto')" id="btn-mixto" class="workout-type-btn px-3 py-3 rounded-xl text-xs font-bold uppercase tracking-wider bg-surface-container-high text-white/70 border border-transparent hover:border-primary/30 transition-all">
-🔄 Mezclar
+<button onclick="setWorkoutType('mixto')" id="btn-mixto" class="workout-type-btn px-2 py-2 md:px-3 md:py-3 rounded-lg md:rounded-xl text-[10px] md:text-xs font-bold uppercase tracking-wider bg-surface-container-high text-white/70 border border-transparent hover:border-primary/30 transition-all">
+🔄 <span class="hidden md:inline">Mezclar</span><span class="md:hidden">Mix</span>
 </button>
 </div>
 </div>
 
 <!-- Indicador de Intensidad -->
-<div id="intensityIndicator" class="mb-6 p-4 bg-surface-container-low rounded-2xl border border-white/5">
-<div class="flex items-center justify-between mb-2">
-<span class="text-sm font-bold text-white flex items-center gap-2">
-<span class="material-symbols-outlined text-secondary">speed</span>
-Intensidad del Plan
+<div id="intensityIndicator" class="mb-4 md:mb-6 p-3 md:p-4 bg-surface-container-low rounded-xl md:rounded-2xl border border-white/5">
+<div class="flex items-center justify-between mb-1 md:mb-2">
+<span class="text-xs md:text-sm font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-sm md:text-base">speed</span>
+Intensidad
 </span>
-<span id="intensityLevel" class="text-xs text-primary font-bold">--</span>
+<span id="intensityLevel" class="text-[10px] md:text-xs text-primary font-bold">--</span>
 </div>
-<div class="flex items-center gap-3">
-<div class="flex-1 h-2 bg-surface-container-high rounded-full overflow-hidden">
+<div class="flex items-center gap-2 md:gap-3">
+<div class="flex-1 h-1.5 md:h-2 bg-surface-container-high rounded-full overflow-hidden">
 <div id="intensityBar" class="h-full bg-gradient-to-r from-green-400 via-yellow-400 to-red-400 transition-all duration-500" style="width:0%"></div>
 </div>
-<span id="intensityDetails" class="text-xs text-on-surface-variant">Sin datos</span>
+<span id="intensityDetails" class="text-[10px] md:text-xs text-on-surface-variant hidden md:inline">Sin datos</span>
 </div>
 </div>
 
 <!-- Plan Semanal -->
-<div id="weeklyPlanSection" class="mb-8 hidden">
-<div class="flex justify-between items-center mb-4">
-<h3 class="text-lg font-bold text-white flex items-center gap-2">
-<span class="material-symbols-outlined text-primary">calendar_month</span>
-Plan Semanal
+<div id="weeklyPlanSection" class="mb-6 md:mb-8 hidden">
+<div class="flex justify-between items-center mb-3 md:mb-4">
+<h3 class="text-sm md:text-lg font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-base md:text-xl">calendar_month</span>
+<span class="hidden md:inline">Plan Semanal</span><span class="md:hidden">Esta Semana</span>
 </h3>
-<button onclick="regenerateWeeklyPlan()" class="text-xs text-primary hover:text-white transition-colors flex items-center gap-1">
+<button onclick="regenerateWeeklyPlan()" class="text-[10px] md:text-xs text-primary hover:text-white transition-colors flex items-center gap-1">
 <span class="material-symbols-outlined text-sm">refresh</span>
-Regenerar
+<span class="hidden md:inline">Regenerar</span>
 </button>
 </div>
-<div id="weeklyPlanDays" class="grid grid-cols-7 gap-2"></div>
+<div id="weeklyPlanDays" class="grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-3"></div>
 </div>
 
 <!-- Stats Bento Grid -->
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-6 md:mb-8">
 <!-- Monthly Goal -->
-<div class="bg-surface-container-low rounded-2xl p-5 ghost-border group relative overflow-hidden">
-<div class="absolute -right-4 -top-4 w-16 h-16 bg-primary/10 rounded-full"></div>
-<div class="flex justify-between items-start mb-3 relative">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1">flag</span>
+<div class="bg-surface-container-low rounded-xl md:rounded-2xl p-3 md:p-5 ghost-border group relative overflow-hidden">
+<div class="absolute -right-2 -top-2 w-10 h-10 md:w-16 md:h-16 bg-primary/10 rounded-full"></div>
+<div class="flex justify-between items-start mb-2 md:mb-3 relative">
+<span class="material-symbols-outlined text-primary text-base md:text-xl" style="font-variation-settings:'FILL' 1">flag</span>
 </div>
-<div class="flex items-baseline gap-2">
-<h3 class="text-4xl font-headline font-extrabold text-white"><span id="monthWorkoutsDash">0</span><span class="text-on-surface-variant text-xl">/20</span></h3>
-<span class="text-xs text-primary font-bold">80%</span>
+<div class="flex items-baseline gap-1 md:gap-2">
+<h3 class="text-2xl md:text-4xl font-headline font-extrabold text-white"><span id="monthWorkoutsDash">0</span><span class="text-on-surface-variant text-sm md:text-xl">/20</span></h3>
 </div>
-<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden mt-3">
+<div class="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden mt-2 md:mt-3">
 <div id="monthProgressBarDash" class="h-full bg-primary rounded-full transition-all duration-1000" style="width:0%"></div>
 </div>
-<p class="text-[10px] text-on-surface-variant mt-3 italic">¡Uno más para la recompensa de "Semana Consistente"!</p>
+<p class="text-[8px] md:text-[10px] text-on-surface-variant mt-1 md:mt-3 hidden md:block">¡Uno más para la recompensa!</p>
 </div>
 
 <!-- Calories -->
-<div class="bg-surface-container-low rounded-2xl p-5 ghost-border group relative overflow-hidden">
-<div class="absolute -right-4 -top-4 w-16 h-16 bg-secondary/10 rounded-full"></div>
-<div class="flex justify-between items-start mb-3 relative">
-<span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1">local_fire_department</span>
+<div class="bg-surface-container-low rounded-xl md:rounded-2xl p-3 md:p-5 ghost-border group relative overflow-hidden">
+<div class="absolute -right-2 -top-2 w-10 h-10 md:w-16 md:h-16 bg-secondary/10 rounded-full"></div>
+<div class="flex justify-between items-start mb-2 md:mb-3 relative">
+<span class="material-symbols-outlined text-secondary text-base md:text-xl" style="font-variation-settings:'FILL' 1">local_fire_department</span>
 </div>
-<div class="flex items-baseline gap-2">
-<h3 class="text-4xl font-headline font-extrabold text-secondary"><span id="monthCaloriesDash">0</span></h3>
-<span class="text-on-surface-variant text-xs font-bold">KCAL</span>
+<div class="flex items-baseline gap-1 md:gap-2">
+<h3 class="text-2xl md:text-4xl font-headline font-extrabold text-secondary"><span id="monthCaloriesDash">0</span></h3>
+<span class="text-on-surface-variant text-[10px] md:text-xs font-bold">KCAL</span>
 </div>
-<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden mt-3">
+<div class="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden mt-2 md:mt-3">
 <div id="caloriesProgressBarDash" class="h-full bg-secondary rounded-full transition-all duration-1000" style="width:0%"></div>
 </div>
-<p id="caloriesProgressTextDash" class="text-[10px] text-secondary/70 mt-3 italic">Sin datos aún.</p>
 </div>
 
 <!-- Minutes -->
-<div class="bg-surface-container-low rounded-2xl p-5 ghost-border group relative overflow-hidden">
-<div class="absolute -right-4 -top-4 w-16 h-16 bg-blue-500/10 rounded-full"></div>
-<div class="flex justify-between items-start mb-3 relative">
-<span class="material-symbols-outlined text-blue-400" style="font-variation-settings:'FILL' 1">timer</span>
+<div class="bg-surface-container-low rounded-xl md:rounded-2xl p-3 md:p-5 ghost-border group relative overflow-hidden">
+<div class="absolute -right-2 -top-2 w-10 h-10 md:w-16 md:h-16 bg-blue-500/10 rounded-full"></div>
+<div class="flex justify-between items-start mb-2 md:mb-3 relative">
+<span class="material-symbols-outlined text-blue-400 text-base md:text-xl" style="font-variation-settings:'FILL' 1">timer</span>
 </div>
-<div class="flex items-baseline gap-2">
-<h3 class="text-4xl font-headline font-extrabold text-blue-400"><span id="monthMinutesDash">0</span></h3>
-<span class="text-on-surface-variant text-xs font-bold">MIN</span>
+<div class="flex items-baseline gap-1 md:gap-2">
+<h3 class="text-2xl md:text-4xl font-headline font-extrabold text-blue-400"><span id="monthMinutesDash">0</span></h3>
+<span class="text-on-surface-variant text-[10px] md:text-xs font-bold">MIN</span>
 </div>
-<p class="text-[10px] text-on-surface-variant mt-3">Minutos activos esta semana</p>
+<p class="text-[8px] md:text-[10px] text-on-surface-variant mt-1 md:mt-3 hidden md:block">Minutos activos</p>
 </div>
 
 <!-- Streak -->
-<div class="bg-surface-container-low rounded-2xl p-5 ghost-border group relative overflow-hidden bg-gradient-to-br from-surface-container-low to-primary/5 rounded-2xl">
-<div class="absolute -right-4 -top-4 w-16 h-16 bg-green-500/10 rounded-full"></div>
-<div class="flex justify-between items-start mb-3 relative">
-<span class="material-symbols-outlined text-green-400" style="font-variation-settings:'FILL' 1">bolt</span>
+<div class="bg-surface-container-low rounded-xl md:rounded-2xl p-3 md:p-5 ghost-border group relative overflow-hidden bg-gradient-to-br from-surface-container-low to-primary/5">
+<div class="absolute -right-2 -top-2 w-10 h-10 md:w-16 md:h-16 bg-green-500/10 rounded-full"></div>
+<div class="flex justify-between items-start mb-2 md:mb-3 relative">
+<span class="material-symbols-outlined text-green-400 text-base md:text-xl" style="font-variation-settings:'FILL' 1">bolt</span>
 </div>
-<div class="flex gap-1.5 mt-2">
-<div class="w-2.5 h-2.5 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]"></div>
-<div class="w-2.5 h-2.5 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]"></div>
-<div class="w-2.5 h-2.5 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]"></div>
-<div class="w-2.5 h-2.5 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]"></div>
-<div class="w-2.5 h-2.5 rounded-full bg-surface-container-highest"></div>
-<div class="w-2.5 h-2.5 rounded-full bg-surface-container-highest"></div>
-<div class="w-2.5 h-2.5 rounded-full bg-surface-container-highest"></div>
+<div class="flex gap-1 md:gap-1.5 mt-1 md:mt-2">
+<div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.6)]"></div>
+<div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.6)]"></div>
+<div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.6)]"></div>
+<div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.6)]"></div>
+<div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-surface-container-highest"></div>
+<div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-surface-container-highest"></div>
+<div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-surface-container-highest"></div>
 </div>
-<p class="text-xs text-green-400 mt-3 font-bold flex items-center gap-1">
+<p class="text-[10px] md:text-xs text-green-400 mt-2 md:mt-3 font-bold flex items-center gap-1">
 <span class="material-symbols-outlined text-sm">auto_awesome</span>
-¡Nuevo Récord Personal!
+<span class="hidden md:inline">¡Nuevo Récord!</span><span class="md:hidden">Récord</span>
 </p>
 </div>
 </div>
@@ -273,7 +306,7 @@ Regenerar
 <p class="text-on-surface-variant text-sm">La consistencia es la clave del éxito</p>
 </div>
 </div>
-<div id="weekDaysDash" class="h-48 flex items-end justify-between gap-4"></div>
+<div id="weekDaysDash" class="h-32 md:h-48 flex items-end justify-between gap-1 md:gap-4"></div>
 </div>
 
 <!-- Victorias Recientes Card -->
@@ -308,148 +341,114 @@ Ver Todos los Récords
 <div id="workoutView">
 
 <!-- Main Session Header -->
-<section class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end mb-8">
-<div class="space-y-2">
-<span class="text-on-surface-variant font-headline font-bold uppercase tracking-[0.2em] text-xs">Tiempo Total de Sesión</span>
-<div class="flex items-baseline gap-2">
-<h1 id="workoutTimerDash" class="font-headline font-extrabold text-7xl tracking-tighter text-primary timer-glow">00:00</h1>
-<span class="text-primary font-bold text-xl">MIN</span>
+<section class="grid grid-cols-2 md:grid-cols-2 gap-4 md:gap-6 items-center mb-4 md:mb-8">
+<div class="space-y-1">
+<span class="text-on-surface-variant font-headline font-bold uppercase tracking-[0.2em] text-[10px] md:text-xs">Sesión</span>
+<div class="flex items-baseline gap-1 md:gap-2">
+<h1 id="workoutTimerDash" class="font-headline font-extrabold text-4xl md:text-7xl tracking-tighter text-primary timer-glow">00:00</h1>
+<span class="text-primary font-bold text-sm md:text-xl hidden md:inline">MIN</span>
 </div>
 </div>
-<div class="flex flex-wrap gap-4 md:justify-end">
-<button onclick="pauseWorkout()" class="px-8 py-4 rounded-2xl bg-surface-container-high text-on-surface font-headline font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-surface-bright transition-all active:scale-95 duration-200">
-<span class="material-symbols-outlined">pause</span>
-Pausar
+<div class="flex gap-2 justify-end">
+<button onclick="pauseWorkout()" class="px-3 py-2 md:px-8 md:py-4 rounded-xl md:rounded-2xl bg-surface-container-high text-on-surface font-headline font-bold text-xs md:text-sm uppercase tracking-wider flex items-center gap-1 md:gap-2 hover:bg-surface-bright transition-all active:scale-95 duration-200">
+<span class="material-symbols-outlined text-sm md:text-base">pause</span>
+<span class="hidden md:inline">Pausar</span>
 </button>
-<button onclick="finishWorkout()" class="px-8 py-4 rounded-2xl bg-gradient-to-br from-primary to-primary-dim text-on-primary-container font-headline font-bold uppercase tracking-widest shadow-[0_0_25px_rgba(255,144,109,0.4)] hover:brightness-110 transition-all active:scale-95 duration-200">
+<button onclick="finishWorkout()" class="px-3 py-2 md:px-8 md:py-4 rounded-xl md:rounded-2xl bg-gradient-to-br from-primary to-primary-dim text-on-primary-container font-headline font-bold text-xs md:text-sm uppercase tracking-wider shadow-[0_0_15px_rgba(255,144,109,0.4)] hover:brightness-110 transition-all active:scale-95 duration-200">
 Finalizar
 </button>
 </div>
 </section>
 
-<!-- Bento Layout -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-<!-- Active Exercise Panel -->
-<section class="lg:col-span-8 bg-surface-container-low rounded-2xl p-6 ring-1 ring-white/5 space-y-8 relative overflow-hidden">
-<div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-<span class="material-symbols-outlined text-9xl">fitness_center</span>
-</div>
+<!-- Exercise Info & Inputs -->
+<div class="bg-surface-container-low rounded-2xl p-4 md:p-6 ring-1 ring-white/5 space-y-4 md:space-y-6 mb-4 md:mb-6">
 <div class="flex justify-between items-start">
-<div>
-<div class="flex items-center gap-2 text-primary font-headline font-bold text-sm uppercase tracking-widest mb-1">
+<div class="flex-1">
+<div class="flex items-center gap-2 text-primary font-headline font-bold text-[10px] md:text-sm uppercase tracking-widest mb-1">
 <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-Entrenando Ahora
+<span class="hidden md:inline">Entrenando Ahora</span><span class="md:hidden">Ejercicio</span>
 </div>
-<h2 id="currentExerciseName" class="text-4xl font-headline font-extrabold tracking-tight text-white">Selecciona ejercicio</h2>
-<div class="flex gap-4 mt-2">
-<span class="px-3 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-xs font-bold uppercase tracking-wider" id="currentSetInfo">Serie 1 de 3</span>
-<span class="px-3 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-xs font-bold uppercase tracking-wider">Anterior: <span id="lastWeight">-</span></span>
+<h2 id="currentExerciseName" class="text-xl md:text-4xl font-headline font-extrabold tracking-tight text-white truncate pr-2">Selecciona ejercicio</h2>
+<div class="flex gap-2 mt-2 flex-wrap">
+<span class="px-2 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-[10px] md:text-xs font-bold uppercase tracking-wider" id="currentSetInfo">S1/3</span>
+<span class="px-2 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-[10px] md:text-xs font-bold uppercase tracking-wider hidden md:inline">Ant: <span id="lastWeight">-</span></span>
 </div>
 </div>
-<div class="flex gap-2">
-<button onclick="showExerciseLibrary()" class="p-2 rounded-full hover:bg-surface-variant text-on-surface-variant transition-colors"><span class="material-symbols-outlined">add</span></button>
-<button onclick="showWorkoutSettings()" class="p-2 rounded-full hover:bg-surface-variant text-on-surface-variant transition-colors"><span class="material-symbols-outlined">settings</span></button>
+<div class="flex gap-1">
+<button onclick="showExerciseLibrary()" class="p-2 rounded-full hover:bg-surface-variant text-on-surface-variant transition-colors"><span class="material-symbols-outlined text-lg">add</span></button>
 </div>
 </div>
 
 <!-- Metrics Selectors -->
-<div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="exerciseInputs">
-<!-- Weight -->
-<div id="weightContainer" class="bg-surface-container rounded-2xl p-5 flex flex-col items-center justify-center space-y-2 group transition-all hover:bg-surface-bright cursor-pointer">
-<span class="text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest">Peso (KG)</span>
-<div class="text-4xl font-headline font-extrabold flex items-center gap-4">
-<span class="material-symbols-outlined text-primary text-xl cursor-pointer" onclick="adjustWeight(-5)">remove</span>
-<input type="number" id="weightInput" class="w-20 bg-transparent text-center text-4xl font-headline font-extrabold focus:outline-none" value="0"/>
-<span class="material-symbols-outlined text-primary text-xl cursor-pointer" onclick="adjustWeight(5)">add</span>
+<div class="grid grid-cols-3 gap-2 md:gap-4" id="exerciseInputs">
+<div id="weightContainer" class="bg-surface-container rounded-xl md:rounded-2xl p-3 md:p-5 flex flex-col items-center justify-center space-y-1 md:space-y-2 group transition-all hover:bg-surface-bright cursor-pointer">
+<span class="text-[9px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest">KG</span>
+<div class="text-2xl md:text-4xl font-headline font-extrabold flex items-center gap-2 md:gap-4 text-primary">
+<span class="material-symbols-outlined text-base md:text-xl cursor-pointer" onclick="adjustWeight(-5)">remove</span>
+<span id="weightInput" class="w-12 md:w-20 text-center">0</span>
+<span class="material-symbols-outlined text-base md:text-xl cursor-pointer" onclick="adjustWeight(5)">add</span>
 </div>
 </div>
-<!-- Reps -->
-<div id="repsContainer" class="bg-surface-container rounded-2xl p-5 flex flex-col items-center justify-center space-y-2 group transition-all hover:bg-surface-bright cursor-pointer">
-<span class="text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest">Reps</span>
-<div class="text-4xl font-headline font-extrabold flex items-center gap-4">
-<span class="material-symbols-outlined text-primary text-xl cursor-pointer" onclick="adjustReps(-1)">remove</span>
-<input type="number" id="repsInput" class="w-20 bg-transparent text-center text-4xl font-headline font-extrabold focus:outline-none" value="10"/>
-<span class="material-symbols-outlined text-primary text-xl cursor-pointer" onclick="adjustReps(1)">add</span>
+<div id="repsContainer" class="bg-surface-container rounded-xl md:rounded-2xl p-3 md:p-5 flex flex-col items-center justify-center space-y-1 md:space-y-2 group transition-all hover:bg-surface-bright cursor-pointer">
+<span class="text-[9px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest">Reps</span>
+<div class="text-2xl md:text-4xl font-headline font-extrabold flex items-center gap-2 md:gap-4 text-primary">
+<span class="material-symbols-outlined text-base md:text-xl cursor-pointer" onclick="adjustReps(-1)">remove</span>
+<span id="repsInput" class="w-12 md:w-20 text-center">10</span>
+<span class="material-symbols-outlined text-base md:text-xl cursor-pointer" onclick="adjustReps(1)">add</span>
 </div>
 </div>
-<!-- RPE -->
-<div id="rpeContainer" class="bg-surface-container rounded-2xl p-5 flex flex-col items-center justify-center space-y-2 group transition-all hover:bg-surface-bright cursor-pointer">
-<span class="text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest">RPE (1-10)</span>
-<div class="text-4xl font-headline font-extrabold flex items-center gap-4 text-secondary">
-<span class="material-symbols-outlined text-secondary text-xl cursor-pointer" onclick="adjustRPE(-1)">remove</span>
+<div id="rpeContainer" class="bg-surface-container rounded-xl md:rounded-2xl p-3 md:p-5 flex flex-col items-center justify-center space-y-1 md:space-y-2 group transition-all hover:bg-surface-bright cursor-pointer">
+<span class="text-[9px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest">RPE</span>
+<div class="text-2xl md:text-4xl font-headline font-extrabold flex items-center gap-2 md:gap-4 text-secondary">
+<span class="material-symbols-outlined text-base md:text-xl cursor-pointer" onclick="adjustRPE(-1)">remove</span>
 <span id="currentRPE">8</span>
-<span class="material-symbols-outlined text-secondary text-xl cursor-pointer" onclick="adjustRPE(1)">add</span>
+<span class="material-symbols-outlined text-base md:text-xl cursor-pointer" onclick="adjustRPE(1)">add</span>
 </div>
 </div>
 </div>
 
-<!-- Primary Action Cluster -->
-<div class="flex flex-col sm:flex-row gap-4" id="workoutActions">
-<button id="startExerciseBtn" onclick="startExercise()" class="flex-[2] py-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-headline font-black uppercase tracking-[0.2em] hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-3">
+<!-- Primary Action Buttons -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4" id="workoutActions">
+<button id="startExerciseBtn" onclick="startExercise()" class="col-span-2 py-3 md:py-5 rounded-xl md:rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-headline font-black uppercase tracking-wider text-xs md:text-sm hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-2">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
-Iniciar Set
+Iniciar
 </button>
-<button id="logSetBtn" onclick="handleActionBtnClick()" class="flex-[2] py-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-headline font-black uppercase tracking-[0.2em] hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-3 hidden">
+<button id="logSetBtn" onclick="handleActionBtnClick()" class="col-span-2 py-3 md:py-5 rounded-xl md:rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-headline font-black uppercase tracking-wider text-xs md:text-sm hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-2 hidden">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check</span>
-<span id="actionBtnText">Registrar Set</span>
+<span id="actionBtnText">Registrar</span>
 </button>
-<button class="flex-1 py-5 rounded-2xl bg-surface-container-high border border-white/5 text-on-surface font-headline font-bold uppercase tracking-widest hover:bg-surface-bright transition-all flex items-center justify-center gap-3" onclick="showAIPreferences()">
-<span class="material-symbols-outlined">auto_awesome</span>
-AI
+<button class="py-3 md:py-5 rounded-xl md:rounded-2xl bg-surface-container-high border border-white/5 text-on-surface font-headline font-bold uppercase tracking-wider text-xs md:text-sm hover:bg-surface-bright transition-all flex items-center justify-center gap-1" onclick="showAIPreferences()">
+<span class="material-symbols-outlined text-sm">auto_awesome</span>
+<span class="hidden md:inline">AI</span>
 </button>
-<button class="flex-1 py-5 rounded-2xl bg-tertiary/10 border border-tertiary/30 text-tertiary font-headline font-bold uppercase tracking-widest hover:bg-tertiary/20 transition-all flex items-center justify-center gap-3" onclick="manualStartRest()">
-<span class="material-symbols-outlined">timer</span>
-Descanso
+<button class="py-3 md:py-5 rounded-xl md:rounded-2xl bg-tertiary/10 border border-tertiary/30 text-tertiary font-headline font-bold uppercase tracking-wider text-xs md:text-sm hover:bg-tertiary/20 transition-all flex items-center justify-center gap-1" onclick="manualStartRest()">
+<span class="material-symbols-outlined text-sm">timer</span>
+<span class="hidden md:inline">Descanso</span>
 </button>
 </div>
-</section>
 
-<!-- Exercise Log/List -->
-<aside class="lg:col-span-4 bg-surface-container-low rounded-2xl p-6 ring-1 ring-white/5 flex flex-col">
-<div class="flex justify-between items-center mb-6">
-<h3 class="font-headline font-bold uppercase tracking-widest text-sm text-on-surface-variant">Cola de Ejercicios</h3>
-<span class="text-xs bg-surface-container-highest px-2 py-1 rounded text-primary font-bold" id="exercisesLeftCount">0 Restantes</span>
+<!-- Exercise List -->
+<div class="bg-surface-container-low rounded-2xl p-4 md:p-6 ring-1 ring-white/5">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline font-bold uppercase tracking-widest text-xs text-on-surface-variant">Ejercicios</h3>
+<span class="text-xs bg-surface-container-highest px-2 py-1 rounded text-primary font-bold" id="exercisesLeftCount">0</span>
 </div>
-<div id="workoutExerciseList" class="space-y-4 overflow-y-auto max-h-[450px] pr-2 custom-scrollbar"></div>
-</aside>
+<div id="workoutExerciseList" class="space-y-2 md:space-y-4 overflow-y-auto max-h-[200px] md:max-h-[450px] pr-2 custom-scrollbar"></div>
 </div>
 
 <!-- Bottom Stats -->
-<section class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-<div class="bg-surface-container rounded-2xl p-6 relative overflow-hidden group">
-<div class="absolute inset-0 bg-gradient-to-br from-secondary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-<p class="text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest mb-4">Volumen Hoy</p>
-<h4 class="text-3xl font-headline font-black italic"><span id="totalVolumeDash">0</span> <span class="text-sm font-normal text-on-surface-variant not-italic uppercase">KG</span></h4>
-<div class="mt-4 h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-secondary w-2/3 shadow-[0_0_10px_rgba(254,179,0,0.5)]"></div>
+<section class="grid grid-cols-3 md:grid-cols-3 gap-2 md:gap-4 mt-4 md:mt-6">
+<div class="bg-surface-container rounded-xl md:rounded-2xl p-3 md:p-6 relative overflow-hidden">
+<p class="text-[9px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest mb-1 md:mb-4">Volumen</p>
+<h4 class="text-xl md:text-3xl font-headline font-black"><span id="totalVolumeDash">0</span> <span class="text-[9px] md:text-sm font-normal text-on-surface-variant not-italic uppercase">KG</span></h4>
 </div>
+<div class="bg-surface-container rounded-xl md:rounded-2xl p-3 md:p-6 relative overflow-hidden">
+<p class="text-[9px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest mb-1 md:mb-4">Calorías</p>
+<h4 class="text-xl md:text-3xl font-headline font-black"><span id="caloriesDash">0</span></h4>
 </div>
-<div class="bg-surface-container rounded-2xl p-6 relative overflow-hidden group">
-<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-<p class="text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest mb-4">Calorías</p>
-<h4 class="text-3xl font-headline font-black italic"><span id="caloriesDash">0</span> <span class="text-sm font-normal text-on-surface-variant not-italic uppercase">KCAL</span></h4>
-<div class="flex items-end gap-1 mt-4 h-8">
-<div class="w-full bg-primary/20 h-4 rounded-t-sm"></div>
-<div class="w-full bg-primary/40 h-6 rounded-t-sm"></div>
-<div class="w-full bg-primary h-8 rounded-t-sm"></div>
-<div class="w-full bg-primary/60 h-5 rounded-t-sm"></div>
-<div class="w-full bg-primary/30 h-3 rounded-t-sm"></div>
-</div>
-</div>
-<div class="bg-surface-container rounded-2xl p-6 relative overflow-hidden group">
-<div class="absolute inset-0 bg-gradient-to-br from-tertiary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-<p class="text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest mb-4">Temporizador de Descanso</p>
-<div class="flex items-center gap-3">
-<h4 class="text-3xl font-headline font-black italic" id="restTimerDisplay">00:00</h4>
-</div>
-<div class="mt-4 h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-tertiary" id="restProgressBar" style="width:0%"></div>
-</div>
-<button onclick="manualStartRest()" class="mt-4 w-full py-3 bg-tertiary/20 text-tertiary font-bold uppercase tracking-widest text-xs rounded-xl hover:bg-tertiary/30 transition-all flex items-center justify-center gap-2">
-<span class="material-symbols-outlined text-sm">play_arrow</span>
-Iniciar Descanso
-</button>
+<div class="bg-surface-container rounded-xl md:rounded-2xl p-3 md:p-6 relative overflow-hidden">
+<p class="text-[9px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest mb-1 md:mb-4">Descanso</p>
+<h4 class="text-xl md:text-3xl font-headline font-black" id="restTimerDisplay">00:00</h4>
 </div>
 </section>
 
@@ -559,17 +558,18 @@ Iniciar Descanso
 </div>
 </main>
 
-<!-- Mobile Bottom Nav -->
-<nav class="md:hidden fixed bottom-0 w-full bg-surface-container-low/95 backdrop-blur-xl h-16 flex justify-around items-center z-50 border-t border-white/5">
-<a href="index.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[10px]">Inicio</span></a>
-<a href="perfil.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
-<a href="alimentos.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
-<a href="plan.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">event_note</span><span class="text-[10px]">Plan</span></a>
-<a href="compras.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
-<a href="macros.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
-<a href="checklist.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
-<a href="entrenamientos.html" class="flex flex-col items-center text-primary"><span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">fitness_center</span><span class="text-[10px]">Gym</span></a>
-<a href="suplementos.html" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">medication</span><span class="text-[10px]">Sup</span></a>
+<!-- BottomNavBar (Mobile) - 5 items optimizado -->
+<nav id="bottomNav" class="md:hidden fixed bottom-0 left-0 w-full h-20 flex justify-around items-end pb-3 z-50 px-2" style="background:rgba(24,23,23,0.98);border-top:1px solid rgba(255,77,0,0.3)" role="navigation" aria-label="Navegación principal">
+<a href="perfil.html" class="flex flex-col items-center text-white/60 hover:text-white transition-all" aria-label="Perfil"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px] mt-1">Perfil</span></a>
+<a href="macros.html" class="flex flex-col items-center text-white/60 hover:text-white transition-all" aria-label="Macros"><span class="material-symbols-outlined text-2xl">monitoring</span><span class="text-[10px] mt-1">Macros</span></a>
+<a href="index.html" class="flex flex-col items-center -mt-5" aria-label="Inicio">
+<div class="w-12 h-12 rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);box-shadow:0 0 20px rgba(255,77,0,0.6),0 0 40px rgba(255,77,0,0.3)">
+<span class="material-symbols-outlined text-white text-2xl" style="font-variation-settings:'FILL' 1">cottage</span>
+</div>
+<span class="text-[10px] mt-1 text-white/60">Inicio</span>
+</a>
+<a href="compras.html" class="flex flex-col items-center text-white/60 hover:text-white transition-all" aria-label="Despensa"><span class="material-symbols-outlined text-2xl">shopping_basket</span><span class="text-[10px] mt-1">Despensa</span></a>
+<a href="entrenamientos.html" class="flex flex-col items-center text-primary-container relative" aria-label="Entrenamiento" aria-current="page"><span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">sports_gymnastics</span><span class="text-[10px] mt-1 font-bold">Gym</span></a>
 </nav>
 
 <script src="utils.js"></script>
@@ -679,11 +679,11 @@ function renderWeeklyPlanDays(weekPlan) {
   var container = document.getElementById('weeklyPlanDays');
   if (!container) return;
   
-  var dayNames = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+  var dayNames = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
   var today = new Date();
   var todayStr = today.toISOString().slice(0, 10);
   var dayIndex = today.getDay() === 0 ? 6 : today.getDay() - 1;
-  var dayKeys = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
+  var dayKeys = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
   
   var html = '';
   dayNames.forEach(function(name, i) {
@@ -694,37 +694,42 @@ function renderWeeklyPlanDays(weekPlan) {
     var muscleLabel = dayData && dayData.muscle ? getMuscleLabel(dayData.muscle) : '';
     
     var bgClass = 'bg-surface-container-low';
-    var borderClass = '';
+    var borderClass = 'border border-transparent';
     var icon = '✕';
-    var iconColor = 'text-gray-500';
+    var iconColor = 'text-gray-600';
+    var textColor = 'text-gray-500';
     
     if (isTraining) {
       if (isCompleted) {
-        bgClass = 'bg-green-500/20 border border-green-500/30';
+        bgClass = 'bg-green-500/20';
+        borderClass = 'border border-green-500/40';
         icon = '✓';
         iconColor = 'text-green-400';
+        textColor = 'text-green-300';
       } else if (isToday) {
-        bgClass = 'bg-primary/20 border-2 border-primary';
+        bgClass = 'bg-primary/20';
+        borderClass = 'border-2 border-primary';
         icon = '▶';
         iconColor = 'text-primary';
+        textColor = 'text-primary';
       } else {
-        bgClass = 'bg-surface-container-high border border-white/10';
+        bgClass = 'bg-surface-container-high';
+        borderClass = 'border border-white/10';
         icon = '●';
-        iconColor = 'text-primary';
+        iconColor = 'text-primary/70';
+        textColor = 'text-primary/70';
       }
     }
     
-    html += '<div class="' + bgClass + ' ' + borderClass + ' rounded-xl p-3 text-center cursor-pointer hover:bg-surface-container transition-all" onclick="selectDayWorkout(\'' + dayKeys[i] + '\')">';
-    html += '<div class="text-xs text-on-surface-variant mb-1">' + name + '</div>';
-    html += '<div class="text-lg mb-1 ' + iconColor + '">' + icon + '</div>';
+    html += '<div class="' + bgClass + ' ' + borderClass + ' rounded-xl p-2 md:p-3 text-center cursor-pointer hover:scale-105 transition-all" onclick="selectDayWorkout(\'' + dayKeys[i] + '\')">';
+    html += '<div class="text-[10px] md:text-xs ' + (isToday ? 'text-primary font-bold' : 'text-on-surface-variant') + ' mb-1">' + name + '</div>';
+    html += '<div class="text-xl md:text-lg mb-1 ' + iconColor + '">' + icon + '</div>';
     if (isTraining) {
       var catIcon = dayData.mainCategory === 'calistenia' ? '🏃' : (dayData.mainCategory === 'fuerza' ? '💪' : '⚙️');
-      var catLabel = dayData.mainCategory === 'calistenia' ? 'Calist' : (dayData.mainCategory === 'fuerza' ? 'Fuerza' : 'Maquina');
-      html += '<div class="text-[10px] text-primary font-bold">' + muscleLabel + '</div>';
-      html += '<div class="text-[10px] ' + iconColor + '">' + catIcon + ' ' + catLabel + '</div>';
-      html += '<div class="text-[10px] text-on-surface-variant">' + (dayData.exercises ? dayData.exercises.length : 0) + ' ej.</div>';
+      html += '<div class="text-[9px] md:text-[10px] ' + textColor + ' font-bold truncate">' + muscleLabel + '</div>';
+      html += '<div class="text-[9px] md:text-[10px] ' + iconColor + '">' + catIcon + '</div>';
     } else {
-      html += '<div class="text-[10px] text-gray-500">Descanso</div>';
+      html += '<div class="text-[9px] md:text-[10px] text-gray-500">Descanso</div>';
     }
     html += '</div>';
   });
@@ -1404,7 +1409,7 @@ function renderWeekDaysDash(workouts) {
   var html = '';
   
   var weekData = [];
-  for (var i = 0; i < 7; i++) {
+  for (var i = 0; i < 6; i++) {
     var date = new Date(startOfWeek);
     date.setDate(startOfWeek.getDate() + i);
     var dateStr = date.toISOString().slice(0, 10);
@@ -1422,13 +1427,13 @@ function renderWeekDaysDash(workouts) {
     var textClass = d.isToday ? 'text-primary' : 'text-on-surface-variant';
     var fontClass = d.isToday ? 'font-bold' : '';
     
-    html += '<div class="flex-1 flex flex-col items-center gap-2">';
+    html += '<div class="flex-1 flex flex-col items-center gap-1 md:gap-2">';
     html += '<div class="w-full ' + bgClass + ' rounded-t-lg transition-all relative group" style="height:' + height + '%">';
     if (d.duration > 0) {
       html += '<div class="absolute bottom-0 w-full ' + activeClass + ' rounded-t-lg h-full"></div>';
     }
     html += '</div>';
-    html += '<span class="text-[10px] ' + textClass + ' ' + fontClass + ' uppercase">' + d.day + '</span>';
+    html += '<span class="text-[8px] md:text-[10px] ' + textClass + ' ' + fontClass + ' uppercase">' + d.day + '</span>';
     html += '</div>';
   });
   
@@ -1802,8 +1807,8 @@ function renderExerciseList() {
     setText('currentExerciseName', currentEx.name);
     setText('currentSetInfo', 'Serie ' + currentSet + ' de ' + (current.sets || 3));
     setText('lastWeight', current.weight || '-');
-    document.getElementById('weightInput').value = current.weight || '';
-    document.getElementById('repsInput').value = current.reps || 10;
+    document.getElementById('weightInput').textContent = current.weight || '0';
+    document.getElementById('repsInput').textContent = current.reps || 10;
     
     // Show/hide weight input based on exercise type
     var weightContainer = document.querySelector('#exerciseInputs > div:first-child');
@@ -1831,16 +1836,16 @@ function setRPE(val) {
 
 function adjustWeight(delta) {
   var input = document.getElementById('weightInput');
-  var val = parseInt(input.value) || 0;
+  var val = parseInt(input.textContent) || 0;
   val = Math.max(0, val + delta);
-  input.value = val;
+  input.textContent = val;
 }
 
 function adjustReps(delta) {
   var input = document.getElementById('repsInput');
-  var val = parseInt(input.value) || 0;
+  var val = parseInt(input.textContent) || 0;
   val = Math.max(1, val + delta);
-  input.value = val;
+  input.textContent = val;
 }
 
 function adjustRPE(delta) {
@@ -1862,8 +1867,8 @@ var supersetMode = false;
 var supersetExercises = [];
 
 function startExercise() {
-  var weight = document.getElementById('weightInput').value;
-  var reps = document.getElementById('repsInput').value;
+  var weight = document.getElementById('weightInput').textContent;
+  var reps = document.getElementById('repsInput').textContent;
   
   var current = manualWorkoutData[currentExerciseIndex];
   var exercises = getExercises();
@@ -1908,8 +1913,8 @@ function handleActionBtnClick() {
 }
 
 function logCurrentSet() {
-  var weight = document.getElementById('weightInput').value;
-  var reps = document.getElementById('repsInput').value;
+  var weight = document.getElementById('weightInput').textContent;
+  var reps = document.getElementById('repsInput').textContent;
   
   var current = manualWorkoutData[currentExerciseIndex];
   var exercises = getExercises();

@@ -51,12 +51,49 @@ function getLocalData(key, schema, defaultValue) {
 // Guardar en localStorage con manejo de errores
 function setLocalData(key, data) {
   try {
-    localStorage.setItem(key, JSON.stringify(data));
+    const MAX_STORAGE_MB = 4.5;
+    const serialized = JSON.stringify(data);
+    const currentSize = new Blob(Object.values(localStorage)).size;
+    const newSize = new Blob([serialized]).size;
+    if ((currentSize + newSize) > MAX_STORAGE_MB * 1024 * 1024) {
+      console.warn('[Utils] localStorage quota exceeded, cleaning old data');
+      cleanOldData();
+    }
+    localStorage.setItem(key, serialized);
     return true;
   } catch (e) {
     console.error('[Utils] Error saving to localStorage:', e.message);
     return false;
   }
+}
+
+function cleanOldData() {
+  const keysToClean = ['keto_weight_history', 'mealPlan_', 'checklist_'];
+  keysToClean.forEach(pattern => {
+    if (pattern.endsWith('_')) {
+      Object.keys(localStorage).forEach(k => {
+        if (k.startsWith(pattern)) {
+          const data = safeParseJSON(localStorage.getItem(k), []);
+          if (Array.isArray(data) && data.length > 90) {
+            localStorage.setItem(k, JSON.stringify(data.slice(-90)));
+          }
+        }
+      });
+    } else {
+      const data = safeParseJSON(localStorage.getItem(pattern), null);
+      if (data && Array.isArray(data) && data.length > 365) {
+        localStorage.setItem(pattern, JSON.stringify(data.slice(-365)));
+      }
+    }
+  });
+}
+
+function getStorageUsage() {
+  let total = 0;
+  Object.keys(localStorage).forEach(k => {
+    total += localStorage.getItem(k).length * 2;
+  });
+  return (total / (1024 * 1024)).toFixed(2) + ' MB';
 }
 
 // ==================== ESQUEMAS DE VALIDACIÓN ====================
