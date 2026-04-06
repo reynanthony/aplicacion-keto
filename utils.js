@@ -1,9 +1,28 @@
 // ==================== UTILIDADES COMPARTIDAS - KetoLab ====================
 // Este archivo contiene funciones comunes usadas por todos los módulos
 
-// ==================== SEGURIDAD ====================
+// ==================== SEGURIDAD (XSS LOCALSTORAGE MIDDLEWARE) ====================
 
-// Sanitizar texto para prevenir XSS
+(function() {
+  var originalSetItem = localStorage.setItem;
+  localStorage.setItem = function(key, value) {
+    var vulnerableKeys = ['ketoFoods', 'customChecklist', 'mealPlan_', 'userData', 'keto_profile', 'keto_weight_history', 'despensa'];
+    var shouldSanitize = vulnerableKeys.some(function(k) { return key.startsWith(k); });
+    
+    if (shouldSanitize && typeof value === 'string') {
+      // Remover scripts en crudo
+      value = value.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+      // Remover handlers de eventos maliciosos
+      value = value.replace(/on\w+\s*=\s*"[^"]*"/gi, '');
+      value = value.replace(/on\w+\s*=\s*'[^']*'/gi, '');
+      // Remover href con javascript:
+      value = value.replace(/href\s*=\s*["']javascript:[^"']*["']/gi, '');
+    }
+    return originalSetItem.call(localStorage, key, value);
+  };
+})();
+
+// Sanitizar texto para prevenir XSS en tiempo de ejecución
 function escapeHtml(text) {
   if (text === null || text === undefined) return '';
   const div = document.createElement('div');
@@ -266,7 +285,8 @@ function getStockColor(percent) {
 }
 
 // Alias para compatibilidad global
-window.showToast = function(message, duration, type) {
+if (typeof window !== 'undefined') {
+  window.showToast = function(message, duration, type) {
   if (!message) return;
   
   createModernToast();
@@ -305,7 +325,8 @@ window.showToast = function(message, duration, type) {
       }
     }, 300);
   }, timeout);
-};
+  };
+}
 
 // ==================== SISTEMA DE TOASTS MODERNO ====================
 function createModernToast() {
@@ -659,6 +680,25 @@ function showToastOld(message, duration) {
 }
 
 // ==================== EXPORTAR PARA USO GLOBAL ====================
+
+if (typeof window !== 'undefined') {
+  window.customConfirm = function(message) {
+  return new Promise(function(resolve) {
+    showModernModal({
+      title: 'Confirmar',
+      message: message,
+      icon: '?',
+      iconBg: 'rgba(59, 130, 246, 0.2)',
+      buttons: [
+        { text: 'Cancelar', action: 'cancel', onClick: function() { resolve(false); } },
+        { text: 'Confirmar', primary: true, action: 'confirm', onClick: function() { resolve(true); } }
+      ],
+      onClose: function() { resolve(false); }
+    });
+  });
+  };
+}
+
 // Funciones adicionales para compatibilidad hacia atrás
 
 // Versión segura de parseFloat
@@ -1520,4 +1560,11 @@ function initI18n() {
     }
   }
   applyTranslations();
+}
+
+// Para Node.js (Jest)
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    safeParseJSON, validateMealPlan, escapeHtml, schemas, getLocalData
+  };
 }

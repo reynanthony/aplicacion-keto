@@ -1299,7 +1299,7 @@ function showExerciseHistoryOverlay(exerciseName) {
   data = data.slice(-10);
   
   if (data.length < 2) {
-    alert('Necesitas más datos para el gráfico');
+    window.showToast('Necesitas más datos para el gráfico', 3000, "warning");
     return;
   }
   

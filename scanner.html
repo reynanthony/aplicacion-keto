@@ -149,7 +149,7 @@ async function initScanner() {
   } catch (err) {
     console.error('Camera error:', err);
     statusEl.innerHTML = '<p class="text-red-400 text-sm">Error: ' + err.message + '</p>';
-    alert('No se pudo acceder a la cámara: ' + err.message);
+    window.showToast('No se pudo acceder a la cámara: ' + err.message, 3000, "warning");
   }
 }
 
@@ -216,7 +216,7 @@ function toggleCamera() {
 
 function addToDespensa() {
   var name = document.getElementById('product-name').value.trim();
-  if (!name) { alert('Ingresa un nombre'); return; }
+  if (!name) { window.showToast('Ingresa un nombre', 3000, "warning"); return; }
   
   var cal = parseFloat(document.getElementById('product-calories').value) || 0;
   var prot = parseFloat(document.getElementById('product-protein').value) || 0;

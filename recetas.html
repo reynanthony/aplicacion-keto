@@ -367,7 +367,7 @@ var catLabels={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snack
 html+='<article class="group relative overflow-hidden rounded-[2rem] '+(isFirst?"md:col-span-2 lg:col-span-2 xl:col-span-2":"")+' bg-surface-container transition-all duration-500 hover:shadow-[0_0_40px_rgba(255,144,105,0.1)] cursor-pointer" onclick="openRecipeModal(\''+recipe.id+'\')">';
 html+='<div class="h-48 md:h-64 w-full overflow-hidden relative">';
 if(recipe.image){
-html+='<img src="'+recipe.image+'" alt="'+recipe.title+'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80" onerror="this.style.display=\'none\'">';
+html+='<img loading="lazy" src="'+recipe.image+'" alt="'+recipe.title+'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80" onerror="this.style.display=\'none\'">';
 }else{
 html+='<div class="w-full h-full bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-6xl text-white/40">restaurant</span></div>';
 }
@@ -406,7 +406,7 @@ currentRecipeMacros={calories:recipe.calories,protein:recipe.protein,fat:recipe.
 
 var html='<div class="relative">';
 if(recipe.image){
-html+='<div class="h-64 md:h-80 w-full overflow-hidden rounded-t-[2rem]"><img src="'+recipe.image+'" alt="'+recipe.title+'" class="w-full h-full object-cover"></div>';
+html+='<div class="h-64 md:h-80 w-full overflow-hidden rounded-t-[2rem]"><img loading="lazy" src="'+recipe.image+'" alt="'+recipe.title+'" class="w-full h-full object-cover"></div>';
 }else{
 html+='<div class="h-64 md:h-80 w-full bg-primary-container flex items-center justify-center rounded-t-[2rem]"><span class="material-symbols-outlined text-8xl text-white/30">restaurant</span></div>';
 }

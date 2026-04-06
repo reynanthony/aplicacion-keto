@@ -1,0 +1,28 @@
+name: KetoLab CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+
+    - name: Instalar Dependencias
+      run: npm ci || npm install
+
+    - name: Ejecutar Pruebas Automatizadas (Jest)
+      run: npm test
+
+    - name: Comprobación de Performance Híbrido PWA
+      run: bash verify_hibrido.sh || true

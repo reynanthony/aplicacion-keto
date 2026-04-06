@@ -593,7 +593,7 @@ Buscar
 <div class="relative">
 <input type="file" id="foodImage" accept="image/*" class="hidden" onchange="previewFoodImage(this)">
 <div id="imagePreviewContainer" class="hidden glass-card rounded-xl p-2 mb-2">
-<img id="imagePreview" src="" alt="Preview" class="w-full h-32 object-cover rounded-lg">
+<img loading="lazy" id="imagePreview" src="" alt="Preview" class="w-full h-32 object-cover rounded-lg">
 </div>
 <button type="button" onclick="document.getElementById('foodImage').click()" class="w-full py-3 rounded-xl border-2 border-dashed border-outline hover:border-primary-container transition-colors flex items-center justify-center gap-2 text-on-surface-variant hover:text-white">
 <span class="material-symbols-outlined">add_photo_alternate</span>
@@ -633,7 +633,7 @@ Eliminar imagen
 <div id="detailImagePlaceholder" class="hidden w-full h-40 rounded-xl bg-surface-container-high mb-4 flex items-center justify-center">
 <span class="material-symbols-outlined text-5xl text-white/30">fastfood</span>
 </div>
-<img id="detailFoodImage" src="" alt="" class="hidden w-full h-40 rounded-xl object-cover mb-4" onerror="this.classList.add('hidden');document.getElementById('detailImagePlaceholder').classList.remove('hidden')">
+<img loading="lazy" id="detailFoodImage" src="" alt="" class="hidden w-full h-40 rounded-xl object-cover mb-4" onerror="this.classList.add('hidden');document.getElementById('detailImagePlaceholder').classList.remove('hidden')">
 
 <!-- Portion Converter -->
 <div class="mb-4 p-4 bg-primary-container/10 border border-primary-container/30 rounded-xl">
@@ -965,7 +965,7 @@ var netCarbs=getNetCarbs(f);
 html+='<div class="group relative glass-card rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-glow cursor-pointer" onclick="openDetail(\''+f.id+'\')">';
 html+='<div class="h-40 w-full overflow-hidden relative">';
 if(f.image){
-html+='<img src="'+f.image+'" alt="'+f.name+'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.style.display=\'none\'; this.parentElement.innerHTML=\'<div class=\\\'w-full h-full flex items-center justify-center bg-surface-container\\\'><span class=\\\'material-symbols-outlined text-5xl text-white/20\\\'>restaurant</span></div>\'" loading="lazy">';
+html+='<img loading="lazy" src="'+f.image+'" alt="'+f.name+'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.style.display=\'none\'; this.parentElement.innerHTML=\'<div class=\\\'w-full h-full flex items-center justify-center bg-surface-container\\\'><span class=\\\'material-symbols-outlined text-5xl text-white/20\\\'>restaurant</span></div>\'" loading="lazy">';
 }else{
 html+='<div class="w-full h-full flex items-center justify-center bg-surface-container"><span class="material-symbols-outlined text-5xl text-white/20">restaurant</span></div>';
 }
@@ -1163,7 +1163,7 @@ var imageData=null;
 if(imageInput.files&&imageInput.files[0]){
 imageData=document.getElementById("imagePreview").src;
 }
-if(!name){alert("Ingresa el nombre del alimento");return}
+if(!name){window.showToast("Ingresa el nombre del alimento", 3000, "warning");return}
 if(id){
 var food=currentFoods.find(function(f){return f.id===id});
 if(food){food.name=name;food.calories=calories;food.portion=portion;food.protein=protein;food.fat=fat;food.carbs=carbs;food.fiber=fiber;food.category=category;if(imageData)food.image=imageData}
@@ -1669,8 +1669,7 @@ renderGroups();
 showToast("Grupo creado: "+name,3000,"success");
 }
 
-function deleteGroup(id){
-if(!confirm("Eliminar este grupo?"))return;
+async function deleteGroup(id){if(!(await customConfirm("Eliminar este grupo?")))return;
 var groups=JSON.parse(localStorage.getItem("foodGroups")||"[]");
 groups=groups.filter(function(g){return g.id!==id});
 localStorage.setItem("foodGroups",JSON.stringify(groups));
@@ -1711,7 +1710,7 @@ var dateStr=dateObj.toLocaleDateString("es-ES",{weekday:"short",month:"short",da
 html+='<div class="mb-4"><h4 class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">'+dateStr+'</h4><div class="space-y-1">';
 foods.forEach(function(h){
 var food=currentFoods.find(function(f){return f.id===h.id})||h;
-html+='<div class="flex items-center justify-between p-3 bg-surface-container rounded-xl cursor-pointer hover:bg-surface-container-high" onclick="openDetail(\''+h.id+'\')"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-surface-container-high overflow-hidden">'+(food.image?'<img src="'+food.image+'" class="w-full h-full object-cover">':'<span class="material-symbols-outlined text-xl text-white/20 flex items-center justify-center w-full h-full">restaurant</span>')+'</div><div><p class="text-sm font-bold text-white">'+food.name+'</p><p class="text-xs text-on-surface-variant">'+Math.round(food.calories)+' cal | P:'+food.protein+'g | F:'+food.fat+'g</p></div></div><span class="material-symbols-outlined text-white/40">chevron_right</span></div>';
+html+='<div class="flex items-center justify-between p-3 bg-surface-container rounded-xl cursor-pointer hover:bg-surface-container-high" onclick="openDetail(\''+h.id+'\')"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-surface-container-high overflow-hidden">'+(food.image?'<img loading="lazy" src="'+food.image+'" class="w-full h-full object-cover">':'<span class="material-symbols-outlined text-xl text-white/20 flex items-center justify-center w-full h-full">restaurant</span>')+'</div><div><p class="text-sm font-bold text-white">'+food.name+'</p><p class="text-xs text-on-surface-variant">'+Math.round(food.calories)+' cal | P:'+food.protein+'g | F:'+food.fat+'g</p></div></div><span class="material-symbols-outlined text-white/40">chevron_right</span></div>';
 });
 html+='</div></div>';
 });

@@ -135,10 +135,10 @@ document.getElementById("addPreview").textContent=totalGrams.toLocaleString()+" 
 function confirmAdd(){
 if(!addingFoodId)return;
 var qty=parseFloat(document.getElementById("addQuantity").value)||0;
-if(qty<=0){alert("Ingresa una cantidad válida");return;}
+if(qty<=0){window.showToast("Ingresa una cantidad válida", 3000, "warning");return;}
 var unit=addingFoodUnits[addingFoodCurrentUnit];
 var totalGrams=Math.round(qty*unit.grams);
-if(totalGrams<=0){alert("La cantidad en gramos debe ser mayor a 0");return;}
+if(totalGrams<=0){window.showToast("La cantidad en gramos debe ser mayor a 0", 3000, "warning");return;}
 var despensa=getDespensa();
 if(despensa[addingFoodId]){
 despensa[addingFoodId].stock+=totalGrams;

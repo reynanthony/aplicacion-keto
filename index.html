@@ -1322,7 +1322,7 @@ function saveNewWeight() {
   var newWeight = parseFloat(input.value);
   
   if (!newWeight || newWeight < 20 || newWeight > 300) {
-    alert('Por favor ingresa un peso válido entre 20 y 300 kg');
+    window.showToast('Por favor ingresa un peso válido entre 20 y 300 kg', 3000, "warning");
     return;
   }
   
@@ -2459,9 +2459,9 @@ function confirmGlobalReset() {
           // Verificar actualizaciones
           registration.addEventListener('updatefound', () => {
             const newWorker = registration.installing;
-            newWorker.addEventListener('statechange', () => {
+            newWorker.addEventListener('statechange', async () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                if (confirm('Nueva versión disponible. ¿Actualizar ahora?')) {
+                if (await customConfirm('Nueva versión disponible. ¿Actualizar ahora?')) {
                   window.location.reload();
                 }
               }

@@ -502,8 +502,8 @@ document.getElementById("stockModal").classList.add("hidden");
 document.getElementById("stockModal").classList.remove("flex");
 pendingAdd={meal:null,foodId:null,totalGrams:0};
 }
-function copyPlan(){var plan=getMealPlan(currentDay);var yesterday=new Date(currentDay);yesterday.setDate(yesterday.getDate()-1);var yesterdayKey=yesterday.toISOString().slice(0,10);var yesterdayPlan=getMealPlan(yesterdayKey);if(yesterdayPlan.desayuno.length>0||yesterdayPlan.almuerzo.length>0||yesterdayPlan.cena.length>0||yesterdayPlan.snacks.length>0){saveMealPlanForDate(currentDay,yesterdayPlan);renderMealPlan();alert("Plan copiado de ayer!")}else{alert("No hay plan de ayer para copiar")}}
-function resetPlan(){if(!confirm("Reiniciar el plan del día seleccionado?"))return;var plan={desayuno:[],almuerzo:[],cena:[],snacks:[]};saveMealPlanForDate(currentDay,plan);renderMealPlan();initWeekSelector()}
+function copyPlan(){var plan=getMealPlan(currentDay);var yesterday=new Date(currentDay);yesterday.setDate(yesterday.getDate()-1);var yesterdayKey=yesterday.toISOString().slice(0,10);var yesterdayPlan=getMealPlan(yesterdayKey);if(yesterdayPlan.desayuno.length>0||yesterdayPlan.almuerzo.length>0||yesterdayPlan.cena.length>0||yesterdayPlan.snacks.length>0){saveMealPlanForDate(currentDay,yesterdayPlan);renderMealPlan();window.showToast("Plan copiado de ayer!", 3000, "warning")}else{window.showToast("No hay plan de ayer para copiar", 3000, "warning")}}
+async function resetPlan(){if(!(await customConfirm("Reiniciar el plan del día seleccionado?"))return;var plan={desayuno:[],almuerzo:[],cena:[],snacks:[]};saveMealPlanForDate(currentDay,plan);renderMealPlan();initWeekSelector()}
 document.getElementById("tempQty").addEventListener("input",updatePlanPreview);
 var dateOptions={weekday:"long",day:"numeric",month:"long"};document.getElementById("dateDisplay").textContent=new Date().toLocaleDateString("es-ES",dateOptions);
 var currentDay=new Date().toISOString().slice(0,10);
@@ -774,8 +774,7 @@ initPlanStatus();
 showWeeklyPlanToast("Progreso guardado. ¡Nueva semana!");
 }
 
-function confirmResetWeeklyPlan(){
-if(!confirm("¿Estás seguro de borrar todo el plan semanal? Esta acción no se puede deshacer."))return;
+async function confirmResetWeeklyPlan(){if(!(await customConfirm("¿Estás seguro de borrar todo el plan semanal? Esta acción no se puede deshacer."))return;
 clearWeeklyPlanData();
 clearWeeklyPlan();
 closeWeeklyModal();
@@ -888,48 +887,31 @@ var yesterdayPlan=getMealPlan(yesterdayKey);
 saveMealPlanForDate(dateKey,yesterdayPlan);
 closeWeeklyModal();
 initWeekSelector();
-alert("Plan copiado a "+d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric"}));
+window.showToast("Plan copiado a "+d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric"}, 3000, "warning"));
 }
 function copyDayPlan(){
 var fromDay=document.getElementById("copyFromDay").value;
 var toDay=document.getElementById("copyToDay").value;
-if(fromDay===toDay){alert("Selecciona días diferentes");return;}
+if(fromDay===toDay){window.showToast("Selecciona días diferentes", 3000, "warning");return;}
 var fromPlan=getMealPlan(fromDay);
 saveMealPlanForDate(toDay,fromPlan);
 closeWeeklyModal();
 initWeekSelector();
-alert("Plan copiado exitosamente");
+window.showToast("Plan copiado exitosamente", 3000, "warning");
 }
-function resetSelectedDay(){
-if(!confirm("Reiniciar el plan del día seleccionado?"))return;
+async function resetSelectedDay(){if(!(await customConfirm("Reiniciar el plan del día seleccionado?")))return;
 var plan={desayuno:[],almuerzo:[],cena:[],snacks:[]};
 saveMealPlanForDate(currentDay,plan);
 renderMealPlan();
 initWeekSelector();
 closeWeeklyModal();
-alert("Plan reiniciado");
+window.showToast("Plan reiniciado", 3000, "warning");
 }
 function saveMealPlanForDate(dateKey,plan){
 localStorage.setItem("mealPlan_"+dateKey,JSON.stringify(plan));
 }
 
-function showToast(message) {
-  var toast = document.getElementById('toast');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.id = 'toast';
-    toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 z-[70] hidden opacity-0 translate-y-4 pointer-events-none transition-all duration-300';
-    toast.innerHTML = '<div class="glass-card rounded-full px-6 py-3 flex items-center gap-3 shadow-lg"><span class="material-symbols-outlined text-primary-container">info</span><span class="text-white font-medium"></span></div>';
-    document.body.appendChild(toast);
-  }
-  toast.querySelector('span:last-child').textContent = message;
-  toast.classList.remove('hidden', 'opacity-0', 'translate-y-4', 'pointer-events-none');
-  toast.classList.add('opacity-100', 'translate-y-0');
-  setTimeout(function() {
-    toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
-    toast.classList.remove('opacity-100', 'translate-y-0');
-  }, 3000);
-}
+
 </script>
 
 <script>
@@ -942,9 +924,9 @@ function showToast(message) {
           console.log('[PWA] Service Worker registrado correctamente en:', registration.scope);
           registration.addEventListener('updatefound', () => {
             const newWorker = registration.installing;
-            newWorker.addEventListener('statechange', () => {
+            newWorker.addEventListener('statechange', async () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                if (confirm('Nueva versión disponible. ¿Actualizar ahora?')) {
+                if (await customConfirm('Nueva versión disponible. ¿Actualizar ahora?')) {
                   window.location.reload();
                 }
               }
@@ -1314,7 +1296,7 @@ function openAddFoodModalForAutoMeal(meal) {
   var items = Object.keys(despensa).filter(function(k) { return despensa[k] && despensa[k].stock > 0; });
   
   if (items.length === 0) {
-    alert('No hay alimentos en la despensa');
+    window.showToast('No hay alimentos en la despensa', 3000, "warning");
     return;
   }
   
@@ -1803,7 +1785,7 @@ function generateWeeklyPlanAI() {
       }
       openWeeklyPlanPreview(weekPlan);
     } else {
-      alert('Error al generar el plan. Por favor intenta de nuevo.');
+      window.showToast('Error al generar el plan. Por favor intenta de nuevo.', 3000, "warning");
     }
   }, 1500);
 }
@@ -1813,7 +1795,7 @@ function openWeeklyPlanPreview(weekPlan) {
     weekPlan = typeof loadWeeklyPlan === 'function' ? loadWeeklyPlan() : null;
   }
   if (!weekPlan) {
-    alert('No hay plan semanal guardado. Genera uno nuevo.');
+    window.showToast('No hay plan semanal guardado. Genera uno nuevo.', 3000, "warning");
     return;
   }
   
@@ -2138,7 +2120,7 @@ function showWeeklyPlanToast(message) {
 function openModifyPlanModal() {
   var weekPlan = typeof loadWeeklyPlan === 'function' ? loadWeeklyPlan() : null;
   if (!weekPlan) {
-    alert('No hay plan para modificar');
+    window.showToast('No hay plan para modificar', 3000, "warning");
     return;
   }
   
@@ -2312,7 +2294,7 @@ function openRecipeDetail(recipeId) {
   }
   
   if (!recipe) {
-    alert('Receta no encontrada');
+    window.showToast('Receta no encontrada', 3000, "warning");
     return;
   }
   

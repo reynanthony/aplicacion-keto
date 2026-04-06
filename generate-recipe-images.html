@@ -62,7 +62,7 @@ function generateRecipeImage(recipe) {
   
   const preview = document.createElement('div');
   preview.className = 'preview';
-  preview.innerHTML = '<p>' + recipe.title + '</p><img src="' + link.href + '" width="200">';
+  preview.innerHTML = '<p>' + recipe.title + '</p><img loading="lazy" src="' + link.href + '" width="200">';
   document.getElementById('previews').appendChild(preview);
 }
 
