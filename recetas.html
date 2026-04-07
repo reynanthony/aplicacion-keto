@@ -303,11 +303,58 @@ Favoritos
 </nav>
 
 <script src="utils.js"></script>
+<script src="data-loader.js"></script>
 <script>
 if(localStorage.getItem("sidebarCollapsed")==="true"){document.body.classList.add("sidebar-collapsed");var s=document.getElementById("sidebarNav");s.style.width="72px";s.style.overflow="hidden"}
 var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
 
-var recipesDB=[
+// Recetas de Supabase (se cargan async)
+var recipesDB=[];
+
+// Cargar recetas de Supabase al iniciar
+async function loadRecipesFromSupabase() {
+    const headers = {
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYnF6c29udWp3dnFtZmhqamdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQzMDAsImV4cCI6MjA4ODgzMDMwMH0.SBsTQCh844rtGx0wLNZaEGO8NDmAVZjUj1YiDkRSm1k',
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYnF6c29udWp3dnFtZmhqamdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQzMDAsImV4cCI6MjA4ODgzMDMwMH0.SBsTQCh844rtGx0wLNZaEGO8NDmAVZjUj1YiDkRSm1k'
+    };
+    
+    try {
+        const response = await fetch('https://lmbqzsonujwvqmfhjjgf.supabase.co/rest/v1/recetas?activo=eq.true&select=*&order=fecha_creacion.desc', { headers });
+        const data = await response.json();
+        
+        if (data && data.length > 0) {
+            // Convertir formato Supabase a formato de la app
+            recipesDB = data.map(r => ({
+                id: r.id,
+                title: r.titulo,
+                description: r.descripcion || '',
+                instructions: r.instrucciones || '',
+                difficulty: r.dificultad || 'facil',
+                category: categorizeByPrepTime(r.tiempo_preparacion),
+                prepTime: r.tiempo_preparacion || 15,
+                image: r.imagen_url || '',
+                calories: 0, protein: 0, fat: 0, carbs: 0,
+                source: 'cloud'
+            }));
+            console.log('✅ Cargadas', recipesDB.length, 'recetas de Supabase');
+            renderRecipes();
+        }
+    } catch (e) {
+        console.error('Error cargando recetas:', e);
+    }
+}
+
+function categorizeByPrepTime(min) {
+    if (!min) return 'snacks';
+    if (min <= 15) return 'desayuno';
+    if (min <= 30) return 'almuerzo';
+    return 'cena';
+}
+
+// Cargar al iniciar
+loadRecipesFromSupabase();
+
+var recipesDBFallback=[
 {id:"huevos-bacon",title:"Huevos con Bacon",category:"desayuno",prepTime:10,calories:420,protein:22,fat:35,carbs:1,image:"https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400",instructions:"Freír el bacon hasta crujiente. En la misma grasa, freír los huevos. Sazonar con sal y pimienta.",difficulty:"easy"},
 {id:"tortilla-espinaca",title:"Tortilla de Espinacas",category:"desayuno",prepTime:12,calories:280,protein:18,fat:22,carbs:3,image:"https://images.unsplash.com/photo-1510693206972-df098062cb71?w=400",instructions:"Batir huevos y agregar espinacas. Cocinar en sarten con mantequilla a fuego lento.",difficulty:"easy"},
 {id:"cafe-keto",title:"Café Keto (Bulletproof)",category:"desayuno",prepTime:5,calories:320,protein:2,fat:34,carbs:0,image:"https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400",instructions:"Licuar café con mantequilla y aceite de coco hasta espumoso.",difficulty:"easy"},
@@ -325,6 +372,11 @@ var recipesDB=[
 {id:"batido-queso",title:"Batido de Queso Cottage",category:"snacks",prepTime:3,calories:180,protein:20,fat:8,carbs:4,image:"https://images.unsplash.com/photo-1505252585461-04db1eb84625?w=400",instructions:"Mezclar todos los ingredientes hasta suave.",difficulty:"easy"},
 {id:"aderezo-keto",title:"Aderezo Cesar",category:"snacks",prepTime:5,calories:520,protein:0,fat:58,carbs:0,image:"https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400",instructions:"Mezclar todos los ingredientes.",difficulty:"easy"}
 ];
+
+// Usar fallback si no hay datos de Supabase
+if (recipesDB.length === 0) {
+    recipesDB = recipesDBFallback;
+}
 
 var currentCategory="all";
 var showFavoritesOnly=false;
