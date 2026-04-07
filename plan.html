@@ -442,22 +442,86 @@ function executeChangePortion(meal,idx,delta){var plan=getMealPlan(currentDay);v
 function removeFromMeal(meal,idx){var sessionKey = 'autoPlanWarningMeal_' + currentDay;if(!sessionStorage.getItem(sessionKey)){showAutoPlanWarning(function(){executeRemoveFromMeal(meal,idx)});return;}executeRemoveFromMeal(meal,idx)}
 function executeRemoveFromMeal(meal,idx){var plan=getMealPlan(currentDay);plan[meal].splice(idx,1);saveMealPlanForDate(currentDay,plan);renderMealPlan();initWeekSelector()}
 var currentFoods=[];
-function getAllFoodsForPlan(){
-var stored=safeParseJSON(localStorage.getItem("ketoFoods"), null);
-if(stored&&Array.isArray(stored)){
-stored.forEach(function(f){
-if(!f.units){
-var def=defaultFoods.find(function(d){return d.id===f.id});
-if(def&&def.units)f.units=def.units;
+var foodsLoaded = false;
+
+async function loadFoodsFromSupabase() {
+  if (foodsLoaded) return;
+  
+  try {
+    const { data, error } = await window.supabase
+      .from('alimentos')
+      .select('id, nombre, categoria, calorias_100g, proteinas_100g, grasas_100g, carbohidratos_100g')
+      .eq('activo', true)
+      .order('nombre', { ascending: true });
+    
+    if (error) throw error;
+    
+    if (data && data.length > 0) {
+      const foods = data.map(f => ({
+        id: f.id,
+        name: f.nombre,
+        category: mapCategory(f.categoria),
+        calories: f.calorias_100g || 0,
+        protein: f.proteinas_100g || 0,
+        fat: f.grasas_100g || 0,
+        carbs: f.carbohidratos_100g || 0,
+        portion: 100,
+        units: [{name: "gramos", grams: 1}, {name: "kilos", grams: 1000}]
+      }));
+      
+      currentFoods = foods;
+      localStorage.setItem("ketoFoods", JSON.stringify(foods));
+      localStorage.setItem("ketoFoodsVersion", "1.0");
+      foodsLoaded = true;
+      console.log('✅ Cargados', foods.length, 'alimentos desde Supabase');
+      return foods;
+    }
+  } catch (e) {
+    console.error('Error cargando alimentos desde Supabase:', e);
+  }
+  
+  // Fallback a foods locales
+  currentFoods = defaultFoods;
+  return defaultFoods;
 }
-});
-return stored;
+
+function mapCategory(cat) {
+  const map = {
+    'proteina': 'Proteínas',
+    'grasa': 'Grasas',
+    'vegetal': 'Verduras',
+    'lacteo': 'Lácteos',
+    'fruto_seco': 'Frutos secos',
+    'otro': 'Otros'
+  };
+  return map[cat] || 'Otros';
 }
-return defaultFoods;
+
+function getAllFoodsForPlan() {
+  if (currentFoods.length > 0) return currentFoods;
+  
+  var stored = safeParseJSON(localStorage.getItem("ketoFoods"), null);
+  if (stored && Array.isArray(stored) && stored.length > 0) {
+    stored.forEach(function(f) {
+      if (!f.units) {
+        var def = defaultFoods.find(function(d) { return d.id === f.id; });
+        if (def && def.units) f.units = def.units;
+      }
+    });
+    currentFoods = stored;
+    return stored;
+  }
+  return defaultFoods;
 }
+
+// Cargar alimentos desde Supabase al iniciar
+loadFoodsFromSupabase();
 function getDespensa(){return safeParseJSON(localStorage.getItem("despensa"), {})}
 function getFoods(){
-return getAllFoodsForPlan();
+  if (currentFoods.length === 0) {
+    loadFoodsFromSupabase();
+  }
+  return currentFoods.length > 0 ? currentFoods : getAllFoodsForPlan();
 }
 function getStockStatus(foodId){
 var despensa=getDespensa();
@@ -468,7 +532,20 @@ if(percent<=25)return{color:"#ffb300",text:"Bajo"};
 if(percent<=50)return{color:"#ffc107",text:"Medio"};
 return{color:"#4caf50",text:"OK"};
 }
-function openFoodSelector(meal){document.getElementById("selectedMeal").textContent=mealNames[meal];document.getElementById("selectedMealType").value=meal;document.getElementById("foodSearch").value="";filterFoods();document.getElementById("foodSelectorModal").classList.remove("hidden");document.getElementById("foodSelectorModal").classList.add("flex")}
+function openFoodSelector(meal){document.getElementById("selectedMeal").textContent=mealNames[meal];document.getElementById("selectedMealType").value=meal;document.getElementById("foodSearch").value="";document.getElementById("foodSearch").focus();openFoodSelectorAsync();}
+async function openFoodSelectorAsync() {
+  // Mostrar loading
+  document.getElementById("foodList").innerHTML = '<div class="flex items-center justify-center py-12"><div class="animate-spin w-8 h-8 border-2 border-primary-container border-t-transparent rounded-full"></div></div>';
+  document.getElementById("foodSelectorModal").classList.remove("hidden");
+  document.getElementById("foodSelectorModal").classList.add("flex");
+  
+  // Cargar alimentos si no están cargados
+  if (currentFoods.length === 0) {
+    await loadFoodsFromSupabase();
+  }
+  filterFoods();
+}
+
 function closeFoodSelector(){document.getElementById("foodSelectorModal").classList.add("hidden");document.getElementById("foodSelectorModal").classList.remove("flex")}
 function filterFoods(){
 if(currentFoods.length===0){currentFoods=getAllFoodsForPlan();}
@@ -477,9 +554,9 @@ var filtered=currentFoods.filter(function(f){return f.name.toLowerCase().include
 var html="";
 if(filtered.length===0){
 html='<div class="text-center py-8">';
-html+='<span class="material-symbols-outlined text-6xl text-on-surface-variant/70 mb-4">inventory_2</span>';
-html+='<p class="text-on-surface-variant mb-2">Tu despensa está vacía</p>';
-html+='<p class="text-sm text-on-surface-variant/70">Ve a "Compras" para agregar alimentos</p>';
+html+='<span class="material-symbols-outlined text-6xl text-on-surface-variant/70 mb-4"> search_off</span>';
+html+='<p class="text-on-surface-variant mb-2">No se encontraron alimentos</p>';
+html+='<p class="text-sm text-on-surface-variant/70">Intenta con otro término de búsqueda</p>';
 html+='</div>';
 document.getElementById("foodList").innerHTML=html;
 return;
@@ -664,22 +741,55 @@ var today=new Date();
 var dayOfWeek=today.getDay();
 var monday=new Date(today);
 monday.setDate(today.getDate()-(dayOfWeek<=0?6:dayOfWeek-1));
-var html="";
+var html='<div class="flex gap-2 overflow-x-auto pb-2 w-full">';
 for(var i=0;i<7;i++){
 var d=new Date(monday);
 d.setDate(monday.getDate()+i);
 var dateKey=d.toISOString().slice(0,10);
 var isToday=dateKey===today.toISOString().slice(0,10);
 var isSelected=dateKey===currentDay;
-var bgColor=isSelected||isToday?"#ff4d00":"#181717";
-var textColor=isSelected||isToday?"#ffffff":"rgba(255,255,255,0.7)";
 var plan=getMealPlan(dateKey);
 var itemCount=(plan.desayuno?plan.desayuno.length:0)+(plan.almuerzo?plan.almuerzo.length:0)+(plan.cena?plan.cena.length:0)+(plan.snacks?plan.snacks.length:0);
-html+='<button data-date="'+dateKey+'" class="day-btn flex-shrink-0 rounded-lg p-3 text-center min-w-[60px] transition-all duration-200" style="background:'+bgColor+';color:'+textColor+'">';
-html+='<div class="text-[10px] uppercase '+(isToday||isSelected?"font-bold":"")+'">'+weekDays[i]+'</div>';
-html+='<div class="text-lg font-bold '+(isToday||isSelected?"font-bold":"")+'">'+d.getDate()+'</div>';
-html+='<div class="text-[10px] '+(itemCount>0?"":"")+'" style="color:'+(itemCount>0?"#4ade80":"rgba(255,255,255,0.4)")+'">'+(itemCount>0?itemCount+" ítems":"Vacío")+'</div>';
+var calories = calculateDayCalories(plan);
+
+var borderColor = isSelected?"border-primary-container":"border-transparent";
+var bgColor = isSelected?"bg-primary-container/20":(isToday?"bg-surface-container-highest":"bg-surface-container");
+var dotColor = itemCount>0?(calories>0?"bg-green-500":"bg-yellow-500"):"bg-surface-container-highest";
+
+html+='<button data-date="'+dateKey+'" class="day-btn flex-shrink-0 rounded-xl p-3 text-center min-w-[70px] border-2 transition-all duration-200 '+borderColor+'" style="background:'+bgColor+';">';
+html+='<div class="text-[10px] uppercase '+(isToday?"font-bold text-primary-container":"text-on-surface-variant")+'">'+weekDays[i]+'</div>';
+html+='<div class="text-xl font-bold '+(isSelected||isToday?"text-white":"text-on-surface")+'">'+d.getDate()+'</div>';
+html+='<div class="flex items-center justify-center gap-1 mt-1">';
+html+='<div class="w-2 h-2 rounded-full '+dotColor+'"></div>';
+html+='<span class="text-[10px] '+(itemCount>0?"text-green-400":"text-on-surface-variant")+'">'+(itemCount>0?itemCount:"")+'</span>';
+html+='</div>';
+if(calories>0){
+html+='<div class="text-[9px] text-yellow-400 mt-0.5">'+calories+' kcal</div>';
+}
 html+='</button>';
+}
+html+='</div>';
+container.innerHTML=html;
+container.querySelectorAll(".day-btn").forEach(function(btn){
+btn.addEventListener("click",function(){
+selectDay(this.getAttribute("data-date"));
+});
+});
+renderWeeklyOverview();
+}
+
+function calculateDayCalories(plan){
+var totalCal=0;
+Object.keys(plan).forEach(function(meal){
+plan[meal].forEach(function(item){
+var food=currentFoods.find(function(f){return f.id===item.id})||defaultFoods.find(function(f){return f.id===item.id})||item;
+var itemPort=parseFloat(item.portion)||100;
+var foodPort=parseFloat(food.portion)||100;
+var ratio=itemPort/foodPort;
+totalCal+=Math.round((parseFloat(food.calories)||0)*ratio);
+});
+});
+return totalCal;
 }
 container.innerHTML=html;
 container.querySelectorAll(".day-btn").forEach(function(btn){
