@@ -436,7 +436,46 @@ function filterByCategory(category){
 showToast("Filtrando: "+category);
 }
 
-function openAddSupplementModal(){
+// Cargar suplementos desde Supabase
+async function loadSupplementsFromSupabase() {
+    const headers = {
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYnF6c29udWp3dnFtZmhqamdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQzMDAsImV4cCI6MjA4ODgzMDMwMH0.SBsTQCh844rtGx0wLNZaEGO8NDmAVZjUj1YiDkRSm1k',
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYnF6c29udWp3dnFtZmhqamdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQzMDAsImV4cCI6MjA4ODgzMDMwMH0.SBsTQCh844rtGx0wLNZaEGO8NDmAVZjUj1YiDkRSm1k'
+    };
+    
+    try {
+        const response = await fetch('https://lmbqzsonujwvqmfhjjgf.supabase.co/rest/v1/suplementos?activo=eq.true&select=*&order=nombre.asc', { headers });
+        const data = await response.json();
+        
+        if (data && data.length > 0) {
+            console.log('✅ Cargados', data.length, 'suplementos de Supabase');
+            return data;
+        }
+    } catch (e) {
+        console.error('Error cargando suplementos:', e);
+    }
+    return [];
+}
+
+function mapSuplementoCategory(cat) {
+    const map = {
+        'mineral': 'esencial',
+        'vitamina': 'esencial',
+        'proteina': 'rendimiento',
+        'aminoacido': 'rendimiento',
+        'creatina': 'rendimiento',
+        'cetogenico': 'control',
+        'acido_graso': 'control',
+        'quemador': 'control',
+        'adaptogeno': 'salud',
+        'hormona': 'salud',
+        'digestivo': 'salud',
+        'estimulante': 'rendimiento'
+    };
+    return map[cat] || 'salud';
+}
+
+async function openAddSupplementModal(){
 var data=getSupplementRecommendations();
 var allSupplements=[];
 if(typeof supplementRecommender!=='undefined'){
@@ -446,6 +485,22 @@ if(db.performance)Object.values(db.performance).forEach(function(s){allSupplemen
 if(db.weight)Object.values(db.weight).forEach(function(s){allSupplements.push(s);});
 if(db.general)Object.values(db.general).forEach(function(s){allSupplements.push(s);});
 }
+
+// Cargar suplementos de Supabase
+const supabaseSupps = await loadSupplementsFromSupabase();
+supabaseSupps.forEach(function(s) {
+    allSupplements.push({
+        id: s.id,
+        name: s.nombre,
+        category: mapSuplementoCategory(s.categoria),
+        dosage: s.dosis_recomendada || '',
+        description: s.beneficios || '',
+        timing: 'diario',
+        priority: 'media',
+        source: 'cloud'
+    });
+});
+
 var html="";
 allSupplements.forEach(function(sup){
 var catInfo=supplementColors[sup.category]||supplementColors.salud;
@@ -454,7 +509,7 @@ html+='<div class="w-12 h-12 rounded-xl '+catInfo.bg+' flex items-center justify
 html+='<span class="material-symbols-outlined text-xl" style="color:'+catInfo.color+'">'+catInfo.icon+'</span></div>';
 html+='<div class="flex-1">';
 html+='<p class="font-bold text-white">'+sup.name+'</p>';
-html+='<p class="text-xs text-on-surface-variant">'+sup.dosage+' - '+sup.timing+'</p></div>';
+html+='<p class="text-xs text-on-surface-variant">'+(sup.dosage||sup.timing||'diario')+'</p></div>';
 html+='<span class="material-symbols-outlined text-primary">add_circle</span></div>';
 });
 document.getElementById("supplementListModal").innerHTML=html||'<p class="text-center text-on-surface-variant py-8">No hay suplementos disponibles</p>';

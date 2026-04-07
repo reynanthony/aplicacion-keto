@@ -2837,7 +2837,69 @@ function saveWorkouts(workouts) {
   localStorage.setItem('ketoWorkouts', JSON.stringify(workouts));
 }
 
-function getExercises() {
+// Cargar ejercicios desde Supabase
+async function loadExercisesFromSupabase() {
+  const headers = {
+    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYnF6c29udWp3dnFtZmhqamdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQzMDAsImV4cCI6MjA4ODgzMDMwMH0.SBsTQCh844rtGx0wLNZaEGO8NDmAVZjUj1YiDkRSm1k',
+    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYnF6c29udWp3dnFtZmhqamdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQzMDAsImV4cCI6MjA4ODgzMDMwMH0.SBsTQCh844rtGx0wLNZaEGO8NDmAVZjUj1YiDkRSm1k'
+  };
+  
+  try {
+    const response = await fetch('https://lmbqzsonujwvqmfhjjgf.supabase.co/rest/v1/ejercicios?activo=eq.true&select=*&order=nombre.asc', { headers });
+    const data = await response.json();
+    
+    if (data && data.length > 0) {
+      const supabaseExercises = data.map(e => ({
+        id: e.id,
+        name: e.nombre,
+        muscle: mapMuscle(e.categoria),
+        calories: parseInt(e.calorias_estimadas_por_minuto) || 5,
+        sets: 3,
+        reps: 10,
+        category: mapExerciseCategory(e.categoria),
+        instructions: e.instrucciones || '',
+        source: 'cloud'
+      }));
+      console.log('✅ Cargados', supabaseExercises.length, 'ejercicios de Supabase');
+      return supabaseExercises;
+    }
+  } catch (e) {
+    console.error('Error cargando ejercicios:', e);
+  }
+  return null;
+}
+
+function mapMuscle(cat) {
+  const map = {
+    'pecho': 'Pecho',
+    'espalda': 'Espalda',
+    'piernas': 'Piernas',
+    'hombros': 'Hombros',
+    'brazos': 'Bíceps',
+    'core': 'Abdomen'
+  };
+  return map[cat] || 'Pecho';
+}
+
+function mapExerciseCategory(cat) {
+  const map = {
+    'pecho': 'fuerza',
+    'espalda': 'fuerza',
+    'piernas': 'fuerza',
+    'hombros': 'fuerza',
+    'brazos': 'fuerza',
+    'core': 'calistenia',
+    'cardio': 'cardio'
+  };
+  return map[cat] || 'fuerza';
+}
+
+var exercisesCache = null;
+
+async function getExercises() {
+  // Si ya cargamos de Supabase, usar cache
+  if (exercisesCache) return exercisesCache;
+  
   var stored = localStorage.getItem('ketoExercises');
   var exercises = stored ? JSON.parse(stored) : null;
   
@@ -2857,6 +2919,13 @@ function getExercises() {
   }
   
   if (exercises && exercises.length > 0) return exercises;
+  
+  // Intentar cargar de Supabase
+  const supabaseExercises = await loadExercisesFromSupabase();
+  if (supabaseExercises && supabaseExercises.length > 0) {
+    exercisesCache = supabaseExercises;
+    return supabaseExercises;
+  }
   
   // Build default exercises and save to localStorage
   var defaultExercises = [
