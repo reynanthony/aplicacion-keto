@@ -391,7 +391,7 @@ async function loadRecipesFromSupabase() {
                     description: r.descripcion || '',
                     instructions: r.instrucciones || '',
                     difficulty: r.dificultad || 'facil',
-                    category: categorizeByPrepTime(r.tiempo_preparacion),
+                    category: categorizeByPrepTime(r.tiempo_preparacion, r.titulo),
                     prepTime: r.tiempo_preparacion || 15,
                     image: r.imagen_url || '',
                     calories: macros.calorias_totales || 0,
@@ -410,10 +410,28 @@ async function loadRecipesFromSupabase() {
     }
 }
 
-function categorizeByPrepTime(min) {
-    if (!min) return 'snacks';
-    if (min <= 15) return 'desayuno';
-    if (min <= 30) return 'almuerzo';
+function categorizeByPrepTime(min, titulo) {
+    // Si ya tiene categoría, devolverla
+    var title = titulo || '';
+    var lower = title.toLowerCase();
+    
+    // Clasificar por palabras clave en el título
+    if (/huevo|tortilla|omelette|pancake|cafe|coffee|bulletproof|yogur|desayuno/.test(lower)) {
+        return 'desayuno';
+    }
+    if (/batido|smoothie|shake|cookie|golosina|snack|bocadillo/.test(lower)) {
+        return 'snacks';
+    }
+    if (/pollo|bistec|carne|burger|atun|cerdo|vacuno/.test(lower)) {
+        return 'almuerzo';
+    }
+    if (/salmón|salmon|merluza|pescado|fish/.test(lower)) {
+        return 'cena';
+    }
+    
+    // Por tiempo de preparación
+    if (min && min <= 15) return 'desayuno';
+    if (min && min <= 30) return 'almuerzo';
     return 'cena';
 }
 
@@ -515,13 +533,20 @@ var isFavorite=favorites.indexOf(recipe.id)!==-1;
 var isFirst=i===0&&!search&&!showFavoritesOnly&&currentCategory==="all";
 var catColors={desayuno:"bg-yellow-500/20 text-yellow-400",almuerzo:"bg-orange-500/20 text-orange-400",cena:"bg-purple-500/20 text-purple-400",snacks:"bg-pink-500/20 text-pink-400"};
 var catLabels={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snacks"};
+var catGradients={desayuno:"linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fcd34d 100%)",almuerzo:"linear-gradient(135deg, #ea580c 0%, #f97316 50%, #fb923c 100%)",cena:"linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #a78bfa 100%)",snacks:"linear-gradient(135deg, #db2777 0%, #ec4899 50%, #f472b6 100%)"};
+var catIcons={desayuno:"egg",almuerzo:"restaurant",cena:"dinner_dining",snacks:"cookie"};
 
 html+='<article class="group relative overflow-hidden rounded-[2rem] '+(isFirst?"md:col-span-2 lg:col-span-2 xl:col-span-2":"")+' bg-surface-container transition-all duration-500 hover:shadow-[0_0_40px_rgba(255,144,105,0.1)] cursor-pointer" onclick="openRecipeModal(\''+recipe.id+'\')">';
 html+='<div class="h-48 md:h-64 w-full overflow-hidden relative">';
-if(recipe.image){
-html+='<img loading="lazy" src="'+recipe.image+'" alt="'+recipe.title+'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80" onerror="this.style.display=\'none\'">';
+if(recipe.image && recipe.image.startsWith('http')){
+html+='<img loading="lazy" src="'+recipe.image+'" alt="'+recipe.title+'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\'">';
+html+='<div class="w-full h-full items-center justify-center hidden" style="background:'+catGradients[recipe.category]+';">';
+html+='<span class="material-symbols-outlined text-6xl text-white/30" style="font-size:80px;">'+catIcons[recipe.category]+'</span>';
+html+='</div>';
 }else{
-html+='<div class="w-full h-full bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-6xl text-white/60">restaurant</span></div>';
+html+='<div class="w-full h-full flex items-center justify-center" style="background:'+catGradients[recipe.category]+';">';
+html+='<span class="material-symbols-outlined text-white/30" style="font-size:80px;">'+catIcons[recipe.category]+'</span>';
+html+='</div>';
 }
 html+='<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>';
 html+='<div class="absolute top-4 right-4 flex gap-2">';
@@ -556,11 +581,19 @@ if(!recipe)return;
 currentServings=1;
 currentRecipeMacros={calories:recipe.calories,protein:recipe.protein,fat:recipe.fat,carbs:recipe.carbs};
 
+var catGradients={desayuno:"linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fcd34d 100%)",almuerzo:"linear-gradient(135deg, #ea580c 0%, #f97316 50%, #fb923c 100%)",cena:"linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #a78bfa 100%)",snacks:"linear-gradient(135deg, #db2777 0%, #ec4899 50%, #f472b6 100%)"};
+var catIcons={desayuno:"egg",almuerzo:"restaurant",cena:"dinner_dining",snacks:"cookie"};
+
 var html='<div class="relative">';
-if(recipe.image){
-html+='<div class="h-64 md:h-80 w-full overflow-hidden rounded-t-[2rem]"><img loading="lazy" src="'+recipe.image+'" alt="'+recipe.title+'" class="w-full h-full object-cover"></div>';
+if(recipe.image && recipe.image.startsWith('http')){
+html+='<div class="h-64 md:h-80 w-full overflow-hidden rounded-t-[2rem]"><img loading="lazy" src="'+recipe.image+'" alt="'+recipe.title+'" class="w-full h-full object-cover" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\'">';
+html+='<div class="h-64 md:h-80 w-full items-center justify-center rounded-t-[2rem] hidden" style="background:'+catGradients[recipe.category]+';">';
+html+='<span class="material-symbols-outlined text-white/30" style="font-size:100px;">'+catIcons[recipe.category]+'</span>';
+html+='</div></div>';
 }else{
-html+='<div class="h-64 md:h-80 w-full bg-primary-container flex items-center justify-center rounded-t-[2rem]"><span class="material-symbols-outlined text-8xl text-white/60">restaurant</span></div>';
+html+='<div class="h-64 md:h-80 w-full flex items-center justify-center rounded-t-[2rem]" style="background:'+catGradients[recipe.category]+';">';
+html+='<span class="material-symbols-outlined text-white/30" style="font-size:100px;">'+catIcons[recipe.category]+'</span>';
+html+='</div>';
 }
 html+='<button onclick="closeRecipeModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary-container transition-colors"><span class="material-symbols-outlined">close</span></button>';
 html+='<button onclick="toggleFavorite(\''+recipe.id+'\')" class="absolute top-4 left-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary-container transition-colors"><span class="material-symbols-outlined" style="font-variation-settings:\'FILL 1\'">favorite</span></button>';
