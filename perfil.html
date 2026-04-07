@@ -53,6 +53,24 @@ tailwind.config = {
 }
 </script>
 <style>
+.sidebar-link.active{background:rgba(30,28,28,1)!important;}
+.sidebar-link.active .material-symbols-outlined{color:#ff4d00!important;}
+.sidebar-link.active{color:white!important;}
+.sidebar-collapsed .sidebar-nav{width:72px;}
+.sidebar-collapsed .sidebar-nav .sidebar-text{display:none;}
+.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0;}
+.sidebar-collapsed .sidebar-logo-text{display:none;}
+.sidebar-collapsed .sidebar-logo{justify-content:center;}
+.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px;}
+.sidebar-collapsed~main .main-content{margin-left:72px;}
+.sidebar-toggle-btn{left:256px;transition:left 0.3s ease;}
+.sidebar-collapsed~.sidebar-toggle-btn{left:72px;}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Inter",sans-serif;background:#0a0a0a;color:#fff}
+.glass-card{background:rgba(30,28,28,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1)}
+.sidebar-link{display:flex;align-items:center;gap:1rem;padding:0.75rem 1rem;margin:0 0.5rem;border-radius:9999px;background:#1e1c1c;font-size:0.875rem;font-weight:700;transition:all 0.2s}
+
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:"Inter",sans-serif;background:#0a0a0a;color:#fff}
 .glass-card{background:rgba(30,28,28,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1)}
@@ -63,8 +81,6 @@ body{font-family:"Inter",sans-serif;background:#0a0a0a;color:#fff}
 #bottomNav a.text-primary-container .material-symbols-outlined{color:#ff4d00!important}
 #bottomNav a.text-primary-container span{color:#ff4d00!important}
 .sidebar-logo{display:flex;align-items:center;gap:0.75rem}
-.sidebar-logo-text h1{font-size:1.125rem;font-weight:900;color:#ff4d00;letter-spacing:-0.02em}
-.sidebar-logo-text span{font-size:0.5625rem;color:rgba(255,255,255,0.4);letter-spacing:0.2em;text-transform:uppercase}
 .sidebar-collapsed .sidebar-logo-text,.sidebar-collapsed .sidebar-text{display:none}
 .sidebar-collapsed .sidebar-link{justify-content:center;padding:0.75rem}
 .shadow-glow{box-shadow:0 0 20px rgba(255,77,0,0.3)}
@@ -85,88 +101,45 @@ select option{background:#1e1c1c;color:#fff}
 </head>
 <body class="bg-background text-on-surface font-body overflow-x-hidden selection:bg-primary-container selection:text-on-primary pt-safe-top">
 
-<nav id="sidebarNav" class="sidebar-nav hidden md:flex fixed left-0 top-0 h-full w-64 flex-col py-6 bg-surface-container-low z-50 border-r border-primary-container/10 transition-all duration-300">
-<div class="px-4 mb-8 flex items-center justify-center">
-<div class="flex items-center justify-center sidebar-logo">
-<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center flex-shrink-0">
-<span class="material-symbols-outlined text-white text-lg" style="font-variation-settings: 'FILL' 1;">nutrition</span>
-</div>
-<div class="sidebar-logo-text">
-<h1 class="text-lg font-black text-primary-container font-headline tracking-tighter">KetoLab</h1>
-<span class="text-[9px] text-white/40 font-label tracking-[0.2em] uppercase">High-Performance Fuel</span>
-</div>
-</div>
-</div>
-<div class="flex-1 space-y-1 px-4">
-<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="index.html">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
-<span class="sidebar-text">Inicio</span>
-</a>
-<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="perfil.html">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
-<span class="sidebar-text">Perfil</span>
-</a>
-<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="alimentos.html">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
-<span class="sidebar-text">Alimentos</span>
-</a>
-<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="plan.html">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
-<span class="sidebar-text">Plan</span>
-</a>
-<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="recetas.html">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
-<span class="sidebar-text">Recetas</span>
-</a>
-<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="compras.html">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shopping_cart</span>
-<span class="sidebar-text">Compras</span>
-</a>
-<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="macros.html">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">donut_small</span>
-<span class="sidebar-text">Macros</span>
-</a>
-<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="checklist.html">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">checklist</span>
-<span class="sidebar-text">Daily</span>
-</a>
-<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="entrenamientos.html">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
-<span class="sidebar-text">Entreno</span>
-</a>
-<a class="sidebar-link flex items-center gap-4 px-4 py-3" href="suplementos.html">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">medication</span>
-<span class="sidebar-text">Suplementos</span>
-</a>
-<button onclick="openBackupModal()" class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all w-full text-left">
-<span class="material-symbols-outlined">backup</span>
-<span class="sidebar-text">Backup</span>
-</button>
-<select id="langSelector" onchange="setLang(this.value)" class="sidebar-link flex items-center gap-2 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all w-full text-left cursor-pointer">
-<option value="es">Español</option>
-<option value="en">English</option>
-</select>
-<button onclick="requestPushPermission()" class="sidebar-link flex items-center gap-4 px-4 py-3 bg-surface-container-high rounded-full mx-2 font-bold font-headline text-sm tracking-wide transition-all w-full text-left">
-<span class="material-symbols-outlined">notifications</span>
-<span class="sidebar-text">Notificaciones</span>
-</button>
-</div>
+<!-- SideNavBar (Desktop) -->
+<nav id="sidebarNav" class="sidebar-nav hidden md:flex fixed left-0 top-0 h-full w-64 flex-col py-6 z-50 border-r border-white/5 transition-all duration-300" style="background:#111010;">
+  <div class="px-6 mb-8 flex items-center justify-center">
+    <div class="flex items-center gap-3 sidebar-logo">
+      <img src="logo.svg" alt="KetoLab Logo" class="w-12 h-12 flex-shrink-0" style="filter:drop-shadow(0 0 10px rgba(255,77,0,0.5));">
+      <div class="sidebar-logo-text flex flex-col items-start justify-center">
+        <span class="text-xl font-black tracking-tighter font-headline" style="background:linear-gradient(to right,#ff4d00,#ffb300);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;">KetoLab</span>
+        <span class="text-[9px] font-bold uppercase tracking-[0.25em] mt-0.5" style="color:rgba(255,255,255,0.45);">High-Performance</span>
+      </div>
+    </div>
+  </div>
+  <div class="flex-1 space-y-1 px-4 overflow-y-auto">
+    <a class="sidebar-link flex items-center gap-4 px-4 py-3 rounded-full mx-2 font-bold text-sm tracking-wide transition-all hover:bg-white/5 text-white/70" href="index.html"><span class="material-symbols-outlined">dashboard</span><span class="sidebar-text">Inicio</span></a>
+    <a class="sidebar-link flex items-center gap-4 px-4 py-3 rounded-full mx-2 font-bold text-sm tracking-wide transition-all hover:bg-white/5 text-white/70" href="perfil.html"><span class="material-symbols-outlined">person</span><span class="sidebar-text">Perfil</span></a>
+    <a class="sidebar-link flex items-center gap-4 px-4 py-3 rounded-full mx-2 font-bold text-sm tracking-wide transition-all hover:bg-white/5 text-white/70" href="alimentos.html"><span class="material-symbols-outlined">restaurant</span><span class="sidebar-text">Alimentos</span></a>
+    <a class="sidebar-link flex items-center gap-4 px-4 py-3 rounded-full mx-2 font-bold text-sm tracking-wide transition-all hover:bg-white/5 text-white/70" href="plan.html"><span class="material-symbols-outlined">event_note</span><span class="sidebar-text">Plan</span></a>
+    <a class="sidebar-link flex items-center gap-4 px-4 py-3 rounded-full mx-2 font-bold text-sm tracking-wide transition-all hover:bg-white/5 text-white/70" href="recetas.html"><span class="material-symbols-outlined">menu_book</span><span class="sidebar-text">Recetas</span></a>
+    <a class="sidebar-link flex items-center gap-4 px-4 py-3 rounded-full mx-2 font-bold text-sm tracking-wide transition-all hover:bg-white/5 text-white/70" href="compras.html"><span class="material-symbols-outlined">shopping_cart</span><span class="sidebar-text">Despensa</span></a>
+    <a class="sidebar-link flex items-center gap-4 px-4 py-3 rounded-full mx-2 font-bold text-sm tracking-wide transition-all hover:bg-white/5 text-white/70" href="macros.html"><span class="material-symbols-outlined">donut_small</span><span class="sidebar-text">Macros</span></a>
+    <a class="sidebar-link flex items-center gap-4 px-4 py-3 rounded-full mx-2 font-bold text-sm tracking-wide transition-all hover:bg-white/5 text-white/70" href="checklist.html"><span class="material-symbols-outlined">fact_check</span><span class="sidebar-text">Checklist</span></a>
+    <a class="sidebar-link flex items-center gap-4 px-4 py-3 rounded-full mx-2 font-bold text-sm tracking-wide transition-all hover:bg-white/5 text-white/70" href="entrenamientos.html"><span class="material-symbols-outlined">fitness_center</span><span class="sidebar-text">Gym</span></a>
+    <a class="sidebar-link flex items-center gap-4 px-4 py-3 rounded-full mx-2 font-bold text-sm tracking-wide transition-all hover:bg-white/5 text-white/70" href="suplementos.html"><span class="material-symbols-outlined">medication</span><span class="sidebar-text">Suplementos</span></a>
+  </div>
 </nav>
+<button id="sidebarToggle" onclick="toggleSidebar()" class="sidebar-toggle-btn hidden md:flex fixed top-20 z-50 w-11 h-11 bg-surface-container-low hover:bg-surface-container-high border border-white/10 rounded-r-lg items-center justify-center transition-all duration-300 hover:border-primary-container/30">
+<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_left</span>
+</button>
 
 <!-- Mobile Header -->
-<header class="md:hidden fixed top-0 w-full h-14 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5 px-4 flex items-center justify-between">
-<a href="index.html" class="flex items-center gap-2">
-<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center">
-<span class="material-symbols-outlined text-white text-base" style="font-variation-settings: 'FILL' 1;">nutrition</span>
-</div>
-<span class="text-base font-black text-primary-container tracking-tight font-headline">KetoLab</span>
-</a>
-<div class="flex items-center gap-2">
-<button onclick="toggleHamburgerMenu()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined">menu</span></button>
-<button onclick="document.getElementById('mobileSettingsModal').classList.remove('hidden')" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
-<span class="material-symbols-outlined">settings</span>
-</button>
-</div>
+<!-- TopAppBar (Mobile) -->
+<header class="md:hidden fixed top-0 w-full h-14 z-40 border-b border-white/5 px-4 flex items-center justify-between" style="background:rgba(10,10,10,0.9);backdrop-filter:blur(20px);">
+  <a href="index.html" class="flex items-center gap-3">
+    <img src="logo.svg" alt="KetoLab Logo" class="w-9 h-9" style="filter:drop-shadow(0 0 8px rgba(255,77,0,0.5));">
+    <span class="text-xl font-black tracking-tight" style="background:linear-gradient(to right,#ffffff,rgba(255,255,255,0.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">KetoLab</span>
+  </a>
+  <div class="flex items-center gap-2">
+    <button onclick="toggleHamburgerMenu()" class="w-11 h-11 rounded-full flex items-center justify-center transition-all hover:bg-white/10" style="color:rgba(255,255,255,0.6);"><span class="material-symbols-outlined">menu</span></button>
+    <button onclick="if(document.getElementById('mobileSettingsModal'))document.getElementById('mobileSettingsModal').classList.remove('hidden')" class="w-11 h-11 rounded-full flex items-center justify-center transition-all hover:bg-white/10" style="color:rgba(255,255,255,0.6);"><span class="material-symbols-outlined">settings</span></button>
+  </div>
 </header>
 
 <!-- Hamburger Menu (Mobile) -->
@@ -175,7 +148,7 @@ select option{background:#1e1c1c;color:#fff}
 <div class="absolute top-0 right-0 h-full w-72 bg-surface-container-low shadow-2xl transform transition-transform duration-300 translate-x-full" id="hamburgerPanel">
 <div class="p-4 border-b border-white/10">
 <div class="flex items-center justify-between"><span class="text-lg font-bold text-white">Más opciones</span>
-<button onclick="toggleHamburgerMenu()" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined">close</span></button>
+<button onclick="toggleHamburgerMenu()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined">close</span></button>
 </div>
 </div>
 <div class="overflow-y-auto h-[calc(100%-64px)] pb-20">
@@ -210,7 +183,7 @@ var deferredPrompt=null;window.addEventListener('beforeinstallprompt',function(e
 <span class="material-symbols-outlined text-primary-container">settings</span>
 Configuración
 </h3>
-<button onclick="document.getElementById('mobileSettingsModal').classList.add('hidden')" class="w-8 h-8 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
+<button onclick="document.getElementById('mobileSettingsModal').classList.add('hidden')" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
 <span class="material-symbols-outlined text-lg">close</span>
 </button>
 </div>
@@ -236,25 +209,19 @@ Guía de Uso
 </div>
 </div>
 
-<button id="sidebarToggle" onclick="toggleSidebar()" class="sidebar-toggle-btn hidden md:flex fixed top-20 z-50 w-8 h-8 bg-surface-container-low hover:bg-surface-container-high border border-white/10 rounded-r-lg items-center justify-center transition-all duration-300 hover:border-primary-container/30">
-<span class="material-symbols-outlined text-white/60 hover:text-primary-container text-lg">chevron_left</span>
-</button>
-
 <!-- TopAppBar (Desktop) -->
-<header class="topbar-desktop hidden md:flex fixed top-0 w-full justify-between items-center px-8 h-20 z-40 bg-gradient-to-b from-surface-container-low to-transparent transition-all duration-300">
-<div class="topbar-pl pl-64 transition-all duration-300">
-<h2 class="text-2xl font-black text-primary-container tracking-tighter font-headline">KetoLab</h2>
-</div>
-<div class="flex items-center gap-4">
-<button class="material-symbols-outlined text-white/70 hover:text-primary-container transition-colors duration-300 scale-95 active:scale-90 relative" onclick="showNotifications()" title="Notificaciones">
-notifications
-<span class="absolute top-0 right-0 w-2 h-2 bg-primary-container rounded-full ring-2 ring-background"></span>
-</button>
-<a href="perfil.html" class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center font-headline font-bold text-white text-sm cursor-pointer hover:scale-105 transition-transform" id="profileBtn" title="Mi perfil">KL</a>
-</div>
+<header class="topbar-desktop hidden md:flex fixed top-0 w-full h-16 px-8 items-center justify-between z-40 border-b border-white/5 transition-all duration-300" style="background:rgba(17,16,16,0.95);backdrop-filter:blur(20px);">
+  <div class="topbar-pl pl-64 transition-all duration-300 flex items-center gap-3">
+    <span class="text-xs font-bold uppercase tracking-[0.2em]" style="color:#ff4d00;">KetoLab</span>
+    <span style="color:rgba(255,255,255,0.2);">/</span>
+    <h2 class="text-base font-bold tracking-tight" style="color:rgba(255,255,255,0.9);">Mi Perfil</h2>
+  </div>
+  <div class="flex items-center gap-3">
+    <a href="perfil.html" class="w-9 h-9 rounded-full flex items-center justify-center font-bold text-white text-sm cursor-pointer hover:scale-105 transition-transform" style="background:#ff4d00;" title="Mi perfil">KL</a>
+  </div>
 </header>
 
-<main class="main-content relative z-30 ml-0 md:ml-64 pt-24 md:pt-6 pb-24 md:pb-6 p-4 md:p-6 transition-all duration-300">
+<main class="main-content relative z-30 ml-0 md:ml-64 pt-24 md:pt-20 pb-24 md:pb-6 p-4 md:p-6 transition-all duration-300">
 <div class="max-w-7xl mx-auto space-y-6">
 
 <!-- Header con Stats -->
@@ -807,7 +774,7 @@ function loadWeightHistoryList(){
     var diff = prev ? (h.weight - prev.weight).toFixed(1) : 0;
     var diffClass = diff > 0 ? 'text-red-400' : diff < 0 ? 'text-green-400' : 'text-on-surface-variant';
     var diffText = prev ? (diff > 0 ? '+' : '') + diff : '';
-    return '<div class="flex items-center justify-between p-3 bg-surface-container-high rounded-xl hover:bg-surface-container-highest transition-colors"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center"><span class="material-symbols-outlined text-on-surface-variant text-sm" style="font-size:16px">calendar_today</span></div><div><p class="text-white text-sm font-medium">' + h.date + '</p><p class="text-xs text-on-surface-variant">' + (prev ? 'Hace ' + (i+1) + ' registro(s)' : 'Ultimo registro') + '</p></div></div><div class="text-right"><p class="text-white font-bold">' + h.weight + ' kg</p><p class="text-xs ' + diffClass + '">' + diffText + '</p></div></div>';
+    return '<div class="flex items-center justify-between p-3 bg-surface-container-high rounded-xl hover:bg-surface-container-highest transition-colors"><div class="flex items-center gap-3"><div class="w-11 h-11 rounded-lg bg-surface-container-low flex items-center justify-center"><span class="material-symbols-outlined text-on-surface-variant text-sm" style="font-size:16px">calendar_today</span></div><div><p class="text-white text-sm font-medium">' + h.date + '</p><p class="text-xs text-on-surface-variant">' + (prev ? 'Hace ' + (i+1) + ' registro(s)' : 'Ultimo registro') + '</p></div></div><div class="text-right"><p class="text-white font-bold">' + h.weight + ' kg</p><p class="text-xs ' + diffClass + '">' + diffText + '</p></div></div>';
   }).join('');
 }
 
@@ -1168,5 +1135,29 @@ if (activeNav) {
 <a href="compras.html" class="flex flex-col items-center text-white/60 hover:text-white transition-all" aria-label="Despensa"><span class="material-symbols-outlined text-2xl">shopping_basket</span><span class="text-[10px] mt-1">Despensa</span></a>
 <a href="entrenamientos.html" class="flex flex-col items-center text-white/60 hover:text-white transition-all" aria-label="Entrenamiento"><span class="material-symbols-outlined text-2xl">sports_gymnastics</span><span class="text-[10px] mt-1">Gym</span></a>
 </nav>
+<script>var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active");link.style.background="#1e1c1c";link.querySelector(".material-symbols-outlined").style.color="#ff4d00"}});</script>
+<script>
+var _cp=window.location.pathname.split("/").pop()||"index.html";
+document.querySelectorAll(".sidebar-link").forEach(function(l){
+  if(l.getAttribute("href")===_cp){
+    l.classList.add("active");
+    l.style.background="rgba(30,28,28,1)";
+    l.style.color="white";
+    var ic=l.querySelector(".material-symbols-outlined");
+    if(ic)ic.style.color="#ff4d00";
+  }
+});
+if(localStorage.getItem("sidebarCollapsed")==="true"){
+  document.body.classList.add("sidebar-collapsed");
+  var _sn=document.getElementById("sidebarNav");
+  if(_sn){_sn.style.width="72px";_sn.style.overflow="hidden";}
+  var _tp=document.querySelector(".topbar-pl");
+  if(_tp)_tp.style.paddingLeft="88px";
+  var _mc=document.querySelector(".main-content");
+  if(_mc)_mc.style.marginLeft="72px";
+  var _st=document.getElementById("sidebarToggle");
+  if(_st)_st.style.left="72px";
+}
+</script>
 </body>
 </html>

@@ -4,7 +4,9 @@
   "description": "KetoLab PWA",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "npx serve .",
+    "dev": "npx serve ."
   },
   "devDependencies": {
     "sharp": "^0.34.5",

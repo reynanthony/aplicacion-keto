@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KetoLab - Diagnóstico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: system-ui, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-900 min-h-screen p-8">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-2xl font-bold text-white mb-8">🔧 KetoLab - Diagnóstico</h1>
+        
+        <div id="results" class="space-y-4"></div>
+        
+        <div class="mt-8 p-4 bg-gray-800 rounded-lg">
+            <h2 class="text-lg font-bold text-white mb-2">¿Qué hacer si hay errores?</h2>
+            <ol class="text-gray-300 text-sm space-y-2 list-decimal list-inside">
+                <li>Ve a tu proyecto en <a href="https://supabase.com/dashboard" class="text-orange-400 underline" target="_blank">Supabase Dashboard</a></li>
+                <li>Selecciona tu proyecto: <code class="bg-gray-700 px-2 py-1 rounded">lmbqzsonujwvqmfhjjgf</code></li>
+                <li>Ve a <strong>Authentication</strong> → <strong>Settings</strong></li>
+                <li>Configura <strong>Site URL</strong> como <code class="bg-gray-700 px-2 py-1 rounded">http://localhost:3000</code></li>
+                <li>Asegúrate que <strong>Enable Sign Up</strong> esté ON</li>
+                <li>En <strong>Redirect URLs</strong> agrega <code class="bg-gray-700 px-2 py-1 rounded">http://localhost:3000/*</code></li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const results = document.getElementById('results');
+        
+        function log(message, type = 'info') {
+            const colors = {
+                info: 'text-blue-400',
+                success: 'text-green-400',
+                error: 'text-red-400',
+                warning: 'text-yellow-400'
+            };
+            const div = document.createElement('div');
+            div.className = `p-4 bg-gray-800 rounded-lg border-l-4 ${type === 'error' ? 'border-red-500' : type === 'success' ? 'border-green-500' : 'border-blue-500'}`;
+            div.innerHTML = `<span class="${colors[type]}">[${new Date().toLocaleTimeString()}]</span> ${message}`;
+            results.appendChild(div);
+        }
+
+        async function runDiagnostics() {
+            const SUPABASE_URL = 'https://lmbqzsonujwvqmfhjjgf.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYnF6c29udWp3dnFtZmhqamdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQzMDAsImV4cCI6MjA4ODgzMDMwMH0.SBsTQCh844rtGx0wLNZaEGO8NDmAVZjUj1YiDkRSm1k';
+            
+            const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            
+            log('Iniciando diagnóstico...');
+            
+            // Test 1: Conexión básica
+            try {
+                log('1. Probando conexión a Supabase...');
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/`, {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    }
+                });
+                log(`Conexión HTTP: ${response.status} ${response.statusText}`, response.ok ? 'success' : 'error');
+            } catch (e) {
+                log(`Error de conexión: ${e.message}`, 'error');
+            }
+            
+            // Test 2: Leer alimentos (sin auth)
+            try {
+                log('2. Probando lectura de alimentos...');
+                const { data, error } = await supabase.from('alimentos').select('id, nombre').limit(3);
+                if (error) {
+                    log(`Error al leer alimentos: ${error.message} (${error.code})`, 'error');
+                } else {
+                    log(`Alimentos encontrados: ${data.length}`, 'success');
+                    data.forEach(a => log(`   - ${a.nombre}`, 'info'));
+                }
+            } catch (e) {
+                log(`Excepción: ${e.message}`, 'error');
+            }
+            
+            // Test 3: Leer recetas
+            try {
+                log('3. Probando lectura de recetas...');
+                const { data, error } = await supabase.from('recetas').select('id, titulo').limit(3);
+                if (error) {
+                    log(`Error al leer recetas: ${error.message}`, 'error');
+                } else {
+                    log(`Recetas encontradas: ${data.length}`, 'success');
+                }
+            } catch (e) {
+                log(`Excepción: ${e.message}`, 'error');
+            }
+            
+            // Test 4: Signup
+            try {
+                log('4. Probando signup (crear cuenta de prueba)...');
+                const testEmail = `test_${Date.now()}@test.com`;
+                const { data, error } = await supabase.auth.signUp({
+                    email: testEmail,
+                    password: 'TestPassword123!'
+                });
+                
+                if (error) {
+                    log(`Error de signup: ${error.message} (${error.status})`, 'error');
+                    
+                    if (error.message.includes('401')) {
+                        log('⚠️ El error 401 indica problema con las políticas RLS de auth.users', 'warning');
+                        log('   Solución: Ve a Supabase Dashboard → Authentication → Users → disable RLS o configura correctamente', 'warning');
+                    }
+                } else {
+                    log(`Signup exitoso: ${data.user?.email || 'Usuario creado'}`, 'success');
+                    if (data.user) {
+                        log('   ✅ El sistema de auth funciona correctamente', 'success');
+                    }
+                }
+            } catch (e) {
+                log(`Excepción en signup: ${e.message}`, 'error');
+            }
+            
+            // Test 5: Verificar tablas
+            try {
+                log('5. Verificando estructura de tablas...');
+                const tables = ['alimentos', 'recetas', 'usuarios', 'datos_usuario'];
+                for (const table of tables) {
+                    const { error } = await supabase.from(table).select('id').limit(1);
+                    log(`   Tabla ${table}: ${error ? '❌ ' + error.message : '✅ existe'}`, error ? 'error' : 'success');
+                }
+            } catch (e) {
+                log(`Error verificando tablas: ${e.message}`, 'error');
+            }
+            
+            log('Diagnóstico completado.');
+        }
+        
+        runDiagnostics();
+    </script>
+</body>
+</html>

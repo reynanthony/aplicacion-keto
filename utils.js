@@ -418,8 +418,8 @@ function createModernModalStyles() {
       to { opacity: 1; }
     }
     @keyframes modalSlideIn {
-      from { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
-      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
     @keyframes modalBackdrop {
       from { backdrop-filter: blur(0px); }
@@ -437,10 +437,7 @@ function createModernModalStyles() {
       padding: 20px;
     }
     .modern-modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      position: relative;
       z-index: 99999;
       width: 100%;
       max-width: 420px;
