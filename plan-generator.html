@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<meta name="theme-color" content="#ff4d00">
+<title>KetoCore | Generador de Plan</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0"></script>
+<script>
+window.SUPABASE_URL = 'https://lmbqzsonujwvqmfhjjgf.supabase.co';
+window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYnF6c29udWp3dnFtZmhqamdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQzMDAsImV4cCI6MjA4ODgzMDMwMH0.SBsTQCh844rtGx0wLNZaEGO8NDmAVZjUj1YiDkRSm1k';
+window.supabase = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght@20..48,100..700&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","primary-container":"#ff4d00","on-primary":"#ffffff","on-primary-container":"#ffffff","surface":"#0a0a0a","surface-container":"#181717","surface-container-low":"#111010","surface-container-high":"#1e1c1c","surface-container-highest":"#242222","on-surface":"#ffffff","on-surface-variant":"#adaaaa","secondary":"#ffb300","background":"#0a0a0a"},fontFamily:{headline:["Plus Jakarta Sans","sans-serif"],body:["Inter","sans-serif"]}}}};
+</script>
+<style>
+body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#ffffff;}
+h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.glass-card{background:rgba(30,28,28,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,77,0,0.15)}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 20px rgba(255,77,0,0.3)}50%{box-shadow:0 0 40px rgba(255,77,0,0.6)}}
+.animate-pulse-glow{animation:pulse-glow 2s infinite}
+@keyframes spin-slow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.animate-spin-slow{animation:spin-slow 3s linear infinite}
+</style>
+</head>
+<body class="min-h-screen">
+<!-- Header -->
+<header class="fixed top-0 w-full h-16 px-6 flex items-center justify-between z-50 border-b border-white/5" style="background:rgba(10,10,10,0.95);backdrop-filter:blur(20px);">
+<a href="plan.html" class="flex items-center gap-2 text-white/70 hover:text-white transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+<span class="text-sm">Volver</span>
+</a>
+<h1 class="text-lg font-bold text-white">Generador de Plan</h1>
+<div class="w-10"></div>
+</header>
+
+<main class="pt-20 px-4 pb-8 max-w-2xl mx-auto">
+<!-- Estado Inicial - Esperando generar -->
+<div id="stepInitial" class="space-y-6">
+<!-- Info Card -->
+<div class="glass-card rounded-2xl p-6 text-center">
+<div class="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center" style="background:linear-gradient(135deg, #ff4d0020, #ffb30020)">
+<span class="material-symbols-outlined text-5xl text-primary-container">auto_awesome</span>
+</div>
+<h2 class="text-2xl font-bold text-white mb-2">Plan Semanal Personalizado</h2>
+<p class="text-on-surface-variant mb-6">Genera un plan de alimentación automáticamente basado en tus macros objetivo y preferencias.</p>
+
+<!-- Preview de macros del usuario -->
+<div class="bg-surface-container-high rounded-xl p-4 mb-6 text-left">
+<h3 class="text-sm font-medium text-white mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-sm">person</span>
+Tus macros objetivo
+</h3>
+<div class="grid grid-cols-4 gap-3 text-center">
+<div class="bg-surface-container rounded-lg p-2">
+<div class="text-lg font-bold text-yellow-400" id="userTargetCal">1800</div>
+<div class="text-[10px] text-on-surface-variant">kcal</div>
+</div>
+<div class="bg-surface-container rounded-lg p-2">
+<div class="text-lg font-bold text-orange-400" id="userTargetProt">160</div>
+<div class="text-[10px] text-on-surface-variant">proteína</div>
+</div>
+<div class="bg-surface-container rounded-lg p-2">
+<div class="text-lg font-bold text-yellow-300" id="userTargetFat">150</div>
+<div class="text-[10px] text-on-surface-variant">grasa</div>
+</div>
+<div class="bg-surface-container rounded-lg p-2">
+<div class="text-lg font-bold text-cyan-400" id="userTargetCarbs">25</div>
+<div class="text-[10px] text-on-surface-variant">carbos</div>
+</div>
+</div>
+</div>
+
+<button onclick="startGeneration()" class="w-full py-4 rounded-2xl font-bold text-white transition-all hover:opacity-90 flex items-center justify-center gap-3" style="background:linear-gradient(135deg, #ff4d00, #ff6b00)">
+<span class="material-symbols-outlined">auto_awesome</span>
+Generar Plan Semanal
+</button>
+</div>
+
+<!-- Info adicional -->
+<div class="text-center text-xs text-on-surface-variant">
+<p>El plan se genera en base a tus recetas guardadas y preferencias alimentarias.</p>
+</div>
+</div>
+
+<!-- Estado: Generando -->
+<div id="stepGenerating" class="hidden space-y-6">
+<div class="glass-card rounded-2xl p-8 text-center">
+<!-- Animación -->
+<div class="relative w-24 h-24 mx-auto mb-6">
+<div class="absolute inset-0 rounded-full border-4 border-primary-container/30"></div>
+<div class="absolute inset-0 rounded-full border-4 border-primary-container border-t-transparent animate-spin-slow"></div>
+<div class="absolute inset-4 rounded-full bg-primary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl text-primary-container animate-pulse">auto_awesome</span>
+</div>
+</div>
+
+<h2 class="text-xl font-bold text-white mb-2">Generando tu plan...</h2>
+<p class="text-on-surface-variant mb-4" id="generationStatus">Analizando tus preferencias</p>
+
+<!-- Progress Steps -->
+<div class="space-y-3 text-left mt-6">
+<div class="flex items-center gap-3" id="step1">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center step-indicator">
+<span class="material-symbols-outlined text-sm text-on-surface-variant">1</span>
+</div>
+<span class="text-sm text-on-surface-variant">Analizando perfil y preferencias</span>
+</div>
+<div class="flex items-center gap-3" id="step2">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center step-indicator">
+<span class="material-symbols-outlined text-sm text-on-surface-variant">2</span>
+</div>
+<span class="text-sm text-on-surface-variant">Buscando recetas compatibles</span>
+</div>
+<div class="flex items-center gap-3" id="step3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center step-indicator">
+<span class="material-symbols-outlined text-sm text-on-surface-variant">3</span>
+</div>
+<span class="text-sm text-on-surface-variant">Calculando macros por día</span>
+</div>
+<div class="flex items-center gap-3" id="step4">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center step-indicator">
+<span class="material-symbols-outlined text-sm text-on-surface-variant">4</span>
+</div>
+<span class="text-sm text-on-surface-variant">Optimizando distribución</span>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Estado: Plan Listo -->
+<div id="stepReady" class="hidden space-y-6">
+<div class="glass-card rounded-2xl p-6">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-green-400">check_circle</span>
+<h2 class="text-xl font-bold text-white">Plan Generado</h2>
+</div>
+
+<p class="text-on-surface-variant text-sm mb-6">Tu plan semanal está listo. Revisa el resumen antes de confirmar.</p>
+
+<!-- Preview del plan -->
+<div id="planPreview" class="space-y-3 mb-6"></div>
+
+<!-- Acciones -->
+<div class="flex gap-3">
+<button onclick="discardPlan()" class="flex-1 py-4 rounded-2xl font-medium text-white/70 bg-surface-container hover:bg-surface-container-high transition-all">
+Volver sin guardar
+</button>
+<button onclick="confirmPlan()" class="flex-1 py-4 rounded-2xl font-bold text-white transition-all hover:opacity-90 flex items-center justify-center gap-2" style="background:linear-gradient(135deg, #22c55e, #16a34a)">
+<span class="material-symbols-outlined">check</span>
+Activar Plan
+</button>
+</div>
+</div>
+</div>
+</main>
+
+<script>
+// Load user macros
+function loadUserMacros() {
+var macros = JSON.parse(localStorage.getItem('keto_macros') || '{}');
+document.getElementById('userTargetCal').textContent = macros.calories || 1800;
+document.getElementById('userTargetProt').textContent = macros.protein || 160;
+document.getElementById('userTargetFat').textContent = macros.fat || 150;
+document.getElementById('userTargetCarbs').textContent = macros.carbs || 25;
+}
+loadUserMacros();
+
+var generatedPlan = null;
+var generationSteps = 0;
+
+async function startGeneration() {
+document.getElementById('stepInitial').classList.add('hidden');
+document.getElementById('stepGenerating').classList.remove('hidden');
+
+var steps = ['step1', 'step2', 'step3', 'step4'];
+var messages = [
+'Analizando tus preferencias...',
+'Buscando recetas cetogénicas...',
+'Calculando macros diarios...',
+'Optimizando tu plan semanal...'
+];
+
+for (var i = 0; i < steps.length; i++) {
+await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 600));
+document.getElementById(steps[i]).querySelector('.step-indicator').style.background = '#ff4d00';
+document.getElementById(steps[i]).querySelector('.step-indicator').innerHTML = '<span class="material-symbols-outlined text-sm text-white">check</span>';
+document.getElementById(steps[i]).querySelector('span:last-child').classList.remove('text-on-surface-variant');
+document.getElementById(steps[i]).querySelector('span:last-child').classList.add('text-white');
+document.getElementById('generationStatus').textContent = messages[i];
+}
+
+// Generate mock plan
+generatedPlan = generateMockPlan();
+await new Promise(resolve => setTimeout(resolve, 500));
+
+document.getElementById('stepGenerating').classList.add('hidden');
+document.getElementById('stepReady').classList.remove('hidden');
+renderPlanPreview();
+}
+
+function generateMockPlan() {
+var days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+var plan = {};
+days.forEach(function(day) {
+plan[day] = {
+desayuno: { name: 'Huevos con Aguacate', cal: 350 + Math.floor(Math.random() * 100) },
+almuerzo: { name: 'Pollo a la Plancha', cal: 400 + Math.floor(Math.random() * 100) },
+cena: { name: 'Salmón al Horno', cal: 380 + Math.floor(Math.random() * 100) },
+snacks: { name: 'Puñado de Almendras', cal: 150 }
+};
+});
+return plan;
+}
+
+function renderPlanPreview() {
+var container = document.getElementById('planPreview');
+var html = '';
+var days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+days.forEach(function(day) {
+var meals = generatedPlan[day];
+var totalCal = meals.desayuno.cal + meals.almuerzo.cal + meals.cena.cal + meals.snacks.cal;
+html += '<div class="bg-surface-container rounded-xl p-4">';
+html += '<div class="flex items-center justify-between mb-3">';
+html += '<span class="font-medium text-white">' + day + '</span>';
+html += '<span class="text-sm text-yellow-400 font-bold">' + totalCal + ' kcal</span>';
+html += '</div>';
+html += '<div class="grid grid-cols-4 gap-2 text-xs">';
+html += '<div class="text-center"><div class="text-on-surface-variant">Desayuno</div><div class="text-white truncate">' + meals.desayuno.name + '</div></div>';
+html += '<div class="text-center"><div class="text-on-surface-variant">Almuerzo</div><div class="text-white truncate">' + meals.almuerzo.name + '</div></div>';
+html += '<div class="text-center"><div class="text-on-surface-variant">Cena</div><div class="text-white truncate">' + meals.cena.name + '</div></div>';
+html += '<div class="text-center"><div class="text-on-surface-variant">Snacks</div><div class="text-white truncate">' + meals.snacks.name + '</div></div>';
+html += '</div>';
+html += '</div>';
+});
+
+container.innerHTML = html;
+}
+
+function discardPlan() {
+if (confirm('¿Descartar el plan generado?')) {
+window.location.href = 'plan.html';
+}
+}
+
+function confirmPlan() {
+window.location.href = 'plan.html';
+}
+</script>
+</body>
+</html>
