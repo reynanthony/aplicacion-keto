@@ -280,6 +280,10 @@
             // Crear perfil si no existe
             await ensureProfile(data.user);
             
+            // Guardar info del usuario para el dropdown
+            localStorage.setItem('ketolab_user_id', data.user.id);
+            localStorage.setItem('ketolab_user_email', email);
+            
             // Verificar si necesita onboarding
             const needsOnboarding = !localStorage.getItem('ketolab_onboarding_done');
             
@@ -330,6 +334,10 @@
             
             // Crear perfil
             await ensureProfile(data.user);
+            
+            // Guardar info del usuario para el dropdown
+            localStorage.setItem('ketolab_user_id', data.user.id);
+            localStorage.setItem('ketolab_user_email', email);
             
             // Marcar como usuario nuevo (necesita onboarding)
             localStorage.removeItem('ketolab_onboarding_done');
