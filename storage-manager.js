@@ -1,5 +1,5 @@
 // ==============================================
-// KetoLab Storage Manager
+// KetoCore Storage Manager
 // Maneja sincronización offline/online
 // ==============================================
 
@@ -50,7 +50,7 @@ class KetoStorageManager {
 
     async initIndexedDB() {
         return new Promise((resolve, reject) => {
-            const request = indexedDB.open('ketolab_cache', 1);
+            const request = indexedDB.open('KetoCore_cache', 1);
             
             request.onerror = () => {
                 console.error('Error abriendo IndexedDB');
@@ -189,7 +189,7 @@ class KetoStorageManager {
     }
 
     saveLocal(table, data) {
-        const key = `ketolab_${table}`;
+        const key = `KetoCore_${table}`;
         let existing = [];
         
         try {
@@ -277,7 +277,7 @@ class KetoStorageManager {
     }
 
     loadLocal(table) {
-        const key = `ketolab_${table}`;
+        const key = `KetoCore_${table}`;
         try {
             const data = localStorage.getItem(key);
             return data ? JSON.parse(data) : [];
@@ -406,12 +406,12 @@ class KetoStorageManager {
         
         ['datos_usuario', 'weight_history'].forEach(key => {
             try {
-                const data = JSON.parse(localStorage.getItem(`ketolab_${key}`) || '[]');
+                const data = JSON.parse(localStorage.getItem(`KetoCore_${key}`) || '[]');
                 const filtered = data.filter(item => {
                     const date = new Date(item.fecha || item.date).getTime();
                     return date > thirtyDaysAgo;
                 });
-                localStorage.setItem(`ketolab_${key}`, JSON.stringify(filtered));
+                localStorage.setItem(`KetoCore_${key}`, JSON.stringify(filtered));
             } catch (e) {}
         });
     }
@@ -422,10 +422,10 @@ class KetoStorageManager {
         
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            if (key.startsWith('ketolab_')) {
+            if (key.startsWith('KetoCore_')) {
                 const value = localStorage.getItem(key);
                 const size = value.length * 2;
-                breakdown[key.replace('ketolab_', '')] = {
+                breakdown[key.replace('KetoCore_', '')] = {
                     bytes: size,
                     kb: (size / 1024).toFixed(2)
                 };
@@ -443,7 +443,7 @@ class KetoStorageManager {
 
     showToast(message) {
         // Emitir evento para que la UI lo capture
-        window.dispatchEvent(new CustomEvent('ketolab:toast', { detail: { message } }));
+        window.dispatchEvent(new CustomEvent('KetoCore:toast', { detail: { message } }));
     }
 }
 

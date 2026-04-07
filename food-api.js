@@ -1,4 +1,4 @@
-// ==================== FOOD API - KetoLab ====================
+// ==================== FOOD API - KetoCore ====================
 // API de USDA FoodData Central (gratuita)
 // Documentación: https://fdc.nal.usda.gov/api-guide.html
 
@@ -51,7 +51,7 @@ async function searchFoodsOnline(query, limit = 10) {
     
     var results = data.foods || [];
     
-    // Transformar al formato de KetoLab
+    // Transformar al formato de KetoCore
     var formatted = results.map(function(food) {
       return {
         id: 'usda_' + food.fdcId,
@@ -93,7 +93,7 @@ function getNutrientValue(food, nutrientId) {
   return nutrient ? nutrient.value : null;
 }
 
-// Mapear categoría del USDA a categorías de KetoLab
+// Mapear categoría del USDA a categorías de KetoCore
 function mapFoodCategory(usdaCategory) {
   if (!usdaCategory) return 'Otros';
   
@@ -376,7 +376,7 @@ async function searchOpenFoodFacts(query, limit = 15) {
       return [];
     }
     
-    // Transformar al formato de KetoLab
+    // Transformar al formato de KetoCore
     var formatted = data.products
       .filter(function(p) {
         return p.product_name && p.nutriments;
@@ -424,7 +424,7 @@ async function searchOpenFoodFacts(query, limit = 15) {
   }
 }
 
-// Mapear categoría de OpenFoodFacts a categorías de KetoLab
+// Mapear categoría de OpenFoodFacts a categorías de KetoCore
 function mapOpenFoodFactsCategory(categories) {
   if (!categories) return 'Otros';
   

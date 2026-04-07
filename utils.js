@@ -1,4 +1,4 @@
-// ==================== UTILIDADES COMPARTIDAS - KetoLab ====================
+// ==================== UTILIDADES COMPARTIDAS - KetoCore ====================
 // Este archivo contiene funciones comunes usadas por todos los módulos
 
 // ==================== SEGURIDAD (XSS LOCALSTORAGE MIDDLEWARE) ====================
@@ -1083,7 +1083,7 @@ function getAllAppData() {
     'weight_history',
     'theme',
     'sidebarCollapsed',
-    'ketolab_onboarding_done',
+    'KetoCore_onboarding_done',
     'preferred_meal_mode',
     'preferred_workout_mode'
   ];
@@ -1144,7 +1144,7 @@ function exportAllData() {
   
   var a = document.createElement('a');
   a.href = url;
-  a.download = 'ketolab_backup_' + new Date().toISOString().slice(0, 10) + '.json';
+  a.download = 'KetoCore_backup_' + new Date().toISOString().slice(0, 10) + '.json';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -1347,7 +1347,7 @@ function showLocalNotification(title, body, tag) {
       body: body,
       icon: './icons/icon-192x192.png',
       badge: './icons/icon-72x72.png',
-      tag: tag || 'ketolab-notification',
+      tag: tag || 'KetoCore-notification',
       vibrate: [200, 100, 200]
     });
   }
@@ -1363,7 +1363,7 @@ function initKetoReminders() {
   var currentWater = localStorage.getItem('current_water') || 0;
   
   if (currentWater < waterGoal) {
-    scheduleNotification('💧 KetoLab', '¡Hora de beber agua! Objetivo: ' + (waterGoal - currentWater) + 'ml restantes', 120, 'water');
+    scheduleNotification('💧 KetoCore', '¡Hora de beber agua! Objetivo: ' + (waterGoal - currentWater) + 'ml restantes', 120, 'water');
   }
 }
 

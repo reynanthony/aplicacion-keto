@@ -6,10 +6,10 @@
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="KetoLab">
+<meta name="apple-mobile-web-app-title" content="KetoCore">
 <link rel="apple-touch-icon" href="icons/icon-192x192.png">
 <meta name="theme-color" content="#ff4d00">
-<title>KetoLab | Guía de Uso</title>
+<title>KetoCore | Guía de Uso</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -43,7 +43,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 <div class="w-16 h-16 rounded-full bg-primary-container/20 flex items-center justify-center mx-auto mb-4">
 <span class="material-symbols-outlined text-4xl text-primary-container" style="font-variation-settings:'FILL' 1">menu_book</span>
 </div>
-<h2 class="text-2xl font-headline font-bold text-white mb-2">Aprende a usar KetoLab</h2>
+<h2 class="text-2xl font-headline font-bold text-white mb-2">Aprende a usar KetoCore</h2>
 <p class="text-on-surface-variant">Sigue estos pasos para sacar el máximo provecho de la app</p>
 </div>
 
@@ -272,13 +272,13 @@ No mostrar de nuevo
 <script>
 function closeGuide() {
   if (document.getElementById('dontShowAgain').checked) {
-    localStorage.setItem('ketolab_guide_seen', 'true');
+    localStorage.setItem('KetoCore_guide_seen', 'true');
   }
   window.location.href = 'index.html';
 }
 
 // Check if already seen
-if (localStorage.getItem('ketolab_guide_seen')) {
+if (localStorage.getItem('KetoCore_guide_seen')) {
   window.location.href = 'index.html';
 }
 </script>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KetoLab - Migración de Datos</title>
+    <title>KetoCore - Migración de Datos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +24,7 @@
 <body class="min-h-screen flex flex-col p-4">
     
     <header class="flex items-center justify-center gap-3 mb-8">
-        <img src="logo.svg" alt="KetoLab Logo" class="w-12 h-12" style="filter:drop-shadow(0 0 10px rgba(255,77,0,0.5));">
+        <img src="logo.svg" alt="KetoCore Logo" class="w-12 h-12" style="filter:drop-shadow(0 0 10px rgba(255,77,0,0.5));">
         <h1 class="text-2xl font-black text-white">Migración de Datos</h1>
     </header>
 
@@ -155,7 +155,7 @@
             const keys = [];
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
-                if (key.startsWith('keto') || key.startsWith('ketolab')) {
+                if (key.startsWith('keto') || key.startsWith('KetoCore')) {
                     keys.push(key);
                 }
             }
@@ -301,15 +301,15 @@
         function mapKeyToTable(key) {
             const mappings = {
                 'ketoFoods': 'alimentos',
-                'ketolab_foods': 'alimentos',
+                'KetoCore_foods': 'alimentos',
                 'ketoRecipes': 'recetas',
-                'ketolab_recipes': 'recetas',
+                'KetoCore_recipes': 'recetas',
                 'keto_profile': 'usuarios',
-                'ketolab_profile': 'usuarios',
+                'KetoCore_profile': 'usuarios',
                 'keto_weight_history': 'datos_usuario',
-                'ketolab_weight_history': 'datos_usuario',
+                'KetoCore_weight_history': 'datos_usuario',
                 'ketoStreak': 'progreso_racha',
-                'ketolab_streak': 'progreso_racha'
+                'KetoCore_streak': 'progreso_racha'
             };
             
             return mappings[key] || null;
@@ -455,8 +455,8 @@
             log(`${count} recetas cargadas`, 'success');
             
             // Guardar también en localStorage
-            localStorage.setItem('ketolab_foods', JSON.stringify(alimentos));
-            localStorage.setItem('ketolab_recipes', JSON.stringify(recetas));
+            localStorage.setItem('KetoCore_foods', JSON.stringify(alimentos));
+            localStorage.setItem('KetoCore_recipes', JSON.stringify(recetas));
             
             btn.innerHTML = '<span class="material-symbols-outlined">check</span><span>¡Datos cargados!</span>';
             
@@ -478,7 +478,7 @@
             const keys = [];
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
-                if (key.startsWith('keto') || key.startsWith('ketolab')) {
+                if (key.startsWith('keto') || key.startsWith('KetoCore')) {
                     keys.push(key);
                 }
             }
@@ -493,7 +493,7 @@
             const keys = [];
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
-                if (key.startsWith('keto') || key.startsWith('ketolab')) {
+                if (key.startsWith('keto') || key.startsWith('KetoCore')) {
                     keys.push(key);
                 }
             }

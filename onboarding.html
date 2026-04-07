@@ -6,10 +6,10 @@
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="KetoLab">
+<meta name="apple-mobile-web-app-title" content="KetoCore">
 <link rel="apple-touch-icon" href="icons/icon-192x192.png">
 <meta name="theme-color" content="#ff4d00">
-<title>KetoLab | Bienvenido</title>
+<title>KetoCore | Bienvenido</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -33,7 +33,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 <div class="w-24 h-24 rounded-full bg-primary-container/20 flex items-center justify-center mx-auto mb-6">
 <span class="material-symbols-outlined text-5xl text-primary-container" style="font-variation-settings:'FILL' 1">nutrition</span>
 </div>
-<h1 class="text-3xl font-headline font-bold text-white mb-3">Bienvenido a KetoLab</h1>
+<h1 class="text-3xl font-headline font-bold text-white mb-3">Bienvenido a KetoCore</h1>
 <p class="text-on-surface-variant text-lg mb-6">Tu compañero definitivo para la dieta keto</p>
 <p class="text-white/60 text-sm">Planificación de comidas, seguimiento de macros, workouts y más.</p>
 </div>
@@ -177,16 +177,16 @@ function goToSlide(n) {
 }
 
 function completeOnboarding() {
-  localStorage.setItem('ketolab_onboarding_done', 'true');
+  localStorage.setItem('ketocore_onboarding_done', 'true');
   window.location.href = 'index.html';
 }
 
 function skipOnboarding() {
-  localStorage.setItem('ketolab_onboarding_done', 'true');
+  localStorage.setItem('ketocore_onboarding_done', 'true');
   window.location.href = 'index.html';
 }
 
-if (localStorage.getItem('ketolab_onboarding_done')) {
+if (localStorage.getItem('ketocore_onboarding_done')) {
   window.location.href = 'index.html';
 }
 </script>

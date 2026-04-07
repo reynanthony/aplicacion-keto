@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#ff4d00">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>KetoLab - Tu Camino Keto</title>
+    <title>KetoCore - Tu Camino Keto</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,8 +37,8 @@
     <!-- Header -->
     <header class="p-4 flex items-center justify-between">
         <div class="flex items-center gap-3">
-            <img src="logo.svg" alt="KetoLab Logo" class="w-10 h-10" style="filter:drop-shadow(0 0 8px rgba(255,77,0,0.5));">
-            <span class="text-xl font-black text-white" style="font-family:'Plus Jakarta Sans',sans-serif;">KetoLab</span>
+            <img src="logo.svg" alt="KetoCore Logo" class="w-10 h-10" style="filter:drop-shadow(0 0 8px rgba(255,77,0,0.5));">
+            <span class="text-xl font-black text-white" style="font-family:'Plus Jakarta Sans',sans-serif;">KetoCore</span>
         </div>
     </header>
 
@@ -281,11 +281,11 @@
             await ensureProfile(data.user);
             
             // Guardar info del usuario para el dropdown
-            localStorage.setItem('ketolab_user_id', data.user.id);
-            localStorage.setItem('ketolab_user_email', email);
+            localStorage.setItem('ketocore_user_id', data.user.id);
+            localStorage.setItem('ketocore_user_email', email);
             
             // Verificar si necesita onboarding
-            const needsOnboarding = !localStorage.getItem('ketolab_onboarding_done');
+            const needsOnboarding = !localStorage.getItem('ketocore_onboarding_done');
             
             setTimeout(() => {
                 if (needsOnboarding) {
@@ -336,11 +336,11 @@
             await ensureProfile(data.user);
             
             // Guardar info del usuario para el dropdown
-            localStorage.setItem('ketolab_user_id', data.user.id);
-            localStorage.setItem('ketolab_user_email', email);
+            localStorage.setItem('ketocore_user_id', data.user.id);
+            localStorage.setItem('ketocore_user_email', email);
             
             // Marcar como usuario nuevo (necesita onboarding)
-            localStorage.removeItem('ketolab_onboarding_done');
+            localStorage.removeItem('ketocore_onboarding_done');
             
             setTimeout(() => {
                 window.location.href = 'onboarding.html';
@@ -376,7 +376,7 @@
 
         function continueAsGuest() {
             // Guardar en localStorage que es guest
-            localStorage.setItem('ketolab_guest', 'true');
+            localStorage.setItem('KetoCore_guest', 'true');
             window.location.href = 'index.html';
         }
 

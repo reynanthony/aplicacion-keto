@@ -1,8 +1,8 @@
-# KetoLab v2.0 - Sistema Híbrido
+# KetoCore v2.0 - Sistema Híbrido
 
 ## 🎯 Objetivo
 
-**KetoLab** es una aplicación web progresiva (PWA) de seguimiento para dieta keto que combina el control manual con asistencia inteligente.
+**KetoCore** es una aplicación web progresiva (PWA) de seguimiento para dieta keto que combina el control manual con asistencia inteligente.
 
 ## ✨ Novedades v2.0 - Sistema Híbrido
 
@@ -70,4 +70,4 @@ bash verify_hibrido.sh
 
 ---
 
-**KetoLab** - High-Performance Fuel for Your Keto Journey
+**KetoCore** - High-Performance Fuel for Your Keto Journey

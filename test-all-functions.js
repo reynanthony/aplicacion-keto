@@ -1,10 +1,10 @@
 // ==========================================
-// KETOLAB - SCRIPT DE PRUEBAS AUTOMATIZADAS
+// KetoCore - SCRIPT DE PRUEBAS AUTOMATIZADAS
 // Ejecutar en la consola del navegador (F12)
 // ==========================================
 
 (async function() {
-    console.log('🧪 INICIANDO PRUEBAS DE KETOLAB...');
+    console.log('🧪 INICIANDO PRUEBAS DE KetoCore...');
     console.log('='.repeat(50));
     
     const results = [];
@@ -308,13 +308,13 @@
             streak: localStorage.getItem('ketoStreak')
         };
         const backupStr = JSON.stringify(backup);
-        localStorage.setItem('ketolab_backup', backupStr);
+        localStorage.setItem('KetoCore_backup', backupStr);
         console.log('   Tamaño backup:', (backupStr.length / 1024).toFixed(2), 'KB');
         return backupStr.length > 0 ? true : 'Error';
     });
     
     test('Importar datos (restore)', () => {
-        const backup = JSON.parse(localStorage.getItem('ketolab_backup') || '{}');
+        const backup = JSON.parse(localStorage.getItem('KetoCore_backup') || '{}');
         if (backup.profile) localStorage.setItem('keto_profile', backup.profile);
         return backup.profile ? true : 'Sin backup';
     });

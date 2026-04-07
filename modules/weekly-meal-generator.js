@@ -1,4 +1,4 @@
-// ==================== GENERADOR DE PLAN SEMANAL KETO - KetoLab ====================
+// ==================== GENERADOR DE PLAN SEMANAL KETO - KetoCore ====================
 // Genera planes semanales personalizados basados en perfil y despensa
 
 console.log('[WeeklyMealGenerator] Modulo cargado');

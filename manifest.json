@@ -1,6 +1,6 @@
 {
-  "name": "KetoLab",
-  "short_name": "KetoLab",
+  "name": "KetoCore",
+  "short_name": "KetoCore",
   "description": "Gestor de dieta cetogénica, despensa inteligente y seguimiento de entrenamientos",
   "start_url": "./",
   "display": "standalone",
@@ -65,7 +65,7 @@
       "sizes": "1080x1920",
       "type": "image/png",
       "platform": "narrow",
-      "label": "Pantalla principal de KetoLab"
+      "label": "Pantalla principal de KetoCore"
     }
   ],
   "prefer_related_applications": false,

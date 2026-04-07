@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Generador de Imágenes para Recetas KetoLab</title>
+  <title>Generador de Imágenes para Recetas KetoCore</title>
   <style>
     body { background: #0a0a0a; font-family: monospace; padding: 20px; color: white; }
     .preview { display: inline-block; margin: 10px; text-align: center; }
@@ -9,7 +9,7 @@
   </style>
 </head>
 <body>
-<h1>Generador de Imágenes para Recetas KetoLab</h1>
+<h1>Generador de Imágenes para Recetas KetoCore</h1>
 <div id="previews"></div>
 <script>
 const recipes = [
@@ -53,7 +53,7 @@ function generateRecipeImage(recipe) {
   
   ctx.font = '20px Inter';
   ctx.fillStyle = 'rgba(255,255,255,0.7)';
-  ctx.fillText("KETOLAB", canvas.width/2, canvas.height - 40);
+  ctx.fillText("KetoCore", canvas.width/2, canvas.height - 40);
   
   const link = document.createElement('a');
   link.download = recipe.name + '.jpg';

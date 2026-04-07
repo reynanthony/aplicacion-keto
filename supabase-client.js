@@ -1,5 +1,5 @@
 // ==============================================
-// KetoLab Supabase Client (sin módulos)
+// KetoCore Supabase Client (sin módulos)
 // ==============================================
 
 const SUPABASE_URL = 'https://lmbqzsonujwvqmfhjjgf.supabase.co';

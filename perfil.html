@@ -7,11 +7,11 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="KetoLab">
+<meta name="apple-mobile-web-app-title" content="KetoCore">
 <link rel="apple-touch-icon" href="icons/icon-192x192.png">
 <meta name="theme-color" content="#ff4d00">
 <meta name="mobile-web-app-capable" content="yes">
-<title>KetoLab | Perfil</title>
+<title>KetoCore | Perfil</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -114,9 +114,9 @@ select option{background:#1e1c1c;color:#fff}
 <nav id="sidebarNav" class="sidebar-nav hidden md:flex fixed left-0 top-0 h-full w-64 flex-col py-6 z-50 border-r border-white/5 transition-all duration-300" style="background:#111010;">
   <div class="px-6 mb-8 flex items-center justify-center">
     <div class="flex items-center gap-3 sidebar-logo">
-      <img src="logo.svg" alt="KetoLab Logo" class="w-12 h-12 flex-shrink-0" style="filter:drop-shadow(0 0 10px rgba(255,77,0,0.5));">
+      <img src="logo.svg" alt="KetoCore Logo" class="w-12 h-12 flex-shrink-0" style="filter:drop-shadow(0 0 10px rgba(255,77,0,0.5));">
       <div class="sidebar-logo-text flex flex-col items-start justify-center">
-        <span class="text-xl font-black tracking-tighter font-headline" style="background:linear-gradient(to right,#ff4d00,#ffb300);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;">KetoLab</span>
+        <span class="text-xl font-black tracking-tighter font-headline" style="background:linear-gradient(to right,#ff4d00,#ffb300);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;">KetoCore</span>
         <span class="text-[9px] font-bold uppercase tracking-[0.25em] mt-0.5" style="color:rgba(255,255,255,0.45);">High-Performance</span>
       </div>
     </div>
@@ -142,8 +142,8 @@ select option{background:#1e1c1c;color:#fff}
 <!-- TopAppBar (Mobile) -->
 <header class="md:hidden fixed top-0 w-full h-14 z-40 border-b border-white/5 px-4 flex items-center justify-between" style="background:rgba(10,10,10,0.9);backdrop-filter:blur(20px);">
   <a href="index.html" class="flex items-center gap-3">
-    <img src="logo.svg" alt="KetoLab Logo" class="w-9 h-9" style="filter:drop-shadow(0 0 8px rgba(255,77,0,0.5));">
-    <span class="text-xl font-black tracking-tight" style="background:linear-gradient(to right,#ffffff,rgba(255,255,255,0.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">KetoLab</span>
+    <img src="logo.svg" alt="KetoCore Logo" class="w-9 h-9" style="filter:drop-shadow(0 0 8px rgba(255,77,0,0.5));">
+    <span class="text-xl font-black tracking-tight" style="background:linear-gradient(to right,#ffffff,rgba(255,255,255,0.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">KetoCore</span>
   </a>
   <div class="flex items-center gap-2">
     <button onclick="toggleMobileUserMenu()" class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:scale-105 transition-transform overflow-hidden border-2 border-white/20" style="background:#1e1c1c;" title="Mi cuenta">
@@ -242,7 +242,7 @@ Guía de Uso
 <!-- TopAppBar (Desktop) -->
 <header class="topbar-desktop hidden md:flex fixed top-0 w-full h-16 px-8 items-center justify-between z-40 border-b border-white/5 transition-all duration-300" style="background:rgba(17,16,16,0.95);backdrop-filter:blur(20px);">
   <div class="topbar-pl pl-64 transition-all duration-300 flex items-center gap-3">
-    <span class="text-xs font-bold uppercase tracking-[0.2em]" style="color:#ff4d00;">KetoLab</span>
+    <span class="text-xs font-bold uppercase tracking-[0.2em]" style="color:#ff4d00;">KetoCore</span>
     <span style="color:rgba(255,255,255,0.2);">/</span>
     <h2 class="text-base font-bold tracking-tight" style="color:rgba(255,255,255,0.9);">Mi Perfil</h2>
   </div>
@@ -1228,7 +1228,7 @@ function toggleMobileUserMenu() {
 function updateDropdownInfo() {
   const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
   const userName = profile.nombre || profile.name || 'Usuario';
-  const userEmail = localStorage.getItem('ketolab_user_email') || 'usuario@ejemplo.com';
+  const userEmail = localStorage.getItem('ketocore_user_email') || 'usuario@ejemplo.com';
   const dn = document.getElementById('dropdownUserName');
   const de = document.getElementById('dropdownUserEmail');
   const mdn = document.getElementById('mobileDropdownUserName');
@@ -1270,9 +1270,9 @@ document.addEventListener('click', function(e) {
 async function handleLogout() {
   if (confirm('¿Cerrar sesión?')) {
     await window.supabase.auth.signOut();
-    localStorage.removeItem('ketolab_user_id');
-    localStorage.removeItem('ketolab_user_email');
-    localStorage.removeItem('ketolab_onboarding_done');
+    localStorage.removeItem('ketocore_user_id');
+    localStorage.removeItem('ketocore_user_email');
+    localStorage.removeItem('ketocore_onboarding_done');
     window.location.href = 'welcome.html';
   }
 }

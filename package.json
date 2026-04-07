@@ -1,7 +1,7 @@
 {
   "name": "ketolab",
   "version": "2.0.0",
-  "description": "KetoLab PWA",
+  "description": "KetoCore PWA",
   "main": "index.js",
   "scripts": {
     "test": "jest",

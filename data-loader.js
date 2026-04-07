@@ -1,11 +1,11 @@
 // =============================================
-// KetoLab Data Loader - Carga datos de Supabase
+// KetoCore Data Loader - Carga datos de Supabase
 // =============================================
 
 const SUPABASE_URL = 'https://lmbqzsonujwvqmfhjjgf.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYnF6c29udWp3dnFtZmhqamdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQzMDAsImV4cCI6MjA4ODgzMDMwMH0.SBsTQCh844rtGx0wLNZaEGO8NDmAVZjUj1YiDkRSm1k';
 
-window.KetoLabData = {
+window.KetoCoreData = {
     alimentos: [],
     recetas: [],
     suplementos: [],
@@ -14,7 +14,7 @@ window.KetoLabData = {
 };
 
 async function loadAllData() {
-    if (window.KetoLabData.loaded) return window.KetoLabData;
+    if (window.KetoCoreData.loaded) return window.KetoCoreData;
     
     try {
         const headers = {
@@ -29,23 +29,23 @@ async function loadAllData() {
             fetch(`${SUPABASE_URL}/rest/v1/ejercicios?activo=eq.true&select=*`, { headers }).then(r => r.json())
         ]);
         
-        window.KetoLabData.alimentos = alimentos || [];
-        window.KetoLabData.recetas = recetas || [];
-        window.KetoLabData.suplementos = suplementos || [];
-        window.KetoLabData.ejercicios = ejercicios || [];
-        window.KetoLabData.loaded = true;
+        window.KetoCoreData.alimentos = alimentos || [];
+        window.KetoCoreData.recetas = recetas || [];
+        window.KetoCoreData.suplementos = suplementos || [];
+        window.KetoCoreData.ejercicios = ejercicios || [];
+        window.KetoCoreData.loaded = true;
         
-        console.log('✅ KetoLab data loaded from Supabase:', {
-            alimentos: window.KetoLabData.alimentos.length,
-            recetas: window.KetoLabData.recetas.length,
-            suplementos: window.KetoLabData.suplementos.length,
-            ejercicios: window.KetoLabData.ejercicios.length
+        console.log('✅ KetoCore data loaded from Supabase:', {
+            alimentos: window.KetoCoreData.alimentos.length,
+            recetas: window.KetoCoreData.recetas.length,
+            suplementos: window.KetoCoreData.suplementos.length,
+            ejercicios: window.KetoCoreData.ejercicios.length
         });
         
-        return window.KetoLabData;
+        return window.KetoCoreData;
     } catch (error) {
         console.error('❌ Error loading Supabase data:', error);
-        return window.KetoLabData;
+        return window.KetoCoreData;
     }
 }
 
@@ -58,7 +58,7 @@ async function loadAlimentos() {
     try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/alimentos?activo=eq.true&select=*&order=nombre`, headers);
         const data = await response.json();
-        window.KetoLabData.alimentos = data || [];
+        window.KetoCoreData.alimentos = data || [];
         return data;
     } catch (error) {
         console.error('Error loading alimentos:', error);
@@ -75,7 +75,7 @@ async function loadRecetas() {
     try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/recetas?activo=eq.true&select=*&order=fecha_creacion.desc`, headers);
         const data = await response.json();
-        window.KetoLabData.recetas = data || [];
+        window.KetoCoreData.recetas = data || [];
         return data;
     } catch (error) {
         console.error('Error loading recetas:', error);
@@ -92,7 +92,7 @@ async function loadSuplementos() {
     try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/suplementos?activo=eq.true&select=*`, headers);
         const data = await response.json();
-        window.KetoLabData.suplementos = data || [];
+        window.KetoCoreData.suplementos = data || [];
         return data;
     } catch (error) {
         console.error('Error loading suplementos:', error);
@@ -109,7 +109,7 @@ async function loadEjercicios() {
     try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/ejercicios?activo=eq.true&select=*&order=nombre`, headers);
         const data = await response.json();
-        window.KetoLabData.ejercicios = data || [];
+        window.KetoCoreData.ejercicios = data || [];
         return data;
     } catch (error) {
         console.error('Error loading ejercicios:', error);

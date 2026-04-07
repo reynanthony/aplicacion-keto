@@ -1,4 +1,4 @@
-// ==================== KETOLAB CLOUD SYNC MODULE ====================
+// ==================== KetoCore CLOUD SYNC MODULE ====================
 // Proporciona la capa de abstracción para sincronización de datos con el Backend
 
 class CloudSyncAdapter {
@@ -84,7 +84,7 @@ class CloudSyncAdapter {
     
     const a = document.createElement('a');
     a.href = url;
-    a.download = `ketolab_backup_${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `KetoCore_backup_${new Date().toISOString().split('T')[0]}.json`;
     document.body.appendChild(a);
     a.click();
     
