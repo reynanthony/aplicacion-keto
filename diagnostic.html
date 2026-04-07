@@ -2,17 +2,28 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
+    <meta name="theme-color" content="#ff4d00">
     <title>KetoLab - Diagnóstico</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght@20..48,100..700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: system-ui, sans-serif; }
+        :root { --primary: #ff4d00; --secondary: #ffb300; --background: #0a0a0a; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #ffffff; }
+        h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
     </style>
 </head>
-<body class="bg-gray-900 min-h-screen p-8">
+<body class="min-h-screen p-8" style="background:#0a0a0a;">
     <div class="max-w-2xl mx-auto">
-        <h1 class="text-2xl font-bold text-white mb-8">🔧 KetoLab - Diagnóstico</h1>
+        <div class="flex items-center gap-3 mb-8">
+            <img src="logo.svg" alt="KetoLab Logo" class="w-10 h-10" style="filter:drop-shadow(0 0 8px rgba(255,77,0,0.5));">
+            <h1 class="text-2xl font-bold text-white" style="font-family:'Plus Jakarta Sans',sans-serif;">Diagnóstico</h1>
+        </div>
         
         <div id="results" class="space-y-4"></div>
         

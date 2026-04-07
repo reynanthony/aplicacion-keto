@@ -6,10 +6,14 @@
     <title>KetoLab - Migración de Datos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@0..1&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght@20..48,100..700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0a0a0a; }
+        :root { --primary: #ff4d00; --secondary: #ffb300; --background: #0a0a0a; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #ffffff; }
+        h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
         .gradient-bg { background: linear-gradient(135deg, #ff4d00 0%, #ff6b2c 100%); }
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
         .glass-card { background: rgba(36, 34, 34, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,77,0,0.15); }
@@ -20,9 +24,7 @@
 <body class="min-h-screen flex flex-col p-4">
     
     <header class="flex items-center justify-center gap-3 mb-8">
-        <div class="w-12 h-12 rounded-xl gradient-bg flex items-center justify-center">
-            <span class="material-symbols-outlined text-white text-2xl" style="font-variation-settings:'FILL' 1">local_fire_department</span>
-        </div>
+        <img src="logo.svg" alt="KetoLab Logo" class="w-12 h-12" style="filter:drop-shadow(0 0 10px rgba(255,77,0,0.5));">
         <h1 class="text-2xl font-black text-white">Migración de Datos</h1>
     </header>
 

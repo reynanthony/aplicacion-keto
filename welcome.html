@@ -9,14 +9,18 @@
     <title>KetoLab - Tu Camino Keto</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@0..1&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght@20..48,100..700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ff4d00;
             --secondary: #ffb300;
+            --background: #0a0a0a;
         }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0a0a0a; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #ffffff; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Plus Jakarta Sans', sans-serif; }
         .gradient-bg { background: linear-gradient(135deg, #ff4d00 0%, #ff6b2c 100%); }
         .gradient-text { background: linear-gradient(135deg, #ff4d00, #ffb300); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
@@ -33,10 +37,8 @@
     <!-- Header -->
     <header class="p-4 flex items-center justify-between">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center">
-                <span class="material-symbols-outlined text-white text-xl" style="font-variation-settings:'FILL' 1">local_fire_department</span>
-            </div>
-            <span class="text-xl font-black text-white">KetoLab</span>
+            <img src="logo.svg" alt="KetoLab Logo" class="w-10 h-10" style="filter:drop-shadow(0 0 8px rgba(255,77,0,0.5));">
+            <span class="text-xl font-black text-white" style="font-family:'Plus Jakarta Sans',sans-serif;">KetoLab</span>
         </div>
     </header>
 
