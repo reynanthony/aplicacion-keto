@@ -258,7 +258,10 @@ body {
   </div>
   <div class="flex items-center gap-3">
     <div class="relative">
-      <button onclick="toggleUserMenu()" id="profileBtn" class="w-9 h-9 rounded-full flex items-center justify-center font-bold text-white text-sm cursor-pointer hover:scale-105 transition-transform" style="background:#ff4d00;" title="Mi cuenta">KL</button>
+      <button onclick="toggleUserMenu()" id="profileBtn" class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:scale-105 transition-transform overflow-hidden border-2 border-white/20" style="background:#1e1c1c;" title="Mi cuenta">
+        <img id="headerAvatarImg" src="" class="hidden w-full h-full object-cover" alt="Avatar">
+        <span id="headerAvatarIcon" class="material-symbols-outlined text-white" style="font-size:22px;">account_circle</span>
+      </button>
       <div id="userDropdown" class="hidden absolute right-0 top-12 w-48 bg-surface-container-high rounded-xl shadow-2xl shadow-black/50 border border-white/10 overflow-hidden z-50">
         <div class="p-3 border-b border-white/10">
           <p class="text-sm font-medium text-white" id="dropdownUserName">Usuario</p>
@@ -286,7 +289,10 @@ body {
     <span class="text-xl font-black tracking-tight" style="background:linear-gradient(to right,#ffffff,rgba(255,255,255,0.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">KetoLab</span>
   </a>
   <div class="flex items-center gap-2">
-    <button onclick="toggleMobileUserMenu()" class="w-11 h-11 rounded-full flex items-center justify-center font-bold text-white text-xs hover:scale-105 transition-transform" style="background:#ff4d00;" title="Mi cuenta">KL</button>
+    <button onclick="toggleMobileUserMenu()" class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:scale-105 transition-transform overflow-hidden border-2 border-white/20" style="background:#1e1c1c;" title="Mi cuenta">
+      <img id="mobileHeaderAvatarImg" src="" class="hidden w-full h-full object-cover" alt="Avatar">
+      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined text-white" style="font-size:22px;">account_circle</span>
+    </button>
     <button onclick="toggleHamburgerMenu()" class="w-11 h-11 rounded-full flex items-center justify-center transition-all hover:bg-white/10" style="color:rgba(255,255,255,0.6);"><span class="material-symbols-outlined">menu</span></button>
   </div>
 </header>
@@ -368,6 +374,36 @@ function updateDropdownInfo() {
   document.getElementById('dropdownUserEmail').textContent = userEmail;
   document.getElementById('mobileDropdownUserName').textContent = userName;
   document.getElementById('mobileDropdownUserEmail').textContent = userEmail;
+}
+
+// Update header avatar
+function updateHeaderAvatar() {
+  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+  const avatarUrl = profile.avatar_url;
+  
+  // Desktop avatar
+  const headerImg = document.getElementById('headerAvatarImg');
+  const headerIcon = document.getElementById('headerAvatarIcon');
+  
+  // Mobile avatar
+  const mobileHeaderImg = document.getElementById('mobileHeaderAvatarImg');
+  const mobileHeaderIcon = document.getElementById('mobileHeaderAvatarIcon');
+  
+  if (avatarUrl) {
+    headerImg.src = avatarUrl;
+    headerImg.classList.remove('hidden');
+    headerIcon.classList.add('hidden');
+    
+    mobileHeaderImg.src = avatarUrl;
+    mobileHeaderImg.classList.remove('hidden');
+    mobileHeaderIcon.classList.add('hidden');
+  } else {
+    headerImg.classList.add('hidden');
+    headerIcon.classList.remove('hidden');
+    
+    mobileHeaderImg.classList.add('hidden');
+    mobileHeaderIcon.classList.remove('hidden');
+  }
 }
 
 // Close dropdown when clicking outside
@@ -1594,6 +1630,9 @@ if (document.readyState === 'loading') {
 // Ejecutar verificación de onboarding
 checkOnboarding();
 
+// Actualizar avatar del header
+updateHeaderAvatar();
+
 // Reload dashboard when page becomes visible (e.g., after returning from profile)
 document.addEventListener('visibilitychange', function() {
   if (!document.hidden) {
@@ -1604,6 +1643,7 @@ document.addEventListener('visibilitychange', function() {
 // Listen for profile saved events
 window.addEventListener('profileSaved', function(e) {
   loadDashboard();
+  updateHeaderAvatar();
 });
 
 function loadDashboard() {

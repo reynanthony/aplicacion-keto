@@ -228,9 +228,11 @@ Guía de Uso
 <div class="glass-card rounded-2xl p-5">
 <div class="flex flex-col lg:flex-row items-start lg:items-center gap-4">
 <div class="flex items-center gap-4">
-<div id="avatarCircle" class="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-container to-secondary flex items-center justify-center shadow-glow">
-<span class="text-xl font-black font-headline text-white">KL</span>
+<div onclick="document.getElementById('avatarInput').click()" class="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-container to-secondary flex items-center justify-center shadow-glow cursor-pointer hover:opacity-80 transition-opacity overflow-hidden" title="Cambiar foto de perfil">
+  <img id="avatarImage" src="" class="hidden w-full h-full object-cover">
+  <span id="avatarInitials" class="text-xl font-black font-headline text-white">KL</span>
 </div>
+<input type="file" id="avatarInput" accept="image/*" class="hidden" onchange="handleAvatarChange(event)">
 <div>
 <h1 id="heroName" class="text-xl font-black font-headline text-white">Tu Perfil</h1>
 <p id="heroSubtitle" class="text-xs text-on-surface-variant">Configura tu informacion para calcular tus macros</p>
@@ -567,9 +569,50 @@ document.querySelectorAll('.sidebar-link').forEach(function(link){
   }
 });
 
+// Handle avatar change
+function handleAvatarChange(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const avatarUrl = e.target.result;
+    
+    // Update avatar display
+    const avatarImage = document.getElementById('avatarImage');
+    const avatarInitials = document.getElementById('avatarInitials');
+    avatarImage.src = avatarUrl;
+    avatarImage.classList.remove('hidden');
+    avatarInitials.classList.add('hidden');
+    
+    // Save to profile
+    try {
+      var profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+      profile.avatar_url = avatarUrl;
+      localStorage.setItem('keto_profile', JSON.stringify(profile));
+      
+      // Dispatch event to update header avatar
+      window.dispatchEvent(new Event('profileSaved'));
+      
+      showToast('Foto de perfil actualizada');
+    } catch(e) {
+      console.error('Error guardando avatar:', e);
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
 function loadProfile(){
   var p = {};
   try{ p = JSON.parse(localStorage.getItem('keto_profile') || '{}'); }catch(e){ p = {}; }
+  
+  // Load avatar if exists
+  if(p.avatar_url) {
+    document.getElementById('avatarImage').src = p.avatar_url;
+    document.getElementById('avatarImage').classList.remove('hidden');
+    document.getElementById('avatarInitials').classList.add('hidden');
+  }
+  
   if(p.name) document.getElementById('userName').value = p.name;
   if(p.age) document.getElementById('age').value = p.age;
   if(p.sex) document.getElementById('sex').value = p.sex;
@@ -638,7 +681,8 @@ function saveProfile(){
       trainingFreq: trainingFreq,
       trainingGoal: trainingGoal,
       experience: experience,
-      goal: goal
+      goal: goal,
+      avatar_url: existingProfile.avatar_url || ''
     };
     
     var bmr = sex === 'male' ? 10 * currentWeight + 6.25 * height - 5 * age + 5 : 10 * currentWeight + 6.25 * height - 5 * age - 161;
@@ -808,11 +852,12 @@ function updateStats(){
   document.getElementById('heroGoal').textContent = goalWeight > 0 ? 'Meta: ' + goalWeight + ' kg' : 'Meta: -- kg';
   document.getElementById('heroProgress').textContent = currentWeight > 0 && goalWeight > 0 ? ((diff > 0 ? '+' : '') + diff.toFixed(1) + ' kg') : '-- kg';
   
-  // Avatar initials
-  if(profile.name){
+  // Avatar initials (solo si no hay imagen)
+  if(!profile.avatar_url && profile.name){
     var initials = profile.name.split(' ').map(function(n){ return n[0]; }).join('').substring(0,2).toUpperCase();
-    var avatar = document.getElementById('avatarCircle');
-    if(avatar) avatar.innerHTML = '<span class="text-3xl font-black font-headline text-white">' + initials + '</span>';
+    document.getElementById('avatarInitials').textContent = initials;
+    document.getElementById('avatarInitials').classList.remove('hidden');
+    document.getElementById('avatarImage').classList.add('hidden');
   }
   
   // Stats overview cards - use startWeight from profile for percentage
