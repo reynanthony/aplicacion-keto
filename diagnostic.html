@@ -67,7 +67,7 @@
             // Test 1: Conexión básica
             try {
                 log('1. Probando conexión a Supabase...');
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/`, {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/alimentos?select=id&limit=1`, {
                     headers: {
                         'apikey': SUPABASE_ANON_KEY,
                         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
@@ -105,36 +105,19 @@
                 log(`Excepción: ${e.message}`, 'error');
             }
             
-            // Test 4: Signup
+            // Test 4: Verificar auth config
             try {
-                log('4. Probando signup (crear cuenta de prueba)...');
-                const testEmail = `test_${Date.now()}@test.com`;
-                const { data, error } = await supabase.auth.signUp({
-                    email: testEmail,
-                    password: 'TestPassword123!'
-                });
-                
-                if (error) {
-                    log(`Error de signup: ${error.message} (${error.status})`, 'error');
-                    
-                    if (error.message.includes('401')) {
-                        log('⚠️ El error 401 indica problema con las políticas RLS de auth.users', 'warning');
-                        log('   Solución: Ve a Supabase Dashboard → Authentication → Users → disable RLS o configura correctamente', 'warning');
-                    }
-                } else {
-                    log(`Signup exitoso: ${data.user?.email || 'Usuario creado'}`, 'success');
-                    if (data.user) {
-                        log('   ✅ El sistema de auth funciona correctamente', 'success');
-                    }
-                }
+                log('4. Verificando configuración de auth...');
+                log('   ⚠️ Test de signup omitido (evita rate limit 429)', 'warning');
+                log('   Para probar auth manualmente: usa welcome.html', 'info');
             } catch (e) {
-                log(`Excepción en signup: ${e.message}`, 'error');
+                log(`Error en verificación auth: ${e.message}`, 'error');
             }
             
             // Test 5: Verificar tablas
             try {
-                log('5. Verificando estructura de tablas...');
-                const tables = ['alimentos', 'recetas', 'usuarios', 'datos_usuario'];
+                log('5. Verificando tablas principales...');
+                const tables = ['alimentos', 'recetas', 'suplementos', 'ejercicios'];
                 for (const table of tables) {
                     const { error } = await supabase.from(table).select('id').limit(1);
                     log(`   Tabla ${table}: ${error ? '❌ ' + error.message : '✅ existe'}`, error ? 'error' : 'success');
