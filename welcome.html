@@ -280,8 +280,15 @@
             // Crear perfil si no existe
             await ensureProfile(data.user);
             
+            // Verificar si necesita onboarding
+            const needsOnboarding = !localStorage.getItem('ketolab_onboarding_done');
+            
             setTimeout(() => {
-                window.location.href = 'index.html';
+                if (needsOnboarding) {
+                    window.location.href = 'onboarding.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
             }, 1000);
         }
 
@@ -324,8 +331,11 @@
             // Crear perfil
             await ensureProfile(data.user);
             
+            // Marcar como usuario nuevo (necesita onboarding)
+            localStorage.removeItem('ketolab_onboarding_done');
+            
             setTimeout(() => {
-                window.location.href = 'index.html';
+                window.location.href = 'onboarding.html';
             }, 1000);
         }
 

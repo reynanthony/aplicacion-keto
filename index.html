@@ -24,6 +24,20 @@
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<!-- Verificar sesión antes de cargar la página -->
+<script>
+const SUPABASE_URL = 'https://lmbqzsonujwvqmfhjjgf.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYnF6c29udWp3dnFtZmhqamdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQzMDAsImV4cCI6MjA4ODgzMDMwMH0.SBsTQCh844rtGx0wLNZaEGO8NDmAVZjUj1YiDkRSm1k';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Verificar sesión y redirigir
+supabase.auth.getSession().then(({ data }) => {
+  if (!data.session) {
+    window.location.href = 'welcome.html';
+  }
+});
+</script>
+
 <script>
 tailwind.config = {
   darkMode: "class",
@@ -1462,12 +1476,34 @@ function initDashboard() {
   initAchievements();
 }
 
+// Verificar onboarding al cargar
+function checkOnboarding() {
+  // Si el usuario está logueado pero no completó onboarding, redirigir
+  const onboardingDone = localStorage.getItem('ketolab_onboarding_done');
+  const userLoggedIn = localStorage.getItem('ketolab_user_id'); // asumiendo que guardas el user ID
+  
+  if (!onboardingDone) {
+    // Verificar si hay sesión de Supabase activa
+    const supabase = window.supabase;
+    if (supabase) {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session?.user && !onboardingDone) {
+          window.location.href = 'onboarding.html';
+        }
+      });
+    }
+  }
+}
+
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initDashboard);
 } else {
   // DOM already loaded
   initDashboard();
 }
+
+// Ejecutar verificación de onboarding
+checkOnboarding();
 
 // Reload dashboard when page becomes visible (e.g., after returning from profile)
 document.addEventListener('visibilitychange', function() {
