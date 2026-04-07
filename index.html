@@ -286,10 +286,28 @@ body {
     <span class="text-xl font-black tracking-tight" style="background:linear-gradient(to right,#ffffff,rgba(255,255,255,0.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">KetoLab</span>
   </a>
   <div class="flex items-center gap-2">
+    <button onclick="toggleMobileUserMenu()" class="w-11 h-11 rounded-full flex items-center justify-center font-bold text-white text-xs hover:scale-105 transition-transform" style="background:#ff4d00;" title="Mi cuenta">KL</button>
     <button onclick="toggleHamburgerMenu()" class="w-11 h-11 rounded-full flex items-center justify-center transition-all hover:bg-white/10" style="color:rgba(255,255,255,0.6);"><span class="material-symbols-outlined">menu</span></button>
-    <button onclick="if(document.getElementById('mobileSettingsModal'))document.getElementById('mobileSettingsModal').classList.remove('hidden')" class="w-11 h-11 rounded-full flex items-center justify-center transition-all hover:bg-white/10" style="color:rgba(255,255,255,0.6);"><span class="material-symbols-outlined">settings</span></button>
   </div>
 </header>
+
+<!-- Mobile User Dropdown -->
+<div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 bg-surface-container-high rounded-xl shadow-2xl shadow-black/50 border border-white/10 overflow-hidden z-[80] hidden">
+  <div class="p-3 border-b border-white/10">
+    <p class="text-sm font-medium text-white" id="mobileDropdownUserName">Usuario</p>
+    <p class="text-xs text-on-surface-variant" id="mobileDropdownUserEmail">email@example.com</p>
+  </div>
+  <div class="p-2">
+    <a href="perfil.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/80 hover:bg-white/10 transition-colors">
+      <span class="material-symbols-outlined text-lg">person</span>
+      <span class="text-sm">Mi Perfil</span>
+    </a>
+    <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors">
+      <span class="material-symbols-outlined text-lg">logout</span>
+      <span class="text-sm">Cerrar Sesión</span>
+    </button>
+  </div>
+</div>
 
 <!-- Hamburger Menu (Mobile) -->
 <div id="hamburgerMenu" class="fixed inset-0 z-[70] hidden">
@@ -327,24 +345,41 @@ body {
 <script>
 function toggleHamburgerMenu(){var m=document.getElementById('hamburgerMenu');var p=document.getElementById('hamburgerPanel');if(m.classList.contains('hidden')){m.classList.remove('hidden');requestAnimationFrame(function(){p.classList.remove('translate-x-full')})}else{p.classList.add('translate-x-full');setTimeout(function(){m.classList.add('hidden')},300)}}
 
-// User Dropdown Menu
+// User Dropdown Menu (Desktop)
 function toggleUserMenu() {
   const dropdown = document.getElementById('userDropdown');
   dropdown.classList.toggle('hidden');
   // Update user info
+  updateDropdownInfo();
+}
+
+// Mobile User Dropdown
+function toggleMobileUserMenu() {
+  const dropdown = document.getElementById('mobileUserDropdown');
+  dropdown.classList.toggle('hidden');
+  updateDropdownInfo();
+}
+
+function updateDropdownInfo() {
   const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
   const userName = profile.nombre || 'Usuario';
   const userEmail = localStorage.getItem('ketolab_user_email') || 'usuario@ejemplo.com';
   document.getElementById('dropdownUserName').textContent = userName;
   document.getElementById('dropdownUserEmail').textContent = userEmail;
+  document.getElementById('mobileDropdownUserName').textContent = userName;
+  document.getElementById('mobileDropdownUserEmail').textContent = userEmail;
 }
 
 // Close dropdown when clicking outside
 document.addEventListener('click', function(e) {
   const dropdown = document.getElementById('userDropdown');
+  const mobileDropdown = document.getElementById('mobileUserDropdown');
   const btn = document.getElementById('profileBtn');
-  if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
+  if (dropdown && !dropdown.contains(e.target) && !btn.contains(e.target)) {
     dropdown.classList.add('hidden');
+  }
+  if (mobileDropdown && !e.target.closest('#mobileUserDropdown') && !e.target.closest('button[onclick="toggleMobileUserMenu()"]')) {
+    mobileDropdown.classList.add('hidden');
   }
 });
 
