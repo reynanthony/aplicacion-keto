@@ -537,17 +537,9 @@ var catGradients={desayuno:"linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fc
 var catIcons={desayuno:"egg",almuerzo:"restaurant",cena:"dinner_dining",snacks:"cookie"};
 
 html+='<article class="group relative overflow-hidden rounded-[2rem] '+(isFirst?"md:col-span-2 lg:col-span-2 xl:col-span-2":"")+' bg-surface-container transition-all duration-500 hover:shadow-[0_0_40px_rgba(255,144,105,0.1)] cursor-pointer" onclick="openRecipeModal(\''+recipe.id+'\')">';
-html+='<div class="h-48 md:h-64 w-full overflow-hidden relative">';
-if(recipe.image && recipe.image.startsWith('http')){
-html+='<img loading="lazy" src="'+recipe.image+'" alt="'+recipe.title+'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\'">';
-html+='<div class="w-full h-full items-center justify-center hidden" style="background:'+catGradients[recipe.category]+';">';
-html+='<span class="material-symbols-outlined text-6xl text-white/30" style="font-size:80px;">'+catIcons[recipe.category]+'</span>';
-html+='</div>';
-}else{
-html+='<div class="w-full h-full flex items-center justify-center" style="background:'+catGradients[recipe.category]+';">';
-html+='<span class="material-symbols-outlined text-white/30" style="font-size:80px;">'+catIcons[recipe.category]+'</span>';
-html+='</div>';
-}
+html+='<div class="h-48 md:h-64 w-full overflow-hidden relative flex items-center justify-center" style="background:'+catGradients[recipe.category]+';">';
+html+='<span class="material-symbols-outlined text-white/25" style="font-size:100px;">'+catIcons[recipe.category]+'</span>';
+html+='<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>';
 html+='<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>';
 html+='<div class="absolute top-4 right-4 flex gap-2">';
 html+='<span class="'+catColors[recipe.category]+' px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">'+catLabels[recipe.category]+'</span>';
@@ -585,16 +577,10 @@ var catGradients={desayuno:"linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fc
 var catIcons={desayuno:"egg",almuerzo:"restaurant",cena:"dinner_dining",snacks:"cookie"};
 
 var html='<div class="relative">';
-if(recipe.image && recipe.image.startsWith('http')){
-html+='<div class="h-64 md:h-80 w-full overflow-hidden rounded-t-[2rem]"><img loading="lazy" src="'+recipe.image+'" alt="'+recipe.title+'" class="w-full h-full object-cover" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\'">';
-html+='<div class="h-64 md:h-80 w-full items-center justify-center rounded-t-[2rem] hidden" style="background:'+catGradients[recipe.category]+';">';
-html+='<span class="material-symbols-outlined text-white/30" style="font-size:100px;">'+catIcons[recipe.category]+'</span>';
-html+='</div></div>';
-}else{
 html+='<div class="h-64 md:h-80 w-full flex items-center justify-center rounded-t-[2rem]" style="background:'+catGradients[recipe.category]+';">';
-html+='<span class="material-symbols-outlined text-white/30" style="font-size:100px;">'+catIcons[recipe.category]+'</span>';
+html+='<span class="material-symbols-outlined text-white/25" style="font-size:120px;">'+catIcons[recipe.category]+'</span>';
+html+='<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>';
 html+='</div>';
-}
 html+='<button onclick="closeRecipeModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary-container transition-colors"><span class="material-symbols-outlined">close</span></button>';
 html+='<button onclick="toggleFavorite(\''+recipe.id+'\')" class="absolute top-4 left-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary-container transition-colors"><span class="material-symbols-outlined" style="font-variation-settings:\'FILL 1\'">favorite</span></button>';
 html+='</div>';
