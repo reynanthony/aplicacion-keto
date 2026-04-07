@@ -12,6 +12,12 @@
 <meta name="theme-color" content="#ff4d00">
 <title>KetoLab | Recipe Vault</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+window.SUPABASE_URL = 'https://lmbqzsonujwvqmfhjjgf.supabase.co';
+window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYnF6c29udWp3dnFtZmhqamdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQzMDAsImV4cCI6MjA4ODgzMDMwMH0.SBsTQCh844rtGx0wLNZaEGO8NDmAVZjUj1YiDkRSm1k';
+window.supabase = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script>
@@ -85,7 +91,28 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
     <h2 class="text-base font-bold tracking-tight" style="color:rgba(255,255,255,0.9);">Recetas</h2>
   </div>
   <div class="flex items-center gap-3">
-    <a href="perfil.html" class="w-9 h-9 rounded-full flex items-center justify-center font-bold text-white text-sm cursor-pointer hover:scale-105 transition-transform" style="background:#ff4d00;" title="Mi perfil">KL</a>
+    <div class="relative">
+      <button onclick="toggleUserMenu()" id="profileBtn" class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:scale-105 transition-transform overflow-hidden border-2 border-white/20" style="background:#1e1c1c;" title="Mi cuenta">
+        <img id="headerAvatarImg" src="" class="hidden w-full h-full object-cover" alt="Avatar">
+        <span id="headerAvatarIcon" class="material-symbols-outlined text-white" style="font-size:22px;">account_circle</span>
+      </button>
+      <div id="userDropdown" class="hidden absolute right-0 top-12 w-48 bg-surface-container-high rounded-xl shadow-2xl shadow-black/50 border border-white/10 overflow-hidden z-50">
+        <div class="p-3 border-b border-white/10">
+          <p class="text-sm font-medium text-white" id="dropdownUserName">Usuario</p>
+          <p class="text-xs text-on-surface-variant" id="dropdownUserEmail">email@example.com</p>
+        </div>
+        <div class="p-2">
+          <a href="perfil.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/80 hover:bg-white/10 transition-colors">
+            <span class="material-symbols-outlined text-lg">person</span>
+            <span class="text-sm">Mi Perfil</span>
+          </a>
+          <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors">
+            <span class="material-symbols-outlined text-lg">logout</span>
+            <span class="text-sm">Cerrar Sesión</span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </header><!-- TopAppBar (Mobile) -->
 <header class="md:hidden fixed top-0 w-full h-14 z-40 border-b border-white/5 px-4 flex items-center justify-between" style="background:rgba(10,10,10,0.9);backdrop-filter:blur(20px);">
@@ -94,8 +121,11 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
     <span class="text-xl font-black tracking-tight" style="background:linear-gradient(to right,#ffffff,rgba(255,255,255,0.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">KetoLab</span>
   </a>
   <div class="flex items-center gap-2">
+    <button onclick="toggleMobileUserMenu()" class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:scale-105 transition-transform overflow-hidden border-2 border-white/20" style="background:#1e1c1c;" title="Mi cuenta">
+      <img id="mobileHeaderAvatarImg" src="" class="hidden w-full h-full object-cover" alt="Avatar">
+      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined text-white" style="font-size:22px;">account_circle</span>
+    </button>
     <button onclick="toggleHamburgerMenu()" class="w-11 h-11 rounded-full flex items-center justify-center transition-all hover:bg-white/10" style="color:rgba(255,255,255,0.6);"><span class="material-symbols-outlined">menu</span></button>
-    <button onclick="if(document.getElementById('mobileSettingsModal'))document.getElementById('mobileSettingsModal').classList.remove('hidden')" class="w-11 h-11 rounded-full flex items-center justify-center transition-all hover:bg-white/10" style="color:rgba(255,255,255,0.6);"><span class="material-symbols-outlined">settings</span></button>
   </div>
 </header>
 
@@ -123,6 +153,24 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ffccbc","pr
 </button>
 </div>
 </div>
+</div>
+
+<!-- Mobile User Dropdown -->
+<div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 bg-surface-container-high rounded-xl shadow-2xl shadow-black/50 border border-white/10 overflow-hidden z-[80] hidden">
+  <div class="p-3 border-b border-white/10">
+    <p class="text-sm font-medium text-white" id="mobileDropdownUserName">Usuario</p>
+    <p class="text-xs text-on-surface-variant" id="mobileDropdownUserEmail">email@example.com</p>
+  </div>
+  <div class="p-2">
+    <a href="perfil.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/80 hover:bg-white/10 transition-colors">
+      <span class="material-symbols-outlined text-lg">person</span>
+      <span class="text-sm">Mi Perfil</span>
+    </a>
+    <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors">
+      <span class="material-symbols-outlined text-lg">logout</span>
+      <span class="text-sm">Cerrar Sesión</span>
+    </button>
+  </div>
 </div>
 
 <script>
@@ -737,6 +785,74 @@ if(localStorage.getItem("sidebarCollapsed")==="true"){
   var _st=document.getElementById("sidebarToggle");
   if(_st)_st.style.left="72px";
 }
+</script>
+<script>
+// User Dropdown Menu
+function toggleUserMenu() {
+  const dropdown = document.getElementById('userDropdown');
+  dropdown.classList.toggle('hidden');
+  updateDropdownInfo();
+}
+
+function toggleMobileUserMenu() {
+  const dropdown = document.getElementById('mobileUserDropdown');
+  dropdown.classList.toggle('hidden');
+  updateDropdownInfo();
+}
+
+function updateDropdownInfo() {
+  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+  const userName = profile.nombre || profile.name || 'Usuario';
+  const userEmail = localStorage.getItem('ketolab_user_email') || 'usuario@ejemplo.com';
+  const dn = document.getElementById('dropdownUserName');
+  const de = document.getElementById('dropdownUserEmail');
+  const mdn = document.getElementById('mobileDropdownUserName');
+  const mde = document.getElementById('mobileDropdownUserEmail');
+  if(dn) dn.textContent = userName;
+  if(de) de.textContent = userEmail;
+  if(mdn) mdn.textContent = userName;
+  if(mde) mde.textContent = userEmail;
+}
+
+function updateHeaderAvatar() {
+  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+  const avatarUrl = profile.avatar_url;
+  const hi = document.getElementById('headerAvatarImg');
+  const hi2 = document.getElementById('headerAvatarIcon');
+  const mhi = document.getElementById('mobileHeaderAvatarImg');
+  const mhi2 = document.getElementById('mobileHeaderAvatarIcon');
+  if (avatarUrl) {
+    if(hi) { hi.src = avatarUrl; hi.classList.remove('hidden'); }
+    if(hi2) hi2.classList.add('hidden');
+    if(mhi) { mhi.src = avatarUrl; mhi.classList.remove('hidden'); }
+    if(mhi2) mhi2.classList.add('hidden');
+  } else {
+    if(hi) hi.classList.add('hidden');
+    if(hi2) hi2.classList.remove('hidden');
+    if(mhi) mhi.classList.add('hidden');
+    if(mhi2) mhi2.classList.remove('hidden');
+  }
+}
+
+document.addEventListener('click', function(e) {
+  const dd = document.getElementById('userDropdown');
+  const mdd = document.getElementById('mobileUserDropdown');
+  const btn = document.getElementById('profileBtn');
+  if (dd && !dd.contains(e.target) && !btn.contains(e.target)) dd.classList.add('hidden');
+  if (mdd && !e.target.closest('#mobileUserDropdown') && !e.target.closest('button[onclick="toggleMobileUserMenu()"]')) mdd.classList.add('hidden');
+});
+
+async function handleLogout() {
+  if (confirm('¿Cerrar sesión?')) {
+    await window.supabase.auth.signOut();
+    localStorage.removeItem('ketolab_user_id');
+    localStorage.removeItem('ketolab_user_email');
+    localStorage.removeItem('ketolab_onboarding_done');
+    window.location.href = 'welcome.html';
+  }
+}
+
+updateHeaderAvatar();
 </script>
 </body>
 </html>
