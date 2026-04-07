@@ -367,23 +367,41 @@ async function loadRecipesFromSupabase() {
     };
     
     try {
-        const response = await fetch('https://lmbqzsonujwvqmfhjjgf.supabase.co/rest/v1/recetas?activo=eq.true&select=*&order=fecha_creacion.desc', { headers });
-        const data = await response.json();
+        // Cargar recetas y macros
+        const [recetasRes, macrosRes] = await Promise.all([
+            fetch('https://lmbqzsonujwvqmfhjjgf.supabase.co/rest/v1/recetas?activo=eq.true&select=*&order=fecha_creacion.desc', { headers }),
+            fetch('https://lmbqzsonujwvqmfhjjgf.supabase.co/rest/v1/receta_macros?select=*', { headers }).catch(() => null)
+        ]);
+        
+        const data = await recetasRes.json();
+        let macrosData = [];
+        if (macrosRes && macrosRes.ok) {
+            macrosData = await macrosRes.json();
+        }
         
         if (data && data.length > 0) {
-            // Convertir formato Supabase a formato de la app
-            recipesDB = data.map(r => ({
-                id: r.id,
-                title: r.titulo,
-                description: r.descripcion || '',
-                instructions: r.instrucciones || '',
-                difficulty: r.dificultad || 'facil',
-                category: categorizeByPrepTime(r.tiempo_preparacion),
-                prepTime: r.tiempo_preparacion || 15,
-                image: r.imagen_url || '',
-                calories: 0, protein: 0, fat: 0, carbs: 0,
-                source: 'cloud'
-            }));
+            const macrosMap = {};
+            macrosData.forEach(m => { macrosMap[m.receta_id] = m; });
+            
+            recipesDB = data.map(r => {
+                const macros = macrosMap[r.id] || {};
+                return {
+                    id: r.id,
+                    title: r.titulo,
+                    description: r.descripcion || '',
+                    instructions: r.instrucciones || '',
+                    difficulty: r.dificultad || 'facil',
+                    category: categorizeByPrepTime(r.tiempo_preparacion),
+                    prepTime: r.tiempo_preparacion || 15,
+                    image: r.imagen_url || '',
+                    calories: macros.calorias_totales || 0,
+                    protein: macros.proteinas_totales || 0,
+                    fat: macros.grasas_totales || 0,
+                    carbs: macros.carbohidratos_totales || 0,
+                    porciones: r.porciones || 1,
+                    source: 'cloud'
+                };
+            });
             console.log('✅ Cargadas', recipesDB.length, 'recetas de Supabase');
             renderRecipes();
         }

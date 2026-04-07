@@ -450,21 +450,24 @@ async function loadFoodsFromSupabase() {
   try {
     const { data, error } = await window.supabase
       .from('alimentos')
-      .select('id, nombre, categoria, calorias_100g, proteinas_100g, grasas_100g, carbohidratos_100g')
+      .select('id, nombre, categoria, calorias, proteinas, carbos, grasas')
       .eq('activo', true)
       .order('nombre', { ascending: true });
     
-    if (error) throw error;
+    if (error) {
+      console.error('Error Supabase:', error);
+      throw error;
+    }
     
     if (data && data.length > 0) {
       const foods = data.map(f => ({
         id: f.id,
         name: f.nombre,
         category: mapCategory(f.categoria),
-        calories: f.calorias_100g || 0,
-        protein: f.proteinas_100g || 0,
-        fat: f.grasas_100g || 0,
-        carbs: f.carbohidratos_100g || 0,
+        calories: f.calorias || 0,
+        protein: f.proteinas || 0,
+        fat: f.grasas || 0,
+        carbs: f.carbos || 0,
         portion: 100,
         units: [{name: "gramos", grams: 1}, {name: "kilos", grams: 1000}]
       }));
@@ -579,7 +582,7 @@ var status=getStockStatus(f.id);
 var stock=0;
 var despensa=getDespensa();
 if(despensa[f.id])stock=despensa[f.id].stock;
-html+='<div class="flex items-center gap-3 p-2 rounded-lg bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer" onclick="selectFood(\''+f.id+'\')">';
+html+='<div class="food-item flex items-center gap-3 p-2 rounded-lg bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer" data-food-id="'+f.id+'" data-food-name="'+f.name.replace(/"/g, '&quot;')+'" data-food-cal="'+f.calories+'" data-food-protein="'+f.protein+'" data-food-fat="'+f.fat+'" data-food-carbs="'+f.carbs+'" data-food-portion="'+foodPort+'">';
 html+='<div class="flex-1 min-w-0">';
 html+='<p class="font-medium text-white truncate">'+f.name+'</p>';
 html+='<p class="text-xs text-on-surface-variant">'+cal100+' cal/100g · '+foodPort+'g</p>';
@@ -607,13 +610,22 @@ document.getElementById("portionFoodName").textContent=food.name;
 var units=food.units||[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}];
 planFoodUnits[foodId]=units;
 planCurrentUnit=0;
-document.getElementById("tempQty").value=1;
+document.getElementById("tempQty").value=100;
 renderPlanUnitSelector(foodId);
 updatePlanPreview();
 closeFoodSelector();
 document.getElementById("portionModal").classList.remove("hidden");
 document.getElementById("portionModal").classList.add("flex");
 }
+
+// Event delegation para clicks en lista de alimentos
+document.addEventListener('click', function(e) {
+var foodItem = e.target.closest('.food-item');
+if (foodItem) {
+var foodId = foodItem.dataset.foodId;
+selectFood(foodId);
+}
+});
 function renderPlanUnitSelector(foodId){
 var units=planFoodUnits[foodId]||[{name:"gramos",grams:1}];
 var container=document.getElementById("planUnitSelector");
