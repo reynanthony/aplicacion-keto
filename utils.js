@@ -941,19 +941,6 @@ function requestNotificationPermission() {
   }
 }
 
-// Programar notificación
-function scheduleNotification(title, body, delayMinutes) {
-  if (!('Notification' in window) || Notification.permission !== 'granted') return;
-  
-  setTimeout(function() {
-    new Notification(title, {
-      body: body,
-      icon: 'icon-192.png',
-      badge: 'icon-192.png'
-    });
-  }, delayMinutes * 60 * 1000);
-}
-
 // Notificación para recordar agua
 function remindWater() {
   if ('Notification' in window && Notification.permission === 'granted') {

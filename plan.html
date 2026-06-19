@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html class="dark" lang="es">
 <head>
+<script>!function(){var d=localStorage.getItem("ketocore_onboarding_done"),g=localStorage.getItem("KetoCore_guest");if(!d&&!g)window.location.replace("welcome.html");}();</script>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
 <!-- PWA Manifest y meta tags para instalación -->
@@ -194,6 +195,20 @@ var deferredPrompt=null;window.addEventListener('beforeinstallprompt',function(e
 <div class="max-w-4xl mx-auto space-y-6">
 <div class="flex items-center justify-between mb-4"><div><p id="dateDisplay" class="text-xs text-on-surface-variant uppercase tracking-wider"></p><h1 class="text-2xl font-headline font-black text-white">Plan Semanal</h1></div><div class="flex items-center gap-2"><span id="planStatusBadge" class="hidden px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1"></span><button onclick="openWeeklyModal()" class="bg-primary-container text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_month</span>Semana</button></div></div>
 
+<!-- Sub-tabs: Nutrición / Entreno / Suplementación -->
+<div class="flex gap-1 mb-5 bg-surface-container rounded-xl p-1">
+  <button id="tabNutricion" onclick="switchPlanTab('nutricion')" class="plan-subtab active flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-1.5 bg-surface-container-high text-white">
+    <span class="material-symbols-outlined text-[18px]">restaurant</span><span>Nutrición</span>
+  </button>
+  <button id="tabEntreno" onclick="switchPlanTab('entreno')" class="plan-subtab flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-1.5 text-white/50 hover:text-white/80">
+    <span class="material-symbols-outlined text-[18px]">fitness_center</span><span>Entreno</span>
+  </button>
+  <button id="tabSuple" onclick="switchPlanTab('suple')" class="plan-subtab flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-1.5 text-white/50 hover:text-white/80">
+    <span class="material-symbols-outlined text-[18px]">medication</span><span>Suplementos</span>
+  </button>
+</div>
+
+<div id="panelNutricion">
 <!-- Plan Status Banner -->
 <div id="activePlanBanner" class="hidden glass-card rounded-xl p-4 mb-4 border-l-4 border-green-500">
 </div>
@@ -248,30 +263,20 @@ var deferredPrompt=null;window.addEventListener('beforeinstallprompt',function(e
 <p class="text-xs text-on-surface-variant">Plan personalizado según tus macros</p>
 </div>
 </div>
-<a href="plan-generator.html" class="px-4 py-2 rounded-xl bg-primary-container/10 text-primary-container text-xs font-medium hover:bg-primary-container/20 transition-all flex items-center gap-2">
+<div class="flex gap-2">
+<button onclick="openWeeklyPlanGenerator()" class="px-4 py-2 rounded-xl bg-primary-container/10 text-primary-container text-xs font-medium hover:bg-primary-container/20 transition-all flex items-center gap-2">
 <span>Crear plan</span>
 <span class="material-symbols-outlined text-sm">arrow_forward</span>
-</a>
+</button>
+<button onclick="openAIRecipeGenerator()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 text-xs font-medium hover:from-purple-500/30 hover:to-pink-500/30 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">auto_awesome</span>
+<span>IA</span>
+</button>
+</div>
 </div>
 </div>
 
-<!-- Calendario Semanal Visual -->
-<div id="weekCalendar" class="mb-6">
-<div class="flex items-center justify-between mb-3">
-<span class="text-xs text-on-surface-variant uppercase tracking-wider">Esta semana</span>
-<div class="flex gap-2">
-<button onclick="navigateWeek(-1)" class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-white/60 hover:text-white hover:bg-surface-container-high transition-all">
-<span class="material-symbols-outlined text-sm">chevron_left</span>
-</button>
-<button onclick="navigateWeek(1)" class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-white/60 hover:text-white hover:bg-surface-container-high transition-all">
-<span class="material-symbols-outlined text-sm">chevron_right</span>
-</button>
-</div>
-</div>
-<div class="grid grid-cols-7 gap-2">
-<div id="calendarDays"></div>
-</div>
-</div>
+
 
 <!-- Resumen (se mantiene igual) -->
 <div class="glass-card rounded-2xl p-5 mb-6">
@@ -471,6 +476,11 @@ var deferredPrompt=null;window.addEventListener('beforeinstallprompt',function(e
 </div>
 
 <script>
+if (typeof window.currentDay !== 'string' || !window.currentDay) {
+window.currentDay = new Date().toISOString().slice(0, 10);
+}
+var currentDay = window.currentDay;
+
 // Toggle meal card expansion
 function toggleMealCard(meal) {
 const detail = document.getElementById(meal + 'Detail');
@@ -506,16 +516,33 @@ var html = '';
 items.forEach(function(item, idx) {
 var food = currentFoods.find(function(f) { return f.id === item.id; }) || defaultFoods.find(function(f) { return f.id === item.id; }) || item;
 var portion = parseFloat(item.portion) || 100;
-var foodPort = parseFloat(food.portion) || 100;
-var ratio = portion / foodPort;
-var cal = Math.round((food.calories || 0) * ratio);
-var prot = Math.round((food.protein || 0) * ratio * 10) / 10;
-var fat = Math.round((food.fat || 0) * ratio * 10) / 10;
-var carbs = Math.round((food.carbs || 0) * ratio * 10) / 10;
+var cal, prot, fat, carbs;
+
+// Use stored values if available (for auto-generated recipes), otherwise calculate
+if (item.isRecipe && item.calories !== undefined) {
+  cal = Math.round(item.calories);
+  prot = Math.round((item.protein || 0) * 10) / 10;
+  fat = Math.round((item.fat || 0) * 10) / 10;
+  carbs = Math.round((item.carbs || 0) * 10) / 10;
+} else if (item.isRecipe && item.baseCalories) {
+  var basePort = parseFloat(item.basePortion) || 100;
+  var ratio = portion / basePort;
+  cal = Math.round(item.baseCalories * ratio);
+  prot = Math.round(item.baseProtein * ratio * 10) / 10;
+  fat = Math.round(item.baseFat * ratio * 10) / 10;
+  carbs = Math.round(item.baseCarbs * ratio * 10) / 10;
+} else {
+  var foodPort = parseFloat(food.portion) || 100;
+  var ratio = portion / foodPort;
+  cal = Math.round((food.calories || 0) * ratio);
+  prot = Math.round((food.protein || 0) * ratio * 10) / 10;
+  fat = Math.round((food.fat || 0) * ratio * 10) / 10;
+  carbs = Math.round((food.carbs || 0) * ratio * 10) / 10;
+}
 
 html += '<div class="flex items-center justify-between bg-surface-container rounded-lg p-3">';
 html += '<div class="flex-1 min-w-0">';
-html += '<p class="text-white text-sm font-medium truncate">' + food.name + '</p>';
+html += '<p class="text-white text-sm font-medium truncate">' + (item.name || food.name) + '</p>';
 html += '<p class="text-xs text-on-surface-variant">' + portion + 'g · ' + cal + ' kcal</p>';
 html += '</div>';
 html += '<button onclick="removeMealItem(\'' + meal + '\', ' + idx + ')" class="w-8 h-8 rounded-lg flex items-center justify-center text-error/60 hover:text-error hover:bg-error/10 transition-colors">';
@@ -552,13 +579,28 @@ var mealCal = 0, mealProt = 0, mealFat = 0, mealCarbs = 0;
 items.forEach(function(item) {
 var food = currentFoods.find(function(f) { return f.id === item.id; }) || defaultFoods.find(function(f) { return f.id === item.id; }) || item;
 var portion = parseFloat(item.portion) || 100;
-var foodPort = parseFloat(food.portion) || 100;
-var ratio = portion / foodPort;
 
-mealCal += Math.round((food.calories || 0) * ratio);
-mealProt += Math.round((food.protein || 0) * ratio * 10) / 10;
-mealFat += Math.round((food.fat || 0) * ratio * 10) / 10;
-mealCarbs += Math.round((food.carbs || 0) * ratio * 10) / 10;
+// Use stored values if available (for auto-generated recipes), otherwise calculate
+if (item.isRecipe && item.calories !== undefined) {
+  mealCal += Math.round(item.calories);
+  mealProt += Math.round((item.protein || 0) * 10) / 10;
+  mealFat += Math.round((item.fat || 0) * 10) / 10;
+  mealCarbs += Math.round((item.carbs || 0) * 10) / 10;
+} else if (item.isRecipe && item.baseCalories) {
+  var basePort = parseFloat(item.basePortion) || 100;
+  var ratio = portion / basePort;
+  mealCal += Math.round(item.baseCalories * ratio);
+  mealProt += Math.round(item.baseProtein * ratio * 10) / 10;
+  mealFat += Math.round(item.baseFat * ratio * 10) / 10;
+  mealCarbs += Math.round(item.baseCarbs * ratio * 10) / 10;
+} else {
+  var foodPort = parseFloat(food.portion) || 100;
+  var ratio = portion / foodPort;
+  mealCal += Math.round((food.calories || 0) * ratio);
+  mealProt += Math.round((food.protein || 0) * ratio * 10) / 10;
+  mealFat += Math.round((food.fat || 0) * ratio * 10) / 10;
+  mealCarbs += Math.round((food.carbs || 0) * ratio * 10) / 10;
+}
 });
 
 document.getElementById(meal + 'Cal').innerHTML = '<span class="text-yellow-400 font-bold">' + mealCal + '</span> kcal';
@@ -600,13 +642,36 @@ document.getElementById('mealCount').textContent = (plan.desayuno.length + plan.
 
 // Initialize calendar
 var currentWeekOffset = 0;
+function getMealPlanForCalendar(dateKey){
+if(typeof getMealPlan==="function"){
+try{
+var existing=getMealPlan(dateKey);
+if(existing&&typeof existing==="object"){return existing;}
+}catch(e){}
+}
+var stored={};
+try{
+stored=JSON.parse(localStorage.getItem("mealPlan_"+dateKey)||"{}");
+}catch(e){
+stored={};
+}
+if(!stored||typeof stored!=="object"||Object.keys(stored).length===0){
+stored={desayuno:[],almuerzo:[],cena:[],snacks:[]};
+}
+if(!stored.desayuno)stored.desayuno=[];
+if(!stored.almuerzo)stored.almuerzo=[];
+if(!stored.cena)stored.cena=[];
+if(!stored.snacks)stored.snacks=[];
+return stored;
+}
 function initCalendar() {
 var container = document.getElementById('calendarDays');
+if(!container)return;
 var today = new Date();
 var dayOfWeek = today.getDay();
 var monday = new Date(today);
 monday.setDate(today.getDate() - (dayOfWeek <= 0 ? 6 : dayOfWeek - 1));
-monday.setDate(monday.getDate + (currentWeekOffset * 7));
+monday.setDate(monday.getDate() + (currentWeekOffset * 7));
 
 var weekDays = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 var html = '';
@@ -614,11 +679,12 @@ var html = '';
 for (var i = 0; i < 7; i++) {
 var d = new Date(monday);
 d.setDate(monday.getDate() + i);
+if(isNaN(d.getTime()))continue;
 var dateKey = d.toISOString().slice(0, 10);
 var isToday = dateKey === today.toISOString().slice(0, 10);
 var isSelected = dateKey === currentDay;
 
-var plan = getMealPlan(dateKey);
+var plan = getMealPlanForCalendar(dateKey);
 var itemCount = (plan.desayuno ? plan.desayuno.length : 0) + (plan.almuerzo ? plan.almuerzo.length : 0) + (plan.cena ? plan.cena.length : 0) + (plan.snacks ? plan.snacks.length : 0);
 var hasContent = itemCount > 0;
 
@@ -637,7 +703,10 @@ container.innerHTML = html;
 
 // Update date label
 var selectedDate = new Date(currentDay);
-document.getElementById('dayDateLabel').textContent = selectedDate.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' });
+var dateLabel=document.getElementById('dayDateLabel');
+if(dateLabel&&!isNaN(selectedDate.getTime())){
+dateLabel.textContent = selectedDate.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' });
+}
 }
 
 function navigateWeek(direction) {
@@ -646,44 +715,257 @@ initCalendar();
 }
 
 // Override selectDay to also update calendar
-var originalSelectDay = selectDay;
-selectDay = function(dateKey) {
-originalSelectDay(dateKey);
-initCalendar();
-updateMealCardMacros();
-renderMealCardItems();
-};
+if (typeof selectDay === 'function') {
+  var originalSelectDay = selectDay;
+  selectDay = function(dateKey) {
+    originalSelectDay(dateKey);
+    initCalendar();
+    updateMealCardMacros();
+    renderMealCardItems();
+  };
+}
 
 // Initialize on load
-initCalendar();
-updateMealCardMacros();
-renderMealCardItems();
+document.addEventListener('DOMContentLoaded', function() {
+  initCalendar();
+  updateMealCardMacros();
+  renderMealCardItems();
+});
+</script>
+</div><!-- /panelNutricion -->
+
+<!-- ===== PANEL ENTRENO ===== -->
+<div id="panelEntreno" class="hidden space-y-4">
+  <!-- Stats row -->
+  <div class="grid grid-cols-3 gap-3" id="entrenoStatsRow"></div>
+  <!-- Today card -->
+  <div id="entrenoTodayCard"></div>
+  <!-- Last workouts -->
+  <div id="entrenoRecentList"></div>
+  <!-- CTA -->
+  <a href="entrenamientos.html" class="flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-primary-container text-white font-bold text-sm hover:bg-primary-container/80 transition-all mt-2">
+    <span class="material-symbols-outlined">fitness_center</span>
+    <span>Ir a Entrenamientos</span>
+    <span class="material-symbols-outlined text-base">arrow_forward</span>
+  </a>
+</div>
+
+<!-- ===== PANEL SUPLEMENTOS ===== -->
+<div id="panelSuple" class="hidden space-y-4">
+  <div id="supleContent"></div>
+  <a href="suplementos.html" class="flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-surface-container-high text-white font-bold text-sm hover:bg-surface-container-highest transition-all border border-white/10">
+    <span class="material-symbols-outlined">medication</span>
+    <span>Gestionar Stack</span>
+    <span class="material-symbols-outlined text-base">arrow_forward</span>
+  </a>
+</div>
+
+<script>
+// ===== PLAN SUB-TABS =====
+var _activePlanTab = 'nutricion';
+
+function switchPlanTab(tab) {
+  _activePlanTab = tab;
+  var panels = { nutricion: 'panelNutricion', entreno: 'panelEntreno', suple: 'panelSuple' };
+  var tabs = { nutricion: 'tabNutricion', entreno: 'tabEntreno', suple: 'tabSuple' };
+  Object.keys(panels).forEach(function(k) {
+    var panel = document.getElementById(panels[k]);
+    var btn = document.getElementById(tabs[k]);
+    if (k === tab) {
+      panel.classList.remove('hidden');
+      btn.classList.add('bg-surface-container-high', 'text-white');
+      btn.classList.remove('text-white/50', 'text-white/80');
+    } else {
+      panel.classList.add('hidden');
+      btn.classList.remove('bg-surface-container-high', 'text-white');
+      btn.classList.add('text-white/50');
+    }
+  });
+  if (tab === 'entreno') renderEntrenoPanel();
+  if (tab === 'suple') renderSuplePanel();
+}
+
+// ===== ENTRENO PANEL =====
+function renderEntrenoPanel() {
+  var workouts = safeParseJSON(localStorage.getItem('ketoWorkouts'), []);
+  var today = new Date().toISOString().slice(0, 10);
+  var todayWorkout = workouts.find(function(w) { return (w.date || '').slice(0, 10) === today; });
+  var totalSessions = workouts.length;
+  var streak = calcWorkoutStreak(workouts);
+  var totalVol = workouts.reduce(function(sum, w) { return sum + (w.totalVolume || 0); }, 0);
+
+  // Stats row
+  document.getElementById('entrenoStatsRow').innerHTML = [
+    { icon: 'bolt', val: totalSessions, label: 'Sesiones', color: 'text-orange-400' },
+    { icon: 'local_fire_department', val: streak + ' días', label: 'Racha', color: 'text-yellow-400' },
+    { icon: 'monitor_weight', val: Math.round(totalVol / 1000) + ' ton', label: 'Volumen total', color: 'text-green-400' }
+  ].map(function(s) {
+    return '<div class="glass-card rounded-xl p-3 text-center"><span class="material-symbols-outlined ' + s.color + ' text-2xl">' + s.icon + '</span><p class="' + s.color + ' text-xl font-black mt-1">' + s.val + '</p><p class="text-on-surface-variant text-[10px] mt-0.5">' + s.label + '</p></div>';
+  }).join('');
+
+  // Today card
+  var todayHtml;
+  if (todayWorkout) {
+    var exList = (todayWorkout.exercises || []).slice(0, 4).map(function(ex) {
+      return '<div class="flex items-center justify-between py-2 border-b border-white/5 last:border-0"><span class="text-white/80 text-sm">' + escapeHtml(ex.name || ex.exerciseName || 'Ejercicio') + '</span><span class="text-primary-container text-xs font-bold">' + (ex.sets ? ex.sets.length : (ex.sets || 0)) + ' series</span></div>';
+    }).join('');
+    todayHtml = '<div class="glass-card rounded-2xl p-4 border-l-4 border-green-500"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-green-400">check_circle</span></div><div><p class="text-white font-bold">Entrenamiento hoy</p><p class="text-on-surface-variant text-xs">' + escapeHtml(todayWorkout.name || 'Sesión completada') + ' · ' + (todayWorkout.duration || '—') + ' min</p></div></div>' + (exList ? '<div class="mt-2">' + exList + '</div>' : '') + '</div>';
+  } else {
+    todayHtml = '<div class="glass-card rounded-2xl p-6 text-center border border-dashed border-white/10"><span class="material-symbols-outlined text-4xl text-white/20 mb-3 block">fitness_center</span><p class="text-white font-bold mb-1">Sin entrenamiento hoy</p><p class="text-on-surface-variant text-sm mb-4">¿Listo para entrenar?</p><a href="entrenamientos.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-container text-white font-bold text-sm hover:bg-primary-container/80 transition-all"><span class="material-symbols-outlined text-sm">add</span>Registrar entreno</a></div>';
+  }
+  document.getElementById('entrenoTodayCard').innerHTML = todayHtml;
+
+  // Recent workouts (last 3, skip today)
+  var recent = workouts.filter(function(w) { return (w.date || '').slice(0, 10) !== today; }).slice(-3).reverse();
+  if (recent.length) {
+    document.getElementById('entrenoRecentList').innerHTML = '<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">Recientes</p>' + recent.map(function(w) {
+      var d = new Date(w.date);
+      var label = isNaN(d.getTime()) ? '' : d.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
+      return '<div class="glass-card rounded-xl p-3 flex items-center gap-3"><div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-primary-container text-lg">fitness_center</span></div><div class="flex-1 min-w-0"><p class="text-white text-sm font-medium truncate">' + escapeHtml(w.name || 'Sesión') + '</p><p class="text-on-surface-variant text-xs">' + label + (w.duration ? ' · ' + w.duration + ' min' : '') + '</p></div><span class="text-green-400 text-xs font-bold">' + (w.totalVolume ? Math.round(w.totalVolume) + ' kg' : '') + '</span></div>';
+    }).join('');
+  } else {
+    document.getElementById('entrenoRecentList').innerHTML = '';
+  }
+}
+
+function calcWorkoutStreak(workouts) {
+  if (!workouts.length) return 0;
+  var dates = workouts.map(function(w) { return (w.date || '').slice(0, 10); }).filter(Boolean).sort().reverse();
+  var unique = dates.filter(function(d, i) { return dates.indexOf(d) === i; });
+  var streak = 0;
+  var check = new Date();
+  for (var i = 0; i < unique.length; i++) {
+    var d = check.toISOString().slice(0, 10);
+    if (unique[i] === d || (i === 0 && unique[0] === new Date(check - 86400000).toISOString().slice(0, 10))) {
+      streak++;
+      check.setDate(check.getDate() - 1);
+    } else break;
+  }
+  return streak;
+}
+
+// ===== SUPLE PANEL =====
+function renderSuplePanel() {
+  var supls = safeParseJSON(localStorage.getItem('user_supplements'), []);
+  var today = new Date().toISOString().slice(0, 10);
+  var taken = safeParseJSON(localStorage.getItem('suple_taken_' + today), {});
+  var container = document.getElementById('supleContent');
+
+  if (!supls.length) {
+    container.innerHTML = '<div class="glass-card rounded-2xl p-6 text-center border border-dashed border-white/10"><span class="material-symbols-outlined text-4xl text-white/20 mb-3 block">medication</span><p class="text-white font-bold mb-1">Sin suplementos configurados</p><p class="text-on-surface-variant text-sm mb-4">Agrega tu stack para ver el horario diario</p><a href="suplementos.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-container text-white font-bold text-sm hover:bg-primary-container/80 transition-all"><span class="material-symbols-outlined text-sm">add</span>Configurar stack</a></div>';
+    return;
+  }
+
+  var takenCount = Object.keys(taken).filter(function(k) { return taken[k]; }).length;
+  var progress = Math.round(takenCount / supls.length * 100);
+
+  var html = '<div class="glass-card rounded-xl p-4 mb-4"><div class="flex items-center justify-between mb-2"><span class="text-sm text-white font-medium">Progreso de hoy</span><span class="text-primary-container font-bold text-sm">' + takenCount + '/' + supls.length + '</span></div><div class="h-2 bg-surface rounded-full overflow-hidden"><div class="h-full bg-primary-container rounded-full transition-all" style="width:' + progress + '%"></div></div></div>';
+
+  html += '<div class="space-y-3">';
+  supls.forEach(function(s) {
+    var isTaken = !!taken[s.id || s.name];
+    var id = s.id || s.name;
+    html += '<div class="glass-card rounded-xl p-4 flex items-center gap-3 cursor-pointer transition-all ' + (isTaken ? 'opacity-60' : '') + '" onclick="toggleSupleTaken(\'' + escapeHtml(id) + '\')">';
+    html += '<div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ' + (isTaken ? 'bg-green-500/20' : 'bg-surface-container-high') + '">';
+    html += '<span class="material-symbols-outlined text-[20px] ' + (isTaken ? 'text-green-400' : 'text-primary-container') + '">' + (isTaken ? 'check_circle' : (s.icon || 'medication')) + '</span>';
+    html += '</div><div class="flex-1 min-w-0"><p class="text-white text-sm font-medium ' + (isTaken ? 'line-through' : '') + '">' + escapeHtml(s.name) + '</p><p class="text-on-surface-variant text-xs truncate">' + escapeHtml(s.dosage || '') + '</p></div>';
+    html += '<span class="text-[10px] bg-surface-container px-2 py-1 rounded-full text-on-surface-variant whitespace-nowrap">' + escapeHtml(s.timing || '—') + '</span>';
+    html += '</div>';
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function toggleSupleTaken(id) {
+  var today = new Date().toISOString().slice(0, 10);
+  var taken = safeParseJSON(localStorage.getItem('suple_taken_' + today), {});
+  taken[id] = !taken[id];
+  localStorage.setItem('suple_taken_' + today, JSON.stringify(taken));
+  renderSuplePanel();
+}
 </script>
 </div>
 </main>
 <div id="foodSelectorModal" class="fixed inset-0 z-[60] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeFoodSelector()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-2xl max-h-[85vh] flex flex-col pointer-events-auto"><div class="flex justify-between items-center mb-4"><div><h3 class="text-lg font-headline font-bold text-white">Agregar a <span id="selectedMeal"></span></h3><p class="text-xs text-on-surface-variant mt-1">Desde tu despensa</p></div><button onclick="closeFoodSelector()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div class="relative mb-4"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span><input type="text" id="foodSearch" placeholder="Buscar en despensa..." class="w-full bg-surface-container text-white border border-outline rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-primary-container" oninput="filterFoods()"></div><div id="foodList" class="flex-1 overflow-y-auto"></div></div></div></div>
 <div id="portionModal" class="fixed inset-0 z-[60] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closePortionModal()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-headline font-bold text-white" id="portionFoodName"></h3><button onclick="closePortionModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div class="bg-surface-container-high rounded-xl p-4 mb-4"><div class="grid grid-cols-4 gap-2 text-center"><div><p class="text-[10px] text-on-surface-variant uppercase">Cal</p><p id="portionCalories" class="text-lg font-bold text-yellow-400">0</p></div><div><p class="text-[10px] text-on-surface-variant uppercase">Prot</p><p id="portionProtein" class="text-lg font-bold text-orange-400">0g</p></div><div><p class="text-[10px] text-on-surface-variant uppercase">Gras</p><p id="portionFat" class="text-lg font-bold text-yellow-300">0g</p></div><div><p class="text-[10px] text-on-surface-variant uppercase">Carb</p><p id="portionCarbs" class="text-lg font-bold text-cyan-400">0g</p></div></div></div><div class="mb-3"><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Unidad de medida</label><div id="planUnitSelector" class="flex flex-wrap gap-2"></div></div><div class="mb-4"><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Cantidad</label><div class="flex items-center gap-3"><button onclick="adjustTempQty(-1)" class="w-12 h-12 rounded-xl bg-surface-container-high text-white font-bold text-xl hover:bg-surface-container-highest transition-all">−</button><input type="number" id="tempQty" value="1" min="0.1" step="0.1" class="flex-1 bg-surface-container text-white border border-outline rounded-xl px-4 py-3 text-center text-xl font-bold focus:outline-none focus:border-primary-container"><button onclick="adjustTempQty(1)" class="w-12 h-12 rounded-xl bg-surface-container-high text-white font-bold text-xl hover:bg-surface-container-highest transition-all">+</button></div></div><div class="bg-primary-container/20 rounded-xl p-3 mb-4 border border-primary-container/30"><div class="flex justify-between items-center"><span class="text-sm text-white/70">Total en gramos:</span><span id="portionPreview" class="text-2xl font-bold text-primary-container">0 g</span></div></div><div id="stockWarning" class="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3 mb-4 hidden"><div class="flex items-center gap-2 text-yellow-400 text-sm"><span class="material-symbols-outlined">warning</span><span id="stockWarningText"></span></div></div><input type="hidden" id="selectedFoodId"><input type="hidden" id="selectedMealType"><div class="flex gap-3"><button onclick="closePortionModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="addFoodToMeal()" class="flex-1 py-3 rounded-xl bg-primary-container text-white font-bold hover:bg-primary-container/80 transition-colors">Agregar</button></div></div></div></div>
 <div id="stockModal" class="fixed inset-0 z-[70] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto text-center"><div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-4xl text-yellow-400">warning</span></div><h3 class="text-xl font-headline font-bold text-white mb-2">Stock Insuficiente</h3><p class="text-white/70 mb-2">Solo tienes disponible:</p><p id="availableStock" class="text-3xl font-bold text-yellow-400 mb-4">0 g</p><p class="text-white/50 text-sm mb-6">de <span id="requestedStock" class="text-white">0 g</span></p><div class="flex gap-3"><button onclick="closeStockModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="addAvailableStock()" class="flex-1 py-3 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors">Agregar lo disponible</button></div></div></div></div>
-<div id="weeklyModal" class="fixed inset-0 z-[70] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWeeklyModal()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-md pointer-events-auto max-h-[90vh] overflow-y-auto"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-headline font-bold text-white">Plan Semanal</h3><button onclick="closeWeeklyModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div id="weeklyDayList" class="space-y-2 mb-4"></div><div class="border-t border-white/10 pt-4 mb-4"><p class="text-xs text-on-surface-variant mb-3">Copiar plan de un día a otro:</p><div class="flex gap-2 mb-4"><select id="copyFromDay" class="flex-1 bg-surface-container text-white rounded-lg px-3 py-2 text-sm"></select><span class="text-white/50">→</span><select id="copyToDay" class="flex-1 bg-surface-container text-white rounded-lg px-3 py-2 text-sm"></select></div><button onclick="copyDayPlan()" class="w-full py-3 rounded-xl bg-primary-container text-white font-bold mb-3">Copiar Día</button><button onclick="resetSelectedDay()" class="w-full py-3 rounded-xl bg-red-500/20 text-red-400 font-medium hover:bg-red-500/30 transition-colors mb-2">Reiniciar Día Actual</button></div><div class="border-t border-white/10 pt-4"><p class="text-xs text-on-surface-variant mb-3">¿Terminaste la semana?</p><button onclick="openFinalizePlanModal()" class="w-full py-3 rounded-xl bg-green-500/20 text-green-400 font-bold hover:bg-green-500/30 transition-colors mb-2">Finalizar Plan Semanal</button><button onclick="confirmResetWeeklyPlan()" class="w-full py-2 rounded-xl bg-red-500/10 text-red-400 font-medium hover:bg-red-500/20 transition-colors text-xs">Borrar Plan Semanal</button></div></div></div></div>
+<div id="weeklyModal" class="fixed inset-0 z-[70] hidden">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeWeeklyModal()"></div>
+  <div class="absolute inset-2 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl bg-surface-container rounded-2xl overflow-hidden flex flex-col max-h-[95vh]">
+    <div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/10">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-xl bg-primary-container/20 flex items-center justify-center">
+          <span class="material-symbols-outlined text-primary-container text-2xl">calendar_month</span>
+        </div>
+        <div>
+          <h3 class="text-xl font-headline font-bold text-white">Plan Semanal</h3>
+          <p class="text-xs text-on-surface-variant">Gestiona tu semana</p>
+        </div>
+      </div>
+      <button onclick="closeWeeklyModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10">
+        <span class="material-symbols-outlined text-xl">close</span>
+      </button>
+    </div>
+    <div class="flex-1 overflow-y-auto p-4">
+      <div id="weeklyDayList" class="grid grid-cols-7 gap-1 mb-4"></div>
+      
+      <div class="mb-4">
+        <p class="text-sm font-bold text-white mb-2">Copiar día:</p>
+        <div class="flex gap-2 mb-3">
+          <select id="copyFromDay" class="flex-1 bg-surface-container-high text-white rounded-lg px-3 py-2 text-sm border border-white/10"></select>
+          <span class="text-white/50 self-center">→</span>
+          <select id="copyToDay" class="flex-1 bg-surface-container-high text-white rounded-lg px-3 py-2 text-sm border border-white/10"></select>
+        </div>
+        <button onclick="copyDayPlan()" class="w-full py-2 rounded-lg bg-primary-container text-white font-bold text-sm">Copiar Plan</button>
+      </div>
+      
+      <div class="mb-4">
+        <p class="text-sm font-bold text-white mb-2">Día seleccionado:</p>
+        <button onclick="resetSelectedDay()" class="w-full py-2 rounded-lg bg-red-500/20 text-red-400 font-medium text-sm">Reiniciar Día</button>
+      </div>
+      
+      <div class="mb-4">
+        <p class="text-sm font-bold text-white mb-2">¿Terminaste la semana?</p>
+        <button onclick="openFinalizePlanModal()" class="w-full py-2 rounded-lg bg-green-500/20 text-green-400 font-bold text-sm mb-2">Finalizar Semana</button>
+      </div>
+      
+      <div>
+        <p class="text-sm font-bold text-red-400 mb-2">Danger Zone:</p>
+        <button onclick="confirmResetWeeklyPlan()" class="w-full py-2 rounded-lg bg-red-500/10 text-red-400 font-medium text-sm hover:bg-red-500/20">Borrar Todo el Plan</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div id="autoPlanWarningModal" class="fixed inset-0 z-[80] hidden"><div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto text-center border-2 border-yellow-500/50"><div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-4xl text-yellow-400">warning</span></div><h3 class="text-xl font-headline font-bold text-yellow-400 mb-2">Advertencia</h3><p class="text-white/80 mb-2">Estás modificando un plan generado automáticamente.</p><p class="text-white/60 text-sm mb-6">Los resultados pueden no ser los indicados para tu objetivo. ¿Deseas continuar?</p><div class="flex gap-3"><button onclick="closeAutoPlanWarning()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="confirmAutoPlanModification()" class="flex-1 py-3 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors">Continuar</button></div></div></div></div>
 <!-- BottomNavBar (Mobile) - 5 items optimizado -->
-<nav id="bottomNav" class="md:hidden fixed bottom-0 left-0 w-full h-20 flex justify-around items-end pb-3 z-50 px-2" style="background:rgba(24,23,23,0.98);border-top:1px solid rgba(255,77,0,0.3)" role="navigation" aria-label="Navegación principal">
-<a href="perfil.html" class="flex flex-col items-center text-white/60 hover:text-white transition-all" aria-label="Perfil"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px] mt-1">Perfil</span></a>
-<a href="macros.html" class="flex flex-col items-center text-white/60 hover:text-white transition-all" aria-label="Macros"><span class="material-symbols-outlined text-2xl">monitoring</span><span class="text-[10px] mt-1">Macros</span></a>
-<a href="index.html" class="flex flex-col items-center -mt-5" aria-label="Inicio">
-<div class="w-12 h-12 rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);box-shadow:0 0 20px rgba(255,77,0,0.6),0 0 40px rgba(255,77,0,0.3)">
-<span class="material-symbols-outlined text-white text-2xl" style="font-variation-settings:'FILL' 1">cottage</span>
-</div>
-<span class="text-[10px] mt-1 text-white/60">Inicio</span>
-</a>
-<a href="compras.html" class="flex flex-col items-center text-white/60 hover:text-white transition-all" aria-label="Despensa"><span class="material-symbols-outlined text-2xl">shopping_basket</span><span class="text-[10px] mt-1">Despensa</span></a>
-<a href="entrenamientos.html" class="flex flex-col items-center text-white/60 hover:text-white transition-all" aria-label="Entrenamiento"><span class="material-symbols-outlined text-2xl">sports_gymnastics</span><span class="text-[10px] mt-1">Gym</span></a>
+<nav id="bottomNav" class="md:hidden fixed bottom-0 left-0 right-0 z-50" style="background:rgba(17,16,16,0.97);border-top:1px solid rgba(255,255,255,0.06);padding-bottom:env(safe-area-inset-bottom,0px)" role="navigation" aria-label="Navegación principal">
+  <div class="flex justify-around items-center h-16 px-1">
+    <a href="index.html" class="flex flex-col items-center gap-0.5 flex-1 py-2 transition-all" style="color:rgba(255,255,255,0.5)"><span class="w-10 h-6 flex items-center justify-center"><span class="material-symbols-outlined text-xl">cottage</span></span><span class="text-[10px]">Inicio</span></a>
+    <a href="plan.html" class="flex flex-col items-center gap-0.5 flex-1 py-2 transition-all" style="color:#ff4d00" aria-current="page"><span class="w-10 h-6 rounded-full flex items-center justify-center" style="background:rgba(255,77,0,0.15)"><span class="material-symbols-outlined text-xl" style="font-variation-settings:'FILL' 1">calendar_month</span></span><span class="text-[10px] font-bold">Plan</span></a>
+    <a href="comunidad.html" class="flex flex-col items-center gap-0.5 flex-1 py-2 transition-all" style="color:rgba(255,255,255,0.5)"><span class="w-10 h-6 flex items-center justify-center"><span class="material-symbols-outlined text-xl">people</span></span><span class="text-[10px]">Comunidad</span></a>
+    <a href="progreso.html" class="flex flex-col items-center gap-0.5 flex-1 py-2 transition-all" style="color:rgba(255,255,255,0.5)"><span class="w-10 h-6 flex items-center justify-center"><span class="material-symbols-outlined text-xl">trending_up</span></span><span class="text-[10px]">Progreso</span></a>
+    <a href="perfil.html" class="flex flex-col items-center gap-0.5 flex-1 py-2 transition-all" style="color:rgba(255,255,255,0.5)"><span class="w-10 h-6 flex items-center justify-center"><span class="material-symbols-outlined text-xl">person</span></span><span class="text-[10px]">Perfil</span></a>
+  </div>
 </nav>
 <script src="utils.js"></script>
-<script src="data/recipes-db.js"></script>
 <script src="data/recipe-details.js"></script>
+<script>
+// Crear recipesDB desde KETO_RECIPES para compatibilidad
+if (typeof KETO_RECIPES !== 'undefined') {
+  window.recipesDB = KETO_RECIPES;
+  console.log('[Plan] recipesDB creado desde KETO_RECIPES:', Object.keys(window.recipesDB).length);
+}
+</script>
+<script src="modules/keto-inspector.js"></script>
+<script src="modules/keto-score-calculator.js"></script>
+<script src="modules/user-learning.js"></script>
+<script src="modules/supabase-keto-intelligence.js"></script>
+<script src="modules/supabase-keto-ai.js"></script>
 <script src="modules/weekly-meal-generator.js"></script>
 <script src="modules/auto-meal-generator.js"></script>
+<script src="modules/plan-inspector-modal.js"></script>
+<script src="modules/plan-shopping.js"></script>
+<script src="modules/plan-generator-ui.js"></script>
 <script>
 function toggleTheme(){document.documentElement.classList.toggle("dark");localStorage.setItem("theme",document.documentElement.classList.contains("dark")?"dark":"light")}
 function toggleSidebar(){var b=document.body;var s=document.getElementById("sidebarNav");var t=document.getElementById("sidebarToggle");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");b.classList.toggle("sidebar-collapsed");if(b.classList.contains("sidebar-collapsed")){s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px";localStorage.setItem("sidebarCollapsed","true")}else{s.style.width="256px";s.style.overflow="";if(p)p.style.paddingLeft="272px";if(m)m.style.marginLeft="256px";if(t)t.style.left="256px";localStorage.setItem("sidebarCollapsed","false")}}
@@ -758,6 +1040,166 @@ async function handleLogout() {
 }
 
 updateHeaderAvatar();
+
+// ==================== USER LEARNING & FEEDBACK ====================
+
+function registrarLikeReceta(recetaId, recetaNombre, ingredientes) {
+  if (window.UserLearning) {
+    window.UserLearning.registrarLikeReceta(recetaId, recetaNombre, ingredientes);
+    window.showToast('Me gusta registrado', 2000);
+  }
+}
+
+function registrarDislikeReceta(recetaId, recetaNombre, ingredientes) {
+  if (window.UserLearning) {
+    window.UserLearning.registrarDislikeReceta(recetaId, recetaNombre, ingredientes);
+    window.showToast('No me gusta registrado', 2000);
+  }
+}
+
+function registrarCalificacion(recetaId, recetaNombre, calificacion, ingredientes) {
+  if (window.UserLearning) {
+    window.UserLearning.registrarCalificacion(recetaId, recetaNombre, calificacion, ingredientes);
+    window.showToast('Calificacion: ' + calificacion + '/5', 2000);
+  }
+}
+
+function showRecetaFeedbackModal(recetaId, recetaNombre, ingredientes) {
+  var existing = document.getElementById('recetaFeedbackModal');
+  if (existing) existing.remove();
+
+  var modal = document.createElement('div');
+  modal.id = 'recetaFeedbackModal';
+  modal.className = 'fixed inset-0 z-[90] flex items-center justify-center p-4 pointer-events-none';
+  modal.innerHTML = '<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeRecetaFeedbackModal()"></div>' +
+    '<div class="bg-surface-container rounded-2xl p-5 w-full max-w-sm pointer-events-auto">' +
+      '<div class="flex items-center gap-3 mb-4">' +
+        '<span class="material-symbols-outlined text-primary-container text-3xl">thumb_up</span>' +
+        '<h3 class="text-lg font-bold text-white">Feedback de Receta</h3>' +
+      '</div>' +
+      '<p class="text-sm text-on-surface-variant mb-4">¿Que te parecio esta receta?</p>' +
+      '<div class="flex justify-center gap-3 mb-4">' +
+        '<button onclick="registrarDislikeReceta(\'' + recetaId + '\',\'' + recetaNombre + '\',[]); closeRecetaFeedbackModal();" class="w-14 h-14 rounded-full bg-red-500/20 flex items-center justify-center hover:bg-red-500/30 transition-all">' +
+          '<span class="material-symbols-outlined text-red-400 text-3xl">thumb_down</span>' +
+        '</button>' +
+        '<button onclick="registrarCalificacion(\'' + recetaId + '\',\'' + recetaNombre + '\',3,[]); closeRecetaFeedbackModal();" class="w-14 h-14 rounded-full bg-yellow-500/20 flex items-center justify-center hover:bg-yellow-500/30 transition-all">' +
+          '<span class="material-symbols-outlined text-yellow-400 text-3xl">remove</span>' +
+        '</button>' +
+        '<button onclick="registrarLikeReceta(\'' + recetaId + '\',\'' + recetaNombre + '\',[]); closeRecetaFeedbackModal();" class="w-14 h-14 rounded-full bg-green-500/20 flex items-center justify-center hover:bg-green-500/30 transition-all">' +
+          '<span class="material-symbols-outlined text-green-400 text-3xl">thumb_up</span>' +
+        '</button>' +
+      '</div>' +
+      '<button onclick="closeRecetaFeedbackModal()" class="w-full py-3 rounded-xl bg-surface-container-high text-white">Cerrar</button>' +
+    '</div>';
+  document.body.appendChild(modal);
+}
+
+function closeRecetaFeedbackModal() {
+  var modal = document.getElementById('recetaFeedbackModal');
+  if (modal) modal.remove();
+}
+
+function showUserProfileModal() {
+  var perfil = window.UserLearning ? window.UserLearning.generarPerfilUsuario() : null;
+  var totalFeedbacks = window.UserLearning ? window.UserLearning.getTotalFeedbacks() : 0;
+  var topLiked = window.UserLearning ? window.UserLearning.getTopLikedIngredients(5) : [];
+  var topDisliked = window.UserLearning ? window.UserLearning.getTopDislikedIngredients(5) : [];
+
+  var existing = document.getElementById('userProfileModal');
+  if (existing) existing.remove();
+
+  var modal = document.createElement('div');
+  modal.id = 'userProfileModal';
+  modal.className = 'fixed inset-0 z-[85] flex items-center justify-center p-4 pointer-events-none';
+  
+  var nivelColor = perfil && perfil.nivelExperiencia === 'avanzado' ? 'text-green-400' : 
+                   perfil && perfil.nivelExperiencia === 'intermedio' ? 'text-yellow-400' : 'text-orange-400';
+  
+  modal.innerHTML = '<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeUserProfileModal()"></div>' +
+    '<div class="bg-surface-container rounded-2xl p-5 w-full max-w-md max-h-[80vh] overflow-y-auto pointer-events-auto">' +
+      '<div class="flex items-center justify-between mb-4">' +
+        '<div class="flex items-center gap-3">' +
+          '<span class="material-symbols-outlined text-primary-container text-3xl">person</span>' +
+          '<h3 class="text-lg font-bold text-white">Tu Perfil Keto</h3>' +
+        '</div>' +
+        '<button onclick="closeUserProfileModal()" class="w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10">' +
+          '<span class="material-symbols-outlined">close</span>' +
+        '</button>' +
+      '</div>' +
+      
+      '<div class="bg-surface-container-high rounded-xl p-4 mb-4">' +
+        '<div class="grid grid-cols-2 gap-4 text-center">' +
+          '<div><p class="text-xs text-on-surface-variant">Experiencia</p><p class="font-bold ' + nivelColor + '">' + (perfil ? perfil.nivelExperiencia : 'nuevo') + '</p></div>' +
+          '<div><p class="text-xs text-on-surface-variant">Feedback</p><p class="font-bold text-white">' + totalFeedbacks + '</p></div>' +
+        '</div>' +
+      '</div>' +
+      
+      '<div class="mb-4">' +
+        '<h4 class="text-sm font-bold text-green-400 mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-sm">favorite</span>Ingredientes Favoritos</h4>' +
+        '<div class="space-y-1">';
+  
+  if (topLiked.length > 0) {
+    topLiked.forEach(function(item) {
+      modal.innerHTML += '<div class="flex items-center justify-between text-sm bg-green-500/10 rounded-lg px-3 py-2">' +
+        '<span class="text-white">' + item.nombre + '</span>' +
+        '<span class="text-green-400">+' + item.score + '</span></div>';
+    });
+  } else {
+    modal.innerHTML += '<p class="text-xs text-on-surface-variant">No hay favoritos aun. ¡Dale like a recetas!</p>';
+  }
+  
+  modal.innerHTML += '</div><div class="mb-4">' +
+        '<h4 class="text-sm font-bold text-red-400 mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-sm">block</span>Ingredientes a Evitar</h4>' +
+        '<div class="space-y-1">';
+  
+  if (topDisliked.length > 0) {
+    topDisliked.forEach(function(item) {
+      modal.innerHTML += '<div class="flex items-center justify-between text-sm bg-red-500/10 rounded-lg px-3 py-2">' +
+        '<span class="text-white">' + item.nombre + '</span>' +
+        '<span class="text-red-400">' + item.score + '</span></div>';
+    });
+  } else {
+    modal.innerHTML += '<p class="text-xs text-on-surface-variant">No hay ingredientes evitados</p>';
+  }
+  
+  modal.innerHTML += '</div></div>' +
+      
+      '<div class="flex gap-2">' +
+        '<button onclick="closeUserProfileModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white">Cerrar</button>' +
+        '<button onclick="exportUserData()" class="flex-1 py-3 rounded-xl bg-primary-container text-white">Exportar Datos</button>' +
+      '</div>' +
+    '</div>';
+  
+  document.body.appendChild(modal);
+}
+
+function closeUserProfileModal() {
+  var modal = document.getElementById('userProfileModal');
+  if (modal) modal.remove();
+}
+
+function exportUserData() {
+  if (window.UserLearning) {
+    var data = window.UserLearning.exportData();
+    var json = JSON.stringify(data, null, 2);
+    var blob = new Blob([json], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'keto_profile_' + new Date().toISOString().slice(0, 10) + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    window.showToast('Datos exportados', 2000);
+  }
+}
+
+function calculateAdvancedKetoScore(receta) {
+  if (window.KetoScoreCalculator) {
+    return window.KetoScoreCalculator.calculateRecipeScore(receta);
+  }
+  return null;
+}
+
 var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
 var today=new Date().toISOString().slice(0,10);
 var planFoodUnits={};
@@ -812,7 +1254,25 @@ var defaultFoods=[
 var mealNames={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snacks"};
 function getMealPlan(){var stored=safeParseJSON(localStorage.getItem("mealPlan_"+today), {});if(Object.keys(stored).length===0){stored={desayuno:[],almuerzo:[],cena:[],snacks:[]};localStorage.setItem("mealPlan_"+today,JSON.stringify(stored))}return stored}
 function saveMealPlan(plan){localStorage.setItem("mealPlan_"+today,JSON.stringify(plan))}
-function renderMealPlan(){var plan=getMealPlan(currentDay);var totalCal=0,totalProt=0,totalFat=0,totalCarbs=0,totalItems=0;var macros=JSON.parse(localStorage.getItem("keto_macros")||"{}");var targetCal=parseInt(macros.calories)||1800;var targetProt=parseInt(macros.protein)||160;var targetFat=parseInt(macros.fat)||150;var targetCarbs=parseInt(macros.carbs)||25;Object.keys(plan).forEach(function(meal){var container=document.getElementById(meal+"Items");if(!container)return;var mealCal=0;if(plan[meal].length===0){container.innerHTML='<p class="text-center text-on-surface-variant text-sm py-4">Sin alimentos. Toca "Agregar" para anadir.</p>'}else{container.innerHTML="";plan[meal].forEach(function(item,idx){var food=defaultFoods.find(function(f){return f.id===item.id})||item;var itemPort=parseFloat(item.portion)||100;var cal,prot,fat,carbs;if(item.isRecipe&&item.baseCalories){var basePort=parseFloat(item.basePortion)||100;var ratio=itemPort/basePort;cal=Math.round(item.baseCalories*ratio);prot=Math.round(item.baseProtein*ratio*10)/10;fat=Math.round(item.baseFat*ratio*10)/10;carbs=Math.round(item.baseCarbs*ratio*10)/10}else{var foodPort=parseFloat(food.portion)||100;var ratio=itemPort/foodPort;cal=Math.round((parseFloat(food.calories)||0)*ratio);prot=Math.round((parseFloat(food.protein)||0)*ratio*10)/10;fat=Math.round((parseFloat(food.fat)||0)*ratio*10)/10;carbs=Math.round((parseFloat(food.carbs)||0)*ratio*10)/10}mealCal+=cal;totalProt+=prot;totalFat+=fat;totalCarbs+=carbs;totalItems++;var html='<div class="flex items-center gap-3 bg-surface-container-low rounded-lg p-3">';html+='<div class="flex-1 min-w-0"><p class="font-medium text-white truncate">'+food.name+'</p><p class="text-xs text-on-surface-variant">'+itemPort+'g - '+cal.toLocaleString()+' kcal</p></div>';html+='<div class="flex items-center gap-1">';html+='<button onclick="changePortion(\''+meal+'\','+idx+',-10)" class="portion-btn w-11 h-11 rounded bg-surface-container-high text-white text-xs hover:bg-surface-container-highest">-</button>';html+='<span class="w-12 text-center text-xs">'+itemPort+'g</span>';html+='<button onclick="changePortion(\''+meal+'\','+idx+',10)" class="portion-btn w-11 h-11 rounded bg-surface-container-high text-white text-xs hover:bg-surface-container-highest">+</button>';html+='<button onclick="removeFromMeal(\''+meal+'\','+idx+')" class="w-11 h-11 rounded bg-error/20 text-error hover:bg-error/30 ml-2"><span class="material-symbols-outlined text-sm">delete</span></button>';html+='</div></div>';container.innerHTML+=html})}document.getElementById(meal+"Macros").textContent=mealCal.toLocaleString()+" kcal";totalCal+=mealCal});var calPct=targetCal>0?Math.round((totalCal/targetCal)*100):0;var protPct=targetProt>0?Math.round((totalProt/targetProt)*100):0;var fatPct=targetFat>0?Math.round((totalFat/targetFat)*100):0;var carbsPct=targetCarbs>0?Math.round((totalCarbs/targetCarbs)*100):0;document.getElementById("currentCal").textContent=totalCal.toLocaleString();document.getElementById("targetCal").textContent=targetCal.toLocaleString();document.getElementById("calorieBar").style.width=Math.min(calPct,100)+"%";document.getElementById("caloriePct").textContent=calPct+"%";document.getElementById("calorieRemaining").textContent="Restan: "+Math.max(0,targetCal-totalCal).toLocaleString()+" kcal";document.getElementById("currentProtein").textContent=Math.round(totalProt);document.getElementById("targetProtein").textContent=targetProt+"g";document.getElementById("proteinBar").style.width=Math.min(protPct,100)+"%";document.getElementById("proteinPct").textContent=protPct+"%";document.getElementById("proteinRemaining").textContent="Restan: "+Math.max(0,targetProt-totalProt).toFixed(0)+"g";document.getElementById("currentFat").textContent=Math.round(totalFat);document.getElementById("targetFat").textContent=targetFat+"g";document.getElementById("fatBar").style.width=Math.min(fatPct,100)+"%";document.getElementById("fatPct").textContent=fatPct+"%";document.getElementById("fatRemaining").textContent="Restan: "+Math.max(0,targetFat-totalFat).toFixed(0)+"g";document.getElementById("currentCarbs").textContent=Math.round(totalCarbs);document.getElementById("targetCarbs").textContent=targetCarbs+"g";document.getElementById("carbsBar").style.width=Math.min(carbsPct,100)+"%";document.getElementById("carbsPct").textContent=carbsPct+"%";document.getElementById("carbsRemaining").textContent="Restan: "+Math.max(0,targetCarbs-totalCarbs).toFixed(0)+"g";document.getElementById("mealCount").textContent=totalItems;var userData={proteinConsumed:totalProt};localStorage.setItem("userData",JSON.stringify(userData))}
+function renderMealPlan(){
+  try{
+    var plan=getMealPlan(currentDay);
+    if(!plan)return;
+    var totalCal=0,totalProt=0,totalFat=0,totalCarbs=0,totalItems=0;var macros=JSON.parse(localStorage.getItem("keto_macros")||"{}");var targetCal=parseInt(macros.calories)||1800;var targetProt=parseInt(macros.protein)||160;var targetFat=parseInt(macros.fat)||150;var targetCarbs=parseInt(macros.carbs)||25;
+    var meals=['desayuno','almuerzo','cena','snacks'];
+    meals.forEach(function(meal){var container=document.getElementById(meal+"Items");if(!container)return;
+      var mealPlan=plan[meal]||[];
+      if(mealPlan.length===0){
+        if(container)container.innerHTML='<p class="text-center text-on-surface-variant text-sm py-4">Sin alimentos. Toca "Agregar" para anadir.</p>';
+      }else{
+        if(container)container.innerHTML="";
+        mealPlan.forEach(function(item,idx){if(!item)return;var food=defaultFoods.find(function(f){return f.id===item.id})||item;var itemPort=parseFloat(item.portion)||100;var foodPort=parseFloat(food.portion)||100;var ratio=itemPort>0?itemPort/foodPort:1;var cal=Math.round((parseFloat(food.calories)||0)*ratio);if(container)container.innerHTML+='<div class="flex items-center gap-3 bg-surface-container-low rounded-lg p-3"><div class="flex-1 min-w-0"><p class="font-medium text-white truncate">'+(food.name||'?')+'</p><p class="text-xs text-on-surface-variant">'+itemPort+'g - '+cal+' kcal</p></div></div>'});
+      }
+    });
+    updateMealCardMacros();
+  }catch(e){console.log('[renderMealplan] Error:',e);}
+}
+
 function changePortion(meal,idx,delta){
 var sessionKey = 'autoPlanWarningMeal_' + currentDay;
 if (!sessionStorage.getItem(sessionKey)) {
@@ -823,9 +1283,9 @@ if (!sessionStorage.getItem(sessionKey)) {
 }
 executeChangePortion(meal, idx, delta);
 }
-function executeChangePortion(meal,idx,delta){var plan=getMealPlan(currentDay);var newPortion=Math.max(10,plan[meal][idx].portion+delta);plan[meal][idx].portion=newPortion;saveMealPlanForDate(currentDay,plan);renderMealPlan();initWeekSelector()}
+function executeChangePortion(meal,idx,delta){var plan=getMealPlan(currentDay);var newPortion=Math.max(10,plan[meal][idx].portion+delta);plan[meal][idx].portion=newPortion;saveMealPlanForDate(currentDay,plan);updateMealCardMacros();renderMealCardItems();initWeekSelector();initCalendar()}
 function removeFromMeal(meal,idx){var sessionKey = 'autoPlanWarningMeal_' + currentDay;if(!sessionStorage.getItem(sessionKey)){showAutoPlanWarning(function(){executeRemoveFromMeal(meal,idx)});return;}executeRemoveFromMeal(meal,idx)}
-function executeRemoveFromMeal(meal,idx){var plan=getMealPlan(currentDay);plan[meal].splice(idx,1);saveMealPlanForDate(currentDay,plan);renderMealPlan();initWeekSelector()}
+function executeRemoveFromMeal(meal,idx){var plan=getMealPlan(currentDay);plan[meal].splice(idx,1);saveMealPlanForDate(currentDay,plan);updateMealCardMacros();renderMealCardItems();initWeekSelector();initCalendar()}
 var currentFoods=[];
 var foodsLoaded = false;
 
@@ -992,6 +1452,22 @@ food=defaultFoods.find(function(f){return f.id===foodId});
 if(!food)return;
 document.getElementById("selectedFoodId").value=food.id;
 document.getElementById("portionFoodName").textContent=food.name;
+
+// Mostrar nivel de riesgo del alimento
+if(typeof KetoInspector !== 'undefined'){
+var inspeccion=KetoInspector.inspeccionarIngrediente(food.name, 100, 'g');
+if(inspeccion && inspeccion.requiere_advertencia){
+var altText=inspeccion.alternativas && inspeccion.alternativas.length > 0 
+? '<br>Alternativa: '+inspeccion.alternativas.join(', ') 
+: '';
+var warningHtml='<div class="mt-3 p-3 rounded-lg '+(inspeccion.nivel==='critico'?'bg-red-500/20 border border-red-500/50':'bg-yellow-500/20 border border-yellow-500/50')+'">';
+warningHtml+='<p class="text-sm '+(inspeccion.nivel==='critico'?'text-red-400':'text-yellow-400')+' font-bold">'+(inspeccion.nivel==='critico'?'🛑 ALTO RIESGO':'⚠️ RIESGO MODERADO')+'</p>';
+warningHtml+='<p class="text-xs text-white/70 mt-1">'+inspeccion.razon+'</p>';
+warningHtml+=altText;
+warningHtml+='</div>';
+document.getElementById("portionFoodName").innerHTML=food.name+warningHtml;
+}
+}
 var units=food.units||[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}];
 planFoodUnits[foodId]=units;
 planCurrentUnit=0;
@@ -1102,8 +1578,10 @@ despensa[foodId].lastUpdated=new Date().toISOString();
 localStorage.setItem("despensa",JSON.stringify(despensa));
 }
 closePortionModal();
-renderMealPlan();
+updateMealCardMacros();
+renderMealCardItems();
 initWeekSelector();
+initCalendar();
 }
 
 function updateMonthlyMealStats(mealCount) {
@@ -1124,12 +1602,13 @@ document.getElementById("stockModal").classList.add("hidden");
 document.getElementById("stockModal").classList.remove("flex");
 pendingAdd={meal:null,foodId:null,totalGrams:0};
 }
-function copyPlan(){var plan=getMealPlan(currentDay);var yesterday=new Date(currentDay);yesterday.setDate(yesterday.getDate()-1);var yesterdayKey=yesterday.toISOString().slice(0,10);var yesterdayPlan=getMealPlan(yesterdayKey);if(yesterdayPlan.desayuno.length>0||yesterdayPlan.almuerzo.length>0||yesterdayPlan.cena.length>0||yesterdayPlan.snacks.length>0){saveMealPlanForDate(currentDay,yesterdayPlan);renderMealPlan();window.showToast("Plan copiado de ayer!", 3000, "warning")}else{window.showToast("No hay plan de ayer para copiar", 3000, "warning")}}
-async function resetPlan(){if(!(await customConfirm("Reiniciar el plan del día seleccionado?"))return;var plan={desayuno:[],almuerzo:[],cena:[],snacks:[]};saveMealPlanForDate(currentDay,plan);renderMealPlan();initWeekSelector()}
+function copyPlan(){var plan=getMealPlan(currentDay);var yesterday=new Date(currentDay);yesterday.setDate(yesterday.getDate()-1);var yesterdayKey=yesterday.toISOString().slice(0,10);var yesterdayPlan=getMealPlan(yesterdayKey);if(yesterdayPlan.desayuno.length>0||yesterdayPlan.almuerzo.length>0||yesterdayPlan.cena.length>0||yesterdayPlan.snacks.length>0){saveMealPlanForDate(currentDay,yesterdayPlan);updateMealCardMacros();renderMealCardItems();initWeekSelector();initCalendar();window.showToast("Plan copiado de ayer!", 3000, "warning")}else{window.showToast("No hay plan de ayer para copiar", 3000, "warning")}}
+async function resetPlan(){if(!(await customConfirm("Reiniciar el plan del día seleccionado?")))return;var plan={desayuno:[],almuerzo:[],cena:[],snacks:[]};saveMealPlanForDate(currentDay,plan);updateMealCardMacros();renderMealCardItems();initWeekSelector();initCalendar()}
 document.getElementById("tempQty").addEventListener("input",updatePlanPreview);
 var dateOptions={weekday:"long",day:"numeric",month:"long"};document.getElementById("dateDisplay").textContent=new Date().toLocaleDateString("es-ES",dateOptions);
-var currentDay=new Date().toISOString().slice(0,10);
-getFoods();renderMealPlan();initWeekSelector();
+var currentDay=window.currentDay||new Date().toISOString().slice(0,10);
+window.currentDay=currentDay;
+getFoods();updateMealCardMacros();renderMealCardItems();initWeekSelector();initCalendar();
 function initWeekSelector(){
 var weekDays=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
 var container=document.getElementById("weekSelector");
@@ -1188,32 +1667,21 @@ totalCal+=Math.round((parseFloat(food.calories)||0)*ratio);
 });
 return totalCal;
 }
-container.innerHTML=html;
-container.querySelectorAll(".day-btn").forEach(function(btn){
-btn.addEventListener("click",function(){
-selectDay(this.getAttribute("data-date"));
-});
-btn.addEventListener("mouseenter",function(){
-if(this.getAttribute("data-date")!==currentDay){
-this.style.background="#1e1c1c";
-this.style.color="#ffffff";
-}
-});
-btn.addEventListener("mouseleave",function(){
-if(this.getAttribute("data-date")!==currentDay){
-this.style.background="#181717";
-this.style.color="rgba(255,255,255,0.7)";
-}
-});
-});
-renderWeeklyOverview();
-}
+
 function selectDay(dateKey){
+if(!dateKey)return;
+var parsedDate=new Date(dateKey);
+if(isNaN(parsedDate.getTime()))return;
 currentDay=dateKey;
-var d=new Date(dateKey);
+window.currentDay=currentDay;
+var d=parsedDate;
 var dateDisplay=document.getElementById("dateDisplay");
+if(dateDisplay){
 dateDisplay.textContent=d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"});
-document.getElementById("weekSelector").querySelectorAll("button").forEach(function(btn){
+}
+var weekSelector=document.getElementById("weekSelector");
+if(weekSelector){
+weekSelector.querySelectorAll("button").forEach(function(btn){
 var isSelected=btn.getAttribute("data-date")===dateKey;
 if(isSelected){
 btn.style.background="#ff4d00";
@@ -1237,6 +1705,7 @@ lastDiv.style.color="rgba(255,255,255,0.4)";
 }
 }
 });
+}
 renderMealPlan();
 renderWeeklyOverview();
 }
@@ -1255,6 +1724,7 @@ initWeekSelector();
 }
 function renderWeeklyOverview(){
 var container=document.getElementById("weeklyStats");
+if(!container)return;
 var monday=new Date();monday.setDate(monday.getDate()-(monday.getDay()<=0?6:monday.getDay()-1));
 var html="";
 var weekDays=["L","M","M","J","V","S","D"];
@@ -1280,7 +1750,10 @@ html+='<div class="text-sm font-bold text-white">'+(totalCal>0?totalCal:"-")+'</
 html+='<div class="text-[9px] text-white/60">kcal</div></div>';
 }
 container.innerHTML=html;
-document.getElementById("weeklyOverview").classList.remove("hidden");
+var weeklyOverview=document.getElementById("weeklyOverview");
+if(weeklyOverview){
+weeklyOverview.classList.remove("hidden");
+}
 }
 function openWeeklyModal(){
 var container=document.getElementById("weeklyDayList");
@@ -1412,7 +1885,7 @@ weight:weight?parseFloat(weight):null,
 energy:energy,
 notes:notes,
 planCompleted:weekPlan?weekPlan.confirmed:false,
-averageMacros:weekPlan?weekPlan.averageMacros:null
+averageMacros:weekPlan?{calories:weekPlan.totalMacros.calories/7,protein:weekPlan.totalMacros.protein/7,fat:weekPlan.totalMacros.fat/7,carbs:weekPlan.totalMacros.carbs/7,netCarbs:weekPlan.totalMacros.netCarbs/7}:null
 };
 var progress=JSON.parse(localStorage.getItem("weeklyProgress")||"[]");
 progress.push(progressData);
@@ -1429,12 +1902,16 @@ initPlanStatus();
 showWeeklyPlanToast("Progreso guardado. ¡Nueva semana!");
 }
 
-async function confirmResetWeeklyPlan(){if(!(await customConfirm("¿Estás seguro de borrar todo el plan semanal? Esta acción no se puede deshacer."))return;
-clearWeeklyPlanData();
-clearWeeklyPlan();
-closeWeeklyModal();
-initPlanStatus();
-showWeeklyPlanToast("Plan semanal borrado");
+async function confirmResetWeeklyPlan(){
+  if(!(await customConfirm("¿Estás seguro de borrar todo el plan semanal? Esta acción no se puede deshacer.")))return;
+  clearWeeklyPlanData();
+  clearWeeklyPlan();
+  closeWeeklyModal();
+  renderMealPlan();
+  initWeekSelector();
+  initCalendar();
+  initPlanStatus();
+  window.showToast("Plan semanal borrado", 2000, "success");
 }
 
 function clearWeeklyPlanData(){
@@ -1476,6 +1953,7 @@ function confirmAutoPlanModification() {
 function selectDayFromModal(dateKey){
 closeWeeklyModal();
 currentDay=dateKey;
+window.currentDay=currentDay;
 var d=new Date(dateKey);
 document.getElementById("dateDisplay").textContent=d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"});
 initWeekSelector();
@@ -1620,7 +2098,8 @@ function setMealPlanMode(mode) {
   var autoBtn = document.getElementById('autoModeBtn');
   var autoPanel = document.getElementById('autoMealPanel');
   var generateBtn = document.getElementById('generateAutoBtn');
-  var summaryRes = document.getElementById('caloriePct').parentElement.parentElement.parentElement;
+  var summaryResEl = document.getElementById('caloriePct');
+  var summaryRes = summaryResEl ? summaryResEl.parentElement.parentElement.parentElement : null;
   
   if (mode === 'manual') {
     manualBtn.classList.add('bg-primary-container', 'text-white');
@@ -1658,7 +2137,19 @@ function generateAndApplyAutoPlan() {
       if (!result || !result.success) {
         var errorMsg = result.error || 'Error al generar plan';
         if (result.despensaVacia) {
-          summaryDiv.innerHTML = '<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-yellow-400 mb-2">inventory_2</span><p class="text-white font-medium mt-2">Tu despensa está vacía</p><p class="text-on-surface-variant text-sm mt-1">' + errorMsg + '</p><p class="text-xs text-on-surface-variant/70 mt-3">Ve a Compras para agregar alimentos</p></div>';
+          summaryDiv.innerHTML = '<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-yellow-400 mb-2">inventory_2</span><p class="text-white font-medium mt-2">Tu despensa esta vacia</p><p class="text-on-surface-variant text-sm mt-1">' + errorMsg + '</p><p class="text-xs text-on-surface-variant/70 mt-3">Ve a Compras para agregar alimentos</p></div>';
+        } else if (result.criticalOnly) {
+          var compras = (result.comprasPrioritarias || []).slice(0, 6).map(function(item) {
+            return '<li class="text-xs text-yellow-300">- ' + item.nombre + ' <span class="text-on-surface-variant">(' + item.motivo + ')</span></li>';
+          }).join('');
+          summaryDiv.innerHTML = '<div class="py-6 px-4 bg-red-500/10 border border-red-500/30 rounded-xl' +
+            '"><div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-red-400">warning</span><p class="text-white font-medium">Despensa con riesgo alto</p></div>' +
+            '<p class="text-on-surface-variant text-sm mb-3">' + errorMsg + '</p>' +
+            '<p class="text-xs text-yellow-300 mb-2">Compras prioritarias sugeridas:</p>' +
+            '<ul class="space-y-1">' + (compras || '<li class="text-xs text-on-surface-variant">Agrega vegetales de hoja, huevos y grasas saludables.</li>') + '</ul></div>';
+        } else if (result.rejectedByInspector) {
+          var descartadas = Object.keys(result.rejectedByInspector || {}).length;
+          summaryDiv.innerHTML = '<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-yellow-400 mb-2">rule</span><p class="text-white font-medium mt-2">Inspector Keto filtro recetas</p><p class="text-on-surface-variant text-sm mt-1">' + errorMsg + '</p><p class="text-xs text-on-surface-variant/70 mt-2">Recetas excluidas: ' + descartadas + ' | Umbral: > ' + (result.ketoThreshold || 70) + '</p></div>';
         } else {
           summaryDiv.innerHTML = '<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-on-surface-variant/70 mb-2">menu_book</span><p class="text-on-surface-variant">' + errorMsg + '</p></div>';
         }
@@ -1745,7 +2236,10 @@ function applyGeneratedPlan() {
   sessionStorage.setItem(sessionKey, 'true');
   
   showToast('Plan automático aplicado');
-  renderMealPlan();
+  updateMealCardMacros();
+  renderMealCardItems();
+  initWeekSelector();
+  initCalendar();
   setMealPlanMode('manual');
 }
 
@@ -2284,7 +2778,7 @@ function initPlanStatus() {
         '</div>' +
         '<div class="flex-1">' +
           '<p class="font-bold text-white">Plan Semanal Activo</p>' +
-          '<p class="text-xs text-on-surface-variant">Generado el ' + generatedDate + ' - ' + weekPlan.averageMacros.calories + ' kcal/dia promedio</p>' +
+          '<p class="text-xs text-on-surface-variant">Generado el ' + generatedDate + ' - ' + (weekPlan.totalMacros.calories / 7).toFixed(0) + ' kcal/dia promedio</p>' +
         '</div>' +
         '<button onclick="openWeeklyPlanPreview()" class="px-4 py-2 rounded-lg bg-green-500/20 text-green-400 text-xs font-bold hover:bg-green-500/30 transition-all">Ver Plan</button>' +
       '</div>';
@@ -2308,141 +2802,6 @@ function checkExistingWeeklyPlan() {
   if (weekPlan && btnVer) {
     btnVer.classList.remove('hidden');
   }
-}
-
-// ==================== SEMANAL PLAN GENERATOR UI ====================
-
-function openWeeklyPlanGenerator() {
-  var modal = document.getElementById('weeklyPlanGeneratorModal');
-  if (!modal) {
-    modal = document.createElement('div');
-    modal.id = 'weeklyPlanGeneratorModal';
-    modal.className = 'fixed inset-0 z-[80] hidden';
-    modal.innerHTML = getWeeklyPlanGeneratorHTML();
-    document.body.appendChild(modal);
-  }
-  modal.classList.remove('hidden');
-  modal.classList.add('flex');
-  
-  loadProfileSummary();
-}
-
-function getWeeklyPlanGeneratorHTML() {
-  return '<div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeWeeklyPlanGenerator()"></div>' +
-    '<div class="relative ma-w-4xl w-full h-full md:h-auto md:max-w-4xl md:max-h-[90vh] mx-auto mt-0 md:mt-10 bg-surface-container rounded-none md:rounded-2xl overflow-hidden flex flex-col">' +
-      '<div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/10">' +
-        '<div class="flex items-center gap-3">' +
-          '<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-container to-secondary flex items-center justify-center">' +
-            '<span class="material-symbols-outlined text-white">auto_awesome</span>' +
-          '</div>' +
-          '<div>' +
-            '<h2 class="text-lg font-headline font-bold text-white">Generar Plan Semanal</h2>' +
-            '<p class="text-xs text-on-surface-variant">Basado en tu perfil y preferencias</p>' +
-          '</div>' +
-        '</div>' +
-        '<button onclick="closeWeeklyPlanGenerator()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">' +
-          '<span class="material-symbols-outlined text-lg">close</span>' +
-        '</button>' +
-      '</div>' +
-      '<div class="flex-1 overflow-y-auto p-4" id="weeklyPlanGeneratorContent">' +
-        '<div class="space-y-4">' +
-          '<div class="bg-surface-container-high rounded-xl p-4">' +
-            '<h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-sm">person</span>Tu Perfil Objetivo</h3>' +
-            '<div class="grid grid-cols-4 gap-3 text-center" id="profileSummary"></div>' +
-          '</div>' +
-          '<div class="bg-surface-container-high rounded-xl p-4">' +
-            '<h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-sm">restaurant</span>Ingredientes Disponibles</h3>' +
-            '<p class="text-xs text-on-surface-variant" id="pantryStatus">Verificando despensa...</p>' +
-          '</div>' +
-          '<div class="bg-surface-container-high rounded-xl p-4">' +
-            '<h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-yellow-400 text-sm">info</span>¿Qué incluye el plan?</h3>' +
-            '<ul class="text-xs text-on-surface-variant space-y-2">' +
-              '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-sm">check_circle</span> 7 días completos de comidas (desayuno, almuerzo, cena, snacks)</li>' +
-              '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-sm">check_circle</span> Recetas detalladas con preparación paso a paso</li>' +
-              '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-sm">check_circle</span> Lista de compras personalizada</li>' +
-              '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-sm">check_circle</span> Macros balanceados según tu objetivo</li>' +
-            '</ul>' +
-          '</div>' +
-        '</div>' +
-      '</div>' +
-      '<div class="p-4 bg-surface-container-high border-t border-white/10">' +
-        '<button onclick="generateWeeklyPlanAI()" class="w-full py-3 rounded-xl bg-gradient-to-r from-primary-container to-secondary text-white font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2">' +
-          '<span class="material-symbols-outlined">auto_awesome</span>Generar Plan con IA' +
-        '</button>' +
-      '</div>' +
-    '</div>';
-}
-
-function closeWeeklyPlanGenerator() {
-  var modal = document.getElementById('weeklyPlanGeneratorModal');
-  if (modal) {
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-  }
-}
-
-function loadProfileSummary() {
-  // Read macros from keto_macros
-  var macros = {};
-  try { macros = JSON.parse(localStorage.getItem('keto_macros') || '{}'); } catch(e) { macros = {}; }
-  
-  var profile = {
-    calories: macros.calories || 1800,
-    protein: macros.protein || 150,
-    fat: macros.fat || 140,
-    netCarbs: macros.carbs || 25
-  };
-  
-  var container = document.getElementById('profileSummary');
-  if (container) {
-    container.innerHTML = 
-      '<div><p class="text-[10px] text-on-surface-variant uppercase">Calorías</p><p class="font-bold text-yellow-400">' + profile.calories + '</p></div>' +
-      '<div><p class="text-[10px] text-on-surface-variant uppercase">Proteína</p><p class="font-bold text-orange-400">' + profile.protein + 'g</p></div>' +
-      '<div><p class="text-[10px] text-on-surface-variant uppercase">Grasa</p><p class="font-bold text-yellow-300">' + profile.fat + 'g</p></div>' +
-      '<div><p class="text-[10px] text-on-surface-variant uppercase">Carbos Net</p><p class="font-bold text-cyan-400">' + profile.netCarbs + 'g</p></div>';
-  }
-  
-  var pantryStatus = document.getElementById('pantryStatus');
-  if (pantryStatus) {
-    var pantry = typeof getPantry === 'function' ? getPantry() : {};
-    var count = Object.keys(pantry).filter(function(k) { return pantry[k] && pantry[k].stock > 0; }).length;
-    pantryStatus.innerHTML = count > 0 
-      ? '<span class="text-green-400">' + count + ' alimentos en tu despensa</span>. Se generará lista de compras para lo que falte.'
-      : '<span class="text-yellow-400">Tu despensa está vacía</span>. Se generará lista de compras completa.';
-  }
-}
-
-function generateWeeklyPlanAI() {
-  closeWeeklyPlanGenerator();
-  
-  var loadingModal = document.getElementById('weeklyPlanLoadingModal');
-  if (!loadingModal) {
-    loadingModal = document.createElement('div');
-    loadingModal.id = 'weeklyPlanLoadingModal';
-    loadingModal.className = 'fixed inset-0 z-[90] flex items-center justify-center bg-black/80 backdrop-blur-sm';
-    loadingModal.innerHTML = '<div class="text-center">' +
-      '<div class="w-16 h-16 mx-auto mb-4 rounded-full border-4 border-primary-container border-t-transparent animate-spin"></div>' +
-      '<p class="text-white font-headline font-bold">Generando tu plan semanal...</p>' +
-      '<p class="text-on-surface-variant text-sm mt-1">Analizando recetas y calculando macros</p>' +
-    '</div>';
-    document.body.appendChild(loadingModal);
-  }
-  loadingModal.classList.remove('hidden');
-  
-  setTimeout(function() {
-    var weekPlan = typeof generateWeeklyPlan === 'function' ? generateWeeklyPlan() : null;
-    
-    loadingModal.classList.add('hidden');
-    
-    if (weekPlan) {
-      if (typeof saveWeeklyPlan === 'function') {
-        saveWeeklyPlan(weekPlan);
-      }
-      openWeeklyPlanPreview(weekPlan);
-    } else {
-      window.showToast('Error al generar el plan. Por favor intenta de nuevo.', 3000, "warning");
-    }
-  }, 1500);
 }
 
 function openWeeklyPlanPreview(weekPlan) {
@@ -2482,7 +2841,7 @@ function getWeeklyPlanPreviewHTML(weekPlan) {
           '</div>' +
           '<div>' +
             '<h2 class="text-lg font-headline font-bold text-white">Tu Plan Semanal</h2>' +
-            '<p class="text-xs text-on-surface-variant">Promedio diario: <span class="text-yellow-400">' + weekPlan.averageMacros.calories + ' kcal</span></p>' +
+            '<p class="text-xs text-on-surface-variant">Promedio diario: <span class="text-yellow-400">' + (weekPlan.totalMacros.calories / 7).toFixed(0) + ' kcal</span></p>' +
           '</div>' +
         '</div>' +
         '<div class="flex items-center gap-2">' +
@@ -2495,6 +2854,21 @@ function getWeeklyPlanPreviewHTML(weekPlan) {
         '</div>' +
       '</div>' +
       '<div class="flex-1 overflow-y-auto p-4 space-y-4" id="weeklyPlanContent">';
+  
+  // Banner del inspector - siempre mostrar
+  var inspectorIssues = weekPlan.inspectorAnalysis ? weekPlan.inspectorAnalysis.issuesFound : 0;
+  var inspectorClass = inspectorIssues > 0 ? 'bg-red-500/20 border-red-500/30' : 'bg-green-500/20 border-green-500/30';
+  var inspectorText = inspectorIssues > 0 ? 'text-red-400' : 'text-green-400';
+  var inspectorIcon = inspectorIssues > 0 ? 'warning' : 'check_circle';
+  
+  html += '<div class="' + inspectorClass + ' border rounded-xl p-3 mb-3">' +
+    '<div class="flex items-center gap-2 mb-2">' +
+      '<span class="material-symbols-outlined ' + inspectorText + '">' + inspectorIcon + '</span>' +
+      '<span class="' + inspectorText + ' font-bold text-sm">Inspector Keto</span>' +
+    '</div>' +
+    '<p class="text-xs text-on-surface-variant mb-2">' + inspectorIssues + ' recetas con alertas (revisa el detalle)</p>' +
+    '<button onclick="openPlanInspectorReview()" class="text-xs text-primary-container hover:text-white">Ver análisis completo →</button>' +
+  '</div>';
   
   Object.keys(weekPlan.days).forEach(function(dateKey) {
     var day = weekPlan.days[dateKey];
@@ -2615,6 +2989,7 @@ function getWeeklyPlanPreviewHTML(weekPlan) {
   return html;
 }
 
+
 function closeWeeklyPlanPreview() {
   var modal = document.getElementById('weeklyPlanPreviewModal');
   if (modal) {
@@ -2704,14 +3079,26 @@ function confirmShoppingAndApplyPlan() {
   var weekPlan = typeof loadWeeklyPlan === 'function' ? loadWeeklyPlan() : null;
   if (!weekPlan) return;
   
-  var pantry = typeof getPantry === 'function' ? getPantry() : {};
-  var shoppingList = typeof calculateShoppingList === 'function' 
-    ? calculateShoppingList(weekPlan, pantry) 
-    : weekPlan.shoppingList;
+  var despensa = getDespensa();
+  var shoppingList = weekPlan.shoppingList || {};
   
-  if (typeof addShoppingToPantry === 'function') {
-    addShoppingToPantry(shoppingList);
-  }
+  Object.keys(shoppingList).forEach(function(foodId) {
+    var item = shoppingList[foodId];
+    var quantity = item.toBuy || item.quantity || 0;
+    if (quantity > 0) {
+      despensa[foodId] = {
+        name: item.name,
+        stock: quantity,
+        unit: item.unit || 'g',
+        category: item.category || 'comprado',
+        addedAt: new Date().toISOString(),
+        macros: item.macros || {}
+      };
+    }
+  });
+  
+  localStorage.setItem('despensa', JSON.stringify(despensa));
+  console.log('[confirmShoppingAndApplyPlan] Agregados a despensa:', Object.keys(despensa).length, 'ingredientes');
   
   weekPlan.confirmed = true;
   weekPlan.confirmedAt = new Date().toISOString();
@@ -2719,6 +3106,9 @@ function confirmShoppingAndApplyPlan() {
   if (typeof saveWeeklyPlan === 'function') {
     saveWeeklyPlan(weekPlan);
   }
+  
+  // Asignar plan semanal a cada día
+  assignWeeklyPlanToDays(weekPlan);
   
   closeShoppingConfirmation();
   closeWeeklyPlanPreview();
@@ -2735,8 +3125,8 @@ function confirmShoppingAndApplyPlan() {
     '<div class="bg-surface-container-high rounded-xl p-4 mb-6 text-left">' +
       '<p class="text-xs text-on-surface-variant mb-2">Resumen:</p>' +
       '<div class="grid grid-cols-2 gap-3 text-center">' +
-        '<div><p class="text-2xl font-bold text-yellow-400">' + weekPlan.averageMacros.calories + '</p><p class="text-xs text-on-surface-variant">kcal/dia</p></div>' +
-        '<div><p class="text-2xl font-bold text-cyan-400">' + weekPlan.averageMacros.netCarbs + 'g</p><p class="text-xs text-on-surface-variant">carbos netos</p></div>' +
+        '<div><p class="text-2xl font-bold text-yellow-400">' + (weekPlan.totalMacros.calories / 7).toFixed(0) + '</p><p class="text-xs text-on-surface-variant">kcal/dia</p></div>' +
+        '<div><p class="text-2xl font-bold text-cyan-400">' + (weekPlan.totalMacros.netCarbs / 7).toFixed(0) + 'g</p><p class="text-xs text-on-surface-variant">carbos netos</p></div>' +
       '</div>' +
     '</div>' +
     '<p class="text-sm text-on-surface-variant">El plan estara visible en tu calendario diario.</p>' +
@@ -3048,6 +3438,295 @@ function closeRecipeDetail() {
     modal.classList.remove('flex');
   }
 }
+
+// ==================== AI RECIPE GENERATOR ====================
+
+function openAIRecipeGenerator() {
+  var modal = document.getElementById('aiRecipeModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'aiRecipeModal';
+    modal.className = 'fixed inset-0 z-[85] hidden';
+    modal.innerHTML = getAIRecipeGeneratorHTML();
+    document.body.appendChild(modal);
+  }
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+function getAIRecipeGeneratorHTML() {
+  return '<div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeAIRecipeGenerator()"></div>' +
+    '<div class="relative ma-w-4xl w-full h-full md:h-auto md:max-w-2xl md:max-h-[90vh] mx-auto mt-0 md:mt-10 bg-surface-container rounded-none md:rounded-2xl overflow-hidden flex flex-col">' +
+      '<div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/10">' +
+        '<div class="flex items-center gap-3">' +
+          '<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">' +
+            '<span class="material-symbols-outlined text-white">auto_awesome</span>' +
+          '</div>' +
+          '<div>' +
+            '<h2 class="text-lg font-headline font-bold text-white">Generar Receta con IA</h2>' +
+            '<p class="text-xs text-on-surface-variant">Recetas únicas basadas en tus preferencias</p>' +
+          '</div>' +
+        '</div>' +
+        '<button onclick="closeAIRecipeGenerator()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">' +
+          '<span class="material-symbols-outlined text-lg">close</span>' +
+        '</button>' +
+      '</div>' +
+      '<div class="flex-1 overflow-y-auto p-4 space-y-4" id="aiRecipeContent">' +
+        '<div class="bg-surface-container-high rounded-xl p-4">' +
+          '<h3 class="text-sm font-bold text-white mb-3">Tipo de Comida</h3>' +
+          '<div class="grid grid-cols-4 gap-2">' +
+            '<button onclick="selectMealTypeForAI(\'desayuno\')" id="aiTypeDesayuno" class="py-3 rounded-xl bg-surface-container text-white text-sm hover:bg-primary-container/30 transition-all border border-transparent">Desayuno</button>' +
+            '<button onclick="selectMealTypeForAI(\'almuerzo\')" id="aiTypeAlmuerzo" class="py-3 rounded-xl bg-surface-container text-white text-sm hover:bg-primary-container/30 transition-all border border-primary-container">Almuerzo</button>' +
+            '<button onclick="selectMealTypeForAI(\'cena\')" id="aiTypeCena" class="py-3 rounded-xl bg-surface-container text-white text-sm hover:bg-primary-container/30 transition-all border border-transparent">Cena</button>' +
+            '<button onclick="selectMealTypeForAI(\'snacks\')" id="aiTypeSnacks" class="py-3 rounded-xl bg-surface-container text-white text-sm hover:bg-primary-container/30 transition-all border border-transparent">Snacks</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="bg-surface-container-high rounded-xl p-4">' +
+          '<h3 class="text-sm font-bold text-white mb-3">Objetivos de Macros</h3>' +
+          '<div class="grid grid-cols-2 gap-3">' +
+            '<div><label class="text-xs text-on-surface-variant">Calorías</label><input type="number" id="aiRecipeCalories" value="400" class="w-full mt-1 px-3 py-2 rounded-lg bg-surface-container text-white border border-white/10 focus:border-primary-container"></div>' +
+            '<div><label class="text-xs text-on-surface-variant">Net Carbs (g)</label><input type="number" id="aiRecipeNetCarbs" value="8" class="w-full mt-1 px-3 py-2 rounded-lg bg-surface-container text-white border border-white/10 focus:border-primary-container"></div>' +
+            '<div><label class="text-xs text-on-surface-variant">Proteína (g)</label><input type="number" id="aiRecipeProtein" value="25" class="w-full mt-1 px-3 py-2 rounded-lg bg-surface-container text-white border border-white/10 focus:border-primary-container"></div>' +
+            '<div><label class="text-xs text-on-surface-variant">Grasa (g)</label><input type="number" id="aiRecipeFat" value="30" class="w-full mt-1 px-3 py-2 rounded-lg bg-surface-container text-white border border-white/10 focus:border-primary-container"></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="bg-surface-container-high rounded-xl p-4">' +
+          '<h3 class="text-sm font-bold text-white mb-3">Ingredientes a Evitar (opcional)</h3>' +
+          '<textarea id="aiRecipeAvoid" placeholder="Ej: cerdo, mariscos..." class="w-full px-3 py-2 rounded-lg bg-surface-container text-white border border-white/10 focus:border-primary-container resize-none h-20"></textarea>' +
+        '</div>' +
+        '<div id="aiRecipeResult" class="hidden"></div>' +
+      '</div>' +
+      '<div class="p-4 bg-surface-container-high border-t border-white/10">' +
+        '<button onclick="generateAIReccipe()" id="btnGenerateAIReccipe" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2">' +
+          '<span class="material-symbols-outlined">auto_awesome</span>Generar Receta' +
+        '</button>' +
+      '</div>' +
+    '</div>';
+}
+
+var selectedAIMealType = 'almuerzo';
+
+function selectMealTypeForAI(mealType) {
+  selectedAIMealType = mealType;
+  var types = ['desayuno', 'almuerzo', 'cena', 'snacks'];
+  types.forEach(function(t) {
+    var btn = document.getElementById('aiType' + t.charAt(0).toUpperCase() + t.slice(1));
+    if (btn) {
+      if (t === mealType) {
+        btn.classList.add('border-primary-container', 'bg-primary-container/30');
+        btn.classList.remove('border-transparent');
+      } else {
+        btn.classList.remove('border-primary-container', 'bg-primary-container/30');
+        btn.classList.add('border-transparent');
+      }
+    }
+  });
+}
+
+async function generateAIReccipe() {
+  var btn = document.getElementById('btnGenerateAIReccipe');
+  var resultDiv = document.getElementById('aiRecipeResult');
+  
+  if (!window.KetoAI) {
+    window.showToast('IA no disponible. Usa el generador normal.', 3000, 'warning');
+    return;
+  }
+  
+  var macros = {
+    calories: parseInt(document.getElementById('aiRecipeCalories').value) || 400,
+    netCarbs: parseInt(document.getElementById('aiRecipeNetCarbs').value) || 8,
+    protein: parseInt(document.getElementById('aiRecipeProtein').value) || 25,
+    fat: parseInt(document.getElementById('aiRecipeFat').value) || 30
+  };
+  
+  var evitar = document.getElementById('aiRecipeAvoid').value.split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s.length > 0; });
+  
+  btn.disabled = true;
+  btn.innerHTML = '<div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Generando...';
+  resultDiv.classList.add('hidden');
+  
+  try {
+    var receta = await window.KetoAI.generarRecetaKeto(selectedAIMealType, macros);
+    
+    if (receta) {
+      resultDiv.innerHTML = '<div class="bg-green-500/10 border border-green-500/30 rounded-xl p-4">' +
+        '<div class="flex items-center gap-2 mb-3">' +
+          '<span class="material-symbols-outlined text-green-400">check_circle</span>' +
+          '<h4 class="font-bold text-white">¡Receta Generada!</h4>' +
+        '</div>' +
+        '<div class="bg-surface-container rounded-lg p-3 mb-3">' +
+          '<h5 class="font-bold text-white text-lg">' + receta.nombre + '</h5>' +
+          '<div class="flex gap-3 text-xs mt-2 text-on-surface-variant">' +
+            '<span>Tiempo: ' + (receta.tiempoPrep || 20) + ' min</span>' +
+            '<span>Dificultad: ' + (receta.dificultad || 'fácil') + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="bg-surface-container rounded-lg p-3 mb-3">' +
+          '<h5 class="text-sm font-bold text-white mb-2">Ingredientes</h5>' +
+          '<ul class="text-sm text-white/80 space-y-1">';
+      
+      (receta.ingredientes || []).forEach(function(ing) {
+        resultDiv.innerHTML += '<li>• ' + (ing.cantidad || '') + ' ' + (ing.nombre || ing) + '</li>';
+      });
+      
+      resultDiv.innerHTML += '</ul></div>' +
+        '<div class="flex gap-2 mt-4">' +
+          '<button onclick="addGeneratedRecipeToPlan(' + JSON.stringify(receta).replace(/"/g, '&quot;') + ')" class="flex-1 py-2 rounded-xl bg-green-500 text-white font-bold text-sm">Agregar al Plan</button>' +
+          '<button onclick="closeAIRecipeGenerator()" class="flex-1 py-2 rounded-xl bg-surface-container text-white text-sm">Cerrar</button>' +
+        '</div>' +
+      '</div>';
+      resultDiv.classList.remove('hidden');
+    } else {
+      window.showToast('Error al generar receta', 3000, 'error');
+    }
+  } catch(e) {
+    console.error('[generateAIReccipe] Error:', e);
+    window.showToast('Error: ' + e.message, 3000, 'error');
+  }
+  
+  btn.disabled = false;
+  btn.innerHTML = '<span class="material-symbols-outlined">auto_awesome</span>Generar Receta';
+}
+
+function addGeneratedRecipeToPlan(receta) {
+  var plan = { desayuno: [], almuerzo: [], cena: [], snacks: [] };
+  var mealType = receta.mealType || 'almuerzo';
+  
+  plan[mealType] = [{
+    id: 'ai_' + Date.now(),
+    name: receta.nombre,
+    portion: receta.porciones || 1,
+    calories: receta.macrosPorcion?.calories || 400,
+    protein: receta.macrosPorcion?.protein || 25,
+    fat: receta.macrosPorcion?.fat || 30,
+    carbs: receta.macrosPorcion?.netCarbs || 8,
+    netCarbs: receta.macrosPorcion?.netCarbs || 8,
+    isRecipe: true,
+    isAIGenerated: true,
+    aiRecipeData: receta
+  }];
+  
+  saveMealPlanForDate(currentDay, plan);
+  closeAIRecipeGenerator();
+  renderMealPlan();
+  
+  window.showToast('Receta de IA agregada al plan', 3000, 'success');
+}
+
+function closeAIRecipeGenerator() {
+  var modal = document.getElementById('aiRecipeModal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+}
+
+// Override renderMealPlan para nuevas tarjetas
+function renderMealPlan(){
+    updateMealCardMacros();
+    renderMealCardItems();
+    initCalendar();
+}
+
+// Fix selectDay
+if (typeof selectDay === 'function') {
+  var originalSelectDay = selectDay;
+  selectDay = function(dateKey){
+    currentDay = dateKey;
+    window.currentDay = currentDay;
+    var d = new Date(dateKey);
+    var dateDisplay = document.getElementById("dateDisplay");
+    if(dateDisplay) {
+      dateDisplay.textContent = d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"});
+    }
+    updateMealCardMacros();
+    renderMealCardItems();
+    initCalendar();
+  };
+}
+
+// Fix copyPlan
+function copyPlan(){
+    var plan = getMealPlan(currentDay);
+    var yesterday = new Date(currentDay);
+    yesterday.setDate(yesterday.getDate()-1);
+    var yesterdayKey = yesterday.toISOString().slice(0,10);
+    var yesterdayPlan = getMealPlan(yesterdayKey);
+    
+    if(yesterdayPlan.desayuno.length > 0 || yesterdayPlan.almuerzo.length > 0 || yesterdayPlan.cena.length > 0 || yesterdayPlan.snacks.length > 0){
+        saveMealPlanForDate(currentDay, yesterdayPlan);
+        updateMealCardMacros();
+        renderMealCardItems();
+        initWeekSelector();
+        initCalendar();
+        if(typeof showToast === 'function') showToast("Plan copiado de ayer!", 3000, "success");
+    } else {
+        if(typeof showToast === 'function') showToast("No hay plan de ayer para copiar", 3000, "warning");
+    }
+}
+
+// Fix resetPlan  
+async function resetPlan(){
+    if(!confirm("¿Reiniciar el plan del día?")) return;
+    var plan = {desayuno:[], almuerzo:[], cena:[], snacks:[]};
+    saveMealPlanForDate(currentDay, plan);
+    updateMealCardMacros();
+    renderMealCardItems();
+    initWeekSelector();
+    initCalendar();
+    if(typeof showToast === 'function') showToast("Plan reiniciado", 2000);
+}
+
+// Open weekly modal
+function openWeeklyModal(){
+    var modal = document.getElementById('weeklyModal');
+    if(modal){
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        renderWeeklyModalContent();
+    }
+}
+
+function closeWeeklyModal(){
+    var modal = document.getElementById('weeklyModal');
+    if(modal){
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+function renderWeeklyModalContent(){
+    var container = document.getElementById('weeklyDayList');
+    if(!container) return;
+    
+    var today = new Date();
+    var dayOfWeek = today.getDay();
+    var monday = new Date(today);
+    monday.setDate(today.getDate() - (dayOfWeek <= 0 ? 6 : dayOfWeek - 1));
+    var weekDays = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+    
+    var html = '';
+    for(var i = 0; i < 7; i++){
+        var d = new Date(monday);
+        d.setDate(monday.getDate() + i);
+        var dateKey = d.toISOString().slice(0,10);
+        var isToday = dateKey === today.toISOString().slice(0,10);
+        var plan = getMealPlan(dateKey);
+        var itemCount = (plan.desayuno.length || 0) + (plan.almuerzo.length || 0) + (plan.cena.length || 0) + (plan.snacks.length || 0);
+        
+        html += '<div class="flex items-center justify-between p-3 rounded-xl ' + (isToday ? 'bg-primary-container/20' : 'bg-surface-container') + '">';
+        html += '<div>';
+        html += '<p class="text-sm font-medium text-white">' + (isToday ? 'Hoy - ' : '') + weekDays[i] + ' ' + d.getDate() + '</p>';
+        html += '<p class="text-xs ' + (itemCount > 0 ? 'text-green-400' : 'text-white/50') + '">' + itemCount + ' alimentos</p>';
+        html += '</div>';
+        html += '<button onclick="selectDay(\'' + dateKey + '\'); closeWeeklyModal();" class="px-3 py-1.5 rounded-lg bg-surface-container-high text-white text-xs">Ver</button>';
+        html += '</div>';
+    }
+    container.innerHTML = html;
+}
+
+// Initialize
+setMealPlanMode('manual');
 </script>
 
 <!-- FAB Group -->
@@ -3057,18 +3736,6 @@ function closeRecipeDetail() {
   </a>
 </div>
 
-<!-- BottomNavBar (Mobile) -->
-<nav class="md:hidden fixed bottom-0 left-0 w-full glass-card h-16 flex justify-around items-center z-50 px-0" style="background:rgba(24,23,23,0.95)">
-<a class="flex flex-col items-center text-white/60" href="index.html"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[10px]">Inicio</span></a>
-<a class="flex flex-col items-center text-white/60" href="perfil.html"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
-<a class="flex flex-col items-center text-white/60" href="alimentos.html"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
-<a class="flex flex-col items-center text-primary-container" href="plan.html"><span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">event_note</span><span class="text-[10px]">Plan</span></a>
-<a class="flex flex-col items-center text-white/60" href="compras.html"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
-<a class="flex flex-col items-center text-white/60" href="macros.html"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
-<a class="flex flex-col items-center text-white/60" href="checklist.html"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
-<a class="flex flex-col items-center text-white/60" href="entrenamientos.html"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
-<a class="flex flex-col items-center text-white/60" href="suplementos.html"><span class="material-symbols-outlined text-2xl">medication</span><span class="text-[10px]">Sup</span></a>
-</nav>
 <script>
 var _cp=window.location.pathname.split("/").pop()||"index.html";
 document.querySelectorAll(".sidebar-link").forEach(function(l){

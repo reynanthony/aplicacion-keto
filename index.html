@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html class="dark" lang="es">
 <head>
+<script>!function(){var d=localStorage.getItem("ketocore_onboarding_done"),g=localStorage.getItem("KetoCore_guest");if(!d&&!g)window.location.replace("welcome.html");}();</script>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
 <!-- PWA Manifest y meta tags para instalación -->
@@ -24,20 +25,9 @@
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0"></script>
 
-<!-- Verificar sesión antes de cargar la página -->
+<!-- Verificar sesión - se hace en supabase-client.js -->
 <script>
-window.SUPABASE_URL = 'https://lmbqzsonujwvqmfhjjgf.supabase.co';
-window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYnF6c29udWp3dnFtZmhqamdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQzMDAsImV4cCI6MjA4ODgzMDMwMH0.SBsTQCh844rtGx0wLNZaEGO8NDmAVZjUj1YiDkRSm1k';
-if (!window.supabase) {
-  window.supabase = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-}
-
-// Verificar sesión y redirigir
-window.supabase.auth.getSession().then(({ data }) => {
-  if (!data.session) {
-    window.location.href = 'welcome.html';
-  }
-});
+// La verificación de sesión se hace después de cargar supabase-client.js
 </script>
 
 <script>
@@ -574,8 +564,80 @@ Importar Backup
 <main class="main-content md:ml-64 pt-14 md:pt-24 px-4 md:px-6 pb-24 md:pb-12 min-h-screen transition-all duration-300">
 <div class="max-w-5xl mx-auto space-y-6">
 
+<!-- ========== COACH HERO (mobile-native) ========== -->
+<section class="px-4 pb-2 pt-1 md:hidden">
+  <!-- Greeting row -->
+  <div class="flex items-center justify-between mb-5">
+    <div>
+      <p id="coachDayPart" class="text-xs font-medium uppercase tracking-widest" style="color:rgba(255,255,255,0.4)">Buenos días</p>
+      <h1 id="coachUserName" class="text-2xl font-headline font-black text-white leading-tight">Campeón 👋</h1>
+    </div>
+    <div class="text-right">
+      <p class="text-[10px] uppercase tracking-wider" style="color:rgba(255,255,255,0.4)">Adherencia</p>
+      <p id="coachAdherence" class="text-2xl font-headline font-black" style="color:#ffb300">--%</p>
+    </div>
+  </div>
+
+  <!-- Health Score + Objective -->
+  <div class="flex items-center gap-4 mb-4">
+    <!-- Score ring -->
+    <div class="relative flex-shrink-0 w-24 h-24">
+      <svg class="w-full h-full -rotate-90" viewBox="0 0 96 96">
+        <circle cx="48" cy="48" r="40" fill="transparent" stroke="rgba(255,255,255,0.07)" stroke-width="8"/>
+        <circle id="coachScoreRing" cx="48" cy="48" r="40" fill="transparent" stroke="#ff4d00"
+          stroke-dasharray="251" stroke-dashoffset="251" stroke-linecap="round" stroke-width="8"
+          style="transition:stroke-dashoffset 1.1s ease,stroke 0.4s ease"/>
+      </svg>
+      <div class="absolute inset-0 flex flex-col items-center justify-center">
+        <p id="coachScoreNum" class="text-2xl font-headline font-black text-white leading-none">--</p>
+        <p class="text-[8px] uppercase tracking-wider" style="color:rgba(255,255,255,0.4)">Score</p>
+        <p id="coachScoreLabel" class="text-[9px] font-bold mt-0.5" style="color:#ffb300">--</p>
+      </div>
+    </div>
+    <!-- Objective + Progress -->
+    <div class="flex-1 space-y-2">
+      <div class="rounded-xl px-3 py-2.5" style="background:#181717">
+        <p class="text-[9px] uppercase tracking-wider mb-0.5" style="color:rgba(255,255,255,0.35)">Objetivo</p>
+        <p id="coachObjective" class="text-sm font-bold text-white truncate">--</p>
+      </div>
+      <div class="rounded-xl px-3 py-2.5" style="background:#181717">
+        <p class="text-[9px] uppercase tracking-wider mb-0.5" style="color:rgba(255,255,255,0.35)">Progreso</p>
+        <p id="coachProgress" class="text-sm font-bold truncate" style="color:#ff4d00">--</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next milestone (conditional) -->
+  <div id="coachMilestone" class="hidden mb-1">
+    <div class="rounded-xl p-3 flex items-center gap-3 border" style="background:rgba(255,179,0,0.06);border-color:rgba(255,179,0,0.2)">
+      <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(255,179,0,0.15)">
+        <span class="material-symbols-outlined text-base" style="color:#ffb300;font-variation-settings:'FILL' 1">emoji_events</span>
+      </div>
+      <div>
+        <p class="text-[9px] uppercase tracking-wider" style="color:rgba(255,255,255,0.4)">Próximo hito</p>
+        <p id="coachMilestoneText" class="text-sm font-bold text-white">--</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== DAILY PLAN CHECKLIST (mobile-native) ========== -->
+<section class="px-4 pb-4 md:hidden">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="text-sm font-headline font-bold text-white flex items-center gap-2">
+      <span class="material-symbols-outlined text-base" style="color:#ff4d00;font-variation-settings:'FILL' 1">task_alt</span>
+      Plan de Hoy
+    </h2>
+    <div class="flex items-center gap-2 rounded-full px-3 py-1" style="background:#181717">
+      <div id="planDots" class="flex gap-1"></div>
+      <span id="planCounter" class="text-xs font-bold" style="color:rgba(255,255,255,0.5)">0/6</span>
+    </div>
+  </div>
+  <div id="dailyPlanList" class="space-y-2"></div>
+</section>
+
 <!-- ========== SECTION 1: HERO - PROGRESS & WEIGHT ========== -->
-<section class="glass-card rounded-2xl p-6 relative overflow-hidden">
+<section class="glass-card rounded-2xl p-6 relative overflow-hidden md:block hidden">
 <!-- Background decoration -->
 <div class="absolute top-0 right-0 w-64 h-64 bg-primary-container/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
 <div class="absolute bottom-0 left-0 w-48 h-48 bg-secondary/5 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2"></div>
@@ -782,7 +844,7 @@ Ver detalles
 </section>
 
 <!-- ========== SECTION 4: WEIGHT TREND ========== -->
-<section class="glass-card rounded-2xl p-6">
+<section class="glass-card rounded-2xl p-6 md:block hidden">
 <div class="flex items-center justify-between mb-4">
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 rounded-lg bg-secondary/20 flex items-center justify-center">
@@ -833,7 +895,7 @@ Ver plan
 </section>
 
 <!-- ========== SECTION 6: ACHIEVEMENTS & STREAKS ========== -->
-<section class="glass-card rounded-2xl p-6">
+<section class="glass-card rounded-2xl p-6 md:block hidden">
 <div class="flex items-center justify-between mb-4">
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
@@ -883,6 +945,20 @@ Ver plan
 <!-- Achievements will be populated by JS -->
 </div>
 </div>
+</section>
+
+<!-- Quick-access to Progreso (mobile only) -->
+<section class="md:hidden">
+  <a href="progreso.html" class="flex items-center gap-4 rounded-2xl p-4 transition-all active:scale-95" style="background:rgba(255,77,0,0.07);border:1px solid rgba(255,77,0,0.15)">
+    <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(255,77,0,0.15)">
+      <span class="material-symbols-outlined" style="color:#ff4d00;font-variation-settings:'FILL' 1">trending_up</span>
+    </div>
+    <div class="flex-1">
+      <p class="text-white font-bold text-sm">Ver mi progreso</p>
+      <p class="text-on-surface-variant text-xs">Peso, logros y adherencia</p>
+    </div>
+    <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+  </a>
 </section>
 
 <!-- ========== SECTION 7: QUICK ACTIONS (Links) ========== -->
@@ -1082,18 +1158,40 @@ Ver plan completo
 </div>
 </div>
 
-<!-- BottomNavBar (Mobile) - 5 items optimizado -->
-<nav id="bottomNav" class="md:hidden fixed bottom-0 left-0 w-full h-20 flex justify-around items-end pb-3 z-50 px-2" style="background:rgba(24,23,23,0.98);border-top:1px solid rgba(255,77,0,0.3)" role="navigation" aria-label="Navegación principal">
-<a href="perfil.html" class="flex flex-col items-center text-white/60 hover:text-white transition-all" aria-label="Perfil"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px] mt-1">Perfil</span></a>
-<a href="macros.html" class="flex flex-col items-center text-white/60 hover:text-white transition-all" aria-label="Macros"><span class="material-symbols-outlined text-2xl">monitoring</span><span class="text-[10px] mt-1">Macros</span></a>
-<a href="index.html" class="flex flex-col items-center -mt-5" aria-label="Inicio" aria-current="page">
-<div class="w-12 h-12 rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);box-shadow:0 0 20px rgba(255,77,0,0.6),0 0 40px rgba(255,77,0,0.3)">
-<span class="material-symbols-outlined text-white text-2xl" style="font-variation-settings:'FILL' 1">cottage</span>
-</div>
-<span class="text-[10px] mt-1 text-primary-container font-bold">Inicio</span>
-</a>
-<a href="compras.html" class="flex flex-col items-center text-white/60 hover:text-white transition-all" aria-label="Despensa"><span class="material-symbols-outlined text-2xl">shopping_basket</span><span class="text-[10px] mt-1">Despensa</span></a>
-<a href="entrenamientos.html" class="flex flex-col items-center text-white/60 hover:text-white transition-all" aria-label="Entrenamiento"><span class="material-symbols-outlined text-2xl">sports_gymnastics</span><span class="text-[10px] mt-1">Gym</span></a>
+<!-- BottomNavBar (Mobile) - 5 tabs: coach navigation -->
+<nav id="bottomNav" class="md:hidden fixed bottom-0 left-0 right-0 z-50" style="background:rgba(17,16,16,0.97);border-top:1px solid rgba(255,255,255,0.06);padding-bottom:env(safe-area-inset-bottom,0px)" role="navigation" aria-label="Navegación principal">
+  <div class="flex justify-around items-center h-16 px-1">
+    <a href="index.html" class="flex flex-col items-center gap-0.5 flex-1 py-2 transition-all" style="color:#ff4d00" aria-current="page">
+      <span class="w-10 h-6 rounded-full flex items-center justify-center" style="background:rgba(255,77,0,0.15)">
+        <span class="material-symbols-outlined text-xl" style="font-variation-settings:'FILL' 1">cottage</span>
+      </span>
+      <span class="text-[10px] font-bold">Inicio</span>
+    </a>
+    <a href="plan.html" class="flex flex-col items-center gap-0.5 flex-1 py-2 transition-all" style="color:rgba(255,255,255,0.5)">
+      <span class="w-10 h-6 flex items-center justify-center">
+        <span class="material-symbols-outlined text-xl">calendar_month</span>
+      </span>
+      <span class="text-[10px]">Plan</span>
+    </a>
+    <a href="comunidad.html" class="flex flex-col items-center gap-0.5 flex-1 py-2 transition-all" style="color:rgba(255,255,255,0.5)">
+      <span class="w-10 h-6 flex items-center justify-center">
+        <span class="material-symbols-outlined text-xl">people</span>
+      </span>
+      <span class="text-[10px]">Comunidad</span>
+    </a>
+    <a href="progreso.html" class="flex flex-col items-center gap-0.5 flex-1 py-2 transition-all" style="color:rgba(255,255,255,0.5)">
+      <span class="w-10 h-6 flex items-center justify-center">
+        <span class="material-symbols-outlined text-xl">trending_up</span>
+      </span>
+      <span class="text-[10px]">Progreso</span>
+    </a>
+    <a href="perfil.html" class="flex flex-col items-center gap-0.5 flex-1 py-2 transition-all" style="color:rgba(255,255,255,0.5)">
+      <span class="w-10 h-6 flex items-center justify-center">
+        <span class="material-symbols-outlined text-xl">person</span>
+      </span>
+      <span class="text-[10px]">Perfil</span>
+    </a>
+  </div>
 </nav>
 
 <!-- Toast Container -->
@@ -1114,9 +1212,15 @@ Ver plan completo
 </div>
 
 <script src="utils.js"></script>
+<script src="modules/health-score.js"></script>
+<script src="modules/recommendation-engine.js"></script>
 <link rel="stylesheet" href="styles/animations.css">
 <link rel="stylesheet" href="styles/mobile-enhancements.css">
 <script>
+// Desktop users → landing page (not standalone/installed PWA)
+if (window.innerWidth >= 1024 && !window.matchMedia('(display-mode: standalone)').matches) {
+  window.location.replace('landing.html');
+}
 if (!localStorage.getItem('ketocore_onboarding_done')) {
   window.location.href = 'onboarding.html';
 }
@@ -2607,7 +2711,8 @@ function confirmGlobalReset() {
   });
 })();
 </script>
-<script src="recipe-suggestions.js">
+</script>
+<script src="data/recipe-details.js"></script>
 
 function quickAddFood() {
   const modal = document.getElementById('quickAddBottomSheet');
@@ -2794,6 +2899,129 @@ if(localStorage.getItem("sidebarCollapsed")==="true"){
   if(_mc)_mc.style.marginLeft="72px";
   var _st=document.getElementById("sidebarToggle");
   if(_st)_st.style.left="72px";
+}
+</script>
+
+<!-- ==================== COACH DASHBOARD JS ==================== -->
+<script>
+function initCoachDashboard() {
+  if (typeof RecommendationEngine === 'undefined' || typeof HealthScoreEngine === 'undefined') return;
+
+  var plan = RecommendationEngine.generate();
+  var hs   = HealthScoreEngine.calculate();
+
+  // Greeting
+  var dayPart = document.getElementById('coachDayPart');
+  var nameEl  = document.getElementById('coachUserName');
+  if (dayPart) dayPart.textContent = plan.greeting.saludo;
+  if (nameEl)  nameEl.textContent  = plan.greeting.nombre + ' 👋';
+
+  // Adherence
+  var adh = document.getElementById('coachAdherence');
+  if (adh) adh.textContent = plan.adherence + '%';
+
+  // Health Score ring
+  var ring   = document.getElementById('coachScoreRing');
+  var numEl  = document.getElementById('coachScoreNum');
+  var lblEl  = document.getElementById('coachScoreLabel');
+  if (ring)  { var c=251; ring.style.strokeDashoffset = c-(c*hs.total/100); ring.style.stroke = hs.color; }
+  if (numEl) numEl.textContent = hs.total;
+  if (lblEl) { lblEl.textContent = hs.label; lblEl.style.color = hs.color; }
+
+  // Objective
+  var objEl = document.getElementById('coachObjective');
+  if (objEl) objEl.textContent = plan.objective;
+
+  // Weight Progress
+  var progEl = document.getElementById('coachProgress');
+  if (progEl) {
+    if (plan.weightProgress) {
+      progEl.textContent = plan.weightProgress.current + ' → ' + plan.weightProgress.goal + ' kg (' + plan.weightProgress.percent + '%)';
+    } else {
+      progEl.textContent = 'Registra tu peso';
+      progEl.style.color = 'rgba(255,255,255,0.4)';
+    }
+  }
+
+  // Next Milestone
+  var milSection = document.getElementById('coachMilestone');
+  var milText    = document.getElementById('coachMilestoneText');
+  if (milSection && plan.nextMilestone) {
+    milSection.classList.remove('hidden');
+    if (milText) milText.textContent = 'Faltan ' + plan.nextMilestone.needed + ' kg para tu siguiente meta';
+  }
+
+  // Daily Plan Checklist
+  renderDailyPlan(plan);
+}
+
+function renderDailyPlan(plan) {
+  var list    = document.getElementById('dailyPlanList');
+  var counter = document.getElementById('planCounter');
+  var dots    = document.getElementById('planDots');
+  if (!list) return;
+
+  if (counter) counter.textContent = plan.completedActions + '/' + plan.totalActions;
+  if (dots) {
+    dots.innerHTML = plan.actions.map(function(a) {
+      return '<span style="width:6px;height:6px;border-radius:50%;background:' + (a.done ? '#4ade80' : 'rgba(255,255,255,0.15)') + ';display:inline-block"></span>';
+    }).join('');
+  }
+
+  list.innerHTML = plan.actions.map(function(action) {
+    var borderColor = action.done ? 'rgba(74,222,128,0.25)' : 'rgba(255,255,255,0.06)';
+    var bg          = action.done ? 'rgba(74,222,128,0.04)' : '#181717';
+    var labelStyle  = action.done ? 'color:rgba(255,255,255,0.4);text-decoration:line-through' : 'color:#fff';
+    var checkBg     = action.done ? '#22c55e' : 'transparent';
+    var checkBorder = action.done ? 'none' : '1.5px solid rgba(255,255,255,0.15)';
+    var progressBar = (action.progress > 0 && !action.done)
+      ? '<div style="margin-top:5px;height:2px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden">' +
+          '<div style="height:100%;width:' + action.progress + '%;background:' + action.iconColor + '60;border-radius:2px;transition:width 0.4s ease"></div>' +
+        '</div>'
+      : '';
+    var clickHandler = action.action
+      ? 'onclick="' + action.action + '"'
+      : (action.href ? 'onclick="location.href=\'' + action.href + '\'"' : '');
+
+    return '<div ' + clickHandler + ' style="display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:14px;border:1px solid ' + borderColor + ';background:' + bg + ';cursor:pointer;transition:all 0.15s;-webkit-tap-highlight-color:transparent">' +
+      '<div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:' + action.iconColor + '18">' +
+        '<span class="material-symbols-outlined" style="font-size:18px;color:' + action.iconColor + '">' + action.icon + '</span>' +
+      '</div>' +
+      '<div style="flex:1;min-width:0">' +
+        '<p style="font-size:13px;font-weight:600;' + labelStyle + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escapeHtml(action.label) + '</p>' +
+        '<p style="font-size:11px;color:rgba(255,255,255,0.35);margin-top:1px">' + escapeHtml(action.detail) + '</p>' +
+        progressBar +
+      '</div>' +
+      '<button onclick="event.stopPropagation();togglePlanAction(\'' + action.id + '\',' + (!action.done) + ')" ' +
+        'style="width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:' + checkBg + ';border:' + checkBorder + ';cursor:pointer;transition:all 0.2s">' +
+        (action.done ? '<span class="material-symbols-outlined" style="font-size:14px;color:#fff">check</span>' : '') +
+      '</button>' +
+    '</div>';
+  }).join('');
+}
+
+function togglePlanAction(actionId, done) {
+  if (typeof RecommendationEngine !== 'undefined') {
+    RecommendationEngine.markAction(actionId, done);
+    // Re-init to refresh all data
+    initCoachDashboard();
+    if (done && typeof checkAndUpdateStreak !== 'undefined') checkAndUpdateStreak();
+  }
+}
+
+// Initialize coach dashboard on load and after dashboard data loads
+document.addEventListener('DOMContentLoaded', function() {
+  // Slight delay to allow loadDashboard() to run first
+  setTimeout(initCoachDashboard, 200);
+});
+
+// Also hook into the existing loadDashboard so coach sections refresh after data loads
+var _origLoadDashboard = typeof loadDashboard === 'function' ? loadDashboard : null;
+if (_origLoadDashboard) {
+  window.loadDashboard = function() {
+    _origLoadDashboard.apply(this, arguments);
+    setTimeout(initCoachDashboard, 50);
+  };
 }
 </script>
 </body>

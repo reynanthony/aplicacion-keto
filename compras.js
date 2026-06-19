@@ -87,6 +87,60 @@ var addingFoodId=null;
 var addingFoodUnits=[];
 var addingFoodCurrentUnit=0;
 
+function getFoodRiskAnalysis(foodName, grams){
+var netCarbsPer100=0;
+if(window.inspectorKeto&&typeof window.inspectorKeto.inspeccionarReceta==="function"){
+var report=window.inspectorKeto.inspeccionarReceta({
+id:"tmp_food",
+title:foodName,
+porciones:1,
+ingredients:[(grams||100)+"g "+foodName]
+});
+if(report&&report.ingredientes_analizados&&report.ingredientes_analizados.length>0){
+var item=report.ingredientes_analizados[0];
+return {
+nivel:item.nivel,
+sugerencia:item.sugerencia,
+carbs:item.carb_netos_estimados
+};
+}
+}
+// Fallback por net carbs cuando no estÃ¡ cargado el inspector
+var foods=getFoods();
+var food=foods.find(function(f){return f.name===foodName;});
+if(food){
+netCarbsPer100=Math.max(0,(parseFloat(food.carbs)||0)-(parseFloat(food.fiber)||0));
+}
+var nivel=netCarbsPer100>20?"critico":(netCarbsPer100>6?"moderado":"seguro");
+return {
+nivel:nivel,
+sugerencia:nivel==="critico"?"Reemplazar por alternativa keto de menor carbohidrato":"Compatible con keto en porcion adecuada",
+carbs:Math.round((netCarbsPer100*(grams||100))/100*10)/10
+};
+}
+
+function renderRiskPill(level){
+var config={
+critico:{icon:"dangerous",label:"CRITICO",cls:"text-red-400 bg-red-500/15 border border-red-500/30"},
+moderado:{icon:"warning",label:"MODERADO",cls:"text-yellow-400 bg-yellow-500/15 border border-yellow-500/30"},
+seguro:{icon:"verified",label:"SEGURO",cls:"text-green-400 bg-green-500/15 border border-green-500/30"}
+};
+var meta=config[level]||config.moderado;
+return '<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold uppercase '+meta.cls+'"><span class="material-symbols-outlined text-xs">'+meta.icon+'</span>'+meta.label+'</span>';
+}
+
+function updateAddRiskInfo(food,grams){
+var panel=document.getElementById("addRiskInfo");
+if(!panel||!food)return;
+var analysis=getFoodRiskAnalysis(food.name,grams||100);
+var html='<div class="mt-2">'+renderRiskPill(analysis.nivel)+'</div>';
+html+='<p class="text-xs text-on-surface-variant mt-2">Estimado: '+analysis.carbs+'g netos por porcion seleccionada.</p>';
+if(analysis.nivel==="critico"){
+html+='<p class="text-xs text-yellow-300 mt-1">Sugerencia: '+analysis.sugerencia+'</p>';
+}
+panel.innerHTML=html;
+}
+
 function openAddModal(foodId){
 var foods=getFoods();
 var food=foods.find(function(f){return f.id===foodId});
@@ -96,6 +150,7 @@ addingFoodUnits=food.units||[{name:"gramos",grams:1}];
 addingFoodCurrentUnit=0;
 document.getElementById("addFoodName").textContent=food.name;
 document.getElementById("addFoodPortion").textContent="1 "+addingFoodUnits[0].name+" = "+Math.round(addingFoodUnits[0].grams)+"g";
+updateAddRiskInfo(food,addingFoodUnits[0].grams);
 document.getElementById("addQuantity").value=1;
 document.getElementById("addModal").classList.remove("hidden");
 document.getElementById("addModal").classList.add("flex");
@@ -122,6 +177,8 @@ updateAddPreview();
 function closeAddModal(){
 document.getElementById("addModal").classList.add("hidden");
 document.getElementById("addModal").classList.remove("flex");
+var panel=document.getElementById("addRiskInfo");
+if(panel){panel.innerHTML="";}
 addingFoodId=null;
 }
 
@@ -130,15 +187,28 @@ var qty=parseFloat(document.getElementById("addQuantity").value)||0;
 var unit=addingFoodUnits[addingFoodCurrentUnit];
 var totalGrams=Math.round(qty*unit.grams);
 document.getElementById("addPreview").textContent=totalGrams.toLocaleString()+" g";
+if(addingFoodId){
+var foods=getFoods();
+var food=foods.find(function(f){return f.id===addingFoodId;});
+if(food){updateAddRiskInfo(food,totalGrams);}
+}
 }
 
 function confirmAdd(){
 if(!addingFoodId)return;
 var qty=parseFloat(document.getElementById("addQuantity").value)||0;
-if(qty<=0){window.showToast("Ingresa una cantidad válida", 3000, "warning");return;}
+if(qty<=0){window.showToast("Ingresa una cantidad valida", 3000, "warning");return;}
+var foods=getFoods();
+var food=foods.find(function(f){return f.id===addingFoodId;});
+if(!food){window.showToast("No se encontro el alimento", 3000, "warning");return;}
 var unit=addingFoodUnits[addingFoodCurrentUnit];
 var totalGrams=Math.round(qty*unit.grams);
 if(totalGrams<=0){window.showToast("La cantidad en gramos debe ser mayor a 0", 3000, "warning");return;}
+var analysis=getFoodRiskAnalysis(food.name,totalGrams);
+if(analysis.nivel==="critico"){
+var proceed=confirm("Este alimento es CRITICO para cetosis.\n\n"+analysis.sugerencia+"\n\nDeseas agregarlo de todos modos?");
+if(!proceed){return;}
+}
 var despensa=getDespensa();
 if(despensa[addingFoodId]){
 despensa[addingFoodId].stock+=totalGrams;
@@ -283,9 +353,11 @@ html+='<h4 class="text-sm font-medium text-on-surface-variant">'+cat+'</h4></div
 html+='<div class="space-y-1">';
 catFoods.forEach(function(food){
 var safeFoodName = escapeHtml(food.name);
+var riskInfo=getFoodRiskAnalysis(food.name,food.portion||100);
 html+='<div class="flex items-center gap-2 p-2 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-all" onclick="openAddModal(\''+food.id+'\')">';
 html+='<span class="material-symbols-outlined text-on-surface-variant text-lg">add_circle</span>';
 html+='<span class="text-sm text-white flex-1">'+safeFoodName+'</span>';
+html+=renderRiskPill(riskInfo.nivel);
 html+='<span class="text-xs text-on-surface-variant">'+food.portion+'g</span></div>';
 });
 html+='</div></div>';
@@ -298,23 +370,86 @@ container.innerHTML=html;
 }
 
 function switchTab(tab){
-document.getElementById("tabDespensa").classList.remove("bg-primary-container","text-white");
-document.getElementById("tabDespensa").classList.add("bg-surface-container","text-on-surface-variant");
-document.getElementById("tabAvailable").classList.remove("bg-primary-container","text-white");
-document.getElementById("tabAvailable").classList.add("bg-surface-container","text-on-surface-variant");
-document.getElementById("despensaSection").classList.add("hidden");
-document.getElementById("availableSection").classList.add("hidden");
-if(tab==="despensa"){
-document.getElementById("tabDespensa").classList.remove("bg-surface-container","text-on-surface-variant");
-document.getElementById("tabDespensa").classList.add("bg-primary-container","text-white");
-document.getElementById("despensaSection").classList.remove("hidden");
-loadDespensa();
+['tabDespensa','tabAvailable','tabPlan'].forEach(function(id){
+  var el=document.getElementById(id);
+  if(el){el.classList.remove('bg-primary-container','bg-primary','text-white');el.classList.add('bg-surface-container','text-on-surface-variant');}
+});
+['despensaSection','availableSection','planSection'].forEach(function(id){
+  var el=document.getElementById(id);
+  if(el) el.classList.add('hidden');
+});
+if(tab==='despensa'){
+  var t=document.getElementById('tabDespensa');
+  if(t){t.classList.remove('bg-surface-container','text-on-surface-variant');t.classList.add('bg-primary-container','text-white');}
+  var s=document.getElementById('despensaSection');
+  if(s) s.classList.remove('hidden');
+  loadDespensa();
+}else if(tab==='plan'){
+  var t=document.getElementById('tabPlan');
+  if(t){t.classList.remove('bg-surface-container','text-on-surface-variant');t.classList.add('bg-secondary/20','text-secondary');}
+  var s=document.getElementById('planSection');
+  if(s) s.classList.remove('hidden');
+  loadPlanShoppingList();
 }else{
-document.getElementById("tabAvailable").classList.remove("bg-surface-container","text-on-surface-variant");
-document.getElementById("tabAvailable").classList.add("bg-primary-container","text-white");
-document.getElementById("availableSection").classList.remove("hidden");
-loadAvailable();
+  var t=document.getElementById('tabAvailable');
+  if(t){t.classList.remove('bg-surface-container','text-on-surface-variant');t.classList.add('bg-primary-container','text-white');}
+  var s=document.getElementById('availableSection');
+  if(s) s.classList.remove('hidden');
+  loadAvailable();
 }
+}
+
+function loadPlanShoppingList(){
+  var container=document.getElementById('planShoppingList');
+  if(!container) return;
+  var today=new Date();
+  var needed={};
+  for(var i=0;i<7;i++){
+    var d=new Date(today); d.setDate(today.getDate()+i);
+    var dk=d.toISOString().slice(0,10);
+    var plan=safeParseJSON(localStorage.getItem('mealPlan_'+dk),{});
+    ['desayuno','almuerzo','cena','snacks'].forEach(function(meal){
+      (plan[meal]||[]).forEach(function(item){
+        var key=item.name||item.id||'item';
+        if(!needed[key]) needed[key]={name:key,totalG:0,days:0,id:item.id};
+        needed[key].totalG+=parseFloat(item.portion||100);
+        needed[key].days++;
+      });
+    });
+  }
+  var items=Object.values(needed);
+  if(!items.length){
+    container.innerHTML='<div class="bg-surface-container rounded-2xl p-8 text-center"><span class="material-symbols-outlined text-4xl text-white/20 block mb-3">event_busy</span><p class="text-on-surface-variant">No hay alimentos en el plan de esta semana.</p><a href="plan.html" class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-xl bg-primary-container text-white text-sm font-bold">Ir al plan</a></div>';
+    return;
+  }
+  var despensa=getDespensa();
+  var html='<div class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">'+items.length+' alimento'+(items.length>1?'s':'')+' — próximos 7 días</div>';
+  html+='<div class="space-y-2">';
+  items.sort(function(a,b){return b.totalG-a.totalG;}).forEach(function(item){
+    var entry=item.id?despensa[item.id]:null;
+    var stockG=entry?(parseFloat(entry.stock)||0):0;
+    var needed2=Math.round(item.totalG);
+    var enough=stockG>=needed2;
+    html+='<div class="bg-surface-container rounded-xl p-4 flex items-center gap-3">';
+    html+='<div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 '+(enough?'bg-green-500/20':'bg-red-500/20')+'">';
+    html+='<span class="material-symbols-outlined text-lg '+(enough?'text-green-400':'text-red-400')+'" style="font-variation-settings:\'FILL\' 1">'+(enough?'check_circle':'shopping_cart')+'</span>';
+    html+='</div>';
+    html+='<div class="flex-1 min-w-0">';
+    html+='<p class="text-white text-sm font-medium truncate">'+escapeHtml(item.name)+'</p>';
+    html+='<p class="text-on-surface-variant text-xs">Necesitas '+needed2+'g · '+item.days+' comida'+(item.days>1?'s':'')+'</p>';
+    html+='</div>';
+    html+='<div class="text-right">';
+    if(enough){
+      html+='<span class="text-green-400 text-xs font-bold">✓ Tienes</span>';
+    }else{
+      var falta=needed2-Math.round(stockG);
+      html+='<span class="text-red-400 text-xs font-bold">Falta '+falta+'g</span>';
+    }
+    html+='</div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  container.innerHTML=html;
 }
 
 function resetDespensaData(){

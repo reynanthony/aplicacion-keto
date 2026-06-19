@@ -13,3 +13,6 @@ Thumbs.db
 
 # Node (if needed)
 node_modules/
+
+# Supabase local temp files
+supabase/.temp/

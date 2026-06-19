@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html class="dark" lang="es">
 <head>
+<script>!function(){var d=localStorage.getItem("ketocore_onboarding_done"),g=localStorage.getItem("KetoCore_guest");if(!d&&!g)window.location.replace("welcome.html");}();</script>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <link rel="manifest" href="manifest.json">
@@ -109,6 +110,10 @@ Escaneos recientes
 </main>
 
 <script src="utils.js"></script>
+<script src="data/keto-inspector-ingredientes.js"></script>
+<script src="modules/inspectorKeto.js"></script>
+<script src="modules/keto-inspector-api.js"></script>
+<script src="modules/keto-inspector-scanner-integration.js"></script>
 <script>
 var lastScannedCode = null;
 var cameraActive = false;

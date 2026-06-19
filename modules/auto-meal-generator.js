@@ -25,23 +25,33 @@ var autoMealGenerator = (function() {
   function getAllRecipes() {
     var recipes = {};
     
-    // Obtener recetas predefinidas (puede ser recipesDB o RECIPES_DB)
-    if (typeof recipesDB !== 'undefined') {
-      Object.keys(recipesDB).forEach(function(key) {
-        recipes[key] = recipesDB[key];
-      });
-    } else if (typeof RECIPES_DB !== 'undefined') {
-      Object.keys(RECIPES_DB).forEach(function(key) {
-        recipes[key] = RECIPES_DB[key];
+    // Cargar de KETO_RECIPES (recipe-details.js) - tiene 196 recetas
+    if (typeof KETO_RECIPES !== 'undefined') {
+      Object.keys(KETO_RECIPES).forEach(function(key) {
+        recipes[key] = KETO_RECIPES[key];
       });
     }
     
-    // Obtener recetas personalizadas del usuario
+    // También intentar con otros formatos
+    if (Object.keys(recipes).length === 0) {
+      if (typeof recipesDB !== 'undefined') {
+        Object.keys(recipesDB).forEach(function(key) {
+          recipes[key] = recipesDB[key];
+        });
+      } else if (typeof RECIPES_DB !== 'undefined') {
+        Object.keys(RECIPES_DB).forEach(function(key) {
+          recipes[key] = RECIPES_DB[key];
+        });
+      }
+    }
+    
+    // Recetas personalizadas del usuario
     var customRecs = safeParseJSON(localStorage.getItem('customRecipes'), []);
     customRecs.forEach(function(r) {
       recipes['custom_' + r.id] = r;
     });
     
+    console.log('[AutoMealGenerator] Total recetas:', Object.keys(recipes).length);
     return recipes;
   }
 
@@ -57,6 +67,83 @@ var autoMealGenerator = (function() {
 
   function getDespensaStock() {
     return safeParseJSON(localStorage.getItem('despensa'), {});
+  }
+
+  function getInspectorKeto() {
+    if (typeof window !== 'undefined' && window.inspectorKeto) {
+      return window.inspectorKeto;
+    }
+    return null;
+  }
+
+  function inspectRecipeWithKeto(key, recipe) {
+    var inspector = getInspectorKeto();
+    if (!inspector || typeof inspector.inspeccionarReceta !== 'function') {
+      return null;
+    }
+
+    // Convertir estructura de receta al formato del Inspector
+    var ingredientes = [];
+    var ingArray = recipe.ingredients || recipe.ingredientes || [];
+    
+    if (Array.isArray(ingArray)) {
+      ingredientes = ingArray.map(function(ing) {
+        return {
+          nombre: ing.name || ing.nombre || ing.id || 'desconocido',
+          cantidad: ing.quantity || ing.cantidad || 100,
+          unidad: ing.unit || ing.unidad || 'g'
+        };
+      });
+    }
+
+    return inspector.inspeccionarReceta({
+      id: key,
+      nombre: recipe.title || recipe.titulo || key,
+      porciones: recipe.servings || recipe.porciones || 1,
+      ingredientes: ingredientes
+    });
+  }
+
+  function filterRecipesByKetoScore(recipes) {
+    var inspector = getInspectorKeto();
+    if (!inspector) {
+      return {
+        accepted: recipes,
+        rejected: {},
+        reports: {},
+        threshold: 0
+      };
+    }
+
+    var rules = (typeof inspector.getRules === 'function') ? inspector.getRules() : {};
+    var threshold = parseInt(rules.minPuntajeAutoPlan, 10) || 0;
+    var accepted = {};
+    var rejected = {};
+    var reports = {};
+
+    Object.keys(recipes).forEach(function(key) {
+      var recipe = recipes[key];
+      var report = inspectRecipeWithKeto(key, recipe);
+      reports[key] = report;
+
+      accepted[key] = recipe;
+    });
+
+    return {
+      accepted: accepted,
+      rejected: rejected,
+      reports: reports,
+      threshold: threshold
+    };
+  }
+
+  function inspectPantryRisk(despensa) {
+    var inspector = getInspectorKeto();
+    if (!inspector || typeof inspector.inspeccionarDespensa !== 'function') {
+      return null;
+    }
+
+    return inspector.inspeccionarDespensa(despensa, getAllFoods());
   }
 
   function getFoodName(foodId) {
@@ -363,9 +450,33 @@ var autoMealGenerator = (function() {
       };
     }
     
+    var pantryRisk = inspectPantryRisk(despensa);
+    if (pantryRisk && pantryRisk.solo_criticos) {
+      return {
+        success: false,
+        criticalOnly: true,
+        error: 'Tu despensa actual contiene solo ingredientes crÃ­ticos para cetosis.',
+        comprasPrioritarias: pantryRisk.compras_prioritarias || [],
+        pantryRisk: pantryRisk
+      };
+    }
+
     var availability = filterRecipesByAvailability(recipes);
     console.log('[AutoMealGenerator] Recetas disponibles:', Object.keys(availability.available).length);
     console.log('[AutoMealGenerator] Recetas parciales:', Object.keys(availability.partial).length);
+
+    var ketoFilter = filterRecipesByKetoScore(availability.available);
+    console.log('[AutoMealGenerator] Recetas evaluadas por Inspector Keto:', Object.keys(ketoFilter.reports).length);
+
+    if (Object.keys(availability.available).length === 0) {
+      return {
+        success: false,
+        error: 'No hay recetas disponibles con los ingredientes en tu despensa.',
+        ketoThreshold: ketoFilter.threshold,
+        rejectedByInspector: ketoFilter.rejected,
+        pantryRisk: pantryRisk
+      };
+    }
     
     var categorized = categorizeRecipes(availability.available);
     console.log('[AutoMealGenerator] Categorias - Desayuno:', categorized.desayuno.length, 'Almuerzo:', categorized.almuerzo.length, 'Cena:', categorized.cena.length, 'Snacks:', categorized.snacks.length);
@@ -374,6 +485,25 @@ var autoMealGenerator = (function() {
     var plan = selectRecipesForPlan(categorized, targetMacros);
     var resultMacros = calculatePlanMacros(plan);
     var warnings = checkMacroDeviations(resultMacros, targetMacros);
+    
+    // Agregar reportes de Inspector Keto al resultado
+    var ketoReports = ketoFilter.reports;
+    var lowScoreRecipes = [];
+    Object.keys(ketoReports).forEach(function(key) {
+      var report = ketoReports[key];
+      if (report && report.puntaje_keto < 50) {
+        lowScoreRecipes.push({ key: key, report: report });
+      }
+    });
+    
+    if (lowScoreRecipes.length > 0) {
+      warnings.push({
+        type: 'inspector_keto',
+        message: lowScoreRecipes.length + ' recetas tienen puntaje keto bajo. Revisa los detalles.',
+        severity: 'low',
+        details: lowScoreRecipes
+      });
+    }
     
     // Agregar warning si hay recetas parciales
     var partialKeys = Object.keys(availability.partial);
@@ -402,7 +532,10 @@ var autoMealGenerator = (function() {
       recipeCount: Object.keys(recipes).length,
       availableRecipeCount: Object.keys(availability.available).length,
       despensaCount: despensaCount,
-      partialRecipes: availability.partial
+      partialRecipes: availability.partial,
+      ketoThreshold: ketoFilter.threshold,
+      rejectedByInspector: ketoFilter.rejected,
+      pantryRisk: pantryRisk
     };
   }
 

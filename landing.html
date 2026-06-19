@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KetoCore — Keto sin adivinar</title>
+<meta name="description" content="El sistema keto que te dice exactamente qué comer hoy. 195 recetas, calculadora de macros, plan diario personalizado. Gratis y offline."/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff4d00">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  theme: { extend: { colors: { brand:'#ff4d00','brand-gold':'#ffb300' }, fontFamily: { display:['Plus Jakarta Sans','sans-serif'], body:['Inter','sans-serif'] } } }
+}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#080808;color:#fff;font-family:'Inter',sans-serif;overflow-x:hidden}
+
+.d{font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;letter-spacing:-0.03em;line-height:1.0}
+.wrap{max-width:1240px;margin:0 auto;padding:0 2rem}
+@media(max-width:640px){.wrap{padding:0 1.25rem}}
+
+.sec{padding:6rem 0}
+@media(max-width:768px){.sec{padding:3.5rem 0}}
+
+.rule{border:none;border-top:1px solid #141414}
+
+.chip{display:inline-block;padding:.25rem .75rem;border-radius:100px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,77,0,.1);color:#ff4d00;border:1px solid rgba(255,77,0,.18)}
+
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.875rem 1.75rem;background:#ff4d00;color:#fff;font-weight:700;font-size:.9375rem;border-radius:100px;text-decoration:none;border:none;cursor:pointer;transition:opacity .15s,transform .15s}
+.btn:hover{opacity:.9;transform:scale(1.02)}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.65)}
+.btn-ghost:hover{border-color:rgba(255,255,255,.35);color:#fff;opacity:1}
+
+.nav-a{color:rgba(255,255,255,.5);font-size:.875rem;text-decoration:none;transition:color .15s}
+.nav-a:hover{color:#fff}
+
+.recipe-card{flex-shrink:0;width:240px;background:#0f0f0f;border-radius:14px;overflow:hidden;border:1px solid #1a1a1a;transition:transform .2s,border-color .2s}
+.recipe-card:hover{transform:translateY(-4px);border-color:#2a2a2a}
+.recipe-card img{width:100%;height:150px;object-fit:cover;display:block}
+
+.scroll-x{display:flex;gap:.875rem;overflow-x:auto;padding-bottom:.5rem;scrollbar-width:none;-ms-overflow-style:none}
+.scroll-x::-webkit-scrollbar{display:none}
+
+.calc-input{background:#0f0f0f;border:1px solid #1e1e1e;color:#fff;padding:.75rem 1rem;border-radius:.75rem;font-size:.9375rem;width:100%;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none;font-family:'Inter',sans-serif}
+.calc-input:focus{border-color:#ff4d00}
+.calc-label{font-size:.7rem;font-weight:700;color:rgba(255,255,255,.4);display:block;margin-bottom:.4rem;letter-spacing:.06em;text-transform:uppercase}
+
+.problem-row{display:flex;gap:1.25rem;align-items:flex-start;padding:1.5rem 0;border-bottom:1px solid #141414}
+.problem-num{font-family:'Plus Jakarta Sans',sans-serif;font-size:.7rem;font-weight:700;color:#ff4d00;padding-top:.2rem;min-width:1.25rem;opacity:.7}
+
+.step-card{padding:2.25rem;border-right:1px solid #141414;flex:1}
+.step-card:last-child{border-right:none}
+.step-n{font-family:'Plus Jakarta Sans',sans-serif;font-size:3.5rem;font-weight:900;line-height:1;margin-bottom:1.25rem;color:#1c1c1c}
+
+.testi{padding:2rem;border:1px solid #161616;border-radius:1rem;background:#0d0d0d}
+.testi-quote{font-size:1.0625rem;font-weight:600;line-height:1.6;color:rgba(255,255,255,.85);margin-bottom:1.25rem}
+
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.a1{animation:up .65s .05s both}.a2{animation:up .65s .2s both}.a3{animation:up .65s .35s both}.a4{animation:up .65s .5s both}
+
+/* two-col grid with mobile fallback */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+@media(max-width:768px){.grid-2{grid-template-columns:1fr;gap:2.5rem}}
+
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+@media(max-width:768px){.grid-3{grid-template-columns:1fr}}
+
+.steps{display:flex;border:1px solid #141414;border-radius:1.125rem;overflow:hidden}
+@media(max-width:768px){.steps{flex-direction:column}.step-card{border-right:none;border-bottom:1px solid #141414}.step-card:last-child{border-bottom:none}}
+
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem}
+@media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr;gap:2rem}}
+
+.hero-stats{display:grid;grid-template-columns:repeat(3,auto);gap:0;margin-top:4rem;padding-top:2.5rem;border-top:1px solid #161616;width:fit-content}
+@media(max-width:640px){.hero-stats{grid-template-columns:1fr 1fr;gap:1.5rem;width:100%}.hero-stats .divl{display:none}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav style="position:fixed;top:0;left:0;right:0;z-index:100;border-bottom:1px solid #111;background:rgba(8,8,8,0.93);backdrop-filter:blur(18px)">
+  <div class="wrap" style="height:58px;display:flex;align-items:center;justify-content:space-between">
+    <a href="landing.html" style="display:flex;align-items:center;gap:.625rem;text-decoration:none">
+      <img src="logo.svg" alt="KetoCore" style="width:30px;height:30px;filter:drop-shadow(0 0 6px rgba(255,77,0,.4))">
+      <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:1.0625rem;color:#ff4d00;letter-spacing:-.02em">KetoCore</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:2rem" class="hidden md:flex">
+      <a href="recetas-publicas.html" class="nav-a">Recetas</a>
+      <a href="#calculadora" class="nav-a">Calculadora</a>
+      <a href="#como-funciona" class="nav-a">Cómo funciona</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:.75rem">
+      <a href="welcome.html" class="nav-a hidden md:inline">Entrar</a>
+      <a href="welcome.html" class="btn" style="padding:.5rem 1.25rem;font-size:.8125rem">Empezar gratis</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="min-height:100vh;display:flex;align-items:center;padding-top:58px;position:relative;overflow:hidden">
+  <div style="position:absolute;top:-150px;right:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(255,77,0,.07) 0%,transparent 65%);border-radius:50%;pointer-events:none"></div>
+  <div style="position:absolute;bottom:-80px;left:5%;width:350px;height:350px;background:radial-gradient(circle,rgba(255,179,0,.04) 0%,transparent 65%);border-radius:50%;pointer-events:none"></div>
+
+  <div class="wrap" style="padding-top:3.5rem;padding-bottom:3.5rem">
+    <div style="max-width:860px">
+      <div class="a1" style="margin-bottom:1.375rem"><span class="chip">Sistema keto personalizado</span></div>
+
+      <h1 class="d a2" style="font-size:clamp(3.25rem,8vw,7rem);margin-bottom:1.75rem">
+        Keto funciona.<br>
+        La mayoría<br>
+        <span style="color:#ff4d00">lo hace mal.</span>
+      </h1>
+
+      <p class="a3" style="font-size:clamp(1.0625rem,2vw,1.25rem);color:rgba(255,255,255,.5);max-width:560px;line-height:1.7;margin-bottom:2.25rem">
+        No más calcular macros en papel ni adivinar qué comer. KetoCore te dice exactamente
+        qué hacer hoy para cumplir tu objetivo, y aprende de ti con el tiempo.
+      </p>
+
+      <div class="a4" style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+        <a href="welcome.html" class="btn">
+          Empezar gratis
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2.5 7.5h10M8.5 4l3.5 3.5-3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#como-funciona" class="btn btn-ghost">Ver cómo funciona</a>
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <div style="padding-right:2.5rem">
+        <p class="d" style="font-size:2.25rem;color:#ff4d00">195</p>
+        <p style="font-size:.75rem;color:rgba(255,255,255,.35);margin-top:.2rem">recetas keto</p>
+      </div>
+      <div class="divl" style="border-left:1px solid #1a1a1a;padding:0 2.5rem">
+        <p class="d" style="font-size:2.25rem">100%</p>
+        <p style="font-size:.75rem;color:rgba(255,255,255,.35);margin-top:.2rem">offline · sin rastreo</p>
+      </div>
+      <div class="divl" style="border-left:1px solid #1a1a1a;padding-left:2.5rem">
+        <p class="d" style="font-size:2.25rem">0€</p>
+        <p style="font-size:.75rem;color:rgba(255,255,255,.35);margin-top:.2rem">siempre gratis</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- PROBLEMA -->
+<section style="background:#0b0b0b">
+  <div class="wrap sec">
+    <div class="grid-2">
+      <div>
+        <span class="chip" style="margin-bottom:1.25rem;display:inline-block">El problema real</span>
+        <h2 class="d" style="font-size:clamp(1.875rem,3.5vw,2.75rem);margin-bottom:1.125rem;line-height:1.08">
+          ¿Por qué el 95% abandona el keto antes de los 30 días?
+        </h2>
+        <p style="color:rgba(255,255,255,.4);line-height:1.75;font-size:.9375rem">
+          No es falta de voluntad. Es falta de sistema. El keto requiere precisión —
+          y sin una guía clara, cualquiera se pierde.
+        </p>
+      </div>
+      <div>
+        <div class="problem-row">
+          <span class="problem-num">01</span>
+          <div>
+            <p style="font-weight:700;font-size:.9375rem;margin-bottom:.375rem">No saben cuántos carbos comer de verdad</p>
+            <p style="color:rgba(255,255,255,.4);font-size:.875rem;line-height:1.65">La diferencia entre 20 g y 50 g de carbos netos determina si entras en cetosis o no. La mayoría no lleva cuenta.</p>
+          </div>
+        </div>
+        <div class="problem-row">
+          <span class="problem-num">02</span>
+          <div>
+            <p style="font-weight:700;font-size:.9375rem;margin-bottom:.375rem">No tienen un plan diario concreto</p>
+            <p style="color:rgba(255,255,255,.4);font-size:.875rem;line-height:1.65">Saber "comer bajo en carbos" no es un plan. Un plan es: desayuno X, almuerzo Y, cena Z, con macros calculados.</p>
+          </div>
+        </div>
+        <div class="problem-row" style="border-bottom:none">
+          <span class="problem-num">03</span>
+          <div>
+            <p style="font-weight:700;font-size:.9375rem;margin-bottom:.375rem">Se rinden cuando no ven resultados</p>
+            <p style="color:rgba(255,255,255,.4);font-size:.875rem;line-height:1.65">Sin seguimiento real de progreso, cualquier semana difícil parece el fin. Con datos, es solo un dato más.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- CÓMO FUNCIONA -->
+<section id="como-funciona" class="sec">
+  <div class="wrap">
+    <div style="margin-bottom:3.5rem">
+      <span class="chip" style="margin-bottom:1rem;display:inline-block">El sistema</span>
+      <h2 class="d" style="font-size:clamp(1.875rem,3.5vw,2.75rem)">De visitante a transformación</h2>
+    </div>
+
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-n">01</div>
+        <p style="font-size:.65rem;font-weight:700;color:#ff4d00;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.625rem">Descubres</p>
+        <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.25rem;font-weight:800;margin-bottom:.75rem;line-height:1.25">Aprendes qué es el keto de verdad</h3>
+        <p style="color:rgba(255,255,255,.4);font-size:.875rem;line-height:1.7;margin-bottom:1.5rem">Recetas reales, calculadora de macros, guías de alimentos. Todo el contenido de descubrimiento, aquí.</p>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          <span style="font-size:.68rem;padding:.2rem .625rem;background:#111;border-radius:100px;color:rgba(255,255,255,.45)">195 recetas</span>
+          <span style="font-size:.68rem;padding:.2rem .625rem;background:#111;border-radius:100px;color:rgba(255,255,255,.45)">Calculadora</span>
+          <span style="font-size:.68rem;padding:.2rem .625rem;background:#111;border-radius:100px;color:rgba(255,255,255,.45)">Guías</span>
+        </div>
+      </div>
+
+      <div class="step-card" style="background:#0c0c0c">
+        <div class="step-n">02</div>
+        <p style="font-size:.65rem;font-weight:700;color:#ff4d00;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.625rem">Te registras</p>
+        <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.25rem;font-weight:800;margin-bottom:.75rem;line-height:1.25">Defines tu objetivo una sola vez</h3>
+        <p style="color:rgba(255,255,255,.4);font-size:.875rem;line-height:1.7;margin-bottom:1.5rem">Peso, meta, actividad. KetoCore calcula tus macros y genera tu primer plan en segundos. Sin fórmulas.</p>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          <span style="font-size:.68rem;padding:.2rem .625rem;background:#161616;border-radius:100px;color:rgba(255,255,255,.45)">Perfil</span>
+          <span style="font-size:.68rem;padding:.2rem .625rem;background:#161616;border-radius:100px;color:rgba(255,255,255,.45)">Macros auto</span>
+          <span style="font-size:.68rem;padding:.2rem .625rem;background:#161616;border-radius:100px;color:rgba(255,255,255,.45)">Plan semanal</span>
+        </div>
+      </div>
+
+      <div class="step-card" style="background:rgba(255,77,0,.03)">
+        <div class="step-n" style="color:rgba(255,77,0,.15)">03</div>
+        <p style="font-size:.65rem;font-weight:700;color:#ff4d00;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.625rem">Ejecutas</p>
+        <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.25rem;font-weight:800;margin-bottom:.75rem;line-height:1.25">La app te dice qué hacer cada día</h3>
+        <p style="color:rgba(255,255,255,.4);font-size:.875rem;line-height:1.7;margin-bottom:1.5rem">Qué comer, cuándo entrenar, qué tomar. Sin adivinar. Sin calcular. Solo seguir el plan.</p>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          <span style="font-size:.68rem;padding:.2rem .625rem;background:rgba(255,77,0,.1);border-radius:100px;color:#ff4d00">Plan diario</span>
+          <span style="font-size:.68rem;padding:.2rem .625rem;background:rgba(255,77,0,.1);border-radius:100px;color:#ff4d00">Seguimiento</span>
+          <span style="font-size:.68rem;padding:.2rem .625rem;background:rgba(255,77,0,.1);border-radius:100px;color:#ff4d00">Hábitos</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- RECETAS -->
+<section id="recetas" style="background:#0a0a0a;padding:4rem 0">
+  <div class="wrap">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem">
+      <div>
+        <span class="chip" style="margin-bottom:.875rem;display:inline-block">Biblioteca pública</span>
+        <h2 class="d" style="font-size:clamp(1.625rem,2.8vw,2.25rem)">195 recetas keto verificadas</h2>
+        <p style="color:rgba(255,255,255,.35);font-size:.8125rem;margin-top:.375rem">Macros calculados · Sin trampa · Cetosis asegurada</p>
+      </div>
+      <a href="recetas-publicas.html" style="color:#ff4d00;font-size:.875rem;font-weight:600;text-decoration:none;white-space:nowrap;flex-shrink:0">Ver todas →</a>
+    </div>
+
+    <div class="scroll-x">
+      <a href="recetas-publicas.html" class="recipe-card" style="text-decoration:none;color:inherit;display:block">
+        <img src="https://images.pexels.com/photos/1893556/pexels-photo-1893556.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" alt="Huevos Revueltos con Aguacate" loading="lazy">
+        <div style="padding:.875rem">
+          <span style="font-size:.6rem;font-weight:700;color:#ff4d00;letter-spacing:.08em;text-transform:uppercase">Desayuno</span>
+          <p style="font-weight:700;font-size:.875rem;margin:.3rem 0 .5rem;line-height:1.3">Huevos Revueltos con Aguacate</p>
+          <div style="display:flex;gap:.75rem"><span style="font-size:.7rem;color:rgba(255,255,255,.4)">450 kcal</span><span style="font-size:.7rem;color:#22c55e;font-weight:600">4 g net carbs</span></div>
+        </div>
+      </a>
+
+      <a href="recetas-publicas.html" class="recipe-card" style="text-decoration:none;color:inherit;display:block">
+        <img src="https://images.pexels.com/photos/3771807/pexels-photo-3771807.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" alt="Pechuga de Pollo con Brócoli" loading="lazy">
+        <div style="padding:.875rem">
+          <span style="font-size:.6rem;font-weight:700;color:#ffb300;letter-spacing:.08em;text-transform:uppercase">Almuerzo</span>
+          <p style="font-weight:700;font-size:.875rem;margin:.3rem 0 .5rem;line-height:1.3">Pechuga de Pollo con Brócoli</p>
+          <div style="display:flex;gap:.75rem"><span style="font-size:.7rem;color:rgba(255,255,255,.4)">420 kcal</span><span style="font-size:.7rem;color:#22c55e;font-weight:600">7 g net carbs</span></div>
+        </div>
+      </a>
+
+      <a href="recetas-publicas.html" class="recipe-card" style="text-decoration:none;color:inherit;display:block">
+        <img src="https://images.pexels.com/photos/1251168/pexels-photo-1251168.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" alt="Bistec con Espinacas Salteadas" loading="lazy">
+        <div style="padding:.875rem">
+          <span style="font-size:.6rem;font-weight:700;color:#818cf8;letter-spacing:.08em;text-transform:uppercase">Cena</span>
+          <p style="font-weight:700;font-size:.875rem;margin:.3rem 0 .5rem;line-height:1.3">Bistec con Espinacas Salteadas</p>
+          <div style="display:flex;gap:.75rem"><span style="font-size:.7rem;color:rgba(255,255,255,.4)">550 kcal</span><span style="font-size:.7rem;color:#22c55e;font-weight:600">4 g net carbs</span></div>
+        </div>
+      </a>
+
+      <a href="recetas-publicas.html" class="recipe-card" style="text-decoration:none;color:inherit;display:block">
+        <img src="https://images.pexels.com/photos/5379352/pexels-photo-5379352.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" alt="Ensalada César Keto" loading="lazy">
+        <div style="padding:.875rem">
+          <span style="font-size:.6rem;font-weight:700;color:#ffb300;letter-spacing:.08em;text-transform:uppercase">Almuerzo</span>
+          <p style="font-weight:700;font-size:.875rem;margin:.3rem 0 .5rem;line-height:1.3">Ensalada César Keto</p>
+          <div style="display:flex;gap:.75rem"><span style="font-size:.7rem;color:rgba(255,255,255,.4)">450 kcal</span><span style="font-size:.7rem;color:#22c55e;font-weight:600">6 g net carbs</span></div>
+        </div>
+      </a>
+
+      <a href="recetas-publicas.html" class="recipe-card" style="text-decoration:none;color:inherit;display:block">
+        <img src="https://images.pexels.com/photos/3691028/pexels-photo-3691028.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" alt="Salmón al Horno con Espárragos" loading="lazy">
+        <div style="padding:.875rem">
+          <span style="font-size:.6rem;font-weight:700;color:#818cf8;letter-spacing:.08em;text-transform:uppercase">Cena</span>
+          <p style="font-weight:700;font-size:.875rem;margin:.3rem 0 .5rem;line-height:1.3">Salmón al Horno con Espárragos</p>
+          <div style="display:flex;gap:.75rem"><span style="font-size:.7rem;color:rgba(255,255,255,.4)">480 kcal</span><span style="font-size:.7rem;color:#22c55e;font-weight:600">5 g net carbs</span></div>
+        </div>
+      </a>
+
+      <a href="recetas-publicas.html" class="recipe-card" style="text-decoration:none;color:inherit;display:block">
+        <img src="https://images.pexels.com/photos/4207904/pexels-photo-4207904.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" alt="Almendras con Queso Cheddar" loading="lazy">
+        <div style="padding:.875rem">
+          <span style="font-size:.6rem;font-weight:700;color:#34d399;letter-spacing:.08em;text-transform:uppercase">Snack</span>
+          <p style="font-weight:700;font-size:.875rem;margin:.3rem 0 .5rem;line-height:1.3">Almendras con Queso Cheddar</p>
+          <div style="display:flex;gap:.75rem"><span style="font-size:.7rem;color:rgba(255,255,255,.4)">280 kcal</span><span style="font-size:.7rem;color:#22c55e;font-weight:600">2 g net carbs</span></div>
+        </div>
+      </a>
+
+      <a href="welcome.html" style="flex-shrink:0;width:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.625rem;background:#0f0f0f;border-radius:14px;border:1px solid #1a1a1a;text-decoration:none;color:rgba(255,255,255,.4);transition:color .2s,border-color .2s;padding:1.75rem;text-align:center">
+        <span style="font-size:1.5rem">→</span>
+        <p style="font-size:.8125rem;font-weight:600;line-height:1.4">Ver las 195 recetas</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- CALCULADORA -->
+<section id="calculadora" style="background:#0b0b0b">
+  <div class="wrap sec">
+    <div class="grid-2">
+      <div>
+        <span class="chip" style="margin-bottom:1.25rem;display:inline-block">Herramienta gratuita</span>
+        <h2 class="d" style="font-size:clamp(1.875rem,3.5vw,2.75rem);margin-bottom:1rem;line-height:1.08">
+          Calcula tus macros keto en 30 segundos
+        </h2>
+        <p style="color:rgba(255,255,255,.4);line-height:1.75;font-size:.9375rem;margin-bottom:1.75rem">
+          Introduce tus datos y obtén tu plan de macros personalizado.
+          Sin registro. Sin trampa.
+        </p>
+
+        <!-- Result panel -->
+        <div id="calcResult" style="display:none;border:1px solid #1e1e1e;border-radius:1rem;padding:1.5rem;background:#0f0f0f">
+          <p style="font-size:.65rem;font-weight:700;color:#ff4d00;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1.125rem">Tu plan keto personalizado</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem;margin-bottom:1.375rem">
+            <div style="text-align:center;padding:.875rem;background:#161616;border-radius:.75rem">
+              <p id="resCalories" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.75rem;font-weight:900;color:#ff4d00;line-height:1">--</p>
+              <p style="font-size:.65rem;color:rgba(255,255,255,.35);margin-top:.25rem">kcal / día</p>
+            </div>
+            <div style="text-align:center;padding:.875rem;background:#161616;border-radius:.75rem">
+              <p id="resCarbs" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.75rem;font-weight:900;color:#22c55e;line-height:1">--</p>
+              <p style="font-size:.65rem;color:rgba(255,255,255,.35);margin-top:.25rem">g carbos netos</p>
+            </div>
+            <div style="text-align:center;padding:.875rem;background:#161616;border-radius:.75rem">
+              <p id="resProtein" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.75rem;font-weight:900;color:#818cf8;line-height:1">--</p>
+              <p style="font-size:.65rem;color:rgba(255,255,255,.35);margin-top:.25rem">g proteína</p>
+            </div>
+            <div style="text-align:center;padding:.875rem;background:#161616;border-radius:.75rem">
+              <p id="resFat" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.75rem;font-weight:900;color:#fbbf24;line-height:1">--</p>
+              <p style="font-size:.65rem;color:rgba(255,255,255,.35);margin-top:.25rem">g grasa</p>
+            </div>
+          </div>
+          <a href="welcome.html" class="btn" style="width:100%;justify-content:center">Usar estos macros en KetoCore →</a>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div style="display:flex;flex-direction:column;gap:1.125rem">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem">
+          <div><label class="calc-label">Edad</label><input id="cAge" type="number" placeholder="30" min="16" max="80" class="calc-input"></div>
+          <div><label class="calc-label">Sexo</label>
+            <select id="cSex" class="calc-input" style="cursor:pointer">
+              <option value="m">Hombre</option>
+              <option value="f">Mujer</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem">
+          <div><label class="calc-label">Peso (kg)</label><input id="cWeight" type="number" placeholder="80" min="40" max="250" class="calc-input"></div>
+          <div><label class="calc-label">Altura (cm)</label><input id="cHeight" type="number" placeholder="175" min="140" max="220" class="calc-input"></div>
+        </div>
+        <div>
+          <label class="calc-label">Nivel de actividad</label>
+          <select id="cActivity" class="calc-input" style="cursor:pointer">
+            <option value="1.2">Sedentario (sin ejercicio)</option>
+            <option value="1.375">Ligeramente activo (1–3 días)</option>
+            <option value="1.55" selected>Moderadamente activo (3–5 días)</option>
+            <option value="1.725">Muy activo (6–7 días)</option>
+            <option value="1.9">Atleta / trabajo físico</option>
+          </select>
+        </div>
+        <div>
+          <label class="calc-label">Objetivo</label>
+          <select id="cGoal" class="calc-input" style="cursor:pointer">
+            <option value="loss">Perder grasa (déficit 20%)</option>
+            <option value="maintain">Mantener peso</option>
+            <option value="gain">Ganar músculo (superávit 10%)</option>
+          </select>
+        </div>
+        <button onclick="calcMacros()" class="btn" style="justify-content:center;border:none">Calcular mis macros keto</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- TESTIMONIOS -->
+<section class="sec">
+  <div class="wrap">
+    <div style="margin-bottom:3.5rem">
+      <span class="chip" style="margin-bottom:1rem;display:inline-block">Resultados reales</span>
+      <h2 class="d" style="font-size:clamp(1.875rem,3.5vw,2.75rem)">Personas que dejaron de adivinar</h2>
+    </div>
+    <div class="grid-3">
+      <div class="testi">
+        <div style="color:#ff4d00;font-size:.9375rem;margin-bottom:1rem;letter-spacing:.05em">★★★★★</div>
+        <p class="testi-quote">"Llevaba 3 intentos fallidos con keto. Con KetoCore fue diferente — el plan diario me quitó la decisión de encima. Solo seguí instrucciones."</p>
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#ff4d00,#ffb300);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.7rem;color:#fff;flex-shrink:0">MF</div>
+          <div><p style="font-weight:700;font-size:.875rem">María F.</p><p style="font-size:.75rem;color:rgba(255,255,255,.35)">−11 kg en 60 días</p></div>
+        </div>
+      </div>
+      <div class="testi">
+        <div style="color:#ff4d00;font-size:.9375rem;margin-bottom:1rem;letter-spacing:.05em">★★★★★</div>
+        <p class="testi-quote">"Las recetas son lo mejor. 195 opciones, todas con macros calculados. Ya no pienso si algo es keto o no — solo cocino de la lista."</p>
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#0ea5e9);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.7rem;color:#fff;flex-shrink:0">CM</div>
+          <div><p style="font-weight:700;font-size:.875rem">Carlos M.</p><p style="font-size:.75rem;color:rgba(255,255,255,.35)">45 días de racha activa</p></div>
+        </div>
+      </div>
+      <div class="testi">
+        <div style="color:#ff4d00;font-size:.9375rem;margin-bottom:1rem;letter-spacing:.05em">★★★★★</div>
+        <p class="testi-quote">"El seguimiento de progreso me cambió la mentalidad. Antes una semana difícil me hacía rendirme. Ahora es solo un dato en la gráfica."</p>
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#22c55e,#0ea5e9);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.7rem;color:#fff;flex-shrink:0">AR</div>
+          <div><p style="font-weight:700;font-size:.875rem">Ana R.</p><p style="font-size:.75rem;color:rgba(255,255,255,.35)">−5.4 kg · 30 días</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section style="background:#ff4d00;padding:5rem 0">
+  <div class="wrap" style="text-align:center">
+    <h2 class="d" style="font-size:clamp(2.5rem,6vw,5rem);color:#fff;margin-bottom:1.125rem">
+      Empieza hoy.<br>Sin excusas.
+    </h2>
+    <p style="color:rgba(255,255,255,.75);font-size:1.125rem;max-width:440px;margin:0 auto 2.25rem;line-height:1.65">
+      Instala KetoCore en tu móvil y completa tu primer plan del día en menos de 2 minutos.
+    </p>
+    <a href="welcome.html" style="display:inline-flex;align-items:center;gap:.75rem;padding:1.0625rem 2.125rem;background:#fff;color:#ff4d00;font-weight:800;font-size:1rem;border-radius:100px;text-decoration:none;transition:transform .15s" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+      Abrir KetoCore
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8h11M9.5 4.5l3.5 3.5-3.5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <p style="color:rgba(255,255,255,.5);font-size:.75rem;margin-top:1rem">PWA · iOS y Android · Sin App Store · Sin tarjeta de crédito</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="border-top:1px solid #111;padding:3rem 0 2rem">
+  <div class="wrap">
+    <div class="footer-grid" style="margin-bottom:2.5rem">
+      <div>
+        <div style="display:flex;align-items:center;gap:.625rem;margin-bottom:.875rem">
+          <img src="logo.svg" alt="KetoCore" style="width:26px;height:26px;filter:drop-shadow(0 0 5px rgba(255,77,0,.35))">
+          <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;color:#ff4d00;font-size:.9375rem">KetoCore</span>
+        </div>
+        <p style="color:rgba(255,255,255,.3);font-size:.8125rem;line-height:1.7;max-width:240px">
+          El sistema keto que te dice exactamente qué hacer hoy. Offline-first, gratis, sin trampa.
+        </p>
+      </div>
+      <div>
+        <p style="font-size:.65rem;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.875rem">Herramientas</p>
+        <div style="display:flex;flex-direction:column;gap:.5rem">
+          <a href="recetas-publicas.html" class="nav-a" style="font-size:.875rem">Recetas</a>
+          <a href="#calculadora" class="nav-a" style="font-size:.875rem">Calculadora</a>
+          <a href="welcome.html" class="nav-a" style="font-size:.875rem">Alimentos</a>
+          <a href="guia.html" class="nav-a" style="font-size:.875rem">Guía keto</a>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:.65rem;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.875rem">App</p>
+        <div style="display:flex;flex-direction:column;gap:.5rem">
+          <a href="welcome.html" class="nav-a" style="font-size:.875rem">Dashboard</a>
+          <a href="welcome.html" class="nav-a" style="font-size:.875rem">Mi plan</a>
+          <a href="welcome.html" class="nav-a" style="font-size:.875rem">Progreso</a>
+          <a href="welcome.html" class="nav-a" style="font-size:.875rem">Comunidad</a>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:.65rem;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.875rem">Más</p>
+        <div style="display:flex;flex-direction:column;gap:.5rem">
+          <a href="#como-funciona" class="nav-a" style="font-size:.875rem">Cómo funciona</a>
+          <a href="welcome.html" class="nav-a" style="font-size:.875rem">Comunidad</a>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid #111;padding-top:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem">
+      <p style="font-size:.75rem;color:rgba(255,255,255,.2)">© 2025 KetoCore · Hecho para personas que van en serio</p>
+      <p style="font-size:.75rem;color:rgba(255,255,255,.2)">Offline-first · Sin anuncios · Sin suscripción</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+function calcMacros() {
+  var age    = parseInt(document.getElementById('cAge').value);
+  var sex    = document.getElementById('cSex').value;
+  var weight = parseFloat(document.getElementById('cWeight').value);
+  var height = parseFloat(document.getElementById('cHeight').value);
+  var act    = parseFloat(document.getElementById('cActivity').value);
+  var goal   = document.getElementById('cGoal').value;
+
+  if (!age || !weight || !height || age < 16 || weight < 40 || height < 140) return;
+
+  // Mifflin-St Jeor
+  var bmr = sex === 'm'
+    ? 10 * weight + 6.25 * height - 5 * age + 5
+    : 10 * weight + 6.25 * height - 5 * age - 161;
+
+  var tdee = bmr * act;
+  var cal  = goal === 'loss' ? tdee * 0.80 : goal === 'gain' ? tdee * 1.10 : tdee;
+  cal = Math.round(cal);
+
+  // Keto split: 5% carbs, 25% protein, 70% fat
+  var carbsG   = Math.round(cal * 0.05 / 4);
+  var proteinG = Math.round(cal * 0.25 / 4);
+  var fatG     = Math.round(cal * 0.70 / 9);
+
+  document.getElementById('resCalories').textContent = cal;
+  document.getElementById('resCarbs').textContent    = carbsG + 'g';
+  document.getElementById('resProtein').textContent  = proteinG + 'g';
+  document.getElementById('resFat').textContent      = fatG + 'g';
+
+  var panel = document.getElementById('calcResult');
+  panel.style.display = 'block';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Allow Enter key on calc inputs
+document.querySelectorAll('.calc-input').forEach(function(el) {
+  el.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') calcMacros();
+  });
+});
+
+// Smooth anchor scroll
+document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+  a.addEventListener('click', function(e) {
+    var target = document.querySelector(this.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+</script>
+</body>
+</html>

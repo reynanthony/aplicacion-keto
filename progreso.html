@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+<script>!function(){var d=localStorage.getItem("ketocore_onboarding_done"),g=localStorage.getItem("KetoCore_guest");if(!d&&!g)window.location.replace("welcome.html");}();</script>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#ff4d00">
+<title>KetoCore | Progreso</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght@20..48,100..700&display=swap" rel="stylesheet"/>
+<script src="utils.js"></script>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary-container":"#ff4d00","secondary":"#ffb300","surface":"#0a0a0a","surface-container":"#181717","surface-container-high":"#1e1c1c","surface-container-highest":"#242222","on-surface":"#ffffff","on-surface-variant":"#adaaaa","background":"#0a0a0a"},fontFamily:{headline:["Plus Jakarta Sans","sans-serif"],body:["Inter","sans-serif"]}}}}
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#fff;font-family:'Inter',sans-serif;}
+.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px)}
+.pt-safe{padding-top:env(safe-area-inset-top,0px)}
+.glass-card{background:rgba(24,23,23,0.8);border:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(20px)}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+</style>
+</head>
+<body class="bg-background text-on-surface">
+
+<!-- TopBar -->
+<header class="fixed top-0 left-0 right-0 z-40 h-14 flex items-center justify-between px-4 border-b border-white/5 pt-safe" style="background:rgba(10,10,10,0.95);backdrop-filter:blur(20px)">
+  <div class="flex items-center gap-3">
+    <img src="logo.svg" alt="KetoCore" class="w-8 h-8" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
+    <h1 class="text-base font-headline font-black text-white">Mi Progreso</h1>
+  </div>
+  <button onclick="openAddWeightModal()" class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:rgba(255,77,0,0.15)">
+    <span class="material-symbols-outlined text-primary-container text-xl">add</span>
+  </button>
+</header>
+
+<!-- Main -->
+<main class="pt-16 pb-24 px-4 space-y-4 max-w-lg mx-auto">
+
+  <!-- Weight Progress Card -->
+  <section class="glass-card rounded-2xl p-5 mt-2">
+    <div class="flex items-center gap-2 mb-4">
+      <span class="material-symbols-outlined text-primary-container" style="font-variation-settings:'FILL' 1">monitor_weight</span>
+      <h2 class="text-base font-headline font-bold text-white">Progreso de Peso</h2>
+    </div>
+
+    <!-- Progress ring + stats -->
+    <div class="flex items-center gap-5 mb-5">
+      <div class="relative w-24 h-24 flex-shrink-0">
+        <svg class="w-full h-full -rotate-90" viewBox="0 0 96 96">
+          <circle cx="48" cy="48" r="38" fill="transparent" stroke="rgba(255,255,255,0.06)" stroke-width="8"/>
+          <circle id="weightProgressRing" cx="48" cy="48" r="38" fill="transparent" stroke="#ff4d00"
+            stroke-dasharray="239" stroke-dashoffset="239" stroke-linecap="round" stroke-width="8"
+            style="transition:stroke-dashoffset 0.6s ease"/>
+        </svg>
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <p id="weightProgressPct" class="text-2xl font-headline font-black text-white leading-none">0%</p>
+          <p class="text-[8px] text-on-surface-variant uppercase tracking-wider">Meta</p>
+        </div>
+      </div>
+      <div class="flex-1 grid grid-cols-2 gap-3">
+        <div class="bg-surface-container rounded-xl p-3 text-center">
+          <p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Actual</p>
+          <p id="currentWeightDisplay" class="text-lg font-headline font-black text-white">-- kg</p>
+        </div>
+        <div class="bg-surface-container rounded-xl p-3 text-center">
+          <p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Objetivo</p>
+          <p id="goalWeightDisplay" class="text-lg font-headline font-black text-primary-container">-- kg</p>
+        </div>
+        <div class="bg-surface-container rounded-xl p-3 text-center col-span-2">
+          <p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Perdidos</p>
+          <p id="lostWeightDisplay" class="text-base font-headline font-bold text-green-400">-- kg</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weight chart -->
+    <div class="bg-surface-container rounded-xl p-3">
+      <p class="text-[10px] text-on-surface-variant uppercase tracking-wider mb-3">Últimas 4 semanas</p>
+      <div style="position:relative;height:120px">
+        <canvas id="weightChartProg"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Health Score History -->
+  <section class="glass-card rounded-2xl p-5">
+    <div class="flex items-center gap-2 mb-4">
+      <span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1">health_metrics</span>
+      <h2 class="text-base font-headline font-bold text-white">Health Score</h2>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="relative w-20 h-20 flex-shrink-0">
+        <svg class="w-full h-full -rotate-90" viewBox="0 0 80 80">
+          <circle cx="40" cy="40" r="32" fill="transparent" stroke="rgba(255,255,255,0.06)" stroke-width="7"/>
+          <circle id="healthScoreProgRing" cx="40" cy="40" r="32" fill="transparent" stroke="#ffb300"
+            stroke-dasharray="201" stroke-dashoffset="201" stroke-linecap="round" stroke-width="7"
+            style="transition:stroke-dashoffset 0.5s ease"/>
+        </svg>
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <p id="healthScoreProgVal" class="text-xl font-headline font-black text-white leading-none">--</p>
+          <p class="text-[7px] text-on-surface-variant">/ 100</p>
+        </div>
+      </div>
+      <div class="flex-1">
+        <p id="healthScoreProgLabel" class="text-sm font-bold text-white mb-1">--</p>
+        <p class="text-xs text-on-surface-variant mb-3">Basado en adherencia, peso y actividad</p>
+        <div id="healthScoreBreakdown" class="space-y-1.5">
+          <!-- Breakdown items rendered by JS -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Streaks & Achievements -->
+  <section class="glass-card rounded-2xl p-5">
+    <div class="flex items-center gap-2 mb-4">
+      <span class="material-symbols-outlined text-yellow-400" style="font-variation-settings:'FILL' 1">emoji_events</span>
+      <h2 class="text-base font-headline font-bold text-white">Rachas y Logros</h2>
+    </div>
+    <div class="grid grid-cols-3 gap-3 mb-4">
+      <div class="bg-surface-container rounded-xl p-3 text-center">
+        <p class="text-2xl mb-1">🔥</p>
+        <p id="streakCurrent" class="text-xl font-headline font-black text-primary-container">0</p>
+        <p class="text-[10px] text-on-surface-variant">Racha actual</p>
+      </div>
+      <div class="bg-surface-container rounded-xl p-3 text-center">
+        <p class="text-2xl mb-1">🏆</p>
+        <p id="streakBest" class="text-xl font-headline font-black text-secondary">0</p>
+        <p class="text-[10px] text-on-surface-variant">Mejor racha</p>
+      </div>
+      <div class="bg-surface-container rounded-xl p-3 text-center">
+        <p class="text-2xl mb-1">⚡</p>
+        <p id="ketoDaysTotal" class="text-xl font-headline font-black text-green-400">0</p>
+        <p class="text-[10px] text-on-surface-variant">Días keto</p>
+      </div>
+    </div>
+    <!-- Achievements grid -->
+    <div id="achievementsGrid" class="flex flex-wrap gap-2">
+      <!-- Rendered by JS -->
+    </div>
+  </section>
+
+  <!-- Adherence last 7 days -->
+  <section class="glass-card rounded-2xl p-5">
+    <div class="flex items-center gap-2 mb-4">
+      <span class="material-symbols-outlined text-green-400" style="font-variation-settings:'FILL' 1">fact_check</span>
+      <h2 class="text-base font-headline font-bold text-white">Adherencia — 7 días</h2>
+    </div>
+    <div id="adherenceWeek" class="flex gap-2 justify-between">
+      <!-- 7 day bars rendered by JS -->
+    </div>
+  </section>
+
+</main>
+
+<!-- Add Weight Modal -->
+<div id="addWeightModal" class="fixed inset-0 z-[80] hidden">
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeAddWeightModal()"></div>
+  <div class="absolute bottom-0 left-0 right-0 glass-card rounded-t-3xl p-6 pb-safe shadow-2xl">
+    <div class="w-10 h-1 bg-white/20 rounded-full mx-auto mb-5"></div>
+    <h3 class="text-lg font-headline font-bold text-white mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary-container">monitor_weight</span>
+      Registrar Peso
+    </h3>
+    <input type="number" id="newWeightInput" step="0.1" min="20" max="300"
+      class="w-full py-4 px-4 bg-surface-container text-white rounded-2xl text-2xl font-bold text-center focus:outline-none focus:ring-2 border border-white/10 mb-4"
+      style="--tw-ring-color:#ff4d00" placeholder="0.0 kg">
+    <button onclick="saveProgressWeight()" class="w-full py-4 rounded-2xl text-white font-bold text-base transition-all active:scale-95"
+      style="background:linear-gradient(135deg,#ff4d00,#ff6b2c)">
+      Guardar
+    </button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 bg-green-600 text-white px-5 py-3 rounded-xl shadow-lg z-[9999] font-medium hidden opacity-0 transition-all duration-300">
+  <span id="toastMsg">✓ Guardado</span>
+</div>
+
+<!-- Bottom Navigation -->
+<nav id="bottomNav" class="md:hidden fixed bottom-0 left-0 right-0 z-50" style="background:rgba(17,16,16,0.97);border-top:1px solid rgba(255,255,255,0.06);padding-bottom:env(safe-area-inset-bottom,0px)" role="navigation" aria-label="Navegación principal">
+  <div class="flex justify-around items-center h-16 px-1">
+    <a href="index.html" class="flex flex-col items-center gap-0.5 flex-1 py-2 transition-all" style="color:rgba(255,255,255,0.5)">
+      <span class="w-10 h-6 flex items-center justify-center">
+        <span class="material-symbols-outlined text-xl">cottage</span>
+      </span>
+      <span class="text-[10px]">Inicio</span>
+    </a>
+    <a href="plan.html" class="flex flex-col items-center gap-0.5 flex-1 py-2 transition-all" style="color:rgba(255,255,255,0.5)">
+      <span class="w-10 h-6 flex items-center justify-center">
+        <span class="material-symbols-outlined text-xl">calendar_month</span>
+      </span>
+      <span class="text-[10px]">Plan</span>
+    </a>
+    <a href="comunidad.html" class="flex flex-col items-center gap-0.5 flex-1 py-2 transition-all" style="color:rgba(255,255,255,0.5)">
+      <span class="w-10 h-6 flex items-center justify-center">
+        <span class="material-symbols-outlined text-xl">people</span>
+      </span>
+      <span class="text-[10px]">Comunidad</span>
+    </a>
+    <a href="progreso.html" class="flex flex-col items-center gap-0.5 flex-1 py-2 transition-all" style="color:#ff4d00" aria-current="page">
+      <span class="w-10 h-6 rounded-full flex items-center justify-center" style="background:rgba(255,77,0,0.15)">
+        <span class="material-symbols-outlined text-xl" style="font-variation-settings:'FILL' 1">trending_up</span>
+      </span>
+      <span class="text-[10px] font-bold">Progreso</span>
+    </a>
+    <a href="perfil.html" class="flex flex-col items-center gap-0.5 flex-1 py-2 transition-all" style="color:rgba(255,255,255,0.5)">
+      <span class="w-10 h-6 flex items-center justify-center">
+        <span class="material-symbols-outlined text-xl">person</span>
+      </span>
+      <span class="text-[10px]">Perfil</span>
+    </a>
+  </div>
+</nav>
+
+<script src="modules/health-score.js"></script>
+<script>
+function fmtDec(n){ return n != null ? parseFloat(n).toFixed(1) : '--'; }
+function showToast(msg){ var t=document.getElementById('toast'); var m=document.getElementById('toastMsg'); if(m) m.textContent=msg; t.classList.remove('hidden','opacity-0'); t.classList.add('opacity-100'); setTimeout(function(){ t.classList.add('opacity-0'); setTimeout(function(){ t.classList.add('hidden'); },300); },2000); }
+
+function openAddWeightModal(){ document.getElementById('addWeightModal').classList.remove('hidden'); var inp=document.getElementById('newWeightInput'); if(inp){ inp.value=''; inp.focus(); } }
+function closeAddWeightModal(){ document.getElementById('addWeightModal').classList.add('hidden'); }
+
+function saveProgressWeight(){
+  var inp = document.getElementById('newWeightInput');
+  var val = parseFloat(inp.value);
+  if (isNaN(val) || val < 20 || val > 300) { alert('Ingresa un peso válido'); return; }
+  var history = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
+  if (!Array.isArray(history)) history = [];
+  var today = new Date().toISOString().split('T')[0];
+  var idx = history.findIndex(function(h){ return (h.date||h.fecha) === today; });
+  if (idx >= 0) history[idx].weight = val;
+  else history.push({ date: today, weight: val });
+  localStorage.setItem('keto_weight_history', JSON.stringify(history));
+  closeAddWeightModal();
+  showToast('✓ Peso registrado: ' + val + ' kg');
+  loadProgressPage();
+}
+
+function loadProgressPage(){
+  var profile = safeParseJSON(localStorage.getItem('keto_profile'), {});
+  var history = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
+  if (!Array.isArray(history)) history = [];
+
+  var startW  = parseFloat(profile.startWeight || profile.pesoInicial) || 0;
+  var goalW   = parseFloat(profile.goalWeight  || profile.pesoObjetivo) || 0;
+  var sorted  = history.slice().sort(function(a,b){ return new Date(b.date||b.fecha) - new Date(a.date||a.fecha); });
+  var currentW = sorted.length ? (sorted[0].weight || sorted[0].peso || 0) : 0;
+  if (!currentW && profile.weight) currentW = parseFloat(profile.weight);
+
+  // Weight progress
+  var totalToLose = startW && goalW ? Math.abs(startW - goalW) : 0;
+  var lost = startW && currentW ? Math.abs(startW - currentW) : 0;
+  var pct  = totalToLose > 0 ? Math.min(100, Math.round((lost / totalToLose) * 100)) : 0;
+
+  var safeSet = function(id, txt){ var el=document.getElementById(id); if(el) el.textContent=txt; };
+  safeSet('currentWeightDisplay', currentW ? fmtDec(currentW) + ' kg' : '-- kg');
+  safeSet('goalWeightDisplay',    goalW    ? fmtDec(goalW)    + ' kg' : '-- kg');
+  safeSet('lostWeightDisplay',    lost > 0 ? '-' + fmtDec(lost) + ' kg' : '0 kg');
+  safeSet('weightProgressPct', pct + '%');
+
+  var ring = document.getElementById('weightProgressRing');
+  if (ring){ var c=239; ring.style.strokeDashoffset = c - (c * pct / 100); }
+
+  // Weight chart (last 28 days)
+  var ctx = document.getElementById('weightChartProg');
+  if (ctx){
+    var days28 = []; var labels = []; var data = [];
+    for (var i=27;i>=0;i--){
+      var d = new Date(); d.setDate(d.getDate()-i);
+      var dk = d.toISOString().split('T')[0];
+      days28.push(dk);
+      var entry = history.find(function(h){ return (h.date||h.fecha) === dk; });
+      labels.push(i % 7 === 0 ? d.getDate() + '/' + (d.getMonth()+1) : '');
+      data.push(entry ? (entry.weight||entry.peso||null) : null);
+    }
+    if (window._weightChart) window._weightChart.destroy();
+    window._weightChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data, borderColor: '#ff4d00', backgroundColor: 'rgba(255,77,0,0.1)',
+          borderWidth: 2, pointRadius: 3, pointBackgroundColor: '#ff4d00',
+          spanGaps: true, tension: 0.4, fill: true
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        animation: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c){ return c.raw ? c.raw + ' kg' : ''; } } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.3)', font: { size: 9 }, maxTicksLimit: 5 } },
+          y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: 'rgba(255,255,255,0.4)', font: { size: 9 }, callback: function(v){ return v + 'kg'; }, maxTicksLimit: 4 } }
+        }
+      }
+    });
+  }
+
+  // Health Score
+  if (typeof HealthScoreEngine !== 'undefined'){
+    var hs = HealthScoreEngine.calculate();
+    var hRing = document.getElementById('healthScoreProgRing');
+    if (hRing){ var hc=201; hRing.style.strokeDashoffset = hc - (hc * hs.total / 100); hRing.style.stroke = hs.color; }
+    safeSet('healthScoreProgVal',   hs.total);
+    safeSet('healthScoreProgLabel', hs.label);
+    var breakdown = document.getElementById('healthScoreBreakdown');
+    if (breakdown){
+      var items = [
+        { label: 'Checklist', value: hs.breakdown.checklist, max: 35, color: '#ff4d00' },
+        { label: 'Macros',    value: hs.breakdown.macros,    max: 25, color: '#ffb300' },
+        { label: 'Peso',      value: hs.breakdown.weight,    max: 25, color: '#4ade80' },
+        { label: 'Ejercicio', value: hs.breakdown.exercise,  max: 15, color: '#818cf8' }
+      ];
+      breakdown.innerHTML = items.map(function(item){
+        var pct = Math.round((item.value / item.max) * 100);
+        return '<div class="flex items-center gap-2">' +
+          '<span class="text-[10px] text-on-surface-variant w-14">' + item.label + '</span>' +
+          '<div class="flex-1 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">' +
+            '<div class="h-full rounded-full transition-all" style="width:' + pct + '%;background:' + item.color + '"></div>' +
+          '</div>' +
+          '<span class="text-[10px] font-bold text-white w-6 text-right">' + item.value + '</span>' +
+        '</div>';
+      }).join('');
+    }
+  }
+
+  // Streaks
+  var streakData = safeParseJSON(localStorage.getItem('ketoStreak'), { currentStreak:0, bestStreak:0, ketoDays:0 });
+  safeSet('streakCurrent', streakData.currentStreak || 0);
+  safeSet('streakBest',    streakData.bestStreak    || 0);
+  safeSet('ketoDaysTotal', streakData.ketoDays      || 0);
+
+  // Achievements
+  var achievements = [];
+  if ((streakData.ketoDays || 0) >= 7)  achievements.push({ icon:'🔥', label:'1 semana keto' });
+  if ((streakData.ketoDays || 0) >= 30) achievements.push({ icon:'🏅', label:'30 días keto' });
+  if (lost >= 2)   achievements.push({ icon:'⚡', label:'Primeros 2 kg' });
+  if (lost >= 5)   achievements.push({ icon:'🥇', label:'5 kg perdidos' });
+  if (lost >= 10)  achievements.push({ icon:'🏆', label:'10 kg perdidos' });
+  if ((streakData.bestStreak || 0) >= 7) achievements.push({ icon:'🌟', label:'Racha de 7 días' });
+
+  var grid = document.getElementById('achievementsGrid');
+  if (grid){
+    grid.innerHTML = achievements.length
+      ? achievements.map(function(a){
+          return '<div class="flex items-center gap-2 bg-surface-container rounded-xl px-3 py-2">' +
+            '<span class="text-base">' + a.icon + '</span>' +
+            '<span class="text-xs font-medium text-white">' + a.label + '</span>' +
+          '</div>';
+        }).join('')
+      : '<p class="text-xs text-on-surface-variant">Completa tu primer checklist para desbloquear logros.</p>';
+  }
+
+  // 7-day adherence
+  var adherenceEl = document.getElementById('adherenceWeek');
+  if (adherenceEl){
+    var days7 = [];
+    for (var j=6;j>=0;j--){
+      var dd = new Date(); dd.setDate(dd.getDate()-j);
+      var dk2 = dd.toISOString().split('T')[0];
+      var chk = safeParseJSON(localStorage.getItem('checklist_' + dk2), null);
+      var count = chk ? Math.min(Object.values(chk).filter(function(v){ return v === true; }).length, 6) : 0;
+      var pct2 = Math.round((count / 6) * 100);
+      var isToday = j === 0;
+      days7.push({ day: ['D','L','M','X','J','V','S'][dd.getDay()], pct: pct2, isToday: isToday, hasData: chk !== null });
+    }
+    adherenceEl.innerHTML = days7.map(function(d){
+      var barColor = d.pct >= 80 ? '#22c55e' : d.pct >= 50 ? '#ffb300' : d.pct > 0 ? '#ff7351' : 'rgba(255,255,255,0.1)';
+      return '<div class="flex flex-col items-center gap-1 flex-1">' +
+        '<div class="w-full flex flex-col justify-end rounded-lg overflow-hidden" style="height:60px;background:rgba(255,255,255,0.05)">' +
+          '<div class="w-full rounded-t-lg transition-all" style="height:' + (d.pct > 0 ? Math.max(4, d.pct * 0.6) : 0) + 'px;background:' + barColor + '"></div>' +
+        '</div>' +
+        '<span class="text-[9px] ' + (d.isToday ? 'text-primary-container font-bold' : 'text-on-surface-variant') + '">' + d.day + '</span>' +
+        '<span class="text-[9px] font-bold ' + (d.hasData ? 'text-white' : 'text-white/20') + '">' + (d.hasData ? d.pct + '%' : '--') + '</span>' +
+      '</div>';
+    }).join('');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadProgressPage);
+</script>
+</body>
+</html>
