@@ -1,0 +1,755 @@
+﻿---
+import AppLayout from '../../layouts/AppLayout.astro';
+import AppNav from '../../components/AppNav.astro';
+---
+
+<AppLayout title="KetoCore | Recetas" authGuard={true}>
+<style is:global>
+.sidebar-link.active{background:rgba(22,22,22,1)!important;}
+.sidebar-link.active .material-symbols-outlined{color:#ff4d00!important;}
+.sidebar-link.active{color:white!important;}
+.sidebar-collapsed .sidebar-nav{width:72px;}
+.sidebar-collapsed .sidebar-nav .sidebar-text{display:none;}
+.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0;}
+.sidebar-collapsed .sidebar-logo-text{display:none;}
+.sidebar-collapsed .sidebar-logo{justify-content:center;}
+.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px;}
+.sidebar-collapsed~main .main-content{margin-left:72px;}
+.sidebar-toggle-btn{left:256px;transition:left 0.3s ease;}
+.sidebar-collapsed~.sidebar-toggle-btn{left:72px;}
+
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.glass-card{background:rgba(22,22,22,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1)}
+.gradient-primary{background:linear-gradient(135deg,#ff4d00 0%,#ffb300 100%)}
+.sidebar-collapsed .sidebar-nav{width:72px}
+.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}
+.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}
+.sidebar-link.active{background:#1e1e1e}
+.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
+.sidebar-link.active{border-left:4px solid #ff4d00;border-radius:0}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:#0a0a0a}
+::-webkit-scrollbar-thumb{background:#1e1e1e;border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:#2a2a2a}
+.shadow-glow{box-shadow:0 0 20px rgba(255,77,0,0.3)}
+.shadow-glow-strong{box-shadow:0 0 30px rgba(255,77,0,0.5)}
+</style>
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(10,10,10,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,0.06)">
+  <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
+    <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
+    <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f5f5f5">KetoCore</span>
+  </a>
+  <div class="flex items-center gap-1.5">
+    <button onclick="toggleMobileUserMenu()" aria-label="Mi cuenta" class="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden" style="background:#1e1e1e;border:1px solid rgba(255,255,255,0.06)">
+      <img id="mobileHeaderAvatarImg" src="" class="hidden w-full h-full object-cover" alt="Avatar">
+      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined" style="font-size:20px;color:rgba(245,245,245,0.6)">account_circle</span>
+    </button>
+    <button onclick="toggleHamburgerMenu()" aria-label="Abrir menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1e1e;color:rgba(245,245,245,0.6)">
+      <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">menu</span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile User Dropdown -->
+<div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161616;border:1px solid rgba(255,255,255,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
+  <div class="p-3" style="border-bottom:1px solid rgba(255,255,255,0.06)">
+    <p class="text-sm font-semibold" style="color:#f5f5f5" id="mobileDropdownUserName">Usuario</p>
+    <p class="text-xs mt-0.5" style="color:rgba(245,245,245,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
+  </div>
+  <div class="p-2">
+    <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f5f5f5">
+      <span class="material-symbols-outlined text-lg" style="color:rgba(245,245,245,0.55)">person</span>
+      <span class="text-sm font-medium">Mi Perfil</span>
+    </a>
+    <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-red-50" style="color:#dc2626">
+      <span class="material-symbols-outlined text-lg">logout</span>
+      <span class="text-sm font-medium">Cerrar Sesión</span>
+    </button>
+  </div>
+</div>
+<main class="main-content pt-14 px-4 pb-20 min-h-screen">
+<div class="space-y-8">
+
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div class="max-w-2xl">
+<span class="text-primary-container font-bold uppercase tracking-widest text-xs mb-2 block">Premium Fuel</span>
+<h2 class="font-headline text-5xl md:text-7xl font-extrabold tracking-tighter">RECIPE <span class="text-primary-container">VAULT</span></h2>
+<p class="text-on-surface-variant mt-4 text-lg max-w-lg">Descubre comidas keto de alto rendimiento diseñadas para mantener tu cuerpo en estado cetogénico óptimo.</p>
+</div>
+<div class="flex flex-col items-start gap-4">
+<button onclick="openCreateRecipeModal()" class="bg-primary-container text-white font-black uppercase tracking-tighter py-4 px-8 rounded-xl flex items-center gap-3 hover:scale-105 active:scale-95 transition-all shadow-glow">
+<span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">add_circle</span>
+NUEVA RECETA
+</button>
+</div>
+</header>
+
+<section class="mb-10 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+<div class="flex-grow max-w-md relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary-container transition-colors">search</span>
+<input id="searchInput" oninput="filterRecipes()" class="w-full bg-surface-container-low border border-outline-variant focus:border-primary-container py-4 pl-12 pr-4 rounded-xl text-on-surface placeholder:text-on-surface-variant" placeholder="Buscar recetas..." type="text"/>
+</div>
+<div class="flex flex-wrap gap-2" id="categoryFilters">
+<button onclick="setCategory('all')" class="category-btn active bg-primary-container text-white py-3 px-6 rounded-xl text-sm font-bold border border-transparent transition-colors" data-category="all">Todas</button>
+<button onclick="setCategory('desayuno')" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors" data-category="desayuno">Desayuno</button>
+<button onclick="setCategory('almuerzo')" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors" data-category="almuerzo">Almuerzo</button>
+<button onclick="setCategory('cena')" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors" data-category="cena">Cena</button>
+<button onclick="setCategory('snacks')" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors" data-category="snacks">Snacks</button>
+<button onclick="showFavorites()" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors" data-category="favorites">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1">favorite</span>
+Favoritos
+</button>
+<button onclick="showMacroFit()" id="btnParaHoy" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors flex items-center gap-2" data-category="macrofit">
+<span class="material-symbols-outlined text-green-400 text-base" style="font-variation-settings:'FILL' 1">target</span>
+Para hoy
+</button>
+<span id="totalRecipesCount" class="ml-4 text-sm text-on-surface-variant self-center"></span>
+</div>
+</section>
+
+<div id="recipesGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+
+<div id="noRecipes" class="hidden text-center py-20">
+<span class="material-symbols-outlined text-6xl text-on-surface-variant/70 mb-4 block">search_off</span>
+<p class="text-on-surface-variant text-lg">No se encontraron recetas</p>
+</div>
+
+</div>
+</main>
+
+<div id="recipeModal" class="fixed inset-0 z-[60] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeRecipeModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none overflow-y-auto">
+<div class="bg-surface-container-low rounded-[2rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto pointer-events-auto">
+<div id="recipeModalContent"></div>
+</div>
+</div>
+</div>
+
+<div id="createRecipeModal" class="fixed inset-0 z-[80] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeCreateRecipeModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none overflow-y-auto">
+<div class="glass-card rounded-3xl p-8 w-full max-w-lg max-h-[90vh] overflow-y-auto pointer-events-auto border border-primary-container/20">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-2xl font-headline font-black text-white">Crear Nueva Receta</h3>
+<button onclick="closeCreateRecipeModal()" class="w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
+</div>
+<div class="space-y-6">
+<div>
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Nombre de la receta</label>
+<input type="text" id="newRecipeName" class="w-full bg-surface-container-high text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary" placeholder="Ej: Desayuno Keto">
+</div>
+<div>
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Categoría</label>
+<select id="newRecipeCategory" class="w-full bg-surface-container-high text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary">
+<option value="desayuno">Desayuno</option>
+<option value="almuerzo">Almuerzo</option>
+<option value="cena">Cena</option>
+<option value="snacks">Snacks</option>
+</select>
+</div>
+<div>
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Tiempo de preparación (min)</label>
+<input type="number" id="newRecipeTime" class="w-full bg-surface-container-high text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary" value="15" min="1">
+</div>
+<div>
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Instrucciones</label>
+<textarea id="newRecipeInstructions" class="w-full bg-surface-container-high text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary h-32" placeholder="Describe la preparación..."></textarea>
+</div>
+<div class="bg-surface-container-high rounded-xl p-4">
+<p class="text-xs text-primary-container uppercase tracking-wider mb-3">Macros por porción</p>
+<div class="grid grid-cols-4 gap-4">
+<div><label class="text-[10px] text-on-surface-variant block mb-1">kcal</label><input type="number" id="newRecipeCalories" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
+<div><label class="text-[10px] text-on-surface-variant block mb-1">Proteína</label><input type="number" id="newRecipeProtein" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
+<div><label class="text-[10px] text-on-surface-variant block mb-1">Grasa</label><input type="number" id="newRecipeFat" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
+<div><label class="text-[10px] text-on-surface-variant block mb-1">Carbs</label><input type="number" id="newRecipeCarbs" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
+</div>
+</div>
+</div>
+<div class="flex gap-3 mt-6">
+<button onclick="closeCreateRecipeModal()" class="flex-1 py-4 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>
+<button onclick="saveRecipe()" class="flex-1 py-4 rounded-xl bg-primary-container text-white font-bold hover:opacity-90 transition-colors">Guardar</button>
+</div>
+</div>
+</div>
+</div>
+
+<div id="mealPlanModal" class="fixed inset-0 z-[70] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeMealPlanModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+<div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto border border-primary-container/20">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-headline font-bold text-white">Agregar al Plan</h3>
+<button onclick="closeMealPlanModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
+</div>
+<p id="mealPlanRecipeName" class="text-primary-container mb-4"></p>
+<div class="space-y-3">
+<button onclick="addToMealPlan('desayuno')" class="w-full py-4 rounded-xl bg-yellow-500/20 text-yellow-400 font-bold hover:bg-yellow-500/30 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">wb_sunny</span> Desayuno
+</button>
+<button onclick="addToMealPlan('almuerzo')" class="w-full py-4 rounded-xl bg-orange-500/20 text-orange-400 font-bold hover:bg-orange-500/30 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">light_mode</span> Almuerzo
+</button>
+<button onclick="addToMealPlan('cena')" class="w-full py-4 rounded-xl bg-purple-500/20 text-purple-400 font-bold hover:bg-purple-500/30 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">nightlight</span> Cena
+</button>
+<button onclick="addToMealPlan('snacks')" class="w-full py-4 rounded-xl bg-pink-500/20 text-pink-400 font-bold hover:bg-pink-500/30 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">cookie</span> Snacks
+</button>
+</div>
+</div>
+</div>
+</div>
+
+<div id="servingsModal" class="fixed inset-0 z-[75] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeServingsModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+<div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto border border-primary-container/20">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-headline font-bold text-white">Ajustar Porciones</h3>
+<button onclick="closeServingsModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
+</div>
+<div class="text-center">
+<p id="servingsRecipeName" class="text-white font-bold mb-4"></p>
+<div class="flex items-center justify-center gap-6 mb-6">
+<button onclick="changeServings(-1)" class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-white text-2xl hover:bg-primary-container transition-colors">-</button>
+<span id="servingsCount" class="text-4xl font-black text-primary-container">1</span>
+<button onclick="changeServings(1)" class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-white text-2xl hover:bg-primary-container transition-colors">+</button>
+</div>
+<div class="bg-surface-container-high rounded-xl p-4 mb-6">
+<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">Macros ajustados</p>
+<div class="grid grid-cols-4 gap-4 text-center">
+<div><span id="adjustedCalories" class="text-xl font-bold text-yellow-400">0</span><span class="text-[10px] text-on-surface-variant block">kcal</span></div>
+<div><span id="adjustedProtein" class="text-xl font-bold text-orange-400">0g</span><span class="text-[10px] text-on-surface-variant block">Prot</span></div>
+<div><span id="adjustedFat" class="text-xl font-bold text-yellow-300">0g</span><span class="text-[10px] text-on-surface-variant block">Grasa</span></div>
+<div><span id="adjustedCarbs" class="text-xl font-bold text-cyan-400">0g</span><span class="text-[10px] text-on-surface-variant block">Carbs</span></div>
+</div>
+</div>
+<button onclick="confirmServings()" class="w-full py-4 rounded-xl kinetic-gradient text-white font-black hover:opacity-90 transition-colors">Aplicar</button>
+</div>
+</div>
+</div>
+</div>
+
+<nav class="md:hidden fixed bottom-0 w-full bg-surface-container-low/95 backdrop-blur-xl h-16 flex justify-around items-center z-50 border-t border-white/5">
+<a href="/app/" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[10px]">Inicio</span></a>
+<a href="/app/perfil" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
+<a href="/app/alimentos" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
+<a href="/app/plan" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">event_note</span><span class="text-[10px]">Plan</span></a>
+<a href="/app/compras" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
+<a href="/app/macros" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
+<a href="/app/recetas" class="flex flex-col items-center text-primary"><span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">menu_book</span><span class="text-[10px]">Recipes</span></a>
+<a href="/app/checklist" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
+<a href="/app/entrenamientos" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
+</nav>
+
+<script is:inline src="/app/utils.js"></script>
+<script is:inline src="/app/data-loader.js"></script>
+<script is:inline src="/app/data/recipe-details.js"></script>
+<script is:inline src="/app/modules/keto-inspector.js"></script>
+<script is:inline src="/app/modules/keto-inspector-recetas-integration.js"></script>
+<script is:inline>
+if(localStorage.getItem("sidebarCollapsed")==="true"){document.body.classList.add("sidebar-collapsed");var s=document.getElementById("sidebarNav");s.style.width="72px";s.style.overflow="hidden"}
+var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
+
+// Recetas de recipe-details.js (única fuente)
+var recipesDB = [];
+
+function loadRecipes() {
+    console.log('[loadRecipes] Ejecutando, KETO_RECIPES existe:', typeof KETO_RECIPES !== 'undefined');
+    if (typeof KETO_RECIPES !== 'undefined') {
+        recipesDB = Object.keys(KETO_RECIPES).map(function(key) {
+            var r = KETO_RECIPES[key];
+            return {
+                id: key,
+                title: r.title,
+                description: r.tips || '',
+                instructions: r.instructions ? r.instructions.join('. ') : '',
+                difficulty: r.difficulty || 'facil',
+                category: r.mealType || r.category,
+                prepTime: parseInt(r.prepTime) || 15,
+                image: r.image || '',
+                calories: r.calories || 0,
+                protein: r.protein || 0,
+                fat: r.fat || 0,
+                carbs: r.carbs || 0,
+                netCarbs: r.netCarbs || 0,
+                fiber: r.fiber || 0,
+                source: 'local'
+            };
+        });
+        console.log('✅ Cargadas', recipesDB.length, 'recetas de recipe-details.js');
+        renderRecipes();
+        return true;
+    }
+    console.error('❌ KETO_RECIPES no está definido');
+    return false;
+}
+
+// Ejecutar carga de recetas al iniciar
+loadRecipes();
+
+var currentCategory="all";
+var showFavoritesOnly=false;
+var showMacroFitOnly=false;
+
+function getRemainingMacros(){
+  var macros=safeParseJSON(localStorage.getItem('keto_macros'),{});
+  var today=new Date().toISOString().slice(0,10);
+  var plan=safeParseJSON(localStorage.getItem('mealPlan_'+today),{desayuno:[],almuerzo:[],cena:[],snacks:[]});
+  var consumed={cal:0,prot:0,fat:0,carbs:0};
+  ['desayuno','almuerzo','cena','snacks'].forEach(function(m){
+    (plan[m]||[]).forEach(function(item){
+      consumed.cal+=parseFloat(item.calories||0);
+      consumed.prot+=parseFloat(item.protein||0);
+      consumed.fat+=parseFloat(item.fat||0);
+      consumed.carbs+=parseFloat(item.carbs||0);
+    });
+  });
+  return {
+    cal:Math.max(0,(parseInt(macros.calories)||1800)-consumed.cal),
+    prot:Math.max(0,(parseInt(macros.protein)||160)-consumed.prot),
+    fat:Math.max(0,(parseInt(macros.fat)||150)-consumed.fat),
+    carbs:Math.max(0,(parseInt(macros.carbs)||25)-consumed.carbs)
+  };
+}
+
+function showMacroFit(){
+  showMacroFitOnly=true;
+  showFavoritesOnly=false;
+  currentCategory='all';
+  document.querySelectorAll('.category-btn').forEach(function(btn){
+    btn.classList.remove('bg-primary','bg-primary-container','text-white','active');
+    btn.classList.add('bg-surface-container-high');
+  });
+  var btn=document.getElementById('btnParaHoy');
+  if(btn){ btn.classList.add('bg-green-500/20','text-green-400','active'); btn.classList.remove('bg-surface-container-high'); }
+  renderRecipes();
+}
+var currentRecipeId=null;
+var currentServings=1;
+var currentRecipeMacros={};
+
+function getFavorites(){
+var stored=localStorage.getItem("recipeFavorites");
+if(stored){try{return JSON.parse(stored)}catch(e){}}
+return[];
+}
+
+function toggleFavorite(id){
+var favorites=getFavorites();
+var idx=favorites.indexOf(id);
+if(idx===-1){favorites.push(id);showToast("Agregado a favoritos")}else{favorites.splice(idx,1);showToast("Eliminado de favoritos")}
+localStorage.setItem("recipeFavorites",JSON.stringify(favorites));
+renderRecipes();
+}
+
+function setCategory(cat){
+currentCategory=cat;
+showFavoritesOnly=false;
+showMacroFitOnly=false;
+document.querySelectorAll(".category-btn").forEach(function(btn){
+btn.classList.remove("bg-primary","text-white","active");
+btn.classList.add("bg-surface-container");
+});
+event.target.closest(".category-btn").classList.add("bg-primary","text-white","active");
+renderRecipes();
+}
+
+function showFavorites(){
+showFavoritesOnly=true;
+showMacroFitOnly=false;
+currentCategory="all";
+document.querySelectorAll(".category-btn").forEach(function(btn){
+btn.classList.remove("bg-primary","text-white","active");
+btn.classList.add("bg-surface-container");
+});
+renderRecipes();
+}
+
+function filterRecipes(){
+renderRecipes();
+}
+
+function renderRecipes(){
+var container=document.getElementById("recipesGrid");
+var noRecipes=document.getElementById("noRecipes");
+var search=document.getElementById("searchInput").value.toLowerCase();
+var favorites=getFavorites();
+var all=recipesDB.concat(JSON.parse(localStorage.getItem("customRecipes")||"[]"));
+var remaining=showMacroFitOnly?getRemainingMacros():null;
+var filtered=all.filter(function(r){
+if(showFavoritesOnly&&favorites.indexOf(r.id)===-1)return false;
+if(currentCategory!=="all"&&r.category!==currentCategory)return false;
+if(search&&!r.title.toLowerCase().includes(search))return false;
+if(showMacroFitOnly&&remaining){
+  if((r.carbs||0)>remaining.carbs+2)return false;
+  if((r.calories||0)>remaining.cal+50)return false;
+}
+return true;
+});
+
+if(filtered.length===0){
+container.innerHTML="";
+noRecipes.classList.remove("hidden");
+return;
+}
+noRecipes.classList.add("hidden");
+
+var html="";
+filtered.forEach(function(recipe,i){
+var isFavorite=favorites.indexOf(recipe.id)!==-1;
+var isFirst=i===0&&!search&&!showFavoritesOnly&&currentCategory==="all";
+var catColors={desayuno:"bg-yellow-500/20 text-yellow-400",almuerzo:"bg-orange-500/20 text-orange-400",cena:"bg-purple-500/20 text-purple-400",snacks:"bg-pink-500/20 text-pink-400"};
+var catLabels={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snacks"};
+var catGradients={desayuno:"linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fcd34d 100%)",almuerzo:"linear-gradient(135deg, #ea580c 0%, #f97316 50%, #fb923c 100%)",cena:"linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #a78bfa 100%)",snacks:"linear-gradient(135deg, #db2777 0%, #ec4899 50%, #f472b6 100%)"};
+var catIcons={desayuno:"egg",almuerzo:"restaurant",cena:"dinner_dining",snacks:"cookie"};
+
+html+='<article class="group relative overflow-hidden rounded-[2rem] '+(isFirst?"md:col-span-2 lg:col-span-2 xl:col-span-2":"")+' bg-surface-container transition-all duration-500 hover:shadow-[0_0_40px_rgba(255,144,105,0.1)] cursor-pointer" onclick="openRecipeModal(\''+recipe.id+'\')">';
+html+='<div class="h-48 md:h-64 w-full overflow-hidden relative flex items-center justify-center" style="background:'+catGradients[recipe.category]+';">';
+html+='<span class="material-symbols-outlined text-white/25" style="font-size:100px;">'+catIcons[recipe.category]+'</span>';
+html+='<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>';
+html+='<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>';
+html+='<div class="absolute top-4 right-4 flex gap-2">';
+html+='<span class="'+catColors[recipe.category]+' px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">'+catLabels[recipe.category]+'</span>';
+if(remaining&&(recipe.carbs||0)<=remaining.carbs+2&&(recipe.calories||0)<=remaining.cal+50){html+='<span class="bg-green-500/30 text-green-300 px-2 py-1 rounded-full text-[10px] font-bold flex items-center gap-0.5"><span class="material-symbols-outlined text-xs" style="font-size:12px">check_circle</span>Cabe hoy</span>';};
+html+='<span class="bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold text-white flex items-center gap-1"><span class="material-symbols-outlined text-xs">schedule</span>'+recipe.prepTime+' min</span>';
+html+='</div>';
+html+='<button onclick="event.stopPropagation();toggleFavorite(\''+recipe.id+'\')" class="absolute top-4 left-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center hover:bg-primary-container transition-colors">';
+html+='<span class="material-symbols-outlined '+(isFavorite?"text-secondary":"text-white/60")+'" style="font-variation-settings:\'FILL '+(isFavorite?'1':'0')+'\'">'+(isFavorite?"favorite":"favorite_border")+'</span></button>';
+html+='</div>';
+html+='<div class="p-6">';
+html+='<h3 class="font-headline text-xl md:text-2xl font-black tracking-tight mb-4 group-hover:text-primary-container transition-colors">'+recipe.title+'</h3>';
+html+='<div class="flex items-center gap-6">';
+html+='<div class="flex flex-col"><span class="text-primary-container font-bold text-lg">'+recipe.carbs+'g</span><span class="text-[9px] uppercase font-bold text-on-surface-variant">Carbs</span></div>';
+html+='<div class="w-px h-8 bg-outline-variant/30"></div>';
+html+='<div class="flex flex-col"><span class="text-secondary font-bold text-lg">'+recipe.protein+'g</span><span class="text-[9px] uppercase font-bold text-on-surface-variant">Prot</span></div>';
+html+='<div class="w-px h-8 bg-outline-variant/30"></div>';
+html+='<div class="flex flex-col"><span class="text-tertiary font-bold text-lg">'+recipe.fat+'g</span><span class="text-[9px] uppercase font-bold text-on-surface-variant">Grasa</span></div>';
+html+='</div>';
+html+='</div>';
+html+='</article>';
+});
+
+container.innerHTML=html;
+document.getElementById("totalRecipesCount").textContent=all.length;
+}
+
+function openRecipeModal(id){
+currentRecipeId=id;
+var all=recipesDB.concat(JSON.parse(localStorage.getItem("customRecipes")||"[]"));
+var recipe=all.find(function(r){return r.id===id});
+if(!recipe)return;
+currentServings=1;
+currentRecipeMacros={calories:recipe.calories,protein:recipe.protein,fat:recipe.fat,carbs:recipe.carbs};
+
+var catGradients={desayuno:"linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fcd34d 100%)",almuerzo:"linear-gradient(135deg, #ea580c 0%, #f97316 50%, #fb923c 100%)",cena:"linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #a78bfa 100%)",snacks:"linear-gradient(135deg, #db2777 0%, #ec4899 50%, #f472b6 100%)"};
+var catIcons={desayuno:"egg",almuerzo:"restaurant",cena:"dinner_dining",snacks:"cookie"};
+
+var html='<div class="relative">';
+html+='<div class="h-64 md:h-80 w-full flex items-center justify-center rounded-t-[2rem]" style="background:'+catGradients[recipe.category]+';">';
+html+='<span class="material-symbols-outlined text-white/25" style="font-size:120px;">'+catIcons[recipe.category]+'</span>';
+html+='<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>';
+html+='</div>';
+html+='<button onclick="closeRecipeModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary-container transition-colors"><span class="material-symbols-outlined">close</span></button>';
+html+='<button onclick="toggleFavorite(\''+recipe.id+'\')" class="absolute top-4 left-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary-container transition-colors"><span class="material-symbols-outlined" style="font-variation-settings:\'FILL 1\'">favorite</span></button>';
+html+='</div>';
+html+='<div class="p-8">';
+html+='<h2 class="font-headline text-3xl md:text-4xl font-black tracking-tight mb-4">'+recipe.title+'</h2>';
+html+='<div class="flex flex-wrap gap-4 mb-8">';
+html+='<div class="flex items-center gap-2 text-on-surface-variant"><span class="material-symbols-outlined">schedule</span><span>'+recipe.prepTime+' min</span></div>';
+html+='<div class="flex items-center gap-2 text-on-surface-variant"><span class="material-symbols-outlined">fitness_center</span><span class="capitalize">'+recipe.difficulty+'</span></div>';
+html+='</div>';
+
+html+='<div class="grid grid-cols-4 gap-4 mb-8">';
+html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-yellow-400">'+recipe.calories+'</span><span class="text-[10px] uppercase text-on-surface-variant">kcal</span></div>';
+html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-orange-400">'+recipe.protein+'g</span><span class="text-[10px] uppercase text-on-surface-variant">Proteína</span></div>';
+html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-yellow-300">'+recipe.fat+'g</span><span class="text-[10px] uppercase text-on-surface-variant">Grasa</span></div>';
+html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-cyan-400">'+recipe.carbs+'g</span><span class="text-[10px] uppercase text-on-surface-variant">Carbs</span></div>';
+html+='</div>';
+
+html+='<div class="mb-8">';
+html+='<h4 class="text-xs text-primary-container uppercase tracking-wider font-bold mb-3">Instrucciones</h4>';
+html+='<p class="text-on-surface-variant leading-relaxed">'+recipe.instructions+'</p>';
+html+='</div>';
+
+html+='<div class="flex gap-3">';
+html+='<button onclick="openServingsModal(\''+recipe.id+'\')" class="flex-1 py-4 rounded-xl bg-surface-container-high text-white font-bold hover:bg-surface-container-highest transition-colors flex items-center justify-center gap-2"><span class="material-symbols-outlined">tune</span>Porciones</button>';
+html+='<button onclick="openMealPlanModal(\''+recipe.id+'\')" class="flex-1 py-4 rounded-xl kinetic-gradient text-white font-black hover:opacity-90 transition-colors flex items-center justify-center gap-2"><span class="material-symbols-outlined" style="font-variation-settings:\'FILL 1\'">add_circle</span>Agregar al Plan</button>';
+html+='</div>';
+html+='</div>';
+
+document.getElementById("recipeModalContent").innerHTML=html;
+document.getElementById("recipeModal").classList.remove("hidden");
+document.getElementById("recipeModal").classList.add("flex");
+}
+
+function closeRecipeModal(){
+document.getElementById("recipeModal").classList.add("hidden");
+document.getElementById("recipeModal").classList.remove("flex");
+currentRecipeId=null;
+}
+
+function openMealPlanModal(id){
+var all=recipesDB.concat(JSON.parse(localStorage.getItem("customRecipes")||"[]"));
+var recipe=all.find(function(r){return r.id===id});
+if(!recipe)return;
+currentRecipeId=id;
+document.getElementById("mealPlanRecipeName").textContent=recipe.title;
+document.getElementById("mealPlanModal").classList.remove("hidden");
+document.getElementById("mealPlanModal").classList.add("flex");
+closeRecipeModal();
+}
+
+function closeMealPlanModal(){
+document.getElementById("mealPlanModal").classList.add("hidden");
+document.getElementById("mealPlanModal").classList.remove("flex");
+}
+
+function addToMealPlan(meal){
+if(!currentRecipeId)return;
+var all=recipesDB.concat(JSON.parse(localStorage.getItem("customRecipes")||"[]"));
+var recipe=all.find(function(r){return r.id===currentRecipeId});
+if(!recipe){showToast("Receta no encontrada");return;}
+
+var today=new Date().toISOString().slice(0,10);
+var planKey="mealPlan_"+today;
+var plan=JSON.parse(localStorage.getItem(planKey)||'{"desayuno":[],"almuerzo":[],"cena":[],"snacks":[]}');
+if(!plan[meal])plan[meal]=[];
+
+var adjustedMacros=currentServings>1?{
+calories:Math.round(recipe.calories*currentServings),
+protein:Math.round(recipe.protein*currentServings),
+fat:Math.round(recipe.fat*currentServings),
+carbs:Math.round(recipe.carbs*currentServings)
+}:{calories:recipe.calories,protein:recipe.protein,fat:recipe.fat,carbs:recipe.carbs};
+
+plan[meal].push({
+id:recipe.id,
+name:recipe.title,
+calories:adjustedMacros.calories,
+protein:adjustedMacros.protein,
+fat:adjustedMacros.fat,
+carbs:adjustedMacros.carbs,
+servings:currentServings,
+image:recipe.image||""
+});
+
+localStorage.setItem(planKey,JSON.stringify(plan));
+closeMealPlanModal();
+showToast("Agregado a "+(meal.charAt(0).toUpperCase()+meal.slice(1)));
+}
+
+function openServingsModal(id){
+var all=recipesDB.concat(JSON.parse(localStorage.getItem("customRecipes")||"[]"));
+var recipe=all.find(function(r){return r.id===id});
+if(!recipe)return;
+currentRecipeId=id;
+currentServings=1;
+currentRecipeMacros={calories:recipe.calories,protein:recipe.protein,fat:recipe.fat,carbs:recipe.carbs};
+document.getElementById("servingsRecipeName").textContent=recipe.title;
+document.getElementById("servingsCount").textContent=currentServings;
+document.getElementById("adjustedCalories").textContent=recipe.calories;
+document.getElementById("adjustedProtein").textContent=recipe.protein+"g";
+document.getElementById("adjustedFat").textContent=recipe.fat+"g";
+document.getElementById("adjustedCarbs").textContent=recipe.carbs+"g";
+document.getElementById("servingsModal").classList.remove("hidden");
+document.getElementById("servingsModal").classList.add("flex");
+closeRecipeModal();
+}
+
+function closeServingsModal(){
+document.getElementById("servingsModal").classList.add("hidden");
+document.getElementById("servingsModal").classList.remove("flex");
+}
+
+function changeServings(delta){
+currentServings=Math.max(0.5,Math.min(10,currentServings+delta));
+var all=recipesDB.concat(JSON.parse(localStorage.getItem("customRecipes")||"[]"));
+var recipe=all.find(function(r){return r.id===currentRecipeId});
+if(!recipe)return;
+document.getElementById("servingsCount").textContent=currentServings;
+document.getElementById("adjustedCalories").textContent=Math.round(recipe.calories*currentServings);
+document.getElementById("adjustedProtein").textContent=Math.round(recipe.protein*currentServings)+"g";
+document.getElementById("adjustedFat").textContent=Math.round(recipe.fat*currentServings)+"g";
+document.getElementById("adjustedCarbs").textContent=Math.round(recipe.carbs*currentServings)+"g";
+}
+
+function confirmServings(){
+currentRecipeMacros={
+calories:parseInt(document.getElementById("adjustedCalories").textContent),
+protein:parseInt(document.getElementById("adjustedProtein").textContent),
+fat:parseInt(document.getElementById("adjustedFat").textContent),
+carbs:parseInt(document.getElementById("adjustedCarbs").textContent)
+};
+closeServingsModal();
+openMealPlanModal(currentRecipeId);
+}
+
+function openCreateRecipeModal(){
+document.getElementById("newRecipeName").value="";
+document.getElementById("newRecipeCategory").value="desayuno";
+document.getElementById("newRecipeTime").value="15";
+document.getElementById("newRecipeInstructions").value="";
+document.getElementById("newRecipeCalories").value="0";
+document.getElementById("newRecipeProtein").value="0";
+document.getElementById("newRecipeFat").value="0";
+document.getElementById("newRecipeCarbs").value="0";
+document.getElementById("createRecipeModal").classList.remove("hidden");
+document.getElementById("createRecipeModal").classList.add("flex");
+}
+
+function closeCreateRecipeModal(){
+document.getElementById("createRecipeModal").classList.add("hidden");
+document.getElementById("createRecipeModal").classList.remove("flex");
+}
+
+function saveRecipe(){
+var name=document.getElementById("newRecipeName").value.trim();
+var category=document.getElementById("newRecipeCategory").value;
+var time=parseInt(document.getElementById("newRecipeTime").value)||15;
+var instructions=document.getElementById("newRecipeInstructions").value.trim();
+var calories=parseInt(document.getElementById("newRecipeCalories").value)||0;
+var protein=parseInt(document.getElementById("newRecipeProtein").value)||0;
+var fat=parseInt(document.getElementById("newRecipeFat").value)||0;
+var carbs=parseInt(document.getElementById("newRecipeCarbs").value)||0;
+
+if(!name){showToast("Ingresa un nombre");return;}
+
+var customRecipes=JSON.parse(localStorage.getItem("customRecipes")||"[]");
+customRecipes.push({
+id:"custom_"+Date.now(),
+title:name,
+category:category,
+prepTime:time,
+calories:calories,
+protein:protein,
+fat:fat,
+carbs:carbs,
+image:"",
+instructions:instructions||"Sin instrucciones",
+difficulty:"easy"
+});
+localStorage.setItem("customRecipes",JSON.stringify(customRecipes));
+closeCreateRecipeModal();
+renderRecipes();
+showToast("Receta guardada!");
+}
+
+function showToast(msg){
+var toast=document.getElementById("toast");
+if(!toast){
+toast=document.createElement("div");
+toast.id="toast";
+toast.className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[100] glass-card rounded-full px-6 py-3 flex items-center gap-3 shadow-lg transition-all duration-300";
+toast.innerHTML='<span class="material-symbols-outlined text-primary">check_circle</span><span class="text-white font-medium"></span>';
+document.body.appendChild(toast);
+}
+toast.querySelector("span:last-child").textContent=msg;
+toast.style.opacity="1";
+toast.style.transform="translateX(-50%) translateY(0)";
+setTimeout(function(){
+toast.style.opacity="0";
+toast.style.transform="translateX(-50%) translateY(20px)";
+},3000);
+}
+
+renderRecipes();
+</script>
+
+<!-- BottomNavBar (Mobile) - 5 items optimizado -->
+<AppNav active="recetas" />
+<script is:inline>
+var _cp=window.location.pathname.split("/").pop()||"index.html";
+document.querySelectorAll(".sidebar-link").forEach(function(l){
+  if(l.getAttribute("href")===_cp){
+    l.classList.add("active");
+    l.style.background="rgba(22,22,22,1)";
+    l.style.color="white";
+    var ic=l.querySelector(".material-symbols-outlined");
+    if(ic)ic.style.color="#ff4d00";
+  }
+});
+if(localStorage.getItem("sidebarCollapsed")==="true"){
+  document.body.classList.add("sidebar-collapsed");
+  var _sn=document.getElementById("sidebarNav");
+  if(_sn){_sn.style.width="72px";_sn.style.overflow="hidden";}
+  var _tp=document.querySelector(".topbar-pl");
+  if(_tp)_tp.style.paddingLeft="88px";
+  var _mc=document.querySelector(".main-content");
+  if(_mc)_mc.style.marginLeft="72px";
+  var _st=document.getElementById("sidebarToggle");
+  if(_st)_st.style.left="72px";
+}
+</script>
+<script is:inline>
+// User Dropdown Menu
+function toggleUserMenu() {
+  const dropdown = document.getElementById('userDropdown');
+  dropdown.classList.toggle('hidden');
+  updateDropdownInfo();
+}
+
+function toggleMobileUserMenu() {
+  const dropdown = document.getElementById('mobileUserDropdown');
+  dropdown.classList.toggle('hidden');
+  updateDropdownInfo();
+}
+
+function updateDropdownInfo() {
+  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+  const userName = profile.nombre || profile.name || 'Usuario';
+  const userEmail = localStorage.getItem('KetoCore_user_email') || 'usuario@ejemplo.com';
+  const dn = document.getElementById('dropdownUserName');
+  const de = document.getElementById('dropdownUserEmail');
+  const mdn = document.getElementById('mobileDropdownUserName');
+  const mde = document.getElementById('mobileDropdownUserEmail');
+  if(dn) dn.textContent = userName;
+  if(de) de.textContent = userEmail;
+  if(mdn) mdn.textContent = userName;
+  if(mde) mde.textContent = userEmail;
+}
+
+function updateHeaderAvatar() {
+  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+  const avatarUrl = profile.avatar_url;
+  const hi = document.getElementById('headerAvatarImg');
+  const hi2 = document.getElementById('headerAvatarIcon');
+  const mhi = document.getElementById('mobileHeaderAvatarImg');
+  const mhi2 = document.getElementById('mobileHeaderAvatarIcon');
+  if (avatarUrl) {
+    if(hi) { hi.src = avatarUrl; hi.classList.remove('hidden'); }
+    if(hi2) hi2.classList.add('hidden');
+    if(mhi) { mhi.src = avatarUrl; mhi.classList.remove('hidden'); }
+    if(mhi2) mhi2.classList.add('hidden');
+  } else {
+    if(hi) hi.classList.add('hidden');
+    if(hi2) hi2.classList.remove('hidden');
+    if(mhi) mhi.classList.add('hidden');
+    if(mhi2) mhi2.classList.remove('hidden');
+  }
+}
+
+document.addEventListener('click', function(e) {
+  const dd = document.getElementById('userDropdown');
+  const mdd = document.getElementById('mobileUserDropdown');
+  const btn = document.getElementById('profileBtn');
+  if (dd && !dd.contains(e.target) && !btn.contains(e.target)) dd.classList.add('hidden');
+  if (mdd && !e.target.closest('#mobileUserDropdown') && !e.target.closest('button[onclick="toggleMobileUserMenu()"]')) mdd.classList.add('hidden');
+});
+
+async function handleLogout() {
+  if (confirm('¿Cerrar sesión?')) {
+    await window.supabase.auth.signOut();
+    localStorage.removeItem('KetoCore_user_id');
+    localStorage.removeItem('KetoCore_user_email');
+    localStorage.removeItem('KetoCore_onboarding_done');
+    window.location.href = '/app/welcome';
+  }
+}
+
+updateHeaderAvatar();
+</script>
+<script is:inline src="/app/modules/keto-inspector-recetas-integration.js"></script>
+
+</AppLayout>

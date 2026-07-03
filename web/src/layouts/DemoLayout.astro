@@ -1,0 +1,427 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  active?: string;
+}
+const { title = 'KetoCore | Demo', active = 'home' } = Astro.props;
+
+const navItems = [
+  { id: 'home',        href: '/app/demo/',              icon: 'cottage',        label: 'Inicio'    },
+  { id: 'plan',        href: '/app/demo/plan',          icon: 'event_note',     label: 'Plan'      },
+  { id: 'coach',       href: '/app/demo/coach',         icon: 'psychology',     label: 'Coach'     },
+  { id: 'inspector',   href: '/app/demo/inspector',     icon: 'analytics',      label: 'Inspector' },
+  { id: 'more',        href: '#',                       icon: 'apps',           label: 'Más',      onclick: 'toggleDemoMenu()' },
+];
+const sideLinks = [
+  { id: 'home',           href: '/app/demo/',              icon: 'cottage',        label: 'Dashboard',       color: '' },
+  { id: 'plan',           href: '/app/demo/plan',          icon: 'event_note',     label: 'Plan Alimenticio',color: '' },
+  { id: 'coach',          href: '/app/demo/coach',         icon: 'psychology',     label: 'Coach IA',        color: '#a78bfa' },
+  { id: 'inspector',      href: '/app/demo/inspector',     icon: 'analytics',      label: 'Inspector',       color: '#60a5fa' },
+  { id: 'recetas',        href: '/app/demo/recetas',       icon: 'menu_book',      label: 'Recetas',         color: '#fb923c' },
+  { id: 'compras',        href: '/app/demo/compras',       icon: 'shopping_cart',  label: 'Lista de Compras',color: '#4ade80' },
+  { id: 'entrenamientos', href: '/app/demo/entrenamientos',icon: 'fitness_center', label: 'Entrenamientos',  color: '#f472b6' },
+];
+---
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="theme-color" content="#ff4d00" />
+  <title>{title}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
+  <style is:global>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+    .icon-filled { font-variation-settings: 'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24; }
+
+    body[data-theme="demo"] {
+      background: #0a0a0a !important;
+      color: #f5f5f5 !important;
+    }
+
+    /* ── Demo Banner ── */
+    #demoBanner {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 36px; display: flex; align-items: center; justify-content: center; gap: 12px;
+      background: linear-gradient(90deg, rgba(255,77,0,0.9), rgba(220,38,38,0.85));
+      backdrop-filter: blur(8px);
+      padding: 0 1rem; font-size: 12px; font-weight: 600;
+    }
+    #demoBanner span { color: #fff; }
+    #demoBanner a {
+      color: #fff; background: rgba(255,255,255,0.2); border-radius: 20px;
+      padding: 2px 10px; font-weight: 700; text-decoration: none; font-size: 11px;
+      border: 1px solid rgba(255,255,255,0.3); transition: background 0.2s;
+    }
+    #demoBanner a:hover { background: rgba(255,255,255,0.3); }
+
+    /* ── Demo Header ── */
+    #demoHeader {
+      position: fixed; top: 36px; left: 0; right: 0; z-index: 40; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 1rem;
+      background: rgba(10,10,10,0.97); backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* ── Demo Sidebar ── */
+    #demoSidebar {
+      display: none;
+      position: fixed; top: 36px; left: 0; bottom: 0; width: 248px; z-index: 30;
+      background: #0f0f0f; border-right: 1px solid rgba(255,255,255,0.05);
+      flex-direction: column; padding: 12px 0; overflow-y: auto;
+    }
+    @media (min-width: 768px) {
+      #demoSidebar { display: flex; }
+      #demoBottomNav { display: none !important; }
+      #demoMenuBtn { display: none !important; }
+      #demoMain { margin-left: 248px !important; }
+      #demoHeader { left: 248px !important; }
+    }
+
+    /* ── Sidebar links ── */
+    .dsb-logo { padding: 12px 16px 20px; display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .dsb-logo img { width: 36px; height: 36px; filter: drop-shadow(0 0 6px rgba(255,77,0,0.4)); }
+    .dsb-brand { font-family: 'Plus Jakarta Sans',sans-serif; font-weight: 900; font-size: 18px;
+      background: linear-gradient(to right,#ff4d00,#ffb300); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -0.02em; }
+    .dsb-tag { font-size: 9px; color: rgba(245,245,245,0.35); font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; margin-top: 1px; }
+    .dsb-section { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(245,245,245,0.28); padding: 8px 16px 4px; margin-top: 4px; }
+    .dsb-link {
+      display: flex; align-items: center; gap: 10px; padding: 9px 16px; margin: 1px 8px;
+      border-radius: 10px; text-decoration: none; color: rgba(245,245,245,0.6);
+      font-size: 13px; font-weight: 500; transition: all 0.15s; cursor: pointer;
+    }
+    .dsb-link:hover { background: rgba(255,255,255,0.05); color: #f5f5f5; }
+    .dsb-link.active { background: rgba(255,77,0,0.12); color: #ff4d00; }
+    .dsb-link.active .material-symbols-outlined { color: #ff4d00 !important; }
+    .dsb-icon { font-size: 18px; }
+
+    /* Demo badge in sidebar */
+    .dsb-demo-badge {
+      margin: 0 8px; padding: 10px 14px; background: rgba(255,77,0,0.08);
+      border: 1px solid rgba(255,77,0,0.2); border-radius: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .dsb-demo-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #ff4d00;
+      animation: demoPulse 2s infinite; flex-shrink: 0; }
+    @keyframes demoPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ── Demo Bottom Nav ── */
+    #demoBottomNav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; height: 68px;
+      display: flex; align-items: center; justify-content: space-around;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      background: rgba(10,10,10,0.97); backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .dbn-item {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      flex: 1; padding: 8px 4px; text-decoration: none;
+      color: rgba(210,230,255,0.38); transition: color 0.2s; cursor: pointer;
+      background: none; border: none;
+    }
+    .dbn-pill {
+      display: flex; align-items: center; justify-content: center;
+      width: 56px; height: 32px; border-radius: 100px; transition: background 0.25s;
+    }
+    .dbn-item .material-symbols-outlined { font-size: 22px; }
+    .dbn-label { font-size: 10px; font-weight: 600; font-family: 'Inter',sans-serif; }
+    .dbn-item.active { color: #ff4d00; }
+    .dbn-item.active .dbn-pill { background: rgba(255,77,0,0.15); }
+
+    /* ── Demo Main ── */
+    #demoMain {
+      padding-top: 92px; /* 36 banner + 56 header */
+      padding-bottom: 88px; /* bottom nav */
+      min-height: 100vh;
+      background: #0a0a0a;
+    }
+    @media (min-width: 768px) {
+      #demoMain { padding-bottom: 2rem; }
+    }
+
+    /* ── Demo More Menu ── */
+    #demoMoreMenu {
+      position: fixed; bottom: 72px; left: 8px; right: 8px; z-index: 80;
+      background: #161616; border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px; padding: 12px;
+      box-shadow: 0 -8px 32px rgba(0,0,0,0.4);
+      display: none; grid-template-columns: 1fr 1fr; gap: 8px;
+    }
+    #demoMoreMenu.open { display: grid; }
+    .dmm-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+      background: #1e1e1e; border-radius: 12px; text-decoration: none;
+      color: rgba(245,245,245,0.8); font-size: 13px; font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.05); transition: background 0.15s;
+    }
+    .dmm-item:hover { background: #2a2a2a; }
+    .dmm-item .material-symbols-outlined { font-size: 20px; }
+
+    /* ── Demo Paywall ── */
+    #demoPaywallOverlay {
+      position: fixed; inset: 0; z-index: 200; display: none;
+      align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
+    }
+    #demoPaywallOverlay.visible { display: flex; }
+    #demoPaywallCard {
+      width: 90%; max-width: 360px; background: #161616;
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 28px;
+      padding: 28px; box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+    }
+    .dpw-icon {
+      width: 56px; height: 56px; border-radius: 18px; margin: 0 auto 16px;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg,#ff4d00,#ff7346);
+    }
+    .dpw-title { font-family: 'Plus Jakarta Sans',sans-serif; font-weight: 900; font-size: 22px;
+      color: #f5f5f5; text-align: center; margin-bottom: 8px; }
+    .dpw-sub { font-size: 13px; color: rgba(245,245,245,0.55); text-align: center;
+      line-height: 1.5; margin-bottom: 20px; }
+    .dpw-features { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .dpw-feat {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+      background: rgba(255,77,0,0.06); border: 1px solid rgba(255,77,0,0.12);
+      border-radius: 10px; font-size: 13px; color: rgba(245,245,245,0.8); font-weight: 500;
+    }
+    .dpw-feat .material-symbols-outlined { color: #ff4d00; font-size: 18px; flex-shrink: 0; }
+    .dpw-cta {
+      width: 100%; padding: 14px; border-radius: 14px; border: none; cursor: pointer;
+      background: linear-gradient(135deg,#ff4d00,#ea580c); color: #fff;
+      font-family: 'Plus Jakarta Sans',sans-serif; font-weight: 800; font-size: 15px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: opacity 0.2s; box-shadow: 0 6px 24px rgba(255,77,0,0.3);
+    }
+    .dpw-cta:hover { opacity: 0.9; }
+    .dpw-skip {
+      width: 100%; padding: 12px; border-radius: 14px; border: none; cursor: pointer;
+      background: transparent; color: rgba(245,245,245,0.4);
+      font-size: 13px; font-weight: 500; margin-top: 10px; transition: color 0.2s;
+    }
+    .dpw-skip:hover { color: rgba(245,245,245,0.7); }
+
+    /* ── Shared card styles ── */
+    .dk-card {
+      background: #161616; border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.25), 0 1px 4px rgba(0,0,0,0.15);
+    }
+    .dk-card-orange {
+      background: #161616; border: 1px solid rgba(255,77,0,0.15);
+      border-radius: 20px; box-shadow: 0 4px 20px rgba(255,77,0,0.06), 0 1px 4px rgba(0,0,0,0.2);
+    }
+    .dk-pill {
+      display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px;
+      border-radius: 100px; font-size: 11px; font-weight: 700;
+    }
+    .dk-progress-bar { height: 6px; background: rgba(255,255,255,0.06); border-radius: 100px; overflow: hidden; }
+    .dk-progress-fill { height: 100%; border-radius: 100px; transition: width 0.6s ease; }
+
+    /* ── Demo grid (desktop 2-col) ── */
+    @media (min-width: 768px) {
+      .demo-2col {
+        display: grid; grid-template-columns: 1fr 360px;
+        gap: 1.25rem; align-items: start; padding-top: 0;
+      }
+      .demo-2col > * { margin-top: 0 !important; }
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #111; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,77,0,0.3); border-radius: 10px; }
+  </style>
+</head>
+<body data-theme="demo">
+
+  <!-- ── Demo Banner ── -->
+  <div id="demoBanner">
+    <span>🔓 Modo Demo · Explorando como Carlos</span>
+    <a href="/app/welcome">Crear cuenta gratis →</a>
+  </div>
+
+  <!-- ── App Header ── -->
+  <header id="demoHeader">
+    <a href="/app/demo/" style="display:flex;align-items:center;gap:10px;text-decoration:none">
+      <img src="/app/logo.svg" alt="KetoCore" style="width:28px;height:28px;filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
+      <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:16px;color:#f5f5f5">KetoCore</span>
+      <span style="font-size:10px;background:rgba(255,77,0,0.15);color:#ff4d00;border-radius:6px;padding:1px 7px;font-weight:700;border:1px solid rgba(255,77,0,0.2)">DEMO</span>
+    </a>
+    <button id="demoMenuBtn" onclick="toggleDemoMenu()" style="width:36px;height:36px;border-radius:50%;background:#1e1e1e;border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(245,245,245,0.6)">
+      <span class="material-symbols-outlined" style="font-size:20px">menu</span>
+    </button>
+  </header>
+
+  <!-- ── Demo Sidebar ── -->
+  <aside id="demoSidebar">
+    <a href="/app/demo/" class="dsb-logo">
+      <img src="/app/logo.svg" alt="KetoCore">
+      <div>
+        <div class="dsb-brand">KetoCore</div>
+        <div class="dsb-tag">Modo Demo</div>
+      </div>
+    </a>
+
+    <div class="dsb-demo-badge">
+      <div class="dsb-demo-badge-dot"></div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#ff4d00">Modo Demo Activo</div>
+        <div style="font-size:10px;color:rgba(245,245,245,0.4);margin-top:1px">Explorando como Carlos R.</div>
+      </div>
+    </div>
+
+    <p class="dsb-section" style="margin-top:16px">Navegación Demo</p>
+    {sideLinks.map(link => (
+      <a href={link.href} class:list={['dsb-link', { active: active === link.id }]}>
+        <span class="material-symbols-outlined dsb-icon" style={link.color ? `color:${link.color}` : ''}>{link.icon}</span>
+        <span>{link.label}</span>
+      </a>
+    ))}
+
+    <div style="margin-top:auto;padding:12px 8px 8px">
+      <a href="/app/welcome" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:14px;background:linear-gradient(135deg,#ff4d00,#ea580c);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:13px;text-decoration:none;box-shadow:0 4px 16px rgba(255,77,0,0.3)">
+        <span class="material-symbols-outlined" style="font-size:18px">rocket_launch</span>
+        Comenzar Gratis
+      </a>
+      <p style="text-align:center;font-size:10px;color:rgba(245,245,245,0.28);margin-top:6px">Sin tarjeta de crédito</p>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ── -->
+  <main id="demoMain">
+    <slot />
+  </main>
+
+  <!-- ── Demo Bottom Nav ── -->
+  <nav id="demoBottomNav">
+    {navItems.map(item => (
+      <a
+        href={item.href}
+        onclick={item.onclick || undefined}
+        class:list={['dbn-item', { active: active === item.id }]}
+      >
+        <div class="dbn-pill">
+          <span class="material-symbols-outlined" style={active === item.id ? "font-variation-settings:'FILL' 1" : ""}>{item.icon}</span>
+        </div>
+        <span class="dbn-label">{item.label}</span>
+      </a>
+    ))}
+  </nav>
+
+  <!-- ── Demo More Menu ── -->
+  <div id="demoMoreMenu">
+    {sideLinks.filter(l => !['home','plan','coach','inspector'].includes(l.id)).map(link => (
+      <a href={link.href} class="dmm-item">
+        <span class="material-symbols-outlined" style={link.color ? `color:${link.color};font-size:20px` : 'font-size:20px'}>{link.icon}</span>
+        {link.label}
+      </a>
+    ))}
+    <a href="/app/welcome" class="dmm-item" style="grid-column:1/-1;background:rgba(255,77,0,0.08);border-color:rgba(255,77,0,0.2);color:#ff4d00;justify-content:center;font-weight:700">
+      <span class="material-symbols-outlined" style="color:#ff4d00;font-size:20px">rocket_launch</span>
+      Crear cuenta gratis
+    </a>
+  </div>
+
+  <!-- ── Paywall Overlay ── -->
+  <div id="demoPaywallOverlay">
+    <div id="demoPaywallCard">
+      <div class="dpw-icon">
+        <span class="material-symbols-outlined icon-filled" id="dpwIcon" style="color:#fff;font-size:28px">star</span>
+      </div>
+      <h3 class="dpw-title" id="dpwTitle">Función Premium</h3>
+      <p class="dpw-sub" id="dpwSub">Disponible en KetoCore Premium</p>
+      <div class="dpw-features" id="dpwFeatures"></div>
+      <a href="/app/welcome" class="dpw-cta">
+        <span class="material-symbols-outlined" style="font-size:18px">rocket_launch</span>
+        Comenzar Gratis
+      </a>
+      <button class="dpw-skip" onclick="hideDemoPaywall()">Continuar explorando el demo</button>
+    </div>
+  </div>
+
+  <script is:inline>
+    // ── Demo Menu Toggle ──
+    function toggleDemoMenu() {
+      const m = document.getElementById('demoMoreMenu');
+      m.classList.toggle('open');
+    }
+    document.addEventListener('click', function(e) {
+      const menu = document.getElementById('demoMoreMenu');
+      if (menu && !e.target.closest('#demoMoreMenu') && !e.target.closest('#demoMenuBtn')) {
+        menu.classList.remove('open');
+      }
+    });
+
+    // ── Paywall System ──
+    const PAYWALL_CONFIG = {
+      plan: {
+        icon: 'event_note',
+        title: 'Plan Personalizado',
+        sub: 'Tu plan de comidas se genera con IA según tu metabolismo, objetivo y preferencias.',
+        features: [
+          { icon: 'smart_toy', text: 'Plan generado por IA para tu perfil' },
+          { icon: 'restaurant_menu', text: '21 días de comidas planificadas' },
+          { icon: 'shopping_cart', text: 'Lista de compras automática' },
+        ]
+      },
+      coach: {
+        icon: 'psychology',
+        title: 'Coach Real con IA',
+        sub: 'Accede al coach inteligente que responde con contexto de tu historial y progreso real.',
+        features: [
+          { icon: 'chat', text: 'Respuestas personalizadas a tu historial' },
+          { icon: 'fitness_center', text: 'Ajuste de macros y plan en tiempo real' },
+          { icon: 'notifications_active', text: 'Alertas proactivas sin que preguntes' },
+        ]
+      },
+      progress: {
+        icon: 'trending_up',
+        title: 'Guarda Tu Progreso',
+        sub: 'Crea tu cuenta para empezar a registrar tu peso, comidas y hábitos diarios.',
+        features: [
+          { icon: 'cloud_sync', text: 'Sincronización en todos tus dispositivos' },
+          { icon: 'history', text: 'Historial de 365 días de progreso' },
+          { icon: 'analytics', text: 'Inspector analizando tus patrones' },
+        ]
+      }
+    };
+
+    function showPaywall(type) {
+      const cfg = PAYWALL_CONFIG[type] || PAYWALL_CONFIG.plan;
+      document.getElementById('dpwIcon').textContent = cfg.icon;
+      document.getElementById('dpwTitle').textContent = cfg.title;
+      document.getElementById('dpwSub').textContent = cfg.sub;
+      const feats = document.getElementById('dpwFeatures');
+      feats.innerHTML = cfg.features.map(f =>
+        `<div class="dpw-feat"><span class="material-symbols-outlined icon-filled">${f.icon}</span>${f.text}</div>`
+      ).join('');
+      document.getElementById('demoPaywallOverlay').classList.add('visible');
+    }
+    function hideDemoPaywall(e) {
+      if (!e || e.target === document.getElementById('demoPaywallOverlay') || !e.target.closest('#demoPaywallCard')) {
+        document.getElementById('demoPaywallOverlay').classList.remove('visible');
+      }
+    }
+    document.getElementById('demoPaywallOverlay').addEventListener('click', hideDemoPaywall);
+
+    // Highlight active sidebar link
+    (function() {
+      const path = window.location.pathname.replace(/\/$/, '') || '/app/demo';
+      document.querySelectorAll('.dsb-link').forEach(function(a) {
+        const href = a.getAttribute('href').replace(/\/$/, '') || '/app/demo';
+        if (path === href || (path === '/app/demo' && href === '/app/demo')) {
+          a.classList.add('active');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

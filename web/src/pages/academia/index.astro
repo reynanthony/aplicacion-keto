@@ -1,0 +1,138 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Academia KetoCore" description="Cursos gratuitos de keto, ayuno intermitente, macros y hábitos saludables. Aprende de forma estructurada con el sistema de cursos de KetoCore.">
+
+<section style="padding:3rem 0 2rem">
+  <div class="wrap">
+    <span class="chip" style="margin-bottom:1rem;display:inline-block">Academia</span>
+    <h1 class="d" style="font-size:clamp(2rem,4vw,3.25rem);margin-bottom:1rem">Aprende en orden.<br>No a saltos.</h1>
+    <p style="color:var(--c-text-muted);font-size:1.0625rem;max-width:560px">La diferencia entre leer artículos sueltos y completar un curso estructurado es la diferencia entre saber y aplicar.</p>
+  </div>
+</section>
+
+<!-- Free courses -->
+<section style="padding:0 0 4rem">
+  <div class="wrap">
+    <h2 style="font-family:var(--font-display);font-weight:800;font-size:1.125rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.625rem">
+      <span class="icon icon-fill" style="color:var(--c-green)">lock_open</span>
+      Cursos gratuitos
+    </h2>
+    <div class="grid-2">
+      {[
+        {
+          icon: 'local_fire_department', title: 'Keto desde cero', level: 'Principiante',
+          desc: 'Todo lo que necesitas para empezar keto correctamente. Qué es la cetosis, cómo calcular macros, qué comer y cómo evitar los errores más comunes.',
+          modules: 6, duration: '90 min', tags: ['Cetosis', 'Macros', 'Alimentos', 'Keto flu'],
+          available: true
+        },
+        {
+          icon: 'timer', title: 'Ayuno intermitente básico', level: 'Principiante',
+          desc: 'Qué es el ayuno intermitente, sus beneficios reales, cómo empezar el 16/8 y cómo combinarlo con keto para resultados óptimos.',
+          modules: 4, duration: '60 min', tags: ['16/8', 'Autofagia', 'Electrolitos'],
+          available: true
+        },
+        {
+          icon: 'calculate', title: 'Entendiendo los macros', level: 'Principiante',
+          desc: 'Cómo calcular calorías y macros. Por qué la proteína importa más de lo que crees. Cómo ajustar cuando el progreso se estanca.',
+          modules: 5, duration: '75 min', tags: ['Calorías', 'Proteína', 'Déficit', 'TDEE'],
+          available: true
+        },
+        {
+          icon: 'receipt_long', title: 'Leyendo etiquetas', level: 'Principiante',
+          desc: 'Cómo identificar azúcar escondido, calcular carbohidratos netos y elegir productos sin arruinar la cetosis.',
+          modules: 3, duration: '45 min', tags: ['Etiquetas', 'Azúcar oculto', 'Compras'],
+          available: true
+        },
+        {
+          icon: 'psychology', title: 'Formación de hábitos keto', level: 'Intermedio',
+          desc: 'La psicología detrás de los hábitos. Cómo crear rutinas que sobrevivan el fin de semana, los viajes y las reuniones sociales.',
+          modules: 5, duration: '80 min', tags: ['Hábitos', 'Psicología', 'Adherencia'],
+          available: false
+        },
+        {
+          icon: 'fitness_center', title: 'Entrenamiento para keto', level: 'Intermedio',
+          desc: 'Qué tipo de ejercicio potencia la cetosis, cómo entrenar sin glucosa y cómo ajustar macros según el volumen de entrenamiento.',
+          modules: 6, duration: '95 min', tags: ['Ejercicio', 'Fuerza', 'HIIT', 'Rendimiento'],
+          available: false
+        },
+      ].map(course => (
+        <div class={`card${!course.available ? ' opacity-60' : ''}`} style={`padding:1.75rem;${!course.available ? 'opacity:0.55' : ''}`}>
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem;gap:1rem">
+            <div style="display:flex;align-items:center;gap:0.75rem">
+              <div style="width:48px;height:48px;border-radius:12px;background:var(--c-primary-dim);border:1px solid var(--c-primary-border);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <span class="icon icon-fill" style="color:var(--c-primary);font-size:22px">{course.icon}</span>
+              </div>
+              <div>
+                <span class="badge">{course.level}</span>
+              </div>
+            </div>
+            {!course.available && <span class="badge" style="flex-shrink:0">Próximamente</span>}
+          </div>
+
+          <h3 style="font-family:var(--font-display);font-size:1.125rem;font-weight:800;margin-bottom:0.625rem">{course.title}</h3>
+          <p style="color:var(--c-text-muted);font-size:0.875rem;line-height:1.65;margin-bottom:1.25rem">{course.desc}</p>
+
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.25rem">
+            {course.tags.map(t => <span class="badge">{t}</span>)}
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;font-size:0.8125rem;color:var(--c-text-dim);margin-bottom:1.25rem">
+            <span style="display:flex;align-items:center;gap:0.25rem">
+              <span class="icon" style="font-size:15px">menu_book</span>
+              {course.modules} módulos
+            </span>
+            <span style="display:flex;align-items:center;gap:0.25rem">
+              <span class="icon" style="font-size:15px">schedule</span>
+              {course.duration}
+            </span>
+          </div>
+
+          {course.available
+            ? <a href="/app/welcome.html" class="btn btn-sm" style="width:100%;justify-content:center">Empezar curso gratis</a>
+            : <button class="btn-ghost btn-sm" style="width:100%;justify-content:center" disabled>Disponible pronto</button>
+          }
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- Premium teaser -->
+<section class="section" style="background:var(--c-surface)">
+  <div class="wrap">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center" id="premium-grid">
+      <div>
+        <span class="chip" style="margin-bottom:1rem;display:inline-block">Premium · Próximamente</span>
+        <h2 class="d" style="font-size:clamp(1.75rem,3vw,2.5rem);margin-bottom:1rem">Cursos avanzados en camino</h2>
+        <p style="color:var(--c-text-muted);font-size:0.9375rem;line-height:1.7;margin-bottom:1.75rem">
+          Protocolos avanzados de resistencia a la insulina, optimización metabólica, performance deportivo keto y más. Para quienes ya dominan lo básico.
+        </p>
+        <a href="/app/welcome.html" class="btn-ghost">Notificarme cuando estén disponibles</a>
+      </div>
+      <div class="grid-2" style="gap:0.75rem">
+        {[
+          'Resistencia a la insulina',
+          'Keto terapéutico',
+          'Performance deportivo',
+          'Optimización de sueño',
+        ].map(title => (
+          <div class="card" style="padding:1.25rem;opacity:0.6">
+            <span class="icon" style="font-size:20px;color:var(--c-text-dim);display:block;margin-bottom:0.5rem">lock</span>
+            <p style="font-family:var(--font-display);font-weight:700;font-size:0.875rem">{title}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (max-width: 768px) {
+    #premium-grid { grid-template-columns: 1fr !important; }
+  }
+</style>
+</Layout>

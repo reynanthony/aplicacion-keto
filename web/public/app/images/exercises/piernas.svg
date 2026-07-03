@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4caf50"/>
+      <stop offset="100%" style="stop-color:#2e7d32"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <path d="M380 150 L380 280 M420 150 L420 280" stroke="rgba(255,255,255,0.3)" stroke-width="12" stroke-linecap="round"/>
+  <path d="M380 280 L350 450 M420 280 L450 450" stroke="rgba(255,255,255,0.25)" stroke-width="12" stroke-linecap="round"/>
+  <ellipse cx="400" cy="200" rx="40" ry="35" fill="rgba(255,255,255,0.2)"/>
+  <ellipse cx="350" cy="380" rx="25" ry="35" fill="rgba(255,255,255,0.15)"/>
+  <ellipse cx="450" cy="380" rx="25" ry="35" fill="rgba(255,255,255,0.15)"/>
+  <text x="400" y="520" text-anchor="middle" fill="white" font-family="system-ui" font-size="36" font-weight="bold">Ejercicios de Piernas</text>
+  <text x="400" y="560" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="18">KETOLAB</text>
+</svg>

@@ -1,0 +1,95 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const recipes = await getCollection('recipes');
+  return recipes.map(r => ({ params: { slug: r.id }, props: { recipe: r } }));
+}
+
+const { recipe } = Astro.props;
+const { Content } = await render(recipe);
+const related = (await getCollection('recipes'))
+  .filter(r => r.id !== recipe.id && r.data.mealType === recipe.data.mealType)
+  .slice(0, 3);
+---
+
+<Layout title={recipe.data.title} description={recipe.data.description} image={recipe.data.image}>
+
+<!-- Recipe hero -->
+{recipe.data.image && (
+  <div style="height:380px;overflow:hidden;position:relative">
+    <img src={recipe.data.image} alt={recipe.data.title} style="width:100%;height:100%;object-fit:cover">
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.15) 0%,rgba(250,250,248,0.9) 100%)"></div>
+    <div style="position:absolute;bottom:2rem;left:0;right:0">
+      <div class="wrap" style="max-width:900px;margin:0 auto">
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+          <span class="badge" style="background:rgba(0,0,0,0.6)">{recipe.data.mealType}</span>
+          <span class="badge" style="background:rgba(0,0,0,0.6)">{recipe.data.prepTime} min</span>
+          <span class="badge" style="background:rgba(0,0,0,0.6)">{recipe.data.difficulty}</span>
+          <span class="badge" style="background:rgba(0,0,0,0.6)">{recipe.data.servings} porciones</span>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+<div class="wrap" style="max-width:900px;margin:0 auto;padding-top:2rem">
+  <!-- Breadcrumb -->
+  <nav style="display:flex;align-items:center;gap:0.5rem;margin-bottom:2rem;font-size:0.8125rem;color:var(--c-text-dim)">
+    <a href="/" style="color:var(--c-text-dim);text-decoration:none">Inicio</a>
+    <span>›</span>
+    <a href="/recetas" style="color:var(--c-text-dim);text-decoration:none">Recetas</a>
+    <span>›</span>
+    <span style="color:var(--c-text-muted)">{recipe.data.title}</span>
+  </nav>
+
+  <h1 class="d" style="font-size:clamp(1.875rem,4vw,3rem);margin-bottom:1rem">{recipe.data.title}</h1>
+  <p style="color:var(--c-text-muted);font-size:1.0625rem;margin-bottom:2rem">{recipe.data.description}</p>
+
+  <!-- Macro grid -->
+  <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid var(--c-border)">
+    <div class="macro-pill"><span style="color:var(--c-primary)">{recipe.data.calories}</span><span>kcal</span></div>
+    <div class="macro-pill"><span style="color:#818cf8">{recipe.data.protein}g</span><span>proteína</span></div>
+    <div class="macro-pill"><span style="color:var(--c-gold)">{recipe.data.fat}g</span><span>grasa</span></div>
+    <div class="macro-pill"><span style="color:var(--c-green)">{recipe.data.netCarbs}g</span><span>net carbs</span></div>
+    {recipe.data.fiber > 0 && <div class="macro-pill"><span style="color:var(--c-text-muted)">{recipe.data.fiber}g</span><span>fibra</span></div>}
+  </div>
+
+  <!-- Content (ingredients + steps) -->
+  <div class="prose">
+    <Content />
+  </div>
+
+  <!-- App CTA -->
+  <div class="card" style="padding:2rem;margin-top:3rem;text-align:center;background:var(--c-surface);border-color:var(--c-primary-border)">
+    <p style="font-family:var(--font-display);font-weight:800;font-size:1.125rem;margin-bottom:0.75rem">¿Quieres este en tu plan diario?</p>
+    <p style="color:var(--c-text-muted);font-size:0.875rem;margin-bottom:1.5rem">En la app, esta receta se integra en tu plan semanal con lista de compras automática.</p>
+    <a href="/app/welcome.html" class="btn">Añadir a mi plan</a>
+  </div>
+</div>
+
+<!-- Related recipes -->
+{related.length > 0 && (
+  <section class="section" style="background:var(--c-surface);margin-top:3rem">
+    <div class="wrap">
+      <h2 style="font-family:var(--font-display);font-weight:800;font-size:1.25rem;margin-bottom:1.5rem">Más recetas de {recipe.data.mealType}</h2>
+      <div class="grid-3">
+        {related.map(r => (
+          <a href={`/recetas/${r.id}`} class="card card-link">
+            {r.data.image && <img src={r.data.image} alt={r.data.title} loading="lazy" style="width:100%;height:160px;object-fit:cover">}
+            <div style="padding:1rem">
+              <h3 style="font-family:var(--font-display);font-size:0.875rem;font-weight:800;line-height:1.35;margin-bottom:0.375rem" class="line-clamp-2">{r.data.title}</h3>
+              <div style="display:flex;gap:0.75rem">
+                <span style="font-size:0.7rem;color:var(--c-text-dim)">{r.data.calories} kcal</span>
+                <span style="font-size:0.7rem;color:var(--c-green);font-weight:600">{r.data.netCarbs}g net carbs</span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+</Layout>

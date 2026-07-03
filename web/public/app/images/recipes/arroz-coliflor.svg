@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#9c27b0"/>
+      <stop offset="100%" style="stop-color:#6a1b9a"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <rect x="200" y="220" width="400" height="200" rx="20" fill="rgba(255,255,255,0.1)"/>
+  <g fill="rgba(255,255,255,0.2)">
+    <circle cx="260" cy="270" r="8"/>
+    <circle cx="290" cy="280" r="7"/>
+    <circle cx="320" cy="265" r="9"/>
+    <circle cx="350" cy="285" r="6"/>
+    <circle cx="380" cy="270" r="8"/>
+    <circle cx="410" cy="280" r="7"/>
+    <circle cx="440" cy="265" r="9"/>
+    <circle cx="470" cy="285" r="6"/>
+    <circle cx="500" cy="275" r="8"/>
+    <circle cx="550" cy="270" r="7"/>
+    <circle cx="270" cy="310" r="6"/>
+    <circle cx="300" cy="320" r="8"/>
+    <circle cx="330" cy="305" r="7"/>
+    <circle cx="360" cy="325" r="9"/>
+    <circle cx="390" cy="310" r="6"/>
+    <circle cx="420" cy="320" r="8"/>
+    <circle cx="450" cy="305" r="7"/>
+    <circle cx="480" cy="325" r="6"/>
+    <circle cx="510" cy="315" r="8"/>
+    <circle cx="540" cy="305" r="7"/>
+    <circle cx="280" cy="360" r="8"/>
+    <circle cx="310" cy="370" r="6"/>
+    <circle cx="340" cy="355" r="9"/>
+    <circle cx="370" cy="375" r="7"/>
+    <circle cx="400" cy="360" r="8"/>
+    <circle cx="430" cy="370" r="6"/>
+    <circle cx="460" cy="355" r="9"/>
+    <circle cx="490" cy="375" r="7"/>
+  </g>
+  <text x="400" y="520" text-anchor="middle" fill="white" font-family="system-ui" font-size="36" font-weight="bold">Arroz de Coliflor</text>
+  <text x="400" y="560" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="18">KETOLAB</text>
+</svg>

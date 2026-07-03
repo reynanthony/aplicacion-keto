@@ -1,0 +1,136 @@
+---
+import DemoLayout from '../../../layouts/DemoLayout.astro';
+---
+
+<DemoLayout title="KetoCore | Entrenamientos Demo" active="entrenamientos">
+<style is:global>
+.workout-card { background:#161616;border:1px solid rgba(255,255,255,0.06);border-radius:16px;overflow:hidden; }
+.ex-row { display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04); }
+.ex-row:last-child { border-bottom:none; }
+</style>
+
+<div class="px-4 pt-2 pb-4">
+  <div class="flex items-start justify-between mb-4">
+    <div>
+      <h1 class="text-xl font-black" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f5f5f5">Entrenamientos</h1>
+      <p class="text-xs mt-0.5" style="color:rgba(245,245,245,0.5)">Semana 3 · Carlos · Moderado</p>
+    </div>
+    <button onclick="showPaywall('plan')" class="text-xs font-bold px-3 py-2 rounded-xl" style="background:rgba(244,114,182,0.1);color:#f472b6;border:1px solid rgba(244,114,182,0.2)">
+      Personalizar
+    </button>
+  </div>
+
+  <!-- Week View -->
+  <div class="dk-card rounded-2xl p-4 mb-4">
+    <p class="text-xs font-bold mb-3 uppercase tracking-wider" style="color:rgba(245,245,245,0.5)">Esta semana</p>
+    <div class="flex gap-2">
+      {[
+        { day:'L', status:'done', type:'Fuerza' },
+        { day:'M', status:'rest', type:'Descanso' },
+        { day:'Mi', status:'done', type:'Cardio' },
+        { day:'J', status:'rest', type:'Descanso' },
+        { day:'V', status:'today', type:'Fuerza' },
+        { day:'S', status:'upcoming', type:'Caminata' },
+        { day:'D', status:'upcoming', type:'Descanso' },
+      ].map(d => (
+        <div class="flex-1 flex flex-col items-center gap-1">
+          <p style="font-size:9px;color:rgba(245,245,245,0.4);font-weight:600">{d.day}</p>
+          <div style={`width:100%;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;${d.status === 'done' ? 'background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.25)' : d.status === 'today' ? 'background:rgba(255,77,0,0.15);border:1px solid rgba(255,77,0,0.3)' : d.status === 'rest' ? 'background:#1a1a1a;border:1px solid rgba(255,255,255,0.04)' : 'background:#1a1a1a;border:1px dashed rgba(255,255,255,0.07)'}`}>
+            {d.status === 'done' && <span class="material-symbols-outlined icon-filled" style="color:#22c55e;font-size:16px">fitness_center</span>}
+            {d.status === 'today' && <span class="material-symbols-outlined icon-filled" style="color:#ff4d00;font-size:16px">fitness_center</span>}
+            {d.status === 'rest' && <span class="material-symbols-outlined" style="color:rgba(245,245,245,0.2);font-size:16px">hotel</span>}
+            {d.status === 'upcoming' && <span class="material-symbols-outlined" style="color:rgba(245,245,245,0.15);font-size:16px">fitness_center</span>}
+          </div>
+          <p style="font-size:8px;color:rgba(245,245,245,0.3);text-align:center;line-height:1.2">{d.type}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Today's Workout -->
+  <div class="mb-3" style="background:rgba(255,77,0,0.04);border:1px solid rgba(255,77,0,0.15);border-radius:16px;overflow:hidden">
+    <div class="flex items-center justify-between p-4" style="border-bottom:1px solid rgba(255,255,255,0.04)">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:rgba(255,77,0,0.12)">
+          <span class="material-symbols-outlined icon-filled" style="color:#ff4d00;font-size:22px">fitness_center</span>
+        </div>
+        <div>
+          <p class="font-bold" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Entrenamiento de Hoy</p>
+          <p style="font-size:10px;color:rgba(245,245,245,0.4)">Fuerza · 45 min · Moderado</p>
+        </div>
+      </div>
+      <button onclick="showPaywall('progress')" class="text-[11px] font-bold px-3 py-2 rounded-xl" style="background:rgba(255,77,0,0.12);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">
+        Iniciar
+      </button>
+    </div>
+    <div class="px-4 pb-2">
+      {[
+        { name:'Sentadillas', sets:'4', reps:'12', rest:'60s', muscle:'Piernas', icon:'accessibility_new' },
+        { name:'Press de pecho con mancuernas', sets:'3', reps:'10', rest:'90s', muscle:'Pecho', icon:'sports_gymnastics' },
+        { name:'Remo con barra', sets:'4', reps:'10', rest:'90s', muscle:'Espalda', icon:'sports_martial_arts' },
+        { name:'Press de hombros', sets:'3', reps:'12', rest:'60s', muscle:'Hombros', icon:'self_improvement' },
+        { name:'Plancha abdominal', sets:'3', reps:'45seg', rest:'30s', muscle:'Core', icon:'sports_gymnastics' },
+      ].map(ex => (
+        <div class="ex-row">
+          <span class="material-symbols-outlined icon-filled flex-shrink-0" style="color:rgba(245,245,245,0.3);font-size:20px">{ex.icon}</span>
+          <div class="flex-1">
+            <p class="text-xs font-bold" style="color:#f5f5f5">{ex.name}</p>
+            <p style="font-size:9px;color:rgba(245,245,245,0.4)">{ex.muscle}</p>
+          </div>
+          <div class="flex items-center gap-2 flex-shrink-0">
+            <span style="font-size:10px;padding:2px 7px;background:rgba(255,77,0,0.1);color:#ff4d00;border-radius:100px;font-weight:700">{ex.sets}×{ex.reps}</span>
+            <span style="font-size:9px;color:rgba(245,245,245,0.3)">∙ {ex.rest}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="workout-card p-4 mb-3">
+    <h3 class="text-sm font-bold mb-3" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Historial Reciente</h3>
+    <div class="space-y-2">
+      {[
+        { date:'Miércoles', type:'Cardio HIIT', dur:'30 min', cal:280, color:'#60a5fa' },
+        { date:'Lunes', type:'Fuerza — Piernas', dur:'50 min', cal:320, color:'#22c55e' },
+        { date:'Viernes pasado', type:'Fuerza — Torso', dur:'45 min', cal:290, color:'#ff4d00' },
+      ].map(w => (
+        <div class="flex items-center gap-3 rounded-xl p-3" style="background:#1e1e1e">
+          <div class="w-2 h-2 rounded-full flex-shrink-0" style={`background:${w.color}`}></div>
+          <div class="flex-1">
+            <p class="text-xs font-bold" style="color:#f5f5f5">{w.type}</p>
+            <p style="font-size:10px;color:rgba(245,245,245,0.4)">{w.date} · {w.dur}</p>
+          </div>
+          <p style="font-size:11px;font-weight:700;color:rgba(245,245,245,0.5)">{w.cal} kcal</p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid grid-cols-3 gap-2 mb-4">
+    {[
+      { label:'Entrenos / semana', value:'3', target:'/ 3 meta', color:'#22c55e' },
+      { label:'Calorías quemadas', value:'890', target:'esta semana', color:'#ff4d00' },
+      { label:'Minutos activos', value:'125', target:'esta semana', color:'#60a5fa' },
+    ].map(s => (
+      <div class="dk-card rounded-xl p-3 text-center">
+        <p class="font-black text-xl" style={`color:${s.color};font-family:'Plus Jakarta Sans',sans-serif`}>{s.value}</p>
+        <p style="font-size:9px;color:rgba(245,245,245,0.4);font-weight:600;margin-top:2px">{s.label}</p>
+        <p style="font-size:8px;color:rgba(245,245,245,0.25);margin-top:1px">{s.target}</p>
+      </div>
+    ))}
+  </div>
+
+  <!-- CTA -->
+  <div class="rounded-2xl p-4" style="background:rgba(244,114,182,0.05);border:1px solid rgba(244,114,182,0.15)">
+    <p class="text-sm font-bold mb-1" style="color:#f5f5f5">Plan de entrenamiento personalizado</p>
+    <p class="text-xs mb-3" style="color:rgba(245,245,245,0.5)">KetoCore genera tu plan de entrenamiento sincronizado con tu plan keto para maximizar la quema de grasa.</p>
+    <button onclick="showPaywall('plan')" class="w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2" style="background:linear-gradient(135deg,#f472b6,#db2777);color:#fff">
+      <span class="material-symbols-outlined icon-filled" style="font-size:18px">fitness_center</span>
+      Ver plan completo
+    </button>
+  </div>
+
+</div>
+</DemoLayout>

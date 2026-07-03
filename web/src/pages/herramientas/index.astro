@@ -1,0 +1,225 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Herramientas Gratuitas" description="Calculadoras de macros, BMI, TDEE, proteína, agua y más. Herramientas gratuitas para optimizar tu protocolo keto.">
+
+<section style="padding:3rem 0 2rem">
+  <div class="wrap">
+    <span class="chip" style="margin-bottom:1rem;display:inline-block">Herramientas gratuitas</span>
+    <h1 class="d" style="font-size:clamp(2rem,4vw,3.25rem);margin-bottom:1rem">Calcula. No adivines.</h1>
+    <p style="color:var(--c-text-muted);font-size:1.0625rem;max-width:560px">Calculadoras precisas para que sepas exactamente cuántas calorías, proteína y grasa necesitas para tu objetivo.</p>
+  </div>
+</section>
+
+<!-- Macro calculator (main) -->
+<section style="padding:0 0 4rem">
+  <div class="wrap">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start" id="calc-main">
+      <!-- Form -->
+      <div class="card" style="padding:2rem">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.75rem">
+          <span class="icon icon-fill" style="font-size:28px;color:var(--c-primary)">calculate</span>
+          <h2 style="font-family:var(--font-display);font-weight:900;font-size:1.375rem">Calculadora de macros keto</h2>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:1.25rem">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+            <div>
+              <label style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--c-text-dim);display:block;margin-bottom:0.5rem">Peso (kg)</label>
+              <input id="weight" type="number" class="input" placeholder="70" min="30" max="250">
+            </div>
+            <div>
+              <label style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--c-text-dim);display:block;margin-bottom:0.5rem">Altura (cm)</label>
+              <input id="height" type="number" class="input" placeholder="170" min="120" max="250">
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+            <div>
+              <label style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--c-text-dim);display:block;margin-bottom:0.5rem">Edad</label>
+              <input id="age" type="number" class="input" placeholder="30" min="15" max="90">
+            </div>
+            <div>
+              <label style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--c-text-dim);display:block;margin-bottom:0.5rem">Sexo</label>
+              <select id="sex" class="input">
+                <option value="male">Hombre</option>
+                <option value="female">Mujer</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--c-text-dim);display:block;margin-bottom:0.5rem">Nivel de actividad</label>
+            <select id="activity" class="input">
+              <option value="1.2">Sedentario (poco o nada de ejercicio)</option>
+              <option value="1.375">Ligero (1–3 días/semana)</option>
+              <option value="1.55" selected>Moderado (3–5 días/semana)</option>
+              <option value="1.725">Activo (6–7 días/semana)</option>
+              <option value="1.9">Muy activo (2x/día o trabajo físico)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--c-text-dim);display:block;margin-bottom:0.5rem">Objetivo</label>
+            <select id="goal" class="input">
+              <option value="loss">Pérdida de peso (déficit 20%)</option>
+              <option value="maintain">Mantenimiento</option>
+              <option value="gain">Ganancia muscular (superávit 10%)</option>
+            </select>
+          </div>
+
+          <button id="calc-btn" class="btn" style="width:100%;justify-content:center;padding:0.875rem">
+            Calcular mis macros
+            <span class="icon">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div id="results" style="display:none">
+        <div class="card" style="padding:2rem;margin-bottom:1rem;border-color:var(--c-primary-border)">
+          <p style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--c-primary);margin-bottom:1.25rem">Tus macros keto diarios</p>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.5rem">
+            <div class="macro-pill" style="padding:1rem"><span id="res-kcal" style="color:var(--c-primary);font-size:1.5rem">—</span><span>kcal/día</span></div>
+            <div class="macro-pill" style="padding:1rem"><span id="res-fat" style="color:var(--c-gold);font-size:1.5rem">—g</span><span>grasa</span></div>
+            <div class="macro-pill" style="padding:1rem"><span id="res-prot" style="color:#818cf8;font-size:1.5rem">—g</span><span>proteína</span></div>
+            <div class="macro-pill" style="padding:1rem"><span id="res-carbs" style="color:var(--c-green);font-size:1.5rem">—g</span><span>carbs netos</span></div>
+          </div>
+          <div style="background:var(--c-surface-3);border-radius:10px;padding:1rem;margin-bottom:1.25rem">
+            <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.75rem;color:var(--c-text-dim)">
+              <span>Grasa 70%</span><span>Proteína 25%</span><span>Carbos 5%</span>
+            </div>
+            <div class="progress-track" style="height:8px">
+              <div style="display:flex;height:100%">
+                <div style="width:70%;background:var(--c-gold);border-radius:100px 0 0 100px"></div>
+                <div style="width:25%;background:#818cf8"></div>
+                <div style="width:5%;background:var(--c-green);border-radius:0 100px 100px 0"></div>
+              </div>
+            </div>
+          </div>
+          <a href="/app/welcome.html" class="btn" style="width:100%;justify-content:center">Usar estos macros en la app</a>
+        </div>
+
+        <div class="card" style="padding:1.5rem">
+          <p style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--c-text-dim);margin-bottom:1rem">Metabolismo basal</p>
+          <div style="display:flex;gap:1rem">
+            <div style="flex:1">
+              <p style="font-size:0.75rem;color:var(--c-text-dim)">BMR</p>
+              <p id="res-bmr" style="font-family:var(--font-display);font-weight:800;font-size:1.125rem">—</p>
+            </div>
+            <div style="flex:1">
+              <p style="font-size:0.75rem;color:var(--c-text-dim)">TDEE</p>
+              <p id="res-tdee" style="font-family:var(--font-display);font-weight:800;font-size:1.125rem">—</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Placeholder before calculation -->
+      <div id="results-placeholder" class="card" style="padding:2rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px">
+        <span class="icon" style="font-size:48px;color:var(--c-text-faint);margin-bottom:1rem">calculate</span>
+        <p style="color:var(--c-text-dim);font-size:0.875rem">Completa el formulario y calcula<br>tus macros personalizados</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- Other calculators -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="chip">Más calculadoras</span>
+      <h2 class="d" style="font-size:clamp(1.75rem,3vw,2.5rem)">Todas las herramientas</h2>
+    </div>
+    <div class="grid-4">
+      {[
+        { icon: 'monitor_weight', title: 'IMC', desc: 'Índice de Masa Corporal y categoría de peso', status: 'disponible' },
+        { icon: 'water_drop', title: 'Agua', desc: 'Ingesta diaria de agua según peso y actividad', status: 'disponible' },
+        { icon: 'fitness_center', title: 'Proteína', desc: 'Requerimiento proteico para masa muscular', status: 'disponible' },
+        { icon: 'percent', title: 'Grasa corporal', desc: 'Estimación de porcentaje de grasa corporal', status: 'próximo' },
+        { icon: 'psychology', title: 'Evaluación metabólica', desc: 'Diagnóstico inicial de salud metabólica', status: 'próximo' },
+        { icon: 'quiz', title: 'Readiness keto', desc: '¿Estás listo para empezar keto?', status: 'próximo' },
+        { icon: 'local_dining', title: 'Calórica', desc: 'Calorías necesarias para tu objetivo exacto', status: 'disponible' },
+        { icon: 'bedtime', title: 'Ventana de ayuno', desc: 'Calcula tu ventana óptima de ayuno', status: 'próximo' },
+      ].map(t => (
+        <div class="card" style={`padding:1.25rem;${t.status === 'próximo' ? 'opacity:0.5' : 'cursor:pointer'}`}>
+          <span class="icon icon-fill" style="font-size:28px;color:var(--c-primary);margin-bottom:0.75rem;display:block">{t.icon}</span>
+          <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.375rem">
+            <h3 style="font-family:var(--font-display);font-weight:800;font-size:0.9375rem">{t.title}</h3>
+            {t.status === 'próximo' && <span class="badge" style="font-size:0.6rem">Pronto</span>}
+          </div>
+          <p style="font-size:0.8125rem;color:var(--c-text-muted);line-height:1.5">{t.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- Assessment CTA -->
+<section class="section" style="background:var(--c-surface);text-align:center">
+  <div class="wrap" style="max-width:600px;margin:0 auto">
+    <span class="chip" style="margin-bottom:1.25rem;display:inline-block">Evaluación completa</span>
+    <h2 class="d" style="font-size:clamp(1.75rem,3vw,2.5rem);margin-bottom:1rem">Las calculadoras son solo el principio.</h2>
+    <p style="color:var(--c-text-muted);margin-bottom:2rem">En la app, tus métricas se integran en un protocolo personalizado que se actualiza conforme progresas.</p>
+    <a href="/app/welcome.html" class="btn">Crear cuenta gratuita</a>
+  </div>
+</section>
+
+<style>
+  @media (max-width: 768px) {
+    #calc-main { grid-template-columns: 1fr !important; }
+  }
+</style>
+
+<script>
+  const btn = document.getElementById('calc-btn');
+  const resultsEl = document.getElementById('results');
+  const placeholder = document.getElementById('results-placeholder');
+
+  btn?.addEventListener('click', () => {
+    const weight = parseFloat((document.getElementById('weight') as HTMLInputElement).value);
+    const height = parseFloat((document.getElementById('height') as HTMLInputElement).value);
+    const age = parseFloat((document.getElementById('age') as HTMLInputElement).value);
+    const sex = (document.getElementById('sex') as HTMLSelectElement).value;
+    const activity = parseFloat((document.getElementById('activity') as HTMLSelectElement).value);
+    const goal = (document.getElementById('goal') as HTMLSelectElement).value;
+
+    if (!weight || !height || !age) {
+      alert('Por favor completa todos los campos');
+      return;
+    }
+
+    // Mifflin-St Jeor BMR
+    const bmr = sex === 'male'
+      ? 10 * weight + 6.25 * height - 5 * age + 5
+      : 10 * weight + 6.25 * height - 5 * age - 161;
+
+    const tdee = Math.round(bmr * activity);
+    const target = goal === 'loss' ? Math.round(tdee * 0.80)
+                 : goal === 'gain' ? Math.round(tdee * 1.10)
+                 : tdee;
+
+    // Keto split: 70% fat / 25% protein / 5% carbs
+    const fatG = Math.round((target * 0.70) / 9);
+    const protG = Math.round((target * 0.25) / 4);
+    const carbG = Math.round((target * 0.05) / 4);
+
+    (document.getElementById('res-kcal') as HTMLElement).textContent = target.toLocaleString();
+    (document.getElementById('res-fat') as HTMLElement).textContent = fatG + 'g';
+    (document.getElementById('res-prot') as HTMLElement).textContent = protG + 'g';
+    (document.getElementById('res-carbs') as HTMLElement).textContent = carbG + 'g';
+    (document.getElementById('res-bmr') as HTMLElement).textContent = Math.round(bmr).toLocaleString() + ' kcal';
+    (document.getElementById('res-tdee') as HTMLElement).textContent = tdee.toLocaleString() + ' kcal';
+
+    if (placeholder) placeholder.style.display = 'none';
+    if (resultsEl) resultsEl.style.display = 'block';
+
+    resultsEl?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+</script>
+</Layout>

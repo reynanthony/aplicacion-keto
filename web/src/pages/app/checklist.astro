@@ -1,0 +1,1214 @@
+﻿---
+import AppLayout from '../../layouts/AppLayout.astro';
+import AppNav from '../../components/AppNav.astro';
+---
+
+<AppLayout title="KetoCore | Checklist" authGuard={true}>
+<style is:global>
+.sidebar-link.active{background:rgba(22,22,22,1)!important;}
+.sidebar-link.active .material-symbols-outlined{color:#ff4d00!important;}
+.sidebar-link.active{color:white!important;}
+.sidebar-collapsed .sidebar-nav{width:72px;}
+.sidebar-collapsed .sidebar-nav .sidebar-text{display:none;}
+.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0;}
+.sidebar-collapsed .sidebar-logo-text{display:none;}
+.sidebar-collapsed .sidebar-logo{justify-content:center;}
+.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px;}
+.sidebar-collapsed~main .main-content{margin-left:72px;}
+.sidebar-toggle-btn{left:256px;transition:left 0.3s ease;}
+.sidebar-collapsed~.sidebar-toggle-btn{left:72px;}
+
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.glass-card{background:rgba(22,22,22,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.ghost-border{border:1px solid rgba(73,72,71,0.15)}
+.progress-ring-glow{filter:drop-shadow(0 0 12px rgba(255,77,0,0.4))}
+.primary-gradient{background:linear-gradient(135deg,#ff4d00 0%,#ff7346 100%)}
+.secondary-gradient{background:linear-gradient(135deg,#ffb300 0%,#ffc94f 100%)}
+.custom-scrollbar::-webkit-scrollbar{width:4px}
+.custom-scrollbar::-webkit-scrollbar-track{background:#0a0a0a}
+.custom-scrollbar::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:10px}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.animate-shimmer{animation:shimmer 2s infinite}
+@keyframes progressGlow{0%,100%{box-shadow:0 0 10px currentColor}50%{box-shadow:0 0 25px currentColor}}
+.progress-glow{animation:progressGlow 2s ease-in-out infinite}
+.sidebar-collapsed .sidebar-nav{width:72px}
+.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}
+.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}
+.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px}
+.sidebar-collapsed~main .main-content{margin-left:72px}
+.sidebar-toggle-btn{left:256px;transition:left 0.3s ease}
+.sidebar-collapsed~.sidebar-toggle-btn{left:72px}
+.sidebar-link.active{background:#161616}
+.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}
+#toast{animation:toastIn 0.3s ease}
+@media(min-width:768px){
+  #ck-grid{display:grid;grid-template-columns:1fr 360px;gap:1.25rem;align-items:start;padding-top:1rem;max-width:none!important;}
+  #ck-grid>*{margin-top:0!important;}
+  #ck-hero{grid-column:1/-1;grid-row:1;}
+  #ck-history{grid-column:1;grid-row:2;}
+  #ck-checklist{grid-column:1;grid-row:3;}
+  #ck-supplements{grid-column:2;grid-row:2;}
+  #ck-meals{grid-column:2;grid-row:3;}
+}
+</style>
+<!-- Sidebar -->
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(10,10,10,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,0.06)">
+  <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
+    <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
+    <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f5f5f5">KetoCore</span>
+  </a>
+  <div class="flex items-center gap-1.5">
+    <button onclick="toggleMobileUserMenu()" aria-label="Mi cuenta" class="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden" style="background:#1e1e1e;border:1px solid rgba(255,255,255,0.06)">
+      <img id="mobileHeaderAvatarImg" src="" class="hidden w-full h-full object-cover" alt="Avatar">
+      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined" style="font-size:20px;color:rgba(245,245,245,0.6)">account_circle</span>
+    </button>
+    <button onclick="toggleHamburgerMenu()" aria-label="Abrir menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1e1e;color:rgba(245,245,245,0.6)">
+      <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">menu</span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile User Dropdown -->
+<div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161616;border:1px solid rgba(255,255,255,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
+  <div class="p-3" style="border-bottom:1px solid rgba(255,255,255,0.06)">
+    <p class="text-sm font-semibold" style="color:#f5f5f5" id="mobileDropdownUserName">Usuario</p>
+    <p class="text-xs mt-0.5" style="color:rgba(245,245,245,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
+  </div>
+  <div class="p-2">
+    <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f5f5f5">
+      <span class="material-symbols-outlined text-lg" style="color:rgba(245,245,245,0.55)">person</span>
+      <span class="text-sm font-medium">Mi Perfil</span>
+    </a>
+    <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-red-50" style="color:#dc2626">
+      <span class="material-symbols-outlined text-lg">logout</span>
+      <span class="text-sm font-medium">Cerrar Sesión</span>
+    </button>
+  </div>
+</div>
+<main class="main-content pt-14 px-4 pb-20 min-h-screen">
+<div id="ck-grid" class="space-y-4">
+
+<!-- Bento Grid Header Section -->
+<div id="ck-hero" class="grid grid-cols-1 md:grid-cols-12 gap-6">
+
+<!-- Circular Progress Hero -->
+<div class="md:col-span-5 lg:col-span-4 bg-surface-container-low rounded-2xl p-8 flex flex-col items-center justify-center relative overflow-hidden group">
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all duration-700"></div>
+<div class="flex items-center justify-between w-full mb-6">
+  <h1 class="font-headline text-2xl font-extrabold tracking-tighter">Tu Progreso de Hoy</h1>
+  <div class="flex items-center gap-2">
+    <button onclick="openNotificationModal()" class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-surface-container-highest transition-colors">
+      <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+    </button>
+    <div class="flex items-center gap-1 px-3 py-1.5 bg-orange-500/20 rounded-full">
+      <span class="material-symbols-outlined text-orange-500 animate-pulse" style="font-variation-settings:'FILL' 1">local_fire_department</span>
+      <span id="streakCount" class="font-headline font-black text-orange-500">0</span>
+    </div>
+  </div>
+</div>
+<div class="relative w-56 h-56">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<defs>
+<lineargradient id="primaryGradient" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#ff4d00"></stop>
+<stop offset="100%" stop-color="#ff7346"></stop>
+</lineargradient>
+</defs>
+<circle cx="50" cy="50" fill="transparent" r="44" stroke="#1e1e1e" stroke-width="8"></circle>
+<circle id="progressCircle" class="progress-ring-glow" cx="50" cy="50" fill="transparent" r="44" stroke="url('/app/#primaryGradient')" stroke-width="8" stroke-linecap="round" stroke-dasharray="276.46" stroke-dashoffset="276.46"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span id="progressPercent" class="font-headline text-5xl font-black tracking-tighter">0%</span>
+<span class="text-on-surface-variant text-sm font-medium uppercase tracking-widest">Completed</span>
+</div>
+</div>
+<p id="progressText" class="mt-8 text-on-surface-variant font-medium text-sm">0 de 6 tareas completadas</p>
+</div>
+
+<!-- Bio-Metrics Trackers -->
+<div class="md:col-span-7 lg:col-span-8 bg-surface-container rounded-2xl p-8">
+<div class="flex items-center justify-between mb-8">
+<h2 class="font-headline text-xl font-extrabold tracking-tight">Bio-Metric Trackers</h2>
+<span class="material-symbols-outlined text-primary">analytics</span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-8" id="biometricsContainer">
+<!-- Dynamic content -->
+</div>
+</div>
+</div>
+
+<!-- Supplements Section -->
+<div id="ck-supplements" class="bg-surface-container rounded-2xl p-8">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h2 class="font-headline text-xl font-extrabold tracking-tight">Suplementos</h2>
+<p class="text-on-surface-variant text-sm">Controla tu suplementación diaria</p>
+</div>
+<button onclick="openSupplementsModal()" class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center hover:bg-primary/30 transition-colors">
+<span class="material-symbols-outlined text-primary">add</span>
+</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="supplementsGrid"></div>
+</div>
+
+<!-- Weekly History Chart -->
+<div id="ck-history" class="bg-surface-container rounded-2xl p-8">
+<div class="flex items-center justify-between mb-6">
+<h2 class="font-headline text-xl font-extrabold tracking-tight">Historial Semanal</h2>
+<span class="material-symbols-outlined text-primary">bar_chart</span>
+</div>
+<div class="flex items-end justify-between gap-3 h-40" id="weeklyChart"></div>
+</div>
+
+<!-- Checklist Section -->
+<div id="ck-checklist" class="bg-surface-container rounded-2xl p-8 relative overflow-hidden">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+<div>
+<h2 class="font-headline text-2xl font-extrabold tracking-tight mb-1">Daily Checklist</h2>
+<p class="text-on-surface-variant font-medium">Track your daily habits and goals.</p>
+</div>
+<button onclick="openCrudModal()" class="primary-gradient px-6 py-3 rounded-xl text-white font-bold flex items-center gap-2 transition-all active:scale-95 shadow-[0_0_20px_rgba(255,144,109,0.3)]">
+<span class="material-symbols-outlined">add</span>
+Agregar
+</button>
+</div>
+
+<!-- Checklist Items -->
+<div class="space-y-4" id="dailyChecklist"></div>
+</div>
+
+<!-- Meals Section -->
+<div id="ck-meals" class="bg-surface-container rounded-2xl p-8 relative overflow-hidden">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+<div>
+<h2 class="font-headline text-2xl font-extrabold tracking-tight mb-1">Comidas del día</h2>
+<p class="text-on-surface-variant font-medium">Fuel your performance with precision nutrition.</p>
+</div>
+</div>
+
+<!-- Meals Container -->
+<div id="mealsContainer" class="space-y-4"></div>
+
+<div class="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-tl from-primary/5 to-transparent pointer-events-none"></div>
+</div>
+
+</div>
+</main>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-28 left-1/2 -translate-x-1/2 z-[70] hidden">
+<div class="glass-card rounded-full px-6 py-3 flex items-center gap-3 shadow-lg border border-primary/20">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1">check_circle</span>
+<span id="toastMessage" class="text-white font-bold">Guardado!</span>
+</div>
+</div>
+
+<!-- Input Modal -->
+<div id="inputModal" class="fixed inset-0 z-[60] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeInputModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+<div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto border border-primary/20">
+<div class="flex justify-between items-center mb-6">
+<h3 id="modalTitle" class="text-xl font-headline font-bold text-white"></h3>
+<button onclick="closeInputModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
+</div>
+<div id="modalContent" class="space-y-4"></div>
+<div class="flex gap-3 mt-6">
+<button onclick="closeInputModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>
+<button onclick="saveInputValue()" class="flex-1 py-3 rounded-xl primary-gradient text-white font-bold hover:opacity-90 transition-colors">Guardar</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Electrolito Modal -->
+<div id="electrolitoModal" class="fixed inset-0 z-[60] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeElectrolitoModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+<div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto border border-primary/20">
+<div class="flex justify-between items-center mb-6">
+<h3 id="electrolitoTitle" class="text-xl font-headline font-bold text-white"></h3>
+<button onclick="closeElectrolitoModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
+</div>
+<div class="space-y-4">
+<p id="electrolitoCurrent" class="text-center text-4xl font-headline font-bold text-primary"></p>
+<input type="range" id="electrolitoSlider" class="w-full accent-primary" min="0" max="100" value="0">
+<p id="electrolitoTarget" class="text-center text-sm text-on-surface-variant"></p>
+</div>
+<div class="flex gap-3 mt-6">
+<button onclick="closeElectrolitoModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>
+<button onclick="saveElectrolito()" class="flex-1 py-3 rounded-xl primary-gradient text-white font-bold hover:opacity-90 transition-colors">Guardar</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- CRUD Modal -->
+<div id="crudModal" class="fixed inset-0 z-[70] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeCrudModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+<div class="glass-card rounded-2xl p-6 w-full max-w-md max-h-[80vh] overflow-y-auto pointer-events-auto border border-primary/20">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-headline font-bold text-white">Configurar Checklist</h3>
+<button onclick="closeCrudModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
+</div>
+<div id="crudContent"></div>
+</div>
+</div>
+</div>
+
+<!-- Item Form Modal -->
+<div id="itemFormModal" class="fixed inset-0 z-[80] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeItemForm()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+<div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto border border-primary/20">
+<div class="flex justify-between items-center mb-4">
+<h3 id="formTitle" class="text-xl font-headline font-bold text-white">Nuevo Item</h3>
+<button onclick="closeItemForm()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
+</div>
+<div class="space-y-4">
+<div>
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Nombre</label>
+<input type="text" id="itemName" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary" placeholder="Ej: Meditacion">
+</div>
+<div>
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Icono</label>
+<select id="itemIcon" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary">
+<option value="water_drop">Agua</option>
+<option value="science">Ciencia/Electrolitos</option>
+<option value="fitness_center">Gimnasio</option>
+<option value="directions_walk">Caminar</option>
+<option value="egg_alt">Proteina</option>
+<option value="bedtime">Dormir</option>
+<option value="self_improvement">Meditacion</option>
+<option value="menu_book">Leer</option>
+<option value="favorite">Salud</option>
+<option value="restaurant">Comida</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Meta</label>
+<input type="number" id="itemTarget" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary" value="1" min="1">
+</div>
+<div>
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Unidad</label>
+<input type="text" id="itemUnit" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary" value="min" placeholder="min, g, hrs...">
+</div>
+</div>
+</div>
+<div class="flex gap-3 mt-6">
+<button onclick="closeItemForm()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>
+<button onclick="saveItem()" class="flex-1 py-3 rounded-xl primary-gradient text-white font-bold hover:opacity-90 transition-colors">Guardar</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Notification Modal -->
+<div id="notificationModal" class="fixed inset-0 z-[80] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeNotificationModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+<div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto border border-primary/20">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-headline font-bold text-white">Recordatorios</h3>
+<button onclick="closeNotificationModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
+</div>
+<div class="space-y-4" id="notificationList"></div>
+<div class="flex gap-3 mt-6">
+<button onclick="requestNotificationPermission()" class="flex-1 py-3 rounded-xl primary-gradient text-white font-bold hover:opacity-90 transition-colors">Activar Notificaciones</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Supplements Modal -->
+<div id="supplementsModal" class="fixed inset-0 z-[80] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeSupplementsModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+<div class="glass-card rounded-2xl p-6 w-full max-w-md max-h-[80vh] overflow-y-auto pointer-events-auto border border-primary/20">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-headline font-bold text-white">Mis Suplementos</h3>
+<button onclick="closeSupplementsModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
+</div>
+<div class="space-y-3 mb-4" id="supplementsConfigList"></div>
+<div class="text-center">
+<button onclick="closeSupplementsModal()" class="px-6 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">
+Cerrar
+</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- BottomNavBar (Mobile) - 5 items optimizado -->
+<AppNav active="more" />
+
+<script is:inline src="/app/utils.js"></script>
+<script is:inline>
+var defaultChecklistConfig=[
+{id:"water",icon:"water_drop",iconColor:"#00bcd4",bg:"bg-cyan-500/20",label:"Agua",unit:"L",target:3,step:0.25},
+{id:"electrolitos",icon:"science",iconColor:"#ffb300",bg:"bg-yellow-500/20",label:"Electrolitos",unit:"ml",target:500,step:50},
+{id:"workout",icon:"fitness_center",iconColor:"#ff4d00",bg:"bg-orange-500/20",label:"Entrenamiento",unit:"min",target:60,step:5},
+{id:"walk",icon:"directions_walk",iconColor:"#4caf50",bg:"bg-green-500/20",label:"Caminata",unit:"min",target:60,step:5},
+{id:"protein",icon:"egg_alt",iconColor:"#ff9800",bg:"bg-amber-500/20",label:"Proteína",unit:"g",target:159,step:10},
+{id:"sleep",icon:"bedtime",iconColor:"#9e9e9e",bg:"bg-gray-500/20",label:"Sueño",unit:"hrs",target:8,step:0.5}
+];
+var checklistConfig=[].concat(defaultChecklistConfig);
+
+var currentInputItem=null;
+var currentElectrolito=null;
+var editingItemIndex=null;
+var iconColors={'water_drop':'#00bcd4','science':'#ffb300','fitness_center':'#ff4d00','directions_walk':'#4caf50','egg_alt':'#ff9800','bedtime':'#9e9e9e','self_improvement':'#9c27b0','menu_book':'#795548','favorite':'#e91e63'};
+
+function loadChecklist(){
+var todayKey=new Date().toISOString().slice(0,10);
+var rawData=localStorage.getItem("checklist_"+todayKey);
+var checklistData=safeParseJSON(rawData, {});
+var userData=getLocalData("userData", schemas.userData, getDefaultUserData());
+var container=document.getElementById("dailyChecklist");
+container.innerHTML="";
+var biometricsContainer=document.getElementById("biometricsContainer");
+biometricsContainer.innerHTML="";
+var completedCount=0;
+var allItems=getEffectiveItems();
+var totalPercent=0;
+
+allItems.forEach(function(item,index){
+var value=checklistData[item.id]||0;
+var isCompleted=value>=item.target;
+if(isCompleted)completedCount++;
+var percent=Math.min(Math.round((value/item.target)*100),100);
+totalPercent+=percent;
+
+var displayValue=item.step<1?value.toFixed(1).replace('.0',''):value;
+var color=item.iconColor||'#ff4d00';
+
+// Add to biometrics grid — with click handler and visual affordance
+var bioHtml='<div class="space-y-3 p-3 rounded-xl cursor-pointer transition-all duration-200 hover:bg-surface-container-highest group" onclick="openInputModal(\''+item.id+'\')" title="Registrar '+item.label+'">'
+  +'<div class="flex justify-between items-center">'
+    +'<div class="flex items-center gap-2">'
+      +'<span class="material-symbols-outlined" style="color:'+color+'">'+item.icon+'</span>'
+      +'<span class="text-sm font-bold uppercase tracking-wider text-on-surface">'+item.label+'</span>'
+    +'</div>'
+    +'<div class="flex items-center gap-2">'
+      +'<span class="text-xs font-bold text-on-surface-variant">'+displayValue+' / '+item.target+item.unit+'</span>'
+      +'<span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity" style="color:'+color+'">add_circle</span>'
+    +'</div>'
+  +'</div>'
+  +'<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">'
+    +'<div class="h-full rounded-full transition-all duration-1000" style="width:'+percent+'%;background:'+color+'"></div>'
+  +'</div>'
++'</div>';
+biometricsContainer.innerHTML+=bioHtml;
+
+// Add checklist card
+var glowStyle=percent>=80?'box-shadow: 0 0 20px '+color+'40;':'';
+var pulseClass=percent>=80&&!isCompleted?'animate-pulse':'';
+cardHtml='<div class="p-4 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer group relative overflow-hidden" style="'+glowStyle+'" onclick="openInputModal(\''+item.id+'\')">';
+if(percent>=80&&!isCompleted){
+cardHtml+='<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>';
+}
+cardHtml+='<div class="flex items-center gap-4">';
+cardHtml+='<div class="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 relative" style="background:'+color+'20">';
+cardHtml+='<span class="material-symbols-outlined text-2xl '+pulseClass+'" style="color:'+color+'">'+item.icon+'</span>';
+if(isCompleted){
+cardHtml+='<div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">';
+cardHtml+='<span class="material-symbols-outlined text-white text-xs" style="font-variation-settings:\'FILL\' 1">check</span></div>';
+}
+cardHtml+='</div>';
+cardHtml+='<div class="flex-1">';
+cardHtml+='<div class="flex justify-between items-center mb-3">';
+cardHtml+='<p class="font-headline font-bold text-white '+(isCompleted?'opacity-60':'')+'">'+item.label+'</p>';
+cardHtml+='<span class="text-sm font-bold '+(isCompleted?'text-green-400':'text-on-surface-variant')+'">'+percent+'%</span></div>';
+cardHtml+='<div class="relative h-3 rounded-full bg-surface-container-highest overflow-hidden">';
+cardHtml+='<div class="absolute inset-y-0 left-0 rounded-full transition-all duration-500 '+(isCompleted?'':'primary-gradient')+'" style="width:'+percent+'%;'+(isCompleted?'background:#4ade80':('background:'+color))+'"></div>';
+cardHtml+='<div class="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-white/30 to-transparent" style="width:'+percent+'%"></div></div>';
+cardHtml+='<div class="flex justify-between items-center mt-2">';
+cardHtml+='<span class="text-xs text-on-surface-variant">'+displayValue+' '+item.unit+'</span>';
+cardHtml+='<span class="text-xs text-on-surface-variant">Meta: '+item.target+' '+item.unit+'</span></div></div>';
+cardHtml+='</div></div>';
+container.innerHTML+=cardHtml;
+});
+
+var total=allItems.length;
+var overallPercent=Math.round(totalPercent/total);
+document.getElementById("progressPercent").textContent=overallPercent+"%";
+document.getElementById("progressText").textContent=completedCount+" de "+total+" tareas completadas";
+document.getElementById("progressCircle").style.strokeDashoffset=276.46-(276.46*overallPercent/100);
+
+updateStreak();
+}
+
+function calculateStreak(){
+  var streak=0;
+  var today=new Date();
+  var threshold=0.8;
+  
+  for(var i=0;i<365;i++){
+    var d=new Date(today);
+    d.setDate(d.getDate()-i);
+    var dateKey=d.toISOString().slice(0,10);
+    var rawData=localStorage.getItem("checklist_"+dateKey);
+    var data=safeParseJSON(rawData,{});
+    var items=getEffectiveItems();
+    var completed=0;
+    var total=items.length;
+    
+    items.forEach(function(item){
+      var val=data[item.id]||0;
+      if(val>=item.target)completed++;
+    });
+    
+    var percent=total>0?completed/total:0;
+    if(percent>=threshold){
+      streak++;
+    }else if(i>0){
+      break;
+    }
+  }
+  
+  return streak;
+}
+
+function updateStreak(){
+  var streak=calculateStreak();
+  document.getElementById("streakCount").textContent=streak;
+  localStorage.setItem("checklistStreak",streak);
+}
+
+function renderWeeklyChart(){
+  var container=document.getElementById("weeklyChart");
+  var days=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+  var today=new Date();
+  var dayOfWeek=today.getDay();
+  var startDay=dayOfWeek===0?6:dayOfWeek-1;
+  
+  var html="";
+  for(var i=6;i>=0;i--){
+    var d=new Date(today);
+    d.setDate(d.getDate()-i);
+    var dateKey=d.toISOString().slice(0,10);
+    var rawData=localStorage.getItem("checklist_"+dateKey);
+    var data=safeParseJSON(rawData,{});
+    var items=getEffectiveItems();
+    var completed=0;
+    var total=items.length;
+    
+    items.forEach(function(item){
+      var val=data[item.id]||0;
+      if(val>=item.target)completed++;
+    });
+    
+    var percent=total>0?Math.round((completed/total)*100):0;
+    var isToday=i===0;
+    var isFuture=i>0;
+    var barHeight=percent>0?Math.max(percent*0.85,15):8;
+    var color=percent>=80?"#ff4d00":percent>=50?"#ffb300":"#2a2a2a";
+    var glowClass=percent>=80?"shadow-[0_0_20px_rgba(255,77,0,0.5)]":percent>=50?"shadow-[0_0_15px_rgba(255,179,0,0.4)]":"";
+    
+    html+='<div class="flex flex-col items-center gap-3 flex-1">';
+    html+='<span class="text-xs font-bold '+(isToday?"text-primary":"text-on-surface-variant")+'">'+(percent>0?percent+"%":"-")+'</span>';
+    html+='<div class="w-full flex justify-center">';
+    html+='<div class="w-8 sm:w-10 relative" style="height:140px">';
+    html+='<div class="absolute bottom-0 left-0 right-0 rounded-2xl transition-all duration-700 '+(isFuture?"opacity-20":(percent>=80?"bg-primary-gradient":percent>=50?"bg-secondary-gradient":"bg-surface-variant"))+' '+glowClass+'" style="height:'+barHeight+'%;background:'+color+'"></div>';
+    html+='<div class="absolute bottom-0 left-0 right-0 bg-surface-container-highest rounded-2xl" style="height:100%"></div>';
+    html+='<div class="absolute bottom-0 left-0 right-0 rounded-2xl transition-all duration-700 '+(isFuture?"opacity-20":(percent>=80?"bg-primary-gradient":percent>=50?"bg-secondary-gradient":"bg-surface-variant"))+' '+glowClass+'" style="height:'+barHeight+'%;background:'+color+'"></div>';
+    if(percent>=80){
+      html+='<div class="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-primary animate-pulse" style="background:'+color+'"></div>';
+    }
+    html+='</div>';
+    html+='</div>';
+    html+='<span class="text-[11px] font-medium '+(isToday?"text-primary":"text-on-surface-variant")+'">'+(isToday?"Hoy":days[(startDay-i+7)%7])+'</span>';
+    html+='</div>';
+  }
+  container.innerHTML=html;
+}
+
+function openInputModal(itemId){
+currentInputItem=getEffectiveItems().find(function(c){return c.id===itemId});
+var todayKey=new Date().toISOString().slice(0,10);
+var rawData=localStorage.getItem("checklist_"+todayKey);
+var checklistData=safeParseJSON(rawData, {});
+var value=checklistData[itemId]||0;
+var displayValue=currentInputItem.step<1?value.toFixed(1).replace('.0',''):value;
+document.getElementById("modalTitle").textContent=currentInputItem.label;
+document.getElementById("modalContent").innerHTML='<p class="text-center text-4xl font-headline font-bold text-primary mb-4">'+displayValue+' '+currentInputItem.unit+'</p><input type="range" id="itemSlider" class="w-full accent-primary" min="0" max="'+currentInputItem.target+'" step="'+currentInputItem.step+'" value="'+value+'">';
+document.getElementById("itemSlider").addEventListener("input",function(){
+var val=parseFloat(this.value);
+var disp=currentInputItem.step<1?val.toFixed(1).replace('.0',''):val;
+document.querySelector("#modalContent p").textContent=disp+' '+currentInputItem.unit;
+});
+document.getElementById("inputModal").classList.remove("hidden");
+document.getElementById("inputModal").classList.add("flex");
+}
+
+function saveInputValue(){
+if(!currentInputItem)return;
+var itemId=currentInputItem.id;
+var newValue=parseFloat(document.getElementById("itemSlider").value);
+var todayKey=new Date().toISOString().slice(0,10);
+var rawData=localStorage.getItem("checklist_"+todayKey);
+var checklistData=safeParseJSON(rawData, {});
+checklistData[itemId]=newValue;
+localStorage.setItem("checklist_"+todayKey,JSON.stringify(checklistData));
+closeInputModal();
+loadChecklist();
+showToast(currentInputItem.label+': '+newValue+' '+currentInputItem.unit);
+}
+
+function closeInputModal(){
+document.getElementById("inputModal").classList.add("hidden");
+document.getElementById("inputModal").classList.remove("flex");
+currentInputItem=null;
+}
+
+function openElectrolitoModal(type){
+var titles={sodio:'Sodio',potasio:'Potasio',magnesio:'Magnesio'};
+var targets={sodio:5,potasio:3.5,magnesio:400};
+var units={sodio:'g',potasio:'g',magnesio:'mg'};
+currentElectrolito=type;
+var userData=getLocalData("userData", schemas.userData, getDefaultUserData());
+var value=userData[type]||0;
+document.getElementById("electrolitoTitle").textContent=titles[type];
+document.getElementById("electrolitoCurrent").textContent=value+' '+units[type];
+document.getElementById("electrolitoTarget").textContent='Meta: '+targets[type]+' '+units[type];
+var slider=document.getElementById("electrolitoSlider");
+slider.max=targets[type];
+slider.value=value;
+slider.oninput=function(){
+document.getElementById("electrolitoCurrent").textContent=this.value+' '+units[type];
+};
+document.getElementById("electrolitoModal").classList.remove("hidden");
+document.getElementById("electrolitoModal").classList.add("flex");
+}
+
+function saveElectrolito(){
+var userData=getLocalData("userData", schemas.userData, getDefaultUserData());
+userData[currentElectrolito]=parseFloat(document.getElementById("electrolitoSlider").value);
+localStorage.setItem("userData",JSON.stringify(userData));
+closeElectrolitoModal();
+loadChecklist();
+}
+
+function closeElectrolitoModal(){
+document.getElementById("electrolitoModal").classList.add("hidden");
+document.getElementById("electrolitoModal").classList.remove("flex");
+currentElectrolito=null;
+}
+
+function loadCustomItems(){
+  var stored=localStorage.getItem("checklistConfig");
+  if(stored){
+    try{
+      var parsed=JSON.parse(stored);
+      if(Array.isArray(parsed) && parsed.length>0 && parsed[0].id){
+        checklistConfig=parsed;
+      }else{
+        checklistConfig=[].concat(defaultChecklistConfig);
+        localStorage.setItem("checklistConfig",JSON.stringify(checklistConfig));
+      }
+    }catch(e){
+      checklistConfig=[].concat(defaultChecklistConfig);
+      localStorage.setItem("checklistConfig",JSON.stringify(checklistConfig));
+    }
+  }else{
+    checklistConfig=[].concat(defaultChecklistConfig);
+    localStorage.setItem("checklistConfig",JSON.stringify(checklistConfig));
+  }
+}
+
+function saveCustomItems(){
+  localStorage.setItem("checklistConfig",JSON.stringify(checklistConfig));
+  loadChecklist();
+}
+
+function getEffectiveItems(){
+  loadCustomItems();
+  
+  // Update protein target from keto_macros if available
+  try {
+    var macros = JSON.parse(localStorage.getItem('keto_macros') || '{}');
+    if (macros.protein) {
+      checklistConfig.forEach(function(item) {
+        if (item.id === 'protein') {
+          item.target = Math.round(macros.protein / 3); // Divide into 3 meals
+        }
+      });
+    }
+  } catch(e) {}
+  
+  return checklistConfig;
+}
+
+function openCrudModal(){
+loadCustomItems();
+renderCrudList();
+document.getElementById("crudModal").classList.remove("hidden");
+document.getElementById("crudModal").classList.add("flex");
+}
+
+function closeCrudModal(){
+document.getElementById("crudModal").classList.add("hidden");
+document.getElementById("crudModal").classList.remove("flex");
+}
+
+function renderCrudList(){
+  var container=document.getElementById("crudContent");
+  var html='<div class="space-y-3 mb-6">';
+  checklistConfig.forEach(function(item,index){
+var isDefault=index<checklistConfig.length;
+var color=iconColors[item.icon]||'#ff4d00';
+html+='<div class="flex items-center gap-3 bg-surface-container-high rounded-xl p-3">';
+html+='<div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:'+color+'20">';
+html+='<span class="material-symbols-outlined" style="color:'+color+'">'+item.icon+'</span></div>';
+html+='<div class="flex-1">';
+html+='<p class="font-medium text-white">'+item.label+'</p>';
+html+='<p class="text-xs text-on-surface-variant">Meta: '+item.target+' '+item.unit+'</p></div>';
+html+='<button onclick="editItem('+index+')" class="w-11 h-11 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-white/10 hover:text-white transition-all"><span class="material-symbols-outlined text-sm">edit</span></button>';
+html+='<button onclick="deleteItem('+index+')" class="w-11 h-11 rounded-lg flex items-center justify-center text-error hover:bg-error/20 transition-all"><span class="material-symbols-outlined text-sm">delete</span></button>';
+html+='</div>';
+});
+html+='</div>';
+html+='<button onclick="openItemForm(-1)" class="w-full py-3 rounded-xl primary-gradient text-white font-bold hover:opacity-90 transition-colors flex items-center justify-center gap-2">';
+html+='<span class="material-symbols-outlined">add</span>Agregar Nuevo Item</button>';
+container.innerHTML=html;
+}
+
+function openItemForm(index){
+editingItemIndex=index;
+if(index===-1){
+document.getElementById("formTitle").textContent="Nuevo Item";
+document.getElementById("itemName").value="";
+document.getElementById("itemTarget").value="1";
+document.getElementById("itemUnit").value="min";
+document.getElementById("itemIcon").value="fitness_center";
+}else{
+  var item=checklistConfig[index];
+  document.getElementById("formTitle").textContent="Editar Item";
+  document.getElementById("itemName").value=item.label;
+  document.getElementById("itemTarget").value=item.target;
+  document.getElementById("itemUnit").value=item.unit;
+  document.getElementById("itemIcon").value=item.icon;
+}
+document.getElementById("crudModal").classList.add("hidden");
+document.getElementById("itemFormModal").classList.remove("hidden");
+document.getElementById("itemFormModal").classList.add("flex");
+}
+
+function closeItemForm(){
+document.getElementById("itemFormModal").classList.add("hidden");
+document.getElementById("itemFormModal").classList.remove("flex");
+editingItemIndex=null;
+document.getElementById("crudModal").classList.remove("hidden");
+document.getElementById("crudModal").classList.add("flex");
+}
+
+function saveItem(){
+var name=document.getElementById("itemName").value.trim();
+var icon=document.getElementById("itemIcon").value;
+var target=parseFloat(document.getElementById("itemTarget").value);
+var unit=document.getElementById("itemUnit").value.trim();
+if(!name||!target||!unit){
+showToast("Completa todos los campos");
+return;
+}
+var color=iconColors[icon]||'#ff4d00';
+if(editingItemIndex===-1){
+  checklistConfig.push({id:"custom_"+Date.now(),icon:icon,iconColor:color,label:name,unit:unit,target:target,step:1,custom:true});
+  showToast("Item agregado");
+}else{
+  if(editingItemIndex<checklistConfig.length){
+    checklistConfig[editingItemIndex].label=name;
+    checklistConfig[editingItemIndex].icon=icon;
+    checklistConfig[editingItemIndex].iconColor=color;
+    checklistConfig[editingItemIndex].target=target;
+    checklistConfig[editingItemIndex].unit=unit;
+  }else{
+    var all=[].concat(checklistConfig,customItems);
+    var item=all[editingItemIndex];
+    item.label=name;
+    item.icon=icon;
+    item.iconColor=color;
+    item.target=target;
+    item.unit=unit;
+  }
+}
+saveCustomItems();
+closeItemForm();
+renderCrudList();
+showToast("Guardado!");
+}
+
+function editItem(index){
+openItemForm(index);
+}
+
+function deleteItem(index){
+  var item=checklistConfig[index];
+  if(confirm("Eliminar '"+item.label+"' de tu checklist?")){
+    checklistConfig.splice(index,1);
+    saveCustomItems();
+    renderCrudList();
+    showToast("Item eliminado");
+  }
+}
+
+function showToast(message){
+var toast=document.getElementById("toast");
+var toastMessage=document.getElementById("toastMessage");
+toastMessage.textContent=message;
+toast.classList.remove("hidden");
+setTimeout(function(){
+toast.classList.add("hidden");
+},3000);
+}
+
+// Meal functions
+var mealIcons={desayuno:"sunny",almuerzo:"wb_sunny",cena:"nights_stay",snacks:"cookie"};
+var mealColors={desayuno:"bg-amber-500/20",almuerzo:"bg-orange-500/20",cena:"bg-indigo-500/20",snacks:"bg-pink-500/20"};
+var mealLabels={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snacks"};
+
+function getToday(){return new Date().toISOString().slice(0,10)}
+function getMealPlan(dateKey){var stored=safeParseJSON(localStorage.getItem("mealPlan_"+dateKey), {});if(Object.keys(stored).length===0){stored={desayuno:[],almuerzo:[],cena:[],snacks:[]};localStorage.setItem("mealPlan_"+dateKey,JSON.stringify(stored))}return stored}
+
+function loadMealConsumption(){
+var container=document.getElementById("mealsContainer");
+var today=getToday();
+var plan=getMealPlan(today);
+var consumed=JSON.parse(localStorage.getItem("mealConsumed_"+today)||"{}");
+var html="";
+var hasAnyMeal=Object.keys(plan).some(function(m){return(plan[m]||[]).length>0});
+
+if(!hasAnyMeal){
+html='<div class="flex flex-col items-center justify-center text-center py-12 px-6"><div class="relative mb-8"><div class="w-32 h-32 bg-surface-container-highest rounded-full flex items-center justify-center opacity-40"><span class="material-symbols-outlined text-6xl text-on-surface-variant">restaurant_menu</span></div><div class="absolute -bottom-2 -right-2 w-10 h-10 bg-primary/20 rounded-full blur-xl animate-pulse"></div></div><h3 class="font-headline text-xl font-bold text-on-surface mb-2">No meals planned yet</h3><p class="text-on-surface-variant max-w-sm mb-8">Ready to track your macros? Start by adding your first meal or select a nutrition plan.</p></div>';
+}else{
+Object.keys(mealLabels).forEach(function(meal){
+var items=plan[meal]||[];
+var isConsumed=consumed[meal]||false;
+var icon=mealIcons[meal]||"restaurant";
+var colorClass=mealColors[meal]||"bg-surface-container-high";
+var borderClass=isConsumed?"border-primary":"border-surface-container-high";
+html+='<div class="flex items-center gap-4 p-4 rounded-2xl border-2 '+borderClass+' bg-surface-container-low cursor-pointer hover:bg-surface-container transition-all" onclick="toggleMealConsumed(\''+meal+'\')">';
+html+='<div class="w-12 h-12 rounded-xl '+colorClass+' flex items-center justify-center"><span class="material-symbols-outlined text-xl text-white">'+icon+'</span></div>';
+html+='<div class="flex-1"><p class="font-bold text-white">'+mealLabels[meal]+'</p><p class="text-xs text-on-surface-variant">'+(items.length>0?items.length+" items":"Sin alimentos")+'</p></div>';
+html+='<span class="material-symbols-outlined '+(isConsumed?"text-primary":"text-on-surface-variant/70")+'" style="font-variation-settings:'+(isConsumed?"'FILL' 1":"0")+'">'+(isConsumed?"check_circle":"radio_button_unchecked")+'</span>';
+html+='</div>';
+});
+}
+container.innerHTML=html;
+}
+
+function toggleMealConsumed(meal){
+var today=getToday();
+var consumed=JSON.parse(localStorage.getItem("mealConsumed_"+today)||"{}");
+consumed[meal]=!consumed[meal];
+localStorage.setItem("mealConsumed_"+today,JSON.stringify(consumed));
+loadMealConsumption();
+showToast(consumed[meal]?mealLabels[meal]+" registrado":"Marcado como no consumido");
+}
+
+loadChecklist();
+loadMealConsumption();
+renderWeeklyChart();
+renderSupplements();
+initNotifications();
+
+function initNotifications(){
+  var stored=localStorage.getItem("checklistReminders");
+  if(!stored){
+    var defaults={water:{enabled:true,time:"08:00"},electrolitos:{enabled:true,time:"10:00"},workout:{enabled:true,time:"18:00"},protein:{enabled:true,time:"12:00"},walk:{enabled:false,time:"17:00"},sleep:{enabled:true,time:"22:00"}};
+    localStorage.setItem("checklistReminders",JSON.stringify(defaults));
+  }
+}
+
+function openNotificationModal(){
+  renderNotificationList();
+  document.getElementById("notificationModal").classList.remove("hidden");
+  document.getElementById("notificationModal").classList.add("flex");
+}
+
+function closeNotificationModal(){
+  document.getElementById("notificationModal").classList.add("hidden");
+  document.getElementById("notificationModal").classList.remove("flex");
+}
+
+function renderNotificationList(){
+  var container=document.getElementById("notificationList");
+  var items=getEffectiveItems();
+  var reminders=JSON.parse(localStorage.getItem("checklistReminders")||"{}");
+  var html="";
+  
+  items.forEach(function(item){
+    var reminder=reminders[item.id]||{enabled:false,time:"08:00"};
+    html+='<div class="flex items-center justify-between p-3 bg-surface-container-high rounded-xl">';
+    html+='<div class="flex items-center gap-3">';
+    html+='<span class="material-symbols-outlined" style="color:'+item.iconColor+'">'+item.icon+'</span>';
+    html+='<span class="text-white font-medium">'+item.label+'</span>';
+    html+='</div>';
+    html+='<div class="flex items-center gap-2">';
+    html+='<input type="time" id="time_'+item.id+'" class="bg-surface-container-low text-white text-sm rounded-lg px-2 py-1 border border-outline" value="'+reminder.time+'">';
+    html+='<button onclick="toggleReminder(\''+item.id+'\')" class="w-10 h-6 rounded-full transition-colors '+(reminder.enabled?'bg-primary':'bg-surface-variant')+'">';
+    html+='<div class="w-5 h-5 rounded-full bg-white shadow-md transform transition-transform '+(reminder.enabled?'translate-x-4':'translate-x-0.5')+'"></div>';
+    html+='</button>';
+    html+='</div>';
+    html+='</div>';
+  });
+  
+  container.innerHTML=html;
+}
+
+function toggleReminder(itemId){
+  var reminders=JSON.parse(localStorage.getItem("checklistReminders")||"{}");
+  if(!reminders[itemId]){
+    reminders[itemId]={enabled:false,time:"08:00"};
+  }
+  reminders[itemId].enabled=!reminders[itemId].enabled;
+  reminders[itemId].time=document.getElementById("time_"+itemId).value;
+  localStorage.setItem("checklistReminders",JSON.stringify(reminders));
+  renderNotificationList();
+  if(reminders[itemId].enabled){
+    scheduleNotification(itemId,reminders[itemId].time);
+  }
+}
+
+function requestNotificationPermission(){
+  if("Notification" in window){
+    Notification.requestPermission().then(function(permission){
+      if(permission==="granted"){
+        showToast("Notificaciones activadas!");
+        scheduleAllNotifications();
+      }else{
+        showToast("Permiso denegado");
+      }
+    });
+  }else{
+    showToast("Tu navegador no soporta notificaciones");
+  }
+}
+
+function scheduleAllNotifications(){
+  var reminders=JSON.parse(localStorage.getItem("checklistReminders")||"{}");
+  var items=getEffectiveItems();
+  items.forEach(function(item){
+    if(reminders[item.id]&&reminders[item.id].enabled){
+      scheduleNotification(item.id,reminders[item.id].time);
+    }
+  });
+}
+
+function scheduleNotification(itemId,time){
+  if(Notification.permission!=="granted")return;
+  var items=getEffectiveItems();
+  var item=items.find(function(i){return i.id===itemId});
+  if(!item)return;
+  
+  var now=new Date();
+  var parts=time.split(":");
+  var scheduledTime=new Date(now.getFullYear(),now.getMonth(),now.getDate(),parts[0],parts[1],0,0);
+  
+  if(scheduledTime<=now){
+    scheduledTime.setDate(scheduledTime.getDate()+1);
+  }
+  
+  var delay=scheduledTime.getTime()-now.getTime();
+  
+  setTimeout(function(){
+    new Notification("KetoCore - Recordatorio",{
+      body:"Es hora de "+item.label+"!",
+      icon:"icons/icon-192x192.png",
+      tag:itemId
+    });
+    scheduleNotification(itemId,time);
+  },delay);
+}
+
+var supplementIconOptions=[
+  {icon:"medication",color:"#ff4d00"},
+  {icon:"science",color:"#ffb300"},
+  {icon:"egg_alt",color:"#4caf50"},
+  {icon:"spa",color:"#9c27b0"},
+  {icon:"favorite",color:"#e91e63"},
+  {icon:"water_drop",color:"#00bcd4"},
+  {icon:"bolt",color:"#ffc107"},
+  {icon:"psychiatry",color:"#3f51b5"}
+];
+
+var availableSupplements=[
+  {id:"creatina",name:"Creatina",category:"deportivo",dose:5,unit:"g",icon:"bolt",color:"#ff4d00"},
+  {id:"beta_alanina",name:"Beta Alanina",category:"deportivo",dose:3,unit:"g",icon:"flash_on",color:"#ff5722"},
+  {id:"bcaa",name:"BCAAs",category:"deportivo",dose:10,unit:"g",icon:"fitness_center",color:"#e91e63"},
+  {id:"proteina_whey",name:"Whey Protein",category:"deportivo",dose:30,unit:"g",icon:"egg_alt",color:"#9c27b0"},
+  {id:"caseina",name:"Caseína",category:"deportivo",dose:30,unit:"g",icon:"breakfast_dining",color:"#673ab7"},
+  {id:"pre_entreno",name:"Pre-Entreno",category:"deportivo",dose:1,unit:"dosis",icon:"play_arrow",color:"#ff9800"},
+  {id:"glutamina",name:"Glutamina",category:"deportivo",dose:5,unit:"g",icon:"healing",color:"#4caf50"},
+  {id:"zma",name:"ZMA (Zinc+Magnesio)",category:"deportivo",dose:1,unit:"capsula",icon:"nightlight",color:"#3f51b5"},
+  {id:"cafeina",name:"Cafeína",category:"deportivo",dose:200,unit:"mg",icon:"coffee",color:"#795548"},
+  {id:"hmb",name:"HMB",category:"deportivo",dose:3,unit:"g",icon:"shield",color:"#607d8b"},
+  {id:"magnesio",name:"Magnesio",category:"vitaminas",dose:400,unit:"mg",icon:"medication",color:"#9c27b0"},
+  {id:"vitd",name:"Vitamina D3",category:"vitaminas",dose:4000,unit:"UI",icon:"wb_sunny",color:"#ffc107"},
+  {id:"vitc",name:"Vitamina C",category:"vitaminas",dose:1000,unit:"mg",icon:"spa",color:"#4caf50"},
+  {id:"zinc",name:"Zinc",category:"vitaminas",dose:30,unit:"mg",icon:"hexagon",color:"#9e9e9e"},
+  {id:"omega3",name:"Omega-3 (EPA/DHA)",category:"vitaminas",dose:2,unit:"capsula",icon:"water_drop",color:"#00bcd4"},
+  {id:"multivitaminico",name:"Multivitamínico",category:"vitaminas",dose:1,unit:"capsula",icon:"medication",color:"#ffb300"},
+  {id:"b12",name:"Vitamina B12",category:"vitaminas",dose:1000,unit:"mcg",icon:"psychiatry",color:"#e91e63"},
+  {id:"vitk2",name:"Vitamina K2",category:"vitaminas",dose:100,unit:"mcg",icon:"favorite",color:"#f44336"},
+  {id:"b complex",name:"Vitamina B-Complex",category:"vitaminas",dose:1,unit:"capsula",icon:"group_work",color:"#8bc34a"},
+  {id:"ashwagandha",name:"Ashwagandha",category:"vitaminas",dose:600,unit:"mg",icon:"self_improvement",color:"#4db6ac"},
+  {id:"electrolitos",name:"Electrolitos",category:"vitaminas",dose:500,unit:"ml",icon:"science",color:"#03a9f4"},
+  {id:"colageno",name:"Colágeno",category:"vitaminas",dose:10,unit:"g",icon:"healing",color:"#ff7043"}
+];
+
+function getSelectedSupplements(){
+  var stored=localStorage.getItem("checklistSelectedSupplements");
+  if(stored){
+    try{
+      return JSON.parse(stored);
+    }catch(e){}
+  }
+  return[];
+}
+
+function saveSelectedSupplements(selected){
+  localStorage.setItem("checklistSelectedSupplements",JSON.stringify(selected));
+}
+
+function renderSupplements(){
+  var container=document.getElementById("supplementsGrid");
+  var selected=getSelectedSupplements();
+  var todayKey=new Date().toISOString().slice(0,10);
+  var takenData=JSON.parse(localStorage.getItem("supplements_"+todayKey)||"{}");
+  var supps=window.availableSupplements||[
+    {id:"creatina",name:"Creatina",category:"deportivo",dose:5,unit:"g",icon:"bolt",color:"#ff4d00"},
+    {id:"magnesio",name:"Magnesio",category:"vitaminas",dose:400,unit:"mg",icon:"medication",color:"#9c27b0"}
+  ];
+  
+  var html="";
+  selected.forEach(function(suppId){
+    var supp=supps.find(function(s){return s.id===suppId});
+    if(!supp)return;
+    var taken=takenData[suppId]||0;
+    var isComplete=taken>=supp.dose;
+    html+='<div class="bg-surface-container-low p-4 rounded-2xl flex items-center gap-4">';
+    html+='<div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:'+supp.color+'20">';
+    html+='<span class="material-symbols-outlined text-2xl" style="color:'+supp.color+'">'+supp.icon+'</span></div>';
+    html+='<div class="flex-1">';
+    html+='<p class="font-bold text-white">'+supp.name+'</p>';
+    html+='<p class="text-xs text-on-surface-variant">'+taken+' / '+supp.dose+' '+supp.unit+'</p>';
+    html+='<div class="w-full h-1.5 bg-surface-container-highest rounded-full mt-2 overflow-hidden">';
+    html+='<div class="h-full rounded-full transition-all" style="width:'+Math.min((taken/supp.dose)*100,100)+'%;background:'+supp.color+'"></div></div>';
+    html+='</div>';
+    html+='<button onclick="takeSupplement(\''+supp.id+'\')" class="w-10 h-10 rounded-full '+((taken>=supp.dose)?'bg-primary/20':'bg-surface-variant')+' flex items-center justify-center hover:bg-surface-container-highest transition-colors">';
+    html+='<span class="material-symbols-outlined '+(taken>=supp.dose?'text-primary':'text-on-surface-variant')+'" style="font-variation-settings:\'FILL '+(taken>=supp.dose?'1':'0')+'\'">check</span></button>';
+    html+='</div>';
+  });
+  
+  if(selected.length===0){
+    html='<div class="col-span-full text-center py-8 text-on-surface-variant">No hay suplementos seleccionados. ¡Agrega los tuyos!</div>';
+  }
+  
+  container.innerHTML=html;
+}
+
+function takeSupplement(suppId){
+  var supps=window.availableSupplements||[
+    {id:"creatina",name:"Creatina",category:"deportivo",dose:5,unit:"g",icon:"bolt",color:"#ff4d00"},
+    {id:"magnesio",name:"Magnesio",category:"vitaminas",dose:400,unit:"mg",icon:"medication",color:"#9c27b0"}
+  ];
+  var supp=supps.find(function(s){return s.id===suppId});
+  if(!supp)return;
+  
+  var todayKey=new Date().toISOString().slice(0,10);
+  var takenData=JSON.parse(localStorage.getItem("supplements_"+todayKey)||"{}");
+  
+  var current=takenData[suppId]||0;
+  var increment=supp.unit==="capsula"||supp.unit==="UI"||supp.unit==="dosis"?1:supp.dose/10;
+  
+  if(current<supp.dose){
+    takenData[suppId]=Math.min(current+increment,supp.dose);
+    localStorage.setItem("supplements_"+todayKey,JSON.stringify(takenData));
+    renderSupplements();
+    showToast(supp.name+": "+Math.round(takenData[suppId])+" "+supp.unit);
+  }else{
+    takenData[suppId]=0;
+    localStorage.setItem("supplements_"+todayKey,JSON.stringify(takenData));
+    renderSupplements();
+    showToast(supp.name+" reiniciado");
+  }
+}
+
+function openSupplementsModal(){
+  renderSupplementsConfig();
+  document.getElementById("supplementsModal").classList.remove("hidden");
+  document.getElementById("supplementsModal").classList.add("flex");
+}
+
+function closeSupplementsModal(){
+  document.getElementById("supplementsModal").classList.add("hidden");
+  document.getElementById("supplementsModal").classList.remove("flex");
+  renderSupplements();
+}
+
+function renderSupplementsConfig(){
+  var container=document.getElementById("supplementsConfigList");
+  var selected=getSelectedSupplements();
+  
+  var supps=window.availableSupplements||[
+    {id:"creatina",name:"Creatina",category:"deportivo",dose:5,unit:"g",icon:"bolt",color:"#ff4d00"},
+    {id:"beta_alanina",name:"Beta Alanina",category:"deportivo",dose:3,unit:"g",icon:"flash_on",color:"#ff5722"},
+    {id:"bcaa",name:"BCAAs",category:"deportivo",dose:10,unit:"g",icon:"fitness_center",color:"#e91e63"},
+    {id:"proteina_whey",name:"Whey Protein",category:"deportivo",dose:30,unit:"g",icon:"egg_alt",color:"#9c27b0"},
+    {id:"caseina",name:"Caseína",category:"deportivo",dose:30,unit:"g",icon:"breakfast_dining",color:"#673ab7"},
+    {id:"pre_entreno",name:"Pre-Entreno",category:"deportivo",dose:1,unit:"dosis",icon:"play_arrow",color:"#ff9800"},
+    {id:"magnesio",name:"Magnesio",category:"vitaminas",dose:400,unit:"mg",icon:"medication",color:"#9c27b0"},
+    {id:"vitd",name:"Vitamina D3",category:"vitaminas",dose:4000,unit:"UI",icon:"wb_sunny",color:"#ffc107"},
+    {id:"omega3",name:"Omega-3",category:"vitaminas",dose:2,unit:"capsula",icon:"water_drop",color:"#00bcd4"}
+  ];
+  
+  if(!supps||!supps.filter){
+    container.innerHTML='<p class="text-center text-on-surface-variant py-4">Error cargando suplementos</p>';
+    return;
+  }
+  
+  var sportsSupps=supps.filter(function(s){return s.category==="deportivo"});
+  var vitaminSupps=supps.filter(function(s){return s.category==="vitaminas"});
+  
+  var html='<div class="mb-4"><h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3">Suplementos Deportivos</h4><div class="grid grid-cols-2 gap-2">';
+  sportsSupps.forEach(function(supp){
+    var isSelected=selected.indexOf(supp.id)!==-1;
+    html+='<button onclick="toggleSupplement(\''+supp.id+'\')" class="p-3 rounded-xl text-left transition-all '+(isSelected?'bg-primary/20 border border-primary':'bg-surface-container-high border border-transparent hover:border-primary/30')+'">';
+    html+='<div class="flex items-center gap-2">';
+    html+='<span class="material-symbols-outlined" style="color:'+supp.color+'">'+supp.icon+'</span>';
+    html+='<span class="text-sm font-medium text-white">'+supp.name+'</span>';
+    html+='</div>';
+    html+='<span class="text-[10px] text-on-surface-variant">'+supp.dose+' '+supp.unit+'</span>';
+    html+='</button>';
+  });
+  html+='</div></div>';
+  
+  html+='<div><h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3">Vitaminas y Minerales</h4><div class="grid grid-cols-2 gap-2">';
+  vitaminSupps.forEach(function(supp){
+    var isSelected=selected.indexOf(supp.id)!==-1;
+    html+='<button onclick="toggleSupplement(\''+supp.id+'\')" class="p-3 rounded-xl text-left transition-all '+(isSelected?'bg-primary/20 border border-primary':'bg-surface-container-high border border-transparent hover:border-primary/30')+'">';
+    html+='<div class="flex items-center gap-2">';
+    html+='<span class="material-symbols-outlined" style="color:'+supp.color+'">'+supp.icon+'</span>';
+    html+='<span class="text-sm font-medium text-white">'+supp.name+'</span>';
+    html+='</div>';
+    html+='<span class="text-[10px] text-on-surface-variant">'+supp.dose+' '+supp.unit+'</span>';
+    html+='</button>';
+  });
+  html+='</div></div>';
+  
+  container.innerHTML=html;
+}
+
+function toggleSupplement(suppId){
+  var selected=getSelectedSupplements();
+  var idx=selected.indexOf(suppId);
+  if(idx===-1){
+    selected.push(suppId);
+  }else{
+    selected.splice(idx,1);
+  }
+  saveSelectedSupplements(selected);
+  renderSupplementsConfig();
+  renderSupplements();
+}
+
+if(localStorage.getItem("sidebarCollapsed")==="true"){document.body.classList.add("sidebar-collapsed");var s=document.getElementById("sidebarNav");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");var t=document.getElementById("sidebarToggle");s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px"}
+var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
+</script>
+<script is:inline>
+var _cp=window.location.pathname.split("/").pop()||"index.html";
+document.querySelectorAll(".sidebar-link").forEach(function(l){
+  if(l.getAttribute("href")===_cp){
+    l.classList.add("active");
+    l.style.background="rgba(22,22,22,1)";
+    l.style.color="white";
+    var ic=l.querySelector(".material-symbols-outlined");
+    if(ic)ic.style.color="#ff4d00";
+  }
+});
+if(localStorage.getItem("sidebarCollapsed")==="true"){
+  document.body.classList.add("sidebar-collapsed");
+  var _sn=document.getElementById("sidebarNav");
+  if(_sn){_sn.style.width="72px";_sn.style.overflow="hidden";}
+  var _tp=document.querySelector(".topbar-pl");
+  if(_tp)_tp.style.paddingLeft="88px";
+  var _mc=document.querySelector(".main-content");
+  if(_mc)_mc.style.marginLeft="72px";
+  var _st=document.getElementById("sidebarToggle");
+  if(_st)_st.style.left="72px";
+}
+</script>
+<script is:inline>
+// User Dropdown Menu
+function toggleUserMenu() {
+  const dropdown = document.getElementById('userDropdown');
+  dropdown.classList.toggle('hidden');
+  updateDropdownInfo();
+}
+
+function toggleMobileUserMenu() {
+  const dropdown = document.getElementById('mobileUserDropdown');
+  dropdown.classList.toggle('hidden');
+  updateDropdownInfo();
+}
+
+function updateDropdownInfo() {
+  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+  const userName = profile.nombre || profile.name || 'Usuario';
+  const userEmail = localStorage.getItem('KetoCore_user_email') || 'usuario@ejemplo.com';
+  const dn = document.getElementById('dropdownUserName');
+  const de = document.getElementById('dropdownUserEmail');
+  const mdn = document.getElementById('mobileDropdownUserName');
+  const mde = document.getElementById('mobileDropdownUserEmail');
+  if(dn) dn.textContent = userName;
+  if(de) de.textContent = userEmail;
+  if(mdn) mdn.textContent = userName;
+  if(mde) mde.textContent = userEmail;
+}
+
+function updateHeaderAvatar() {
+  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+  const avatarUrl = profile.avatar_url;
+  const hi = document.getElementById('headerAvatarImg');
+  const hi2 = document.getElementById('headerAvatarIcon');
+  const mhi = document.getElementById('mobileHeaderAvatarImg');
+  const mhi2 = document.getElementById('mobileHeaderAvatarIcon');
+  if (avatarUrl) {
+    if(hi) { hi.src = avatarUrl; hi.classList.remove('hidden'); }
+    if(hi2) hi2.classList.add('hidden');
+    if(mhi) { mhi.src = avatarUrl; mhi.classList.remove('hidden'); }
+    if(mhi2) mhi2.classList.add('hidden');
+  } else {
+    if(hi) hi.classList.add('hidden');
+    if(hi2) hi2.classList.remove('hidden');
+    if(mhi) mhi.classList.add('hidden');
+    if(mhi2) mhi2.classList.remove('hidden');
+  }
+}
+
+document.addEventListener('click', function(e) {
+  const dd = document.getElementById('userDropdown');
+  const mdd = document.getElementById('mobileUserDropdown');
+  const btn = document.getElementById('profileBtn');
+  if (dd && !dd.contains(e.target) && !btn.contains(e.target)) dd.classList.add('hidden');
+  if (mdd && !e.target.closest('#mobileUserDropdown') && !e.target.closest('button[onclick="toggleMobileUserMenu()"]')) mdd.classList.add('hidden');
+});
+
+async function handleLogout() {
+  if (confirm('¿Cerrar sesión?')) {
+    await window.supabase.auth.signOut();
+    localStorage.removeItem('KetoCore_user_id');
+    localStorage.removeItem('KetoCore_user_email');
+    localStorage.removeItem('KetoCore_onboarding_done');
+    window.location.href = '/app/welcome';
+  }
+}
+
+updateHeaderAvatar();
+</script>
+
+</AppLayout>

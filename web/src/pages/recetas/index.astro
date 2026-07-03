@@ -1,0 +1,148 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allRecipes = await getCollection('recipes');
+const mealTypes = [...new Set(allRecipes.map(r => r.data.mealType))];
+const difficulties = ['Fácil', 'Medio', 'Difícil'];
+---
+
+<Layout title="Recetas Keto" description="195 recetas keto verificadas con macros calculados. Desayunos, almuerzos, cenas y snacks que mantienen la cetosis.">
+
+<section style="padding:3rem 0 2rem">
+  <div class="wrap">
+    <span class="chip" style="margin-bottom:1rem;display:inline-block">Biblioteca de recetas</span>
+    <h1 class="d" style="font-size:clamp(2rem,4vw,3.25rem);margin-bottom:1rem">195 recetas. Cetosis garantizada.</h1>
+    <p style="color:var(--c-text-muted);font-size:1.0625rem;max-width:560px">Cada receta con macros verificados, tiempo de preparación y nivel de dificultad. Sin trampa, sin azúcar escondido.</p>
+  </div>
+</section>
+
+<!-- Day macro summary bar -->
+<section style="padding:0 0 2rem">
+  <div class="wrap">
+    <div class="card" style="padding:1.5rem;background:var(--c-surface)">
+      <p style="font-size:0.75rem;font-weight:700;color:var(--c-text-dim);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:1rem">Día de ejemplo · Desayuno + Almuerzo + Cena</p>
+      <div style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center">
+        <div class="macro-pill"><span style="color:var(--c-primary)">1,380</span><span>kcal</span></div>
+        <div class="macro-pill"><span style="color:#818cf8">78g</span><span>proteína</span></div>
+        <div class="macro-pill"><span style="color:var(--c-green)">15g</span><span>net carbs</span></div>
+        <div class="macro-pill"><span style="color:var(--c-gold)">112g</span><span>grasa</span></div>
+        <div style="flex:1;min-width:200px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.375rem;font-size:0.7rem;color:var(--c-text-dim)">
+            <span>Distribución keto</span>
+            <span>70/25/5</span>
+          </div>
+          <div class="progress-track" style="height:6px">
+            <div style="display:flex;height:100%">
+              <div style="width:70%;background:var(--c-gold);border-radius:100px 0 0 100px"></div>
+              <div style="width:25%;background:#818cf8"></div>
+              <div style="width:5%;background:var(--c-green);border-radius:0 100px 100px 0"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Filters -->
+<section style="padding:0 0 2rem;border-bottom:1px solid var(--c-border)">
+  <div class="wrap">
+    <div style="display:flex;gap:2rem;flex-wrap:wrap">
+      <div>
+        <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--c-text-dim);margin-bottom:0.625rem">Tipo de comida</p>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+          <button class="filter-btn active" data-filter="meal" data-value="">Todo</button>
+          {mealTypes.map(t => <button class="filter-btn" data-filter="meal" data-value={t}>{t}</button>)}
+        </div>
+      </div>
+      <div>
+        <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--c-text-dim);margin-bottom:0.625rem">Dificultad</p>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+          <button class="filter-btn active" data-filter="diff" data-value="">Todas</button>
+          {difficulties.map(d => <button class="filter-btn" data-filter="diff" data-value={d}>{d}</button>)}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Recipe grid -->
+<section class="section-sm">
+  <div class="wrap">
+    <div class="grid-4" id="recipe-grid">
+      {allRecipes.map(r => (
+        <a href={`/recetas/${r.id}`} class="card card-link" data-meal={r.data.mealType} data-diff={r.data.difficulty}>
+          {r.data.image && <img src={r.data.image} alt={r.data.title} loading="lazy" style="width:100%;height:160px;object-fit:cover">}
+          <div style="padding:1rem">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem">
+              <span style={`font-size:0.6rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:${r.data.mealType === 'Desayuno' ? 'var(--c-primary)' : r.data.mealType === 'Almuerzo' ? 'var(--c-gold)' : r.data.mealType === 'Cena' ? '#818cf8' : 'var(--c-green)'}`}>{r.data.mealType}</span>
+              <span class="badge">{r.data.prepTime}min</span>
+            </div>
+            <h3 style="font-family:var(--font-display);font-size:0.875rem;font-weight:800;line-height:1.35;margin-bottom:0.625rem" class="line-clamp-2">{r.data.title}</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.375rem">
+              <div style="font-size:0.7rem;color:var(--c-text-dim)">{r.data.calories} kcal</div>
+              <div style="font-size:0.7rem;color:var(--c-green);font-weight:600">{r.data.netCarbs}g net carbs</div>
+              <div style="font-size:0.7rem;color:#818cf8">{r.data.protein}g proteína</div>
+              <div style="font-size:0.7rem;color:var(--c-gold)">{r.data.fat}g grasa</div>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <!-- App CTA -->
+    <div class="card" style="margin-top:3rem;padding:2.5rem;text-align:center;background:var(--c-surface);border-color:var(--c-primary-border)">
+      <span class="chip" style="margin-bottom:1rem;display:inline-block">En la app</span>
+      <h2 class="d" style="font-size:clamp(1.5rem,2.5vw,2rem);margin-bottom:0.875rem">192 recetas más esperan</h2>
+      <p style="color:var(--c-text-muted);font-size:0.9375rem;margin-bottom:1.75rem">Con búsqueda avanzada, filtros por macros, plan semanal automático y lista de compras.</p>
+      <a href="/app/welcome.html" class="btn">Acceder a las 195 recetas</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .filter-btn {
+    padding: 0.375rem 0.875rem;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: var(--c-surface-2);
+    border: 1px solid var(--c-border);
+    color: var(--c-text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-body);
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--c-primary-dim);
+    border-color: var(--c-primary-border);
+    color: var(--c-primary);
+  }
+  .card[hidden] { display: none !important; }
+</style>
+
+<script>
+  const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const cards = document.querySelectorAll<HTMLElement>('#recipe-grid .card[data-meal]');
+  let activeMeal = '';
+  let activeDiff = '';
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter!;
+      const value = btn.dataset.value!;
+      document.querySelectorAll<HTMLButtonElement>(`.filter-btn[data-filter="${filter}"]`).forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (filter === 'meal') activeMeal = value;
+      if (filter === 'diff') activeDiff = value;
+      cards.forEach(card => {
+        const meal = (card as HTMLElement).dataset.meal!;
+        const diff = (card as HTMLElement).dataset.diff!;
+        const show = (!activeMeal || meal === activeMeal) && (!activeDiff || diff === activeDiff);
+        (card.closest('a') as HTMLElement).hidden = !show;
+      });
+    });
+  });
+</script>
+</Layout>

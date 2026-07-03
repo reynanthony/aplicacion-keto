@@ -1,0 +1,86 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const protocols = await getCollection('protocols');
+const categories = [...new Set(protocols.map(p => p.data.category))];
+const goals = [...new Set(protocols.map(p => p.data.goal))];
+---
+
+<Layout title="Protocolos" description="Protocolos de pérdida de peso, salud metabólica, ayuno intermitente y más. Sistemas completos con objetivo, fases y estrategias de ejecución.">
+
+<section style="padding:3rem 0 2rem">
+  <div class="wrap">
+    <span class="chip" style="margin-bottom:1rem;display:inline-block">Centro de protocolos</span>
+    <h1 class="d" style="font-size:clamp(2rem,4vw,3.25rem);margin-bottom:1rem">Sistemas que funcionan.<br>No dietas.</h1>
+    <p style="color:var(--c-text-muted);font-size:1.0625rem;max-width:560px">Un protocolo no es una lista de alimentos. Es un sistema con objetivo, fases, métricas y estrategias de salida. Aquí los que funcionan.</p>
+  </div>
+</section>
+
+<!-- Protocol categories -->
+<section style="padding:0 0 3rem">
+  <div class="wrap">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;margin-bottom:3rem" id="cat-grid">
+      {[
+        { icon: 'trending_down', label: 'Pérdida de peso', color: 'var(--c-primary)' },
+        { icon: 'favorite', label: 'Salud metabólica', color: '#22c55e' },
+        { icon: 'fitness_center', label: 'Ganancia muscular', color: '#818cf8' },
+        { icon: 'timer', label: 'Ayuno', color: 'var(--c-gold)' },
+      ].map(c => (
+        <div class="card" style={`padding:1.25rem;text-align:center;cursor:pointer;transition:border-color 0.2s`}>
+          <span class="icon icon-fill" style={`color:${c.color};font-size:32px;display:block;margin-bottom:0.625rem`}>{c.icon}</span>
+          <p style="font-family:var(--font-display);font-size:0.875rem;font-weight:800">{c.label}</p>
+        </div>
+      ))}
+    </div>
+
+    <!-- Protocol list -->
+    <div class="grid-2">
+      {protocols.map(p => (
+        <a href={`/protocolos/${p.id}`} class="card card-link" style="padding:2rem;display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:start">
+          <div style="width:52px;height:52px;border-radius:14px;background:var(--c-primary-dim);border:1px solid var(--c-primary-border);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <span class="icon icon-fill" style="color:var(--c-primary);font-size:24px">
+              {p.data.category === 'Keto' ? 'local_fire_department' : p.data.category === 'Ayuno Intermitente' ? 'timer' : 'fitness_center'}
+            </span>
+          </div>
+          <div>
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.625rem;flex-wrap:wrap">
+              <span class="chip">{p.data.category}</span>
+              <span class="badge">{p.data.difficulty}</span>
+              {p.data.featured && <span class="badge" style="background:var(--c-primary-dim);color:var(--c-primary)">Popular</span>}
+            </div>
+            <h3 style="font-family:var(--font-display);font-size:1.125rem;font-weight:800;margin-bottom:0.5rem;line-height:1.3">{p.data.title}</h3>
+            <p style="color:var(--c-text-muted);font-size:0.875rem;line-height:1.6;margin-bottom:1rem" class="line-clamp-2">{p.data.description}</p>
+            <div style="display:flex;gap:1.25rem;font-size:0.75rem;color:var(--c-text-dim)">
+              <span style="display:flex;align-items:center;gap:0.25rem">
+                <span class="icon" style="font-size:14px">schedule</span>
+                {p.data.duration}
+              </span>
+              <span style="display:flex;align-items:center;gap:0.25rem">
+                <span class="icon" style="font-size:14px">flag</span>
+                {p.data.goal}
+              </span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Personalization CTA -->
+<section class="section" style="background:var(--c-surface)">
+  <div class="wrap" style="max-width:680px;margin:0 auto;text-align:center">
+    <span class="chip" style="margin-bottom:1.25rem;display:inline-block">En la app</span>
+    <h2 class="d" style="font-size:clamp(1.75rem,3vw,2.5rem);margin-bottom:1rem">Obtén tu versión personalizada de este protocolo.</h2>
+    <p style="color:var(--c-text-muted);font-size:1rem;margin-bottom:2rem">Los protocolos públicos son plantillas. En la app, se adaptan a tu peso, objetivo, horario y preferencias.</p>
+    <a href="/app/welcome.html" class="btn" style="font-size:1rem;padding:0.875rem 2rem">Crear cuenta gratuita</a>
+  </div>
+</section>
+
+<style>
+  @media (max-width: 768px) {
+    #cat-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  }
+</style>
+</Layout>

@@ -1,0 +1,80 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer style="background:var(--c-surface);border-top:1px solid var(--c-border);margin-top:5rem">
+  <div class="wrap" style="padding-top:3rem;padding-bottom:3rem">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem">
+
+      <!-- Brand -->
+      <div>
+        <a href="/" style="display:inline-flex;align-items:center;gap:0.625rem;text-decoration:none;margin-bottom:1rem">
+          <img src="/logo.svg" alt="KetoCore" width="26" height="26" style="filter:drop-shadow(0 0 5px rgba(255,77,0,.35))">
+          <span style="font-family:var(--font-display);font-weight:900;color:var(--c-primary);font-size:0.9375rem">KetoCore</span>
+        </a>
+        <p style="color:var(--c-text-dim);font-size:0.8125rem;line-height:1.7;max-width:240px">
+          La plataforma de salud metabólica que convierte el conocimiento en acción real.
+        </p>
+        <div style="display:flex;gap:0.75rem;margin-top:1.25rem">
+          <a href="/app/welcome.html" class="btn btn-sm">Empezar gratis</a>
+        </div>
+      </div>
+
+      <!-- Aprende -->
+      <div>
+        <p style="font-size:0.65rem;font-weight:700;color:var(--c-text-faint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1rem">Aprende</p>
+        <div style="display:flex;flex-direction:column;gap:0.625rem">
+          <a href="/aprender" class="nav-a" style="font-size:0.875rem">Artículos</a>
+          <a href="/protocolos" class="nav-a" style="font-size:0.875rem">Protocolos</a>
+          <a href="/academia" class="nav-a" style="font-size:0.875rem">Academia</a>
+          <a href="/herramientas" class="nav-a" style="font-size:0.875rem">Calculadoras</a>
+        </div>
+      </div>
+
+      <!-- Recursos -->
+      <div>
+        <p style="font-size:0.65rem;font-weight:700;color:var(--c-text-faint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1rem">Recursos</p>
+        <div style="display:flex;flex-direction:column;gap:0.625rem">
+          <a href="/recetas" class="nav-a" style="font-size:0.875rem">Recetas</a>
+          <a href="/alimentos" class="nav-a" style="font-size:0.875rem">Alimentos</a>
+          <a href="/retos" class="nav-a" style="font-size:0.875rem">Retos</a>
+          <a href="/historias" class="nav-a" style="font-size:0.875rem">Historias</a>
+        </div>
+      </div>
+
+      <!-- Comunidad -->
+      <div>
+        <p style="font-size:0.65rem;font-weight:700;color:var(--c-text-faint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1rem">Comunidad</p>
+        <div style="display:flex;flex-direction:column;gap:0.625rem">
+          <a href="/comunidad" class="nav-a" style="font-size:0.875rem">Feed público</a>
+          <a href="/historias" class="nav-a" style="font-size:0.875rem">Transformaciones</a>
+          <a href="/app/welcome.html" class="nav-a" style="font-size:0.875rem">Únete gratis</a>
+        </div>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid var(--c-border);padding-top:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+      <p style="color:var(--c-text-faint);font-size:0.8125rem">© {year} KetoCore. Todos los derechos reservados.</p>
+      <p style="color:var(--c-text-faint);font-size:0.75rem">El contenido de este sitio es educativo y no constituye asesoramiento médico.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  @media (max-width: 768px) {
+    footer > div > div:first-child {
+      grid-template-columns: 1fr 1fr !important;
+    }
+    footer > div > div:first-child > div:first-child {
+      grid-column: span 2;
+    }
+  }
+  @media (max-width: 480px) {
+    footer > div > div:first-child {
+      grid-template-columns: 1fr !important;
+    }
+    footer > div > div:first-child > div:first-child {
+      grid-column: span 1;
+    }
+  }
+</style>

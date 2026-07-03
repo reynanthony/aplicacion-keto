@@ -1,0 +1,103 @@
+---
+interface Props {
+  active: 'home' | 'macros' | 'plan' | 'recetas' | 'more';
+}
+const { active } = Astro.props;
+
+const items = [
+  { id: 'home',    href: '/app/',              icon: 'cottage',    label: 'Inicio'  },
+  { id: 'macros',  href: '/app/macros',        icon: 'donut_small', label: 'Macros' },
+  { id: 'plan',    href: '/app/plan',          icon: 'event_note', label: 'Plan'    },
+  { id: 'recetas', href: '/app/recetas',       icon: 'menu_book',  label: 'Recetas' },
+  { id: 'more',    href: '#',                  icon: 'apps',       label: 'Más',    onclick: 'toggleHamburgerMenu()' },
+];
+---
+
+<nav class="app-nav">
+  {items.map(item => {
+    const isActive = active === item.id;
+    return (
+      <a
+        href={item.href}
+        onclick={item.onclick}
+        class:list={['app-nav-item', { 'app-nav-active': isActive }]}
+        aria-current={isActive ? 'page' : undefined}
+      >
+        <span class="app-nav-pill">
+          <span class="material-symbols-outlined" style={isActive ? "font-variation-settings:'FILL' 1" : ""}>{item.icon}</span>
+        </span>
+        <span class="app-nav-label">{item.label}</span>
+      </a>
+    );
+  })}
+</nav>
+
+<style is:global>
+.app-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 68px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: rgba(10,10,10,0.97);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+}
+
+.app-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  flex: 1;
+  padding: 8px 4px;
+  text-decoration: none;
+  color: rgba(210,230,255,0.38);
+  transition: color 0.2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.app-nav-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 32px;
+  border-radius: 100px;
+  transition: background 0.25s, transform 0.2s;
+}
+
+.app-nav-item .material-symbols-outlined {
+  font-size: 22px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.app-nav-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  font-family: 'Inter', sans-serif;
+}
+
+.app-nav-active {
+  color: #ff4d00;
+}
+
+.app-nav-active .app-nav-pill {
+  background: rgba(255, 77, 0, 0.15);
+}
+
+.app-nav-item:active .app-nav-pill {
+  transform: scale(0.92);
+}
+</style>

@@ -1,0 +1,256 @@
+---
+import DemoLayout from '../../../layouts/DemoLayout.astro';
+---
+
+<DemoLayout title="KetoCore | Inspector Demo" active="inspector">
+<style is:global>
+@keyframes scanLine {
+  0%{transform:translateY(-100%);opacity:0.6}
+  100%{transform:translateY(400%);opacity:0}
+}
+.scan-line { position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#60a5fa,transparent);animation:scanLine 2.5s ease-in-out infinite; }
+@keyframes riskPulse { 0%,100%{box-shadow:0 0 0 0 rgba(96,165,250,0.3)} 50%{box-shadow:0 0 0 12px rgba(96,165,250,0)} }
+.risk-card { animation:riskPulse 3s infinite; }
+@keyframes scanIn { from{opacity:0;transform:scale(0.96)} to{opacity:1;transform:scale(1)} }
+.scan-in { animation: scanIn 0.5s ease; }
+.metric-row { display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;cursor:pointer;transition:background 0.15s; }
+.metric-row:hover { background:rgba(255,255,255,0.04); }
+.metric-bar-wrap { height:4px;background:rgba(255,255,255,0.07);border-radius:100px;overflow:hidden;flex:1; }
+.metric-bar-fill { height:100%;border-radius:100px;transition:width 0.8s ease; }
+.alert-item { display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:6px; }
+</style>
+
+<div class="px-4 pt-2 pb-4">
+
+  <!-- ── Inspector Header ── -->
+  <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 relative overflow-hidden" style="background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.2)">
+        <div class="scan-line"></div>
+        <span class="material-symbols-outlined icon-filled" style="color:#60a5fa;font-size:26px">analytics</span>
+      </div>
+      <div>
+        <h1 class="text-xl font-black" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f5f5f5">Inspector Inteligente</h1>
+        <p class="text-xs" style="color:rgba(245,245,245,0.5)">Análisis continuo · 3 motores activos</p>
+      </div>
+    </div>
+    <div class="text-right">
+      <p class="text-[10px] uppercase tracking-wider font-bold" style="color:rgba(245,245,245,0.35)">Última análisis</p>
+      <p class="text-xs font-bold" style="color:#60a5fa">Hace 2 min</p>
+    </div>
+  </div>
+
+  <!-- ── Active Systems ── -->
+  <div class="grid grid-cols-3 gap-2 mb-4">
+    {[
+      { label:'Adherencia', icon:'task_alt', color:'#22c55e', status:'Activo' },
+      { label:'Peso', icon:'show_chart', color:'#60a5fa', status:'Activo' },
+      { label:'Macros', icon:'donut_small', color:'#fb923c', status:'Activo' },
+    ].map(s => (
+      <div class="rounded-xl p-3 text-center" style={`background:#161616;border:1px solid rgba(255,255,255,0.06)`}>
+        <span class="material-symbols-outlined icon-filled" style={`color:${s.color};font-size:20px`}>{s.icon}</span>
+        <p style="font-size:10px;font-weight:700;color:#f5f5f5;margin-top:4px">{s.label}</p>
+        <p style="font-size:9px;color:rgba(34,197,94,0.8);font-weight:600">{s.status}</p>
+      </div>
+    ))}
+  </div>
+
+  <div class="demo-2col">
+    <!-- ═══ LEFT ═══ -->
+    <div class="space-y-3">
+
+      <!-- ── RESULTADO PRINCIPAL ── -->
+      <div class="scan-in risk-card rounded-3xl p-5" style="background:#161616;border:1px solid rgba(34,197,94,0.25);box-shadow:0 4px 24px rgba(34,197,94,0.08)">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background:rgba(34,197,94,0.12)">
+            <span class="material-symbols-outlined icon-filled" style="color:#22c55e;font-size:26px">verified</span>
+          </div>
+          <div>
+            <p class="text-[10px] font-bold uppercase tracking-widest" style="color:rgba(245,245,245,0.4)">Resultado del análisis</p>
+            <h2 class="text-xl font-black" style="color:#22c55e;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.01em">PROGRESO EXCELENTE</h2>
+          </div>
+        </div>
+        <p class="text-sm leading-relaxed mb-3" style="color:rgba(245,245,245,0.7)">
+          Carlos está en una trayectoria óptima. 17 libras perdidas en 21 días con 89% de adherencia es un rendimiento excepcional. El Inspector detecta patrones consistentes de quema de grasa.
+        </p>
+        <div class="rounded-xl p-3" style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.12)">
+          <p class="text-xs font-bold mb-1.5" style="color:#22c55e">⚡ Nota del Inspector:</p>
+          <p class="text-xs leading-relaxed" style="color:rgba(245,245,245,0.6)">
+            Se detecta una leve reducción de proteína en los últimos 3 días (138g vs. meta de 150g). Esto no es urgente pero optimizar la proteína podría acelerar la recomposición corporal. Considera añadir una porción extra de pollo o huevos al día.
+          </p>
+        </div>
+      </div>
+
+      <!-- ── Análisis Detallado: 7 métricas ── -->
+      <div class="dk-card rounded-2xl p-5">
+        <h3 class="text-sm font-bold mb-4 flex items-center gap-2" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">
+          <span class="material-symbols-outlined" style="color:#60a5fa;font-size:18px">radar</span>
+          Métricas Monitoreadas
+          <span class="ml-auto text-[10px] font-normal" style="color:rgba(245,245,245,0.35)">Últimos 7 días</span>
+        </h3>
+
+        <div id="metricsContainer" class="space-y-0">
+          <!-- Filled by JS -->
+        </div>
+      </div>
+
+      <!-- ── Tendencia 30 días ── -->
+      <div class="dk-card rounded-2xl p-5">
+        <h3 class="text-sm font-bold mb-3" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Tendencia 21 días · Peso</h3>
+        <div class="relative rounded-xl overflow-hidden" style="background:#111;height:100px">
+          <svg viewBox="0 0 300 90" class="w-full h-full" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="inspGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M10,80 L50,72 L90,63 L130,56 L170,45 L210,33 L250,22 L290,12 L290,85 L10,85 Z" fill="url(#inspGrad)"/>
+            <polyline points="10,80 50,72 90,63 130,56 170,45 210,33 250,22 290,12"
+              fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="absolute bottom-2 left-3">
+            <span style="font-size:9px;color:rgba(245,245,245,0.35)">Día 1: 245 lbs</span>
+          </div>
+          <div class="absolute bottom-2 right-3">
+            <span style="font-size:9px;color:#22c55e;font-weight:700">Hoy: 228 lbs</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ═══ RIGHT ═══ -->
+    <div class="space-y-3">
+
+      <!-- ── Automatizaciones Activas ── -->
+      <div class="dk-card rounded-2xl p-5">
+        <h3 class="text-sm font-bold mb-3 flex items-center gap-2" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">
+          <span class="material-symbols-outlined icon-filled" style="color:#fbbf24;font-size:18px">bolt</span>
+          Automatizaciones
+        </h3>
+        <div class="space-y-2" id="automationsContainer">
+          <!-- Filled by JS -->
+        </div>
+      </div>
+
+      <!-- ── Análisis por período ── -->
+      <div class="dk-card rounded-2xl p-5">
+        <h3 class="text-sm font-bold mb-3" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Adherencia por Período</h3>
+        <div class="space-y-3">
+          {[
+            { period:'7 días', pct:92, color:'#22c55e' },
+            { period:'14 días', pct:89, color:'#60a5fa' },
+            { period:'21 días', pct:89, color:'#ff4d00' },
+          ].map(p => (
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-xs font-semibold" style="color:rgba(245,245,245,0.6)">{p.period}</span>
+                <span class="text-xs font-bold" style={`color:${p.color}`}>{p.pct}%</span>
+              </div>
+              <div class="dk-progress-bar">
+                <div class="demo-bar dk-progress-fill" data-pct={p.pct} style={`width:0%;background:${p.color}`}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- ── Patrón de consumo ── -->
+      <div class="dk-card rounded-2xl p-5">
+        <h3 class="text-sm font-bold mb-3" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Patrón Semanal</h3>
+        <div class="flex items-end justify-between gap-1" style="height:80px">
+          {[
+            { day:'L', pct:95, done:true },
+            { day:'M', pct:78, done:true },
+            { day:'Mi', pct:100, done:true },
+            { day:'J', pct:88, done:true },
+            { day:'V', pct:92, done:true },
+            { day:'S', pct:70, done:true },
+            { day:'D', pct:85, done:false },
+          ].map(d => (
+            <div class="flex flex-col items-center gap-1 flex-1">
+              <div class="w-full rounded-t-lg relative overflow-hidden" style={`height:${d.pct*0.65}px;background:${d.done ? 'rgba(255,77,0,0.6)' : 'rgba(255,77,0,0.2)'};border-radius:4px 4px 0 0`}>
+              </div>
+              <span style="font-size:9px;color:rgba(245,245,245,0.4);font-weight:600">{d.day}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- ── Premium insight ── -->
+      <button onclick="showPaywall('coach')" class="w-full text-left dk-card rounded-2xl p-4 transition-all hover:border-purple-500/30" style="border-color:rgba(167,139,250,0.15)">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="material-symbols-outlined icon-filled" style="color:#a78bfa;font-size:18px">auto_awesome</span>
+          <p class="text-xs font-bold" style="color:#a78bfa">Predicción IA</p>
+          <span class="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full" style="background:rgba(167,139,250,0.1);color:#a78bfa">PREMIUM</span>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:rgba(245,245,245,0.5)">A este ritmo, Carlos alcanzará su peso objetivo de 200 lbs en ~38 días adicionales. El Inspector predice un plateau en la semana 8 y ya tiene un protocolo preparado. Activa premium para ver el plan completo →</p>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  // ── Metrics data ──
+  var metrics = [
+    { icon:'monitor_weight', label:'Tendencia de Peso', value:'-0.81 lbs/día', pct:94, color:'#22c55e', status:'Bajando', flag:false },
+    { icon:'task_alt', label:'Adherencia Keto', value:'89% / 7 días', pct:89, color:'#ff4d00', status:'Excelente', flag:false },
+    { icon:'egg_alt', label:'Proteína', value:'138g vs 150g meta', pct:92, color:'#fb923c', status:'Leve déficit', flag:true },
+    { icon:'local_fire_department', label:'Grasas', value:'138g / meta 145g', pct:95, color:'#fbbf24', status:'En meta', flag:false },
+    { icon:'grain', label:'Carbohidratos Netos', value:'22g / límite 25g', pct:88, color:'#0891b2', status:'Bajo control', flag:false },
+    { icon:'water_drop', label:'Hidratación', value:'2.1L / meta 2.5L', pct:84, color:'#60a5fa', status:'Mejorable', flag:true },
+    { icon:'fitness_center', label:'Actividad Física', value:'3x/semana · moderada', pct:78, color:'#4ade80', status:'Activo', flag:false },
+  ];
+
+  var container = document.getElementById('metricsContainer');
+  metrics.forEach(function(m, i) {
+    var div = document.createElement('div');
+    div.className = 'metric-row';
+    div.style.animationDelay = (i * 0.07) + 's';
+    div.innerHTML = [
+      '<span class="material-symbols-outlined icon-filled flex-shrink-0" style="color:'+m.color+';font-size:18px">'+m.icon+'</span>',
+      '<div style="flex:1;min-width:0">',
+        '<div class="flex items-center justify-between mb-1">',
+          '<p style="font-size:11px;font-weight:600;color:#f5f5f5">'+m.label+'</p>',
+          (m.flag ? '<span class="material-symbols-outlined icon-filled" style="color:#fbbf24;font-size:14px">warning</span>' : ''),
+        '</div>',
+        '<div style="display:flex;align-items:center;gap:8px">',
+          '<div class="metric-bar-wrap" style="flex:1"><div class="metric-bar-fill" data-pct="'+m.pct+'" style="width:0%;background:'+m.color+'"></div></div>',
+          '<span style="font-size:9px;font-weight:700;color:'+m.color+';min-width:24px;text-align:right">'+m.pct+'%</span>',
+        '</div>',
+        '<p style="font-size:9px;color:rgba(245,245,245,0.4);margin-top:2px">'+m.value+'</p>',
+      '</div>',
+    ].join('');
+    container.appendChild(div);
+  });
+
+  // ── Automations ──
+  var automations = [
+    { icon:'emoji_events', label:'Logro generado', detail:'21 días de racha completados', color:'#fbbf24', bg:'rgba(251,191,36,0.08)', time:'Hoy 08:00' },
+    { icon:'psychology', label:'Consejo enviado', detail:'Optimiza proteína: +12g diarios sugeridos', color:'#a78bfa', bg:'rgba(167,139,250,0.08)', time:'Hoy 09:30' },
+    { icon:'water_drop', label:'Recordatorio activo', detail:'Hidratación bajo meta 2 días consecutivos', color:'#60a5fa', bg:'rgba(96,165,250,0.08)', time:'Ayer 18:00' },
+  ];
+  var autoContainer = document.getElementById('automationsContainer');
+  automations.forEach(function(a) {
+    var div = document.createElement('div');
+    div.className = 'alert-item';
+    div.style.background = a.bg;
+    div.style.border = '1px solid ' + a.color.replace(')', ',0.15)').replace('rgb', 'rgba');
+    div.innerHTML = '<span class="material-symbols-outlined icon-filled" style="color:'+a.color+';font-size:18px;flex-shrink:0">'+a.icon+'</span>'
+      + '<div style="flex:1"><p style="font-size:11px;font-weight:700;color:#f5f5f5">'+a.label+'</p>'
+      + '<p style="font-size:10px;color:rgba(245,245,245,0.5);margin-top:1px">'+a.detail+'</p></div>'
+      + '<p style="font-size:9px;color:rgba(245,245,245,0.3);flex-shrink:0">'+a.time+'</p>';
+    autoContainer.appendChild(div);
+  });
+
+  // Animate bars
+  requestAnimationFrame(function() {
+    setTimeout(function() {
+      document.querySelectorAll('[data-pct]').forEach(function(el) {
+        el.style.width = el.dataset.pct + '%';
+      });
+    }, 400);
+  });
+</script>
+</DemoLayout>

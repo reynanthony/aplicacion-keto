@@ -1,0 +1,152 @@
+---
+import DemoLayout from '../../../layouts/DemoLayout.astro';
+
+const categories = [
+  {
+    id: 'carnes', label: 'Carnes y Pescados', icon: 'kebab_dining', color: '#f97316', bg: 'rgba(249,115,22,0.08)',
+    items: [
+      { name: 'Pechuga de pollo', qty: '1 kg', est: '$8.50', done: true },
+      { name: 'Filete de salmón', qty: '500g', est: '$12.00', done: false },
+      { name: 'Carne molida 80/20', qty: '500g', est: '$6.50', done: true },
+      { name: 'Tocino sin azúcar', qty: '250g', est: '$4.00', done: false },
+      { name: 'Atún en aceite de oliva', qty: '3 latas', est: '$5.00', done: true },
+    ]
+  },
+  {
+    id: 'vegetales', label: 'Vegetales y Verdes', icon: 'eco', color: '#22c55e', bg: 'rgba(34,197,94,0.08)',
+    items: [
+      { name: 'Brócoli fresco', qty: '1 cabeza', est: '$2.50', done: false },
+      { name: 'Espinaca baby', qty: '200g', est: '$3.00', done: true },
+      { name: 'Aguacates', qty: '4 piezas', est: '$5.00', done: false },
+      { name: 'Espárragos', qty: '1 manojo', est: '$3.50', done: false },
+      { name: 'Lechuga romana', qty: '1 cabeza', est: '$2.00', done: true },
+      { name: 'Pepinos', qty: '2 piezas', est: '$1.50', done: false },
+    ]
+  },
+  {
+    id: 'grasas', label: 'Grasas y Aceites', icon: 'water_drop', color: '#fbbf24', bg: 'rgba(251,191,36,0.08)',
+    items: [
+      { name: 'Aceite de oliva virgen extra', qty: '500ml', est: '$8.00', done: true },
+      { name: 'Mantequilla sin sal', qty: '250g', est: '$3.50', done: true },
+      { name: 'Aceite de coco orgánico', qty: '250ml', est: '$5.00', done: false },
+      { name: 'Nueces de macadamia', qty: '200g', est: '$7.00', done: false },
+      { name: 'Almendras crudas', qty: '300g', est: '$5.50', done: false },
+    ]
+  },
+  {
+    id: 'lacteos', label: 'Lácteos y Huevos', icon: 'egg_alt', color: '#60a5fa', bg: 'rgba(96,165,250,0.08)',
+    items: [
+      { name: 'Huevos frescos (caja)', qty: '12 piezas', est: '$3.50', done: true },
+      { name: 'Crema de leche entera', qty: '500ml', est: '$4.00', done: true },
+      { name: 'Queso cheddar', qty: '200g', est: '$4.50', done: false },
+      { name: 'Queso crema', qty: '200g', est: '$3.00', done: false },
+      { name: 'Yogur griego entero', qty: '400g', est: '$4.00', done: true },
+    ]
+  },
+];
+
+const totalItems = categories.reduce((sum, c) => sum + c.items.length, 0);
+const doneItems = categories.reduce((sum, c) => sum + c.items.filter(i => i.done).length, 0);
+const totalEst = '$87.50';
+---
+
+<DemoLayout title="KetoCore | Compras Demo" active="compras">
+<style is:global>
+.shop-item { display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04); }
+.shop-item:last-child { border-bottom:none; }
+.check-box { width:22px;height:22px;border-radius:6px;border:1.5px solid rgba(255,255,255,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s; }
+.check-box.done { background:#22c55e;border-color:#22c55e; }
+</style>
+
+<div class="px-4 pt-2 pb-4">
+  <!-- Header -->
+  <div class="flex items-start justify-between mb-4">
+    <div>
+      <h1 class="text-xl font-black" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f5f5f5">Lista de Compras</h1>
+      <p class="text-xs mt-0.5" style="color:rgba(245,245,245,0.5)">Generada para la semana · {totalItems} artículos</p>
+    </div>
+    <button onclick="showPaywall('plan')" class="text-xs font-bold px-3 py-2 rounded-xl" style="background:rgba(255,77,0,0.1);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">
+      Regenerar IA
+    </button>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="dk-card rounded-2xl p-4 mb-4">
+    <div class="flex items-center justify-between mb-2">
+      <p class="text-xs font-bold" style="color:#f5f5f5">Completado</p>
+      <p class="text-xs font-bold" style="color:#22c55e">{doneItems}/{totalItems} artículos</p>
+    </div>
+    <div class="dk-progress-bar mb-2">
+      <div class="dk-progress-fill demo-bar" data-pct={Math.round(doneItems/totalItems*100)} style={`width:0%;background:#22c55e`}></div>
+    </div>
+    <div class="flex items-center justify-between">
+      <p class="text-xs" style="color:rgba(245,245,245,0.4)">Estimado total semanal</p>
+      <p class="text-sm font-black" style="color:#f5f5f5">{totalEst}</p>
+    </div>
+  </div>
+
+  <!-- Categories -->
+  <div class="space-y-3">
+    {categories.map(cat => (
+      <div class="dk-card rounded-2xl overflow-hidden">
+        <div class="flex items-center gap-3 p-4" style={`border-bottom:1px solid rgba(255,255,255,0.04)`}>
+          <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={`background:${cat.bg}`}>
+            <span class="material-symbols-outlined icon-filled" style={`color:${cat.color};font-size:18px`}>{cat.icon}</span>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-bold" style="color:#f5f5f5">{cat.label}</p>
+            <p style="font-size:10px;color:rgba(245,245,245,0.4)">{cat.items.length} artículos · {cat.items.filter(i=>i.done).length} listos</p>
+          </div>
+          <span class="text-[10px] font-bold px-2 py-1 rounded-full" style={`background:${cat.bg};color:${cat.color}`}>
+            {cat.items.filter(i=>i.done).length}/{cat.items.length}
+          </span>
+        </div>
+        <div class="px-4">
+          {cat.items.map((item, idx) => (
+            <div class="shop-item">
+              <div class:list={['check-box', { done: item.done }]} id={`cb-${cat.id}-${idx}`} onclick={`toggleItem('${cat.id}',${idx})`}>
+                {item.done && <span class="material-symbols-outlined icon-filled" style="color:#fff;font-size:14px">check</span>}
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-semibold" style={item.done ? "color:rgba(245,245,245,0.35);text-decoration:line-through" : "color:#f5f5f5"}>{item.name}</p>
+                <p style="font-size:10px;color:rgba(245,245,245,0.35)">{item.qty}</p>
+              </div>
+              <p class="text-xs font-semibold" style="color:rgba(245,245,245,0.4)">{item.est}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <!-- CTA -->
+  <div class="mt-4 rounded-2xl p-4" style="background:rgba(255,77,0,0.05);border:1px solid rgba(255,77,0,0.15)">
+    <p class="text-sm font-bold mb-1" style="color:#f5f5f5">Lista generada con IA</p>
+    <p class="text-xs mb-3" style="color:rgba(245,245,245,0.5)">La lista real se genera automáticamente desde tu plan de comidas de la semana, agrupada por categoría y con precios estimados según tu región.</p>
+    <button onclick="showPaywall('plan')" class="w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2" style="background:linear-gradient(135deg,#ff4d00,#ea580c);color:#fff">
+      <span class="material-symbols-outlined icon-filled" style="font-size:18px">shopping_cart</span>
+      Generar mi lista real
+    </button>
+  </div>
+
+</div>
+
+<script is:inline>
+  requestAnimationFrame(function() {
+    setTimeout(function() {
+      document.querySelectorAll('[data-pct]').forEach(function(el){ el.style.width = el.dataset.pct + '%'; });
+    }, 300);
+  });
+
+  function toggleItem(catId, idx) {
+    var cb = document.getElementById('cb-' + catId + '-' + idx);
+    var isDone = cb.classList.contains('done');
+    cb.classList.toggle('done');
+    cb.innerHTML = isDone ? '' : '<span class="material-symbols-outlined icon-filled" style="color:#fff;font-size:14px">check</span>';
+    var row = cb.closest('.shop-item');
+    var nameEl = row.querySelector('.flex-1 p:first-child');
+    nameEl.style.color = isDone ? '#f5f5f5' : 'rgba(245,245,245,0.35)';
+    nameEl.style.textDecoration = isDone ? '' : 'line-through';
+  }
+</script>
+</DemoLayout>

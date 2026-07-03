@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e91e63"/>
+      <stop offset="100%" style="stop-color:#c2185b"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <path d="M200 350 Q250 250 400 250 Q550 250 600 350 L550 400 Q400 350 250 400 Z" fill="rgba(255,255,255,0.2)"/>
+  <path d="M250 280 L250 380 M300 260 L300 390 M350 250 L350 400 M450 250 L450 400 M500 260 L500 390 M550 280 L550 380" stroke="rgba(255,255,255,0.3)" stroke-width="8" stroke-linecap="round"/>
+  <text x="400" y="520" text-anchor="middle" fill="white" font-family="system-ui" font-size="36" font-weight="bold">Ejercicios de Pecho</text>
+  <text x="400" y="560" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="18">KETOLAB</text>
+</svg>

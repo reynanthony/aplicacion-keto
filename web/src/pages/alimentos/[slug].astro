@@ -1,0 +1,134 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const foods = await getCollection('foods');
+  return foods.map(f => ({ params: { slug: f.id }, props: { food: f } }));
+}
+
+const { food } = Astro.props;
+const { Content } = await render(food);
+const related = (await getCollection('foods'))
+  .filter(f => f.id !== food.id && f.data.category === food.data.category)
+  .slice(0, 3);
+---
+
+<Layout title={food.data.name} description={`Perfil nutricional completo de ${food.data.name}. Calorías, macros, beneficios y compatibilidad con dietas keto, low carb y más.`} image={food.data.image}>
+
+<div class="wrap" style="max-width:900px;margin:0 auto;padding-top:2.5rem">
+  <nav style="display:flex;align-items:center;gap:0.5rem;margin-bottom:2rem;font-size:0.8125rem;color:var(--c-text-dim)">
+    <a href="/" style="color:var(--c-text-dim);text-decoration:none">Inicio</a>
+    <span>›</span>
+    <a href="/alimentos" style="color:var(--c-text-dim);text-decoration:none">Alimentos</a>
+    <span>›</span>
+    <span style="color:var(--c-text-muted)">{food.data.name}</span>
+  </nav>
+
+  <div style="display:grid;grid-template-columns:1fr 300px;gap:3rem;align-items:start" id="food-layout">
+    <div>
+      <span class="chip" style="margin-bottom:1rem;display:inline-block">{food.data.category}</span>
+      <h1 class="d" style="font-size:clamp(2rem,4vw,3rem);margin-bottom:0.5rem">{food.data.name}</h1>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:2rem">
+        {food.data.diets.map(d => <span class="badge">{d}</span>)}
+      </div>
+
+      {food.data.image && <img src={food.data.image} alt={food.data.name} style="width:100%;height:300px;object-fit:cover;border-radius:16px;margin-bottom:2rem">}
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      {food.data.benefits.length > 0 && (
+        <div style="margin-top:2rem">
+          <h2 style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;margin-bottom:1rem;color:var(--c-green)">Beneficios</h2>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:0.625rem">
+            {food.data.benefits.map(b => (
+              <li style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.9375rem;color:rgba(255,255,255,0.75)">
+                <span class="icon icon-fill" style="color:var(--c-green);font-size:18px;flex-shrink:0;margin-top:2px">check_circle</span>
+                {b}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {food.data.drawbacks.length > 0 && (
+        <div style="margin-top:1.5rem">
+          <h2 style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;margin-bottom:1rem;color:var(--c-gold)">A tener en cuenta</h2>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:0.625rem">
+            {food.data.drawbacks.map(d => (
+              <li style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.9375rem;color:rgba(255,255,255,0.75)">
+                <span class="icon" style="color:var(--c-gold);font-size:18px;flex-shrink:0;margin-top:2px">info</span>
+                {d}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+
+    <!-- Sidebar: Nutrition facts -->
+    <div style="position:sticky;top:80px">
+      <div class="card" style="padding:1.5rem;margin-bottom:1rem">
+        <p style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--c-text-dim);margin-bottom:1.25rem">Información nutricional · 100g</p>
+        <div style="display:flex;flex-direction:column;gap:0.875rem">
+          {[
+            { label: 'Calorías', value: `${food.data.calories} kcal`, color: 'var(--c-primary)' },
+            { label: 'Grasa total', value: `${food.data.fat}g`, color: 'var(--c-gold)' },
+            { label: 'Carbohidratos', value: `${food.data.carbs}g`, color: 'rgba(255,255,255,0.5)' },
+            { label: 'Fibra', value: `${food.data.fiber}g`, color: 'rgba(255,255,255,0.5)' },
+            { label: 'Carbos netos', value: `${food.data.netCarbs}g`, color: 'var(--c-green)', bold: true },
+            { label: 'Proteína', value: `${food.data.protein}g`, color: '#818cf8' },
+          ].map(row => (
+            <div style={`display:flex;justify-content:space-between;align-items:center;font-size:0.875rem${row.bold ? ';padding:0.5rem;background:rgba(34,197,94,0.08);border-radius:8px;border:1px solid rgba(34,197,94,0.15)' : ''}`}>
+              <span style="color:var(--c-text-muted)">{row.label}</span>
+              <span style={`font-weight:700;color:${row.color}`}>{row.value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Keto compatibility -->
+      <div class="card" style={`padding:1.25rem;margin-bottom:1rem;border-color:${food.data.netCarbs <= 5 ? 'rgba(34,197,94,0.3)' : food.data.netCarbs <= 15 ? 'rgba(255,179,0,0.3)' : 'rgba(239,68,68,0.3)'}`}>
+        <div style="display:flex;align-items:center;gap:0.75rem">
+          <span class="icon icon-fill" style={`font-size:28px;color:${food.data.netCarbs <= 5 ? 'var(--c-green)' : food.data.netCarbs <= 15 ? 'var(--c-gold)' : '#ef4444'}`}>
+            {food.data.netCarbs <= 5 ? 'check_circle' : food.data.netCarbs <= 15 ? 'warning' : 'cancel'}
+          </span>
+          <div>
+            <p style="font-weight:700;font-size:0.9375rem">{food.data.netCarbs <= 5 ? 'Ideal para keto' : food.data.netCarbs <= 15 ? 'Con moderación' : 'Evitar en keto'}</p>
+            <p style="font-size:0.75rem;color:var(--c-text-dim)">{food.data.netCarbs}g carbos netos / 100g</p>
+          </div>
+        </div>
+      </div>
+
+      <a href="/app/welcome.html" class="btn" style="width:100%;justify-content:center">Añadir a mi plan</a>
+    </div>
+  </div>
+</div>
+
+{related.length > 0 && (
+  <section class="section" style="background:var(--c-surface);margin-top:4rem">
+    <div class="wrap">
+      <h2 style="font-family:var(--font-display);font-weight:800;font-size:1.25rem;margin-bottom:1.5rem">Más en {food.data.category}</h2>
+      <div class="grid-3">
+        {related.map(f => (
+          <a href={`/alimentos/${f.id}`} class="card card-link">
+            {f.data.image && <img src={f.data.image} alt={f.data.name} loading="lazy" style="width:100%;height:140px;object-fit:cover">}
+            <div style="padding:1rem">
+              <h3 style="font-family:var(--font-display);font-size:0.9375rem;font-weight:800;margin-bottom:0.375rem">{f.data.name}</h3>
+              <span style="font-size:0.7rem;color:var(--c-green);font-weight:600">{f.data.netCarbs}g net carbs</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  @media (max-width: 768px) {
+    #food-layout { grid-template-columns: 1fr !important; }
+  }
+</style>
+</Layout>

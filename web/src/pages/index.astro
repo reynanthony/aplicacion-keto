@@ -1,0 +1,292 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const articles = (await getCollection('articles')).filter(a => a.data.featured).slice(0, 3);
+const recipes = (await getCollection('recipes')).filter(r => r.data.featured).slice(0, 6);
+const protocols = (await getCollection('protocols')).filter(p => p.data.featured).slice(0, 3);
+const stories = (await getCollection('stories')).filter(s => s.data.featured).slice(0, 2);
+const challenges = (await getCollection('challenges')).filter(c => c.data.active).slice(0, 3);
+---
+
+<Layout title="Transforma tu salud metabólica" description="La plataforma de salud metabólica más completa. 195 recetas keto, calculadoras, protocolos y comunidad activa. Empieza gratis hoy.">
+
+<!-- HERO -->
+<section style="padding:5rem 0 4rem;position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(255,77,0,0.12),transparent);pointer-events:none"></div>
+  <div class="wrap" style="position:relative;z-index:1">
+    <div style="max-width:760px">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;flex-wrap:wrap">
+        <span class="chip">+12,400 miembros activos</span>
+        <span style="font-size:0.75rem;color:var(--c-text-muted)">·</span>
+        <span style="font-size:0.75rem;color:var(--c-text-muted)">195 recetas verificadas</span>
+        <span style="font-size:0.75rem;color:var(--c-text-muted)">·</span>
+        <span style="font-size:0.75rem;color:var(--c-text-muted)">Sin publicidad</span>
+      </div>
+      <h1 class="d" style="font-size:clamp(2.5rem,6vw,4.5rem);margin-bottom:1.5rem">
+        Keto funciona.<br>
+        La mayoría<br>
+        <span class="text-gradient">lo hace mal.</span>
+      </h1>
+      <p style="font-size:clamp(1rem,1.5vw,1.1875rem);color:var(--c-text-muted);line-height:1.7;max-width:560px;margin-bottom:2.5rem">
+        KetoCore combina ciencia real, protocolos probados y una comunidad activa para llevar tu transformación metabólica de la teoría a la ejecución diaria.
+      </p>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap">
+        <a href="/app/welcome" class="btn" style="font-size:1rem;padding:0.875rem 2rem">
+          Empezar gratis
+          <span class="icon">arrow_forward</span>
+        </a>
+        <a href="/app/demo/" class="btn-ghost" style="font-size:1rem;padding:0.875rem 2rem;display:inline-flex;align-items:center;gap:0.5rem">
+          <span class="icon icon-fill" style="font-size:18px;color:var(--c-primary)">play_circle</span>
+          Ver demo en vivo
+        </a>
+      </div>
+      <p style="margin-top:1rem;font-size:0.8125rem;color:var(--c-text-dim)">Sin tarjeta de crédito · Sin trampa · <a href="/app/demo/" style="color:var(--c-primary);font-weight:600;text-decoration:none">o explora el demo →</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section style="padding:0 0 4rem">
+  <div class="wrap">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem" id="stats-grid">
+      <div class="stat-card">
+        <span class="icon icon-fill" style="color:var(--c-primary);font-size:28px;margin-bottom:0.5rem;display:block">groups</span>
+        <div class="stat-value">12,400+</div>
+        <div class="stat-label">Miembros activos</div>
+      </div>
+      <div class="stat-card">
+        <span class="icon icon-fill" style="color:var(--c-primary);font-size:28px;margin-bottom:0.5rem;display:block">trending_down</span>
+        <div class="stat-value">87,000 kg</div>
+        <div class="stat-label">Peso perdido por la comunidad</div>
+      </div>
+      <div class="stat-card">
+        <span class="icon icon-fill" style="color:var(--c-primary);font-size:28px;margin-bottom:0.5rem;display:block">restaurant_menu</span>
+        <div class="stat-value">195</div>
+        <div class="stat-label">Recetas verificadas</div>
+      </div>
+      <div class="stat-card">
+        <span class="icon icon-fill" style="color:var(--c-primary);font-size:28px;margin-bottom:0.5rem;display:block">emoji_events</span>
+        <div class="stat-value">24</div>
+        <div class="stat-label">Retos completados</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- HOW IT WORKS -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="chip">Cómo funciona</span>
+      <h2 class="d">De visitante a transformación</h2>
+      <p>Un sistema en tres pasos diseñado para que el conocimiento se convierta en acción real.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem" id="steps-grid">
+      <div class="card" style="padding:2rem">
+        <div style="font-family:var(--font-display);font-size:3rem;font-weight:900;color:var(--c-primary);opacity:0.2;line-height:1;margin-bottom:1rem">01</div>
+        <p style="font-size:0.65rem;font-weight:700;color:var(--c-primary);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">Descubres</p>
+        <h3 style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;margin-bottom:0.75rem;line-height:1.3">Aprende cómo funciona tu metabolismo</h3>
+        <p style="color:var(--c-text-muted);font-size:0.875rem;line-height:1.7;margin-bottom:1.25rem">Artículos respaldados por ciencia, protocolos detallados, calculadoras de macros. Todo el conocimiento necesario, organizado y accesible.</p>
+        <div style="display:flex;gap:0.375rem;flex-wrap:wrap">
+          <span class="badge">195 recetas</span>
+          <span class="badge">Calculadoras</span>
+          <span class="badge">Protocolos</span>
+        </div>
+      </div>
+
+      <div class="card" style="padding:2rem;background:var(--c-surface-2)">
+        <div style="font-family:var(--font-display);font-size:3rem;font-weight:900;color:var(--c-green);opacity:0.2;line-height:1;margin-bottom:1rem">02</div>
+        <p style="font-size:0.65rem;font-weight:700;color:var(--c-green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">Te registras</p>
+        <h3 style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;margin-bottom:0.75rem;line-height:1.3">Crea tu perfil metabólico único</h3>
+        <p style="color:var(--c-text-muted);font-size:0.875rem;line-height:1.7;margin-bottom:1.25rem">Peso, objetivo, actividad. KetoCore calcula tus macros exactos y genera tu primer plan personalizado en segundos.</p>
+        <div style="display:flex;gap:0.375rem;flex-wrap:wrap">
+          <span class="badge">Macros auto</span>
+          <span class="badge">Plan semanal</span>
+        </div>
+      </div>
+
+      <div class="card" style="padding:2rem;background:rgba(255,77,0,0.03);border-color:rgba(255,77,0,0.1)">
+        <div style="font-family:var(--font-display);font-size:3rem;font-weight:900;color:var(--c-primary);opacity:0.15;line-height:1;margin-bottom:1rem">03</div>
+        <p style="font-size:0.65rem;font-weight:700;color:var(--c-primary);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">Ejecutas</p>
+        <h3 style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;margin-bottom:0.75rem;line-height:1.3">La app te dice qué hacer hoy</h3>
+        <p style="color:var(--c-text-muted);font-size:0.875rem;line-height:1.7;margin-bottom:1.25rem">Qué comer, cuándo entrenar, qué suplementar. Sin adivinar. Sin calcular. Solo seguir el plan.</p>
+        <div style="display:flex;gap:0.375rem;flex-wrap:wrap">
+          <span class="badge" style="background:var(--c-primary-dim);color:var(--c-primary)">Plan diario</span>
+          <span class="badge" style="background:var(--c-primary-dim);color:var(--c-primary)">Seguimiento</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- FEATURED RECIPES -->
+<section class="section" style="background:var(--c-surface)">
+  <div class="wrap">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem">
+      <div>
+        <span class="chip" style="margin-bottom:0.75rem;display:inline-block">Biblioteca pública</span>
+        <h2 class="d" style="font-size:clamp(1.625rem,2.8vw,2.25rem)">195 recetas keto verificadas</h2>
+        <p style="color:var(--c-text-dim);font-size:0.8125rem;margin-top:0.375rem">Macros calculados · Sin trampa · Cetosis asegurada</p>
+      </div>
+      <a href="/recetas" style="color:var(--c-primary);font-size:0.875rem;font-weight:600;text-decoration:none;white-space:nowrap">Ver todas →</a>
+    </div>
+    <div class="scroll-x">
+      {recipes.map(r => (
+        <a href={`/recetas/${r.id}`} style="flex-shrink:0;width:200px;text-decoration:none;color:inherit">
+          <div class="card" style="width:200px">
+            {r.data.image && <img src={r.data.image} alt={r.data.title} loading="lazy" style="width:100%;height:130px;object-fit:cover">}
+            <div style="padding:0.875rem">
+              <span style={`font-size:0.6rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:${r.data.mealType === 'Desayuno' ? 'var(--c-primary)' : r.data.mealType === 'Almuerzo' ? 'var(--c-gold)' : '#818cf8'}`}>{r.data.mealType}</span>
+              <p style="font-weight:700;font-size:0.875rem;margin:0.3rem 0 0.5rem;line-height:1.3" class="line-clamp-2">{r.data.title}</p>
+              <div style="display:flex;gap:0.75rem">
+                <span style="font-size:0.7rem;color:var(--c-text-dim)">{r.data.calories} kcal</span>
+                <span style="font-size:0.7rem;color:var(--c-green);font-weight:600">{r.data.netCarbs}g net carbs</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      ))}
+      <a href="/app/welcome" style="flex-shrink:0;width:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.625rem;background:var(--c-surface-2);border-radius:14px;border:1px solid var(--c-border);text-decoration:none;color:var(--c-text-dim);padding:1.5rem;text-align:center">
+        <span style="font-size:1.25rem">→</span>
+        <p style="font-size:0.8125rem;font-weight:600;line-height:1.4">Ver las 195 recetas</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- PROTOCOLS -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="chip">Protocolos</span>
+      <h2 class="d">Sistemas probados. No dietas.</h2>
+      <p>Cada protocolo es un sistema estructurado con objetivo, duración, alimentos y estrategias de ejecución.</p>
+    </div>
+    <div class="grid-3">
+      {protocols.map(p => (
+        <a href={`/protocolos/${p.id}`} class="card card-link" style="padding:1.75rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+            <span class="chip">{p.data.category}</span>
+            <span class="badge">{p.data.difficulty}</span>
+          </div>
+          <h3 style="font-family:var(--font-display);font-size:1.0625rem;font-weight:800;margin-bottom:0.625rem;line-height:1.3">{p.data.title}</h3>
+          <p style="color:var(--c-text-muted);font-size:0.8125rem;line-height:1.6;margin-bottom:1.25rem" class="line-clamp-3">{p.data.description}</p>
+          <div style="display:flex;align-items:center;gap:1rem;font-size:0.75rem;color:var(--c-text-dim)">
+            <span style="display:flex;align-items:center;gap:0.25rem">
+              <span class="icon" style="font-size:14px">schedule</span>
+              {p.data.duration}
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+    <div style="text-align:center;margin-top:2.5rem">
+      <a href="/protocolos" class="btn-ghost">Ver todos los protocolos</a>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- FEATURED ARTICLES -->
+<section class="section" style="background:var(--c-surface)">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="chip">Centro de aprendizaje</span>
+      <h2 class="d">Ciencia real. Sin mitos.</h2>
+      <p>Artículos escritos con fuentes científicas, explicados en lenguaje claro.</p>
+    </div>
+    <div class="grid-3">
+      {articles.map(a => (
+        <a href={`/aprender/${a.id}`} class="card card-link">
+          {a.data.image && <img src={a.data.image} alt={a.data.title} loading="lazy" style="width:100%;height:180px;object-fit:cover">}
+          <div style="padding:1.25rem">
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem">
+              <span class="chip">{a.data.category}</span>
+              <span style="font-size:0.7rem;color:var(--c-text-dim)">{a.data.readTime} min</span>
+            </div>
+            <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:800;line-height:1.35;margin-bottom:0.5rem" class="line-clamp-2">{a.data.title}</h3>
+            <p style="font-size:0.8125rem;color:var(--c-text-muted);line-height:1.6" class="line-clamp-2">{a.data.description}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+    <div style="text-align:center;margin-top:2.5rem">
+      <a href="/aprender" class="btn-ghost">Ver todos los artículos</a>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- SUCCESS STORIES PREVIEW -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="chip">Transformaciones reales</span>
+      <h2 class="d">Resultados que hablan.</h2>
+      <p>Historias reales de personas que usaron KetoCore y transformaron su salud.</p>
+    </div>
+    <div class="grid-2">
+      {stories.map(s => (
+        <div class="card" style="padding:2rem">
+          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem">
+            <div style="width:52px;height:52px;border-radius:50%;background:var(--c-primary-dim);border:2px solid var(--c-primary-border);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <span class="icon icon-fill" style="color:var(--c-primary);font-size:24px">person</span>
+            </div>
+            <div>
+              <p style="font-family:var(--font-display);font-weight:800;font-size:1rem">{s.data.name}</p>
+              <p style="font-size:0.75rem;color:var(--c-text-dim)">{s.data.age} años · {s.data.protocol}</p>
+            </div>
+            <div style="margin-left:auto;text-align:right;flex-shrink:0">
+              <p style="font-family:var(--font-display);font-weight:900;font-size:1.75rem;color:var(--c-primary);letter-spacing:-0.03em">-{s.data.weightLost}kg</p>
+              <p style="font-size:0.7rem;color:var(--c-text-dim)">en {s.data.duration}</p>
+            </div>
+          </div>
+          <a href={`/historias/${s.id}`} style="display:inline-flex;align-items:center;gap:0.375rem;font-size:0.8125rem;color:var(--c-primary);font-weight:600;text-decoration:none">
+            Leer historia completa <span class="icon" style="font-size:16px">arrow_forward</span>
+          </a>
+        </div>
+      ))}
+    </div>
+    <div style="text-align:center;margin-top:2.5rem">
+      <a href="/historias" class="btn-ghost">Ver todas las historias</a>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- FINAL CTA -->
+<section class="section" style="text-align:center">
+  <div class="wrap" style="max-width:680px;margin:0 auto">
+    <span class="chip" style="margin-bottom:1.5rem;display:inline-block">Empieza hoy</span>
+    <h2 class="d" style="font-size:clamp(2rem,4vw,3.25rem);margin-bottom:1.25rem">Tu protocolo personalizado<br>a un clic.</h2>
+    <p style="color:var(--c-text-muted);font-size:1.0625rem;line-height:1.7;margin-bottom:2.5rem">
+      Crea tu cuenta gratuita, define tu objetivo y obtén tu plan keto personalizado en menos de 3 minutos.
+    </p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <a href="/app/welcome" class="btn" style="font-size:1rem;padding:1rem 2.25rem">Crear cuenta gratis</a>
+      <a href="/app/demo/" class="btn-ghost" style="font-size:1rem;padding:1rem 2.25rem;display:inline-flex;align-items:center;gap:0.5rem">
+        <span class="icon icon-fill" style="font-size:18px;color:var(--c-primary)">play_circle</span>
+        Ver demo
+      </a>
+    </div>
+    <p style="margin-top:1.25rem;font-size:0.8125rem;color:var(--c-text-dim)">El demo muestra la app completa sin necesidad de registrarse.</p>
+  </div>
+</section>
+
+<style>
+  @media (max-width: 768px) {
+    #stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    #steps-grid { grid-template-columns: 1fr !important; }
+  }
+</style>
+</Layout>

@@ -1,0 +1,102 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allArticles = await getCollection('articles');
+allArticles.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+
+const categories = [...new Set(allArticles.map(a => a.data.category))];
+const featured = allArticles.filter(a => a.data.featured).slice(0, 1)[0];
+const rest = allArticles.filter(a => !a.data.featured || a.id !== featured?.id);
+---
+
+<Layout title="Centro de Aprendizaje" description="Artículos, guías y recursos sobre keto, ayuno intermitente, salud metabólica y más. Ciencia real, explicada en lenguaje claro.">
+
+<section style="padding:3rem 0 2rem">
+  <div class="wrap">
+    <span class="chip" style="margin-bottom:1rem;display:inline-block">Centro de aprendizaje</span>
+    <h1 class="d" style="font-size:clamp(2rem,4vw,3.25rem);margin-bottom:1rem">Conocimiento que transforma.</h1>
+    <p style="color:var(--c-text-muted);font-size:1.0625rem;max-width:560px">Artículos respaldados por ciencia, sin mitos, sin clickbait. Aprende cómo funciona tu metabolismo y toma decisiones informadas.</p>
+  </div>
+</section>
+
+<!-- Categories filter -->
+<section style="padding:0 0 2rem;border-bottom:1px solid var(--c-border)">
+  <div class="wrap">
+    <div class="scroll-x" style="gap:0.5rem">
+      <a href="/aprender" class="chip" style="background:var(--c-primary);color:#fff;border-color:var(--c-primary);text-decoration:none;cursor:pointer">Todo</a>
+      {categories.map(cat => (
+        <a href={`/aprender?cat=${encodeURIComponent(cat)}`} class="badge" style="padding:0.375rem 0.875rem;font-size:0.75rem;cursor:pointer;text-decoration:none;transition:background 0.15s;white-space:nowrap">{cat}</a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Featured article -->
+{featured && (
+  <section class="section-sm">
+    <div class="wrap">
+      <a href={`/aprender/${featured.id}`} class="card card-link" style="display:grid;grid-template-columns:1fr 1fr;gap:0;overflow:hidden" id="featured-card">
+        {featured.data.image && <img src={featured.data.image} alt={featured.data.title} style="width:100%;height:320px;object-fit:cover">}
+        <div style="padding:2.5rem;display:flex;flex-direction:column;justify-content:center">
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem">
+            <span class="chip">Destacado</span>
+            <span class="badge">{featured.data.category}</span>
+            <span style="font-size:0.75rem;color:var(--c-text-dim)">{featured.data.readTime} min</span>
+          </div>
+          <h2 style="font-family:var(--font-display);font-size:clamp(1.25rem,2vw,1.625rem);font-weight:900;line-height:1.3;margin-bottom:0.875rem">{featured.data.title}</h2>
+          <p style="color:var(--c-text-muted);font-size:0.9375rem;line-height:1.7;margin-bottom:1.5rem" class="line-clamp-3">{featured.data.description}</p>
+          <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;color:var(--c-primary);font-weight:600">
+            Leer artículo <span class="icon" style="font-size:16px">arrow_forward</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+)}
+
+<!-- All articles grid -->
+<section class="section-sm">
+  <div class="wrap">
+    <h2 style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;margin-bottom:1.5rem">Todos los artículos</h2>
+    <div class="grid-3">
+      {rest.map(a => (
+        <a href={`/aprender/${a.id}`} class="card card-link">
+          {a.data.image && <img src={a.data.image} alt={a.data.title} loading="lazy" style="width:100%;height:180px;object-fit:cover">}
+          <div style="padding:1.25rem">
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;flex-wrap:wrap">
+              <span class="chip">{a.data.category}</span>
+              <span style="font-size:0.7rem;color:var(--c-text-dim)">{a.data.readTime} min</span>
+              <span class="badge">{a.data.difficulty}</span>
+            </div>
+            <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:800;line-height:1.35;margin-bottom:0.5rem" class="line-clamp-2">{a.data.title}</h3>
+            <p style="font-size:0.8125rem;color:var(--c-text-muted);line-height:1.6" class="line-clamp-2">{a.data.description}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+    {allArticles.length === 0 && (
+      <div style="text-align:center;padding:4rem;color:var(--c-text-dim)">
+        <span class="icon" style="font-size:48px;display:block;margin-bottom:1rem">article</span>
+        <p>Próximamente más artículos</p>
+      </div>
+    )}
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section" style="background:var(--c-surface);text-align:center">
+  <div class="wrap" style="max-width:560px;margin:0 auto">
+    <h2 class="d" style="font-size:clamp(1.5rem,3vw,2.25rem);margin-bottom:1rem">¿Listo para ejecutar?</h2>
+    <p style="color:var(--c-text-muted);margin-bottom:2rem">El conocimiento sin acción no transforma. Crea tu cuenta y obtén tu protocolo personalizado.</p>
+    <a href="/app/welcome.html" class="btn">Empezar gratis</a>
+  </div>
+</section>
+
+<style>
+  @media (max-width: 768px) {
+    #featured-card { grid-template-columns: 1fr !important; }
+    #featured-card img { height: 220px !important; }
+  }
+</style>
+</Layout>

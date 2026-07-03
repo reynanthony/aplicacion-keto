@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffc107"/>
+      <stop offset="100%" style="stop-color:#ff6f00"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <ellipse cx="320" cy="300" rx="60" ry="45" fill="rgba(255,255,255,0.2)"/>
+  <ellipse cx="480" cy="300" rx="60" ry="45" fill="rgba(255,255,255,0.15)"/>
+  <ellipse cx="320" cy="300" rx="30" ry="22" fill="rgba(255,255,255,0.3)"/>
+  <ellipse cx="480" cy="300" rx="30" ry="22" fill="rgba(255,255,255,0.25)"/>
+  <text x="400" y="520" text-anchor="middle" fill="white" font-family="system-ui" font-size="36" font-weight="bold">Huevos Revueltos Cremosos</text>
+  <text x="400" y="560" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="18">KETOLAB</text>
+</svg>

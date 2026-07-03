@@ -1,0 +1,98 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+const stories = await getCollection('stories');
+---
+
+<Layout title="Historias de Transformación" description="Historias reales de personas que transformaron su salud con KetoCore. Resultados reales, protocolos reales.">
+
+<section style="padding:3rem 0 2rem">
+  <div class="wrap">
+    <span class="chip" style="margin-bottom:1rem;display:inline-block">Transformaciones reales</span>
+    <h1 class="d" style="font-size:clamp(2rem,4vw,3.25rem);margin-bottom:1rem">No testimonios. Pruebas.</h1>
+    <p style="color:var(--c-text-muted);font-size:1.0625rem;max-width:560px">Historias completas con protocolo usado, duración, desafíos y lecciones aprendidas. Sin filtros.</p>
+  </div>
+</section>
+
+<!-- Community stats -->
+<section style="padding:0 0 3rem">
+  <div class="wrap">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem" id="story-stats">
+      <div class="stat-card">
+        <div class="stat-value">87,000 kg</div>
+        <div class="stat-label">Perdidos por la comunidad</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">12,400+</div>
+        <div class="stat-label">Transformaciones activas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">6.2 meses</div>
+        <div class="stat-label">Tiempo promedio al objetivo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stories -->
+<section style="padding:0 0 4rem">
+  <div class="wrap">
+    <div style="display:flex;flex-direction:column;gap:2rem">
+      {stories.map(async s => {
+        const { Content } = await render(s);
+        return (
+          <div class="card" style="padding:2rem">
+            <div style="display:grid;grid-template-columns:auto 1fr auto;gap:1.5rem;align-items:start" id="story-header">
+              <!-- Avatar -->
+              <div style="width:64px;height:64px;border-radius:50%;background:var(--c-primary-dim);border:2px solid var(--c-primary-border);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <span class="icon icon-fill" style="color:var(--c-primary);font-size:28px">person</span>
+              </div>
+
+              <!-- Info -->
+              <div>
+                <h2 style="font-family:var(--font-display);font-weight:900;font-size:1.125rem;margin-bottom:0.25rem">{s.data.name}</h2>
+                <p style="font-size:0.8125rem;color:var(--c-text-dim)">{s.data.age} años · {s.data.protocol}</p>
+                <div style="display:flex;gap:0.5rem;margin-top:0.625rem;flex-wrap:wrap">
+                  {s.data.tags.map(t => <span class="badge">#{t}</span>)}
+                </div>
+              </div>
+
+              <!-- Result -->
+              <div style="text-align:right;flex-shrink:0">
+                <p style="font-family:var(--font-display);font-weight:900;font-size:2.5rem;color:var(--c-primary);letter-spacing:-0.04em;line-height:1">-{s.data.weightLost}kg</p>
+                <p style="font-size:0.75rem;color:var(--c-text-dim)">en {s.data.duration}</p>
+                <p style="font-size:0.75rem;color:var(--c-text-dim);margin-top:0.25rem">{s.data.startWeight}kg → {s.data.currentWeight}kg</p>
+              </div>
+            </div>
+
+            <div style="margin-top:1.75rem;padding-top:1.75rem;border-top:1px solid var(--c-border)">
+              <div class="prose" style="font-size:0.9375rem">
+                <Content />
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<!-- Share your story CTA -->
+<section class="section" style="background:var(--c-surface);text-align:center">
+  <div class="wrap" style="max-width:580px;margin:0 auto">
+    <span class="icon icon-fill" style="font-size:48px;color:var(--c-primary);display:block;margin-bottom:1rem">stars</span>
+    <h2 class="d" style="font-size:clamp(1.75rem,3vw,2.5rem);margin-bottom:1rem">¿Tienes una historia?</h2>
+    <p style="color:var(--c-text-muted);margin-bottom:2rem">Si KetoCore formó parte de tu transformación, queremos saberlo. Las historias reales inspiran a las próximas personas.</p>
+    <a href="/app/welcome.html" class="btn">Compartir mi transformación</a>
+  </div>
+</section>
+
+<style>
+  @media (max-width: 640px) {
+    #story-stats { grid-template-columns: 1fr !important; }
+    #story-header { grid-template-columns: auto 1fr !important; }
+    #story-header > div:last-child { grid-column: span 2; text-align: left !important; }
+  }
+</style>
+</Layout>

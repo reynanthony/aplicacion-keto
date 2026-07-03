@@ -1,0 +1,358 @@
+---
+import AppLayout from '../../layouts/AppLayout.astro';
+---
+
+<AppLayout title="KetoCore | Bienvenido" authGuard={false} bodyClass="flex flex-col">
+<style is:global>
+body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #f5f5f5; }
+h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+input { font-family: 'Inter', sans-serif; font-size: 1rem; }
+input:focus { outline: none; border-color: #ff4d00 !important; box-shadow: 0 0 0 3px rgba(255,77,0,0.18); }
+#loadingOverlay { background: rgba(10,10,10,0.95) !important; backdrop-filter: blur(12px); }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeInUp 0.4s ease-out forwards; }
+@keyframes kpulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.animate-pulse-custom { animation: kpulse 1.5s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .fade-in, .animate-pulse-custom { animation: none; opacity: 1; }
+}
+</style>
+
+<!-- Header -->
+<header class="px-5 pt-5 pb-3 flex items-center gap-3">
+  <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#ff4d00,#ea580c)">
+    <img src="/app/logo.svg" alt="KetoCore" class="w-5 h-5" style="filter:brightness(0) invert(1)">
+  </div>
+  <span class="text-xl font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f5f5f5">KetoCore</span>
+</header>
+
+<!-- Main -->
+<main class="flex-1 flex items-center justify-center px-5 py-6">
+  <div class="w-full max-w-sm">
+
+    <!-- Hero -->
+    <div class="text-center mb-7 fade-in">
+      <h1 class="text-3xl font-black tracking-tight mb-2" style="color:#f5f5f5">
+        Transforma tu <span style="background:linear-gradient(135deg,#ff4d00,#ea580c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">salud</span>
+      </h1>
+      <p style="color:rgba(245,245,245,0.6);font-size:0.9375rem">La app cetogénica más completa en español</p>
+    </div>
+
+    <!-- Feature pills -->
+    <div class="flex flex-wrap justify-center gap-2 mb-7 fade-in" style="animation-delay:.08s">
+      <span class="px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5" style="background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.25)">
+        <span class="material-symbols-outlined" style="font-size:14px;color:#16a34a">check_circle</span>
+        Offline
+      </span>
+      <span class="px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5" style="background:rgba(255,77,0,0.1);color:#fb923c;border:1px solid rgba(255,77,0,0.25)">
+        <span class="material-symbols-outlined" style="font-size:14px;color:#ea580c">language</span>
+        100% Español
+      </span>
+      <span class="px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5" style="background:rgba(251,191,36,0.1);color:#fbbf24;border:1px solid rgba(251,191,36,0.25)">
+        <span class="material-symbols-outlined" style="font-size:14px;color:#d97706">star</span>
+        Gratis
+      </span>
+    </div>
+
+    <!-- Auth Card -->
+    <div class="rounded-3xl p-6 fade-in" style="animation-delay:.16s;background:#161616;border:1px solid rgba(255,255,255,0.07);box-shadow:0 4px 16px rgba(0,0,0,0.4),0 1px 4px rgba(0,0,0,0.2)">
+
+      <!-- Tabs -->
+      <div class="flex rounded-xl p-1 mb-6" style="background:#1e1e1e">
+        <button id="tabLogin" onclick="switchTab('login')"
+          class="flex-1 py-2.5 rounded-lg text-sm font-bold transition-all"
+          style="background:#ff4d00;color:#ffffff;box-shadow:0 1px 4px rgba(255,77,0,0.25)">
+          Iniciar Sesión
+        </button>
+        <button id="tabRegister" onclick="switchTab('register')"
+          class="flex-1 py-2.5 rounded-lg text-sm font-bold transition-all"
+          style="background:transparent;color:rgba(245,245,245,0.55)">
+          Registrarse
+        </button>
+      </div>
+
+      <!-- Login Form -->
+      <div id="formLogin">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-semibold mb-1.5" style="color:#f5f5f5">Email</label>
+            <input type="email" id="loginEmail" placeholder="tu@email.com"
+              autocomplete="email" spellcheck="false"
+              class="w-full px-4 py-3.5 rounded-xl transition-all"
+              style="background:#1e1e1e;border:1.5px solid rgba(255,255,255,0.12);color:#f5f5f5">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold mb-1.5" style="color:#f5f5f5">Contraseña</label>
+            <input type="password" id="loginPassword" placeholder="Tu contraseña"
+              autocomplete="current-password"
+              class="w-full px-4 py-3.5 rounded-xl transition-all"
+              style="background:#1e1e1e;border:1.5px solid rgba(255,255,255,0.12);color:#f5f5f5">
+          </div>
+          <button onclick="handleLogin()" id="loginBtn"
+            class="w-full py-4 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2"
+            style="background:linear-gradient(135deg,#ff4d00,#ea580c);box-shadow:0 2px 8px rgba(255,77,0,0.25)">
+            <span class="material-symbols-outlined" style="font-size:20px">login</span>
+            <span>Iniciar Sesión</span>
+          </button>
+        </div>
+        <p id="loginError" class="text-red-600 text-sm mt-4" style="display:none"></p>
+      </div>
+
+      <!-- Register Form -->
+      <div id="formRegister" style="display:none">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-semibold mb-1.5" style="color:#f5f5f5">Nombre</label>
+            <input type="text" id="registerName" placeholder="Tu nombre"
+              autocomplete="given-name"
+              class="w-full px-4 py-3.5 rounded-xl transition-all"
+              style="background:#1e1e1e;border:1.5px solid rgba(255,255,255,0.12);color:#f5f5f5">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold mb-1.5" style="color:#f5f5f5">Email</label>
+            <input type="email" id="registerEmail" placeholder="tu@email.com"
+              autocomplete="email" spellcheck="false"
+              class="w-full px-4 py-3.5 rounded-xl transition-all"
+              style="background:#1e1e1e;border:1.5px solid rgba(255,255,255,0.12);color:#f5f5f5">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold mb-1.5" style="color:#f5f5f5">Contraseña</label>
+            <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres"
+              autocomplete="new-password"
+              class="w-full px-4 py-3.5 rounded-xl transition-all"
+              style="background:#1e1e1e;border:1.5px solid rgba(255,255,255,0.12);color:#f5f5f5">
+          </div>
+          <button onclick="handleRegister()" id="registerBtn"
+            class="w-full py-4 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2"
+            style="background:linear-gradient(135deg,#ff4d00,#ea580c);box-shadow:0 2px 8px rgba(255,77,0,0.25)">
+            <span class="material-symbols-outlined" style="font-size:20px">person_add</span>
+            <span>Crear Cuenta</span>
+          </button>
+        </div>
+        <p id="registerError" class="text-red-600 text-sm mt-4" style="display:none"></p>
+      </div>
+
+      <!-- Divider -->
+      <div class="flex items-center gap-3 my-5">
+        <div class="flex-1 h-px" style="background:rgba(255,255,255,0.08)"></div>
+        <span class="text-sm" style="color:rgba(245,245,245,0.42)">o</span>
+        <div class="flex-1 h-px" style="background:rgba(255,255,255,0.08)"></div>
+      </div>
+
+      <!-- Demo CTA -->
+      <a href="/app/demo"
+        class="w-full py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 text-sm mb-3"
+        style="background:rgba(167,139,250,0.1);color:#a78bfa;border:1.5px solid rgba(167,139,250,0.2)">
+        <span class="material-symbols-outlined icon-filled" style="font-size:18px">play_circle</span>
+        Explorar demo sin registro
+      </a>
+
+      <!-- Guest -->
+      <button onclick="continueAsGuest()"
+        class="w-full py-3 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 text-sm"
+        style="background:#1e1e1e;color:rgba(245,245,245,0.55);border:1.5px solid rgba(255,255,255,0.08)">
+        <span class="material-symbols-outlined" style="font-size:18px">arrow_forward</span>
+        Continuar sin cuenta
+      </button>
+    </div>
+
+    <!-- Benefits -->
+    <div class="mt-6 space-y-3 fade-in" style="animation-delay:.24s">
+      <div class="flex items-center gap-3" style="color:rgba(245,245,245,0.6)">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(255,77,0,0.08)">
+          <span class="material-symbols-outlined" style="font-size:16px;color:#ff4d00">cloud_sync</span>
+        </div>
+        <span class="text-sm">Sincronización en la nube</span>
+      </div>
+      <div class="flex items-center gap-3" style="color:rgba(245,245,245,0.6)">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(255,77,0,0.08)">
+          <span class="material-symbols-outlined" style="font-size:16px;color:#ff4d00">install_mobile</span>
+        </div>
+        <span class="text-sm">Instala como app en tu móvil</span>
+      </div>
+      <div class="flex items-center gap-3" style="color:rgba(245,245,245,0.6)">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(255,77,0,0.08)">
+          <span class="material-symbols-outlined" style="font-size:16px;color:#ff4d00">lock</span>
+        </div>
+        <span class="text-sm">Tus datos siempre seguros</span>
+      </div>
+    </div>
+
+    <!-- Terms -->
+    <p class="text-center text-xs mt-7" style="color:rgba(245,245,245,0.38)">
+      Al continuar aceptas nuestros
+      <a href="#" class="hover:underline" style="color:#ff4d00">Términos de Servicio</a>
+    </p>
+  </div>
+</main>
+
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="fixed inset-0 bg-white/90 backdrop-blur-sm z-50 flex items-center justify-center" style="display:none">
+  <div class="text-center">
+    <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse-custom" style="background:linear-gradient(135deg,#ff4d00,#ea580c)">
+      <span class="material-symbols-outlined text-white text-3xl" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">local_fire_department</span>
+    </div>
+    <p id="loadingText" class="font-semibold" style="color:#f5f5f5">Cargando...</p>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" aria-live="polite" aria-atomic="true" class="fixed bottom-8 left-1/2 -translate-x-1/2 px-5 py-3 rounded-xl font-medium shadow-lg transition-all duration-300 pointer-events-none z-50"
+  style="background:#f5f5f5;color:#0a0a0a;opacity:0;transform:translateX(-50%) translateY(12px)">
+  <span id="toastText"></span>
+</div>
+
+<script is:inline>
+  function switchTab(tab) {
+    const loginTab = document.getElementById('tabLogin');
+    const registerTab = document.getElementById('tabRegister');
+    const loginForm = document.getElementById('formLogin');
+    const registerForm = document.getElementById('formRegister');
+    if (tab === 'login') {
+      loginTab.style.cssText = 'background:#ff4d00;color:#ffffff;box-shadow:0 1px 4px rgba(255,77,0,0.25)';
+      registerTab.style.cssText = 'background:transparent;color:rgba(245,245,245,0.55)';
+      loginForm.style.display = '';
+      registerForm.style.display = 'none';
+    } else {
+      registerTab.style.cssText = 'background:#ff4d00;color:#ffffff;box-shadow:0 1px 4px rgba(255,77,0,0.25)';
+      loginTab.style.cssText = 'background:transparent;color:rgba(245,245,245,0.55)';
+      registerForm.style.display = '';
+      loginForm.style.display = 'none';
+    }
+  }
+
+  function showLoading(text) {
+    document.getElementById('loadingText').textContent = text || 'Cargando...';
+    document.getElementById('loadingOverlay').style.display = 'flex';
+  }
+
+  function showToast(message, duration) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastText').textContent = message;
+    toast.style.cssText = 'background:#1a1714;color:#ffffff;opacity:1;transform:translateX(-50%) translateY(0);pointer-events:none';
+    setTimeout(() => {
+      toast.style.cssText = 'background:#1a1714;color:#ffffff;opacity:0;transform:translateX(-50%) translateY(12px);pointer-events:none';
+    }, duration || 3000);
+  }
+
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function clearError(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+
+  async function handleLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const btn = document.getElementById('loginBtn');
+    clearError('loginError');
+    if (!email || !password) { showError('loginError', 'Completa todos los campos'); return; }
+    btn.disabled = true;
+    btn.innerHTML = '<span style="opacity:.7">Iniciando sesión...</span>';
+    let data, error;
+    try {
+      ({ data, error } = await window.supabase.auth.signInWithPassword({ email, password }));
+    } catch (e) {
+      const savedEmail = localStorage.getItem('ketocore_user_email');
+      const savedId = localStorage.getItem('ketocore_user_id');
+      if (savedId && savedEmail === email) {
+        showLoading('¡Bienvenido!');
+        setTimeout(() => {
+          window.location.href = localStorage.getItem('ketocore_onboarding_done') ? '/app/' : '/app/onboarding';
+        }, 1000);
+        return;
+      }
+      showError('loginError', 'Sin conexión. Usa "Continuar sin cuenta" para acceder.');
+      btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:20px">login</span><span>Iniciar Sesión</span>';
+      btn.disabled = false;
+      return;
+    }
+    if (error) {
+      const msg = error.message === 'Invalid login credentials' ? 'Email o contraseña incorrectos' : error.message;
+      showError('loginError', msg);
+      btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:20px">login</span><span>Iniciar Sesión</span>';
+      btn.disabled = false;
+      return;
+    }
+    showLoading('¡Bienvenido!');
+    await ensureProfile(data.user);
+    localStorage.setItem('ketocore_user_id', data.user.id);
+    localStorage.setItem('ketocore_user_email', email);
+    setTimeout(() => {
+      window.location.href = localStorage.getItem('ketocore_onboarding_done') ? '/app/' : '/app/onboarding';
+    }, 1000);
+  }
+
+  async function handleRegister() {
+    const name = document.getElementById('registerName').value.trim();
+    const email = document.getElementById('registerEmail').value.trim();
+    const password = document.getElementById('registerPassword').value;
+    const btn = document.getElementById('registerBtn');
+    clearError('registerError');
+    if (!name || !email || !password) { showError('registerError', 'Completa todos los campos'); return; }
+    if (password.length < 6) { showError('registerError', 'La contraseña debe tener al menos 6 caracteres'); return; }
+    btn.disabled = true;
+    btn.innerHTML = '<span style="opacity:.7">Creando cuenta...</span>';
+    let data, error;
+    try {
+      ({ data, error } = await window.supabase.auth.signUp({ email, password, options: { data: { nombre: name } } }));
+    } catch (e) {
+      const localId = 'local_' + Date.now();
+      localStorage.setItem('ketocore_user_id', localId);
+      localStorage.setItem('ketocore_user_email', email);
+      localStorage.setItem('ketocore_user_name', name);
+      localStorage.removeItem('ketocore_onboarding_done');
+      showLoading('¡Cuenta creada!');
+      setTimeout(() => { window.location.href = '/app/onboarding'; }, 1000);
+      return;
+    }
+    if (error) {
+      showError('registerError', error.message);
+      btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:20px">person_add</span><span>Crear Cuenta</span>';
+      btn.disabled = false;
+      return;
+    }
+    showLoading('¡Cuenta creada!');
+    await ensureProfile(data.user);
+    localStorage.setItem('ketocore_user_id', data.user.id);
+    localStorage.setItem('ketocore_user_email', email);
+    localStorage.removeItem('ketocore_onboarding_done');
+    setTimeout(() => { window.location.href = '/app/onboarding'; }, 1000);
+  }
+
+  async function ensureProfile(user) {
+    if (!user) return;
+    try {
+      const { data: existing } = await window.supabase.from('usuarios').select('id').eq('id', user.id).single();
+      if (!existing) {
+        await window.supabase.from('usuarios').insert({ id: user.id, email: user.email, nombre: user.user_metadata?.nombre || user.email.split('@')[0] });
+        await window.supabase.from('progreso_racha').insert({ usuario_id: user.id, racha_actual: 0, racha_maxima: 0 });
+      }
+    } catch (e) { /* offline */ }
+  }
+
+  function continueAsGuest() {
+    localStorage.setItem('KetoCore_guest', 'true');
+    window.location.href = '/app/';
+  }
+
+  async function checkAuth() {
+    try {
+      const { data: { session } } = await window.supabase.auth.getSession();
+      if (session?.user) {
+        localStorage.setItem('ketocore_user_id', session.user.id);
+        localStorage.setItem('ketocore_user_email', session.user.email);
+        window.location.href = localStorage.getItem('ketocore_onboarding_done') ? '/app/' : '/app/onboarding';
+      }
+    } catch (e) { /* offline */ }
+  }
+
+  checkAuth();
+</script>
+
+</AppLayout>
