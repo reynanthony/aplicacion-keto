@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0b0a08; }
+  .msym { font-family: 'Material Symbols Outlined'; font-style: normal; line-height: 1; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; -webkit-font-smoothing: antialiased; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .fill { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+  .nums { font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .disp { font-family: 'Plus Jakarta Sans', sans-serif; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,77,0,0.3); border-radius: 10px; }
+</style>
+</helmet>
+<div style="display:flex;min-height:100vh;background:#0b0a08;color:#f7f4f0;font-family:'Inter',sans-serif;font-size:16px">
+  <dc-import name="KetoSidebar" active="compras" hint-size="250px,100%"></dc-import>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <div style="padding:38px 40px 56px;max-width:1120px;width:100%">
+
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:26px;flex-wrap:wrap;gap:20px">
+        <div>
+          <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#60a5fa;margin-bottom:12px">Lista de compras · Semana 3</div>
+          <h1 class="disp" style="font-weight:800;font-size:42px;line-height:0.98;letter-spacing:-0.035em">Todo para tu plan semanal</h1>
+        </div>
+        <button style="height:46px;padding:0 22px;border-radius:14px;background:#161310;border:1px solid rgba(255,240,225,0.1);cursor:pointer;display:flex;align-items:center;gap:8px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;color:#f7f4f0"><span class="msym" style="font-size:20px">ios_share</span>Exportar</button>
+      </div>
+
+      <!-- Summary strip -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:22px">
+        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:20px;padding:20px;display:flex;align-items:center;gap:14px"><div style="width:44px;height:44px;border-radius:12px;background:rgba(96,165,250,0.12);display:flex;align-items:center;justify-content:center"><span class="msym fill" style="color:#60a5fa;font-size:22px">list_alt</span></div><div><div class="disp nums" style="font-weight:900;font-size:26px;line-height:1">32</div><div style="font-size:12px;color:rgba(247,244,240,0.45)">Artículos</div></div></div>
+        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:20px;padding:20px;display:flex;align-items:center;gap:14px"><div style="width:44px;height:44px;border-radius:12px;background:rgba(34,197,94,0.12);display:flex;align-items:center;justify-content:center"><span class="msym fill" style="color:#22c55e;font-size:22px">shopping_basket</span></div><div><div class="disp nums" style="font-weight:900;font-size:26px;line-height:1">8</div><div style="font-size:12px;color:rgba(247,244,240,0.45)">En el carrito</div></div></div>
+        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:20px;padding:20px;display:flex;align-items:center;gap:14px"><div style="width:44px;height:44px;border-radius:12px;background:rgba(255,77,0,0.12);display:flex;align-items:center;justify-content:center"><span class="msym fill" style="color:#ff4d00;font-size:22px">payments</span></div><div><div class="disp nums" style="font-weight:900;font-size:26px;line-height:1">~$84</div><div style="font-size:12px;color:rgba(247,244,240,0.45)">Costo estimado</div></div></div>
+      </div>
+
+      <!-- Aisles -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:24px;padding:24px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span class="msym fill" style="color:#ea580c;font-size:22px">set_meal</span><span class="disp" style="font-weight:800;font-size:16px">Carnes y pescados</span><span style="margin-left:auto;font-size:12px;color:rgba(247,244,240,0.4)">6 items</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 8px;border-radius:12px"><span class="msym fill" style="color:#22c55e;font-size:22px">check_box</span><span style="flex:1;font-size:14px;color:rgba(247,244,240,0.45);text-decoration:line-through">Salmón fresco · 4 filetes</span></div>
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 8px;border-radius:12px"><span class="msym" style="color:rgba(247,244,240,0.3);font-size:22px">check_box_outline_blank</span><span style="flex:1;font-size:14px">Pechuga de pollo · 1 kg</span></div>
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 8px;border-radius:12px"><span class="msym" style="color:rgba(247,244,240,0.3);font-size:22px">check_box_outline_blank</span><span style="flex:1;font-size:14px">Bistec de res · 600 g</span></div>
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 8px;border-radius:12px"><span class="msym" style="color:rgba(247,244,240,0.3);font-size:22px">check_box_outline_blank</span><span style="flex:1;font-size:14px">Tocino · 1 paquete</span></div>
+          </div>
+        </div>
+
+        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:24px;padding:24px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span class="msym fill" style="color:#22c55e;font-size:22px">nutrition</span><span class="disp" style="font-weight:800;font-size:16px">Verduras</span><span style="margin-left:auto;font-size:12px;color:rgba(247,244,240,0.4)">8 items</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 8px;border-radius:12px"><span class="msym fill" style="color:#22c55e;font-size:22px">check_box</span><span style="flex:1;font-size:14px;color:rgba(247,244,240,0.45);text-decoration:line-through">Aguacates · 6 unidades</span></div>
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 8px;border-radius:12px"><span class="msym fill" style="color:#22c55e;font-size:22px">check_box</span><span style="flex:1;font-size:14px;color:rgba(247,244,240,0.45);text-decoration:line-through">Espinacas · 2 bolsas</span></div>
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 8px;border-radius:12px"><span class="msym" style="color:rgba(247,244,240,0.3);font-size:22px">check_box_outline_blank</span><span style="flex:1;font-size:14px">Espárragos · 2 manojos</span></div>
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 8px;border-radius:12px"><span class="msym" style="color:rgba(247,244,240,0.3);font-size:22px">check_box_outline_blank</span><span style="flex:1;font-size:14px">Brócoli · 1 cabeza</span></div>
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 8px;border-radius:12px"><span class="msym" style="color:rgba(247,244,240,0.3);font-size:22px">check_box_outline_blank</span><span style="flex:1;font-size:14px">Calabacín · 3 unidades</span></div>
+          </div>
+        </div>
+
+        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:24px;padding:24px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span class="msym fill" style="color:#fbbf24;font-size:22px">egg</span><span class="disp" style="font-weight:800;font-size:16px">Lácteos y huevos</span><span style="margin-left:auto;font-size:12px;color:rgba(247,244,240,0.4)">5 items</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 8px;border-radius:12px"><span class="msym fill" style="color:#22c55e;font-size:22px">check_box</span><span style="flex:1;font-size:14px;color:rgba(247,244,240,0.45);text-decoration:line-through">Huevos · 2 docenas</span></div>
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 8px;border-radius:12px"><span class="msym" style="color:rgba(247,244,240,0.3);font-size:22px">check_box_outline_blank</span><span style="flex:1;font-size:14px">Mantequilla · 250 g</span></div>
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 8px;border-radius:12px"><span class="msym" style="color:rgba(247,244,240,0.3);font-size:22px">check_box_outline_blank</span><span style="flex:1;font-size:14px">Queso crema · 2 paquetes</span></div>
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 8px;border-radius:12px"><span class="msym" style="color:rgba(247,244,240,0.3);font-size:22px">check_box_outline_blank</span><span style="flex:1;font-size:14px">Queso parmesano · 200 g</span></div>
+          </div>
+        </div>
+
+        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:24px;padding:24px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span class="msym fill" style="color:#a78bfa;font-size:22px">grocery</span><span class="disp" style="font-weight:800;font-size:16px">Despensa</span><span style="margin-left:auto;font-size:12px;color:rgba(247,244,240,0.4)">7 items</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 8px;border-radius:12px"><span class="msym" style="color:rgba(247,244,240,0.3);font-size:22px">check_box_outline_blank</span><span style="flex:1;font-size:14px">Aceite de oliva extra virgen</span></div>
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 8px;border-radius:12px"><span class="msym" style="color:rgba(247,244,240,0.3);font-size:22px">check_box_outline_blank</span><span style="flex:1;font-size:14px">Aceite MCT</span></div>
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 8px;border-radius:12px"><span class="msym" style="color:rgba(247,244,240,0.3);font-size:22px">check_box_outline_blank</span><span style="flex:1;font-size:14px">Nueces de macadamia · 300 g</span></div>
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 8px;border-radius:12px"><span class="msym" style="color:rgba(247,244,240,0.3);font-size:22px">check_box_outline_blank</span><span style="flex:1;font-size:14px">Harina de almendra</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+</body>
+</html>

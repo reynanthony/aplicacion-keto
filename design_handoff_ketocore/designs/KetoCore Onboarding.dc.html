@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0b0a08; }
+  .msym { font-family: 'Material Symbols Outlined'; font-style: normal; line-height: 1; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; -webkit-font-smoothing: antialiased; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .fill { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+  .nums { font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .disp { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .opt { transition: border-color .13s, background .13s; }
+  .opt:hover { border-color: rgba(255,77,0,0.4) !important; background: #1e1a15 !important; }
+</style>
+</helmet>
+<div style="min-height:100vh;background:#0b0a08;color:#f7f4f0;font-family:'Inter',sans-serif;font-size:16px;display:flex">
+
+  <!-- Left rail -->
+  <div style="width:400px;flex-shrink:0;background:linear-gradient(165deg,#1a0e05,#0b0a08);border-right:1px solid rgba(255,240,225,0.06);padding:44px 40px;display:flex;flex-direction:column;justify-content:space-between">
+    <div>
+      <div style="display:flex;align-items:center;gap:11px;margin-bottom:56px">
+        <img src="assets/logo.svg" alt="KetoCore" style="width:38px;height:38px;border-radius:11px;filter:drop-shadow(0 0 12px rgba(255,77,0,0.45))">
+        <span class="disp" style="font-weight:900;font-size:19px;letter-spacing:-0.02em">KetoCore</span>
+      </div>
+      <h1 class="disp" style="font-weight:900;font-size:34px;line-height:1.1;letter-spacing:-0.03em;margin-bottom:16px">Creemos tu perfil metabólico</h1>
+      <p style="font-size:15px;line-height:1.6;color:rgba(247,244,240,0.55);max-width:280px">En 4 pasos calculamos tus macros exactos y generamos tu primer plan keto.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;align-items:center;gap:14px"><div style="width:34px;height:34px;border-radius:50%;background:#22c55e;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="color:#0a2818;font-size:20px">check</span></div><span style="font-size:14.5px;font-weight:600">Datos básicos</span></div>
+      <div style="display:flex;align-items:center;gap:14px"><div style="width:34px;height:34px;border-radius:50%;background:#ff4d00;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="disp nums" style="color:#1a0e05;font-weight:800;font-size:14px">2</span></div><span style="font-size:14.5px;font-weight:700">Tu objetivo</span></div>
+      <div style="display:flex;align-items:center;gap:14px"><div style="width:34px;height:34px;border-radius:50%;background:#1e1a15;border:1px solid rgba(255,240,225,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="disp nums" style="color:rgba(247,244,240,0.4);font-weight:800;font-size:14px">3</span></div><span style="font-size:14.5px;color:rgba(247,244,240,0.5)">Actividad y experiencia</span></div>
+      <div style="display:flex;align-items:center;gap:14px"><div style="width:34px;height:34px;border-radius:50%;background:#1e1a15;border:1px solid rgba(255,240,225,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="disp nums" style="color:rgba(247,244,240,0.4);font-weight:800;font-size:14px">4</span></div><span style="font-size:14.5px;color:rgba(247,244,240,0.5)">Tu plan listo</span></div>
+    </div>
+  </div>
+
+  <!-- Right content -->
+  <div style="flex:1;display:flex;flex-direction:column;padding:44px 56px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:40px">
+      <div style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(247,244,240,0.4)">Paso 2 de 4</div>
+      <div style="display:flex;gap:6px"><div style="width:40px;height:5px;border-radius:100px;background:#22c55e"></div><div style="width:40px;height:5px;border-radius:100px;background:#ff4d00"></div><div style="width:40px;height:5px;border-radius:100px;background:rgba(255,240,225,0.1)"></div><div style="width:40px;height:5px;border-radius:100px;background:rgba(255,240,225,0.1)"></div></div>
+    </div>
+
+    <div style="flex:1;max-width:620px">
+      <h2 class="disp" style="font-weight:800;font-size:32px;letter-spacing:-0.025em;margin-bottom:8px">¿Cuál es tu objetivo principal?</h2>
+      <p style="font-size:15px;color:rgba(247,244,240,0.5);margin-bottom:32px">Ajustaremos tus macros y plan según lo que quieras lograr.</p>
+
+      <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:36px">
+        <div class="opt" style="display:flex;align-items:center;gap:18px;padding:22px;border-radius:18px;background:rgba(255,77,0,0.08);border:1.5px solid #ff4d00;cursor:pointer"><div style="width:52px;height:52px;border-radius:15px;background:rgba(255,77,0,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="color:#ff4d00;font-size:28px">trending_down</span></div><div style="flex:1"><div class="disp" style="font-weight:700;font-size:17px">Perder peso</div><div style="font-size:13.5px;color:rgba(247,244,240,0.5);margin-top:2px">Déficit calórico controlado en cetosis</div></div><span class="msym fill" style="color:#ff4d00;font-size:26px">radio_button_checked</span></div>
+        <div class="opt" style="display:flex;align-items:center;gap:18px;padding:22px;border-radius:18px;background:#161310;border:1.5px solid rgba(255,240,225,0.07);cursor:pointer"><div style="width:52px;height:52px;border-radius:15px;background:rgba(34,197,94,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="color:#22c55e;font-size:28px">fitness_center</span></div><div style="flex:1"><div class="disp" style="font-weight:700;font-size:17px">Ganar músculo</div><div style="font-size:13.5px;color:rgba(247,244,240,0.5);margin-top:2px">Mayor proteína, superávit ligero</div></div><span class="msym" style="color:rgba(247,244,240,0.25);font-size:26px">radio_button_unchecked</span></div>
+        <div class="opt" style="display:flex;align-items:center;gap:18px;padding:22px;border-radius:18px;background:#161310;border:1.5px solid rgba(255,240,225,0.07);cursor:pointer"><div style="width:52px;height:52px;border-radius:15px;background:rgba(96,165,250,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="color:#60a5fa;font-size:28px">balance</span></div><div style="flex:1"><div class="disp" style="font-weight:700;font-size:17px">Mantener y sentirme mejor</div><div style="font-size:13.5px;color:rgba(247,244,240,0.5);margin-top:2px">Energía estable, claridad mental</div></div><span class="msym" style="color:rgba(247,244,240,0.25);font-size:26px">radio_button_unchecked</span></div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:14px">
+        <button style="height:52px;padding:0 24px;border-radius:15px;background:#161310;border:1px solid rgba(255,240,225,0.1);cursor:pointer;display:flex;align-items:center;gap:8px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15px;color:rgba(247,244,240,0.7)"><span class="msym" style="font-size:20px">arrow_back</span>Atrás</button>
+        <button style="flex:1;height:52px;border-radius:15px;background:#ff4d00;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:16px;color:#fff;box-shadow:0 6px 20px rgba(255,77,0,0.3)">Continuar<span class="msym" style="font-size:20px">arrow_forward</span></button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

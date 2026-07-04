@@ -1,11 +1,11 @@
-﻿---
+---
 import AppLayout from '../../layouts/AppLayout.astro';
 import AppNav from '../../components/AppNav.astro';
 ---
 
 <AppLayout title="KetoCore | Suplementos" authGuard={true}>
 <style is:global>
-.sidebar-link.active{background:rgba(22,22,22,1)!important;}
+.sidebar-link.active{background:rgba(22,19,16,1)!important;}
 .sidebar-link.active .material-symbols-outlined{color:#ff4d00!important;}
 .sidebar-link.active{color:white!important;}
 .sidebar-collapsed .sidebar-nav{width:72px;}
@@ -19,16 +19,16 @@ import AppNav from '../../components/AppNav.astro';
 .sidebar-collapsed~.sidebar-toggle-btn{left:72px;}
 
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
-.glass-card{background:rgba(22,22,22,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.glass-card{background:rgba(22,19,16,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 .primary-gradient{background:linear-gradient(135deg,#ff4d00 0%,#ff7346 100%)}
 .secondary-gradient{background:linear-gradient(135deg,#ffb300 0%,#ffc94f 100%)}
 .custom-scrollbar::-webkit-scrollbar{width:4px}
-.custom-scrollbar::-webkit-scrollbar-track{background:#0a0a0a}
+.custom-scrollbar::-webkit-scrollbar-track{background:#0b0a08}
 .custom-scrollbar::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:10px}
 .sidebar-collapsed .sidebar-nav{width:72px}
 .sidebar-collapsed .sidebar-nav .sidebar-text{display:none}
 .sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}
-.sidebar-link.active{background:#161616}
+.sidebar-link.active{background:#161310}
 .sidebar-link.active .material-symbols-outlined{color:#ff4d00}
 @keyframes pulse-glow{0%,100%{box-shadow:0 0 10px currentColor}50%{box-shadow:0 0 25px currentColor}}
 .pulse-glow{animation:pulse-glow 2s ease-in-out infinite}
@@ -46,31 +46,31 @@ import AppNav from '../../components/AppNav.astro';
   #sups-categories{grid-column:2;grid-row:5;}
 }
 </style>
-<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(10,10,10,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,0.06)">
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
   <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
     <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
-    <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f5f5f5">KetoCore</span>
+    <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">KetoCore</span>
   </a>
   <div class="flex items-center gap-1.5">
-    <button onclick="toggleMobileUserMenu()" aria-label="Mi cuenta" class="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden" style="background:#1e1e1e;border:1px solid rgba(255,255,255,0.06)">
+    <button onclick="toggleMobileUserMenu()" aria-label="Mi cuenta" class="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
       <img id="mobileHeaderAvatarImg" src="" class="hidden w-full h-full object-cover" alt="Avatar">
-      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined" style="font-size:20px;color:rgba(245,245,245,0.6)">account_circle</span>
+      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined" style="font-size:20px;color:rgba(247,244,240,0.6)">account_circle</span>
     </button>
-    <button onclick="toggleHamburgerMenu()" aria-label="Abrir menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1e1e;color:rgba(245,245,245,0.6)">
+    <button onclick="toggleHamburgerMenu()" aria-label="Abrir menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1a15;color:rgba(247,244,240,0.6)">
       <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">menu</span>
     </button>
   </div>
 </header>
 
 <!-- Mobile User Dropdown -->
-<div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161616;border:1px solid rgba(255,255,255,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
-  <div class="p-3" style="border-bottom:1px solid rgba(255,255,255,0.06)">
-    <p class="text-sm font-semibold" style="color:#f5f5f5" id="mobileDropdownUserName">Usuario</p>
-    <p class="text-xs mt-0.5" style="color:rgba(245,245,245,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
+<div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161310;border:1px solid rgba(255,240,225,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
+  <div class="p-3" style="border-bottom:1px solid rgba(255,240,225,0.06)">
+    <p class="text-sm font-semibold" style="color:#f7f4f0" id="mobileDropdownUserName">Usuario</p>
+    <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
   </div>
   <div class="p-2">
-    <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f5f5f5">
-      <span class="material-symbols-outlined text-lg" style="color:rgba(245,245,245,0.55)">person</span>
+    <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f7f4f0">
+      <span class="material-symbols-outlined text-lg" style="color:rgba(247,244,240,0.55)">person</span>
       <span class="text-sm font-medium">Mi Perfil</span>
     </a>
     <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-red-50" style="color:#dc2626">
@@ -88,8 +88,8 @@ import AppNav from '../../components/AppNav.astro';
 <div class="absolute -bottom-20 -left-20 w-48 h-48 bg-secondary/10 rounded-full blur-3xl"></div>
 <div class="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
 <div>
-<span class="text-xs font-bold text-secondary uppercase tracking-widest">Optimizacion Nutricional</span>
-<h1 class="font-headline text-4xl md:text-5xl font-black text-white tracking-tight mt-2">Tu Stack de Suplementos</h1>
+<span style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00">Optimización nutricional</span>
+<h1 class="kc-h1" style="margin-top:10px">Tu stack de<br>suplementos</h1>
 <p class="text-on-surface-variant mt-3 max-w-lg">Optimiza tu rendimiento con suplementos personalizados segun tu perfil y objetivos.</p>
 </div>
 <button onclick="openAddSupplementModal()" class="primary-gradient px-8 py-4 rounded-2xl text-white font-bold flex items-center gap-3 hover:opacity-90 transition-all shadow-[0_10px_30px_rgba(255,77,0,0.3)] float-animation">
@@ -576,7 +576,7 @@ var _cp=window.location.pathname.split("/").pop()||"index.html";
 document.querySelectorAll(".sidebar-link").forEach(function(l){
   if(l.getAttribute("href")===_cp){
     l.classList.add("active");
-    l.style.background="rgba(22,22,22,1)";
+    l.style.background="rgba(22,19,16,1)";
     l.style.color="white";
     var ic=l.querySelector(".material-symbols-outlined");
     if(ic)ic.style.color="#ff4d00";

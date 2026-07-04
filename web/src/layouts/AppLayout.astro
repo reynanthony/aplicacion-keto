@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css';
-import AppHamburger from '../components/AppHamburger.astro';
 import AppSidebar from '../components/AppSidebar.astro';
 
 interface Props {
@@ -34,21 +33,24 @@ const { title = 'KetoCore', authGuard = true, bodyClass = '' } = Astro.props;
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
   <title>{title}</title>
   <style is:global>
-  /* ── Desktop layout: sidebar active ≥ 768px ── */
-  @media (min-width: 768px) {
+  /* ── Desktop layout: sidebar activo > 900px (breakpoint app del diseño) ── */
+  @media (min-width: 901px) {
     #appSidebar { display: flex !important; }
-    nav.app-nav { display: none !important; }
-    /* hide mobile hamburger buttons on desktop */
+    /* ocultar botones hamburguesa móviles en desktop */
     button[aria-label="Menú"],
     button[aria-label="Abrir menú"] { display: none !important; }
-    /* shift fixed header right of sidebar */
-    header.fixed { left: 248px !important; }
-    /* shift main content right of sidebar; uncap narrow inner pages */
-    main { margin-left: 248px !important; padding-bottom: 2rem !important; max-width: none !important; }
-    /* normalize horizontal gutters across all pages to match dashboard px-4 */
+    /* desplazar header fijo a la derecha del sidebar */
+    header.fixed { left: 250px !important; }
+    /* desplazar main a la derecha del sidebar; destapar páginas angostas */
+    main { margin-left: 250px !important; padding-bottom: 2rem !important; max-width: none !important; }
+    /* normalizar gutters horizontales */
     main.main-content { padding-left: 1rem !important; padding-right: 1rem !important; }
-    /* FAB group: no bottom nav on desktop, move down */
+    /* grupo FAB: sin bottom nav en desktop, bajar */
     .fixed.bottom-20.right-4 { bottom: 1rem !important; }
+  }
+  /* ── Móvil: aire para la bottom tab bar ── */
+  @media (max-width: 900px) {
+    main { padding-bottom: 96px !important; }
   }
   </style>
   <!-- Clear obsolete sidebar state from old nav system -->
@@ -61,7 +63,6 @@ const { title = 'KetoCore', authGuard = true, bodyClass = '' } = Astro.props;
 </head>
 <body data-theme="app" class={`min-h-screen bg-background text-on-surface font-body overflow-x-hidden${bodyClass ? ' ' + bodyClass : ''}`}>
   <slot />
-  <AppHamburger />
   <AppSidebar />
 </body>
 </html>

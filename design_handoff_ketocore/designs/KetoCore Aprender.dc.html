@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #f4efe6; }
+  .msym { font-family: 'Material Symbols Outlined'; font-style: normal; line-height: 1; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; -webkit-font-smoothing: antialiased; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .fill { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+  .nums { font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .disp { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .lift { transition: transform .16s, border-color .16s; }
+  .lift:hover { transform: translateY(-4px); border-color: rgba(255,77,0,0.3) !important; }
+  a { text-decoration: none; color: inherit; }
+</style>
+</helmet>
+<div style="background:#f4efe6;color:#1a140e;font-family:'Inter',sans-serif;font-size:16px;min-height:100vh">
+  <dc-import name="KetoTopNav" hint-size="100%,72px"></dc-import>
+
+  <div style="max-width:1180px;margin:0 auto;padding:56px 32px 72px">
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#ff4d00">Centro de aprendizaje</span>
+    <h1 class="disp" style="font-weight:900;font-size:clamp(34px,5vw,52px);line-height:1;letter-spacing:-0.03em;margin:14px 0 14px">Ciencia real.<br>Sin mitos.</h1>
+    <p style="font-size:17px;color:rgba(26,20,14,0.55);max-width:560px;line-height:1.55;margin-bottom:36px">Artículos escritos con fuentes científicas, explicados en lenguaje claro.</p>
+
+    <!-- categories -->
+    <div style="display:flex;gap:9px;margin-bottom:32px;flex-wrap:wrap">
+      <span style="font-size:13px;font-weight:700;padding:8px 16px;border-radius:100px;background:#ff4d00;color:#fff">Todos</span>
+      <span style="font-size:13px;font-weight:600;padding:8px 16px;border-radius:100px;background:#fff;border:1px solid rgba(26,20,14,0.08);color:rgba(26,20,14,0.6)">Fundamentos</span>
+      <span style="font-size:13px;font-weight:600;padding:8px 16px;border-radius:100px;background:#fff;border:1px solid rgba(26,20,14,0.08);color:rgba(26,20,14,0.6)">Ciencia</span>
+      <span style="font-size:13px;font-weight:600;padding:8px 16px;border-radius:100px;background:#fff;border:1px solid rgba(26,20,14,0.08);color:rgba(26,20,14,0.6)">Nutrición</span>
+      <span style="font-size:13px;font-weight:600;padding:8px 16px;border-radius:100px;background:#fff;border:1px solid rgba(26,20,14,0.08);color:rgba(26,20,14,0.6)">Ayuno</span>
+      <span style="font-size:13px;font-weight:600;padding:8px 16px;border-radius:100px;background:#fff;border:1px solid rgba(26,20,14,0.08);color:rgba(26,20,14,0.6)">Ejercicio</span>
+    </div>
+
+    <!-- featured -->
+    <a href="#" class="lift" style="display:grid;grid-template-columns:1.3fr 1fr;gap:0;border-radius:24px;overflow:hidden;background:#fff;border:1px solid rgba(26,20,14,0.07);margin-bottom:22px">
+      <div style="padding:36px;display:flex;flex-direction:column;justify-content:center">
+        <span style="align-self:flex-start;font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:6px 13px;border-radius:100px;background:rgba(255,77,0,0.1);color:#c23400;margin-bottom:16px">Destacado · Fundamentos</span>
+        <h2 class="disp" style="font-weight:800;font-size:28px;line-height:1.1;letter-spacing:-0.02em;margin-bottom:12px">¿Qué es la cetosis y cómo entrar en ella?</h2>
+        <p style="font-size:14.5px;color:rgba(26,20,14,0.55);line-height:1.6;margin-bottom:18px">La guía definitiva para entender el estado metabólico que hace funcionar la dieta keto — respaldada por la ciencia.</p>
+        <div style="display:flex;align-items:center;gap:16px;font-size:13px;color:rgba(26,20,14,0.5)"><span style="display:flex;align-items:center;gap:5px"><span class="msym" style="font-size:17px">schedule</span>8 min de lectura</span><span style="display:flex;align-items:center;gap:5px"><span class="msym fill" style="font-size:17px;color:#22c55e">verified</span>Revisado por nutriólogos</span></div>
+      </div>
+      <div style="min-height:280px;background:linear-gradient(135deg,#ffb27a,#ff6a26);display:flex;align-items:center;justify-content:center"><span class="msym fill" style="color:rgba(255,255,255,0.9);font-size:80px">science</span></div>
+    </a>
+
+    <!-- grid -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+      <a href="#" class="lift" style="border-radius:20px;overflow:hidden;background:#fff;border:1px solid rgba(26,20,14,0.07)">
+        <div style="height:160px;background:linear-gradient(135deg,#c3a6f5,#8b5cf6);display:flex;align-items:center;justify-content:center"><span class="msym fill" style="color:rgba(255,255,255,0.9);font-size:46px">schedule</span></div>
+        <div style="padding:20px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#7c3aed">Ayuno</span><span style="font-size:11px;color:rgba(26,20,14,0.4)">· 6 min</span></div><h3 class="disp" style="font-weight:800;font-size:16px;line-height:1.3;margin-bottom:8px">Ayuno intermitente: la guía completa</h3><p style="font-size:13px;color:rgba(26,20,14,0.5);line-height:1.5">16:8, 20:4 o OMAD — cuál elegir según tu objetivo.</p></div>
+      </a>
+      <a href="#" class="lift" style="border-radius:20px;overflow:hidden;background:#fff;border:1px solid rgba(26,20,14,0.07)">
+        <div style="height:160px;background:linear-gradient(135deg,#9ee6a8,#3ec46d);display:flex;align-items:center;justify-content:center"><span class="msym fill" style="color:rgba(255,255,255,0.92);font-size:46px">bloodtype</span></div>
+        <div style="padding:20px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#16a34a">Ciencia</span><span style="font-size:11px;color:rgba(26,20,14,0.4)">· 10 min</span></div><h3 class="disp" style="font-weight:800;font-size:16px;line-height:1.3;margin-bottom:8px">Colesterol y keto: lo que dice la evidencia</h3><p style="font-size:13px;color:rgba(26,20,14,0.5);line-height:1.5">Separamos el mito del dato real sobre grasas.</p></div>
+      </a>
+      <a href="#" class="lift" style="border-radius:20px;overflow:hidden;background:#fff;border:1px solid rgba(26,20,14,0.07)">
+        <div style="height:160px;background:linear-gradient(135deg,#ffd18a,#f5a623);display:flex;align-items:center;justify-content:center"><span class="msym fill" style="color:rgba(255,255,255,0.92);font-size:46px">bolt</span></div>
+        <div style="padding:20px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#d97706">Nutrición</span><span style="font-size:11px;color:rgba(26,20,14,0.4)">· 5 min</span></div><h3 class="disp" style="font-weight:800;font-size:16px;line-height:1.3;margin-bottom:8px">Electrolitos: cómo evitar el "keto flu"</h3><p style="font-size:13px;color:rgba(26,20,14,0.5);line-height:1.5">Sodio, potasio y magnesio en las primeras semanas.</p></div>
+      </a>
+      <a href="#" class="lift" style="border-radius:20px;overflow:hidden;background:#fff;border:1px solid rgba(26,20,14,0.07)">
+        <div style="height:160px;background:linear-gradient(135deg,#ffb27a,#ff6a26);display:flex;align-items:center;justify-content:center"><span class="msym fill" style="color:rgba(255,255,255,0.92);font-size:46px">fitness_center</span></div>
+        <div style="padding:20px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#c23400">Ejercicio</span><span style="font-size:11px;color:rgba(26,20,14,0.4)">· 7 min</span></div><h3 class="disp" style="font-weight:800;font-size:16px;line-height:1.3;margin-bottom:8px">Entrenar en cetosis sin perder músculo</h3><p style="font-size:13px;color:rgba(26,20,14,0.5);line-height:1.5">Proteína, timing y recuperación óptima.</p></div>
+      </a>
+      <a href="#" class="lift" style="border-radius:20px;overflow:hidden;background:#fff;border:1px solid rgba(26,20,14,0.07)">
+        <div style="height:160px;background:linear-gradient(135deg,#a6d8f5,#2b8fd6);display:flex;align-items:center;justify-content:center"><span class="msym fill" style="color:rgba(255,255,255,0.92);font-size:46px">psychology</span></div>
+        <div style="padding:20px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#2563eb">Fundamentos</span><span style="font-size:11px;color:rgba(26,20,14,0.4)">· 4 min</span></div><h3 class="disp" style="font-weight:800;font-size:16px;line-height:1.3;margin-bottom:8px">Cetonas y claridad mental: la conexión</h3><p style="font-size:13px;color:rgba(26,20,14,0.5);line-height:1.5">Por qué el cerebro ama las cetonas.</p></div>
+      </a>
+      <a href="#" class="lift" style="border-radius:20px;overflow:hidden;background:#fff;border:1px solid rgba(26,20,14,0.07)">
+        <div style="height:160px;background:linear-gradient(135deg,#f5a6c3,#e0518a);display:flex;align-items:center;justify-content:center"><span class="msym fill" style="color:rgba(255,255,255,0.92);font-size:46px">favorite</span></div>
+        <div style="padding:20px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#db2777">Nutrición</span><span style="font-size:11px;color:rgba(26,20,14,0.4)">· 9 min</span></div><h3 class="disp" style="font-weight:800;font-size:16px;line-height:1.3;margin-bottom:8px">Keto para mujeres: ajustes hormonales</h3><p style="font-size:13px;color:rgba(26,20,14,0.5);line-height:1.5">Cómo adaptar el protocolo a cada fase del ciclo.</p></div>
+      </a>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

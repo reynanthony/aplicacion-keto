@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0b0a08; }
+  .msym { font-family: 'Material Symbols Outlined'; font-style: normal; line-height: 1; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; -webkit-font-smoothing: antialiased; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .fill { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+  .nums { font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .disp { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .frow { transition: background .12s; }
+  .frow:hover { background: #1e1a15 !important; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,77,0,0.3); border-radius: 10px; }
+</style>
+</helmet>
+<div style="display:flex;min-height:100vh;background:#0b0a08;color:#f7f4f0;font-family:'Inter',sans-serif;font-size:16px">
+  <dc-import name="KetoSidebar" active="alimentos" hint-size="250px,100%"></dc-import>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <div style="padding:38px 40px 56px;max-width:1120px;width:100%">
+
+      <div style="margin-bottom:22px">
+        <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#fb923c;margin-bottom:12px">Base de datos · 2 800 alimentos</div>
+        <h1 class="disp" style="font-weight:800;font-size:42px;line-height:0.98;letter-spacing:-0.035em">¿Es keto o no?</h1>
+      </div>
+
+      <!-- Search -->
+      <div style="display:flex;align-items:center;gap:12px;height:56px;padding:0 20px;border-radius:16px;background:#161310;border:1px solid rgba(255,240,225,0.1);margin-bottom:16px"><span class="msym" style="font-size:24px;color:rgba(247,244,240,0.4)">search</span><span style="flex:1;font-size:15px;color:rgba(247,244,240,0.4)">Busca cualquier alimento…</span><span style="font-size:12px;font-weight:600;padding:6px 12px;border-radius:100px;background:rgba(255,77,0,0.12);color:#ff4d00">Escanear código</span></div>
+
+      <!-- Filter chips -->
+      <div style="display:flex;gap:9px;margin-bottom:24px;flex-wrap:wrap">
+        <span style="font-size:13px;font-weight:700;padding:8px 15px;border-radius:100px;background:#fb923c;color:#1a0e05;cursor:pointer">Todos</span>
+        <span style="font-size:13px;font-weight:600;padding:8px 15px;border-radius:100px;background:#161310;border:1px solid rgba(255,240,225,0.08);color:rgba(247,244,240,0.6);cursor:pointer">Keto-friendly</span>
+        <span style="font-size:13px;font-weight:600;padding:8px 15px;border-radius:100px;background:#161310;border:1px solid rgba(255,240,225,0.08);color:rgba(247,244,240,0.6);cursor:pointer">Con moderación</span>
+        <span style="font-size:13px;font-weight:600;padding:8px 15px;border-radius:100px;background:#161310;border:1px solid rgba(255,240,225,0.08);color:rgba(247,244,240,0.6);cursor:pointer">Evitar</span>
+      </div>
+
+      <!-- Table -->
+      <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:22px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:2.4fr 1fr 1fr 1fr 1.1fr;gap:12px;padding:16px 22px;border-bottom:1px solid rgba(255,240,225,0.07);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(247,244,240,0.35)"><span>Alimento (100 g)</span><span style="text-align:right">kcal</span><span style="text-align:right">Grasa</span><span style="text-align:right">C. netos</span><span style="text-align:right">Veredicto</span></div>
+
+        <div class="frow" style="display:grid;grid-template-columns:2.4fr 1fr 1fr 1fr 1.1fr;gap:12px;align-items:center;padding:15px 22px;border-bottom:1px solid rgba(255,240,225,0.04)"><div style="display:flex;align-items:center;gap:13px"><div style="width:40px;height:40px;border-radius:11px;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="color:#22c55e;font-size:20px">eco</span></div><span style="font-size:14.5px;font-weight:600">Aguacate</span></div><span class="nums" style="font-size:14px;text-align:right;color:rgba(247,244,240,0.7)">160</span><span class="nums" style="font-size:14px;text-align:right;color:rgba(247,244,240,0.7)">15 g</span><span class="disp nums" style="font-size:14px;font-weight:700;text-align:right;color:#22c55e">2 g</span><span style="text-align:right"><span style="font-size:11px;font-weight:700;padding:5px 11px;border-radius:100px;background:rgba(34,197,94,0.14);color:#22c55e">Keto</span></span></div>
+
+        <div class="frow" style="display:grid;grid-template-columns:2.4fr 1fr 1fr 1fr 1.1fr;gap:12px;align-items:center;padding:15px 22px;border-bottom:1px solid rgba(255,240,225,0.04)"><div style="display:flex;align-items:center;gap:13px"><div style="width:40px;height:40px;border-radius:11px;background:rgba(234,88,12,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="color:#ea580c;font-size:20px">set_meal</span></div><span style="font-size:14.5px;font-weight:600">Salmón</span></div><span class="nums" style="font-size:14px;text-align:right;color:rgba(247,244,240,0.7)">208</span><span class="nums" style="font-size:14px;text-align:right;color:rgba(247,244,240,0.7)">13 g</span><span class="disp nums" style="font-size:14px;font-weight:700;text-align:right;color:#22c55e">0 g</span><span style="text-align:right"><span style="font-size:11px;font-weight:700;padding:5px 11px;border-radius:100px;background:rgba(34,197,94,0.14);color:#22c55e">Keto</span></span></div>
+
+        <div class="frow" style="display:grid;grid-template-columns:2.4fr 1fr 1fr 1fr 1.1fr;gap:12px;align-items:center;padding:15px 22px;border-bottom:1px solid rgba(255,240,225,0.04)"><div style="display:flex;align-items:center;gap:13px"><div style="width:40px;height:40px;border-radius:11px;background:rgba(251,191,36,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="color:#fbbf24;font-size:20px">egg</span></div><span style="font-size:14.5px;font-weight:600">Huevo entero</span></div><span class="nums" style="font-size:14px;text-align:right;color:rgba(247,244,240,0.7)">143</span><span class="nums" style="font-size:14px;text-align:right;color:rgba(247,244,240,0.7)">10 g</span><span class="disp nums" style="font-size:14px;font-weight:700;text-align:right;color:#22c55e">1 g</span><span style="text-align:right"><span style="font-size:11px;font-weight:700;padding:5px 11px;border-radius:100px;background:rgba(34,197,94,0.14);color:#22c55e">Keto</span></span></div>
+
+        <div class="frow" style="display:grid;grid-template-columns:2.4fr 1fr 1fr 1fr 1.1fr;gap:12px;align-items:center;padding:15px 22px;border-bottom:1px solid rgba(255,240,225,0.04)"><div style="display:flex;align-items:center;gap:13px"><div style="width:40px;height:40px;border-radius:11px;background:rgba(245,158,11,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="color:#f59e0b;font-size:20px">nutrition</span></div><span style="font-size:14.5px;font-weight:600">Zanahoria</span></div><span class="nums" style="font-size:14px;text-align:right;color:rgba(247,244,240,0.7)">41</span><span class="nums" style="font-size:14px;text-align:right;color:rgba(247,244,240,0.7)">0.2 g</span><span class="disp nums" style="font-size:14px;font-weight:700;text-align:right;color:#f59e0b">7 g</span><span style="text-align:right"><span style="font-size:11px;font-weight:700;padding:5px 11px;border-radius:100px;background:rgba(245,158,11,0.14);color:#f59e0b">Moderar</span></span></div>
+
+        <div class="frow" style="display:grid;grid-template-columns:2.4fr 1fr 1fr 1fr 1.1fr;gap:12px;align-items:center;padding:15px 22px;border-bottom:1px solid rgba(255,240,225,0.04)"><div style="display:flex;align-items:center;gap:13px"><div style="width:40px;height:40px;border-radius:11px;background:rgba(239,68,68,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="color:#ef4444;font-size:20px">bakery_dining</span></div><span style="font-size:14.5px;font-weight:600">Pan blanco</span></div><span class="nums" style="font-size:14px;text-align:right;color:rgba(247,244,240,0.7)">265</span><span class="nums" style="font-size:14px;text-align:right;color:rgba(247,244,240,0.7)">3 g</span><span class="disp nums" style="font-size:14px;font-weight:700;text-align:right;color:#ef4444">49 g</span><span style="text-align:right"><span style="font-size:11px;font-weight:700;padding:5px 11px;border-radius:100px;background:rgba(239,68,68,0.14);color:#ef4444">Evitar</span></span></div>
+
+        <div class="frow" style="display:grid;grid-template-columns:2.4fr 1fr 1fr 1fr 1.1fr;gap:12px;align-items:center;padding:15px 22px"><div style="display:flex;align-items:center;gap:13px"><div style="width:40px;height:40px;border-radius:11px;background:rgba(239,68,68,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="color:#ef4444;font-size:20px">rice_bowl</span></div><span style="font-size:14.5px;font-weight:600">Arroz blanco cocido</span></div><span class="nums" style="font-size:14px;text-align:right;color:rgba(247,244,240,0.7)">130</span><span class="nums" style="font-size:14px;text-align:right;color:rgba(247,244,240,0.7)">0.3 g</span><span class="disp nums" style="font-size:14px;font-weight:700;text-align:right;color:#ef4444">28 g</span><span style="text-align:right"><span style="font-size:11px;font-weight:700;padding:5px 11px;border-radius:100px;background:rgba(239,68,68,0.14);color:#ef4444">Evitar</span></span></div>
+      </div>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+</body>
+</html>

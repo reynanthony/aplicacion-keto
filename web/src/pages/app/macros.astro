@@ -1,599 +1,377 @@
-﻿---
+---
 import AppLayout from '../../layouts/AppLayout.astro';
-import AppNav from '../../components/AppNav.astro';
 ---
 
 <AppLayout title="KetoCore | Macros" authGuard={true}>
 <style is:global>
-.sidebar-link.active{background:rgba(22,22,22,1)!important;}
-.sidebar-link.active .material-symbols-outlined{color:#ff4d00!important;}
-.sidebar-link.active{color:white!important;}
-.sidebar-collapsed .sidebar-nav{width:72px;}
-.sidebar-collapsed .sidebar-nav .sidebar-text{display:none;}
-.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0;}
-.sidebar-collapsed .sidebar-logo-text{display:none;}
-.sidebar-collapsed .sidebar-logo{justify-content:center;}
-.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px;}
-.sidebar-collapsed~main .main-content{margin-left:72px;}
-.sidebar-toggle-btn{left:256px;transition:left 0.3s ease;}
-.sidebar-collapsed~.sidebar-toggle-btn{left:72px;}
-
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
-.glass-card{background:rgba(22,22,22,0.7);backdrop-filter:blur(20px);border:1px solid rgba(255,77,0,0.1)}
-.mountain-bg{background:linear-gradient(180deg,rgba(10,10,10,0) 0%,rgba(255,77,0,0.05) 100%)}
-.path-line{stroke-dasharray:10;animation:dash 30s linear infinite}
-@keyframes dash{to{stroke-dashoffset:-100}}
-.mountain-peak{filter:drop-shadow(0 0 20px rgba(255,179,0,0.3))}
-.climber-glow{filter:drop-shadow(0 0 12px rgba(255,77,0,0.8))}
-.camp-node{box-shadow:0 0 20px rgba(255,77,0,0.2)}
-.sidebar-collapsed .sidebar-nav{width:72px}
-.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}
-.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}
-.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px}
-.sidebar-collapsed~main .main-content{margin-left:72px}
-.sidebar-toggle-btn{left:256px;transition:left 0.3s ease}
-.sidebar-collapsed~.sidebar-toggle-btn{left:72px}
-.sidebar-link.active{background:#161616}
-.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
 ::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:#161616}
-::-webkit-scrollbar-thumb{background:#ff4d00;border-radius:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,77,0,0.3);border-radius:10px}
+
+/* Layout Macros — Editorial Bento */
+.mx-row1 { display:grid; grid-template-columns:1fr; gap:18px; margin-bottom:18px; }
+.mx-tiles { display:grid; grid-template-columns:1fr; gap:18px; margin-bottom:18px; }
+.mx-stats { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:18px; }
+.mx-donut-wrap { display:flex; flex-direction:column; align-items:center; gap:24px; }
+@media (min-width:901px){
+  header.fixed { display:none !important; }
+  .mx-row1 { grid-template-columns:1.4fr 1fr; }
+  .mx-tiles { grid-template-columns:repeat(3,1fr); }
+  .mx-stats { grid-template-columns:repeat(4,1fr); }
+  .mx-donut-wrap { flex-direction:row; gap:36px; }
+  #mxPage { padding-top:38px; }
+}
+#mxPage { padding-top:84px; }
+
+/* Tabla registro: móvil ≤560 solo Comida + kcal */
+.mx-log-grid { display:grid; grid-template-columns:2.2fr 1fr 1fr 1fr 1fr; gap:12px; align-items:center; }
+@media (max-width:560px){
+  .mx-log-grid { grid-template-columns:1fr auto; }
+  .mx-log-grid > .mx-col-macro { display:none; }
+}
 </style>
-<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(10,10,10,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,0.06)">
+
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
   <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
     <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
-    <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f5f5f5">KetoCore</span>
+    <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">KetoCore</span>
   </a>
   <div class="flex items-center gap-1.5">
-    <button onclick="toggleMobileUserMenu()" aria-label="Mi cuenta" class="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden" style="background:#1e1e1e;border:1px solid rgba(255,255,255,0.06)">
+    <button onclick="toggleMobileUserMenu()" aria-label="Mi cuenta" class="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
       <img id="mobileHeaderAvatarImg" src="" class="hidden w-full h-full object-cover" alt="Avatar">
-      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined" style="font-size:20px;color:rgba(245,245,245,0.6)">account_circle</span>
+      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined" style="font-size:20px;color:rgba(247,244,240,0.6)">account_circle</span>
     </button>
-    <button onclick="toggleHamburgerMenu()" aria-label="Abrir menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1e1e;color:rgba(245,245,245,0.6)">
+    <button onclick="toggleHamburgerMenu()" aria-label="Abrir menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1a15;color:rgba(247,244,240,0.6)">
       <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">menu</span>
     </button>
   </div>
 </header>
 
 <!-- Mobile User Dropdown -->
-<div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161616;border:1px solid rgba(255,255,255,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
-  <div class="p-3" style="border-bottom:1px solid rgba(255,255,255,0.06)">
-    <p class="text-sm font-semibold" style="color:#f5f5f5" id="mobileDropdownUserName">Usuario</p>
-    <p class="text-xs mt-0.5" style="color:rgba(245,245,245,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
+<div id="mobileUserDropdown" class="fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161310;border:1px solid rgba(255,240,225,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
+  <div class="p-3" style="border-bottom:1px solid rgba(255,240,225,0.06)">
+    <p class="text-sm font-semibold" style="color:#f7f4f0" id="mobileDropdownUserName">Usuario</p>
+    <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
   </div>
   <div class="p-2">
-    <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f5f5f5">
-      <span class="material-symbols-outlined text-lg" style="color:rgba(245,245,245,0.55)">person</span>
+    <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors" style="color:#f7f4f0">
+      <span class="material-symbols-outlined text-lg" style="color:rgba(247,244,240,0.55)">person</span>
       <span class="text-sm font-medium">Mi Perfil</span>
     </a>
-    <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-red-50" style="color:#dc2626">
+    <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors" style="color:#ef4444">
       <span class="material-symbols-outlined text-lg">logout</span>
       <span class="text-sm font-medium">Cerrar Sesión</span>
     </button>
   </div>
 </div>
-<main class="main-content pt-14 px-4 pb-20 min-h-screen">
-<div class="space-y-8">
 
-<header class="text-center md:text-left space-y-2">
-<h2 class="text-4xl md:text-5xl font-headline font-black text-white tracking-tight">¡Tu Transformación Continúa!</h2>
-<p class="text-lg text-on-surface-variant font-medium max-w-2xl">Cada gramo cuenta, cada elección es un paso hacia la cima. La vista desde arriba será increíble.</p>
-</header>
+<main class="min-h-screen" style="background:#0b0a08">
+<div id="mxPage" class="kc-page">
 
-<section class="grid grid-cols-1 md:grid-cols-12 gap-10">
-<div class="md:col-span-5 order-2 md:order-1">
-<div class="glass-card rounded-3xl p-8 h-full flex flex-col justify-center border-l-4 border-l-primary-container">
-<div class="space-y-8">
-<div>
-<h3 class="text-xs font-black text-secondary uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-<span class="material-symbols-outlined text-sm">explore</span> Estado de la Expedición
-</h3>
-<div class="flex items-baseline gap-4 mb-2">
-<span id="currentWeight" class="text-7xl font-headline font-black text-white tracking-tighter">--</span>
-<span class="text-3xl font-headline font-bold text-on-surface-variant">kg</span>
-</div>
-<p class="text-xl text-on-surface-variant">Tu peso actual. <span class="text-white font-bold">Meta: <span id="goalWeight">--</span>kg</span></p>
-<p id="lostProgressBadge" class="mt-2 inline-flex items-center gap-1 bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm font-bold hidden">
-<span class="material-symbols-outlined text-sm">check_circle</span>
-<span id="lostProgressText">-0kg (0%)</span>
-</p>
-</div>
-<div class="grid grid-cols-1 gap-6">
-<div class="bg-surface-container-high rounded-2xl p-6 border border-white/5 relative overflow-hidden group">
-<div class="absolute right-0 top-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
-<span class="material-symbols-outlined text-6xl text-primary-container">altitude</span>
-</div>
-<p class="text-xs font-bold text-primary-container uppercase tracking-widest mb-1">Progreso del Camino</p>
-<p id="progressPercent" class="text-3xl font-black text-white mb-2">--%</p>
-<div class="w-full h-3 bg-surface-container-highest rounded-full overflow-hidden">
-<div id="progressBar" class="h-full bg-gradient-to-r from-primary-container to-secondary rounded-full transition-all duration-1000" style="width:0%"></div>
-</div>
-<p class="text-xs text-on-surface-variant mt-3 italic">"Cada paso te acerca a tu meta"</p>
-</div>
-<div class="bg-surface-container-high rounded-2xl p-6 border border-white/5 flex items-center gap-6">
-<div class="w-16 h-16 rounded-full bg-secondary/10 flex items-center justify-center flex-shrink-0">
-<span class="material-symbols-outlined text-secondary text-4xl" style="font-variation-settings:'FILL' 1">workspace_premium</span>
-</div>
-<div>
-<p class="text-white font-bold">Racha de Constancia</p>
-<p id="streakText" class="text-sm text-on-surface-variant">Completa tu checklist diario para construir tu racha.</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+  <!-- Header editorial -->
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:30px;flex-wrap:wrap;gap:20px">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <span style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00">Nutrición · <span id="mxDate"></span></span>
+      </div>
+      <h1 class="kc-h1">Tus macros de hoy</h1>
+    </div>
+    <a href="/app/alimentos" class="kc-btn"><span class="material-symbols-outlined" style="font-size:20px">add</span>Registrar comida</a>
+  </div>
 
-<div class="md:col-span-7 order-1 md:order-2">
-<div class="glass-card rounded-3xl p-8 md:p-12 relative overflow-hidden h-[500px] flex items-center justify-center mountain-bg">
-<div class="absolute inset-0 flex justify-center">
-<svg class="h-full w-48" preserveAspectRatio="none" viewBox="0 0 100 500">
-<path d="M50,500 L50,450 Q50,420 70,400 T70,350 Q70,320 30,300 T30,250 Q30,220 50,200 T50,150 Q50,120 70,100 T70,50 L50,0" fill="none" stroke="rgba(255,77,0,0.2)" stroke-linecap="round" stroke-width="8"></path>
-<path id="climberPath" class="path-line" d="M50,500 L50,450 Q50,420 70,400 T70,350 Q70,320 30,300 T30,250 Q30,220 50,200" fill="none" stroke="url('/app/#mountainGradient')" stroke-linecap="round" stroke-width="8"></path>
-<defs>
-<linearGradient id="mountainGradient" x1="0%" x2="0%" y1="100%" y2="0%">
-<stop offset="0%" style="stop-color:#ff4d00;stop-opacity:1"></stop>
-<stop offset="100%" style="stop-color:#ffb300;stop-opacity:1"></stop>
-</linearGradient>
-</defs>
-</svg>
-</div>
-<div class="absolute inset-0 flex flex-col items-center py-10">
-<div class="absolute top-[5%] left-1/2 -translate-x-1/2 flex flex-col items-center">
-<div class="w-14 h-14 rounded-full bg-surface-container-highest border-4 border-background flex items-center justify-center z-10 mountain-peak">
-<span class="material-symbols-outlined text-secondary text-2xl">flag</span>
-</div>
-<div class="mt-2 text-center">
-<p class="text-[10px] font-black text-secondary uppercase tracking-widest">Meta</p>
-<p id="mountainGoal" class="text-sm font-bold text-white">--kg</p>
-</div>
-</div>
-<div id="climberPosition" class="absolute left-1/2 -translate-x-1/2 z-30 flex flex-col items-center climber-glow" style="top:85%;">
-<div class="bg-primary-container p-1.5 rounded-xl ring-2 ring-primary-container/30">
-<span class="material-symbols-outlined text-white text-2xl" style="font-variation-settings:'FILL' 1">hiking</span>
-</div>
-<div class="mt-1 bg-background/80 backdrop-blur px-2 py-0.5 rounded-full border border-primary-container/50">
-<p class="text-[8px] font-black text-green-400 uppercase tracking-tighter">-0kg</p>
-</div>
-</div>
-<div class="absolute top-[75%] left-[30%] flex flex-col items-center">
-<div class="w-10 h-10 rounded-full bg-primary-container border-4 border-background flex items-center justify-center z-10 camp-node">
-<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1">check</span>
-</div>
-<div class="mt-2 text-center">
-<p class="text-[9px] font-bold text-on-surface-variant uppercase">Campamento 1</p>
-<p class="text-xs font-bold text-white">Inicio del camino</p>
-</div>
-</div>
-<div class="absolute bottom-[5%] left-1/2 -translate-x-1/2 flex flex-col items-center">
-<div class="w-10 h-10 rounded-full bg-primary-container border-4 border-background flex items-center justify-center z-10 camp-node">
-<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1">home</span>
-</div>
-<div class="mt-2 text-center">
-<p class="text-[9px] font-bold text-on-surface-variant uppercase">Campo Base</p>
-<p id="baseWeight" class="text-xs font-bold text-white">--kg</p>
-</div>
-</div>
-</div>
-<div class="absolute top-10 right-10 opacity-20 hidden md:block">
-<span class="material-symbols-outlined text-8xl text-white">cloud</span>
-</div>
-</div>
-<!-- Weight Progress Scale -->
-<div class="absolute bottom-20 left-1/2 -translate-x-1/2 w-full px-8">
-<svg id="weightProgressSvg" class="w-full h-16" viewBox="0 0 400 60" preserveAspectRatio="xMidYMid meet"></svg>
-</div>
-</div>
-</section>
+  <!-- Fila 1: donut + carbos cream -->
+  <div class="mx-row1">
+    <!-- Donut -->
+    <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:32px">
+      <div class="mx-donut-wrap">
+        <div style="position:relative;width:220px;height:220px;flex-shrink:0">
+          <svg width="220" height="220" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,240,225,0.05)" stroke-width="22"></circle>
+            <circle id="donutFat"  cx="100" cy="100" r="80" fill="none" stroke="#d97706" stroke-width="22" stroke-dasharray="0 503" transform="rotate(-90 100 100)" stroke-linecap="round" style="transition:stroke-dasharray 1.2s cubic-bezier(.4,0,.2,1)"></circle>
+            <circle id="donutProt" cx="100" cy="100" r="80" fill="none" stroke="#ea580c" stroke-width="22" stroke-dasharray="0 503" transform="rotate(-90 100 100)" stroke-linecap="round" style="transition:stroke-dasharray 1.2s cubic-bezier(.4,0,.2,1)"></circle>
+            <circle id="donutCarb" cx="100" cy="100" r="80" fill="none" stroke="#0891b2" stroke-width="22" stroke-dasharray="0 503" transform="rotate(-90 100 100)" stroke-linecap="round" style="transition:stroke-dasharray 1.2s cubic-bezier(.4,0,.2,1)"></circle>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+            <div id="mxKcalNow" class="kc-num" style="font-weight:900;font-size:46px;line-height:0.9;color:#f7f4f0">0</div>
+            <div style="font-size:12px;color:rgba(247,244,240,0.4);margin-top:2px">de <span id="mxKcalTarget">--</span> kcal</div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:0;width:100%">
+          <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:18px;margin-bottom:6px;color:#f7f4f0">Distribución keto</h2>
+          <p style="font-size:13px;color:rgba(247,244,240,0.45);line-height:1.5;margin-bottom:20px">Objetivo: 70% grasas · 25% proteína · 5% carbos</p>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;align-items:center;gap:12px"><span style="width:12px;height:12px;border-radius:4px;background:#d97706;flex-shrink:0"></span><span style="flex:1;font-size:14px;font-weight:600;color:#f7f4f0">Grasas</span><span id="mxPctFat" class="kc-num" style="font-weight:800;font-size:15px;color:#f7f4f0">--%</span></div>
+            <div style="display:flex;align-items:center;gap:12px"><span style="width:12px;height:12px;border-radius:4px;background:#ea580c;flex-shrink:0"></span><span style="flex:1;font-size:14px;font-weight:600;color:#f7f4f0">Proteína</span><span id="mxPctProt" class="kc-num" style="font-weight:800;font-size:15px;color:#f7f4f0">--%</span></div>
+            <div style="display:flex;align-items:center;gap:12px"><span style="width:12px;height:12px;border-radius:4px;background:#0891b2;flex-shrink:0"></span><span style="flex:1;font-size:14px;font-weight:600;color:#f7f4f0">Carbos netos</span><span id="mxPctCarb" class="kc-num" style="font-weight:800;font-size:15px;color:#f7f4f0">--%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<section class="glass-card rounded-3xl p-8 border-t-2 border-primary-container/20">
-<div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-10">
-<div class="flex items-center gap-4">
-<div class="w-14 h-14 rounded-2xl bg-primary-container flex items-center justify-center">
-<span class="material-symbols-outlined text-white text-3xl" style="font-variation-settings:'FILL' 1">nutrition</span>
-</div>
-<div>
-<h3 class="text-2xl font-headline font-black text-white">Ración Diaria de Macros</h3>
-<p class="text-sm text-on-surface-variant">Energía optimizada para el ascenso keto</p>
-</div>
-</div>
-<div class="bg-gradient-to-br from-primary-container/20 to-primary-container/5 px-8 py-4 rounded-2xl border border-primary-container/30 text-center">
-<p class="text-[10px] text-primary-container uppercase font-bold tracking-widest mb-2">Tu Objetivo Diario</p>
-<p class="text-5xl font-black text-white tracking-tighter"><span id="caloriesResult">1800</span> <span class="text-2xl text-primary-container">kcal</span></p>
-<p class="text-xs text-on-surface-variant mt-2">Déficit vs mantenimiento: <span id="tdeeResult" class="text-white font-bold">2000</span> kcal</p>
-</div>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-<div class="bg-surface-container-high rounded-2xl p-6 border-b-4 border-orange-400">
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-orange-400 text-4xl">egg_alt</span>
-<div class="flex-1">
-<p class="text-xs text-on-surface-variant uppercase font-bold tracking-widest">Proteína</p>
-<p class="text-3xl font-black text-white"><span id="proteinResult">120</span><span class="text-lg text-white/60">g</span></p>
-</div>
-</div>
-<p class="text-[10px] text-orange-400 mt-4 font-bold uppercase italic">Reparación muscular activa</p>
-</div>
-<div class="bg-surface-container-high rounded-2xl p-6 border-b-4 border-yellow-400">
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-yellow-400 text-4xl">local_fire_department</span>
-<div class="flex-1">
-<p class="text-xs text-on-surface-variant uppercase font-bold tracking-widest">Grasas Saludables</p>
-<p class="text-3xl font-black text-white"><span id="fatResult">140</span><span class="text-lg text-white/60">g</span></p>
-</div>
-</div>
-<p class="text-[10px] text-yellow-400 mt-4 font-bold uppercase italic">Energía limpia para el ascenso</p>
-</div>
-<div class="bg-surface-container-high rounded-2xl p-6 border-b-4 border-cyan-400">
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-cyan-400 text-4xl">grain</span>
-<div class="flex-1">
-<p class="text-xs text-on-surface-variant uppercase font-bold tracking-widest">Carbohidratos Netos</p>
-<p class="text-3xl font-black text-white">&lt;<span id="carbsResult">25</span><span class="text-lg text-white/60">g</span></p>
-</div>
-</div>
-<p class="text-[10px] text-cyan-400 mt-4 font-bold uppercase italic">Cetosis profunda mantenida</p>
-</div>
-</div>
-</section>
+    <!-- Carbos netos — cream (crítico keto) -->
+    <div class="kc-tile-cream" style="border-radius:26px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;gap:18px">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:13px;letter-spacing:0.02em;color:rgba(26,20,14,0.55)">CARBOS NETOS RESTANTES</span>
+        <span class="material-symbols-outlined icon-filled" style="color:#0891b2;font-size:22px">grain</span>
+      </div>
+      <div>
+        <div class="kc-num" style="font-weight:900;font-size:72px;line-height:0.82;color:#1a140e"><span id="mxCarbsLeft">--</span><span style="font-size:26px;font-weight:700;color:rgba(26,20,14,0.4)"> g</span></div>
+        <p id="mxCarbsNote" style="font-size:13.5px;color:rgba(26,20,14,0.55);margin-top:10px;line-height:1.5">Configura tus macros en Perfil para ver tu margen diario.</p>
+      </div>
+      <div id="mxCarbSegs" style="display:flex;gap:5px">
+        <div style="flex:1;height:8px;border-radius:100px;background:rgba(26,20,14,0.12)"></div>
+        <div style="flex:1;height:8px;border-radius:100px;background:rgba(26,20,14,0.12)"></div>
+        <div style="flex:1;height:8px;border-radius:100px;background:rgba(26,20,14,0.12)"></div>
+        <div style="flex:1;height:8px;border-radius:100px;background:rgba(26,20,14,0.12)"></div>
+        <div style="flex:1;height:8px;border-radius:100px;background:rgba(26,20,14,0.12)"></div>
+      </div>
+    </div>
+  </div>
 
-<section class="grid grid-cols-1 md:grid-cols-2 gap-8">
-<div class="glass-card rounded-2xl p-6">
-<div class="flex items-center justify-between mb-8">
-<div>
-<h4 class="text-sm font-black text-on-surface-variant uppercase tracking-[0.2em] flex items-center gap-2">
-<span class="material-symbols-outlined text-primary-container text-2xl">bar_chart</span> Stats Metabólicas
-</h4>
-<p class="text-xs text-on-surface-variant mt-1">Tu metabolismo basal y requerimientos</p>
-</div>
-</div>
-<div class="grid grid-cols-2 gap-4">
-<div class="bg-surface-container-low rounded-2xl p-5 border border-white/5">
-<span class="material-symbols-outlined text-primary-container text-4xl mb-3 block">favorite</span>
-<p class="text-3xl font-black text-white"><span id="bmrResult">1700</span></p>
-<p class="text-xs text-on-surface-variant mb-2">BMR (Metabolismo basal)</p>
-<p class="text-[10px] text-primary-container font-bold uppercase tracking-tighter italic">Calorías en reposo</p>
-</div>
-<div class="bg-surface-container-low rounded-2xl p-5 border border-white/5">
-<span class="material-symbols-outlined text-secondary text-4xl mb-3 block">bolt</span>
-<p id="deficitText" class="text-3xl font-black text-white">-200</p>
-<p class="text-xs text-on-surface-variant mb-2">Déficit Calórico</p>
-<p class="text-[10px] text-secondary font-bold uppercase tracking-tighter italic">Quema de grasa acelerada</p>
-</div>
-<div class="bg-surface-container-low rounded-2xl p-5 border border-white/5">
-<span class="material-symbols-outlined text-blue-400 text-4xl mb-3 block">event</span>
-<p id="goalDays" class="text-3xl font-black text-white">--</p>
-<p class="text-xs text-on-surface-variant mb-2">Días para Meta</p>
-<p class="text-[10px] text-blue-400 font-bold uppercase tracking-tighter italic">Consistencia = Resultados</p>
-</div>
-<div class="bg-surface-container-low rounded-2xl p-5 border border-white/5">
-<span class="material-symbols-outlined text-green-400 text-4xl mb-3 block">scale</span>
-<p id="weightDiff" class="text-3xl font-black text-white">--</p>
-<p class="text-xs text-on-surface-variant mb-2">kg restantes</p>
-<p class="text-[10px] text-green-400 font-bold uppercase tracking-tighter italic">¡Sigue así!</p>
-</div>
-</div>
-</div>
+  <!-- Fila 2: tiles de macro -->
+  <div class="mx-tiles">
+    <div style="background:#161310;border:1px solid rgba(234,88,12,0.16);border-radius:24px;padding:24px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(234,88,12,0.12);display:flex;align-items:center;justify-content:center"><span class="material-symbols-outlined icon-filled" style="color:#ea580c;font-size:22px">egg_alt</span></div><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15px;color:#f7f4f0">Proteína</span></div>
+      <div class="kc-num" style="font-weight:900;font-size:44px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="mxProtNow">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.4)"> / <span id="mxProtTarget">--</span> g</span></div>
+      <div style="height:8px;border-radius:100px;background:rgba(234,88,12,0.14);overflow:hidden;margin:18px 0 10px"><div id="mxProtBar" style="height:100%;width:0%;background:#ea580c;border-radius:100px;transition:width .5s"></div></div>
+      <div id="mxProtNote" style="font-size:12.5px;color:rgba(247,244,240,0.45)">--</div>
+    </div>
+    <div style="background:#161310;border:1px solid rgba(217,119,6,0.16);border-radius:24px;padding:24px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(217,119,6,0.12);display:flex;align-items:center;justify-content:center"><span class="material-symbols-outlined icon-filled" style="color:#d97706;font-size:22px">local_fire_department</span></div><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15px;color:#f7f4f0">Grasas</span></div>
+      <div class="kc-num" style="font-weight:900;font-size:44px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="mxFatNow">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.4)"> / <span id="mxFatTarget">--</span> g</span></div>
+      <div style="height:8px;border-radius:100px;background:rgba(217,119,6,0.14);overflow:hidden;margin:18px 0 10px"><div id="mxFatBar" style="height:100%;width:0%;background:#d97706;border-radius:100px;transition:width .5s"></div></div>
+      <div id="mxFatNote" style="font-size:12.5px;color:rgba(247,244,240,0.45)">--</div>
+    </div>
+    <div style="background:#161310;border:1px solid rgba(8,145,178,0.16);border-radius:24px;padding:24px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(8,145,178,0.12);display:flex;align-items:center;justify-content:center"><span class="material-symbols-outlined icon-filled" style="color:#0891b2;font-size:22px">grain</span></div><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15px;color:#f7f4f0">Carbos netos</span></div>
+      <div class="kc-num" style="font-weight:900;font-size:44px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="mxCarbNow">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.4)"> / <span id="mxCarbTarget">--</span> g</span></div>
+      <div style="height:8px;border-radius:100px;background:rgba(8,145,178,0.14);overflow:hidden;margin:18px 0 10px"><div id="mxCarbBar" style="height:100%;width:0%;background:#0891b2;border-radius:100px;transition:width .5s"></div></div>
+      <div id="mxCarbNote" style="font-size:12.5px;color:rgba(247,244,240,0.45)">--</div>
+    </div>
+  </div>
 
-<div class="glass-card rounded-2xl p-6">
-<div class="flex items-center justify-between mb-8">
-<div>
-<h4 class="text-sm font-black text-on-surface-variant uppercase tracking-[0.2em] flex items-center gap-2">
-<span class="material-symbols-outlined text-primary-container text-2xl">inventory_2</span> Resumen de Hoy
-</h4>
-<p class="text-xs text-on-surface-variant mt-1">Tu progreso diario de macros</p>
-</div>
-<p class="text-[11px] text-secondary font-bold italic">"Paso a paso se llega lejos"</p>
-</div>
-<div class="space-y-4">
-<div id="todayMacros" class="bg-surface-container-low rounded-2xl p-6 flex flex-col gap-4 border border-white/5">
-<p class="text-center text-on-surface-variant">Cargando consumo de hoy...</p>
-</div>
-</div>
-</div>
-</section>
+  <!-- Registro de hoy -->
+  <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:28px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:8px">
+      <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:19px;letter-spacing:-0.01em;color:#f7f4f0">Registro de hoy</h2>
+      <span id="mxLogSummary" style="font-size:12.5px;color:rgba(247,244,240,0.45)">0 comidas · 0 kcal</span>
+    </div>
+    <div class="mx-log-grid" style="padding:0 4px 12px;border-bottom:1px solid rgba(255,240,225,0.07);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(247,244,240,0.35)">
+      <span>Comida</span><span style="text-align:right">kcal</span><span class="mx-col-macro" style="text-align:right">P</span><span class="mx-col-macro" style="text-align:right">G</span><span class="mx-col-macro" style="text-align:right">C</span>
+    </div>
+    <div id="mxLogRows"></div>
+    <a href="/app/alimentos" style="width:100%;margin-top:8px;padding:15px;border-radius:16px;background:transparent;border:1.5px dashed rgba(255,77,0,0.3);color:#ff4d00;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none"><span class="material-symbols-outlined" style="font-size:20px">add</span>Añadir comida o alimento</a>
+  </div>
+
+  <!-- Stats metabólicas + progreso de peso -->
+  <div class="mx-stats">
+    <div class="kc-tile" style="padding:20px">
+      <p class="kc-eyebrow" style="margin-bottom:10px">BMR basal</p>
+      <p class="kc-num" style="font-size:28px;color:#f7f4f0"><span id="bmrResult">--</span><span style="font-size:13px;color:rgba(247,244,240,0.4)"> kcal</span></p>
+    </div>
+    <div class="kc-tile" style="padding:20px">
+      <p class="kc-eyebrow" style="margin-bottom:10px">Déficit diario</p>
+      <p id="deficitText" class="kc-num" style="font-size:28px;color:#22c55e">--</p>
+      <p style="font-size:11px;color:rgba(247,244,240,0.4);margin-top:4px">vs TDEE <span id="tdeeResult">--</span></p>
+    </div>
+    <div class="kc-tile" style="padding:20px">
+      <p class="kc-eyebrow" style="margin-bottom:10px">Días para meta</p>
+      <p id="goalDays" class="kc-num" style="font-size:28px;color:#60a5fa">--</p>
+      <p style="font-size:11px;color:rgba(247,244,240,0.4);margin-top:4px"><span id="weightDiff">--</span> kg restantes</p>
+    </div>
+    <div class="kc-tile" style="padding:20px">
+      <p class="kc-eyebrow" style="margin-bottom:10px">Peso actual</p>
+      <p class="kc-num" style="font-size:28px;color:#f7f4f0"><span id="currentWeight">--</span><span style="font-size:13px;color:rgba(247,244,240,0.4)"> kg → <span id="goalWeight">--</span> kg</span></p>
+      <div style="height:6px;border-radius:100px;background:rgba(255,240,225,0.07);overflow:hidden;margin-top:10px"><div id="progressBar" style="height:100%;width:0%;background:linear-gradient(90deg,#ff4d00,#fb923c);border-radius:100px;transition:width 1s"></div></div>
+      <p style="font-size:11px;color:rgba(247,244,240,0.4);margin-top:6px"><span id="progressPercent">--%</span> del camino · <span id="lostProgressBadge" class="hidden" style="color:#22c55e;font-weight:700"><span id="lostProgressText"></span></span></p>
+    </div>
+  </div>
+
+  <!-- Racha -->
+  <div class="kc-tile" style="margin-top:18px;display:flex;align-items:center;gap:16px">
+    <div style="width:48px;height:48px;border-radius:14px;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <span class="material-symbols-outlined icon-filled" style="color:#22c55e;font-size:26px">workspace_premium</span>
+    </div>
+    <div>
+      <p style="font-weight:700;font-size:14.5px;color:#f7f4f0">Racha de constancia</p>
+      <p id="streakText" style="font-size:13px;color:rgba(247,244,240,0.5)">Completa tu checklist diario para construir tu racha.</p>
+    </div>
+  </div>
 
 </div>
 </main>
 
-<!-- BottomNavBar (Mobile) - 5 items optimizado -->
-<AppNav active="macros" />
-
 <script is:inline src="/app/utils.js"></script>
 <script is:inline>
-if(localStorage.getItem("sidebarCollapsed")==="true"){document.body.classList.add("sidebar-collapsed");var s=document.getElementById("sidebarNav");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");var t=document.getElementById("sidebarToggle");s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px"}
-var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
-
 function fmt(n){var s=String(Math.round(Number(n)));return s.replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1,');}
+
+var MEAL_META={
+  desayuno:{label:'Desayuno',icon:'wb_sunny'},
+  almuerzo:{label:'Almuerzo',icon:'restaurant'},
+  cena:{label:'Cena',icon:'nightlight'},
+  snacks:{label:'Snack',icon:'lunch_dining'}
+};
 
 function loadMacrosData(){
   var p={};
   try{p=JSON.parse(localStorage.getItem("keto_profile")||"{}")}catch(e){p={}}
   var m={};
   try{m=JSON.parse(localStorage.getItem("keto_macros")||"{}")}catch(e){m={}}
-  
-  // Read macros from keto_macros (same as perfil.html saves)
-  var macrosFromStorage = m;
-  var bmrRounded = macrosFromStorage.bmr || 0;
-  var tdeeRounded = macrosFromStorage.tdee || 0;
-  var calRounded = macrosFromStorage.calories || 0;
-  var proteinRounded = macrosFromStorage.protein || 0;
-  var fatRounded = macrosFromStorage.fat || 0;
-  var carbsRounded = macrosFromStorage.carbs || 0;
-  
-  // Weight calculations - only use stored values, no defaults
-  var hasProfile = p && (p.startWeight || p.weight || p.goalWeight);
-  var startWeight = p.startWeight || 0;  // Peso inicial de Datos Personales
-  var goalWeight = p.goalWeight || 0;   // Meta de peso
-  
-  // Get current weight from history (most recent entry)
+
+  var bmr=m.bmr||0, tdee=m.tdee||0, calTarget=m.calories||0;
+  var protTarget=m.protein||0, fatTarget=m.fat||0, carbTarget=m.carbs||25;
+
+  // Fecha en header
+  var dateEl=document.getElementById('mxDate');
+  if(dateEl) dateEl.textContent=new Date().toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'short'});
+
+  // ── Consumo de hoy ──
+  var today=new Date().toISOString().slice(0,10);
+  var mealPlan={};
+  try{mealPlan=JSON.parse(localStorage.getItem("mealPlan_"+today)||"{}")}catch(e){}
+  var cCal=0,cProt=0,cFat=0,cCarb=0,itemCount=0,rows=[];
+  Object.keys(mealPlan).forEach(function(meal){
+    if(Array.isArray(mealPlan[meal])){
+      mealPlan[meal].forEach(function(item){
+        var r=(parseFloat(item.portion)||100)/100;
+        var kcal=Math.round((parseFloat(item.calories)||0)*r);
+        var pr=Math.round((parseFloat(item.protein)||0)*r);
+        var ft=Math.round((parseFloat(item.fat)||0)*r);
+        var cb=Math.round((parseFloat(item.carbs)||0)*r);
+        cCal+=kcal;cProt+=pr;cFat+=ft;cCarb+=cb;itemCount++;
+        rows.push({name:item.name||item.nombre||'Alimento',meal:meal,kcal:kcal,p:pr,g:ft,c:cb});
+      });
+    }
+  });
+
+  // ── Donut ──
+  var C=503; // 2π·80
+  var totalMacroCal=(cProt*4)+(cFat*9)+(cCarb*4);
+  var fatPct=0,protPct=0,carbPct=0;
+  if(totalMacroCal>0){
+    fatPct=Math.round((cFat*9/totalMacroCal)*100);
+    protPct=Math.round((cProt*4/totalMacroCal)*100);
+    carbPct=Math.max(0,100-fatPct-protPct);
+  }
+  var fatArc=C*fatPct/100, protArc=C*protPct/100, carbArc=C*carbPct/100;
+  var dF=document.getElementById('donutFat'),dP=document.getElementById('donutProt'),dC=document.getElementById('donutCarb');
+  if(dF){dF.setAttribute('stroke-dasharray',fatArc+' '+C);dF.setAttribute('transform','rotate(-90 100 100)');}
+  if(dP){dP.setAttribute('stroke-dasharray',protArc+' '+C);dP.setAttribute('transform','rotate('+(-90+fatPct*3.6)+' 100 100)');}
+  if(dC){dC.setAttribute('stroke-dasharray',carbArc+' '+C);dC.setAttribute('transform','rotate('+(-90+(fatPct+protPct)*3.6)+' 100 100)');}
+  document.getElementById('mxKcalNow').textContent=fmt(cCal);
+  document.getElementById('mxKcalTarget').textContent=calTarget?fmt(calTarget):'--';
+  document.getElementById('mxPctFat').textContent=fatPct+'%';
+  document.getElementById('mxPctProt').textContent=protPct+'%';
+  document.getElementById('mxPctCarb').textContent=carbPct+'%';
+
+  // ── Cream: carbos restantes ──
+  var carbsLeft=Math.max(0,carbTarget-cCarb);
+  document.getElementById('mxCarbsLeft').textContent=carbTarget?carbsLeft:'--';
+  var note=document.getElementById('mxCarbsNote');
+  if(note){
+    if(!carbTarget){note.textContent='Configura tus macros en Perfil para ver tu margen diario.';}
+    else if(cCarb>carbTarget){note.textContent='Has consumido '+cCarb+' g de '+carbTarget+' g. Te pasaste '+(cCarb-carbTarget)+' g — cuida la cena para volver a cetosis.';}
+    else{note.textContent='Has consumido '+cCarb+' g de '+carbTarget+' g. '+(carbsLeft>=5?'Suficiente margen para tu cena sin salir de cetosis.':'Margen justo: elige cena muy baja en carbos.');}
+  }
+  var segs=document.querySelectorAll('#mxCarbSegs > div');
+  var usedRatio=carbTarget>0?cCarb/carbTarget:0;
+  var litSegs=Math.min(5,Math.round(usedRatio*5));
+  segs.forEach(function(s,i){s.style.background=i<litSegs?'#0891b2':'rgba(26,20,14,0.12)';});
+
+  // ── Tiles de macro ──
+  function setMacro(now,target,barId,nowId,targetId,noteId,kcalPerG,unit){
+    document.getElementById(nowId).textContent=fmt(now);
+    document.getElementById(targetId).textContent=target?fmt(target):'--';
+    var pct=target>0?Math.min(100,Math.round(now/target*100)):0;
+    document.getElementById(barId).style.width=pct+'%';
+    var el=document.getElementById(noteId);
+    if(el){
+      var kcal=now*kcalPerG;
+      var left=Math.max(0,target-now);
+      el.textContent=fmt(kcal)+' kcal · '+(target?(unit==='carb'?'quedan '+left+' g':'faltan '+left+' g'):'sin meta');
+    }
+  }
+  setMacro(cProt,protTarget,'mxProtBar','mxProtNow','mxProtTarget','mxProtNote',4,'prot');
+  setMacro(cFat,fatTarget,'mxFatBar','mxFatNow','mxFatTarget','mxFatNote',9,'fat');
+  setMacro(cCarb,carbTarget,'mxCarbBar','mxCarbNow','mxCarbTarget','mxCarbNote',4,'carb');
+
+  // ── Registro de hoy ──
+  var logEl=document.getElementById('mxLogRows');
+  var summary=document.getElementById('mxLogSummary');
+  if(summary) summary.textContent=itemCount+(itemCount===1?' comida':' comidas')+' · '+fmt(cCal)+' kcal';
+  if(logEl){
+    if(rows.length===0){
+      logEl.innerHTML='<div style="text-align:center;padding:32px 0"><span class="material-symbols-outlined" style="font-size:44px;color:rgba(247,244,240,0.25);display:block;margin-bottom:10px">restaurant</span><p style="font-size:13.5px;color:rgba(247,244,240,0.45)">No hay alimentos registrados hoy</p></div>';
+    }else{
+      logEl.innerHTML=rows.map(function(rw,i){
+        var meta=MEAL_META[rw.meal]||{label:rw.meal,icon:'restaurant'};
+        return '<div class="mx-log-grid" style="padding:16px 4px;'+(i<rows.length-1?'border-bottom:1px solid rgba(255,240,225,0.05)':'')+'">'
+          +'<div style="display:flex;align-items:center;gap:13px;min-width:0"><div style="width:42px;height:42px;border-radius:12px;background:rgba(255,77,0,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="material-symbols-outlined icon-filled" style="color:#ff4d00;font-size:20px">'+meta.icon+'</span></div><div style="min-width:0"><div style="font-size:14.5px;font-weight:600;color:#f7f4f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml(String(rw.name))+'</div><div style="font-size:12px;color:rgba(247,244,240,0.4)">'+meta.label+'</div></div></div>'
+          +'<span class="kc-num" style="font-weight:700;font-size:15px;text-align:right;color:#f7f4f0">'+fmt(rw.kcal)+'</span>'
+          +'<span class="mx-col-macro nums" style="font-size:14px;color:rgba(247,244,240,0.6);text-align:right">'+rw.p+' g</span>'
+          +'<span class="mx-col-macro nums" style="font-size:14px;color:rgba(247,244,240,0.6);text-align:right">'+rw.g+' g</span>'
+          +'<span class="mx-col-macro nums" style="font-size:14px;color:rgba(247,244,240,0.6);text-align:right">'+rw.c+' g</span>'
+          +'</div>';
+      }).join('');
+    }
+  }
+
+  // ── Stats metabólicas ──
+  document.getElementById("bmrResult").textContent=bmr?fmt(bmr):'--';
+  document.getElementById("tdeeResult").textContent=tdee?fmt(tdee):'--';
+  var deficit=tdee-calTarget;
+  document.getElementById("deficitText").textContent=(tdee&&calTarget)?((deficit>=0?"-":"+")+fmt(Math.abs(Math.round(deficit)))):'--';
+
+  // ── Peso ──
+  var startWeight=p.startWeight||0, goalWeight=p.goalWeight||0;
   var weightHistory=[];
   try{weightHistory=JSON.parse(localStorage.getItem("keto_weight_history")||"[]")}catch(e){weightHistory=[]}
-  var currentWeight = 0;
-  if(Array.isArray(weightHistory) && weightHistory.length>0){
-    var sortedHistory=weightHistory.slice().sort(function(a,b){return new Date(b.date)-new Date(a.date);});
-    currentWeight=sortedHistory[0].weight||0;
+  var currentWeight=0;
+  if(Array.isArray(weightHistory)&&weightHistory.length>0){
+    var sorted=weightHistory.slice().sort(function(a,b){return new Date(b.date)-new Date(a.date);});
+    currentWeight=sorted[0].weight||0;
   }
-  if(!currentWeight && p.weight){
-    currentWeight=p.weight;
-  }
-  
-  // Display values
-  var displayWeight=currentWeight||"--";
-  var displayGoal=goalWeight||"--";
-  document.getElementById("currentWeight").textContent=displayWeight;
-  document.getElementById("goalWeight").textContent=displayGoal;
-  document.getElementById("mountainGoal").textContent=displayGoal!=="--"?displayGoal+"kg":"--kg";
-  document.getElementById("baseWeight").textContent=displayWeight!=="--"?displayWeight+"kg":"--kg";
-  
+  if(!currentWeight&&p.weight)currentWeight=p.weight;
+
+  document.getElementById("currentWeight").textContent=currentWeight||"--";
+  document.getElementById("goalWeight").textContent=goalWeight||"--";
   var weightDiff=currentWeight&&goalWeight?Math.abs(currentWeight-goalWeight):null;
   document.getElementById("weightDiff").textContent=weightDiff!==null?weightDiff.toFixed(1):"--";
-  
-  // Progress calculation based on start weight
+  var daysToGoal=weightDiff!==null&&deficit>0?weightDiff*7700/deficit:null;
+  document.getElementById("goalDays").textContent=daysToGoal!==null&&isFinite(daysToGoal)&&daysToGoal>0?fmt(Math.round(daysToGoal)):"--";
+
   var totalToLose=startWeight-goalWeight;
   var lostSoFar=currentWeight>0&&startWeight>0?startWeight-currentWeight:0;
   var weightProgress=0;
-  if(totalToLose>0&&currentWeight>0&&startWeight>0){
-    weightProgress=Math.round((lostSoFar/totalToLose)*100);
-  }
-  if(weightProgress<0)weightProgress=0;
-  if(weightProgress>100)weightProgress=100;
-  
-  if(hasProfile&&currentWeight>0){
-    document.getElementById("progressPercent").textContent=weightProgress+"%";
-    document.getElementById("progressBar").style.width=weightProgress+"%";
-  } else {
-    document.getElementById("progressPercent").textContent="--%";
-    document.getElementById("progressBar").style.width="0%";
-  }
-  
-  // Update climber position on mountain based on progress
-  updateClimberPosition(weightProgress);
-  
-  // Update lost progress badge
+  if(totalToLose>0&&currentWeight>0&&startWeight>0){weightProgress=Math.round((lostSoFar/totalToLose)*100);}
+  weightProgress=Math.max(0,Math.min(100,weightProgress));
+  document.getElementById("progressPercent").textContent=(currentWeight>0&&startWeight>0)?weightProgress+"%":"--%";
+  document.getElementById("progressBar").style.width=weightProgress+"%";
+
   var lostBadge=document.getElementById("lostProgressBadge");
   var lostText=document.getElementById("lostProgressText");
   if(lostBadge&&lostText){
     if(lostSoFar>0){
-      var percentOfTotal=totalToLose>0?Math.round((lostSoFar/totalToLose)*100):0;
-      lostText.textContent="-"+lostSoFar.toFixed(1)+"kg ("+percentOfTotal+"%)";
-      lostBadge.classList.remove("hidden","bg-red-500/20","text-red-400");
-      lostBadge.classList.add("bg-green-500/20","text-green-400");
-    } else if(lostSoFar<0){
-      lostText.textContent="+"+Math.abs(lostSoFar).toFixed(1)+"kg";
-      lostBadge.classList.remove("hidden","bg-green-500/20","text-green-400");
-      lostBadge.classList.add("bg-red-500/20","text-red-400");
-    } else {
+      lostText.textContent="-"+lostSoFar.toFixed(1)+" kg";
+      lostBadge.style.color="#22c55e";
+      lostBadge.classList.remove("hidden");
+    }else if(lostSoFar<0){
+      lostText.textContent="+"+Math.abs(lostSoFar).toFixed(1)+" kg";
+      lostBadge.style.color="#ef4444";
+      lostBadge.classList.remove("hidden");
+    }else{
       lostBadge.classList.add("hidden");
     }
   }
-  
-  // Use stored values
-  document.getElementById("bmrResult").textContent=fmt(bmrRounded);
-  document.getElementById("tdeeResult").textContent=fmt(tdeeRounded);
-  document.getElementById("caloriesResult").textContent=fmt(calRounded);
-  
-  var deficit=tdeeRounded-calRounded;
-  document.getElementById("deficitText").textContent=(deficit>=0?"-":"+")+fmt(Math.abs(Math.round(deficit)));
-  
-  var daysToGoal=weightDiff!==null&&deficit>0?weightDiff*7700/deficit:null;
-  document.getElementById("goalDays").textContent=daysToGoal!==null&&isFinite(daysToGoal)&&daysToGoal>0?fmt(Math.round(daysToGoal)):"--";
-  
-  document.getElementById("proteinResult").textContent=fmt(proteinRounded);
-  document.getElementById("fatResult").textContent=fmt(fatRounded);
-  document.getElementById("carbsResult").textContent=fmt(carbsRounded);
-  
-  loadTodayMacros();
+
   loadStreak();
-  renderWeightProgress();
-}
-
-function renderWeightProgress(){
-  var svg=document.getElementById("weightProgressSvg");
-  if(!svg) return;
-  
-  var ketoProfile={};
-  try{ketoProfile=JSON.parse(localStorage.getItem("keto_profile")||"{}")}catch(e){}
-  var weightHistory=[];
-  try{weightHistory=JSON.parse(localStorage.getItem("keto_weight_history")||"[]")}catch(e){}
-  
-  var startWeight=ketoProfile.startWeight||0;
-  var goalWeight=ketoProfile.goalWeight||0;
-  
-  var currentWeight=0;
-  if(weightHistory&&weightHistory.length>0){
-    var sortedDesc=weightHistory.slice().sort(function(a,b){return new Date(b.date)-new Date(a.date);});
-    currentWeight=sortedDesc[0].weight||0;
-  }
-  if(!currentWeight) currentWeight=ketoProfile.weight||0;
-  
-  if(!startWeight&&!goalWeight){
-    svg.innerHTML='<text x="200" y="35" text-anchor="middle" fill="#9ca3af" font-size="12">Registra tu peso en Perfil</text>';
-    return;
-  }
-  
-  var chartWidth=380;
-  var chartHeight=50;
-  var paddingX=40;
-  var paddingY=5;
-  
-  var allWeights=[startWeight,goalWeight,currentWeight].filter(function(w){return w>0;});
-  var minW=Math.min.apply(null,allWeights)-2;
-  var maxW=Math.max.apply(null,allWeights)+2;
-  var range=maxW-minW||1;
-  
-  function getY(weight){
-    return(chartHeight+paddingY)-((weight-minW)/range)*(chartHeight-10);
-  }
-  
-  var html='<defs><linearGradient id="weightGradM" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#ff4d00;stop-opacity:0.4"/><stop offset="100%" style="stop-color:#ff4d00;stop-opacity:0"/></linearGradient></defs>';
-  
-  if(startWeight>0&&goalWeight>0){
-    var startX=paddingX;
-    var startY=getY(startWeight);
-    var goalX=chartWidth+paddingX;
-    var goalY=getY(goalWeight);
-    
-    html+='<line x1="'+startX+'" y1="'+startY+'" x2="'+goalX+'" y2="'+goalY+'" stroke="#6b7280" stroke-width="2" stroke-dasharray="6,4" opacity="0.4"/>';
-    html+='<path d="M '+startX+' '+startY+' L '+goalX+' '+goalY+' L '+goalX+' '+(chartHeight+paddingY)+' L '+startX+' '+(chartHeight+paddingY)+' Z" fill="url('/app/#weightGradM')" opacity="0.3"/>';
-    
-    html+='<circle cx="'+startX+'" cy="'+startY+'" r="7" fill="#4ade80"/>';
-    html+='<text x="'+(startX+12)+'" y="'+(startY-3)+'" fill="#4ade80" font-size="10" font-weight="bold">Inicio '+startWeight+'kg</text>';
-    
-    html+='<circle cx="'+goalX+'" cy="'+goalY+'" r="7" fill="#fbbf24"/>';
-    html+='<text x="'+(goalX-12)+'" y="'+(goalY-3)+'" text-anchor="end" fill="#fbbf24" font-size="10" font-weight="bold">Meta '+goalWeight+'kg</text>';
-  }
-  
-  if(currentWeight>0&&startWeight>0){
-    var progress=0;
-    var totalToLose=startWeight-goalWeight;
-    var lost=startWeight-currentWeight;
-    progress=totalToLose>0?Math.max(0,Math.min(1,lost/totalToLose)):0;
-    
-    var startX=paddingX;
-    var goalX=chartWidth+paddingX;
-    var currentX=startX+progress*(goalX-startX);
-    var currentY=getY(currentWeight);
-    
-    html+='<circle cx="'+currentX+'" cy="'+currentY+'" r="12" fill="none" stroke="#fff" stroke-width="2" opacity="0.6"/>';
-    html+='<circle cx="'+currentX+'" cy="'+currentY+'" r="7" fill="#ff4d00" stroke="#0a0a0a" stroke-width="2"/>';
-    html+='<text x="'+currentX+'" y="'+(currentY-15)+'" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">AQUI: '+currentWeight+'kg</text>';
-  }
-  
-  svg.innerHTML=html;
-}
-
-function updateClimberPosition(progress){
-  var climberPath=document.getElementById("climberPath");
-  var climberPosition=document.getElementById("climberPosition");
-  if(!climberPath||!climberPosition) return;
-  
-  var ketoProfile={};
-  try{ketoProfile=JSON.parse(localStorage.getItem("keto_profile")||"{}")}catch(e){}
-  var weightHistory=[];
-  try{weightHistory=JSON.parse(localStorage.getItem("keto_weight_history")||"[]")}catch(e){}
-  
-  var startWeight=ketoProfile.startWeight||0;
-  var goalWeight=ketoProfile.goalWeight||0;
-  var currentWeight=0;
-  if(weightHistory&&weightHistory.length>0){
-    var sorted=weightHistory.slice().sort(function(a,b){return new Date(b.date)-new Date(a.date);});
-    currentWeight=sorted[0].weight||0;
-  }
-  if(!currentWeight) currentWeight=ketoProfile.weight||0;
-  
-  // Calculate progress
-  var totalToLose=startWeight-goalWeight;
-  var lostSoFar=startWeight-currentWeight;
-  var actualProgress=0;
-  if(totalToLose>0&&startWeight>0&&currentWeight>0){
-    actualProgress=Math.max(0,Math.min(100,(lostSoFar/totalToLose)*100));
-  }
-  
-  // Mountain full path
-  var fullPath="M50,500 L50,450 Q50,420 70,400 T70,350 Q70,320 30,300 T30,250 Q30,220 50,200 T50,150 Q50,120 70,100 T70,50 L50,0";
-  
-  // Set the main path to full and add gradient stroke
-  climberPath.setAttribute("d",fullPath);
-  climberPath.setAttribute("stroke","url('/app/#mountainGradient')");
-  climberPath.setAttribute("stroke-width","8");
-  climberPath.setAttribute("opacity","0.9");
-  
-  // Remove remaining path element if exists
-  var remainingEl=document.getElementById("climberPathRemaining");
-  if(remainingEl) remainingEl.remove();
-  
-  // Update climber position based on progress
-  // Top is 5%, bottom is 80%
-  var topPercent=5+(actualProgress/100)*75;
-  climberPosition.style.top=topPercent+"%";
-  
-  // Update text
-  var lostKg=lostSoFar>0?lostSoFar.toFixed(1):"0";
-  var labelEl=climberPosition.querySelector("p");
-  if(labelEl){
-    labelEl.textContent="-"+lostKg+"kg";
-  }
-}
-
-function loadTodayMacros(){
-  var container=document.getElementById("todayMacros");
-  var today=new Date().toISOString().slice(0,10);
-  
-  // Get targets from keto_macros
-  var m={};
-  try{m=JSON.parse(localStorage.getItem("keto_macros")||"{}")}catch(e){m={}}
-  var proteinTarget=m.protein||0;
-  var fatTarget=m.fat||0;
-  var carbsTarget=m.carbs||25;
-  var calories=m.calories||0;
-   
-  var totalProtein=0,totalFat=0,totalCarbs=0,totalCalories=0;
-  var hasData=false;
-  
-  var mealPlan=localStorage.getItem("mealPlan_"+today);
-  if(mealPlan){
-    try{
-      mealPlan=JSON.parse(mealPlan);
-      Object.keys(mealPlan).forEach(function(meal){
-        if(Array.isArray(mealPlan[meal])){
-          mealPlan[meal].forEach(function(item){
-            var p=parseFloat(item.portion)||100;
-            var r=p/100;
-            totalProtein+=Math.round((parseFloat(item.protein)||0)*r);
-            totalFat+=Math.round((parseFloat(item.fat)||0)*r);
-            totalCarbs+=Math.round((parseFloat(item.carbs)||0)*r);
-            totalCalories+=Math.round((parseFloat(item.calories)||0)*r);
-            hasData=true;
-          });
-        }
-      });
-    }catch(e){}
-  }
-  
-  if(!hasData){
-    container.innerHTML='<div class="text-center py-8"><span class="material-symbols-outlined text-5xl text-on-surface-variant/70 mb-4 block">restaurant</span><p class="text-on-surface-variant text-sm mb-2">No hay alimentos registrados hoy</p><a href="/app/alimentos" class="text-primary-container text-sm font-bold hover:underline">Ir a Alimentos para agregar</a></div>';
-    return;
-  }
-  
-  var html="";
-  
-  html+='<div class="flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center"><span class="material-symbols-outlined text-orange-400 text-2xl">egg_alt</span></div><div class="flex-1"><div class="flex justify-between items-end mb-1"><p class="text-xl font-black text-white">'+fmt(Math.round(totalProtein))+' <span class="text-sm text-white/60">/ '+fmt(proteinTarget)+'g</span></p><span class="text-[10px] text-orange-400 font-bold uppercase">Proteína</span></div><div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden"><div class="h-full bg-orange-400 rounded-full" style="width:'+Math.min((totalProtein/proteinTarget)*100,100)+'%"></div></div></div></div>';
-  
-  html+='<div class="flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-yellow-500/10 flex items-center justify-center"><span class="material-symbols-outlined text-yellow-400 text-2xl">local_fire_department</span></div><div class="flex-1"><div class="flex justify-between items-end mb-1"><p class="text-xl font-black text-white">'+fmt(Math.round(totalFat))+' <span class="text-sm text-white/60">/ '+fmt(fatTarget)+'g</span></p><span class="text-[10px] text-yellow-400 font-bold uppercase">Grasas</span></div><div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden"><div class="h-full bg-yellow-400 rounded-full" style="width:'+Math.min((totalFat/fatTarget)*100,100)+'%"></div></div></div></div>';
-  
-  html+='<div class="flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center"><span class="material-symbols-outlined text-cyan-400 text-2xl">grain</span></div><div class="flex-1"><div class="flex justify-between items-end mb-1"><p class="text-xl font-black text-white">'+fmt(Math.round(totalCarbs))+' <span class="text-sm text-white/60">/ '+fmt(carbsTarget)+'g</span></p><span class="text-[10px] text-cyan-400 font-bold uppercase">Carbos Netos</span></div><div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden"><div class="h-full bg-cyan-400 rounded-full" style="width:'+Math.min((totalCarbs/carbsTarget)*100,100)+'%"></div></div></div></div>';
-  
-  html+='<div class="flex items-center gap-4 mt-4 pt-4 border-t border-white/10"><div class="w-12 h-12 rounded-xl bg-primary-container/10 flex items-center justify-center"><span class="material-symbols-outlined text-primary-container text-2xl">local_fire_department</span></div><div class="flex-1"><div class="flex justify-between items-end mb-1"><p class="text-xl font-black text-white">'+fmt(totalCalories)+' <span class="text-sm text-white/60">/ '+fmt(calories)+' kcal</span></p><span class="text-[10px] text-primary-container font-bold uppercase">Calorías</span></div><div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden"><div class="h-full bg-primary-container rounded-full" style="width:'+Math.min((totalCalories/calories)*100,100)+'%"></div></div></div></div>';
-  
-  container.innerHTML=html;
 }
 
 function loadStreak(){
   var streak=0;
   var today=new Date();
   var threshold=0.8;
-  
   for(var i=0;i<365;i++){
     var d=new Date(today);
     d.setDate(d.getDate()-i);
@@ -601,125 +379,60 @@ function loadStreak(){
     var rawData=localStorage.getItem("checklist_"+dateKey);
     var data={};
     try{if(rawData)data=JSON.parse(rawData)}catch(e){}
-    
     var items=["water","electrolitos","workout","walk","protein","sleep"];
     var completed=0;
-    items.forEach(function(id){
-      if(data[id]&&data[id]>=1)completed++;
-    });
-    
+    items.forEach(function(id){if(data[id]&&data[id]>=1)completed++;});
     var percent=completed/items.length;
-    if(percent>=threshold){
-      streak++;
-    }else if(i>0){
-      break;
-    }
+    if(percent>=threshold){streak++;}else if(i>0){break;}
   }
-  
-  document.getElementById("streakText").textContent="Has mantenido tu rutina por "+streak+" días consecutivos. ¡Imparable!";
+  document.getElementById("streakText").textContent=streak>0?"Has mantenido tu rutina por "+streak+" días consecutivos. ¡Imparable!":"Completa tu checklist diario para construir tu racha.";
 }
 
 try{loadMacrosData();}catch(e){console.error('Error loading macros:',e);}
 
 document.addEventListener('visibilitychange',function(){
-  if(!document.hidden){
-    try{loadMacrosData();}catch(e){console.error(e);}
-  }
+  if(!document.hidden){try{loadMacrosData();}catch(e){console.error(e);}}
 });
-
 window.addEventListener('storage',function(e){
   if(e.key==='keto_profile'||e.key==='keto_macros'||e.key==='keto_weight_history'||e.key&&e.key.startsWith('mealPlan_')){
     try{loadMacrosData();}catch(err){}
   }
 });
-
-window.addEventListener('weightUpdated',function(){
-  try{loadMacrosData();}catch(e){}
-});
-
-window.addEventListener('profileSaved',function(){
-  try{loadMacrosData();}catch(e){}
-});
+window.addEventListener('weightUpdated',function(){try{loadMacrosData();}catch(e){}});
+window.addEventListener('profileSaved',function(){try{loadMacrosData();}catch(e){}});
 </script>
 <script is:inline>
-var _cp=window.location.pathname.split("/").pop()||"index.html";
-document.querySelectorAll(".sidebar-link").forEach(function(l){
-  if(l.getAttribute("href")===_cp){
-    l.classList.add("active");
-    l.style.background="rgba(22,22,22,1)";
-    l.style.color="white";
-    var ic=l.querySelector(".material-symbols-outlined");
-    if(ic)ic.style.color="#ff4d00";
-  }
-});
-if(localStorage.getItem("sidebarCollapsed")==="true"){
-  document.body.classList.add("sidebar-collapsed");
-  var _sn=document.getElementById("sidebarNav");
-  if(_sn){_sn.style.width="72px";_sn.style.overflow="hidden";}
-  var _tp=document.querySelector(".topbar-pl");
-  if(_tp)_tp.style.paddingLeft="88px";
-  var _mc=document.querySelector(".main-content");
-  if(_mc)_mc.style.marginLeft="72px";
-  var _st=document.getElementById("sidebarToggle");
-  if(_st)_st.style.left="72px";
-}
-</script>
-<script is:inline>
-// User Dropdown Menu
-function toggleUserMenu() {
-  const dropdown = document.getElementById('userDropdown');
-  dropdown.classList.toggle('hidden');
-  updateDropdownInfo();
-}
-
 function toggleMobileUserMenu() {
   const dropdown = document.getElementById('mobileUserDropdown');
   dropdown.classList.toggle('hidden');
   updateDropdownInfo();
 }
-
 function updateDropdownInfo() {
   const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
   const userName = profile.nombre || profile.name || 'Usuario';
   const userEmail = localStorage.getItem('KetoCore_user_email') || 'usuario@ejemplo.com';
-  const dn = document.getElementById('dropdownUserName');
-  const de = document.getElementById('dropdownUserEmail');
   const mdn = document.getElementById('mobileDropdownUserName');
   const mde = document.getElementById('mobileDropdownUserEmail');
-  if(dn) dn.textContent = userName;
-  if(de) de.textContent = userEmail;
   if(mdn) mdn.textContent = userName;
   if(mde) mde.textContent = userEmail;
 }
-
 function updateHeaderAvatar() {
   const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
   const avatarUrl = profile.avatar_url;
-  const hi = document.getElementById('headerAvatarImg');
-  const hi2 = document.getElementById('headerAvatarIcon');
   const mhi = document.getElementById('mobileHeaderAvatarImg');
   const mhi2 = document.getElementById('mobileHeaderAvatarIcon');
   if (avatarUrl) {
-    if(hi) { hi.src = avatarUrl; hi.classList.remove('hidden'); }
-    if(hi2) hi2.classList.add('hidden');
     if(mhi) { mhi.src = avatarUrl; mhi.classList.remove('hidden'); }
     if(mhi2) mhi2.classList.add('hidden');
   } else {
-    if(hi) hi.classList.add('hidden');
-    if(hi2) hi2.classList.remove('hidden');
     if(mhi) mhi.classList.add('hidden');
     if(mhi2) mhi2.classList.remove('hidden');
   }
 }
-
 document.addEventListener('click', function(e) {
-  const dd = document.getElementById('userDropdown');
   const mdd = document.getElementById('mobileUserDropdown');
-  const btn = document.getElementById('profileBtn');
-  if (dd && !dd.contains(e.target) && !btn.contains(e.target)) dd.classList.add('hidden');
   if (mdd && !e.target.closest('#mobileUserDropdown') && !e.target.closest('button[onclick="toggleMobileUserMenu()"]')) mdd.classList.add('hidden');
 });
-
 async function handleLogout() {
   if (confirm('¿Cerrar sesión?')) {
     await window.supabase.auth.signOut();
@@ -729,7 +442,6 @@ async function handleLogout() {
     window.location.href = '/app/welcome';
   }
 }
-
 updateHeaderAvatar();
 </script>
 

@@ -5,7 +5,7 @@ import AppNav from '../../components/AppNav.astro';
 
 <AppLayout title="KetoCore | Inspector Inteligente" authGuard={true}>
 <style is:global>
-html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-family: 'Inter', sans-serif; }
+html, body { margin: 0; padding: 0; background: #0b0a08; color: #f7f4f0; font-family: 'Inter', sans-serif; }
 .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 .icon-filled { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
 
@@ -24,11 +24,11 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
 
 .fade-up { animation: fadeUp 0.4s ease-out forwards; }
 .ik-card {
-  background: #161616;
-  border: 1px solid rgba(255,255,255,0.07);
+  background: #161310;
+  border: 1px solid rgba(255,240,225,0.07);
   border-radius: 20px;
 }
-.metric-bar-bg { background: rgba(255,255,255,0.05); border-radius: 100px; height: 6px; overflow: hidden; }
+.metric-bar-bg { background: rgba(255,240,225,0.05); border-radius: 100px; height: 6px; overflow: hidden; }
 .metric-bar    { height: 6px; border-radius: 100px; transition: width 1s cubic-bezier(.4,0,.2,1); }
 
 .verdict-good    { background: rgba(34,197,94,0.06);  border-color: rgba(34,197,94,0.2)  !important; animation: pulseGreen 3s infinite; }
@@ -37,7 +37,7 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
 
 .period-tab { display:inline-flex;align-items:center;padding:5px 12px;border-radius:100px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid transparent;transition:all 0.15s; }
 .period-tab.active { background:rgba(255,77,0,0.12);color:#ff4d00;border-color:rgba(255,77,0,0.25); }
-.period-tab:not(.active) { color:rgba(245,245,245,0.45);background:#1a1a1a;border-color:rgba(255,255,255,0.06); }
+.period-tab:not(.active) { color:rgba(247,244,240,0.45);background:#1a1a1a;border-color:rgba(255,240,225,0.06); }
 
 @media (min-width: 768px) {
   #inspMain {
@@ -60,7 +60,7 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
 
 <!-- ── Header ─────────────────────────────────────────────────────────── -->
 <header class="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4"
-  style="height:56px;background:rgba(10,10,10,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,0.06)">
+  style="height:56px;background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
 
   <div class="flex items-center gap-3">
     <div class="relative w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
@@ -69,8 +69,8 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
       <div style="position:absolute;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(255,77,0,0.8),transparent);animation:scanLine 2.5s ease-in-out infinite"></div>
     </div>
     <div>
-      <h1 class="font-black text-base leading-none" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Inspector Keto</h1>
-      <p id="lastAnalyzed" style="font-size:9px;color:rgba(245,245,245,0.35);font-weight:600;margin-top:1px">Analizando...</p>
+      <h1 class="font-black text-base leading-none" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Inspector Keto</h1>
+      <p id="lastAnalyzed" style="font-size:9px;color:rgba(247,244,240,0.35);font-weight:600;margin-top:1px">Analizando...</p>
     </div>
   </div>
 
@@ -82,7 +82,7 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
     </button>
     <button onclick="toggleHamburgerMenu()" aria-label="Menú"
       class="w-9 h-9 rounded-full flex items-center justify-center"
-      style="background:#161616;color:rgba(245,245,245,0.5);border:1px solid rgba(255,255,255,0.06)">
+      style="background:#161310;color:rgba(247,244,240,0.5);border:1px solid rgba(255,240,225,0.06)">
       <span class="material-symbols-outlined" style="font-size:20px">menu</span>
     </button>
   </div>
@@ -95,16 +95,16 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
   <section id="insp-verdict" class="ik-card p-4 fade-up">
     <div class="flex items-start gap-3">
       <div id="verdictIcon" class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-        style="background:rgba(245,245,245,0.06)">
-        <span class="material-symbols-outlined icon-filled" style="color:#f5f5f5;font-size:22px">monitoring</span>
+        style="background:rgba(247,244,240,0.06)">
+        <span class="material-symbols-outlined icon-filled" style="color:#f7f4f0;font-size:22px">monitoring</span>
       </div>
       <div class="flex-1">
-        <p id="verdictTitle" class="font-black text-lg leading-tight" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Analizando tus datos...</p>
-        <p id="verdictSub" class="text-xs mt-0.5 leading-relaxed" style="color:rgba(245,245,245,0.5)">El inspector está revisando tu progreso reciente.</p>
+        <p id="verdictTitle" class="font-black text-lg leading-tight" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Analizando tus datos...</p>
+        <p id="verdictSub" class="text-xs mt-0.5 leading-relaxed" style="color:rgba(247,244,240,0.5)">El inspector está revisando tu progreso reciente.</p>
       </div>
       <div id="verdictScore" class="text-right flex-shrink-0">
-        <p class="font-black text-2xl leading-none" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">—</p>
-        <p class="text-[10px] font-bold mt-0.5" style="color:rgba(245,245,245,0.35)">puntos</p>
+        <p class="font-black text-2xl leading-none" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">—</p>
+        <p class="text-[10px] font-bold mt-0.5" style="color:rgba(247,244,240,0.35)">puntos</p>
       </div>
     </div>
   </section>
@@ -117,7 +117,7 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
   <!-- 3. Key metrics with animated bars -->
   <section id="insp-metrics" class="ik-card p-4 fade-up" style="animation-delay:0.07s">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-sm font-bold" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Métricas Clave</h2>
+      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Métricas Clave</h2>
       <div class="flex gap-1" id="periodTabs">
         <button class="period-tab active" onclick="setPeriod(7,this)">7d</button>
         <button class="period-tab"        onclick="setPeriod(14,this)">14d</button>
@@ -129,11 +129,11 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
 
   <!-- 4. Adherence by period -->
   <section id="insp-adherence" class="ik-card p-4 fade-up" style="animation-delay:0.12s">
-    <h2 class="text-sm font-bold mb-4" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Adherencia al Plan</h2>
+    <h2 class="text-sm font-bold mb-4" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Adherencia al Plan</h2>
     <div id="adherenceGrid" class="grid grid-cols-3 gap-3 mb-4"></div>
     <!-- Weekly bar chart -->
     <div>
-      <p class="text-xs mb-2 font-semibold" style="color:rgba(245,245,245,0.35)">Últimos 7 días</p>
+      <p class="text-xs mb-2 font-semibold" style="color:rgba(247,244,240,0.35)">Últimos 7 días</p>
       <div id="weekBars" class="flex gap-1.5 items-end" style="height:48px"></div>
       <div id="weekLabels" class="flex gap-1.5 mt-1"></div>
     </div>
@@ -141,17 +141,17 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
 
   <!-- 5. Macro compliance -->
   <section id="insp-macros" class="ik-card p-4 fade-up" style="animation-delay:0.17s">
-    <h2 class="text-sm font-bold mb-3" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Macros — Promedio <span id="macrosPeriodLabel">7 días</span></h2>
+    <h2 class="text-sm font-bold mb-3" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Macros — Promedio <span id="macrosPeriodLabel">7 días</span></h2>
     <div id="macroRows" class="space-y-3"></div>
   </section>
 
   <!-- 6. Weight trend -->
   <section id="insp-weight" class="ik-card p-4 fade-up" style="animation-delay:0.22s">
     <div class="flex items-center justify-between mb-3">
-      <h2 class="text-sm font-bold" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Tendencia de Peso</h2>
-      <div id="weightTrendBadge" class="flex items-center gap-1 px-3 py-1 rounded-full" style="background:#1e1e1e;border:1px solid rgba(255,255,255,0.06)">
-        <span class="material-symbols-outlined" id="trendIcon" style="font-size:14px;color:rgba(245,245,245,0.4)">remove</span>
-        <span id="trendLabel" style="font-size:10px;font-weight:700;color:rgba(245,245,245,0.4)">Sin datos</span>
+      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Tendencia de Peso</h2>
+      <div id="weightTrendBadge" class="flex items-center gap-1 px-3 py-1 rounded-full" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
+        <span class="material-symbols-outlined" id="trendIcon" style="font-size:14px;color:rgba(247,244,240,0.4)">remove</span>
+        <span id="trendLabel" style="font-size:10px;font-weight:700;color:rgba(247,244,240,0.4)">Sin datos</span>
       </div>
     </div>
     <!-- Mini SVG chart -->
@@ -166,7 +166,7 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
         <path id="weightFill" d="" fill="url(#wGrad)"/>
         <path id="weightLine" d="" fill="none" stroke="#ff4d00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      <p id="noWeightData" class="absolute inset-0 flex items-center justify-center text-xs" style="color:rgba(245,245,245,0.3)">
+      <p id="noWeightData" class="absolute inset-0 flex items-center justify-center text-xs" style="color:rgba(247,244,240,0.3)">
         Registra tu peso para ver la tendencia
       </p>
     </div>
@@ -298,11 +298,11 @@ function metricRow(label, value, unit, pct, color, subtitle) {
   var barPct = Math.min(100, pct);
   return '<div>' +
     '<div class="flex items-center justify-between mb-1">' +
-      '<p class="text-xs font-semibold" style="color:rgba(245,245,245,0.7)">' + label + '</p>' +
-      '<p class="text-xs font-bold" style="color:' + color + '">' + value + '<span style="font-size:10px;color:rgba(245,245,245,0.35);font-weight:400"> ' + unit + '</span></p>' +
+      '<p class="text-xs font-semibold" style="color:rgba(247,244,240,0.7)">' + label + '</p>' +
+      '<p class="text-xs font-bold" style="color:' + color + '">' + value + '<span style="font-size:10px;color:rgba(247,244,240,0.35);font-weight:400"> ' + unit + '</span></p>' +
     '</div>' +
     '<div class="metric-bar-bg"><div class="metric-bar" style="width:0;--bar-w:' + barPct + '%;background:' + color + '" data-pct="' + barPct + '"></div></div>' +
-    (subtitle ? '<p style="font-size:9px;color:rgba(245,245,245,0.3);margin-top:3px">' + subtitle + '</p>' : '') +
+    (subtitle ? '<p style="font-size:9px;color:rgba(247,244,240,0.3);margin-top:3px">' + subtitle + '</p>' : '') +
   '</div>';
 }
 
@@ -352,7 +352,7 @@ function renderVerdict(data) {
   title.style.color = cfg.titleColor;
   title.textContent = cfg.t;
   sub.textContent   = cfg.s;
-  scoreEl.innerHTML = '<p class="font-black text-2xl leading-none" style="color:' + cfg.iconColor + ';font-family:\'Plus Jakarta Sans\',sans-serif">' + data.score + '</p><p class="text-[10px] font-bold mt-0.5" style="color:rgba(245,245,245,0.35)">/ 100</p>';
+  scoreEl.innerHTML = '<p class="font-black text-2xl leading-none" style="color:' + cfg.iconColor + ';font-family:\'Plus Jakarta Sans\',sans-serif">' + data.score + '</p><p class="text-[10px] font-bold mt-0.5" style="color:rgba(247,244,240,0.35)">/ 100</p>';
 }
 
 // ── Render metrics ────────────────────────────────────────────────────
@@ -392,8 +392,8 @@ function renderAdherence() {
     var color = pctVal >= 80 ? '#22c55e' : pctVal >= 60 ? '#f59e0b' : '#f87171';
     return '<div class="text-center">' +
       '<p class="font-black text-xl leading-none" style="color:' + color + ';font-family:\'Plus Jakarta Sans\',sans-serif">' + pctVal + '%</p>' +
-      '<p style="font-size:9px;color:rgba(245,245,245,0.35);margin-top:4px;font-weight:600">Últimos ' + d + 'd</p>' +
-      '<p style="font-size:8px;color:rgba(245,245,245,0.22);margin-top:2px">' + logged + '/' + d + ' días</p>' +
+      '<p style="font-size:9px;color:rgba(247,244,240,0.35);margin-top:4px;font-weight:600">Últimos ' + d + 'd</p>' +
+      '<p style="font-size:8px;color:rgba(247,244,240,0.22);margin-top:2px">' + logged + '/' + d + ' días</p>' +
     '</div>';
   }).join('');
 
@@ -415,7 +415,7 @@ function renderWeekBars() {
 
   daily.forEach(function (d, i) {
     var isToday = i === daily.length - 1;
-    var color   = d.logged ? (isToday ? '#ff4d00' : '#22c55e') : 'rgba(255,255,255,0.07)';
+    var color   = d.logged ? (isToday ? '#ff4d00' : '#22c55e') : 'rgba(255,240,225,0.07)';
     var h       = d.logged ? Math.max(12, Math.min(48, Math.round((d.cal / 2000) * 48))) : 12;
 
     var bar = document.createElement('div');
@@ -425,7 +425,7 @@ function renderWeekBars() {
 
     var label = document.createElement('div');
     label.style.cssText = 'flex:1;text-align:center;font-size:8px;font-weight:600;color:' +
-      (isToday ? '#ff4d00' : 'rgba(245,245,245,0.3)');
+      (isToday ? '#ff4d00' : 'rgba(247,244,240,0.3)');
     var dateObj = new Date(d.date + 'T12:00:00');
     label.textContent = days[dateObj.getDay()];
     labels.appendChild(label);
@@ -509,9 +509,9 @@ function renderWeightTrend(data) {
     var first = weights[0], last = weights[weights.length - 1];
     var delta = Math.round((last - first) * 10) / 10;
     stats.innerHTML =
-      '<div class="text-center"><p class="font-bold text-sm" style="color:#f5f5f5">' + first + 'kg</p><p style="font-size:9px;color:rgba(245,245,245,0.35)">Inicio</p></div>' +
-      '<div class="text-center"><p class="font-bold text-sm" style="color:' + cfg.color + '">' + (delta > 0 ? '+' : '') + delta + 'kg</p><p style="font-size:9px;color:rgba(245,245,245,0.35)">Cambio</p></div>' +
-      '<div class="text-center"><p class="font-bold text-sm" style="color:#f5f5f5">' + last + 'kg</p><p style="font-size:9px;color:rgba(245,245,245,0.35)">Actual</p></div>';
+      '<div class="text-center"><p class="font-bold text-sm" style="color:#f7f4f0">' + first + 'kg</p><p style="font-size:9px;color:rgba(247,244,240,0.35)">Inicio</p></div>' +
+      '<div class="text-center"><p class="font-bold text-sm" style="color:' + cfg.color + '">' + (delta > 0 ? '+' : '') + delta + 'kg</p><p style="font-size:9px;color:rgba(247,244,240,0.35)">Cambio</p></div>' +
+      '<div class="text-center"><p class="font-bold text-sm" style="color:#f7f4f0">' + last + 'kg</p><p style="font-size:9px;color:rgba(247,244,240,0.35)">Actual</p></div>';
   }
 }
 
@@ -538,11 +538,11 @@ function renderAlerts() {
       '<div class="flex items-start gap-2.5">' +
         '<span class="material-symbols-outlined icon-filled flex-shrink-0" style="font-size:18px;color:' + s.icon + ';margin-top:1px">' + (a.icon||'info') + '</span>' +
         '<div class="flex-1">' +
-          '<p class="text-xs font-bold" style="color:#f5f5f5">' + (a.title||'') + '</p>' +
-          '<p class="text-xs mt-0.5 leading-relaxed" style="color:rgba(245,245,245,0.55)">' + (a.message||'') + '</p>' +
+          '<p class="text-xs font-bold" style="color:#f7f4f0">' + (a.title||'') + '</p>' +
+          '<p class="text-xs mt-0.5 leading-relaxed" style="color:rgba(247,244,240,0.55)">' + (a.message||'') + '</p>' +
           btn +
         '</div>' +
-        '<button onclick="dismissAlert(\'' + (a.id||'') + '\')" class="material-symbols-outlined flex-shrink-0" style="color:rgba(245,245,245,0.25);font-size:16px">close</button>' +
+        '<button onclick="dismissAlert(\'' + (a.id||'') + '\')" class="material-symbols-outlined flex-shrink-0" style="color:rgba(247,244,240,0.25);font-size:16px">close</button>' +
       '</div></div>';
   }).join('');
 }

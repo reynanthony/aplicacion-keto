@@ -5,13 +5,13 @@ import AppNav from '../../components/AppNav.astro';
 
 <AppLayout title="KetoCore | Mi Perfil" authGuard={true}>
 <style is:global>
-html,body{margin:0;padding:0;box-sizing:border-box;background:#0a0a0a;color:#f5f5f5;font-family:'Inter',sans-serif}
+html,body{margin:0;padding:0;box-sizing:border-box;background:#0b0a08;color:#f7f4f0;font-family:'Inter',sans-serif}
 *,*::before,*::after{box-sizing:border-box}
 .glass-card{background:#181818;border:1px solid rgba(255,255,255,0.09);box-shadow:0 2px 16px rgba(0,0,0,0.4)}
-.field-input{background:#111;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px 12px;font-size:14px;color:#f5f5f5;width:100%;-webkit-appearance:none;appearance:none;font-family:'Inter',sans-serif}
+.field-input{background:#111;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px 12px;font-size:14px;color:#f7f4f0;width:100%;-webkit-appearance:none;appearance:none;font-family:'Inter',sans-serif}
 .field-input:focus{outline:none;border-color:rgba(255,77,0,0.5)}
-.field-input::placeholder{color:rgba(245,245,245,0.3)}
-select.field-input option{background:#1a1a1a;color:#f5f5f5}
+.field-input::placeholder{color:rgba(247,244,240,0.3)}
+select.field-input option{background:#1a1a1a;color:#f7f4f0}
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
 @media (min-width: 768px) {
   #perfilMain {
@@ -35,17 +35,17 @@ select.field-input option{background:#1a1a1a;color:#f5f5f5}
 </style>
 
 <!-- TopBar -->
-<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(10,10,10,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,0.06)">
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
   <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
     <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
-    <h1 class="text-base font-black" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Mi Perfil</h1>
+    <h1 class="text-base font-black" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Mi Perfil</h1>
   </a>
   <div class="flex items-center gap-2">
     <button onclick="saveProfile()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all active:scale-95" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);color:#fff">
       <span class="material-symbols-outlined" style="font-size:15px">save</span>
       Guardar
     </button>
-    <button onclick="toggleHamburgerMenu()" aria-label="Menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1e1e;color:rgba(245,245,245,0.6);border:1px solid rgba(255,255,255,0.06)">
+    <button onclick="toggleHamburgerMenu()" aria-label="Menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1a15;color:rgba(247,244,240,0.6);border:1px solid rgba(255,240,225,0.06)">
       <span class="material-symbols-outlined" style="font-size:20px">menu</span>
     </button>
   </div>
@@ -66,10 +66,10 @@ select.field-input option{background:#1a1a1a;color:#f5f5f5}
       </div>
       <input type="file" id="avatarInput" accept="image/*" class="hidden" onchange="handleAvatarChange(event)">
       <div class="flex-1 min-w-0">
-        <p id="heroName" class="text-base font-black truncate mb-1" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Tu Perfil</p>
+        <p id="heroName" class="text-base font-black truncate mb-1" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Tu Perfil</p>
         <div class="flex flex-wrap gap-1.5">
-          <span id="heroWeight" class="text-xs font-bold px-2 py-1 rounded-lg" style="background:#1e1e1e;color:#ff4d00">-- kg</span>
-          <span id="heroGoal" class="text-xs font-bold px-2 py-1 rounded-lg" style="background:#1e1e1e;color:rgba(245,245,245,0.55)">Meta: --</span>
+          <span id="heroWeight" class="text-xs font-bold px-2 py-1 rounded-lg" style="background:#1e1a15;color:#ff4d00">-- kg</span>
+          <span id="heroGoal" class="text-xs font-bold px-2 py-1 rounded-lg" style="background:#1e1a15;color:rgba(247,244,240,0.55)">Meta: --</span>
           <span id="heroLost" class="text-xs font-bold px-2 py-1 rounded-lg" style="background:rgba(34,197,94,0.1);color:#22c55e">0 kg</span>
         </div>
       </div>
@@ -83,21 +83,21 @@ select.field-input option{background:#1a1a1a;color:#f5f5f5}
         <span class="material-symbols-outlined" style="color:#ff4d00;font-size:16px;font-variation-settings:'FILL' 1">bolt</span>
       </div>
       <p id="statStreak" class="text-lg font-black leading-none" style="color:#ff4d00;font-family:'Plus Jakarta Sans',sans-serif">0</p>
-      <p style="font-size:9px;color:rgba(245,245,245,0.5);margin-top:3px">Racha</p>
+      <p style="font-size:9px;color:rgba(247,244,240,0.5);margin-top:3px">Racha</p>
     </div>
     <div class="glass-card rounded-xl p-3 text-center">
       <div class="w-8 h-8 rounded-xl flex items-center justify-center mx-auto mb-1.5" style="background:rgba(34,197,94,0.12)">
         <span class="material-symbols-outlined" style="color:#22c55e;font-size:16px;font-variation-settings:'FILL' 1">trending_down</span>
       </div>
       <p id="statLost" class="text-lg font-black leading-none" style="color:#22c55e;font-family:'Plus Jakarta Sans',sans-serif">0</p>
-      <p style="font-size:9px;color:rgba(245,245,245,0.5);margin-top:3px">kg perdidos</p>
+      <p style="font-size:9px;color:rgba(247,244,240,0.5);margin-top:3px">kg perdidos</p>
     </div>
     <div class="glass-card rounded-xl p-3 text-center">
       <div class="w-8 h-8 rounded-xl flex items-center justify-center mx-auto mb-1.5" style="background:rgba(96,165,250,0.12)">
         <span class="material-symbols-outlined" style="color:#60a5fa;font-size:16px;font-variation-settings:'FILL' 1">fitness_center</span>
       </div>
       <p id="statWorkouts" class="text-lg font-black leading-none" style="color:#60a5fa;font-family:'Plus Jakarta Sans',sans-serif">0</p>
-      <p style="font-size:9px;color:rgba(245,245,245,0.5);margin-top:3px">Entrenos</p>
+      <p style="font-size:9px;color:rgba(247,244,240,0.5);margin-top:3px">Entrenos</p>
     </div>
   </div>
 
@@ -105,19 +105,19 @@ select.field-input option{background:#1a1a1a;color:#f5f5f5}
   <section id="pf-datos" class="glass-card rounded-2xl p-4">
     <div class="flex items-center gap-2 mb-3">
       <span class="material-symbols-outlined text-base" style="color:#ff4d00;font-variation-settings:'FILL' 1">person</span>
-      <h2 class="text-sm font-bold" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Datos Personales</h2>
+      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Datos Personales</h2>
     </div>
     <div class="grid grid-cols-2 gap-3">
       <div class="col-span-2">
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(245,245,245,0.45)">Nombre</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Nombre</label>
         <input type="text" id="userName" class="field-input" placeholder="Tu nombre">
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(245,245,245,0.45)">Edad</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Edad</label>
         <input type="number" id="age" class="field-input" placeholder="30">
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(245,245,245,0.45)">Sexo</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Sexo</label>
         <select id="sex" class="field-input">
           <option value="">Seleccionar</option>
           <option value="male">Masculino</option>
@@ -125,11 +125,11 @@ select.field-input option{background:#1a1a1a;color:#f5f5f5}
         </select>
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(245,245,245,0.45)">Altura (cm)</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Altura (cm)</label>
         <input type="number" id="height" class="field-input" placeholder="170">
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(245,245,245,0.45)">Meses Keto</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Meses Keto</label>
         <input type="number" id="monthsOnKeto" class="field-input" placeholder="1">
       </div>
     </div>
@@ -139,19 +139,19 @@ select.field-input option{background:#1a1a1a;color:#f5f5f5}
   <section id="pf-peso" class="glass-card rounded-2xl p-4">
     <div class="flex items-center gap-2 mb-3">
       <span class="material-symbols-outlined text-base" style="color:#ff4d00;font-variation-settings:'FILL' 1">monitor_weight</span>
-      <h2 class="text-sm font-bold" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Peso & Objetivo</h2>
+      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Peso & Objetivo</h2>
     </div>
     <div class="grid grid-cols-2 gap-3">
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(245,245,245,0.45)">Peso Inicial (kg)</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Peso Inicial (kg)</label>
         <input type="number" id="startWeight" step="0.1" class="field-input" placeholder="85.0">
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(245,245,245,0.45)">Peso Meta (kg)</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Peso Meta (kg)</label>
         <input type="number" id="goalWeight" step="0.1" class="field-input" placeholder="70.0">
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(245,245,245,0.45)">Objetivo</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Objetivo</label>
         <select id="trainingGoal" class="field-input">
           <option value="lose">Perder Grasa</option>
           <option value="maintain">Mantener</option>
@@ -160,7 +160,7 @@ select.field-input option{background:#1a1a1a;color:#f5f5f5}
         </select>
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(245,245,245,0.45)">Nivel de Actividad</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Nivel de Actividad</label>
         <select id="activity" class="field-input">
           <option value="1.2">Sedentario</option>
           <option value="1.375">Ligero</option>
@@ -176,11 +176,11 @@ select.field-input option{background:#1a1a1a;color:#f5f5f5}
   <section id="pf-entreno" class="glass-card rounded-2xl p-4">
     <div class="flex items-center gap-2 mb-3">
       <span class="material-symbols-outlined text-base" style="color:#4ade80;font-variation-settings:'FILL' 1">fitness_center</span>
-      <h2 class="text-sm font-bold" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Entrenamiento</h2>
+      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Entrenamiento</h2>
     </div>
     <div class="grid grid-cols-2 gap-3">
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(245,245,245,0.45)">Tipo</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Tipo</label>
         <select id="trainingType" class="field-input">
           <option value="bodyweight">Peso Corporal</option>
           <option value="dumbbells">Mancuernas</option>
@@ -190,7 +190,7 @@ select.field-input option{background:#1a1a1a;color:#f5f5f5}
         </select>
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(245,245,245,0.45)">Frecuencia</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Frecuencia</label>
         <select id="trainingFreq" class="field-input">
           <option value="1">1 día / sem</option>
           <option value="2">2 días / sem</option>
@@ -202,7 +202,7 @@ select.field-input option{background:#1a1a1a;color:#f5f5f5}
         </select>
       </div>
       <div class="col-span-2">
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(245,245,245,0.45)">Experiencia</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Experiencia</label>
         <select id="experience" class="field-input">
           <option value="beginner">Principiante</option>
           <option value="intermediate">Intermedio</option>
@@ -216,27 +216,27 @@ select.field-input option{background:#1a1a1a;color:#f5f5f5}
   <section id="pf-macros" class="glass-card rounded-2xl p-4">
     <div class="flex items-center gap-2 mb-3">
       <span class="material-symbols-outlined text-base" style="color:#fbbf24;font-variation-settings:'FILL' 1">insights</span>
-      <h2 class="text-sm font-bold" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Resumen Metabólico</h2>
+      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Resumen Metabólico</h2>
     </div>
     <div class="space-y-2">
-      <div class="flex items-center justify-between px-3 py-2.5 rounded-xl" style="background:#111;border:1px solid rgba(255,255,255,0.07)">
-        <span class="text-xs" style="color:rgba(245,245,245,0.5)">TMB (BMR)</span>
-        <span id="bmrValue" class="text-sm font-bold" style="color:#f5f5f5">-- kcal</span>
+      <div class="flex items-center justify-between px-3 py-2.5 rounded-xl" style="background:#111;border:1px solid rgba(255,240,225,0.07)">
+        <span class="text-xs" style="color:rgba(247,244,240,0.5)">TMB (BMR)</span>
+        <span id="bmrValue" class="text-sm font-bold" style="color:#f7f4f0">-- kcal</span>
       </div>
-      <div class="flex items-center justify-between px-3 py-2.5 rounded-xl" style="background:#111;border:1px solid rgba(255,255,255,0.07)">
-        <span class="text-xs" style="color:rgba(245,245,245,0.5)">TDEE</span>
-        <span id="tdeeValue" class="text-sm font-bold" style="color:#f5f5f5">-- kcal</span>
+      <div class="flex items-center justify-between px-3 py-2.5 rounded-xl" style="background:#111;border:1px solid rgba(255,240,225,0.07)">
+        <span class="text-xs" style="color:rgba(247,244,240,0.5)">TDEE</span>
+        <span id="tdeeValue" class="text-sm font-bold" style="color:#f7f4f0">-- kcal</span>
       </div>
       <div class="flex items-center justify-between px-3 py-2.5 rounded-xl" style="background:rgba(255,77,0,0.07);border:1px solid rgba(255,77,0,0.15)">
         <span class="text-xs font-semibold" style="color:rgba(255,77,0,0.7)">Meta calórica</span>
         <span id="caloriesValue" class="text-sm font-black" style="color:#ff4d00">-- kcal</span>
       </div>
-      <div class="flex items-center justify-between px-3 py-2.5 rounded-xl" style="background:#111;border:1px solid rgba(255,255,255,0.07)">
-        <span class="text-xs" style="color:rgba(245,245,245,0.5)">Proteína diaria</span>
+      <div class="flex items-center justify-between px-3 py-2.5 rounded-xl" style="background:#111;border:1px solid rgba(255,240,225,0.07)">
+        <span class="text-xs" style="color:rgba(247,244,240,0.5)">Proteína diaria</span>
         <span id="proteinValue" class="text-sm font-bold" style="color:#fb923c">-- g</span>
       </div>
     </div>
-    <p class="text-[10px] mt-2 text-center" style="color:rgba(245,245,245,0.25)">Calculado con Mifflin-St Jeor · se actualiza al guardar</p>
+    <p class="text-[10px] mt-2 text-center" style="color:rgba(247,244,240,0.25)">Calculado con Mifflin-St Jeor · se actualiza al guardar</p>
   </section>
 
   <!-- Historial de Peso -->
@@ -244,7 +244,7 @@ select.field-input option{background:#1a1a1a;color:#f5f5f5}
     <div class="flex items-center justify-between mb-3">
       <div class="flex items-center gap-2">
         <span class="material-symbols-outlined text-base" style="color:#ff4d00;font-variation-settings:'FILL' 1">history</span>
-        <h2 class="text-sm font-bold" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Historial de Peso</h2>
+        <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Historial de Peso</h2>
       </div>
       <a href="/app/progreso" class="text-[10px] font-bold px-2 py-1 rounded-full" style="background:rgba(255,77,0,0.12);color:#ff4d00;text-decoration:none">Ver gráfica →</a>
     </div>
@@ -259,9 +259,9 @@ select.field-input option{background:#1a1a1a;color:#f5f5f5}
   <section id="pf-peligro" class="glass-card rounded-2xl p-4" style="border-color:rgba(220,38,38,0.2)">
     <div class="flex items-center gap-2 mb-1">
       <span class="material-symbols-outlined text-base" style="color:#dc2626;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">warning</span>
-      <h2 class="text-sm font-bold" style="color:#f5f5f5">Zona Peligrosa</h2>
+      <h2 class="text-sm font-bold" style="color:#f7f4f0">Zona Peligrosa</h2>
     </div>
-    <p class="text-[11px] mb-4" style="color:rgba(245,245,245,0.35)">Estas acciones son irreversibles. Asegúrate de saber lo que estás haciendo.</p>
+    <p class="text-[11px] mb-4" style="color:rgba(247,244,240,0.35)">Estas acciones son irreversibles. Asegúrate de saber lo que estás haciendo.</p>
 
     <!-- Cerrar sesión -->
     <button onclick="handleLogout()" class="w-full py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 flex items-center justify-center gap-2 mb-2" style="background:rgba(220,38,38,0.07);color:#dc2626;border:1px solid rgba(220,38,38,0.18)">
@@ -289,19 +289,19 @@ select.field-input option{background:#1a1a1a;color:#f5f5f5}
   <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWeightModal()"></div>
   <div class="absolute bottom-0 left-0 right-0 rounded-t-3xl p-6 shadow-2xl" style="background:#181818;border:1px solid rgba(255,255,255,0.09)">
     <div class="w-10 h-1 rounded-full mx-auto mb-5" style="background:rgba(255,255,255,0.2)"></div>
-    <h3 class="text-lg font-bold flex items-center gap-2 mb-4" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">
+    <h3 class="text-lg font-bold flex items-center gap-2 mb-4" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">
       <span class="material-symbols-outlined" style="color:#ff4d00">monitor_weight</span>
       Registrar Peso
     </h3>
     <input type="number" id="newWeightInput" step="0.1" min="20" max="300"
       class="w-full py-4 px-4 rounded-2xl text-2xl font-bold text-center focus:outline-none mb-4"
-      style="background:#111;border:1.5px solid rgba(255,255,255,0.12);color:#f5f5f5" placeholder="0.0">
+      style="background:#111;border:1.5px solid rgba(255,255,255,0.12);color:#f7f4f0" placeholder="0.0">
     <button onclick="saveWeight()" class="w-full py-4 rounded-2xl font-bold text-base transition-all active:scale-95 mb-2"
       style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);color:#fff">
       Guardar
     </button>
     <button onclick="closeWeightModal()" class="w-full py-3 rounded-2xl font-bold text-sm transition-all active:scale-95"
-      style="background:rgba(255,255,255,0.05);color:rgba(245,245,245,0.5)">
+      style="background:rgba(255,240,225,0.05);color:rgba(247,244,240,0.5)">
       Cancelar
     </button>
   </div>
@@ -448,19 +448,19 @@ function loadWeightHistoryList() {
   var history = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
   var recent = history.slice().sort(function(a,b){ return new Date(b.date)-new Date(a.date); }).slice(0, 5);
   if (!recent.length) {
-    container.innerHTML = '<p style="font-size:12px;color:rgba(245,245,245,0.35);text-align:center;padding:10px 0">Sin registros aún</p>';
+    container.innerHTML = '<p style="font-size:12px;color:rgba(247,244,240,0.35);text-align:center;padding:10px 0">Sin registros aún</p>';
     return;
   }
   container.innerHTML = recent.map(function(h, i) {
     var prev = recent[i+1];
     var diff = prev ? (h.weight - prev.weight) : null;
-    var diffColor = diff === null ? '' : diff < 0 ? '#22c55e' : diff > 0 ? '#ff7351' : 'rgba(245,245,245,0.4)';
+    var diffColor = diff === null ? '' : diff < 0 ? '#22c55e' : diff > 0 ? '#ff7351' : 'rgba(247,244,240,0.4)';
     var diffText  = diff !== null ? (diff > 0 ? '+' : '') + diff.toFixed(1) + ' kg' : '';
-    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:10px;background:#111;border:1px solid rgba(255,255,255,0.07)">' +
-      '<span style="font-size:12px;color:rgba(245,245,245,0.5)">' + h.date.slice(5).replace('-','/') + '</span>' +
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:10px;background:#111;border:1px solid rgba(255,240,225,0.07)">' +
+      '<span style="font-size:12px;color:rgba(247,244,240,0.5)">' + h.date.slice(5).replace('-','/') + '</span>' +
       '<div style="display:flex;align-items:center;gap:8px">' +
         (diffText ? '<span style="font-size:11px;color:' + diffColor + '">' + diffText + '</span>' : '') +
-        '<span style="font-size:13px;font-weight:700;color:#f5f5f5">' + h.weight + ' kg</span>' +
+        '<span style="font-size:13px;font-weight:700;color:#f7f4f0">' + h.weight + ' kg</span>' +
       '</div></div>';
   }).join('');
 }

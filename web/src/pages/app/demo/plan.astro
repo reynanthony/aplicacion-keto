@@ -4,7 +4,7 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
 
 <DemoLayout title="KetoCore | Plan Demo" active="plan">
 <style is:global>
-.meal-card { background:#161616;border:1px solid rgba(255,255,255,0.06);border-radius:16px;overflow:hidden; }
+.meal-card { background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:16px;overflow:hidden; }
 .macro-pill { display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:700; }
 </style>
 
@@ -13,8 +13,8 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
   <!-- Header -->
   <div class="flex items-start justify-between mb-4">
     <div>
-      <h1 class="text-2xl font-black leading-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f5f5f5">Plan de Hoy</h1>
-      <p class="text-xs mt-0.5" style="color:rgba(245,245,245,0.5)">Día 21 de programa · Carlos R.</p>
+      <h1 class="text-2xl font-black leading-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">Plan de Hoy</h1>
+      <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.5)">Día 21 de programa · Carlos R.</p>
     </div>
     <button onclick="showPaywall('plan')" class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold" style="background:linear-gradient(135deg,rgba(255,77,0,0.15),rgba(234,88,12,0.1));color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">
       <span class="material-symbols-outlined icon-filled" style="font-size:16px">auto_awesome</span>
@@ -26,7 +26,7 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
   <div class="rounded-2xl p-4 mb-4" style="background:rgba(255,77,0,0.05);border:1px solid rgba(255,77,0,0.15)">
     <div class="flex items-center justify-between mb-3">
       <p class="text-xs font-bold uppercase tracking-wider" style="color:#ff4d00">Totales del día</p>
-      <span class="text-xs font-semibold" style="color:rgba(245,245,245,0.5)">Meta: 2,050 kcal</span>
+      <span class="text-xs font-semibold" style="color:rgba(247,244,240,0.5)">Meta: 2,050 kcal</span>
     </div>
     <div class="grid grid-cols-4 gap-3">
       {[
@@ -37,7 +37,7 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
       ].map(t => (
         <div class="text-center">
           <p class="font-black text-lg leading-tight" style={`color:${t.color};font-family:'Plus Jakarta Sans',sans-serif`}>{t.value}</p>
-          <p style="font-size:9px;color:rgba(245,245,245,0.4);font-weight:600;text-transform:uppercase;letter-spacing:0.05em">{t.label}</p>
+          <p style="font-size:9px;color:rgba(247,244,240,0.4);font-weight:600;text-transform:uppercase;letter-spacing:0.05em">{t.label}</p>
         </div>
       ))}
     </div>
@@ -52,8 +52,8 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined icon-filled" style="color:#fbbf24;font-size:20px">wb_sunny</span>
           <div>
-            <p class="font-bold" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Desayuno</p>
-            <p style="font-size:10px;color:rgba(245,245,245,0.4)">7:30 AM · 620 kcal</p>
+            <p class="font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Desayuno</p>
+            <p style="font-size:10px;color:rgba(247,244,240,0.4)">7:30 AM · 620 kcal</p>
           </div>
         </div>
         <span class="material-symbols-outlined icon-filled" style="color:#22c55e;font-size:20px">check_circle</span>
@@ -65,10 +65,10 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
           { name:'Aguacate (½ mediano)', prot:2, fat:11, carb:2, cal:120, icon:'eco' },
           { name:'Café con crema (1 taza)', prot:1, fat:5, carb:1, cal:55, icon:'coffee' },
         ].map(f => (
-          <div class="flex items-center justify-between rounded-xl px-3 py-2.5" style="background:#1e1e1e">
+          <div class="flex items-center justify-between rounded-xl px-3 py-2.5" style="background:#1e1a15">
             <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined icon-filled" style="color:rgba(245,245,245,0.3);font-size:16px">{f.icon}</span>
-              <p class="text-xs font-semibold" style="color:#f5f5f5">{f.name}</p>
+              <span class="material-symbols-outlined icon-filled" style="color:rgba(247,244,240,0.3);font-size:16px">{f.icon}</span>
+              <p class="text-xs font-semibold" style="color:#f7f4f0">{f.name}</p>
             </div>
             <div class="flex items-center gap-1.5">
               <span class="macro-pill" style="background:rgba(234,88,12,0.1);color:#fb923c">{f.prot}P</span>
@@ -86,8 +86,8 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined icon-filled" style="color:#fb923c;font-size:20px">light_mode</span>
           <div>
-            <p class="font-bold" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Almuerzo</p>
-            <p style="font-size:10px;color:rgba(245,245,245,0.4)">1:00 PM · 580 kcal</p>
+            <p class="font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Almuerzo</p>
+            <p style="font-size:10px;color:rgba(247,244,240,0.4)">1:00 PM · 580 kcal</p>
           </div>
         </div>
         <span class="material-symbols-outlined icon-filled" style="color:#22c55e;font-size:20px">check_circle</span>
@@ -99,10 +99,10 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
           { name:'Mantequilla (1 cda)', prot:0, fat:12, carb:0, cal:100, icon:'water_drop' },
           { name:'Ensalada verde + aceite oliva', prot:1, fat:14, carb:2, cal:145, icon:'eco' },
         ].map(f => (
-          <div class="flex items-center justify-between rounded-xl px-3 py-2.5" style="background:#1e1e1e">
+          <div class="flex items-center justify-between rounded-xl px-3 py-2.5" style="background:#1e1a15">
             <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined icon-filled" style="color:rgba(245,245,245,0.3);font-size:16px">{f.icon}</span>
-              <p class="text-xs font-semibold" style="color:#f5f5f5">{f.name}</p>
+              <span class="material-symbols-outlined icon-filled" style="color:rgba(247,244,240,0.3);font-size:16px">{f.icon}</span>
+              <p class="text-xs font-semibold" style="color:#f7f4f0">{f.name}</p>
             </div>
             <div class="flex items-center gap-1.5">
               <span class="macro-pill" style="background:rgba(234,88,12,0.1);color:#fb923c">{f.prot}P</span>
@@ -120,8 +120,8 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined icon-filled" style="color:#4ade80;font-size:20px">fastfood</span>
           <div>
-            <p class="font-bold" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Snack</p>
-            <p style="font-size:10px;color:rgba(245,245,245,0.4)">4:30 PM · 280 kcal</p>
+            <p class="font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Snack</p>
+            <p style="font-size:10px;color:rgba(247,244,240,0.4)">4:30 PM · 280 kcal</p>
           </div>
         </div>
         <span class="material-symbols-outlined icon-filled" style="color:#22c55e;font-size:20px">check_circle</span>
@@ -131,10 +131,10 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
           { name:'Nueces de macadamia (30g)', prot:2, fat:21, carb:2, cal:200, icon:'eco' },
           { name:'Queso cheddar (30g)', prot:7, fat:9, carb:0, cal:115, icon:'lunch_dining' },
         ].map(f => (
-          <div class="flex items-center justify-between rounded-xl px-3 py-2.5" style="background:#1e1e1e">
+          <div class="flex items-center justify-between rounded-xl px-3 py-2.5" style="background:#1e1a15">
             <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined icon-filled" style="color:rgba(245,245,245,0.3);font-size:16px">{f.icon}</span>
-              <p class="text-xs font-semibold" style="color:#f5f5f5">{f.name}</p>
+              <span class="material-symbols-outlined icon-filled" style="color:rgba(247,244,240,0.3);font-size:16px">{f.icon}</span>
+              <p class="text-xs font-semibold" style="color:#f7f4f0">{f.name}</p>
             </div>
             <div class="flex items-center gap-1.5">
               <span class="macro-pill" style="background:rgba(234,88,12,0.1);color:#fb923c">{f.prot}P</span>
@@ -152,11 +152,11 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined icon-filled" style="color:#60a5fa;font-size:20px">bedtime</span>
           <div>
-            <p class="font-bold" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Cena</p>
-            <p style="font-size:10px;color:rgba(245,245,245,0.4)">7:30 PM · 460 kcal · pendiente</p>
+            <p class="font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Cena</p>
+            <p style="font-size:10px;color:rgba(247,244,240,0.4)">7:30 PM · 460 kcal · pendiente</p>
           </div>
         </div>
-        <span class="material-symbols-outlined" style="color:rgba(245,245,245,0.2);font-size:20px">radio_button_unchecked</span>
+        <span class="material-symbols-outlined" style="color:rgba(247,244,240,0.2);font-size:20px">radio_button_unchecked</span>
       </div>
       <div class="px-4 pb-4 space-y-2">
         {[
@@ -166,8 +166,8 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
         ].map(f => (
           <div class="flex items-center justify-between rounded-xl px-3 py-2.5" style="background:#1a1a1a;opacity:0.7">
             <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined icon-filled" style="color:rgba(245,245,245,0.3);font-size:16px">{f.icon}</span>
-              <p class="text-xs font-semibold" style="color:#f5f5f5">{f.name}</p>
+              <span class="material-symbols-outlined icon-filled" style="color:rgba(247,244,240,0.3);font-size:16px">{f.icon}</span>
+              <p class="text-xs font-semibold" style="color:#f7f4f0">{f.name}</p>
             </div>
             <div class="flex items-center gap-1.5">
               <span class="macro-pill" style="background:rgba(234,88,12,0.1);color:#fb923c">{f.prot}P</span>
@@ -182,8 +182,8 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
 
   <!-- CTA Block -->
   <div class="mt-4 rounded-2xl p-4" style="background:rgba(255,77,0,0.05);border:1px solid rgba(255,77,0,0.15)">
-    <p class="text-sm font-bold mb-1" style="color:#f5f5f5">¿Quieres un plan personalizado?</p>
-    <p class="text-xs mb-3" style="color:rgba(245,245,245,0.5)">KetoCore genera tu plan de 21 días basado en tu metabolismo, peso, objetivo y preferencias alimenticias.</p>
+    <p class="text-sm font-bold mb-1" style="color:#f7f4f0">¿Quieres un plan personalizado?</p>
+    <p class="text-xs mb-3" style="color:rgba(247,244,240,0.5)">KetoCore genera tu plan de 21 días basado en tu metabolismo, peso, objetivo y preferencias alimenticias.</p>
     <button onclick="showPaywall('plan')" class="w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2" style="background:linear-gradient(135deg,#ff4d00,#ea580c);color:#fff;box-shadow:0 4px 16px rgba(255,77,0,0.3)">
       <span class="material-symbols-outlined icon-filled" style="font-size:18px">auto_awesome</span>
       Obtén tu plan personalizado

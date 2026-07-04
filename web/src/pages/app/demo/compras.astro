@@ -62,8 +62,8 @@ const totalEst = '$87.50';
   <!-- Header -->
   <div class="flex items-start justify-between mb-4">
     <div>
-      <h1 class="text-xl font-black" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f5f5f5">Lista de Compras</h1>
-      <p class="text-xs mt-0.5" style="color:rgba(245,245,245,0.5)">Generada para la semana · {totalItems} artículos</p>
+      <h1 class="text-xl font-black" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">Lista de Compras</h1>
+      <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.5)">Generada para la semana · {totalItems} artículos</p>
     </div>
     <button onclick="showPaywall('plan')" class="text-xs font-bold px-3 py-2 rounded-xl" style="background:rgba(255,77,0,0.1);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">
       Regenerar IA
@@ -73,15 +73,15 @@ const totalEst = '$87.50';
   <!-- Progress Bar -->
   <div class="dk-card rounded-2xl p-4 mb-4">
     <div class="flex items-center justify-between mb-2">
-      <p class="text-xs font-bold" style="color:#f5f5f5">Completado</p>
+      <p class="text-xs font-bold" style="color:#f7f4f0">Completado</p>
       <p class="text-xs font-bold" style="color:#22c55e">{doneItems}/{totalItems} artículos</p>
     </div>
     <div class="dk-progress-bar mb-2">
       <div class="dk-progress-fill demo-bar" data-pct={Math.round(doneItems/totalItems*100)} style={`width:0%;background:#22c55e`}></div>
     </div>
     <div class="flex items-center justify-between">
-      <p class="text-xs" style="color:rgba(245,245,245,0.4)">Estimado total semanal</p>
-      <p class="text-sm font-black" style="color:#f5f5f5">{totalEst}</p>
+      <p class="text-xs" style="color:rgba(247,244,240,0.4)">Estimado total semanal</p>
+      <p class="text-sm font-black" style="color:#f7f4f0">{totalEst}</p>
     </div>
   </div>
 
@@ -94,8 +94,8 @@ const totalEst = '$87.50';
             <span class="material-symbols-outlined icon-filled" style={`color:${cat.color};font-size:18px`}>{cat.icon}</span>
           </div>
           <div class="flex-1">
-            <p class="text-sm font-bold" style="color:#f5f5f5">{cat.label}</p>
-            <p style="font-size:10px;color:rgba(245,245,245,0.4)">{cat.items.length} artículos · {cat.items.filter(i=>i.done).length} listos</p>
+            <p class="text-sm font-bold" style="color:#f7f4f0">{cat.label}</p>
+            <p style="font-size:10px;color:rgba(247,244,240,0.4)">{cat.items.length} artículos · {cat.items.filter(i=>i.done).length} listos</p>
           </div>
           <span class="text-[10px] font-bold px-2 py-1 rounded-full" style={`background:${cat.bg};color:${cat.color}`}>
             {cat.items.filter(i=>i.done).length}/{cat.items.length}
@@ -108,10 +108,10 @@ const totalEst = '$87.50';
                 {item.done && <span class="material-symbols-outlined icon-filled" style="color:#fff;font-size:14px">check</span>}
               </div>
               <div class="flex-1">
-                <p class="text-sm font-semibold" style={item.done ? "color:rgba(245,245,245,0.35);text-decoration:line-through" : "color:#f5f5f5"}>{item.name}</p>
-                <p style="font-size:10px;color:rgba(245,245,245,0.35)">{item.qty}</p>
+                <p class="text-sm font-semibold" style={item.done ? "color:rgba(247,244,240,0.35);text-decoration:line-through" : "color:#f7f4f0"}>{item.name}</p>
+                <p style="font-size:10px;color:rgba(247,244,240,0.35)">{item.qty}</p>
               </div>
-              <p class="text-xs font-semibold" style="color:rgba(245,245,245,0.4)">{item.est}</p>
+              <p class="text-xs font-semibold" style="color:rgba(247,244,240,0.4)">{item.est}</p>
             </div>
           ))}
         </div>
@@ -121,8 +121,8 @@ const totalEst = '$87.50';
 
   <!-- CTA -->
   <div class="mt-4 rounded-2xl p-4" style="background:rgba(255,77,0,0.05);border:1px solid rgba(255,77,0,0.15)">
-    <p class="text-sm font-bold mb-1" style="color:#f5f5f5">Lista generada con IA</p>
-    <p class="text-xs mb-3" style="color:rgba(245,245,245,0.5)">La lista real se genera automáticamente desde tu plan de comidas de la semana, agrupada por categoría y con precios estimados según tu región.</p>
+    <p class="text-sm font-bold mb-1" style="color:#f7f4f0">Lista generada con IA</p>
+    <p class="text-xs mb-3" style="color:rgba(247,244,240,0.5)">La lista real se genera automáticamente desde tu plan de comidas de la semana, agrupada por categoría y con precios estimados según tu región.</p>
     <button onclick="showPaywall('plan')" class="w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2" style="background:linear-gradient(135deg,#ff4d00,#ea580c);color:#fff">
       <span class="material-symbols-outlined icon-filled" style="font-size:18px">shopping_cart</span>
       Generar mi lista real
@@ -145,7 +145,7 @@ const totalEst = '$87.50';
     cb.innerHTML = isDone ? '' : '<span class="material-symbols-outlined icon-filled" style="color:#fff;font-size:14px">check</span>';
     var row = cb.closest('.shop-item');
     var nameEl = row.querySelector('.flex-1 p:first-child');
-    nameEl.style.color = isDone ? '#f5f5f5' : 'rgba(245,245,245,0.35)';
+    nameEl.style.color = isDone ? '#f7f4f0' : 'rgba(247,244,240,0.35)';
     nameEl.style.textDecoration = isDone ? '' : 'line-through';
   }
 </script>

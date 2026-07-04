@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0b0a08; }
+  .msym { font-family: 'Material Symbols Outlined'; font-style: normal; line-height: 1; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; -webkit-font-smoothing: antialiased; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .fill { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+  .nums { font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .disp { font-family: 'Plus Jakarta Sans', sans-serif; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,77,0,0.3); border-radius: 10px; }
+</style>
+</helmet>
+<div style="display:flex;min-height:100vh;background:#0b0a08;color:#f7f4f0;font-family:'Inter',sans-serif;font-size:16px">
+  <dc-import name="KetoSidebar" active="progreso" hint-size="250px,100%"></dc-import>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <div style="padding:38px 40px 56px;max-width:1300px;width:100%">
+
+      <!-- Header -->
+      <div style="margin-bottom:26px">
+        <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px">Mi Progreso · Día 18</div>
+        <h1 class="disp" style="font-weight:800;font-size:42px;line-height:0.98;letter-spacing:-0.035em">−5.2 kg y contando</h1>
+      </div>
+
+      <!-- Top bento -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:150px;gap:18px;margin-bottom:18px">
+        <!-- weight big -->
+        <div style="grid-column:span 2;grid-row:span 2;background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:28px;display:flex;flex-direction:column">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:8px">
+            <div><span class="disp" style="font-weight:800;font-size:16px;color:rgba(247,244,240,0.55)">Peso actual</span><div class="disp nums" style="font-weight:900;font-size:60px;line-height:0.9;margin-top:6px">74.8<span style="font-size:24px;color:rgba(247,244,240,0.4)"> kg</span></div></div>
+            <div style="display:flex;gap:6px"><span style="font-size:11px;font-weight:700;padding:6px 12px;border-radius:100px;background:rgba(255,77,0,0.12);color:#ff4d00">90d</span><span style="font-size:11px;font-weight:600;padding:6px 12px;border-radius:100px;color:rgba(247,244,240,0.4)">Todo</span></div>
+          </div>
+          <svg viewBox="0 0 560 150" width="100%" height="150" preserveAspectRatio="none" style="display:block;flex:1">
+            <defs><linearGradient id="prArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(255,77,0,0.28)"></stop><stop offset="100%" stop-color="rgba(255,77,0,0)"></stop></linearGradient></defs>
+            <path d="M0,26 L80,38 L160,44 L240,64 L320,82 L400,100 L480,116 L560,126 L560,150 L0,150 Z" fill="url(#prArea)"></path>
+            <path d="M0,26 L80,38 L160,44 L240,64 L320,82 L400,100 L480,116 L560,126" fill="none" stroke="#ff4d00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <circle cx="560" cy="126" r="6" fill="#ff4d00" stroke="#161310" stroke-width="3.5"></circle>
+          </svg>
+          <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:11px;color:rgba(247,244,240,0.32)"><span>Abr</span><span>May</span><span>Jun</span><span>Jul</span></div>
+        </div>
+        <!-- goal cream -->
+        <div style="grid-column:span 2;background:#f3ede3;border-radius:26px;padding:26px;color:#1a140e;display:flex;flex-direction:column;justify-content:space-between">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span class="disp" style="font-weight:800;font-size:13px;letter-spacing:0.02em;color:rgba(26,20,14,0.55)">META: PERDER 8 KG</span><span class="msym fill" style="color:#ff4d00;font-size:22px">flag</span></div>
+          <div><div style="display:flex;align-items:baseline;gap:10px"><span class="disp nums" style="font-weight:900;font-size:44px;line-height:0.85">65%</span><span style="font-size:14px;font-weight:600;color:rgba(26,20,14,0.5)">completado</span></div><div style="height:10px;border-radius:100px;background:rgba(26,20,14,0.09);overflow:hidden;margin-top:14px"><div style="height:100%;width:65%;border-radius:100px;background:#ff4d00"></div></div><div style="font-size:12.5px;font-weight:600;color:rgba(26,20,14,0.5);margin-top:8px">Faltan 2.8 kg · ~4 semanas</div></div>
+        </div>
+        <!-- stats -->
+        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:24px;padding:22px;display:flex;flex-direction:column;justify-content:space-between"><span class="msym fill" style="color:#ff4d00;font-size:22px">local_fire_department</span><div><div class="disp nums" style="font-weight:900;font-size:34px;line-height:0.9">18</div><div style="font-size:11.5px;color:rgba(247,244,240,0.4);margin-top:3px">días de racha</div></div></div>
+        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:24px;padding:22px;display:flex;flex-direction:column;justify-content:space-between"><span class="msym fill" style="color:#22c55e;font-size:22px">restaurant</span><div><div class="disp nums" style="font-weight:900;font-size:34px;line-height:0.9">156</div><div style="font-size:11.5px;color:rgba(247,244,240,0.4);margin-top:3px">comidas</div></div></div>
+      </div>
+
+      <!-- Body measurements -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px">
+        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:28px">
+          <h2 class="disp" style="font-weight:800;font-size:18px;margin-bottom:20px">Medidas corporales</h2>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;align-items:center;gap:16px;padding:14px 16px;border-radius:16px;background:#1e1a15"><span class="msym" style="color:#ff4d00;font-size:22px">straighten</span><span style="flex:1;font-size:14px;font-weight:600">Cintura</span><span class="disp nums" style="font-weight:700;font-size:15px">86 cm</span><span style="font-size:12px;font-weight:700;color:#22c55e">−7 cm</span></div>
+            <div style="display:flex;align-items:center;gap:16px;padding:14px 16px;border-radius:16px;background:#1e1a15"><span class="msym" style="color:#ff4d00;font-size:22px">fitness_center</span><span style="flex:1;font-size:14px;font-weight:600">% grasa corporal</span><span class="disp nums" style="font-weight:700;font-size:15px">24.5%</span><span style="font-size:12px;font-weight:700;color:#22c55e">−3.8%</span></div>
+            <div style="display:flex;align-items:center;gap:16px;padding:14px 16px;border-radius:16px;background:#1e1a15"><span class="msym" style="color:#ff4d00;font-size:22px">monitor_heart</span><span style="flex:1;font-size:14px;font-weight:600">Masa muscular</span><span class="disp nums" style="font-weight:700;font-size:15px">51.2 kg</span><span style="font-size:12px;font-weight:700;color:#22c55e">+1.1 kg</span></div>
+          </div>
+        </div>
+        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:28px">
+          <h2 class="disp" style="font-weight:800;font-size:18px;margin-bottom:20px">Logros desbloqueados</h2>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+            <div style="aspect-ratio:1;border-radius:18px;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px"><span class="msym fill" style="color:#ff4d00;font-size:28px">local_fire_department</span><span style="font-size:9px;font-weight:600;color:rgba(247,244,240,0.55);text-align:center">Racha 14</span></div>
+            <div style="aspect-ratio:1;border-radius:18px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px"><span class="msym fill" style="color:#fbbf24;font-size:28px">emoji_events</span><span style="font-size:9px;font-weight:600;color:rgba(247,244,240,0.55);text-align:center">−5 kg</span></div>
+            <div style="aspect-ratio:1;border-radius:18px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px"><span class="msym fill" style="color:#22c55e;font-size:28px">eco</span><span style="font-size:9px;font-weight:600;color:rgba(247,244,240,0.55);text-align:center">100 comidas</span></div>
+            <div style="aspect-ratio:1;border-radius:18px;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px"><span class="msym fill" style="color:#60a5fa;font-size:28px">water_drop</span><span style="font-size:9px;font-weight:600;color:rgba(247,244,240,0.55);text-align:center">Hidratado</span></div>
+            <div style="aspect-ratio:1;border-radius:18px;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px"><span class="msym fill" style="color:#a78bfa;font-size:28px">bedtime</span><span style="font-size:9px;font-weight:600;color:rgba(247,244,240,0.55);text-align:center">Ayuno x7</span></div>
+            <div style="aspect-ratio:1;border-radius:18px;background:#1e1a15;border:1px solid rgba(255,240,225,0.06);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;opacity:0.4"><span class="msym" style="color:rgba(247,244,240,0.5);font-size:28px">lock</span><span style="font-size:9px;font-weight:600;color:rgba(247,244,240,0.45);text-align:center">−8 kg</span></div>
+            <div style="aspect-ratio:1;border-radius:18px;background:#1e1a15;border:1px solid rgba(255,240,225,0.06);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;opacity:0.4"><span class="msym" style="color:rgba(247,244,240,0.5);font-size:28px">lock</span><span style="font-size:9px;font-weight:600;color:rgba(247,244,240,0.45);text-align:center">Racha 30</span></div>
+            <div style="aspect-ratio:1;border-radius:18px;background:#1e1a15;border:1px solid rgba(255,240,225,0.06);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;opacity:0.4"><span class="msym" style="color:rgba(247,244,240,0.5);font-size:28px">lock</span><span style="font-size:9px;font-weight:600;color:rgba(247,244,240,0.45);text-align:center">Meta</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Before / after -->
+      <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:28px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px"><h2 class="disp" style="font-weight:800;font-size:18px">Fotos de progreso</h2><button style="height:38px;padding:0 16px;border-radius:11px;background:rgba(255,77,0,0.12);border:1px solid rgba(255,77,0,0.2);color:#ff4d00;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px"><span class="msym" style="font-size:18px">add_a_photo</span>Añadir foto</button></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+          <div style="aspect-ratio:3/4;border-radius:18px;background:repeating-linear-gradient(135deg,#1c1811,#1c1811 10px,#181510 10px,#181510 20px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px"><span class="msym" style="color:rgba(247,244,240,0.3);font-size:32px">photo_camera</span><span style="font-family:monospace;font-size:11px;color:rgba(247,244,240,0.35)">Día 1 · 80 kg</span></div>
+          <div style="aspect-ratio:3/4;border-radius:18px;background:repeating-linear-gradient(135deg,#1c1811,#1c1811 10px,#181510 10px,#181510 20px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px"><span class="msym" style="color:rgba(247,244,240,0.3);font-size:32px">photo_camera</span><span style="font-family:monospace;font-size:11px;color:rgba(247,244,240,0.35)">Día 10 · 77 kg</span></div>
+          <div style="aspect-ratio:3/4;border-radius:18px;background:repeating-linear-gradient(135deg,#221a11,#221a11 10px,#1d160e 10px,#1d160e 20px);border:1px solid rgba(255,77,0,0.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px"><span class="msym" style="color:rgba(255,77,0,0.5);font-size:32px">photo_camera</span><span style="font-family:monospace;font-size:11px;color:rgba(255,77,0,0.55)">Día 18 · 74.8 kg</span></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+</body>
+</html>

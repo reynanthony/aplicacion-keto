@@ -1,19 +1,16 @@
 ---
+// Nav — KetoTopNav del rediseño Editorial Bento (sitio de marketing, tema claro)
+// Desktop >820px: sticky translúcida con blur + links + CTA "Entrar a la app".
+// Móvil ≤820px: logo + hamburguesa que abre panel lateral.
 const pathname = Astro.url.pathname;
 
 const navLinks = [
-  { href: '/aprender', label: 'Aprender' },
-  { href: '/recetas', label: 'Recetas' },
-  { href: '/alimentos', label: 'Alimentos' },
-  { href: '/protocolos', label: 'Protocolos' },
+  { href: '/protocolos',   label: 'Protocolos' },
+  { href: '/aprender',     label: 'Aprender' },
+  { href: '/recetas',      label: 'Recetas' },
   { href: '/herramientas', label: 'Herramientas' },
-];
-
-const moreLinks = [
-  { href: '/comunidad', label: 'Comunidad', icon: 'groups' },
-  { href: '/retos', label: 'Retos', icon: 'emoji_events' },
-  { href: '/historias', label: 'Historias', icon: 'stars' },
-  { href: '/academia', label: 'Academia', icon: 'school' },
+  { href: '/retos',        label: 'Retos' },
+  { href: '/historias',    label: 'Historias' },
 ];
 
 function isActive(href: string) {
@@ -21,112 +18,117 @@ function isActive(href: string) {
 }
 ---
 
-<nav id="site-nav" style="position:fixed;top:0;left:0;right:0;z-index:100;border-bottom:1px solid var(--c-border);background:rgba(250,250,248,0.95);backdrop-filter:blur(18px);transition:transform 0.3s;box-shadow:0 1px 0 rgba(26,20,14,0.06)">
-  <div class="wrap" style="height:60px;display:flex;align-items:center;justify-content:space-between;gap:2rem">
+<nav id="site-nav" class="ktn">
+  <a href="/" class="ktn-logo">
+    <img src="/logo.svg" alt="KetoCore" width="34" height="34">
+    <span>KetoCore</span>
+  </a>
 
-    <!-- Logo -->
-    <a href="/" style="display:flex;align-items:center;gap:0.625rem;text-decoration:none;flex-shrink:0">
-      <img src="/logo.svg" alt="KetoCore" width="30" height="30" style="filter:drop-shadow(0 0 6px rgba(255,77,0,.4))">
-      <span style="font-family:var(--font-display);font-weight:900;font-size:1.0625rem;color:var(--c-primary);letter-spacing:-0.02em">KetoCore</span>
-    </a>
-
-    <!-- Desktop nav -->
-    <div id="desktop-nav" style="display:flex;align-items:center;gap:0.25rem;flex:1;max-width:680px">
-      {navLinks.map(link => (
-        <a
-          href={link.href}
-          class={`nav-a${isActive(link.href) ? ' active' : ''}`}
-          style="padding:0.375rem 0.75rem;border-radius:8px;transition:background 0.15s,color 0.15s"
-        >
-          {link.label}
-        </a>
-      ))}
-
-      <!-- Más dropdown -->
-      <div class="nav-dropdown" style="position:relative">
-        <button class="nav-a nav-dropdown-btn" style="display:flex;align-items:center;gap:0.25rem;padding:0.375rem 0.75rem;border-radius:8px;background:transparent;border:none;cursor:pointer;font-family:var(--font-display);font-size:0.875rem;font-weight:600;color:var(--c-text-muted);transition:color 0.15s">
-          Más
-          <span class="icon" style="font-size:16px">expand_more</span>
-        </button>
-        <div class="nav-dropdown-menu" style="position:absolute;top:calc(100% + 0.5rem);left:0;background:var(--c-surface);border:1px solid var(--c-border-2);border-radius:14px;padding:0.5rem;min-width:180px;opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity 0.15s,transform 0.15s;box-shadow:0 8px 24px rgba(26,20,14,0.12)">
-          {moreLinks.map(link => (
-            <a href={link.href} style="display:flex;align-items:center;gap:0.625rem;padding:0.625rem 0.875rem;border-radius:8px;text-decoration:none;color:var(--c-text-muted);font-size:0.875rem;font-weight:600;transition:background 0.15s,color 0.15s" class="nav-more-link">
-              <span class="icon" style="font-size:18px;color:var(--c-primary)">{link.icon}</span>
-              {link.label}
-            </a>
-          ))}
-        </div>
-      </div>
-    </div>
-
-    <!-- CTA buttons -->
-    <div style="display:flex;align-items:center;gap:0.75rem;flex-shrink:0">
-      <a href="/app/welcome.html" class="nav-a" style="display:none" id="nav-login">Entrar</a>
-      <a href="/app/welcome.html" class="btn btn-sm">Empezar gratis</a>
-      <!-- Mobile menu button -->
-      <button id="mobile-menu-btn" style="display:none;background:none;border:none;color:var(--c-text);cursor:pointer;padding:0.25rem" aria-label="Menú">
-        <span class="icon" style="font-size:24px">menu</span>
-      </button>
-    </div>
+  <div class="ktn-desk">
+    {navLinks.map(link => (
+      <a href={link.href} class:list={['ktn-link', { active: isActive(link.href) }]}>{link.label}</a>
+    ))}
+    <a href="/app/" class="ktn-cta">Entrar a la app</a>
   </div>
 
-  <!-- Mobile menu -->
-  <div id="mobile-menu" style="display:none;border-top:1px solid var(--c-border);background:var(--c-surface)">
-    <div style="padding:1rem 1.5rem;display:flex;flex-direction:column;gap:0.25rem">
-      {[...navLinks, ...moreLinks].map(link => (
-        <a href={link.href} style="padding:0.75rem 1rem;border-radius:10px;text-decoration:none;color:var(--c-text-muted);font-weight:600;font-family:var(--font-display);font-size:0.9375rem;transition:background 0.15s,color 0.15s" class="mobile-nav-link">
-          {link.label}
-        </a>
-      ))}
-      <div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--c-border);display:flex;gap:0.75rem">
-        <a href="/app/welcome.html" class="btn-ghost" style="flex:1;justify-content:center;padding:0.625rem 1rem;font-size:0.875rem">Entrar</a>
-        <a href="/app/welcome.html" class="btn" style="flex:1;justify-content:center;padding:0.625rem 1rem;font-size:0.875rem">Empezar gratis</a>
-      </div>
-    </div>
-  </div>
+  <button type="button" id="ktn-open" class="ktn-burger" aria-label="Abrir menú">
+    <span class="material-symbols-outlined" style="font-size:24px;color:#1a140e">menu</span>
+  </button>
 </nav>
 
-<!-- Spacer for fixed nav -->
-<div style="height:60px"></div>
+<!-- Panel móvil -->
+<div id="ktn-menu" class="ktn-menu" aria-hidden="true">
+  <div class="ktn-scrim"></div>
+  <div class="ktn-panel">
+    <div class="ktn-panel-head">
+      <span>Menú</span>
+      <button type="button" id="ktn-close" class="ktn-x" aria-label="Cerrar menú">
+        <span class="material-symbols-outlined" style="font-size:22px;color:#1a140e">close</span>
+      </button>
+    </div>
+    {navLinks.map(link => (
+      <a href={link.href} class="ktn-m-link">{link.label}</a>
+    ))}
+    <a href="/app/" class="ktn-m-cta">Entrar a la app</a>
+  </div>
+</div>
 
 <style>
-  @media (min-width: 768px) {
-    #nav-login { display: inline !important; }
-  }
-  @media (max-width: 767px) {
-    #desktop-nav { display: none !important; }
-    #mobile-menu-btn { display: block !important; }
-  }
-  .nav-dropdown:hover .nav-dropdown-menu,
-  .nav-dropdown:focus-within .nav-dropdown-menu {
-    opacity: 1 !important;
-    pointer-events: all !important;
-    transform: translateY(0) !important;
-  }
-  .nav-more-link:hover { background: var(--c-surface-2) !important; color: var(--c-text) !important; }
-  .nav-a:hover, .mobile-nav-link:hover { background: rgba(255,255,255,0.04) !important; color: var(--c-text) !important; }
+.ktn {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 32px;
+  background: rgba(244,239,230,0.85);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(26,20,14,0.06);
+  font-family: var(--font-body);
+}
+.ktn-logo { display: flex; align-items: center; gap: 11px; text-decoration: none; flex-shrink: 0; }
+.ktn-logo img { width: 34px; height: 34px; border-radius: 10px; }
+.ktn-logo span {
+  font-family: var(--font-display); font-weight: 900; font-size: 18px;
+  letter-spacing: -0.02em; color: #1a140e;
+}
+.ktn-desk { display: flex; align-items: center; gap: 30px; }
+.ktn-link { font-size: 14px; font-weight: 500; color: rgba(26,20,14,0.62); text-decoration: none; transition: color .13s; }
+.ktn-link:hover { color: #1a140e; }
+.ktn-link.active { color: #ff4d00; font-weight: 700; }
+.ktn-cta {
+  display: flex; align-items: center; gap: 7px; height: 42px; padding: 0 20px;
+  border-radius: 12px; background: #ff4d00; color: #fff;
+  font-family: var(--font-display); font-weight: 700; font-size: 13.5px;
+  text-decoration: none; box-shadow: 0 4px 14px rgba(255,77,0,0.28);
+  transition: transform .14s, box-shadow .14s;
+}
+.ktn-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(255,77,0,0.34); }
+.ktn-burger {
+  display: none; width: 44px; height: 44px; border-radius: 12px;
+  background: #fff; border: 1px solid rgba(26,20,14,0.1); cursor: pointer;
+  align-items: center; justify-content: center;
+}
+
+.ktn-menu { position: fixed; inset: 0; z-index: 70; display: none; font-family: var(--font-body); }
+.ktn-menu.open { display: block; }
+.ktn-scrim { position: absolute; inset: 0; background: rgba(26,20,14,0.4); }
+.ktn-panel {
+  position: absolute; top: 0; right: 0; bottom: 0; width: 80%; max-width: 320px;
+  background: #f4efe6; padding: 22px;
+  display: flex; flex-direction: column; gap: 6px;
+  overflow-y: auto;
+}
+.ktn-panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.ktn-panel-head span { font-family: var(--font-display); font-weight: 900; font-size: 17px; color: #1a140e; }
+.ktn-x {
+  width: 38px; height: 38px; border-radius: 11px;
+  background: #fff; border: 1px solid rgba(26,20,14,0.1); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.ktn-m-link {
+  padding: 14px 16px; border-radius: 12px;
+  font-size: 15px; font-weight: 600; color: #1a140e; text-decoration: none; background: #fff;
+}
+.ktn-m-cta {
+  margin-top: 8px; padding: 15px; border-radius: 13px; text-align: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 15px;
+  color: #fff; text-decoration: none; background: #ff4d00;
+}
+
+@media (max-width: 820px) {
+  .ktn { padding: 14px 16px; }
+  .ktn-desk { display: none; }
+  .ktn-burger { display: flex; }
+}
 </style>
 
 <script>
-  const btn = document.getElementById('mobile-menu-btn');
-  const menu = document.getElementById('mobile-menu');
-  btn?.addEventListener('click', () => {
-    const open = menu?.style.display === 'block';
-    if (menu) menu.style.display = open ? 'none' : 'block';
-    const icon = btn?.querySelector('.icon');
-    if (icon) icon.textContent = open ? 'menu' : 'close';
-  });
-
-  // Hide nav on scroll down, show on scroll up
-  let lastY = 0;
-  const nav = document.getElementById('site-nav');
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    if (y > 100) {
-      if (nav) nav.style.transform = y > lastY ? 'translateY(-100%)' : 'translateY(0)';
-    } else {
-      if (nav) nav.style.transform = 'translateY(0)';
-    }
-    lastY = y;
-  }, { passive: true });
+  const menu = document.getElementById('ktn-menu');
+  const setOpen = (open: boolean) => {
+    menu?.classList.toggle('open', open);
+    menu?.setAttribute('aria-hidden', open ? 'false' : 'true');
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  document.getElementById('ktn-open')?.addEventListener('click', () => setOpen(true));
+  document.getElementById('ktn-close')?.addEventListener('click', () => setOpen(false));
+  menu?.querySelector('.ktn-scrim')?.addEventListener('click', () => setOpen(false));
+  menu?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setOpen(false)));
 </script>

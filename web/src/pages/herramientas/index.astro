@@ -78,16 +78,16 @@ import Layout from '../../layouts/Layout.astro';
 
       <!-- Results -->
       <div id="results" style="display:none">
-        <div class="card" style="padding:2rem;margin-bottom:1rem;border-color:var(--c-primary-border)">
-          <p style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--c-primary);margin-bottom:1.25rem">Tus macros keto diarios</p>
+        <div style="padding:2rem;margin-bottom:1rem;background:#1a140e;border-radius:26px;color:#f7f4f0">
+          <p style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#ff7a3c;margin-bottom:1.25rem">Tus macros keto diarios</p>
           <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.5rem">
             <div class="macro-pill" style="padding:1rem"><span id="res-kcal" style="color:var(--c-primary);font-size:1.5rem">—</span><span>kcal/día</span></div>
             <div class="macro-pill" style="padding:1rem"><span id="res-fat" style="color:var(--c-gold);font-size:1.5rem">—g</span><span>grasa</span></div>
             <div class="macro-pill" style="padding:1rem"><span id="res-prot" style="color:#818cf8;font-size:1.5rem">—g</span><span>proteína</span></div>
             <div class="macro-pill" style="padding:1rem"><span id="res-carbs" style="color:var(--c-green);font-size:1.5rem">—g</span><span>carbs netos</span></div>
           </div>
-          <div style="background:var(--c-surface-3);border-radius:10px;padding:1rem;margin-bottom:1.25rem">
-            <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.75rem;color:var(--c-text-dim)">
+          <div style="background:rgba(247,244,240,0.06);border-radius:10px;padding:1rem;margin-bottom:1.25rem">
+            <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.75rem;color:rgba(247,244,240,0.5)">
               <span>Grasa 70%</span><span>Proteína 25%</span><span>Carbos 5%</span>
             </div>
             <div class="progress-track" style="height:8px">
@@ -98,7 +98,7 @@ import Layout from '../../layouts/Layout.astro';
               </div>
             </div>
           </div>
-          <a href="/app/welcome.html" class="btn" style="width:100%;justify-content:center">Usar estos macros en la app</a>
+          <a href="/app/welcome" class="btn" style="width:100%;justify-content:center">Usar estos macros en la app</a>
         </div>
 
         <div class="card" style="padding:1.5rem">
@@ -166,12 +166,14 @@ import Layout from '../../layouts/Layout.astro';
     <span class="chip" style="margin-bottom:1.25rem;display:inline-block">Evaluación completa</span>
     <h2 class="d" style="font-size:clamp(1.75rem,3vw,2.5rem);margin-bottom:1rem">Las calculadoras son solo el principio.</h2>
     <p style="color:var(--c-text-muted);margin-bottom:2rem">En la app, tus métricas se integran en un protocolo personalizado que se actualiza conforme progresas.</p>
-    <a href="/app/welcome.html" class="btn">Crear cuenta gratuita</a>
+    <a href="/app/welcome" class="btn">Crear cuenta gratuita</a>
   </div>
 </section>
 
 <style>
-  @media (max-width: 768px) {
+  #results .macro-pill { background: rgba(247,244,240,0.08); border-color: rgba(247,244,240,0.12); }
+  #results .macro-pill span:last-child { color: rgba(247,244,240,0.5); }
+  @media (max-width: 820px) {
     #calc-main { grid-template-columns: 1fr !important; }
   }
 </style>
@@ -181,7 +183,16 @@ import Layout from '../../layouts/Layout.astro';
   const resultsEl = document.getElementById('results');
   const placeholder = document.getElementById('results-placeholder');
 
-  btn?.addEventListener('click', () => {
+  // Recalcular en vivo cuando cambian los inputs (una vez calculado)
+  let calculated = false;
+  ['weight', 'height', 'age', 'sex', 'activity', 'goal'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', () => { if (calculated) calc(); });
+    document.getElementById(id)?.addEventListener('change', () => { if (calculated) calc(); });
+  });
+
+  btn?.addEventListener('click', () => { calculated = true; calc(); });
+
+  function calc() {
     const weight = parseFloat((document.getElementById('weight') as HTMLInputElement).value);
     const height = parseFloat((document.getElementById('height') as HTMLInputElement).value);
     const age = parseFloat((document.getElementById('age') as HTMLInputElement).value);
@@ -220,6 +231,6 @@ import Layout from '../../layouts/Layout.astro';
     if (resultsEl) resultsEl.style.display = 'block';
 
     resultsEl?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  });
+  }
 </script>
 </Layout>

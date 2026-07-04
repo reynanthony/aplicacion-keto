@@ -9,10 +9,11 @@
   --c-primary-border: rgba(255,77,0,0.25);
 
   /* Backgrounds — warm cream editorial */
-  --c-bg: #fafaf8;
+  --c-bg: #f4efe6;
   --c-surface: #ffffff;
-  --c-surface-2: #f4efe9;
-  --c-surface-3: #ebe4dc;
+  --c-surface-2: #efe9dd;
+  --c-surface-3: #e6ded0;
+  --c-ink: #1a140e;
 
   /* Borders */
   --c-border: rgba(26,20,14,0.09);
@@ -45,8 +46,8 @@
     line-height: 1.6;
   }
   body[data-theme="app"] {
-    background: #0a0a0a !important;
-    color: #f5f5f5 !important;
+    background: #0b0a08 !important;
+    color: #f7f4f0 !important;
   }
 }
 
@@ -269,22 +270,24 @@
   --c-primary-dim: rgba(255,77,0,0.12);
   --c-primary-border: rgba(255,77,0,0.28);
 
-  /* Surfaces (deep black / charcoal) */
-  --c-bg: #0a0a0a;
-  --c-surface: #161616;
-  --c-surface-2: #1e1e1e;
-  --c-surface-3: #242424;
-  --c-surface-4: #2a2a2a;
+  /* Surfaces (warm toasted near-black — Editorial Bento) */
+  --c-bg: #0b0a08;
+  --c-bg-sidebar: #0f0d0a;
+  --c-surface: #161310;
+  --c-surface-2: #1e1a15;
+  --c-surface-3: #26211a;
+  --c-surface-4: #2c261e;
+  --c-cream: #f3ede3;
 
-  /* Borders (neutral white alpha) */
-  --c-border: rgba(255,255,255,0.07);
-  --c-border-2: rgba(255,255,255,0.13);
+  /* Borders (warm cream alpha) */
+  --c-border: rgba(255,240,225,0.06);
+  --c-border-2: rgba(255,240,225,0.12);
 
-  /* Text (neutral white) */
-  --c-text: #f5f5f5;
-  --c-text-muted: rgba(245,245,245,0.65);
-  --c-text-dim: rgba(245,245,245,0.45);
-  --c-text-faint: rgba(245,245,245,0.28);
+  /* Text (warm white) */
+  --c-text: #f7f4f0;
+  --c-text-muted: rgba(247,244,240,0.55);
+  --c-text-dim: rgba(247,244,240,0.40);
+  --c-text-faint: rgba(247,244,240,0.25);
 
   /* Semantic (brightened for dark bg) */
   --c-green: #22c55e;
@@ -301,14 +304,14 @@
   --g-surface: linear-gradient(135deg, rgba(255,77,0,0.1) 0%, rgba(255,122,0,0.04) 100%);
 
   /* Override Tailwind @theme tokens for app scope */
-  --color-background: #0a0a0a;
-  --color-surface: #161616;
-  --color-surface-container: #1e1e1e;
-  --color-surface-container-low: #0a0a0a;
-  --color-surface-container-high: #242424;
-  --color-surface-container-highest: #2a2a2a;
-  --color-on-surface: #f5f5f5;
-  --color-on-surface-variant: rgba(245,245,245,0.65);
+  --color-background: #0b0a08;
+  --color-surface: #161310;
+  --color-surface-container: #1e1a15;
+  --color-surface-container-low: #0b0a08;
+  --color-surface-container-high: #26211a;
+  --color-surface-container-highest: #2c261e;
+  --color-on-surface: #f7f4f0;
+  --color-on-surface-variant: rgba(247,244,240,0.55);
 }
 
 /* Tailwind v4 custom color tokens */
@@ -317,16 +320,17 @@
   --color-primary-container: #ff4d00;
   --color-on-primary: #ffffff;
   --color-on-primary-container: #ffffff;
-  --color-surface: #161616;
-  --color-surface-container: #1e1e1e;
-  --color-surface-container-low: #0a0a0a;
-  --color-surface-container-high: #242424;
-  --color-surface-container-highest: #2a2a2a;
-  --color-on-surface: #f5f5f5;
-  --color-on-surface-variant: rgba(245,245,245,0.65);
-  --color-outline: rgba(255,255,255,0.18);
-  --color-outline-variant: rgba(255,255,255,0.08);
-  --color-background: #0a0a0a;
+  --color-cream: #f3ede3;
+  --color-surface: #161310;
+  --color-surface-container: #1e1a15;
+  --color-surface-container-low: #0b0a08;
+  --color-surface-container-high: #26211a;
+  --color-surface-container-highest: #2c261e;
+  --color-on-surface: #f7f4f0;
+  --color-on-surface-variant: rgba(247,244,240,0.55);
+  --color-outline: rgba(255,240,225,0.16);
+  --color-outline-variant: rgba(255,240,225,0.06);
+  --color-background: #0b0a08;
   --color-secondary: #22c55e;
   --color-secondary-container: #22c55e;
   --color-tertiary: #60a5fa;
@@ -337,8 +341,8 @@
 
 /* ─── APP CARD SYSTEM ───────────────────────────────────────────────── */
 [data-theme="app"] .glass-card {
-  background: #161616;
-  border: 1px solid rgba(255,255,255,0.07);
+  background: #161310;
+  border: 1px solid rgba(255,240,225,0.06);
   box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 1px 4px rgba(0,0,0,0.2);
   backdrop-filter: none;
 }
@@ -383,7 +387,9 @@ button, a, [role="button"] { touch-action: manipulation; }
 .glow-primary { box-shadow: 0 2px 8px rgba(255,77,0,0.16), 0 1px 3px rgba(26,20,14,0.06); }
 .glow-gold    { box-shadow: 0 2px 8px rgba(180,83,9,0.14),  0 1px 3px rgba(26,20,14,0.06); }
 
-.bg-background { background-color: #fafaf8; }
+.bg-background { background-color: #f4efe6; }
+[data-theme="app"] .bg-background,
+[data-theme="app"].bg-background { background-color: #0b0a08; }
 
 /* Gradient text utility */
 .text-gradient-primary {
@@ -456,6 +462,132 @@ button, a, [role="button"] { touch-action: manipulation; }
 }
 .prose hr { border: none; border-top: 1px solid var(--c-border); margin: 2.5rem 0; }
 .prose em { color: var(--c-text-muted); }
+
+/* ─── KC REDESIGN SYSTEM (Editorial Bento) ──────────────────────────── */
+
+/* Page shell (app screens) */
+.kc-page {
+  padding: 38px 40px 56px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+/* Editorial page title — 42 → 30 → 26 */
+.kc-h1 {
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+  color: var(--c-text);
+}
+.kc-sub { font-size: 14.5px; color: var(--c-text-muted); margin-top: 10px; }
+
+/* Eyebrow label */
+.kc-eyebrow {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-text-faint);
+}
+
+/* Bento tiles */
+.kc-tile {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 24px;
+  padding: 22px;
+}
+.kc-tile-2 {
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-border);
+  border-radius: 16px;
+}
+.kc-tile-orange {
+  background: linear-gradient(145deg, #ff4d00 0%, #e04300 100%);
+  border-radius: 24px;
+  padding: 22px;
+  color: #fff;
+  box-shadow: 0 12px 40px rgba(255,77,0,0.2);
+}
+.kc-tile-cream {
+  background: var(--c-cream, #f3ede3);
+  border-radius: 24px;
+  padding: 22px;
+  color: #1a140e;
+}
+.kc-tile-cream .kc-eyebrow { color: rgba(26,20,14,0.45); }
+
+/* Big metric number */
+.kc-num {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* Primary pill button (app) */
+.kc-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: #ff4d00; color: #fff;
+  font-family: var(--font-display); font-weight: 700; font-size: 14px;
+  padding: 12px 22px; border-radius: 14px;
+  border: none; cursor: pointer; text-decoration: none;
+  box-shadow: 0 6px 20px rgba(255,77,0,0.3);
+  transition: transform .14s, box-shadow .14s, background .14s;
+  white-space: nowrap;
+}
+.kc-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(255,77,0,0.38); }
+.kc-btn:active { transform: translateY(0); }
+.kc-btn-ghost {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--c-surface-2); color: var(--c-text);
+  font-family: var(--font-display); font-weight: 700; font-size: 14px;
+  padding: 12px 22px; border-radius: 14px;
+  border: 1px solid var(--c-border-2); cursor: pointer; text-decoration: none;
+  transition: background .14s, border-color .14s;
+  white-space: nowrap;
+}
+.kc-btn-ghost:hover { background: var(--c-surface-3); border-color: rgba(255,240,225,0.2); }
+
+/* Chip / filter pill (app dark) */
+.kc-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 100px;
+  background: var(--c-surface); border: 1px solid var(--c-border-2);
+  color: var(--c-text-muted); font-size: 12.5px; font-weight: 600;
+  cursor: pointer; white-space: nowrap; text-decoration: none;
+  transition: background .14s, color .14s, border-color .14s;
+  font-family: var(--font-body);
+}
+.kc-chip:hover { color: var(--c-text); border-color: rgba(255,240,225,0.2); }
+.kc-chip.active, .kc-chip[aria-pressed="true"] {
+  background: #ff4d00; border-color: #ff4d00; color: #fff; font-weight: 700;
+}
+
+/* Semantic badges (Keto / Moderar / Evitar) */
+.kc-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 11px; border-radius: 100px; font-size: 11px; font-weight: 700; }
+.kc-badge-green { background: rgba(34,197,94,0.12); color: #22c55e; }
+.kc-badge-amber { background: rgba(251,191,36,0.12); color: #fbbf24; }
+.kc-badge-red   { background: rgba(239,68,68,0.12);  color: #ef4444; }
+
+/* App page header block */
+.kc-head { margin-bottom: 26px; }
+.kc-head .kc-eyebrow { margin-bottom: 10px; }
+
+/* Bento grid helpers */
+.kc-grid { display: grid; gap: 20px; }
+
+/* Responsive (app ≤900 / fine ≤560) */
+@media (max-width: 900px) {
+  .kc-page { padding: 22px 16px 96px; }
+  .kc-h1 { font-size: 30px; }
+}
+@media (max-width: 560px) {
+  .kc-h1 { font-size: 26px; }
+}
 
 /* Filter button */
 .filter-btn {

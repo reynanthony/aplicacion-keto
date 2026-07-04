@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0b0a08; }
+  .msym { font-family: 'Material Symbols Outlined'; font-style: normal; line-height: 1; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; -webkit-font-smoothing: antialiased; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .fill { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+  .disp { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .kc-inp { width:100%; height:52px; padding:0 16px; border-radius:14px; background:#161310; border:1.5px solid rgba(255,240,225,0.1); font-family:'Inter',sans-serif; font-size:15px; color:#f7f4f0; }
+  .kc-inp:focus { outline:none; border-color:#ff4d00; box-shadow:0 0 0 3px rgba(255,77,0,0.18); }
+  .kc-inp::placeholder { color:rgba(247,244,240,0.35); }
+  .btn-p { transition: transform .14s, box-shadow .14s; }
+  .btn-p:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(255,77,0,0.35) !important; }
+</style>
+</helmet>
+<div style="min-height:100vh;background:radial-gradient(circle at 50% 0%,#1e130b,#0b0a08 55%);color:#f7f4f0;font-family:'Inter',sans-serif;display:flex;flex-direction:column">
+  <header style="padding:22px 24px;display:flex;align-items:center;gap:11px">
+    <img src="assets/logo.svg" alt="KetoCore" style="width:36px;height:36px;border-radius:10px;filter:drop-shadow(0 0 12px rgba(255,77,0,0.45))">
+    <span class="disp" style="font-weight:900;font-size:18px;letter-spacing:-0.02em">KetoCore</span>
+  </header>
+
+  <main style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px">
+    <div style="width:100%;max-width:400px">
+      <div style="text-align:center;margin-bottom:30px">
+        <h1 class="disp" style="font-weight:900;font-size:34px;letter-spacing:-0.03em;line-height:1.05;margin-bottom:10px">Transforma tu <span style="background:linear-gradient(135deg,#ff4d00,#ea580c);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">salud</span></h1>
+        <p style="font-size:15px;color:rgba(247,244,240,0.55)">La app cetogénica más completa en español</p>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:28px">
+        <span style="display:flex;align-items:center;gap:6px;font-size:12.5px;padding:7px 14px;border-radius:100px;background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.22)"><span class="msym fill" style="font-size:15px">check_circle</span>Offline</span>
+        <span style="display:flex;align-items:center;gap:6px;font-size:12.5px;padding:7px 14px;border-radius:100px;background:rgba(255,77,0,0.1);color:#fb923c;border:1px solid rgba(255,77,0,0.22)"><span class="msym fill" style="font-size:15px">language</span>100% Español</span>
+        <span style="display:flex;align-items:center;gap:6px;font-size:12.5px;padding:7px 14px;border-radius:100px;background:rgba(167,139,250,0.1);color:#a78bfa;border:1px solid rgba(167,139,250,0.22)"><span class="msym fill" style="font-size:15px">psychology</span>Coach IA</span>
+      </div>
+
+      <div style="background:#120f0b;border:1px solid rgba(255,240,225,0.08);border-radius:24px;padding:26px">
+        <div style="display:flex;gap:4px;padding:4px;border-radius:14px;background:#0b0a08;margin-bottom:22px">
+          <button style="flex:1;height:40px;border-radius:11px;background:#ff4d00;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;color:#fff">Crear cuenta</button>
+          <button style="flex:1;height:40px;border-radius:11px;background:transparent;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:14px;color:rgba(247,244,240,0.5)">Entrar</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:13px">
+          <input class="kc-inp" placeholder="Tu nombre" value="">
+          <input class="kc-inp" placeholder="correo@ejemplo.com" value="">
+          <input class="kc-inp" type="password" placeholder="Contraseña" value="">
+          <a href="KetoCore Onboarding.dc.html" class="btn-p" style="height:52px;border-radius:14px;background:#ff4d00;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15px;color:#fff;text-decoration:none;box-shadow:0 6px 20px rgba(255,77,0,0.3);margin-top:4px">Empezar gratis<span class="msym" style="font-size:20px">arrow_forward</span></a>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin:20px 0"><div style="flex:1;height:1px;background:rgba(255,240,225,0.08)"></div><span style="font-size:12px;color:rgba(247,244,240,0.35)">o</span><div style="flex:1;height:1px;background:rgba(255,240,225,0.08)"></div></div>
+        <button style="width:100%;height:50px;border-radius:14px;background:#161310;border:1px solid rgba(255,240,225,0.1);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:#f7f4f0"><span class="msym" style="font-size:20px;color:#4ade80">bolt</span>Continuar sin cuenta (modo local)</button>
+      </div>
+      <p style="text-align:center;font-size:12px;color:rgba(247,244,240,0.35);margin-top:18px;line-height:1.5">Al continuar aceptas los Términos y la Política de Privacidad de KetoCore.</p>
+    </div>
+  </main>
+</div>
+</x-dc>
+</body>
+</html>

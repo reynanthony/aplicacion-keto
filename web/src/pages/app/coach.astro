@@ -5,7 +5,7 @@ import AppNav from '../../components/AppNav.astro';
 
 <AppLayout title="KetoCore | Coach IA" authGuard={true}>
 <style is:global>
-html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-family: 'Inter', sans-serif; }
+html, body { margin: 0; padding: 0; background: #0b0a08; color: #f7f4f0; font-family: 'Inter', sans-serif; }
 .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 .icon-filled { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
 
@@ -16,8 +16,8 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
 .msg-in { animation: msgIn 0.3s ease-out forwards; }
 
 .chat-bubble-coach {
-  background: #161616;
-  border: 1px solid rgba(255,255,255,0.07);
+  background: #161310;
+  border: 1px solid rgba(255,240,225,0.07);
   border-radius: 20px 20px 20px 4px;
 }
 
@@ -29,7 +29,7 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
 
 .typing-dot {
   width: 6px; height: 6px; border-radius: 50%;
-  background: rgba(245,245,245,0.4);
+  background: rgba(247,244,240,0.4);
   display: inline-block;
   animation: typingDot 1.2s infinite ease-in-out;
 }
@@ -40,12 +40,12 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
   display: inline-flex; align-items: center;
   padding: 6px 14px; border-radius: 100px;
   font-size: 11px; font-weight: 600; cursor: pointer;
-  background: #161616; border: 1px solid rgba(255,255,255,0.07);
-  color: rgba(245,245,245,0.65); white-space: nowrap;
+  background: #161310; border: 1px solid rgba(255,240,225,0.07);
+  color: rgba(247,244,240,0.65); white-space: nowrap;
   transition: all 0.15s;
 }
 .suggestion-chip:hover {
-  background: #1e1e1e; border-color: rgba(255,77,0,0.3); color: #f5f5f5;
+  background: #1e1a15; border-color: rgba(255,77,0,0.3); color: #f7f4f0;
 }
 .suggestion-chip:active { transform: scale(0.96); }
 
@@ -65,7 +65,7 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
 
 <!-- ── Top Header ─────────────────────────────────────────────────────── -->
 <header class="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4"
-  style="height:56px;background:rgba(10,10,10,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,0.06)">
+  style="height:56px;background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
 
   <div class="flex items-center gap-3">
     <div class="w-9 h-9 rounded-xl flex items-center justify-center"
@@ -73,10 +73,10 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
       <span class="material-symbols-outlined icon-filled" style="color:#a78bfa;font-size:20px">psychology</span>
     </div>
     <div>
-      <h1 class="font-black text-base leading-none" style="color:#f5f5f5;font-family:'Plus Jakarta Sans',sans-serif">Coach IA</h1>
+      <h1 class="font-black text-base leading-none" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Coach IA</h1>
       <div id="aiStatusBar" class="flex items-center gap-1.5 mt-0.5">
         <span class="status-dot status-offline"></span>
-        <span id="aiStatusLabel" style="font-size:9px;color:rgba(245,245,245,0.4);font-weight:600">Verificando...</span>
+        <span id="aiStatusLabel" style="font-size:9px;color:rgba(247,244,240,0.4);font-weight:600">Verificando...</span>
       </div>
     </div>
   </div>
@@ -84,12 +84,12 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
   <div class="flex items-center gap-2">
     <button onclick="toggleContext()" id="btnCtx"
       class="text-xs font-bold px-3 py-1.5 rounded-full transition-all"
-      style="background:#161616;color:rgba(245,245,245,0.55);border:1px solid rgba(255,255,255,0.06)">
+      style="background:#161310;color:rgba(247,244,240,0.55);border:1px solid rgba(255,240,225,0.06)">
       Contexto
     </button>
     <button onclick="toggleHamburgerMenu()" aria-label="Menú"
       class="w-9 h-9 rounded-full flex items-center justify-center"
-      style="background:#161616;color:rgba(245,245,245,0.5);border:1px solid rgba(255,255,255,0.06)">
+      style="background:#161310;color:rgba(247,244,240,0.5);border:1px solid rgba(255,240,225,0.06)">
       <span class="material-symbols-outlined" style="font-size:20px">menu</span>
     </button>
   </div>
@@ -100,10 +100,10 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
 
   <!-- Context panel (collapsible) -->
   <div id="contextPanel" class="hidden mb-3">
-    <div class="rounded-2xl p-4" style="background:#161616;border:1px solid rgba(255,255,255,0.07)">
-      <p class="text-xs font-bold mb-3 uppercase tracking-widest" style="color:rgba(245,245,245,0.35)">Tu contexto actual</p>
+    <div class="rounded-2xl p-4" style="background:#161310;border:1px solid rgba(255,240,225,0.07)">
+      <p class="text-xs font-bold mb-3 uppercase tracking-widest" style="color:rgba(247,244,240,0.35)">Tu contexto actual</p>
       <div id="contextGrid" class="grid grid-cols-3 gap-3"></div>
-      <p id="contextHint" class="text-xs mt-3" style="color:rgba(245,245,245,0.3)"></p>
+      <p id="contextHint" class="text-xs mt-3" style="color:rgba(247,244,240,0.3)"></p>
     </div>
   </div>
 
@@ -115,7 +115,7 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
 
   <!-- Suggestion chips (hidden after first message) -->
   <div id="suggestionsSection" class="mt-5">
-    <p class="text-xs mb-2.5 font-semibold" style="color:rgba(245,245,245,0.35)">Preguntas frecuentes</p>
+    <p class="text-xs mb-2.5 font-semibold" style="color:rgba(247,244,240,0.35)">Preguntas frecuentes</p>
     <div id="suggestionChips" class="flex flex-wrap gap-2"></div>
   </div>
 
@@ -123,15 +123,15 @@ html, body { margin: 0; padding: 0; background: #0a0a0a; color: #f5f5f5; font-fa
 
 <!-- ── Fixed input (above nav) ────────────────────────────────────────── -->
 <div id="coachInputBar" class="fixed right-0 left-0 z-30"
-  style="bottom:68px;background:rgba(10,10,10,0.95);backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.06);padding:10px 16px">
+  style="bottom:68px;background:rgba(11,10,8,0.95);backdrop-filter:blur(16px);border-top:1px solid rgba(255,240,225,0.06);padding:10px 16px">
   <div class="flex gap-2 items-center">
     <input id="chatInput" type="text" autocomplete="off" spellcheck="false"
       placeholder="Pregúntale a tu Coach..."
       class="flex-1 rounded-2xl px-4 py-2.5 text-sm outline-none transition-all"
-      style="background:#161616;border:1px solid rgba(255,255,255,0.08);color:#f5f5f5;font-family:'Inter',sans-serif"
+      style="background:#161310;border:1px solid rgba(255,240,225,0.08);color:#f7f4f0;font-family:'Inter',sans-serif"
       onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage()}"
       onfocus="this.style.borderColor='rgba(167,139,250,0.35)'"
-      onblur="this.style.borderColor='rgba(255,255,255,0.08)'" />
+      onblur="this.style.borderColor='rgba(255,240,225,0.08)'" />
     <button id="sendBtn" onclick="sendMessage()"
       class="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all active:scale-90"
       style="background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.25)">
@@ -246,9 +246,9 @@ function renderContextPanel(ctx) {
   if (!grid) return;
 
   var items = [
-    { label: 'Peso',        value: ctx.peso ? ctx.peso + ' kg' : '—',      color: '#f5f5f5' },
+    { label: 'Peso',        value: ctx.peso ? ctx.peso + ' kg' : '—',      color: '#f7f4f0' },
     { label: 'Cambio',      value: ctx.pesoDelta !== 0 ? (ctx.pesoDelta > 0 ? '+' : '') + ctx.pesoDelta + ' kg' : '—',
-      color: ctx.pesoDelta < 0 ? '#22c55e' : ctx.pesoDelta > 0 ? '#f87171' : '#f5f5f5' },
+      color: ctx.pesoDelta < 0 ? '#22c55e' : ctx.pesoDelta > 0 ? '#f87171' : '#f7f4f0' },
     { label: 'Racha keto',  value: ctx.racha + 'd',                        color: '#ff4d00' },
     { label: 'Cal. meta',   value: ctx.metaCal + ' kcal',                  color: '#60a5fa' },
     { label: 'Carbs meta',  value: ctx.metaCarbs + 'g',                    color: '#f59e0b' },
@@ -258,7 +258,7 @@ function renderContextPanel(ctx) {
   grid.innerHTML = items.map(function (item) {
     return '<div class="text-center">' +
       '<p class="font-black text-base leading-none" style="color:' + item.color + ';font-family:\'Plus Jakarta Sans\',sans-serif">' + item.value + '</p>' +
-      '<p style="font-size:9px;color:rgba(245,245,245,0.35);margin-top:4px">' + item.label + '</p>' +
+      '<p style="font-size:9px;color:rgba(247,244,240,0.35);margin-top:4px">' + item.label + '</p>' +
       '</div>';
   }).join('');
 
@@ -272,7 +272,7 @@ function toggleContext() {
   if (!panel) return;
   panel.classList.toggle('hidden');
   var btn = document.getElementById('btnCtx');
-  if (btn) btn.style.color = panel.classList.contains('hidden') ? 'rgba(245,245,245,0.55)' : '#a78bfa';
+  if (btn) btn.style.color = panel.classList.contains('hidden') ? 'rgba(247,244,240,0.55)' : '#a78bfa';
 }
 
 // ── Alerts render ─────────────────────────────────────────────────────
@@ -298,11 +298,11 @@ function renderAlerts() {
       '<div class="flex items-start gap-2.5">' +
         '<span class="material-symbols-outlined icon-filled flex-shrink-0" style="color:' + s.icon + ';font-size:18px;margin-top:1px">' + escHtml(alert.icon || 'info') + '</span>' +
         '<div class="flex-1">' +
-          '<p class="text-xs font-bold" style="color:#f5f5f5">' + escHtml(alert.title) + '</p>' +
-          '<p class="text-xs mt-0.5 leading-relaxed" style="color:rgba(245,245,245,0.6)">' + escHtml(alert.message) + '</p>' +
+          '<p class="text-xs font-bold" style="color:#f7f4f0">' + escHtml(alert.title) + '</p>' +
+          '<p class="text-xs mt-0.5 leading-relaxed" style="color:rgba(247,244,240,0.6)">' + escHtml(alert.message) + '</p>' +
           btn +
         '</div>' +
-        '<button onclick="dismissAlert(\'' + escHtml(alert.id) + '\')" class="material-symbols-outlined flex-shrink-0" style="color:rgba(245,245,245,0.25);font-size:16px">close</button>' +
+        '<button onclick="dismissAlert(\'' + escHtml(alert.id) + '\')" class="material-symbols-outlined flex-shrink-0" style="color:rgba(247,244,240,0.25);font-size:16px">close</button>' +
       '</div></div>';
   }).join('');
 }
@@ -333,11 +333,11 @@ function addMessage(role, html, meta) {
   if (isUser) {
     wrap.innerHTML =
       '<div class="chat-bubble-user px-4 py-2.5 max-w-[85%]">' +
-        '<p class="text-sm leading-relaxed" style="color:#f5f5f5">' + html + '</p>' +
+        '<p class="text-sm leading-relaxed" style="color:#f7f4f0">' + html + '</p>' +
       '</div>';
   } else {
     var metaHtml = meta
-      ? '<p class="text-[10px] mt-2 font-semibold" style="color:rgba(245,245,245,0.3)">' + meta + '</p>'
+      ? '<p class="text-[10px] mt-2 font-semibold" style="color:rgba(247,244,240,0.3)">' + meta + '</p>'
       : '';
     wrap.innerHTML =
       '<div class="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5" ' +
@@ -345,7 +345,7 @@ function addMessage(role, html, meta) {
         '<span class="material-symbols-outlined icon-filled" style="color:#a78bfa;font-size:16px">psychology</span>' +
       '</div>' +
       '<div class="chat-bubble-coach px-4 py-3 max-w-[88%]">' +
-        '<p class="text-sm leading-relaxed" style="color:#f5f5f5">' + html + '</p>' +
+        '<p class="text-sm leading-relaxed" style="color:#f7f4f0">' + html + '</p>' +
         metaHtml +
       '</div>';
   }

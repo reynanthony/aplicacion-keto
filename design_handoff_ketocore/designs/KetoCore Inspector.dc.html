@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0b0a08; }
+  .msym { font-family: 'Material Symbols Outlined'; font-style: normal; line-height: 1; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; -webkit-font-smoothing: antialiased; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .fill { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+  .nums { font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .disp { font-family: 'Plus Jakarta Sans', sans-serif; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,77,0,0.3); border-radius: 10px; }
+</style>
+</helmet>
+<div style="display:flex;min-height:100vh;background:#0b0a08;color:#f7f4f0;font-family:'Inter',sans-serif;font-size:16px">
+  <dc-import name="KetoSidebar" active="inspector" hint-size="250px,100%"></dc-import>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <div style="padding:38px 40px 56px;max-width:1300px;width:100%">
+
+      <!-- Header -->
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:26px;flex-wrap:wrap;gap:20px">
+        <div>
+          <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px">Inspector Keto · Analizado hace 4 min</div>
+          <h1 class="disp" style="font-weight:800;font-size:42px;line-height:0.98;letter-spacing:-0.035em">Tu análisis inteligente</h1>
+        </div>
+        <div style="display:flex;gap:8px">
+          <span style="font-size:12px;font-weight:700;padding:9px 15px;border-radius:100px;background:rgba(255,77,0,0.12);color:#ff4d00;cursor:pointer">7 días</span>
+          <span style="font-size:12px;font-weight:600;padding:9px 15px;border-radius:100px;background:#161310;border:1px solid rgba(255,240,225,0.08);color:rgba(247,244,240,0.55);cursor:pointer">14 días</span>
+          <span style="font-size:12px;font-weight:600;padding:9px 15px;border-radius:100px;background:#161310;border:1px solid rgba(255,240,225,0.08);color:rgba(247,244,240,0.55);cursor:pointer">30 días</span>
+        </div>
+      </div>
+
+      <!-- Verdict — orange feature -->
+      <div style="background:linear-gradient(150deg,#ff5a12,#e63f00);border-radius:26px;padding:30px;display:flex;align-items:center;gap:26px;margin-bottom:18px;position:relative;overflow:hidden;box-shadow:0 12px 40px rgba(255,77,0,0.2)">
+        <div style="position:absolute;right:-30px;bottom:-50px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.08)"></div>
+        <div style="width:76px;height:76px;border-radius:20px;background:rgba(26,14,5,0.16);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative"><span class="msym fill" style="color:#1a0e05;font-size:40px">verified</span></div>
+        <div style="flex:1;position:relative"><div class="disp" style="font-weight:900;font-size:26px;letter-spacing:-0.02em;color:#1a0e05;line-height:1.05">Vas por excelente camino</div><p style="font-size:15px;color:rgba(26,14,5,0.7);margin-top:6px;line-height:1.5;max-width:640px">Tu adherencia sube 12 puntos vs. la semana pasada y tu ritmo de pérdida (0.7 kg/sem) es óptimo y sostenible. Mantén el ayuno 16:8.</p></div>
+        <div style="text-align:center;flex-shrink:0;position:relative"><div class="disp nums" style="font-weight:900;font-size:64px;line-height:0.85;color:#1a0e05">82</div><div style="font-size:12px;font-weight:700;color:rgba(26,14,5,0.6)">de 100 puntos</div></div>
+      </div>
+
+      <!-- Alerts row -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:18px">
+        <div style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2);border-radius:20px;padding:20px;display:flex;gap:14px"><span class="msym fill" style="color:#22c55e;font-size:24px;flex-shrink:0">check_circle</span><div><div class="disp" style="font-weight:700;font-size:14px;margin-bottom:3px">Cetosis estable</div><p style="font-size:12.5px;color:rgba(247,244,240,0.55);line-height:1.45">7/7 días bajo 25 g de carbos netos.</p></div></div>
+        <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:20px;padding:20px;display:flex;gap:14px"><span class="msym fill" style="color:#f59e0b;font-size:24px;flex-shrink:0">warning</span><div><div class="disp" style="font-weight:700;font-size:14px;margin-bottom:3px">Proteína algo baja</div><p style="font-size:12.5px;color:rgba(247,244,240,0.55);line-height:1.45">Promedias 88% de tu meta. Sube 10 g/día.</p></div></div>
+        <div style="background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.2);border-radius:20px;padding:20px;display:flex;gap:14px"><span class="msym fill" style="color:#60a5fa;font-size:24px;flex-shrink:0">water_drop</span><div><div class="disp" style="font-weight:700;font-size:14px;margin-bottom:3px">Hidratación mejorable</div><p style="font-size:12.5px;color:rgba(247,244,240,0.55);line-height:1.45">2.3 L de media. Apunta a 3 L con electrolitos.</p></div></div>
+      </div>
+
+      <!-- Metrics + adherence -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px">
+        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:28px">
+          <h2 class="disp" style="font-weight:800;font-size:18px;margin-bottom:22px">Métricas clave · 7 días</h2>
+          <div style="display:flex;flex-direction:column;gap:20px">
+            <div><div style="display:flex;justify-content:space-between;margin-bottom:9px"><span style="font-size:13.5px;color:rgba(247,244,240,0.7)">Días en cetosis</span><span class="disp nums" style="font-weight:700;font-size:14px">7 / 7</span></div><div style="height:6px;border-radius:100px;background:rgba(255,240,225,0.06);overflow:hidden"><div style="height:100%;width:100%;background:#22c55e;border-radius:100px"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;margin-bottom:9px"><span style="font-size:13.5px;color:rgba(247,244,240,0.7)">Meta calórica cumplida</span><span class="disp nums" style="font-weight:700;font-size:14px">94%</span></div><div style="height:6px;border-radius:100px;background:rgba(255,240,225,0.06);overflow:hidden"><div style="height:100%;width:94%;background:#ff4d00;border-radius:100px"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;margin-bottom:9px"><span style="font-size:13.5px;color:rgba(247,244,240,0.7)">Proteína objetivo</span><span class="disp nums" style="font-weight:700;font-size:14px">88%</span></div><div style="height:6px;border-radius:100px;background:rgba(255,240,225,0.06);overflow:hidden"><div style="height:100%;width:88%;background:#f59e0b;border-radius:100px"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;margin-bottom:9px"><span style="font-size:13.5px;color:rgba(247,244,240,0.7)">Ayuno 16:8 respetado</span><span class="disp nums" style="font-weight:700;font-size:14px">6 / 7</span></div><div style="height:6px;border-radius:100px;background:rgba(255,240,225,0.06);overflow:hidden"><div style="height:100%;width:86%;background:#a78bfa;border-radius:100px"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;margin-bottom:9px"><span style="font-size:13.5px;color:rgba(247,244,240,0.7)">Hidratación (3 L)</span><span class="disp nums" style="font-weight:700;font-size:14px">77%</span></div><div style="height:6px;border-radius:100px;background:rgba(255,240,225,0.06);overflow:hidden"><div style="height:100%;width:77%;background:#60a5fa;border-radius:100px"></div></div></div>
+          </div>
+        </div>
+
+        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:28px">
+          <h2 class="disp" style="font-weight:800;font-size:18px;margin-bottom:22px">Adherencia diaria</h2>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;height:150px;margin-bottom:14px">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end"><div style="width:100%;height:82%;border-radius:8px;background:linear-gradient(180deg,#ff4d00,#c23400)"></div></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end"><div style="width:100%;height:96%;border-radius:8px;background:linear-gradient(180deg,#ff4d00,#c23400)"></div></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end"><div style="width:100%;height:70%;border-radius:8px;background:linear-gradient(180deg,#ff4d00,#c23400)"></div></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end"><div style="width:100%;height:100%;border-radius:8px;background:linear-gradient(180deg,#ff4d00,#c23400)"></div></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end"><div style="width:100%;height:88%;border-radius:8px;background:linear-gradient(180deg,#ff4d00,#c23400)"></div></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end"><div style="width:100%;height:92%;border-radius:8px;background:linear-gradient(180deg,#ff4d00,#c23400)"></div></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end"><div style="width:100%;height:60%;border-radius:8px;background:linear-gradient(180deg,#ff7a3c,#8a2500);opacity:0.55"></div></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(247,244,240,0.35)"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+          <div style="display:flex;align-items:center;gap:16px;margin-top:22px;padding-top:20px;border-top:1px solid rgba(255,240,225,0.06)">
+            <div style="flex:1"><div class="disp nums" style="font-weight:900;font-size:28px;color:#22c55e">94%</div><div style="font-size:11.5px;color:rgba(247,244,240,0.4)">promedio semanal</div></div>
+            <div style="flex:1"><div class="disp nums" style="font-weight:900;font-size:28px">+12</div><div style="font-size:11.5px;color:rgba(247,244,240,0.4)">vs. semana previa</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weight trend full -->
+      <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:28px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px">
+          <div><h2 class="disp" style="font-weight:800;font-size:18px">Proyección de peso</h2><p style="font-size:13px;color:rgba(247,244,240,0.45);margin-top:4px">Al ritmo actual alcanzas tu meta el <strong style="color:#ff4d00">14 de agosto</strong></p></div>
+          <div style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:100px;background:rgba(34,197,94,0.1)"><span class="msym" style="font-size:15px;color:#22c55e">trending_down</span><span style="font-size:12px;font-weight:700;color:#22c55e">0.7 kg / sem</span></div>
+        </div>
+        <svg viewBox="0 0 1140 200" width="100%" height="200" preserveAspectRatio="none" style="display:block">
+          <defs><linearGradient id="insArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(255,77,0,0.26)"></stop><stop offset="100%" stop-color="rgba(255,77,0,0)"></stop></linearGradient></defs>
+          <line x1="0" y1="50" x2="1140" y2="50" stroke="rgba(255,240,225,0.05)"></line>
+          <line x1="0" y1="100" x2="1140" y2="100" stroke="rgba(255,240,225,0.05)"></line>
+          <line x1="0" y1="150" x2="1140" y2="150" stroke="rgba(255,240,225,0.05)"></line>
+          <path d="M0,44 L160,58 L320,66 L480,90 L560,104 L560,200 L0,200 Z" fill="url(#insArea)"></path>
+          <path d="M0,44 L160,58 L320,66 L480,90 L560,104" fill="none" stroke="#ff4d00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M560,104 L720,124 L880,146 L1040,166 L1140,178" fill="none" stroke="#ff4d00" stroke-width="3" stroke-dasharray="8 8" stroke-linecap="round" opacity="0.5"></path>
+          <circle cx="560" cy="104" r="6" fill="#ff4d00" stroke="#161310" stroke-width="3.5"></circle>
+          <circle cx="1140" cy="178" r="6" fill="none" stroke="#ff4d00" stroke-width="2.5"></circle>
+        </svg>
+        <div style="display:flex;justify-content:space-between;margin-top:14px;font-size:11px;color:rgba(247,244,240,0.32)"><span>Inicio · 80 kg</span><span>Hoy · 74.8 kg</span><span style="color:#ff4d00;font-weight:600">Meta · 72 kg</span></div>
+      </div>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+</body>
+</html>

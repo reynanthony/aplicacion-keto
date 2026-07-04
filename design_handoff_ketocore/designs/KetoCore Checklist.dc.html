@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0b0a08; }
+  .msym { font-family: 'Material Symbols Outlined'; font-style: normal; line-height: 1; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; -webkit-font-smoothing: antialiased; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .fill { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+  .nums { font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .disp { font-family: 'Plus Jakarta Sans', sans-serif; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,77,0,0.3); border-radius: 10px; }
+</style>
+</helmet>
+<div style="display:flex;min-height:100vh;background:#0b0a08;color:#f7f4f0;font-family:'Inter',sans-serif;font-size:16px">
+  <dc-import name="KetoSidebar" active="checklist" hint-size="250px,100%"></dc-import>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <div style="padding:38px 40px 56px;max-width:1000px;width:100%">
+
+      <div style="margin-bottom:26px">
+        <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#22c55e;margin-bottom:12px">Checklist diario · Miércoles 2 Jul</div>
+        <h1 class="disp" style="font-weight:800;font-size:42px;line-height:0.98;letter-spacing:-0.035em">Tus hábitos de hoy</h1>
+      </div>
+
+      <!-- Progress banner -->
+      <div style="background:linear-gradient(150deg,#1a7a3e,#146030);border-radius:24px;padding:26px 30px;display:flex;align-items:center;gap:24px;margin-bottom:22px">
+        <div style="position:relative;width:80px;height:80px;flex-shrink:0">
+          <svg width="80" height="80" viewBox="0 0 80 80" style="transform:rotate(-90deg)"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="7"></circle><circle cx="40" cy="40" r="34" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-dasharray="213" stroke-dashoffset="71"></circle></svg>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><span class="disp nums" style="font-weight:900;font-size:22px;color:#fff">67%</span></div>
+        </div>
+        <div style="flex:1"><div class="disp" style="font-weight:800;font-size:20px;color:#fff">4 de 6 completados</div><p style="font-size:14px;color:rgba(255,255,255,0.8);margin-top:4px">¡Vas genial! Solo te faltan 2 hábitos para cerrar el día perfecto.</p></div>
+        <div style="text-align:center;flex-shrink:0"><div class="disp nums" style="font-weight:900;font-size:34px;color:#fff;line-height:1">18</div><div style="font-size:11px;color:rgba(255,255,255,0.75)">días de racha</div></div>
+      </div>
+
+      <!-- Categories -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:24px;padding:24px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><span class="msym fill" style="color:#ff4d00;font-size:22px">restaurant</span><span class="disp" style="font-weight:800;font-size:16px">Nutrición</span></div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.16)"><span class="msym fill" style="color:#22c55e;font-size:24px">check_circle</span><div style="flex:1"><div style="font-size:14.5px;font-weight:600">Desayuno keto registrado</div><div style="font-size:12px;color:rgba(247,244,240,0.4)">Completado a las 08:10</div></div></div>
+            <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.16)"><span class="msym fill" style="color:#22c55e;font-size:24px">check_circle</span><div style="flex:1"><div style="font-size:14.5px;font-weight:600">Ayuno 16:8 respetado</div><div style="font-size:12px;color:rgba(247,244,240,0.4)">Ventana cerrada 20:00</div></div></div>
+            <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;background:#1e1a15;border:1px solid rgba(255,240,225,0.06)"><span class="msym" style="color:rgba(247,244,240,0.3);font-size:24px">radio_button_unchecked</span><div style="flex:1"><div style="font-size:14.5px;font-weight:600;color:rgba(247,244,240,0.7)">Cena antes de las 20:00</div><div style="font-size:12px;color:rgba(247,244,240,0.35)">Pendiente</div></div></div>
+          </div>
+        </div>
+
+        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:24px;padding:24px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><span class="msym fill" style="color:#60a5fa;font-size:22px">self_improvement</span><span class="disp" style="font-weight:800;font-size:16px">Bienestar</span></div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.16)"><span class="msym fill" style="color:#22c55e;font-size:24px">check_circle</span><div style="flex:1"><div style="font-size:14.5px;font-weight:600">Electrolitos tomados</div><div style="font-size:12px;color:rgba(247,244,240,0.4)">Magnesio + sodio</div></div></div>
+            <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.16)"><span class="msym fill" style="color:#22c55e;font-size:24px">check_circle</span><div style="flex:1"><div style="font-size:14.5px;font-weight:600">3 L de agua</div><div style="font-size:12px;color:rgba(247,244,240,0.4)">Hidratación diaria</div></div></div>
+            <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;background:#1e1a15;border:1px solid rgba(255,240,225,0.06)"><span class="msym" style="color:rgba(247,244,240,0.3);font-size:24px">radio_button_unchecked</span><div style="flex:1"><div style="font-size:14.5px;font-weight:600;color:rgba(247,244,240,0.7)">30 min de ejercicio</div><div style="font-size:12px;color:rgba(247,244,240,0.35)">Pendiente</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weekly streak -->
+      <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:24px;padding:24px;margin-top:18px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px"><span class="disp" style="font-weight:800;font-size:16px">Tu semana</span><span style="font-size:12.5px;color:rgba(247,244,240,0.45)">6 de 7 días perfectos</span></div>
+        <div style="display:flex;gap:12px">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:100%;aspect-ratio:1;max-width:56px;border-radius:14px;background:rgba(34,197,94,0.12);display:flex;align-items:center;justify-content:center"><span class="msym fill" style="color:#22c55e;font-size:26px">check</span></div><span style="font-size:11px;color:rgba(247,244,240,0.4)">Lun</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:100%;aspect-ratio:1;max-width:56px;border-radius:14px;background:rgba(34,197,94,0.12);display:flex;align-items:center;justify-content:center"><span class="msym fill" style="color:#22c55e;font-size:26px">check</span></div><span style="font-size:11px;color:rgba(247,244,240,0.4)">Mar</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:100%;aspect-ratio:1;max-width:56px;border-radius:14px;background:rgba(255,77,0,0.14);border:1.5px solid #ff4d00;display:flex;align-items:center;justify-content:center"><span class="disp nums" style="color:#ff4d00;font-weight:800;font-size:15px">67%</span></div><span style="font-size:11px;color:#ff4d00;font-weight:600">Hoy</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:100%;aspect-ratio:1;max-width:56px;border-radius:14px;background:#1e1a15;display:flex;align-items:center;justify-content:center"><span class="msym" style="color:rgba(247,244,240,0.25);font-size:24px">lock_clock</span></div><span style="font-size:11px;color:rgba(247,244,240,0.4)">Jue</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:100%;aspect-ratio:1;max-width:56px;border-radius:14px;background:#1e1a15;display:flex;align-items:center;justify-content:center"><span class="msym" style="color:rgba(247,244,240,0.25);font-size:24px">lock_clock</span></div><span style="font-size:11px;color:rgba(247,244,240,0.4)">Vie</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:100%;aspect-ratio:1;max-width:56px;border-radius:14px;background:#1e1a15;display:flex;align-items:center;justify-content:center"><span class="msym" style="color:rgba(247,244,240,0.25);font-size:24px">lock_clock</span></div><span style="font-size:11px;color:rgba(247,244,240,0.4)">Sáb</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px"><div style="width:100%;aspect-ratio:1;max-width:56px;border-radius:14px;background:#1e1a15;display:flex;align-items:center;justify-content:center"><span class="msym" style="color:rgba(247,244,240,0.25);font-size:24px">lock_clock</span></div><span style="font-size:11px;color:rgba(247,244,240,0.4)">Dom</span></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+</body>
+</html>

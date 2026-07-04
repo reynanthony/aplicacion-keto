@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0b0a08; }
+  .msym { font-family: 'Material Symbols Outlined'; font-style: normal; line-height: 1; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; -webkit-font-smoothing: antialiased; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .fill { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+  .nums { font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .disp { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .lift { transition: transform .16s, border-color .16s; }
+  .lift:hover { transform: translateY(-4px); border-color: rgba(74,222,128,0.35) !important; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,77,0,0.3); border-radius: 10px; }
+</style>
+</helmet>
+<div style="display:flex;min-height:100vh;background:#0b0a08;color:#f7f4f0;font-family:'Inter',sans-serif;font-size:16px">
+  <dc-import name="KetoSidebar" active="entrenamientos" hint-size="250px,100%"></dc-import>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <div style="padding:38px 40px 56px;max-width:1200px;width:100%">
+
+      <div style="margin-bottom:26px">
+        <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#4ade80;margin-bottom:12px">Entrenamientos · Semana 3</div>
+        <h1 class="disp" style="font-weight:800;font-size:42px;line-height:0.98;letter-spacing:-0.035em">Muévete en cetosis</h1>
+      </div>
+
+      <!-- Today's workout feature -->
+      <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:18px;margin-bottom:18px">
+        <div style="border-radius:26px;overflow:hidden;position:relative;min-height:300px;background:linear-gradient(150deg,#14532d,#0a2818);display:flex;flex-direction:column;justify-content:flex-end;padding:32px">
+          <span class="msym fill" style="position:absolute;top:30px;right:30px;color:rgba(74,222,128,0.22);font-size:110px">fitness_center</span>
+          <span style="align-self:flex-start;font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:6px 13px;border-radius:100px;background:#22c55e;color:#0a2818;margin-bottom:16px">Entrenamiento de hoy</span>
+          <h2 class="disp" style="font-weight:800;font-size:28px;line-height:1.05;letter-spacing:-0.02em;margin-bottom:10px">Fuerza total · Cuerpo completo</h2>
+          <p style="font-size:14px;color:rgba(247,244,240,0.7);max-width:420px;margin-bottom:22px;line-height:1.55">Optimizado para quemar grasa manteniendo masa muscular. Bajo impacto en glucógeno.</p>
+          <div style="display:flex;align-items:center;gap:22px;margin-bottom:22px">
+            <span style="display:flex;align-items:center;gap:6px;font-size:13.5px;color:rgba(247,244,240,0.75)"><span class="msym" style="font-size:18px;color:#4ade80">schedule</span>45 min</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:13.5px;color:rgba(247,244,240,0.75)"><span class="msym" style="font-size:18px;color:#4ade80">local_fire_department</span>~320 kcal</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:13.5px;color:rgba(247,244,240,0.75)"><span class="msym" style="font-size:18px;color:#4ade80">bar_chart</span>Intermedio</span>
+          </div>
+          <button style="align-self:flex-start;height:48px;padding:0 26px;border-radius:14px;background:#22c55e;border:none;cursor:pointer;display:flex;align-items:center;gap:8px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15px;color:#0a2818"><span class="msym fill" style="font-size:20px">play_arrow</span>Empezar sesión</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:22px;padding:24px;flex:1">
+            <div class="disp" style="font-weight:800;font-size:15px;margin-bottom:16px">Esta semana</div>
+            <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px"><span class="disp nums" style="font-weight:900;font-size:40px;line-height:0.9">3</span><span style="font-size:14px;color:rgba(247,244,240,0.4)">/ 5 sesiones</span></div>
+            <div style="height:8px;border-radius:100px;background:rgba(255,240,225,0.06);overflow:hidden;margin:12px 0"><div style="height:100%;width:60%;background:#22c55e;border-radius:100px"></div></div>
+            <div style="font-size:12.5px;color:rgba(247,244,240,0.45)">960 kcal quemadas · 2 sesiones restantes</div>
+          </div>
+          <div style="background:#f3ede3;border-radius:22px;padding:24px;color:#1a140e;flex:1;display:flex;flex-direction:column;justify-content:space-between">
+            <div style="display:flex;align-items:center;justify-content:space-between"><span class="disp" style="font-weight:800;font-size:13px;color:rgba(26,20,14,0.55)">FRECUENCIA CARDIACA</span><span class="msym fill" style="color:#ff4d00;font-size:20px">ecg_heart</span></div>
+            <div><div class="disp nums" style="font-weight:900;font-size:38px;line-height:0.9">72 <span style="font-size:15px;color:rgba(26,20,14,0.4)">bpm reposo</span></div><div style="font-size:12.5px;color:rgba(26,20,14,0.5);margin-top:6px">Zona quema-grasa: 118–140 bpm</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Workout library -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin:8px 0 16px"><h2 class="disp" style="font-weight:800;font-size:20px">Biblioteca de rutinas</h2><div style="display:flex;gap:8px"><span style="font-size:12.5px;font-weight:700;padding:8px 15px;border-radius:100px;background:rgba(74,222,128,0.14);color:#4ade80">Todas</span><span style="font-size:12.5px;font-weight:600;padding:8px 15px;border-radius:100px;background:#161310;border:1px solid rgba(255,240,225,0.08);color:rgba(247,244,240,0.6)">Fuerza</span><span style="font-size:12.5px;font-weight:600;padding:8px 15px;border-radius:100px;background:#161310;border:1px solid rgba(255,240,225,0.08);color:rgba(247,244,240,0.6)">Cardio</span><span style="font-size:12.5px;font-weight:600;padding:8px 15px;border-radius:100px;background:#161310;border:1px solid rgba(255,240,225,0.08);color:rgba(247,244,240,0.6)">Movilidad</span></div></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+        <div class="lift" style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:22px;overflow:hidden">
+          <div style="height:130px;background:linear-gradient(135deg,#14532d,#0a2818);display:flex;align-items:center;justify-content:center"><span class="msym fill" style="color:rgba(74,222,128,0.7);font-size:42px">exercise</span></div>
+          <div style="padding:20px"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#4ade80">Fuerza</span><div class="disp" style="font-weight:700;font-size:16px;margin:6px 0 12px">HIIT quema-grasa</div><div style="display:flex;gap:14px;font-size:12px;color:rgba(247,244,240,0.5)"><span>20 min</span><span>~280 kcal</span></div></div>
+        </div>
+        <div class="lift" style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:22px;overflow:hidden">
+          <div style="height:130px;background:linear-gradient(135deg,#1e3a5f,#0f1f33);display:flex;align-items:center;justify-content:center"><span class="msym fill" style="color:rgba(96,165,250,0.7);font-size:42px">directions_run</span></div>
+          <div style="padding:20px"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#60a5fa">Cardio</span><div class="disp" style="font-weight:700;font-size:16px;margin:6px 0 12px">Caminata en ayunas</div><div style="display:flex;gap:14px;font-size:12px;color:rgba(247,244,240,0.5)"><span>40 min</span><span>~200 kcal</span></div></div>
+        </div>
+        <div class="lift" style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:22px;overflow:hidden">
+          <div style="height:130px;background:linear-gradient(135deg,#3d2a5c,#1f1533);display:flex;align-items:center;justify-content:center"><span class="msym fill" style="color:rgba(167,139,250,0.7);font-size:42px">self_improvement</span></div>
+          <div style="padding:20px"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#a78bfa">Movilidad</span><div class="disp" style="font-weight:700;font-size:16px;margin:6px 0 12px">Yoga restaurativo</div><div style="display:flex;gap:14px;font-size:12px;color:rgba(247,244,240,0.5)"><span>30 min</span><span>~120 kcal</span></div></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+</body>
+</html>

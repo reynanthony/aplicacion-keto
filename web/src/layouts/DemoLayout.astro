@@ -41,8 +41,8 @@ const sideLinks = [
     .icon-filled { font-variation-settings: 'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24; }
 
     body[data-theme="demo"] {
-      background: #0a0a0a !important;
-      color: #f5f5f5 !important;
+      background: #0b0a08 !important;
+      color: #f7f4f0 !important;
     }
 
     /* ── Demo Banner ── */
@@ -66,15 +66,15 @@ const sideLinks = [
       position: fixed; top: 36px; left: 0; right: 0; z-index: 40; height: 56px;
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 1rem;
-      background: rgba(10,10,10,0.97); backdrop-filter: blur(24px);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: rgba(11,10,8,0.97); backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(255,240,225,0.06);
     }
 
     /* ── Demo Sidebar ── */
     #demoSidebar {
       display: none;
       position: fixed; top: 36px; left: 0; bottom: 0; width: 248px; z-index: 30;
-      background: #0f0f0f; border-right: 1px solid rgba(255,255,255,0.05);
+      background: #0f0f0f; border-right: 1px solid rgba(255,240,225,0.05);
       flex-direction: column; padding: 12px 0; overflow-y: auto;
     }
     @media (min-width: 768px) {
@@ -91,16 +91,16 @@ const sideLinks = [
     .dsb-brand { font-family: 'Plus Jakarta Sans',sans-serif; font-weight: 900; font-size: 18px;
       background: linear-gradient(to right,#ff4d00,#ffb300); -webkit-background-clip: text;
       -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -0.02em; }
-    .dsb-tag { font-size: 9px; color: rgba(245,245,245,0.35); font-weight: 600;
+    .dsb-tag { font-size: 9px; color: rgba(247,244,240,0.35); font-weight: 600;
       letter-spacing: 0.08em; text-transform: uppercase; margin-top: 1px; }
     .dsb-section { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-      color: rgba(245,245,245,0.28); padding: 8px 16px 4px; margin-top: 4px; }
+      color: rgba(247,244,240,0.28); padding: 8px 16px 4px; margin-top: 4px; }
     .dsb-link {
       display: flex; align-items: center; gap: 10px; padding: 9px 16px; margin: 1px 8px;
-      border-radius: 10px; text-decoration: none; color: rgba(245,245,245,0.6);
+      border-radius: 10px; text-decoration: none; color: rgba(247,244,240,0.6);
       font-size: 13px; font-weight: 500; transition: all 0.15s; cursor: pointer;
     }
-    .dsb-link:hover { background: rgba(255,255,255,0.05); color: #f5f5f5; }
+    .dsb-link:hover { background: rgba(255,240,225,0.05); color: #f7f4f0; }
     .dsb-link.active { background: rgba(255,77,0,0.12); color: #ff4d00; }
     .dsb-link.active .material-symbols-outlined { color: #ff4d00 !important; }
     .dsb-icon { font-size: 18px; }
@@ -120,8 +120,8 @@ const sideLinks = [
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; height: 68px;
       display: flex; align-items: center; justify-content: space-around;
       padding-bottom: env(safe-area-inset-bottom, 0px);
-      background: rgba(10,10,10,0.97); backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(255,255,255,0.08);
+      background: rgba(11,10,8,0.97); backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255,240,225,0.08);
     }
     .dbn-item {
       display: flex; flex-direction: column; align-items: center; gap: 3px;
@@ -143,7 +143,7 @@ const sideLinks = [
       padding-top: 92px; /* 36 banner + 56 header */
       padding-bottom: 88px; /* bottom nav */
       min-height: 100vh;
-      background: #0a0a0a;
+      background: #0b0a08;
     }
     @media (min-width: 768px) {
       #demoMain { padding-bottom: 2rem; }
@@ -152,7 +152,7 @@ const sideLinks = [
     /* ── Demo More Menu ── */
     #demoMoreMenu {
       position: fixed; bottom: 72px; left: 8px; right: 8px; z-index: 80;
-      background: #161616; border: 1px solid rgba(255,255,255,0.07);
+      background: #161310; border: 1px solid rgba(255,240,225,0.07);
       border-radius: 20px; padding: 12px;
       box-shadow: 0 -8px 32px rgba(0,0,0,0.4);
       display: none; grid-template-columns: 1fr 1fr; gap: 8px;
@@ -160,9 +160,9 @@ const sideLinks = [
     #demoMoreMenu.open { display: grid; }
     .dmm-item {
       display: flex; align-items: center; gap: 10px; padding: 10px 12px;
-      background: #1e1e1e; border-radius: 12px; text-decoration: none;
-      color: rgba(245,245,245,0.8); font-size: 13px; font-weight: 500;
-      border: 1px solid rgba(255,255,255,0.05); transition: background 0.15s;
+      background: #1e1a15; border-radius: 12px; text-decoration: none;
+      color: rgba(247,244,240,0.8); font-size: 13px; font-weight: 500;
+      border: 1px solid rgba(255,240,225,0.05); transition: background 0.15s;
     }
     .dmm-item:hover { background: #2a2a2a; }
     .dmm-item .material-symbols-outlined { font-size: 20px; }
@@ -175,8 +175,8 @@ const sideLinks = [
     }
     #demoPaywallOverlay.visible { display: flex; }
     #demoPaywallCard {
-      width: 90%; max-width: 360px; background: #161616;
-      border: 1px solid rgba(255,255,255,0.08); border-radius: 28px;
+      width: 90%; max-width: 360px; background: #161310;
+      border: 1px solid rgba(255,240,225,0.08); border-radius: 28px;
       padding: 28px; box-shadow: 0 24px 80px rgba(0,0,0,0.6);
     }
     .dpw-icon {
@@ -185,14 +185,14 @@ const sideLinks = [
       background: linear-gradient(135deg,#ff4d00,#ff7346);
     }
     .dpw-title { font-family: 'Plus Jakarta Sans',sans-serif; font-weight: 900; font-size: 22px;
-      color: #f5f5f5; text-align: center; margin-bottom: 8px; }
-    .dpw-sub { font-size: 13px; color: rgba(245,245,245,0.55); text-align: center;
+      color: #f7f4f0; text-align: center; margin-bottom: 8px; }
+    .dpw-sub { font-size: 13px; color: rgba(247,244,240,0.55); text-align: center;
       line-height: 1.5; margin-bottom: 20px; }
     .dpw-features { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
     .dpw-feat {
       display: flex; align-items: center; gap: 10px; padding: 10px 12px;
       background: rgba(255,77,0,0.06); border: 1px solid rgba(255,77,0,0.12);
-      border-radius: 10px; font-size: 13px; color: rgba(245,245,245,0.8); font-weight: 500;
+      border-radius: 10px; font-size: 13px; color: rgba(247,244,240,0.8); font-weight: 500;
     }
     .dpw-feat .material-symbols-outlined { color: #ff4d00; font-size: 18px; flex-shrink: 0; }
     .dpw-cta {
@@ -205,25 +205,25 @@ const sideLinks = [
     .dpw-cta:hover { opacity: 0.9; }
     .dpw-skip {
       width: 100%; padding: 12px; border-radius: 14px; border: none; cursor: pointer;
-      background: transparent; color: rgba(245,245,245,0.4);
+      background: transparent; color: rgba(247,244,240,0.4);
       font-size: 13px; font-weight: 500; margin-top: 10px; transition: color 0.2s;
     }
-    .dpw-skip:hover { color: rgba(245,245,245,0.7); }
+    .dpw-skip:hover { color: rgba(247,244,240,0.7); }
 
     /* ── Shared card styles ── */
     .dk-card {
-      background: #161616; border: 1px solid rgba(255,255,255,0.06);
+      background: #161310; border: 1px solid rgba(255,240,225,0.06);
       border-radius: 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.25), 0 1px 4px rgba(0,0,0,0.15);
     }
     .dk-card-orange {
-      background: #161616; border: 1px solid rgba(255,77,0,0.15);
+      background: #161310; border: 1px solid rgba(255,77,0,0.15);
       border-radius: 20px; box-shadow: 0 4px 20px rgba(255,77,0,0.06), 0 1px 4px rgba(0,0,0,0.2);
     }
     .dk-pill {
       display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px;
       border-radius: 100px; font-size: 11px; font-weight: 700;
     }
-    .dk-progress-bar { height: 6px; background: rgba(255,255,255,0.06); border-radius: 100px; overflow: hidden; }
+    .dk-progress-bar { height: 6px; background: rgba(255,240,225,0.06); border-radius: 100px; overflow: hidden; }
     .dk-progress-fill { height: 100%; border-radius: 100px; transition: width 0.6s ease; }
 
     /* ── Demo grid (desktop 2-col) ── */
@@ -252,10 +252,10 @@ const sideLinks = [
   <header id="demoHeader">
     <a href="/app/demo/" style="display:flex;align-items:center;gap:10px;text-decoration:none">
       <img src="/app/logo.svg" alt="KetoCore" style="width:28px;height:28px;filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
-      <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:16px;color:#f5f5f5">KetoCore</span>
+      <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:16px;color:#f7f4f0">KetoCore</span>
       <span style="font-size:10px;background:rgba(255,77,0,0.15);color:#ff4d00;border-radius:6px;padding:1px 7px;font-weight:700;border:1px solid rgba(255,77,0,0.2)">DEMO</span>
     </a>
-    <button id="demoMenuBtn" onclick="toggleDemoMenu()" style="width:36px;height:36px;border-radius:50%;background:#1e1e1e;border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(245,245,245,0.6)">
+    <button id="demoMenuBtn" onclick="toggleDemoMenu()" style="width:36px;height:36px;border-radius:50%;background:#1e1a15;border:1px solid rgba(255,240,225,0.06);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(247,244,240,0.6)">
       <span class="material-symbols-outlined" style="font-size:20px">menu</span>
     </button>
   </header>
@@ -274,7 +274,7 @@ const sideLinks = [
       <div class="dsb-demo-badge-dot"></div>
       <div>
         <div style="font-size:11px;font-weight:700;color:#ff4d00">Modo Demo Activo</div>
-        <div style="font-size:10px;color:rgba(245,245,245,0.4);margin-top:1px">Explorando como Carlos R.</div>
+        <div style="font-size:10px;color:rgba(247,244,240,0.4);margin-top:1px">Explorando como Carlos R.</div>
       </div>
     </div>
 
@@ -291,7 +291,7 @@ const sideLinks = [
         <span class="material-symbols-outlined" style="font-size:18px">rocket_launch</span>
         Comenzar Gratis
       </a>
-      <p style="text-align:center;font-size:10px;color:rgba(245,245,245,0.28);margin-top:6px">Sin tarjeta de crédito</p>
+      <p style="text-align:center;font-size:10px;color:rgba(247,244,240,0.28);margin-top:6px">Sin tarjeta de crédito</p>
     </div>
   </aside>
 

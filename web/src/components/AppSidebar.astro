@@ -1,268 +1,343 @@
 ---
-// AppSidebar — desktop navigation rail (hidden on mobile via CSS)
+// AppSidebar — navegación completa de la app (rediseño Editorial Bento)
+// Desktop >900px: aside fijo 250px. Móvil ≤900px: bottom tab bar (5 items,
+// botón central "Escanear") + drawer "Más". Expone toggleHamburgerMenu()
+// para los botones de menú existentes en los headers de cada página.
+
+const sections = [
+  {
+    label: 'Principal',
+    links: [
+      { id: 'home',     href: '/app/',          icon: 'cottage',     color: '', label: 'Dashboard' },
+      { id: 'macros',   href: '/app/macros',    icon: 'donut_small', color: '', label: 'Macros' },
+      { id: 'plan',     href: '/app/plan',      icon: 'event_note',  color: '', label: 'Plan Alimenticio' },
+      { id: 'recetas',  href: '/app/recetas',   icon: 'menu_book',   color: '', label: 'Recetas' },
+    ],
+  },
+  {
+    label: 'Herramientas',
+    links: [
+      { id: 'checklist',      href: '/app/checklist',      icon: 'task_alt',            color: '#22c55e', label: 'Checklist' },
+      { id: 'entrenamientos', href: '/app/entrenamientos', icon: 'fitness_center',      color: '#4ade80', label: 'Entrenamientos' },
+      { id: 'alimentos',      href: '/app/alimentos',      icon: 'restaurant',          color: '#fb923c', label: 'Alimentos' },
+      { id: 'suplementos',    href: '/app/suplementos',    icon: 'medication',          color: '#f59e0b', label: 'Suplementos' },
+      { id: 'compras',        href: '/app/compras',        icon: 'shopping_cart',       color: '#60a5fa', label: 'Lista de Compras' },
+      { id: 'scanner',        href: '/app/scanner',        icon: 'center_focus_strong', color: '#22d3ee', label: 'Scanner IA' },
+    ],
+  },
+  {
+    label: 'Inteligencia',
+    links: [
+      { id: 'coach',     href: '/app/coach',     icon: 'psychology', color: '#a78bfa', label: 'Coach IA' },
+      { id: 'inspector', href: '/app/inspector', icon: 'analytics',  color: '#ff4d00', label: 'Inspector' },
+      { id: 'comunidad', href: '/app/comunidad', icon: 'groups',     color: '#f472b6', label: 'Comunidad', badge: 'PRONTO' },
+    ],
+  },
+  {
+    label: 'Progreso & Perfil',
+    links: [
+      { id: 'progreso',  href: '/app/progreso',  icon: 'trending_up', color: '#ff4d00', label: 'Mi Progreso' },
+      { id: 'objetivos', href: '/app/objetivos', icon: 'flag',        color: '#ff4d00', label: 'Mis Objetivos' },
+      { id: 'perfil',    href: '/app/perfil',    icon: 'person',      color: '', label: 'Mi Perfil' },
+    ],
+  },
+];
+
+const drawerLinks = [
+  { href: '/app/recetas',        icon: 'menu_book',      color: '#fb923c', label: 'Recetas' },
+  { href: '/app/checklist',      icon: 'task_alt',       color: '#22c55e', label: 'Checklist' },
+  { href: '/app/entrenamientos', icon: 'fitness_center', color: '#4ade80', label: 'Entrenar' },
+  { href: '/app/alimentos',      icon: 'restaurant',     color: '#fb923c', label: 'Alimentos' },
+  { href: '/app/suplementos',    icon: 'medication',     color: '#f59e0b', label: 'Suplementos' },
+  { href: '/app/compras',        icon: 'shopping_cart',  color: '#60a5fa', label: 'Compras' },
+  { href: '/app/coach',          icon: 'psychology',     color: '#a78bfa', label: 'Coach IA' },
+  { href: '/app/inspector',      icon: 'analytics',      color: '#ff4d00', label: 'Inspector' },
+  { href: '/app/comunidad',      icon: 'groups',         color: '#f472b6', label: 'Comunidad' },
+  { href: '/app/progreso',       icon: 'trending_up',    color: '#ff4d00', label: 'Progreso' },
+  { href: '/app/objetivos',      icon: 'flag',           color: '#ff4d00', label: 'Objetivos' },
+  { href: '/app/perfil',         icon: 'person',         color: '', label: 'Mi Perfil' },
+  { href: '/app/guia',           icon: 'help',           color: '#60a5fa', label: 'Guía' },
+  { href: '/app/demo/',          icon: 'play_circle',    color: '#ff4d00', label: 'Ver Demo' },
+];
 ---
 
+<!-- ===== DESKTOP ASIDE ===== -->
 <aside id="appSidebar">
-
-  <!-- Logo -->
-  <div class="sb-logo-wrap">
-    <a href="/app/" class="sb-logo-link">
-      <img src="/app/logo.svg" alt="KetoCore" class="sb-logo-img">
-      <div>
-        <span class="sb-brand">KetoCore</span>
-        <span class="sb-tagline">Nutrition AI</span>
-      </div>
+  <div class="kcs-logo">
+    <a href="/app/" class="kcs-logo-link">
+      <img src="/app/logo.svg" alt="KetoCore" class="kcs-logo-img" width="36" height="36">
+      <span class="kcs-logo-text">
+        <span class="kcs-brand">KetoCore</span>
+        <span class="kcs-tagline">Nutrition AI</span>
+      </span>
     </a>
   </div>
 
-  <!-- Navigation -->
-  <nav class="sb-nav">
-
-    <!-- Demo banner -->
-    <a href="/app/demo/" class="sb-demo-entry">
-      <span class="material-symbols-outlined icon-filled" style="font-size:16px;color:#ff4d00">play_circle</span>
+  <nav class="kcs-nav">
+    {sections.map(section => (
+      <>
+        <p class="kcs-label">{section.label}</p>
+        {section.links.map(link => (
+          <a href={link.href} data-nav={link.id} class="kcs-link">
+            <span class="material-symbols-outlined kcs-ic" style={link.color ? `color:${link.color}` : ''}>{link.icon}</span>
+            <span>{link.label}</span>
+            {link.badge && <span class="kcs-badge">{link.badge}</span>}
+          </a>
+        ))}
+      </>
+    ))}
+    <a href="/app/demo/" class="kcs-demo">
+      <span class="material-symbols-outlined icon-filled" style="font-size:16px">play_circle</span>
       <span>Explorar Demo</span>
-      <span class="sb-demo-dot"></span>
+      <span class="kcs-demo-dot"></span>
     </a>
-
-    <p class="sb-section-label">Principal</p>
-    <a href="/app/"              data-nav="home"          class="sb-link"><span class="material-symbols-outlined sb-icon">cottage</span><span>Dashboard</span></a>
-    <a href="/app/macros"        data-nav="macros"        class="sb-link"><span class="material-symbols-outlined sb-icon">donut_small</span><span>Macros</span></a>
-    <a href="/app/plan"          data-nav="plan"          class="sb-link"><span class="material-symbols-outlined sb-icon">event_note</span><span>Plan Alimenticio</span></a>
-    <a href="/app/recetas"       data-nav="recetas"       class="sb-link"><span class="material-symbols-outlined sb-icon">menu_book</span><span>Recetas</span></a>
-
-    <p class="sb-section-label" style="margin-top:14px">Herramientas</p>
-    <a href="/app/checklist"     data-nav="checklist"     class="sb-link"><span class="material-symbols-outlined sb-icon" style="color:#22c55e">task_alt</span><span>Checklist</span></a>
-    <a href="/app/entrenamientos"data-nav="entrenamientos"class="sb-link"><span class="material-symbols-outlined sb-icon" style="color:#4ade80">fitness_center</span><span>Entrenamientos</span></a>
-    <a href="/app/alimentos"     data-nav="alimentos"     class="sb-link"><span class="material-symbols-outlined sb-icon" style="color:#fb923c">restaurant</span><span>Alimentos</span></a>
-    <a href="/app/suplementos"   data-nav="suplementos"   class="sb-link"><span class="material-symbols-outlined sb-icon" style="color:#c084fc">medication</span><span>Suplementos</span></a>
-    <a href="/app/compras"       data-nav="compras"       class="sb-link"><span class="material-symbols-outlined sb-icon" style="color:#60a5fa">shopping_cart</span><span>Lista de Compras</span></a>
-
-    <p class="sb-section-label" style="margin-top:14px">Inteligencia</p>
-    <a href="/app/coach"          data-nav="coach"         class="sb-link"><span class="material-symbols-outlined sb-icon" style="color:#a78bfa">psychology</span><span>Coach IA</span></a>
-    <a href="/app/inspector"      data-nav="inspector"     class="sb-link"><span class="material-symbols-outlined sb-icon" style="color:#ff4d00">analytics</span><span>Inspector</span></a>
-
-    <p class="sb-section-label" style="margin-top:14px">Progreso & Perfil</p>
-    <a href="/app/progreso"   data-nav="progreso"   class="sb-link"><span class="material-symbols-outlined sb-icon" style="color:#ff4d00">trending_up</span><span>Mi Progreso</span></a>
-    <a href="/app/objetivos"  data-nav="objetivos"  class="sb-link"><span class="material-symbols-outlined sb-icon" style="color:#ff4d00;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">flag</span><span>Mis Objetivos</span></a>
-    <a href="/app/comunidad"  data-nav="comunidad"  class="sb-link">
-      <span class="material-symbols-outlined sb-icon" style="color:#a78bfa">group</span>
-      <span>Comunidad</span>
-      <span class="sb-badge">PRONTO</span>
-    </a>
-    <a href="/app/perfil"     data-nav="perfil"     class="sb-link"><span class="material-symbols-outlined sb-icon">person</span><span>Mi Perfil</span></a>
-
   </nav>
 
-  <!-- Bottom panel -->
-  <div class="sb-bottom">
-    <!-- Quick stats -->
-    <div class="sb-stats">
-      <div class="sb-stat-card">
-        <p id="sbStreak" class="sb-stat-val" style="color:#ff4d00">--</p>
-        <p class="sb-stat-lbl">Racha</p>
-      </div>
-      <div class="sb-stat-card">
-        <p id="sbScore" class="sb-stat-val">--</p>
-        <p class="sb-stat-lbl">Score</p>
-      </div>
+  <div class="kcs-foot">
+    <a href="/app/perfil" class="kcs-user">
+      <span id="sbAvatar" class="kcs-avatar">?</span>
+      <span class="kcs-user-info">
+        <span id="sbName" class="kcs-user-name">--</span>
+        <span id="sbSub" class="kcs-user-sub">keto tracker</span>
+      </span>
+      <span class="material-symbols-outlined" style="font-size:18px;color:rgba(247,244,240,0.3)">expand_more</span>
+    </a>
+  </div>
+</aside>
+
+<!-- ===== MOBILE BOTTOM TAB BAR ===== -->
+<nav id="kcTabbar" aria-label="Navegación principal">
+  <a href="/app/"       data-tab="home"   class="kct-item"><span class="material-symbols-outlined kct-ic">cottage</span><span class="kct-lbl">Inicio</span></a>
+  <a href="/app/macros" data-tab="macros" class="kct-item"><span class="material-symbols-outlined kct-ic">donut_small</span><span class="kct-lbl">Macros</span></a>
+  <a href="/app/scanner" data-tab="scanner" class="kct-item">
+    <span class="kct-scan"><span class="material-symbols-outlined" style="font-size:24px;color:#fff">center_focus_strong</span></span>
+    <span class="kct-lbl">Escanear</span>
+  </a>
+  <a href="/app/plan"   data-tab="plan"   class="kct-item"><span class="material-symbols-outlined kct-ic">event_note</span><span class="kct-lbl">Plan</span></a>
+  <button type="button" onclick="toggleHamburgerMenu()" class="kct-item" aria-label="Más opciones"><span class="material-symbols-outlined kct-ic">menu</span><span class="kct-lbl">Más</span></button>
+</nav>
+
+<!-- ===== MOBILE DRAWER ===== -->
+<div id="kcDrawer" aria-hidden="true">
+  <div class="kcd-scrim" onclick="toggleHamburgerMenu()"></div>
+  <div class="kcd-sheet" role="dialog" aria-label="Menú">
+    <div class="kcd-handle-row"><span class="kcd-handle"></span></div>
+    <div class="kcd-user-row">
+      <span id="kcdAvatar" class="kcs-avatar" style="width:40px;height:40px;font-size:15px">?</span>
+      <span class="kcs-user-info">
+        <span id="kcdName" class="kcs-user-name" style="font-size:14px">--</span>
+        <span id="kcdSub" class="kcs-user-sub" style="font-size:11px">keto tracker</span>
+      </span>
+      <button type="button" class="kcd-close" onclick="toggleHamburgerMenu()" aria-label="Cerrar menú">
+        <span class="material-symbols-outlined" style="font-size:20px;color:rgba(247,244,240,0.6)">close</span>
+      </button>
     </div>
-    <!-- User row -->
-    <div class="sb-user">
-      <div id="sbAvatar" class="sb-avatar">?</div>
-      <div class="sb-user-info">
-        <p id="sbName" class="sb-user-name">--</p>
-        <p class="sb-user-sub">keto tracker</p>
-      </div>
-      <button onclick="handleLogout()" title="Cerrar sesión" class="sb-logout">
-        <span class="material-symbols-outlined" style="font-size:16px;color:#dc2626">logout</span>
+    <div class="kcd-grid">
+      {drawerLinks.map(link => (
+        <a href={link.href} class="kcd-link">
+          <span class="material-symbols-outlined" style={`font-size:21px;color:${link.color || 'rgba(247,244,240,0.6)'}`}>{link.icon}</span>
+          <span>{link.label}</span>
+        </a>
+      ))}
+      <button type="button" class="kcd-link" onclick="kcLogout()">
+        <span class="material-symbols-outlined" style="font-size:21px;color:#ef4444">logout</span>
+        <span>Salir</span>
       </button>
     </div>
   </div>
-
-</aside>
+</div>
 
 <style is:global>
-/* ── Sidebar shell ── */
+/* ── Desktop aside ── */
 #appSidebar {
-  display: none; /* shown via media query in AppLayout */
+  display: none; /* mostrado ≥901px vía media query global (AppLayout) */
   position: fixed;
   top: 0; left: 0; bottom: 0;
-  width: 248px;
+  width: 250px;
   flex-direction: column;
   z-index: 60;
-  background: #0f0f0f;
-  border-right: 1px solid rgba(255,255,255,0.07);
-  overflow: hidden;
-}
-
-/* ── Logo ── */
-.sb-logo-wrap {
-  height: 60px;
-  display: flex;
-  align-items: center;
-  padding: 0 18px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  flex-shrink: 0;
-}
-.sb-logo-link { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.sb-logo-img  { width: 30px; height: 30px; filter: drop-shadow(0 0 8px rgba(255,77,0,0.5)); }
-.sb-brand {
-  display: block;
-  font-size: 14px; font-weight: 900;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background: linear-gradient(to right, #ff4d00, #fb923c);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text; line-height: 1.2;
-}
-.sb-tagline {
-  display: block;
-  font-size: 9px; color: rgba(255,255,255,0.28);
-  font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-}
-
-/* ── Nav ── */
-.sb-nav {
-  flex: 1; overflow-y: auto; padding: 14px 10px;
-  scrollbar-width: none;
-}
-.sb-nav::-webkit-scrollbar { display: none; }
-
-.sb-section-label {
-  font-size: 9px; font-weight: 700;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  color: rgba(255,255,255,0.22);
-  padding: 0 10px; margin: 0 0 5px;
-}
-
-.sb-link {
-  display: flex; align-items: center; gap: 9px;
-  padding: 8px 10px; border-radius: 9px;
-  font-size: 13px; font-weight: 500;
-  color: rgba(245,245,245,0.5);
-  text-decoration: none;
-  transition: background 0.12s, color 0.12s;
-  margin-bottom: 1px;
+  background: #0f0d0a;
+  border-right: 1px solid rgba(255,240,225,0.06);
   font-family: 'Inter', sans-serif;
+}
+.kcs-logo { height: 76px; display: flex; align-items: center; padding: 0 22px; flex-shrink: 0; }
+.kcs-logo-link { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.kcs-logo-img { width: 36px; height: 36px; border-radius: 10px; filter: drop-shadow(0 0 12px rgba(255,77,0,0.45)); }
+.kcs-logo-text { line-height: 1.1; }
+.kcs-brand { display: block; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 900; font-size: 16px; letter-spacing: -0.01em; color: #f7f4f0; }
+.kcs-tagline { display: block; font-size: 9px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #ff4d00; }
+
+.kcs-nav { flex: 1; overflow-y: auto; padding: 8px 14px; scrollbar-width: thin; scrollbar-color: rgba(255,77,0,0.3) transparent; }
+.kcs-nav::-webkit-scrollbar { width: 6px; }
+.kcs-nav::-webkit-scrollbar-thumb { background: rgba(255,77,0,0.3); border-radius: 10px; }
+
+.kcs-label {
+  font-size: 9px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(255,240,225,0.25); padding: 0 8px; margin: 18px 0 8px;
+}
+.kcs-nav .kcs-label:first-child { margin-top: 12px; }
+
+.kcs-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px; border-radius: 12px; margin-bottom: 3px;
+  font-size: 14px; font-weight: 500; text-decoration: none;
+  color: rgba(247,244,240,0.55);
+  transition: background .13s, color .13s;
   white-space: nowrap;
 }
-.sb-link:hover { background: rgba(255,255,255,0.05); color: rgba(245,245,245,0.85); }
-.sb-link.sb-active {
-  background: rgba(255,77,0,0.1);
-  color: #ff4d00; font-weight: 600;
+.kcs-link:hover { background: rgba(255,255,255,0.045); color: rgba(247,244,240,0.92); }
+.kcs-ic { font-size: 20px; flex-shrink: 0; color: rgba(247,244,240,0.4); font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.kcs-link.kcs-active { background: #ff4d00; color: #0b0a08; font-weight: 700; }
+.kcs-link.kcs-active .kcs-ic { color: #0b0a08 !important; font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+.kcs-badge {
+  margin-left: auto; font-size: 8px; font-weight: 800; padding: 2px 6px; border-radius: 999px;
+  background: rgba(244,114,182,0.12); color: #f472b6; letter-spacing: 0.05em;
 }
-.sb-link.sb-active .sb-icon {
-  color: #ff4d00 !important;
-  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-}
-.sb-icon {
-  font-size: 18px; flex-shrink: 0; width: 20px; text-align: center;
-  color: rgba(245,245,245,0.3);
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-}
-.sb-badge {
-  margin-left: auto;
-  font-size: 8px; font-weight: 800;
-  padding: 2px 6px; border-radius: 999px;
-  background: rgba(167,139,250,0.12); color: #a78bfa;
-  letter-spacing: 0.05em;
-}
+.kcs-link.kcs-active .kcs-badge { background: rgba(11,10,8,0.18); color: #0b0a08; }
 
-/* ── Bottom panel ── */
-.sb-bottom {
-  padding: 12px;
-  border-top: 1px solid rgba(255,255,255,0.06);
-  flex-shrink: 0;
-}
-.sb-stats {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;
-}
-.sb-stat-card {
-  background: #161616;
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 10px; padding: 9px;
-  text-align: center;
-}
-.sb-stat-val {
-  font-size: 18px; font-weight: 900; color: #f5f5f5;
-  font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1;
-}
-.sb-stat-lbl {
-  font-size: 9px; color: rgba(255,255,255,0.28);
-  text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px;
-}
-.sb-user { display: flex; align-items: center; gap: 9px; }
-.sb-avatar {
-  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
-  background: linear-gradient(135deg,#ff4d00,#fb923c);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 12px; color: #fff;
-}
-.sb-user-info { flex: 1; min-width: 0; }
-.sb-user-name { font-size: 12px; font-weight: 700; color: #f5f5f5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.sb-user-sub  { font-size: 10px; color: rgba(255,255,255,0.28); }
-.sb-logout {
-  width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
-  background: rgba(220,38,38,0.06); border: 1px solid rgba(220,38,38,0.14);
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s;
-}
-.sb-logout:hover { background: rgba(220,38,38,0.14); }
-
-/* Demo entry button */
-.sb-demo-entry {
+.kcs-demo {
   display: flex; align-items: center; gap: 8px;
-  margin: 10px 10px 6px;
-  padding: 8px 12px; border-radius: 10px;
-  background: rgba(255,77,0,0.08);
-  border: 1px solid rgba(255,77,0,0.2);
-  color: #ff4d00; font-size: 12px; font-weight: 700;
-  text-decoration: none; cursor: pointer;
-  transition: background 0.15s;
+  margin: 18px 0 6px; padding: 10px 14px; border-radius: 12px;
+  background: rgba(255,77,0,0.08); border: 1px solid rgba(255,77,0,0.2);
+  color: #ff4d00; font-size: 12px; font-weight: 700; text-decoration: none;
+  transition: background .13s;
 }
-.sb-demo-entry:hover { background: rgba(255,77,0,0.15); }
-.sb-demo-dot {
-  margin-left: auto; width: 6px; height: 6px; border-radius: 50%;
-  background: #ff4d00; animation: sbDemoPulse 2s infinite;
+.kcs-demo:hover { background: rgba(255,77,0,0.15); }
+.kcs-demo-dot { margin-left: auto; width: 6px; height: 6px; border-radius: 50%; background: #ff4d00; animation: kcsPulse 2s infinite; }
+@keyframes kcsPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.kcs-foot { padding: 16px; flex-shrink: 0; }
+.kcs-user {
+  display: flex; align-items: center; gap: 11px;
+  padding: 12px; border-radius: 16px;
+  background: #161310; border: 1px solid rgba(255,240,225,0.06);
+  text-decoration: none; transition: background .13s;
 }
-@keyframes sbDemoPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.kcs-user:hover { background: #1e1a15; }
+.kcs-avatar {
+  width: 38px; height: 38px; border-radius: 12px; flex-shrink: 0;
+  background: linear-gradient(135deg, #ff4d00, #fb923c);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 14px; color: #fff;
+}
+.kcs-user-info { flex: 1; min-width: 0; line-height: 1.3; display: flex; flex-direction: column; }
+.kcs-user-name { font-size: 13px; font-weight: 700; color: #f7f4f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kcs-user-sub { font-size: 10.5px; color: rgba(247,244,240,0.35); }
+
+/* ── Mobile bottom tab bar ── */
+#kcTabbar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
+  height: 68px; display: flex; align-items: stretch;
+  background: rgba(15,13,10,0.94);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border-top: 1px solid rgba(255,240,225,0.08);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  font-family: 'Inter', sans-serif;
+}
+.kct-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  text-decoration: none; color: rgba(247,244,240,0.5);
+  background: none; border: none; cursor: pointer; font-family: inherit;
+  transition: color .15s;
+}
+.kct-ic { font-size: 23px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.kct-lbl { font-size: 10px; font-weight: 600; }
+.kct-item.kct-active { color: #ff4d00; }
+.kct-item.kct-active .kct-ic { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+.kct-scan {
+  width: 46px; height: 34px; margin-top: -14px; border-radius: 14px;
+  background: #ff4d00; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 16px rgba(255,77,0,0.4);
+}
+.kct-item:active .kct-scan { transform: scale(0.94); }
+
+/* ── Mobile drawer ── */
+#kcDrawer { position: fixed; inset: 0; z-index: 70; display: none; font-family: 'Inter', sans-serif; }
+#kcDrawer.open { display: block; }
+.kcd-scrim { position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(2px); }
+.kcd-sheet {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  max-height: 82vh; overflow-y: auto;
+  background: #0f0d0a;
+  border-top-left-radius: 24px; border-top-right-radius: 24px;
+  border-top: 1px solid rgba(255,240,225,0.1);
+  padding: 10px 16px calc(24px + env(safe-area-inset-bottom, 0px));
+  animation: kcdUp .22s cubic-bezier(.4,0,.2,1);
+}
+@keyframes kcdUp { from { transform: translateY(24px); opacity: 0.6; } to { transform: translateY(0); opacity: 1; } }
+.kcd-handle-row { display: flex; align-items: center; justify-content: center; padding: 10px 0 6px; }
+.kcd-handle { width: 40px; height: 4px; border-radius: 100px; background: rgba(255,240,225,0.2); }
+.kcd-user-row {
+  display: flex; align-items: center; gap: 11px;
+  padding: 8px 6px 16px; border-bottom: 1px solid rgba(255,240,225,0.06); margin-bottom: 12px;
+}
+.kcd-close {
+  width: 34px; height: 34px; border-radius: 11px; flex-shrink: 0;
+  background: #161310; border: 1px solid rgba(255,240,225,0.08);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.kcd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.kcd-link {
+  display: flex; align-items: center; gap: 11px;
+  padding: 14px; border-radius: 14px;
+  background: #161310; border: none; cursor: pointer;
+  text-decoration: none; color: #f7f4f0;
+  font-size: 13.5px; font-weight: 600; font-family: inherit; text-align: left;
+  transition: background .13s;
+}
+.kcd-link:hover { background: #1e1a15; }
+
+/* Desktop: ocultar bottom bar y drawer */
+@media (min-width: 901px) {
+  #kcTabbar, #kcDrawer { display: none !important; }
+}
 </style>
 
 <script is:inline>
+// Drawer global (los headers de página llaman toggleHamburgerMenu())
+function toggleHamburgerMenu() {
+  var d = document.getElementById('kcDrawer');
+  if (!d) return;
+  var open = d.classList.toggle('open');
+  d.setAttribute('aria-hidden', open ? 'false' : 'true');
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function kcLogout() {
+  if (typeof handleLogout === 'function') { handleLogout(); return; }
+  try {
+    localStorage.removeItem('ketocore_user_id');
+    localStorage.removeItem('KetoCore_guest');
+  } catch (e) {}
+  window.location.href = '/app/welcome';
+}
+
 (function () {
-  // Mark active link based on current path
+  // Estado activo por URL (aside + tabs)
   var path = window.location.pathname.replace(/\/+$/, '') || '/app';
-  var map = {
-    '/app': 'home', '/app/macros': 'macros', '/app/plan': 'plan',
-    '/app/recetas': 'recetas', '/app/checklist': 'checklist',
-    '/app/entrenamientos': 'entrenamientos', '/app/alimentos': 'alimentos',
-    '/app/suplementos': 'suplementos', '/app/compras': 'compras',
-    '/app/progreso': 'progreso', '/app/objetivos': 'objetivos',
-    '/app/comunidad': 'comunidad', '/app/perfil': 'perfil',
-    '/app/coach': 'coach', '/app/inspector': 'inspector'
-  };
-  var active = map[path] || 'home';
-  document.querySelectorAll('.sb-link[data-nav]').forEach(function (a) {
-    if (a.getAttribute('data-nav') === active) a.classList.add('sb-active');
+  var id = path === '/app' ? 'home' : path.replace('/app/', '').split('/')[0];
+  document.querySelectorAll('.kcs-link[data-nav]').forEach(function (a) {
+    if (a.getAttribute('data-nav') === id) a.classList.add('kcs-active');
+  });
+  document.querySelectorAll('.kct-item[data-tab]').forEach(function (a) {
+    if (a.getAttribute('data-tab') === id) a.classList.add('kct-active');
   });
 
-  // Populate user data once DOM + utils are ready
+  // Datos de usuario
   document.addEventListener('DOMContentLoaded', function () {
     try {
-      var profile = safeParseJSON(localStorage.getItem('keto_profile'), {});
-      var streak  = safeParseJSON(localStorage.getItem('ketoStreak'), {});
+      var parse = typeof safeParseJSON === 'function'
+        ? safeParseJSON
+        : function (s, f) { try { return JSON.parse(s) || f; } catch (e) { return f; } };
+      var profile = parse(localStorage.getItem('keto_profile'), {});
+      var streak  = parse(localStorage.getItem('ketoStreak'), {});
       var name     = profile.nombre || profile.name || 'Usuario';
       var initials = name.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase() || '?';
       var days     = streak.currentStreak || 0;
-
-      var el = function (id) { return document.getElementById(id); };
-      if (el('sbName'))   el('sbName').textContent   = name;
-      if (el('sbAvatar')) el('sbAvatar').textContent  = initials;
-      if (el('sbStreak')) el('sbStreak').textContent  = days + 'd';
-      // Simplified health score for sidebar display
-      var score = days ? Math.min(100, Math.round(days * 2.2 + 28)) : '--';
-      if (el('sbScore'))  el('sbScore').textContent   = score;
-    } catch (e) { /* utils.js not loaded on this page */ }
+      var sub      = days > 0 ? 'Racha · Día ' + days : 'keto tracker';
+      ['sbAvatar', 'kcdAvatar'].forEach(function (i) { var e = document.getElementById(i); if (e) e.textContent = initials; });
+      ['sbName', 'kcdName'].forEach(function (i) { var e = document.getElementById(i); if (e) e.textContent = name; });
+      ['sbSub', 'kcdSub'].forEach(function (i) { var e = document.getElementById(i); if (e) e.textContent = sub; });
+    } catch (e) { /* storage no disponible */ }
   });
 })();
 </script>

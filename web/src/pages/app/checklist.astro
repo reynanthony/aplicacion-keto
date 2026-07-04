@@ -1,11 +1,11 @@
-﻿---
+---
 import AppLayout from '../../layouts/AppLayout.astro';
 import AppNav from '../../components/AppNav.astro';
 ---
 
 <AppLayout title="KetoCore | Checklist" authGuard={true}>
 <style is:global>
-.sidebar-link.active{background:rgba(22,22,22,1)!important;}
+.sidebar-link.active{background:rgba(22,19,16,1)!important;}
 .sidebar-link.active .material-symbols-outlined{color:#ff4d00!important;}
 .sidebar-link.active{color:white!important;}
 .sidebar-collapsed .sidebar-nav{width:72px;}
@@ -19,13 +19,13 @@ import AppNav from '../../components/AppNav.astro';
 .sidebar-collapsed~.sidebar-toggle-btn{left:72px;}
 
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
-.glass-card{background:rgba(22,22,22,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.glass-card{background:rgba(22,19,16,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 .ghost-border{border:1px solid rgba(73,72,71,0.15)}
 .progress-ring-glow{filter:drop-shadow(0 0 12px rgba(255,77,0,0.4))}
 .primary-gradient{background:linear-gradient(135deg,#ff4d00 0%,#ff7346 100%)}
 .secondary-gradient{background:linear-gradient(135deg,#ffb300 0%,#ffc94f 100%)}
 .custom-scrollbar::-webkit-scrollbar{width:4px}
-.custom-scrollbar::-webkit-scrollbar-track{background:#0a0a0a}
+.custom-scrollbar::-webkit-scrollbar-track{background:#0b0a08}
 .custom-scrollbar::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:10px}
 @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 .animate-shimmer{animation:shimmer 2s infinite}
@@ -38,7 +38,7 @@ import AppNav from '../../components/AppNav.astro';
 .sidebar-collapsed~main .main-content{margin-left:72px}
 .sidebar-toggle-btn{left:256px;transition:left 0.3s ease}
 .sidebar-collapsed~.sidebar-toggle-btn{left:72px}
-.sidebar-link.active{background:#161616}
+.sidebar-link.active{background:#161310}
 .sidebar-link.active .material-symbols-outlined{color:#ff4d00}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}
 #toast{animation:toastIn 0.3s ease}
@@ -53,31 +53,31 @@ import AppNav from '../../components/AppNav.astro';
 }
 </style>
 <!-- Sidebar -->
-<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(10,10,10,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,0.06)">
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
   <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
     <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
-    <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f5f5f5">KetoCore</span>
+    <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">KetoCore</span>
   </a>
   <div class="flex items-center gap-1.5">
-    <button onclick="toggleMobileUserMenu()" aria-label="Mi cuenta" class="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden" style="background:#1e1e1e;border:1px solid rgba(255,255,255,0.06)">
+    <button onclick="toggleMobileUserMenu()" aria-label="Mi cuenta" class="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
       <img id="mobileHeaderAvatarImg" src="" class="hidden w-full h-full object-cover" alt="Avatar">
-      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined" style="font-size:20px;color:rgba(245,245,245,0.6)">account_circle</span>
+      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined" style="font-size:20px;color:rgba(247,244,240,0.6)">account_circle</span>
     </button>
-    <button onclick="toggleHamburgerMenu()" aria-label="Abrir menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1e1e;color:rgba(245,245,245,0.6)">
+    <button onclick="toggleHamburgerMenu()" aria-label="Abrir menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1a15;color:rgba(247,244,240,0.6)">
       <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">menu</span>
     </button>
   </div>
 </header>
 
 <!-- Mobile User Dropdown -->
-<div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161616;border:1px solid rgba(255,255,255,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
-  <div class="p-3" style="border-bottom:1px solid rgba(255,255,255,0.06)">
-    <p class="text-sm font-semibold" style="color:#f5f5f5" id="mobileDropdownUserName">Usuario</p>
-    <p class="text-xs mt-0.5" style="color:rgba(245,245,245,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
+<div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161310;border:1px solid rgba(255,240,225,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
+  <div class="p-3" style="border-bottom:1px solid rgba(255,240,225,0.06)">
+    <p class="text-sm font-semibold" style="color:#f7f4f0" id="mobileDropdownUserName">Usuario</p>
+    <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
   </div>
   <div class="p-2">
-    <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f5f5f5">
-      <span class="material-symbols-outlined text-lg" style="color:rgba(245,245,245,0.55)">person</span>
+    <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f7f4f0">
+      <span class="material-symbols-outlined text-lg" style="color:rgba(247,244,240,0.55)">person</span>
       <span class="text-sm font-medium">Mi Perfil</span>
     </a>
     <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-red-50" style="color:#dc2626">
@@ -96,7 +96,7 @@ import AppNav from '../../components/AppNav.astro';
 <div class="md:col-span-5 lg:col-span-4 bg-surface-container-low rounded-2xl p-8 flex flex-col items-center justify-center relative overflow-hidden group">
 <div class="absolute -top-12 -right-12 w-48 h-48 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all duration-700"></div>
 <div class="flex items-center justify-between w-full mb-6">
-  <h1 class="font-headline text-2xl font-extrabold tracking-tighter">Tu Progreso de Hoy</h1>
+  <h1 class="kc-h1" style="font-size:26px">Tu progreso de hoy</h1>
   <div class="flex items-center gap-2">
     <button onclick="openNotificationModal()" class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-surface-container-highest transition-colors">
       <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
@@ -115,7 +115,7 @@ import AppNav from '../../components/AppNav.astro';
 <stop offset="100%" stop-color="#ff7346"></stop>
 </lineargradient>
 </defs>
-<circle cx="50" cy="50" fill="transparent" r="44" stroke="#1e1e1e" stroke-width="8"></circle>
+<circle cx="50" cy="50" fill="transparent" r="44" stroke="#1e1a15" stroke-width="8"></circle>
 <circle id="progressCircle" class="progress-ring-glow" cx="50" cy="50" fill="transparent" r="44" stroke="url('/app/#primaryGradient')" stroke-width="8" stroke-linecap="round" stroke-dasharray="276.46" stroke-dashoffset="276.46"></circle>
 </svg>
 <div class="absolute inset-0 flex flex-col items-center justify-center">
@@ -1124,7 +1124,7 @@ var _cp=window.location.pathname.split("/").pop()||"index.html";
 document.querySelectorAll(".sidebar-link").forEach(function(l){
   if(l.getAttribute("href")===_cp){
     l.classList.add("active");
-    l.style.background="rgba(22,22,22,1)";
+    l.style.background="rgba(22,19,16,1)";
     l.style.color="white";
     var ic=l.querySelector(".material-symbols-outlined");
     if(ic)ic.style.color="#ff4d00";

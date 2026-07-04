@@ -5,7 +5,7 @@ import AppNav from '../../components/AppNav.astro';
 
 <AppLayout title="KetoCore | Recetas" authGuard={true}>
 <style is:global>
-.sidebar-link.active{background:rgba(22,22,22,1)!important;}
+.sidebar-link.active{background:rgba(22,19,16,1)!important;}
 .sidebar-link.active .material-symbols-outlined{color:#ff4d00!important;}
 .sidebar-link.active{color:white!important;}
 .sidebar-collapsed .sidebar-nav{width:72px;}
@@ -19,46 +19,50 @@ import AppNav from '../../components/AppNav.astro';
 .sidebar-collapsed~.sidebar-toggle-btn{left:72px;}
 
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
-.glass-card{background:rgba(22,22,22,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1)}
+.glass-card{background:rgba(22,19,16,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1)}
 .gradient-primary{background:linear-gradient(135deg,#ff4d00 0%,#ffb300 100%)}
 .sidebar-collapsed .sidebar-nav{width:72px}
 .sidebar-collapsed .sidebar-nav .sidebar-text{display:none}
 .sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}
-.sidebar-link.active{background:#1e1e1e}
+.sidebar-link.active{background:#1e1a15}
 .sidebar-link.active .material-symbols-outlined{color:#ff4d00}
 .sidebar-link.active{border-left:4px solid #ff4d00;border-radius:0}
 ::-webkit-scrollbar{width:8px}
-::-webkit-scrollbar-track{background:#0a0a0a}
-::-webkit-scrollbar-thumb{background:#1e1e1e;border-radius:4px}
+::-webkit-scrollbar-track{background:#0b0a08}
+::-webkit-scrollbar-thumb{background:#1e1a15;border-radius:4px}
 ::-webkit-scrollbar-thumb:hover{background:#2a2a2a}
 .shadow-glow{box-shadow:0 0 20px rgba(255,77,0,0.3)}
 .shadow-glow-strong{box-shadow:0 0 30px rgba(255,77,0,0.5)}
+/* Chips de categoría — rediseño */
+.category-btn{border-radius:100px !important;padding:8px 16px !important;font-size:13px !important;font-weight:600 !important;background:#161310;border:1px solid rgba(255,240,225,0.08) !important;color:rgba(247,244,240,0.6);text-transform:none !important;letter-spacing:normal !important;transition:all .14s}
+.category-btn:hover{color:#f7f4f0;border-color:rgba(255,240,225,0.18) !important}
+.category-btn.active{background:#ff4d00 !important;border-color:#ff4d00 !important;color:#fff !important;font-weight:700 !important}
 </style>
-<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(10,10,10,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,0.06)">
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
   <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
     <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
-    <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f5f5f5">KetoCore</span>
+    <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">KetoCore</span>
   </a>
   <div class="flex items-center gap-1.5">
-    <button onclick="toggleMobileUserMenu()" aria-label="Mi cuenta" class="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden" style="background:#1e1e1e;border:1px solid rgba(255,255,255,0.06)">
+    <button onclick="toggleMobileUserMenu()" aria-label="Mi cuenta" class="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
       <img id="mobileHeaderAvatarImg" src="" class="hidden w-full h-full object-cover" alt="Avatar">
-      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined" style="font-size:20px;color:rgba(245,245,245,0.6)">account_circle</span>
+      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined" style="font-size:20px;color:rgba(247,244,240,0.6)">account_circle</span>
     </button>
-    <button onclick="toggleHamburgerMenu()" aria-label="Abrir menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1e1e;color:rgba(245,245,245,0.6)">
+    <button onclick="toggleHamburgerMenu()" aria-label="Abrir menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1a15;color:rgba(247,244,240,0.6)">
       <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">menu</span>
     </button>
   </div>
 </header>
 
 <!-- Mobile User Dropdown -->
-<div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161616;border:1px solid rgba(255,255,255,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
-  <div class="p-3" style="border-bottom:1px solid rgba(255,255,255,0.06)">
-    <p class="text-sm font-semibold" style="color:#f5f5f5" id="mobileDropdownUserName">Usuario</p>
-    <p class="text-xs mt-0.5" style="color:rgba(245,245,245,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
+<div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161310;border:1px solid rgba(255,240,225,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
+  <div class="p-3" style="border-bottom:1px solid rgba(255,240,225,0.06)">
+    <p class="text-sm font-semibold" style="color:#f7f4f0" id="mobileDropdownUserName">Usuario</p>
+    <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
   </div>
   <div class="p-2">
-    <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f5f5f5">
-      <span class="material-symbols-outlined text-lg" style="color:rgba(245,245,245,0.55)">person</span>
+    <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f7f4f0">
+      <span class="material-symbols-outlined text-lg" style="color:rgba(247,244,240,0.55)">person</span>
       <span class="text-sm font-medium">Mi Perfil</span>
     </a>
     <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-red-50" style="color:#dc2626">
@@ -67,29 +71,25 @@ import AppNav from '../../components/AppNav.astro';
     </button>
   </div>
 </div>
-<main class="main-content pt-14 px-4 pb-20 min-h-screen">
-<div class="space-y-8">
+<main class="main-content pt-14 px-4 pb-20 min-h-screen" style="background:#0b0a08">
+<div class="space-y-8 kc-page" style="padding-top:12px">
 
-<header class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-<div class="max-w-2xl">
-<span class="text-primary-container font-bold uppercase tracking-widest text-xs mb-2 block">Premium Fuel</span>
-<h2 class="font-headline text-5xl md:text-7xl font-extrabold tracking-tighter">RECIPE <span class="text-primary-container">VAULT</span></h2>
-<p class="text-on-surface-variant mt-4 text-lg max-w-lg">Descubre comidas keto de alto rendimiento diseñadas para mantener tu cuerpo en estado cetogénico óptimo.</p>
-</div>
-<div class="flex flex-col items-start gap-4">
-<button onclick="openCreateRecipeModal()" class="bg-primary-container text-white font-black uppercase tracking-tighter py-4 px-8 rounded-xl flex items-center gap-3 hover:scale-105 active:scale-95 transition-all shadow-glow">
-<span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">add_circle</span>
-NUEVA RECETA
-</button>
-</div>
+<header style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:20px">
+  <div>
+    <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px">Recetas · <span id="totalRecipesCount">--</span> verificadas</div>
+    <h1 class="kc-h1">Cocina keto,<br>sin adivinar</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <button onclick="openCreateRecipeModal()" class="kc-btn" style="height:46px"><span class="material-symbols-outlined" style="font-size:20px">add</span>Nueva receta</button>
+  </div>
 </header>
 
-<section class="mb-10 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
-<div class="flex-grow max-w-md relative group">
-<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary-container transition-colors">search</span>
-<input id="searchInput" oninput="filterRecipes()" class="w-full bg-surface-container-low border border-outline-variant focus:border-primary-container py-4 pl-12 pr-4 rounded-xl text-on-surface placeholder:text-on-surface-variant" placeholder="Buscar recetas..." type="text"/>
+<section class="mb-8 flex flex-col gap-4">
+<div class="relative" style="max-width:340px">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2" style="color:rgba(247,244,240,0.4);font-size:20px">search</span>
+<input id="searchInput" oninput="filterRecipes()" style="width:100%;height:46px;padding:0 16px 0 46px;border-radius:14px;background:#161310;border:1px solid rgba(255,240,225,0.08);color:#f7f4f0;font-size:14px;outline:none" placeholder="Buscar receta o ingrediente…" type="text"/>
 </div>
-<div class="flex flex-wrap gap-2" id="categoryFilters">
+<div class="flex flex-wrap gap-2.5" id="categoryFilters">
 <button onclick="setCategory('all')" class="category-btn active bg-primary-container text-white py-3 px-6 rounded-xl text-sm font-bold border border-transparent transition-colors" data-category="all">Todas</button>
 <button onclick="setCategory('desayuno')" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors" data-category="desayuno">Desayuno</button>
 <button onclick="setCategory('almuerzo')" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors" data-category="almuerzo">Almuerzo</button>
@@ -103,7 +103,6 @@ Favoritos
 <span class="material-symbols-outlined text-green-400 text-base" style="font-variation-settings:'FILL' 1">target</span>
 Para hoy
 </button>
-<span id="totalRecipesCount" class="ml-4 text-sm text-on-surface-variant self-center"></span>
 </div>
 </section>
 
@@ -402,12 +401,13 @@ var isFavorite=favorites.indexOf(recipe.id)!==-1;
 var isFirst=i===0&&!search&&!showFavoritesOnly&&currentCategory==="all";
 var catColors={desayuno:"bg-yellow-500/20 text-yellow-400",almuerzo:"bg-orange-500/20 text-orange-400",cena:"bg-purple-500/20 text-purple-400",snacks:"bg-pink-500/20 text-pink-400"};
 var catLabels={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snacks"};
-var catGradients={desayuno:"linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fcd34d 100%)",almuerzo:"linear-gradient(135deg, #ea580c 0%, #f97316 50%, #fb923c 100%)",cena:"linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #a78bfa 100%)",snacks:"linear-gradient(135deg, #db2777 0%, #ec4899 50%, #f472b6 100%)"};
+var catGradients={desayuno:"linear-gradient(135deg, #3a2410, #1e1509)",almuerzo:"linear-gradient(135deg, #0f2818, #0a1a10)",cena:"linear-gradient(135deg, #3a1810, #1e0d09)",snacks:"linear-gradient(135deg, #38162a, #200c17)"};
+var catIconColors={desayuno:"#ff4d00",almuerzo:"#22c55e",cena:"#fb923c",snacks:"#f472b6"};
 var catIcons={desayuno:"egg",almuerzo:"restaurant",cena:"dinner_dining",snacks:"cookie"};
 
 html+='<article class="group relative overflow-hidden rounded-[2rem] '+(isFirst?"md:col-span-2 lg:col-span-2 xl:col-span-2":"")+' bg-surface-container transition-all duration-500 hover:shadow-[0_0_40px_rgba(255,144,105,0.1)] cursor-pointer" onclick="openRecipeModal(\''+recipe.id+'\')">';
 html+='<div class="h-48 md:h-64 w-full overflow-hidden relative flex items-center justify-center" style="background:'+catGradients[recipe.category]+';">';
-html+='<span class="material-symbols-outlined text-white/25" style="font-size:100px;">'+catIcons[recipe.category]+'</span>';
+html+='<span class="material-symbols-outlined icon-filled" style="font-size:100px;opacity:0.85;color:'+catIconColors[recipe.category]+'">'+catIcons[recipe.category]+'</span>';
 html+='<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>';
 html+='<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>';
 html+='<div class="absolute top-4 right-4 flex gap-2">';
@@ -443,12 +443,13 @@ if(!recipe)return;
 currentServings=1;
 currentRecipeMacros={calories:recipe.calories,protein:recipe.protein,fat:recipe.fat,carbs:recipe.carbs};
 
-var catGradients={desayuno:"linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fcd34d 100%)",almuerzo:"linear-gradient(135deg, #ea580c 0%, #f97316 50%, #fb923c 100%)",cena:"linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #a78bfa 100%)",snacks:"linear-gradient(135deg, #db2777 0%, #ec4899 50%, #f472b6 100%)"};
+var catGradients={desayuno:"linear-gradient(135deg, #3a2410, #1e1509)",almuerzo:"linear-gradient(135deg, #0f2818, #0a1a10)",cena:"linear-gradient(135deg, #3a1810, #1e0d09)",snacks:"linear-gradient(135deg, #38162a, #200c17)"};
+var catIconColors={desayuno:"#ff4d00",almuerzo:"#22c55e",cena:"#fb923c",snacks:"#f472b6"};
 var catIcons={desayuno:"egg",almuerzo:"restaurant",cena:"dinner_dining",snacks:"cookie"};
 
 var html='<div class="relative">';
 html+='<div class="h-64 md:h-80 w-full flex items-center justify-center rounded-t-[2rem]" style="background:'+catGradients[recipe.category]+';">';
-html+='<span class="material-symbols-outlined text-white/25" style="font-size:120px;">'+catIcons[recipe.category]+'</span>';
+html+='<span class="material-symbols-outlined icon-filled" style="font-size:120px;opacity:0.85;color:'+catIconColors[recipe.category]+'">'+catIcons[recipe.category]+'</span>';
 html+='<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>';
 html+='</div>';
 html+='<button onclick="closeRecipeModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary-container transition-colors"><span class="material-symbols-outlined">close</span></button>';
@@ -664,7 +665,7 @@ var _cp=window.location.pathname.split("/").pop()||"index.html";
 document.querySelectorAll(".sidebar-link").forEach(function(l){
   if(l.getAttribute("href")===_cp){
     l.classList.add("active");
-    l.style.background="rgba(22,22,22,1)";
+    l.style.background="rgba(22,19,16,1)";
     l.style.color="white";
     var ic=l.querySelector(".material-symbols-outlined");
     if(ic)ic.style.color="#ff4d00";
