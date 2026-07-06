@@ -239,20 +239,23 @@ const sideLinks = [
     ::-webkit-scrollbar-thumb { background: rgba(255,77,0,0.3); border-radius: 10px; }
 
     /* ── Tour guiado del demo ── */
-    #dtOverlay { position: absolute; top: 0; left: 0; right: 0; z-index: 300; display: none; }
+    /* El overlay NO bloquea la página: las interacciones de prueba
+       (escribir, marcar, escanear) funcionan con la guía visible. */
+    #dtOverlay { position: absolute; top: 0; left: 0; right: 0; z-index: 300; display: none; pointer-events: none; overflow: hidden; }
     #dtOverlay.on { display: block; }
     #dtSpot {
       position: absolute; border-radius: 20px; pointer-events: none;
-      box-shadow: 0 0 0 9999px rgba(0,0,0,0.68), 0 0 0 3px rgba(255,77,0,0.9);
+      box-shadow: 0 0 0 9999px rgba(0,0,0,0.6), 0 0 0 3px rgba(255,77,0,0.9);
       transition: all .35s cubic-bezier(.4,0,.2,1);
     }
-    #dtSpot.center { box-shadow: 0 0 0 9999px rgba(0,0,0,0.68); }
+    #dtSpot.center { box-shadow: 0 0 0 9999px rgba(0,0,0,0.6); }
     #dtCard {
-      position: absolute; width: min(320px, calc(100vw - 32px));
+      position: absolute; width: min(320px, calc(100% - 32px));
       background: #161310; border: 1px solid rgba(255,240,225,0.1);
       border-radius: 20px; padding: 18px; z-index: 301;
       box-shadow: 0 20px 60px rgba(0,0,0,0.6);
       transition: all .35s cubic-bezier(.4,0,.2,1);
+      pointer-events: auto;
     }
     .dt-step { font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #ff4d00; margin-bottom: 6px; }
     .dt-title { font-family: 'Plus Jakarta Sans',sans-serif; font-weight: 800; font-size: 16px; color: #f7f4f0; margin-bottom: 6px; }
@@ -453,7 +456,6 @@ const sideLinks = [
       var overlay = document.getElementById('dtOverlay');
       var spot = document.getElementById('dtSpot');
       var card = document.getElementById('dtCard');
-      overlay.style.height = document.documentElement.scrollHeight + 'px';
       overlay.classList.add('on');
 
       document.getElementById('dtStep').textContent = 'Paso ' + (dtIdx + 1) + ' de ' + dtSteps.length;
@@ -476,25 +478,34 @@ const sideLinks = [
         nextBtn.onclick = dtNext;
       }
 
+      // El body va con zoom en móvil: convertir coordenadas visuales → layout
+      var z = parseFloat(getComputedStyle(document.body).zoom) || 1;
+      var vw = window.innerWidth / z;
+      var vh = window.innerHeight / z;
+      var sy = window.scrollY / z;
+      overlay.style.height = (document.documentElement.scrollHeight / z) + 'px';
+
       var el = s.sel ? document.querySelector(s.sel) : null;
       if (el) {
         el.scrollIntoView({ block: 'center', behavior: 'instant' });
-        var r = el.getBoundingClientRect();
-        var top = r.top + window.scrollY;
+        sy = window.scrollY / z;
+        var r0 = el.getBoundingClientRect();
+        var r = { top: r0.top / z, left: r0.left / z, width: r0.width / z, height: r0.height / z, bottom: r0.bottom / z };
+        var top = r.top + sy;
         spot.classList.remove('center');
         spot.style.top = (top - 6) + 'px';
         spot.style.left = Math.max(4, r.left - 6) + 'px';
-        spot.style.width = Math.min(r.width + 12, window.innerWidth - 8) + 'px';
+        spot.style.width = Math.min(r.width + 12, vw - 8) + 'px';
         spot.style.height = (r.height + 12) + 'px';
         // tarjeta debajo o encima del foco según espacio
-        var below = r.bottom + 210 < window.innerHeight;
-        card.style.top = (below ? top + r.height + 18 : Math.max(window.scrollY + 12, top - 210)) + 'px';
-        card.style.left = Math.max(16, Math.min(r.left, window.innerWidth - 336)) + 'px';
+        var below = r.bottom + 210 < vh;
+        card.style.top = (below ? top + r.height + 18 : Math.max(sy + 12, top - 210)) + 'px';
+        card.style.left = Math.max(16, Math.min(r.left, vw - 336)) + 'px';
       } else {
         spot.classList.add('center');
         spot.style.width = '0px'; spot.style.height = '0px';
-        spot.style.top = (window.scrollY) + 'px'; spot.style.left = '50%';
-        card.style.top = (window.scrollY + window.innerHeight * 0.3) + 'px';
+        spot.style.top = sy + 'px'; spot.style.left = '50%';
+        card.style.top = (sy + vh * 0.3) + 'px';
         card.style.left = 'max(16px, calc(50% - 160px))';
       }
     }
