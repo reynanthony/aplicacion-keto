@@ -96,6 +96,10 @@ const drawerLinks = [
       <span class="material-symbols-outlined" style="font-size:16px">language</span>
       <span>Volver al sitio web</span>
     </a>
+    <button type="button" class="kcs-demo kc-install-btn" onclick="kcInstallApp()" style="background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.2);color:#22c55e;margin-top:6px;width:calc(100% - 0px);cursor:pointer;font-family:inherit">
+      <span class="material-symbols-outlined" style="font-size:16px">install_mobile</span>
+      <span>Instalar app</span>
+    </button>
   </nav>
 
   <div class="kcs-foot">
@@ -144,6 +148,10 @@ const drawerLinks = [
           <span>{link.label}</span>
         </a>
       ))}
+      <button type="button" class="kcd-link kc-install-btn" onclick="kcInstallApp()">
+        <span class="material-symbols-outlined" style="font-size:21px;color:#22c55e">install_mobile</span>
+        <span>Instalar app</span>
+      </button>
       <button type="button" class="kcd-link" onclick="kcLogout()">
         <span class="material-symbols-outlined" style="font-size:21px;color:#ef4444">logout</span>
         <span>Salir</span>
@@ -307,6 +315,37 @@ function toggleHamburgerMenu() {
   d.setAttribute('aria-hidden', open ? 'false' : 'true');
   document.body.style.overflow = open ? 'hidden' : '';
 }
+// Instalación de la PWA
+window.kcInstallPrompt = window.kcInstallPrompt || null;
+window.addEventListener('beforeinstallprompt', function (e) {
+  e.preventDefault();
+  window.kcInstallPrompt = e;
+});
+function kcInstallApp() {
+  var standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  if (standalone) {
+    if (typeof window.showToast === 'function') window.showToast('La app ya está instalada ✓');
+    else alert('La app ya está instalada.');
+    return;
+  }
+  if (window.kcInstallPrompt) {
+    window.kcInstallPrompt.prompt();
+    window.kcInstallPrompt.userChoice.then(function () { window.kcInstallPrompt = null; });
+    return;
+  }
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  alert(isIOS
+    ? 'En iPhone/iPad: toca el botón Compartir de Safari y elige "Añadir a pantalla de inicio".'
+    : 'Abre el menú de tu navegador (⋮) y elige "Instalar aplicación" o "Añadir a pantalla de inicio".');
+}
+(function () {
+  // Ocultar botones de instalación si ya corre como app instalada
+  if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.kc-install-btn').forEach(function (b) { b.style.display = 'none'; });
+    });
+  }
+})();
 function kcLogout() {
   if (typeof handleLogout === 'function') { handleLogout(); return; }
   try {

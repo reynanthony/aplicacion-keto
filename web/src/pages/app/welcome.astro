@@ -153,10 +153,18 @@ main { margin-left: 0 !important; padding-bottom: 2rem !important; }
 
       <!-- Guest -->
       <button onclick="continueAsGuest()"
-        class="w-full py-3 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 text-sm"
+        class="w-full py-3 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 text-sm mb-3"
         style="background:#1e1a15;color:rgba(247,244,240,0.55);border:1.5px solid rgba(255,240,225,0.08)">
         <span class="material-symbols-outlined" style="font-size:18px">arrow_forward</span>
         Continuar sin cuenta
+      </button>
+
+      <!-- Instalar PWA -->
+      <button onclick="kcInstallApp()"
+        class="kc-install-btn w-full py-3 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 text-sm"
+        style="background:rgba(34,197,94,0.08);color:#22c55e;border:1.5px solid rgba(34,197,94,0.2)">
+        <span class="material-symbols-outlined" style="font-size:18px">install_mobile</span>
+        Instalar app en tu móvil
       </button>
     </div>
 
