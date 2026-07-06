@@ -44,25 +44,37 @@ const sideLinks = [
       color: #f7f4f0 !important;
     }
 
-    /* ── Demo Banner ── */
+    /* ── Demo Banner (estética Editorial Bento) ── */
     #demoBanner {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      height: 36px; display: flex; align-items: center; justify-content: center; gap: 12px;
-      background: linear-gradient(90deg, rgba(255,77,0,0.9), rgba(220,38,38,0.85));
-      backdrop-filter: blur(8px);
-      padding: 0 1rem; font-size: 12px; font-weight: 600;
+      height: 40px; display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; padding: 0 14px;
+      background: rgba(15,13,10,0.97);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,77,0,0.25);
+      white-space: nowrap;
     }
-    #demoBanner span { color: #fff; }
-    #demoBanner a {
-      color: #fff; background: rgba(255,255,255,0.2); border-radius: 20px;
-      padding: 2px 10px; font-weight: 700; text-decoration: none; font-size: 11px;
-      border: 1px solid rgba(255,255,255,0.3); transition: background 0.2s;
+    .db-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .db-dot { width: 7px; height: 7px; border-radius: 50%; background: #ff4d00; flex-shrink: 0; animation: demoPulse 2s infinite; }
+    .db-label {
+      font-size: 10.5px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+      color: #ff7a3c; font-family: 'Plus Jakarta Sans', sans-serif;
     }
-    #demoBanner a:hover { background: rgba(255,255,255,0.3); }
+    .db-sub { font-size: 11px; font-weight: 500; color: rgba(247,244,240,0.45); overflow: hidden; text-overflow: ellipsis; }
+    #demoBanner a.db-cta {
+      display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0;
+      height: 27px; padding: 0 13px; border-radius: 100px;
+      background: #ff4d00; color: #fff; text-decoration: none;
+      font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 11.5px;
+      box-shadow: 0 3px 10px rgba(255,77,0,0.3);
+      transition: transform .14s, box-shadow .14s;
+    }
+    #demoBanner a.db-cta:hover { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(255,77,0,0.38); }
+    @media (max-width: 420px) { .db-sub { display: none; } }
 
     /* ── Demo Header ── */
     #demoHeader {
-      position: fixed; top: 36px; left: 0; right: 0; z-index: 40; height: 56px;
+      position: fixed; top: 40px; left: 0; right: 0; z-index: 40; height: 56px;
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 1rem;
       background: rgba(11,10,8,0.97); backdrop-filter: blur(24px);
@@ -72,7 +84,7 @@ const sideLinks = [
     /* ── Demo Sidebar ── */
     #demoSidebar {
       display: none;
-      position: fixed; top: 36px; left: 0; bottom: 0; width: 248px; z-index: 30;
+      position: fixed; top: 40px; left: 0; bottom: 0; width: 248px; z-index: 30;
       background: #0f0f0f; border-right: 1px solid rgba(255,240,225,0.05);
       flex-direction: column; padding: 12px 0; overflow-y: auto;
     }
@@ -139,7 +151,7 @@ const sideLinks = [
 
     /* ── Demo Main ── */
     #demoMain {
-      padding-top: 92px; /* 36 banner + 56 header */
+      padding-top: 96px; /* 40 banner + 56 header */
       padding-bottom: 88px; /* bottom nav */
       min-height: 100vh;
       background: #0b0a08;
@@ -282,8 +294,12 @@ const sideLinks = [
 
   <!-- ── Demo Banner ── -->
   <div id="demoBanner">
-    <span>🔓 Modo Demo · Explorando como Carlos</span>
-    <a href="/app/welcome">Crear cuenta gratis →</a>
+    <div class="db-left">
+      <span class="db-dot"></span>
+      <span class="db-label">Modo prueba</span>
+      <span class="db-sub">· datos de ejemplo de Carlos</span>
+    </div>
+    <a href="/#precios" class="db-cta">Suscribirse<span class="material-symbols-outlined" style="font-size:14px">arrow_forward</span></a>
   </div>
 
   <!-- ── App Header ── -->
