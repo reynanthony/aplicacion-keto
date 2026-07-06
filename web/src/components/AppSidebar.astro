@@ -58,7 +58,7 @@ const drawerLinks = [
   { href: '/app/perfil',         icon: 'person',         color: '', label: 'Mi Perfil' },
   { href: '/app/guia',           icon: 'help',           color: '#60a5fa', label: 'Guía' },
   { href: '/app/demo/',          icon: 'play_circle',    color: '#ff4d00', label: 'Modo Prueba' },
-  { href: '/',                   icon: 'language',       color: '#22d3ee', label: 'Sitio Web' },
+  { href: '/',                   icon: 'language',       color: '#22d3ee', label: 'Sitio Web', web: true },
 ];
 ---
 
@@ -92,7 +92,7 @@ const drawerLinks = [
       <span>Modo Prueba (Demo)</span>
       <span class="kcs-demo-dot"></span>
     </a>
-    <a href="/" class="kcs-demo" style="background:transparent;border-color:rgba(255,240,225,0.1);color:rgba(247,244,240,0.55);margin-top:6px">
+    <a href="/" class="kcs-demo kc-web-link" style="background:transparent;border-color:rgba(255,240,225,0.1);color:rgba(247,244,240,0.55);margin-top:6px">
       <span class="material-symbols-outlined" style="font-size:16px">language</span>
       <span>Volver al sitio web</span>
     </a>
@@ -143,7 +143,7 @@ const drawerLinks = [
     </div>
     <div class="kcd-grid">
       {drawerLinks.map(link => (
-        <a href={link.href} class="kcd-link">
+        <a href={link.href} class:list={['kcd-link', { 'kc-web-link': link.web }]}>
           <span class="material-symbols-outlined" style={`font-size:21px;color:${link.color || 'rgba(247,244,240,0.6)'}`}>{link.icon}</span>
           <span>{link.label}</span>
         </a>
@@ -339,12 +339,17 @@ function kcInstallApp() {
     : 'Abre el menú de tu navegador (⋮) y elige "Instalar aplicación" o "Añadir a pantalla de inicio".');
 }
 (function () {
-  // Ocultar botones de instalación si ya corre como app instalada
-  if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-    document.addEventListener('DOMContentLoaded', function () {
-      document.querySelectorAll('.kc-install-btn').forEach(function (b) { b.style.display = 'none'; });
+  var standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  if (!standalone) return;
+  document.addEventListener('DOMContentLoaded', function () {
+    // Ocultar botones de instalación: ya corre como app instalada
+    document.querySelectorAll('.kc-install-btn').forEach(function (b) { b.style.display = 'none'; });
+    // "Sitio web": salir de la app al navegador real (fuera del scope de la PWA)
+    document.querySelectorAll('.kc-web-link').forEach(function (a) {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
     });
-  }
+  });
 })();
 function kcLogout() {
   if (typeof handleLogout === 'function') { handleLogout(); return; }
