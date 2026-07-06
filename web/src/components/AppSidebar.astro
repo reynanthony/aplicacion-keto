@@ -344,11 +344,7 @@ function kcInstallApp() {
   document.addEventListener('DOMContentLoaded', function () {
     // Ocultar botones de instalación: ya corre como app instalada
     document.querySelectorAll('.kc-install-btn').forEach(function (b) { b.style.display = 'none'; });
-    // "Sitio web": salir de la app al navegador real (fuera del scope de la PWA)
-    document.querySelectorAll('.kc-web-link').forEach(function (a) {
-      a.setAttribute('target', '_blank');
-      a.setAttribute('rel', 'noopener');
-    });
+    // Con scope "/", el sitio web se navega dentro del shell de la app instalada.
   });
 })();
 function kcLogout() {

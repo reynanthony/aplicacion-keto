@@ -49,7 +49,11 @@ function isActive(href: string) {
     {navLinks.map(link => (
       <a href={link.href} class="ktn-m-link">{link.label}</a>
     ))}
+    <a href="/app/demo/" class="ktn-m-link" style="color:#ff4d00">Probar demo gratis</a>
     <a href="/app/" class="ktn-m-cta">Entrar a la app</a>
+    <button type="button" id="ktn-install" class="ktn-m-cta" style="background:#1a140e;border:none;cursor:pointer;font-family:var(--font-display)">
+      Instalar app en tu móvil
+    </button>
   </div>
 </div>
 
@@ -131,4 +135,25 @@ function isActive(href: string) {
   document.getElementById('ktn-close')?.addEventListener('click', () => setOpen(false));
   menu?.querySelector('.ktn-scrim')?.addEventListener('click', () => setOpen(false));
   menu?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+
+  // Instalación de la PWA desde el sitio web
+  let installPrompt: any = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    installPrompt = e;
+  });
+  const installBtn = document.getElementById('ktn-install');
+  const standalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone === true;
+  if (standalone && installBtn) installBtn.style.display = 'none';
+  installBtn?.addEventListener('click', () => {
+    if (installPrompt) {
+      installPrompt.prompt();
+      installPrompt.userChoice.then(() => { installPrompt = null; });
+      return;
+    }
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    alert(isIOS
+      ? 'En iPhone/iPad: toca el botón Compartir de Safari y elige "Añadir a pantalla de inicio".'
+      : 'Abre el menú de tu navegador (⋮) y elige "Instalar aplicación" o "Añadir a pantalla de inicio".');
+  });
 </script>

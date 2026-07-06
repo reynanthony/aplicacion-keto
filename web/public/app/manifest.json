@@ -2,13 +2,13 @@
   "name": "KetoCore",
   "short_name": "KetoCore",
   "description": "Gestor de dieta cetogénica, despensa inteligente y seguimiento de entrenamientos",
-  "id": "/app/",
-  "start_url": "/app/",
+  "id": "/",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#0b0a08",
+  "background_color": "#f4efe6",
   "theme_color": "#ff4d00",
   "orientation": "portrait",
-  "scope": "/app/",
+  "scope": "/",
   "categories": ["health", "fitness", "food", "lifestyle"],
   "icons": [
     {
