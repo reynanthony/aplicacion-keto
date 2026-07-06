@@ -1941,16 +1941,15 @@ localStorage.setItem("mealPlan_"+dateKey,JSON.stringify(plan));
 (function() {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js')
+      navigator.serviceWorker.register('/app/sw.js')
         .then(registration => {
-          console.log('[PWA] Service Worker registrado correctamente en:', registration.scope);
+          registration.update();
           registration.addEventListener('updatefound', () => {
             const newWorker = registration.installing;
-            newWorker.addEventListener('statechange', async () => {
+            if (!newWorker) return;
+            newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                if (await customConfirm('Nueva versión disponible. ¿Actualizar ahora?')) {
-                  window.location.reload();
-                }
+                newWorker.postMessage('SKIP_WAITING');
               }
             });
           });

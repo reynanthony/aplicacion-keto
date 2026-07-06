@@ -2162,26 +2162,29 @@ function confirmGlobalReset() {
 // Implementación PWA para KetoCore
 
 (function() {
-  // Registrar Service Worker
+  // Registrar Service Worker (v3: auto-actualiza y purga cachés viejos)
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw-new.js')
+      navigator.serviceWorker.register('/app/sw.js')
         .then(registration => {
-          // Verificar actualizaciones
+          registration.update();
           registration.addEventListener('updatefound', () => {
             const newWorker = registration.installing;
-            newWorker.addEventListener('statechange', async () => {
+            if (!newWorker) return;
+            newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                if (await customConfirm('Nueva versión disponible. ¿Actualizar ahora?')) {
-                  window.location.reload();
-                }
+                newWorker.postMessage('SKIP_WAITING');
               }
             });
           });
         })
-        .catch(error => {
-          // Silent fail for PWA
-        });
+        .catch(() => {});
+      let swReloaded = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (swReloaded) return;
+        swReloaded = true;
+        window.location.reload();
+      });
     });
   }
    

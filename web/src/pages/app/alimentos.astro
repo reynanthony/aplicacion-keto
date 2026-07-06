@@ -1759,7 +1759,7 @@ originalOpenDetail(id);
 </script>
 
 <script is:inline>
-if("serviceWorker"in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
+if("serviceWorker"in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/app/sw.js").catch(function(){})})}
 </script>
 <script is:inline>
 var _cp=window.location.pathname.split("/").pop()||"index.html";
