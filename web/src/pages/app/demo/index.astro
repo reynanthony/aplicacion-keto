@@ -290,9 +290,9 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
 </div>
 
 <script is:inline>
-  // Activar flags de demo (por si el usuario llegó directamente a esta URL)
-  localStorage.setItem('KetoCore_guest', 'true');
+  // Flag de demo (NO otorga acceso a la app: el guard exige cuenta)
   localStorage.setItem('KetoCore_demo', 'true');
+  localStorage.removeItem('KetoCore_guest');
 
   // Animate score ring
   requestAnimationFrame(function() {

@@ -16,7 +16,8 @@ const { title = 'KetoCore', authGuard = true, bodyClass = '' } = Astro.props;
 <head>
   {authGuard && (
     <script is:inline>
-      !function(){var d=localStorage.getItem("ketocore_onboarding_done"),g=localStorage.getItem("KetoCore_guest"),u=localStorage.getItem("ketocore_user_id");if(!d&&!g&&!u)window.location.replace("/app/welcome");}();
+      // Acceso a la app solo con cuenta (modelo suscripción); el demo vive en /app/demo/
+      !function(){var u=localStorage.getItem("ketocore_user_id");if(!u)window.location.replace("/app/welcome");}();
     </script>
   )}
   <meta charset="UTF-8" />
