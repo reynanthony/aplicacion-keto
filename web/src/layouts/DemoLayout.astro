@@ -237,6 +237,42 @@ const sideLinks = [
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: #111; }
     ::-webkit-scrollbar-thumb { background: rgba(255,77,0,0.3); border-radius: 10px; }
+
+    /* ── Tour guiado del demo ── */
+    #dtOverlay { position: absolute; top: 0; left: 0; right: 0; z-index: 300; display: none; }
+    #dtOverlay.on { display: block; }
+    #dtSpot {
+      position: absolute; border-radius: 20px; pointer-events: none;
+      box-shadow: 0 0 0 9999px rgba(0,0,0,0.68), 0 0 0 3px rgba(255,77,0,0.9);
+      transition: all .35s cubic-bezier(.4,0,.2,1);
+    }
+    #dtSpot.center { box-shadow: 0 0 0 9999px rgba(0,0,0,0.68); }
+    #dtCard {
+      position: absolute; width: min(320px, calc(100vw - 32px));
+      background: #161310; border: 1px solid rgba(255,240,225,0.1);
+      border-radius: 20px; padding: 18px; z-index: 301;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      transition: all .35s cubic-bezier(.4,0,.2,1);
+    }
+    .dt-step { font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #ff4d00; margin-bottom: 6px; }
+    .dt-title { font-family: 'Plus Jakarta Sans',sans-serif; font-weight: 800; font-size: 16px; color: #f7f4f0; margin-bottom: 6px; }
+    .dt-text { font-size: 13px; line-height: 1.55; color: rgba(247,244,240,0.65); margin-bottom: 14px; }
+    .dt-row { display: flex; gap: 8px; align-items: center; }
+    .dt-next {
+      flex: 1; padding: 11px; border-radius: 12px; border: none; cursor: pointer;
+      background: #ff4d00; color: #fff; font-family: 'Plus Jakarta Sans',sans-serif;
+      font-weight: 700; font-size: 13.5px; display: flex; align-items: center; justify-content: center; gap: 6px;
+      text-decoration: none;
+    }
+    .dt-skip { padding: 11px 12px; border-radius: 12px; border: none; cursor: pointer; background: transparent; color: rgba(247,244,240,0.4); font-size: 12.5px; font-weight: 600; }
+    #dtHelp {
+      position: fixed; bottom: 84px; right: 14px; z-index: 90;
+      width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,240,225,0.1);
+      background: #161310; color: rgba(247,244,240,0.6); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4); font-family: 'Plus Jakarta Sans',sans-serif;
+    }
+    @media (min-width: 901px) { #dtHelp { bottom: 20px; } }
   </style>
 </head>
 <body data-theme="demo">
@@ -353,6 +389,129 @@ const sideLinks = [
       <button class="dpw-skip" onclick="hideDemoPaywall()">Continuar explorando el demo</button>
     </div>
   </div>
+
+  <!-- ── Tour guiado ── -->
+  <div id="dtOverlay">
+    <div id="dtSpot"></div>
+    <div id="dtCard">
+      <div class="dt-step" id="dtStep">Paso 1 de 3</div>
+      <div class="dt-title" id="dtTitle"></div>
+      <div class="dt-text" id="dtText"></div>
+      <div class="dt-row">
+        <button class="dt-next" id="dtNext" onclick="dtNext()">Siguiente</button>
+        <button class="dt-skip" onclick="dtEnd(true)">Omitir</button>
+      </div>
+    </div>
+  </div>
+  <button id="dtHelp" onclick="dtStart(true)" aria-label="Ver guía de esta pantalla" title="Ver guía">
+    <span class="material-symbols-outlined" style="font-size:20px">help</span>
+  </button>
+
+  <script is:inline define:vars={{ demoActive: active }}>
+    // ══════════ TOUR GUIADO DEL DEMO ══════════
+    // Pasos por pantalla: qué hacer, ver y esperar. sel:null = paso centrado.
+    var DT_ORDER = ['home','macros','scanner','checklist','alimentos','progreso','plan','coach','inspector','recetas','compras','entrenamientos'];
+    var DT_LABELS = { home:'Dashboard', macros:'Macros', scanner:'Scanner IA', checklist:'Checklist', alimentos:'Alimentos', progreso:'Progreso', plan:'Plan', coach:'Coach IA', inspector:'Inspector', recetas:'Recetas', compras:'Compras', entrenamientos:'Entrenos' };
+    var DT_LINKS = { home:'/app/demo/', macros:'/app/demo/macros', scanner:'/app/demo/scanner', checklist:'/app/demo/checklist', alimentos:'/app/demo/alimentos', progreso:'/app/demo/progreso', plan:'/app/demo/plan', coach:'/app/demo/coach', inspector:'/app/demo/inspector', recetas:'/app/demo/recetas', compras:'/app/demo/compras', entrenamientos:'/app/demo/entrenamientos' };
+    var DT_STEPS = {
+      home: [
+        { sel: null, title: 'Bienvenido al modo prueba', text: 'Estás viendo la app con los datos de Carlos, un usuario real de ejemplo. Todo lo que ves aquí es lo que recibirás con tu suscripción.' },
+        { sel: 'a[href="/app/demo/inspector"]', title: 'Tu Health Score', text: 'La IA resume tu salud metabólica en un número, calculado a diario con tus comidas, peso y hábitos.' },
+        { sel: '.kc-tile-cream', title: 'Calorías y macros del día', text: 'Cada comida que registras se descuenta aquí. Verde = vas en meta.' },
+      ],
+      macros: [
+        { sel: null, title: 'Control de macros', text: 'El corazón de keto: la app calcula tu reparto ideal de grasas, proteína y carbos, y te muestra cuánto llevas.' },
+        { sel: '.kc-tile-cream', title: 'Lo más importante: carbos netos', text: 'Este número te dice cuánto margen te queda hoy para seguir en cetosis. La app lo vigila por ti.' },
+      ],
+      scanner: [
+        { sel: '#dscBtn', title: 'Pruébalo: toca el botón naranja', text: 'Simula un escaneo. En la app real, la cámara detecta el alimento y te da su veredicto keto en 2 segundos.' },
+      ],
+      checklist: [
+        { sel: '.dck-item', title: 'Toca un hábito para marcarlo', text: 'Pruébalo ahora: al marcar y desmarcar, el anillo de progreso se actualiza. Así construyes tu racha diaria.' },
+      ],
+      alimentos: [
+        { sel: '#dalSearch', title: 'Escribe un alimento', text: 'Prueba con "manzana" o "salmón". El veredicto Keto / Moderar / Evitar aparece al instante.' },
+      ],
+      progreso: [
+        { sel: null, title: 'Resultados medibles', text: 'Carlos perdió 17 lbs en 21 días. La app grafica tu peso, tu meta y tus logros — tu progreso, en evidencia.' },
+      ],
+      plan:           [{ sel: null, title: 'Tu semana, planificada', text: 'La app genera tu plan de comidas con IA según tus macros. Aquí ves el día de Carlos ya resuelto: qué comer y cuándo.' }],
+      coach:          [{ sel: null, title: 'Coach IA, siempre en línea', text: 'Pregunta lo que sea: el coach conoce tu progreso y responde con contexto. Escríbele algo para probar.' }],
+      inspector:      [{ sel: null, title: 'El Inspector te analiza', text: 'Detecta patrones en tus datos: cetosis, hidratación, proteína. Te avisa antes de que algo se desvíe.' }],
+      recetas:        [{ sel: null, title: 'Recetas verificadas', text: 'Cada receta trae macros calculados y carbos netos. Filtra por categoría y añádelas a tu plan con un toque.' }],
+      compras:        [{ sel: null, title: 'Lista de compras automática', text: 'Se genera sola a partir de tu plan semanal, organizada por pasillo del supermercado.' }],
+      entrenamientos: [{ sel: null, title: 'Entrenamiento integrado', text: 'Rutinas y seguimiento conectados con tu nutrición: la app ajusta tus macros según lo que entrenas.' }],
+    };
+
+    var dtSteps = DT_STEPS[demoActive] || [];
+    var dtIdx = 0;
+    var dtKey = 'demo_tour_' + demoActive;
+
+    function dtShow() {
+      var s = dtSteps[dtIdx];
+      if (!s) { dtEnd(true); return; }
+      var overlay = document.getElementById('dtOverlay');
+      var spot = document.getElementById('dtSpot');
+      var card = document.getElementById('dtCard');
+      overlay.style.height = document.documentElement.scrollHeight + 'px';
+      overlay.classList.add('on');
+
+      document.getElementById('dtStep').textContent = 'Paso ' + (dtIdx + 1) + ' de ' + dtSteps.length;
+      document.getElementById('dtTitle').textContent = s.title;
+      document.getElementById('dtText').textContent = s.text;
+
+      // Último paso → botón "Siguiente pantalla"
+      var nextBtn = document.getElementById('dtNext');
+      var isLast = dtIdx === dtSteps.length - 1;
+      var orderIdx = DT_ORDER.indexOf(demoActive);
+      var nextPage = orderIdx >= 0 && orderIdx < DT_ORDER.length - 1 ? DT_ORDER[orderIdx + 1] : null;
+      if (isLast && nextPage) {
+        nextBtn.innerHTML = 'Siguiente: ' + DT_LABELS[nextPage] + ' <span class="material-symbols-outlined" style="font-size:16px">arrow_forward</span>';
+        nextBtn.onclick = function () { dtEnd(true); window.location.href = DT_LINKS[nextPage]; };
+      } else if (isLast) {
+        nextBtn.textContent = 'Entendido';
+        nextBtn.onclick = function () { dtEnd(true); };
+      } else {
+        nextBtn.textContent = 'Siguiente';
+        nextBtn.onclick = dtNext;
+      }
+
+      var el = s.sel ? document.querySelector(s.sel) : null;
+      if (el) {
+        el.scrollIntoView({ block: 'center', behavior: 'instant' });
+        var r = el.getBoundingClientRect();
+        var top = r.top + window.scrollY;
+        spot.classList.remove('center');
+        spot.style.top = (top - 6) + 'px';
+        spot.style.left = Math.max(4, r.left - 6) + 'px';
+        spot.style.width = Math.min(r.width + 12, window.innerWidth - 8) + 'px';
+        spot.style.height = (r.height + 12) + 'px';
+        // tarjeta debajo o encima del foco según espacio
+        var below = r.bottom + 210 < window.innerHeight;
+        card.style.top = (below ? top + r.height + 18 : Math.max(window.scrollY + 12, top - 210)) + 'px';
+        card.style.left = Math.max(16, Math.min(r.left, window.innerWidth - 336)) + 'px';
+      } else {
+        spot.classList.add('center');
+        spot.style.width = '0px'; spot.style.height = '0px';
+        spot.style.top = (window.scrollY) + 'px'; spot.style.left = '50%';
+        card.style.top = (window.scrollY + window.innerHeight * 0.3) + 'px';
+        card.style.left = 'max(16px, calc(50% - 160px))';
+      }
+    }
+    function dtNext() { dtIdx++; if (dtIdx >= dtSteps.length) { dtEnd(true); } else { dtShow(); } }
+    function dtEnd(remember) {
+      document.getElementById('dtOverlay').classList.remove('on');
+      if (remember) { try { localStorage.setItem(dtKey, '1'); } catch (e) {} }
+    }
+    function dtStart(force) {
+      if (!dtSteps.length) return;
+      if (!force) { try { if (localStorage.getItem(dtKey)) return; } catch (e) {} }
+      dtIdx = 0;
+      dtShow();
+    }
+    // Autoarranque suave al entrar por primera vez a cada pantalla
+    window.addEventListener('load', function () { setTimeout(function () { dtStart(false); }, 700); });
+  </script>
 
   <script is:inline>
     // ── Demo Menu Toggle ──
