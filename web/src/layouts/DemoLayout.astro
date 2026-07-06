@@ -9,13 +9,18 @@ const { title = 'KetoCore | Demo', active = 'home' } = Astro.props;
 
 // Bottom-nav espejo de la app real: Inicio / Coach / [Escanear] / Plan / Más
 const sideLinks = [
-  { id: 'home',           href: '/app/demo/',              icon: 'cottage',        label: 'Dashboard',       color: '' },
-  { id: 'plan',           href: '/app/demo/plan',          icon: 'event_note',     label: 'Plan Alimenticio',color: '' },
-  { id: 'coach',          href: '/app/demo/coach',         icon: 'psychology',     label: 'Coach IA',        color: '#a78bfa' },
-  { id: 'inspector',      href: '/app/demo/inspector',     icon: 'analytics',      label: 'Inspector',       color: '#60a5fa' },
-  { id: 'recetas',        href: '/app/demo/recetas',       icon: 'menu_book',      label: 'Recetas',         color: '#fb923c' },
-  { id: 'compras',        href: '/app/demo/compras',       icon: 'shopping_cart',  label: 'Lista de Compras',color: '#4ade80' },
-  { id: 'entrenamientos', href: '/app/demo/entrenamientos',icon: 'fitness_center', label: 'Entrenamientos',  color: '#f472b6' },
+  { id: 'home',           href: '/app/demo/',              icon: 'cottage',             label: 'Dashboard',       color: '' },
+  { id: 'macros',         href: '/app/demo/macros',        icon: 'donut_small',         label: 'Macros',          color: '' },
+  { id: 'plan',           href: '/app/demo/plan',          icon: 'event_note',          label: 'Plan Alimenticio',color: '' },
+  { id: 'recetas',        href: '/app/demo/recetas',       icon: 'menu_book',           label: 'Recetas',         color: '#fb923c' },
+  { id: 'checklist',      href: '/app/demo/checklist',     icon: 'task_alt',            label: 'Checklist',       color: '#22c55e' },
+  { id: 'alimentos',      href: '/app/demo/alimentos',     icon: 'restaurant',          label: 'Alimentos',       color: '#fb923c' },
+  { id: 'scanner',        href: '/app/demo/scanner',       icon: 'center_focus_strong', label: 'Scanner IA',      color: '#22d3ee' },
+  { id: 'coach',          href: '/app/demo/coach',         icon: 'psychology',          label: 'Coach IA',        color: '#a78bfa' },
+  { id: 'inspector',      href: '/app/demo/inspector',     icon: 'analytics',           label: 'Inspector',       color: '#60a5fa' },
+  { id: 'progreso',       href: '/app/demo/progreso',      icon: 'trending_up',         label: 'Mi Progreso',     color: '#ff4d00' },
+  { id: 'compras',        href: '/app/demo/compras',       icon: 'shopping_cart',       label: 'Lista de Compras',color: '#60a5fa' },
+  { id: 'entrenamientos', href: '/app/demo/entrenamientos',icon: 'fitness_center',      label: 'Entrenamientos',  color: '#4ade80' },
 ];
 ---
 
@@ -300,14 +305,14 @@ const sideLinks = [
       <span class="material-symbols-outlined dbn-ic" style={active === 'home' ? "font-variation-settings:'FILL' 1" : ""}>cottage</span>
       <span class="dbn-label">Inicio</span>
     </a>
-    <a href="/app/demo/coach" class:list={['dbn-item', { active: active === 'coach' }]}>
-      <span class="material-symbols-outlined dbn-ic" style={active === 'coach' ? "font-variation-settings:'FILL' 1" : ""}>psychology</span>
-      <span class="dbn-label">Coach</span>
+    <a href="/app/demo/macros" class:list={['dbn-item', { active: active === 'macros' }]}>
+      <span class="material-symbols-outlined dbn-ic" style={active === 'macros' ? "font-variation-settings:'FILL' 1" : ""}>donut_small</span>
+      <span class="dbn-label">Macros</span>
     </a>
-    <button type="button" class="dbn-item" onclick="showPaywall('scanner')" aria-label="Escanear (Premium)">
+    <a href="/app/demo/scanner" class:list={['dbn-item', { active: active === 'scanner' }]} aria-label="Escanear">
       <span class="dbn-scan"><span class="material-symbols-outlined icon-filled" style="font-size:24px;color:#fff">center_focus_strong</span></span>
       <span class="dbn-label">Escanear</span>
-    </button>
+    </a>
     <a href="/app/demo/plan" class:list={['dbn-item', { active: active === 'plan' }]}>
       <span class="material-symbols-outlined dbn-ic" style={active === 'plan' ? "font-variation-settings:'FILL' 1" : ""}>event_note</span>
       <span class="dbn-label">Plan</span>
@@ -320,7 +325,7 @@ const sideLinks = [
 
   <!-- ── Demo More Menu ── -->
   <div id="demoMoreMenu">
-    {sideLinks.filter(l => !['home','plan','coach','inspector'].includes(l.id)).map(link => (
+    {sideLinks.filter(l => !['home','plan','macros','scanner'].includes(l.id)).map(link => (
       <a href={link.href} class="dmm-item">
         <span class="material-symbols-outlined" style={link.color ? `color:${link.color};font-size:20px` : 'font-size:20px'}>{link.icon}</span>
         {link.label}

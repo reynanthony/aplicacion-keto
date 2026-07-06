@@ -1,0 +1,122 @@
+---
+import DemoLayout from '../../../layouts/DemoLayout.astro';
+
+const registro = [
+  { icon: 'wb_sunny',     name: 'Huevos revueltos + aguacate', meal: 'Desayuno · 08:10', kcal: '520', p: '32 g', g: '40 g', c: '5 g' },
+  { icon: 'restaurant',   name: 'Ensalada César keto con pollo', meal: 'Almuerzo · 13:30', kcal: '640', p: '52 g', g: '44 g', c: '7 g' },
+  { icon: 'lunch_dining', name: 'Nueces de macadamia', meal: 'Merienda · 17:00', kcal: '380', p: '28 g', g: '38 g', c: '4 g' },
+  { icon: 'nightlight',   name: 'Salmón + espárragos', meal: 'Cena · 20:00', kcal: '400', p: '30 g', g: '38 g', c: '2 g' },
+];
+---
+
+<DemoLayout title="KetoCore | Demo Macros" active="macros">
+<style is:global>
+.dmx-row1 { display:grid; grid-template-columns:1fr; gap:14px; }
+.dmx-tiles { display:grid; grid-template-columns:1fr; gap:14px; }
+.dmx-log { display:grid; grid-template-columns:2.2fr 1fr 1fr 1fr 1fr; gap:10px; align-items:center; }
+@media (min-width:901px){
+  .dmx-row1 { grid-template-columns:1.4fr 1fr; }
+  .dmx-tiles { grid-template-columns:repeat(3,1fr); }
+}
+@media (max-width:560px){
+  .dmx-log { grid-template-columns:1fr auto; }
+  .dmx-log > .dmx-macro { display:none; }
+}
+</style>
+
+<div class="px-4 pt-2 space-y-4" style="max-width:1180px;margin:0 auto">
+
+  <div style="margin:6px 2px 4px">
+    <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Nutrición · Hoy</div>
+    <h1 class="kc-h1" style="font-size:30px">Tus macros de hoy</h1>
+  </div>
+
+  <div class="dmx-row1">
+    <!-- Donut (68/27/5 de Carlos) -->
+    <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:24px;display:flex;flex-direction:column;align-items:center;gap:20px">
+      <div style="position:relative;width:200px;height:200px;flex-shrink:0">
+        <svg width="200" height="200" viewBox="0 0 200 200">
+          <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,240,225,0.05)" stroke-width="22"></circle>
+          <circle cx="100" cy="100" r="80" fill="none" stroke="#d97706" stroke-width="22" stroke-dasharray="342 503" transform="rotate(-90 100 100)" stroke-linecap="round"></circle>
+          <circle cx="100" cy="100" r="80" fill="none" stroke="#ea580c" stroke-width="22" stroke-dasharray="136 503" transform="rotate(155 100 100)" stroke-linecap="round"></circle>
+          <circle cx="100" cy="100" r="80" fill="none" stroke="#0891b2" stroke-width="22" stroke-dasharray="25 503" transform="rotate(252 100 100)" stroke-linecap="round"></circle>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <div class="kc-num" style="font-weight:900;font-size:42px;line-height:0.9;color:#f7f4f0">1,940</div>
+          <div style="font-size:12px;color:rgba(247,244,240,0.4);margin-top:2px">de 2,050 kcal</div>
+        </div>
+      </div>
+      <div style="width:100%">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;gap:12px"><span style="width:12px;height:12px;border-radius:4px;background:#d97706;flex-shrink:0"></span><span style="flex:1;font-size:14px;font-weight:600;color:#f7f4f0">Grasas</span><span class="kc-num" style="font-weight:800;font-size:15px;color:#f7f4f0">68%</span></div>
+          <div style="display:flex;align-items:center;gap:12px"><span style="width:12px;height:12px;border-radius:4px;background:#ea580c;flex-shrink:0"></span><span style="flex:1;font-size:14px;font-weight:600;color:#f7f4f0">Proteína</span><span class="kc-num" style="font-weight:800;font-size:15px;color:#f7f4f0">27%</span></div>
+          <div style="display:flex;align-items:center;gap:12px"><span style="width:12px;height:12px;border-radius:4px;background:#0891b2;flex-shrink:0"></span><span style="flex:1;font-size:14px;font-weight:600;color:#f7f4f0">Carbos netos</span><span class="kc-num" style="font-weight:800;font-size:15px;color:#f7f4f0">5%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carbos restantes — cream -->
+    <div class="kc-tile-cream" style="border-radius:26px;padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:16px">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:13px;color:rgba(26,20,14,0.55)">CARBOS NETOS RESTANTES</span>
+        <span class="material-symbols-outlined icon-filled" style="color:#0891b2;font-size:22px">grain</span>
+      </div>
+      <div>
+        <div class="kc-num" style="font-weight:900;font-size:64px;line-height:0.82;color:#1a140e">7<span style="font-size:24px;font-weight:700;color:rgba(26,20,14,0.4)"> g</span></div>
+        <p style="font-size:13.5px;color:rgba(26,20,14,0.55);margin-top:10px;line-height:1.5">Has consumido 18 g de 25 g. Margen suficiente para la cena sin salir de cetosis.</p>
+      </div>
+      <div style="display:flex;gap:5px">
+        <div style="flex:1;height:8px;border-radius:100px;background:#0891b2"></div>
+        <div style="flex:1;height:8px;border-radius:100px;background:#0891b2"></div>
+        <div style="flex:1;height:8px;border-radius:100px;background:#0891b2"></div>
+        <div style="flex:1;height:8px;border-radius:100px;background:#0891b2"></div>
+        <div style="flex:1;height:8px;border-radius:100px;background:rgba(26,20,14,0.12)"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tiles de macro -->
+  <div class="dmx-tiles">
+    <div style="background:#161310;border:1px solid rgba(234,88,12,0.16);border-radius:22px;padding:20px">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span class="material-symbols-outlined icon-filled" style="color:#ea580c;font-size:20px">egg_alt</span><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;color:#f7f4f0">Proteína</span></div>
+      <div class="kc-num" style="font-weight:900;font-size:36px;line-height:0.9;color:#f7f4f0">142<span style="font-size:16px;font-weight:600;color:rgba(247,244,240,0.4)"> / 150 g</span></div>
+      <div style="height:8px;border-radius:100px;background:rgba(234,88,12,0.14);overflow:hidden;margin-top:14px"><div style="height:100%;width:95%;background:#ea580c;border-radius:100px"></div></div>
+    </div>
+    <div style="background:#161310;border:1px solid rgba(217,119,6,0.16);border-radius:22px;padding:20px">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span class="material-symbols-outlined icon-filled" style="color:#d97706;font-size:20px">local_fire_department</span><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;color:#f7f4f0">Grasas</span></div>
+      <div class="kc-num" style="font-weight:900;font-size:36px;line-height:0.9;color:#f7f4f0">160<span style="font-size:16px;font-weight:600;color:rgba(247,244,240,0.4)"> / 171 g</span></div>
+      <div style="height:8px;border-radius:100px;background:rgba(217,119,6,0.14);overflow:hidden;margin-top:14px"><div style="height:100%;width:94%;background:#d97706;border-radius:100px"></div></div>
+    </div>
+    <div style="background:#161310;border:1px solid rgba(8,145,178,0.16);border-radius:22px;padding:20px">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span class="material-symbols-outlined icon-filled" style="color:#0891b2;font-size:20px">grain</span><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;color:#f7f4f0">Carbos netos</span></div>
+      <div class="kc-num" style="font-weight:900;font-size:36px;line-height:0.9;color:#f7f4f0">18<span style="font-size:16px;font-weight:600;color:rgba(247,244,240,0.4)"> / 25 g</span></div>
+      <div style="height:8px;border-radius:100px;background:rgba(8,145,178,0.14);overflow:hidden;margin-top:14px"><div style="height:100%;width:72%;background:#0891b2;border-radius:100px"></div></div>
+    </div>
+  </div>
+
+  <!-- Registro de hoy -->
+  <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:22px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:18px;color:#f7f4f0">Registro de hoy</h2>
+      <span style="font-size:12.5px;color:rgba(247,244,240,0.45)">4 comidas · 1,940 kcal</span>
+    </div>
+    <div class="dmx-log" style="padding:0 4px 10px;border-bottom:1px solid rgba(255,240,225,0.07);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(247,244,240,0.35)">
+      <span>Comida</span><span style="text-align:right">kcal</span><span class="dmx-macro" style="text-align:right">P</span><span class="dmx-macro" style="text-align:right">G</span><span class="dmx-macro" style="text-align:right">C</span>
+    </div>
+    {registro.map((r, i) => (
+      <div class="dmx-log" style={`padding:14px 4px;${i < registro.length - 1 ? 'border-bottom:1px solid rgba(255,240,225,0.05)' : ''}`}>
+        <div style="display:flex;align-items:center;gap:12px;min-width:0">
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(255,77,0,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="material-symbols-outlined icon-filled" style="color:#ff4d00;font-size:19px">{r.icon}</span></div>
+          <div style="min-width:0"><div style="font-size:14px;font-weight:600;color:#f7f4f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{r.name}</div><div style="font-size:11.5px;color:rgba(247,244,240,0.4)">{r.meal}</div></div>
+        </div>
+        <span class="kc-num" style="font-weight:700;font-size:14px;text-align:right;color:#f7f4f0">{r.kcal}</span>
+        <span class="dmx-macro nums" style="font-size:13px;color:rgba(247,244,240,0.6);text-align:right">{r.p}</span>
+        <span class="dmx-macro nums" style="font-size:13px;color:rgba(247,244,240,0.6);text-align:right">{r.g}</span>
+        <span class="dmx-macro nums" style="font-size:13px;color:rgba(247,244,240,0.6);text-align:right">{r.c}</span>
+      </div>
+    ))}
+    <button onclick="showPaywall('progress')" style="width:100%;margin-top:8px;padding:14px;border-radius:16px;background:transparent;border:1.5px dashed rgba(255,77,0,0.3);color:#ff4d00;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px"><span class="material-symbols-outlined" style="font-size:20px">add</span>Añadir comida o alimento</button>
+  </div>
+
+</div>
+</DemoLayout>
