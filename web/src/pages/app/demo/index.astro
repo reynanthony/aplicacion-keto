@@ -21,60 +21,44 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
     <!-- ═══════════════ LEFT COLUMN ═══════════════ -->
     <div class="space-y-3">
 
-      <!-- ── Hero Card ── -->
-      <div class="fade-up dk-card rounded-3xl p-5">
-        <div class="flex items-start justify-between mb-4">
-          <div>
-            <p class="text-xs font-bold uppercase tracking-widest mb-0.5" style="color:#ff4d00" id="demoGreeting">Buenos días</p>
-            <h1 class="text-2xl font-black leading-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">Carlos R. 👋</h1>
-          </div>
-          <div class="text-right">
-            <p class="text-[10px] uppercase tracking-wider mb-0.5" style="color:rgba(247,244,240,0.5)">Adherencia</p>
-            <p class="text-3xl font-black leading-none" style="background:linear-gradient(135deg,#ff4d00,#ea580c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">89%</p>
-          </div>
+      <!-- ── Header editorial (espejo de la app real) ── -->
+      <div class="fade-up" style="margin:6px 2px 16px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00" id="demoGreeting">Buenos días</span>
+          <span style="width:4px;height:4px;border-radius:50%;background:rgba(247,244,240,0.25)"></span>
+          <span style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(247,244,240,0.4)">Día 21 en cetosis</span>
         </div>
+        <h1 class="kc-h1" style="font-size:30px">Hola, Carlos.<br><span style="color:rgba(247,244,240,0.4)">Vas ganando la semana.</span></h1>
+      </div>
 
-        <div class="flex items-center gap-4">
-          <!-- Score Ring -->
-          <div class="flex-shrink-0 flex flex-col items-center gap-1">
-            <div class="relative" style="width:100px;height:100px">
-              <svg class="w-full h-full -rotate-90" viewBox="0 0 112 112">
-                <circle cx="56" cy="56" r="46" fill="transparent" stroke="rgba(255,240,225,0.06)" stroke-width="8"/>
-                <circle id="demoScoreRing" class="demo-hero-ring" cx="56" cy="56" r="46" fill="transparent"
-                  stroke="url(#dSG)" stroke-dasharray="289" stroke-dashoffset="289"
-                  stroke-linecap="round" stroke-width="8"/>
-                <defs>
-                  <linearGradient id="dSG" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#ff4d00"/>
-                    <stop offset="100%" stop-color="#fb923c"/>
-                  </linearGradient>
-                </defs>
-              </svg>
-              <div class="absolute inset-0 flex flex-col items-center justify-center">
-                <p class="font-black leading-none" style="font-size:36px;font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">87</p>
-                <p style="font-size:9px;color:rgba(247,244,240,0.3);margin-top:2px">/100</p>
-              </div>
+      <!-- ── Bento: score + adherencia + racha ── -->
+      <div class="fade-up" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <a href="/app/demo/inspector" style="grid-column:span 2;background:linear-gradient(150deg,#ff5a12,#e63f00);border-radius:26px;padding:24px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;box-shadow:0 12px 40px rgba(255,77,0,0.22);text-decoration:none;min-height:220px">
+          <div style="position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.08)"></div>
+          <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <div style="display:flex;align-items:center;gap:9px"><span class="material-symbols-outlined icon-filled" style="font-size:22px;color:rgba(26,14,5,0.85)">ecg_heart</span><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:13px;letter-spacing:0.02em;color:rgba(26,14,5,0.85)">HEALTH SCORE</span></div>
+            <span style="font-size:12px;font-weight:800;padding:5px 12px;border-radius:100px;background:rgba(26,14,5,0.16);color:#1a0e05">Perder grasa</span>
+          </div>
+          <div style="position:relative">
+            <div class="kc-num" style="font-weight:900;font-size:clamp(72px,20vw,96px);line-height:0.82;color:#1a0e05">87</div>
+            <div style="font-size:14px;font-weight:600;color:rgba(26,14,5,0.7);margin-top:12px">de 100 · <strong>Excelente</strong></div>
+            <div style="display:flex;gap:5px;margin-top:14px">
+              <div style="flex:1;height:6px;border-radius:100px;background:#1a0e05"></div>
+              <div style="flex:1;height:6px;border-radius:100px;background:#1a0e05"></div>
+              <div style="flex:1;height:6px;border-radius:100px;background:#1a0e05"></div>
+              <div style="flex:1;height:6px;border-radius:100px;background:#1a0e05"></div>
+              <div style="flex:1;height:6px;border-radius:100px;background:rgba(26,14,5,0.22)"></div>
             </div>
-            <p class="font-bold uppercase tracking-wider" style="font-size:9px;color:#ff4d00">Health Score</p>
+            <div style="display:inline-flex;align-items:center;gap:4px;margin-top:14px;font-size:12.5px;font-weight:700;color:rgba(26,14,5,0.75)">-17 lbs en 21 días<span class="material-symbols-outlined" style="font-size:15px">arrow_forward</span></div>
           </div>
-
-          <!-- Info pills -->
-          <div class="flex-1 space-y-2">
-            <a href="/app/demo/plan" class="flex items-center justify-between rounded-2xl px-3 py-2.5 transition-opacity active:opacity-70" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06);text-decoration:none">
-              <div>
-                <p class="text-[9px] uppercase tracking-wider mb-0.5" style="color:rgba(247,244,240,0.45)">Objetivo</p>
-                <p class="text-sm font-bold" style="color:#f7f4f0">Perder grasa</p>
-              </div>
-              <span class="material-symbols-outlined" style="font-size:16px;color:rgba(247,244,240,0.2)">chevron_right</span>
-            </a>
-            <a href="/app/demo/inspector" class="flex items-center justify-between rounded-2xl px-3 py-2.5" style="background:rgba(255,77,0,0.06);border:1px solid rgba(255,77,0,0.12);text-decoration:none">
-              <div>
-                <p class="text-[9px] uppercase tracking-wider mb-0.5" style="color:rgba(247,244,240,0.45)">Progreso</p>
-                <p class="text-sm font-bold" style="color:#ff4d00">-17 lbs en 21 días 🔥</p>
-              </div>
-              <span class="material-symbols-outlined" style="font-size:16px;color:rgba(255,77,0,0.3)">chevron_right</span>
-            </a>
-          </div>
+        </a>
+        <div class="kc-tile" style="display:flex;flex-direction:column;justify-content:space-between;gap:12px">
+          <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;color:rgba(247,244,240,0.5)">Adherencia</span>
+          <div><div class="kc-num" style="font-size:38px;line-height:0.9;color:#ff4d00">89%</div><div style="font-size:11.5px;color:rgba(247,244,240,0.4);margin-top:4px">esta semana</div></div>
+        </div>
+        <div class="kc-tile" style="display:flex;flex-direction:column;justify-content:space-between;gap:12px">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;color:rgba(247,244,240,0.5)">Racha</span><span class="material-symbols-outlined icon-filled" style="color:#ff4d00;font-size:20px">local_fire_department</span></div>
+          <div><div class="kc-num" style="font-size:38px;line-height:0.9;color:#f7f4f0">21<span style="font-size:16px;color:rgba(247,244,240,0.4)"> días</span></div><div style="font-size:11.5px;color:rgba(247,244,240,0.4);margin-top:4px">mejor: 21</div></div>
         </div>
       </div>
 
@@ -94,24 +78,24 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
         ))}
       </div>
 
-      <!-- ── Macros de hoy ── -->
-      <div class="fade-up dk-card-orange rounded-3xl p-5">
-        <div class="flex items-center justify-between mb-1">
-          <span class="text-xs font-bold uppercase tracking-wider" style="color:#ff4d00">Calorías de hoy</span>
-          <span class="dk-pill" style="background:rgba(34,197,94,0.1);color:#22c55e;font-size:10px">✓ En meta</span>
+      <!-- ── Calorías (tile crema, espejo de la app) ── -->
+      <div class="fade-up kc-tile-cream" style="border-radius:26px;padding:22px 24px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:13px;letter-spacing:0.02em;color:rgba(26,20,14,0.55)">CALORÍAS DE HOY</span>
+          <span style="font-size:11px;font-weight:700;padding:4px 11px;border-radius:100px;background:rgba(22,163,74,0.14);color:#15803d">En meta</span>
         </div>
-        <div class="flex items-baseline gap-2 mb-3">
-          <span class="font-black" style="font-size:3.2rem;font-family:'Plus Jakarta Sans',sans-serif;line-height:1;color:#f7f4f0">1,940</span>
-          <span style="color:rgba(247,244,240,0.38);font-size:1rem">/ <span style="color:rgba(247,244,240,0.6);font-weight:700">2,050</span> kcal</span>
-        </div>
-        <div class="dk-progress-bar mb-2">
-          <div class="demo-bar dk-progress-fill" id="calBar" style="width:0%;background:linear-gradient(90deg,#ff4d00,#ea580c)"></div>
-        </div>
-        <div class="flex items-center justify-between">
-          <p class="text-xs" style="color:rgba(247,244,240,0.48)">110 kcal restantes</p>
-          <a href="/app/demo/plan" class="text-xs font-bold flex items-center gap-0.5" style="color:#ff4d00">
-            Ver plan <span class="material-symbols-outlined" style="font-size:14px">arrow_forward</span>
-          </a>
+        <div>
+          <div style="display:flex;align-items:baseline;gap:8px">
+            <span class="kc-num" style="font-weight:900;font-size:46px;line-height:0.85;color:#1a140e">1,940</span>
+            <span style="font-size:14px;font-weight:600;color:rgba(26,20,14,0.5)">/ 2,050 kcal</span>
+          </div>
+          <div style="height:9px;border-radius:100px;background:rgba(26,20,14,0.09);overflow:hidden;margin-top:12px">
+            <div class="demo-bar" id="calBar" style="height:100%;width:0%;border-radius:100px;background:#ff4d00"></div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
+            <span style="font-size:12.5px;font-weight:600;color:rgba(26,20,14,0.5)">110 kcal restantes hoy</span>
+            <a href="/app/demo/plan" style="font-size:12.5px;font-weight:700;color:#ff4d00;text-decoration:none">Ver plan →</a>
+          </div>
         </div>
       </div>
 

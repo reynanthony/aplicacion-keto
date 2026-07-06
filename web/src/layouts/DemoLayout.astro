@@ -7,13 +7,7 @@ interface Props {
 }
 const { title = 'KetoCore | Demo', active = 'home' } = Astro.props;
 
-const navItems = [
-  { id: 'home',        href: '/app/demo/',              icon: 'cottage',        label: 'Inicio'    },
-  { id: 'plan',        href: '/app/demo/plan',          icon: 'event_note',     label: 'Plan'      },
-  { id: 'coach',       href: '/app/demo/coach',         icon: 'psychology',     label: 'Coach'     },
-  { id: 'inspector',   href: '/app/demo/inspector',     icon: 'analytics',      label: 'Inspector' },
-  { id: 'more',        href: '#',                       icon: 'apps',           label: 'Más',      onclick: 'toggleDemoMenu()' },
-];
+// Bottom-nav espejo de la app real: Inicio / Coach / [Escanear] / Plan / Más
 const sideLinks = [
   { id: 'home',           href: '/app/demo/',              icon: 'cottage',        label: 'Dashboard',       color: '' },
   { id: 'plan',           href: '/app/demo/plan',          icon: 'event_note',     label: 'Plan Alimenticio',color: '' },
@@ -77,7 +71,7 @@ const sideLinks = [
       background: #0f0f0f; border-right: 1px solid rgba(255,240,225,0.05);
       flex-direction: column; padding: 12px 0; overflow-y: auto;
     }
-    @media (min-width: 768px) {
+    @media (min-width: 901px) {
       #demoSidebar { display: flex; }
       #demoBottomNav { display: none !important; }
       #demoMenuBtn { display: none !important; }
@@ -124,19 +118,19 @@ const sideLinks = [
       border-top: 1px solid rgba(255,240,225,0.08);
     }
     .dbn-item {
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
       flex: 1; padding: 8px 4px; text-decoration: none;
-      color: rgba(210,230,255,0.38); transition: color 0.2s; cursor: pointer;
-      background: none; border: none;
+      color: rgba(247,244,240,0.5); transition: color 0.15s; cursor: pointer;
+      background: none; border: none; font-family: 'Inter',sans-serif;
     }
-    .dbn-pill {
-      display: flex; align-items: center; justify-content: center;
-      width: 56px; height: 32px; border-radius: 100px; transition: background 0.25s;
-    }
-    .dbn-item .material-symbols-outlined { font-size: 22px; }
-    .dbn-label { font-size: 10px; font-weight: 600; font-family: 'Inter',sans-serif; }
+    .dbn-ic { font-size: 23px; }
+    .dbn-label { font-size: 11px; font-weight: 600; font-family: 'Inter',sans-serif; }
     .dbn-item.active { color: #ff4d00; }
-    .dbn-item.active .dbn-pill { background: rgba(255,77,0,0.15); }
+    .dbn-scan {
+      width: 46px; height: 34px; margin-top: -14px; border-radius: 14px;
+      background: #ff4d00; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 16px rgba(255,77,0,0.4);
+    }
 
     /* ── Demo Main ── */
     #demoMain {
@@ -145,7 +139,7 @@ const sideLinks = [
       min-height: 100vh;
       background: #0b0a08;
     }
-    @media (min-width: 768px) {
+    @media (min-width: 901px) {
       #demoMain { padding-bottom: 2rem; }
     }
 
@@ -227,7 +221,7 @@ const sideLinks = [
     .dk-progress-fill { height: 100%; border-radius: 100px; transition: width 0.6s ease; }
 
     /* ── Demo grid (desktop 2-col) ── */
-    @media (min-width: 768px) {
+    @media (min-width: 901px) {
       .demo-2col {
         display: grid; grid-template-columns: 1fr 360px;
         gap: 1.25rem; align-items: start; padding-top: 0;
@@ -300,20 +294,28 @@ const sideLinks = [
     <slot />
   </main>
 
-  <!-- ── Demo Bottom Nav ── -->
+  <!-- ── Demo Bottom Nav (espejo de la app real) ── -->
   <nav id="demoBottomNav">
-    {navItems.map(item => (
-      <a
-        href={item.href}
-        onclick={item.onclick || undefined}
-        class:list={['dbn-item', { active: active === item.id }]}
-      >
-        <div class="dbn-pill">
-          <span class="material-symbols-outlined" style={active === item.id ? "font-variation-settings:'FILL' 1" : ""}>{item.icon}</span>
-        </div>
-        <span class="dbn-label">{item.label}</span>
-      </a>
-    ))}
+    <a href="/app/demo/" class:list={['dbn-item', { active: active === 'home' }]}>
+      <span class="material-symbols-outlined dbn-ic" style={active === 'home' ? "font-variation-settings:'FILL' 1" : ""}>cottage</span>
+      <span class="dbn-label">Inicio</span>
+    </a>
+    <a href="/app/demo/coach" class:list={['dbn-item', { active: active === 'coach' }]}>
+      <span class="material-symbols-outlined dbn-ic" style={active === 'coach' ? "font-variation-settings:'FILL' 1" : ""}>psychology</span>
+      <span class="dbn-label">Coach</span>
+    </a>
+    <button type="button" class="dbn-item" onclick="showPaywall('scanner')" aria-label="Escanear (Premium)">
+      <span class="dbn-scan"><span class="material-symbols-outlined icon-filled" style="font-size:24px;color:#fff">center_focus_strong</span></span>
+      <span class="dbn-label">Escanear</span>
+    </button>
+    <a href="/app/demo/plan" class:list={['dbn-item', { active: active === 'plan' }]}>
+      <span class="material-symbols-outlined dbn-ic" style={active === 'plan' ? "font-variation-settings:'FILL' 1" : ""}>event_note</span>
+      <span class="dbn-label">Plan</span>
+    </a>
+    <button type="button" class="dbn-item" onclick="toggleDemoMenu()">
+      <span class="material-symbols-outlined dbn-ic">menu</span>
+      <span class="dbn-label">Más</span>
+    </button>
   </nav>
 
   <!-- ── Demo More Menu ── -->
@@ -390,6 +392,16 @@ const sideLinks = [
           { icon: 'cloud_sync', text: 'Sincronización en todos tus dispositivos' },
           { icon: 'history', text: 'Historial de 365 días de progreso' },
           { icon: 'analytics', text: 'Inspector analizando tus patrones' },
+        ]
+      },
+      scanner: {
+        icon: 'center_focus_strong',
+        title: 'Scanner Keto IA',
+        sub: 'Apunta la cámara a cualquier alimento o etiqueta y obtén macros + veredicto keto al instante.',
+        features: [
+          { icon: 'photo_camera', text: 'Detección por cámara o código de barras' },
+          { icon: 'grain', text: 'Carbos netos y veredicto keto en segundos' },
+          { icon: 'add_circle', text: 'Añade directo a tu registro diario' },
         ]
       }
     };

@@ -269,8 +269,9 @@
   .stat-card { padding: 1.1rem 0.6rem; }
 }
 
-/* ─── APP DARK THEME ────────────────────────────────────────────────── */
-[data-theme="app"] {
+/* ─── APP DARK THEME (app y demo comparten tokens) ─────────────────── */
+[data-theme="app"],
+[data-theme="demo"] {
   line-height: 1.5;
 
   /* Brand */
@@ -594,7 +595,7 @@ button, a, [role="button"] { touch-action: manipulation; }
   .kc-page { padding: 22px 16px 96px; }
   .kc-h1 { font-size: 30px; }
   /* Legibilidad móvil: escala TODA la app un 15% (px, rem, iconos y táctiles) */
-  body[data-theme="app"] { zoom: 1.15; }
+  body[data-theme="app"], body[data-theme="demo"] { zoom: 1.15; }
   .kc-sub { font-size: 15px; }
 }
 @media (max-width: 560px) {
