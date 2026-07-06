@@ -1,194 +1,133 @@
 ---
 import DemoLayout from '../../../layouts/DemoLayout.astro';
+
+const days = [
+  { d: 'LUN', n: 30 }, { d: 'MAR', n: 1 }, { d: 'MIÉ', n: 2, active: true },
+  { d: 'JUE', n: 3 }, { d: 'VIE', n: 4 }, { d: 'SÁB', n: 5 }, { d: 'DOM', n: 6 },
+];
+
+const meals = [
+  { label: 'Desayuno', icon: 'wb_sunny',     grad: 'linear-gradient(135deg,#3a2410,#1e1509)', iconColor: '#ff4d00', name: 'Huevos revueltos + aguacate', time: '08:00 · 15 min', kcal: 520, macros: 'P32·G40·C5', done: true },
+  { label: 'Almuerzo', icon: 'restaurant',   grad: 'linear-gradient(135deg,#0f2818,#0a1a10)', iconColor: '#22c55e', name: 'Ensalada César keto con pollo', time: '13:30 · 20 min', kcal: 640, macros: 'P52·G44·C7', done: true },
+  { label: 'Snack',    icon: 'lunch_dining', grad: 'linear-gradient(135deg,#2a1638,#170c20)', iconColor: '#a78bfa', name: 'Nueces de macadamia', time: '17:00 · 0 min', kcal: 380, macros: 'P28·G38·C4', done: true },
+  { label: 'Cena',     icon: 'nightlight',   grad: 'linear-gradient(135deg,#3a1810,#1e0d09)', iconColor: '#fb923c', name: 'Salmón + espárragos', time: '20:00 · 25 min', kcal: 400, macros: 'P30·G38·C2', next: true },
+];
+
+const week = [
+  { d: 'JUE', n: 3, items: ['Tortilla de espinacas', 'Pollo al curry', 'Bistec + brócoli'], kcal: '1,920' },
+  { d: 'VIE', n: 4, items: ['Café con MCT', 'Salmón ahumado', 'Costillas BBQ keto'], kcal: '1,980' },
+  { d: 'SÁB', n: 5, items: ['Pancakes keto', 'Ensalada de atún', 'Pizza fathead'], kcal: '1,890' },
+];
 ---
 
-<DemoLayout title="KetoCore | Plan Demo" active="plan">
+<DemoLayout title="KetoCore | Demo Plan" active="plan">
 <style is:global>
-.meal-card { background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:16px;overflow:hidden; }
-.macro-pill { display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:700; }
+.dpl-meals { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.dpl-bottom { display:grid; grid-template-columns:1fr; gap:14px; }
+@media (min-width:901px){
+  .dpl-meals { grid-template-columns:repeat(4,1fr); gap:16px; }
+  .dpl-bottom { grid-template-columns:1fr 320px; align-items:start; }
+}
+.dpl-day {
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  padding:10px 0; min-width:52px; flex:1; border-radius:16px;
+  background:#161310; border:1px solid rgba(255,240,225,0.06); cursor:pointer;
+}
+.dpl-day.active { background:#ff4d00; border-color:#ff4d00; }
+.dpl-day.active .dpl-day-l { color:rgba(26,14,5,0.7); font-weight:700; }
+.dpl-day.active .dpl-day-n { color:#1a0e05; font-weight:900; }
+.dpl-day-l { font-size:10px; font-weight:600; color:rgba(247,244,240,0.4); }
+.dpl-day-n { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:16px; color:#f7f4f0; font-variant-numeric:tabular-nums; }
 </style>
 
-<div class="px-4 pt-2 pb-4">
+<div class="px-4 pt-2 space-y-4" style="max-width:1180px;margin:0 auto">
 
-  <!-- Header -->
-  <div class="flex items-start justify-between mb-4">
+  <!-- Header editorial -->
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:6px 2px 2px">
     <div>
-      <h1 class="text-2xl font-black leading-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">Plan de Hoy</h1>
-      <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.5)">Día 21 de programa · Carlos R.</p>
+      <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Plan Alimenticio · Semana 3</div>
+      <h1 class="kc-h1" style="font-size:30px">Tu semana,<br><span style="color:rgba(247,244,240,0.4)">planificada.</span></h1>
     </div>
-    <button onclick="showPaywall('plan')" class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold" style="background:linear-gradient(135deg,rgba(255,77,0,0.15),rgba(234,88,12,0.1));color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">
-      <span class="material-symbols-outlined icon-filled" style="font-size:16px">auto_awesome</span>
-      Personalizar
+    <button onclick="showPaywall('plan')" class="kc-btn" style="height:42px;font-size:13px;padding:0 16px">
+      <span class="material-symbols-outlined" style="font-size:18px">auto_awesome</span>Generar con IA
     </button>
   </div>
 
-  <!-- Daily Totals -->
-  <div class="rounded-2xl p-4 mb-4" style="background:rgba(255,77,0,0.05);border:1px solid rgba(255,77,0,0.15)">
-    <div class="flex items-center justify-between mb-3">
-      <p class="text-xs font-bold uppercase tracking-wider" style="color:#ff4d00">Totales del día</p>
-      <span class="text-xs font-semibold" style="color:rgba(247,244,240,0.5)">Meta: 2,050 kcal</span>
-    </div>
-    <div class="grid grid-cols-4 gap-3">
-      {[
-        { label:'Cal', value:'1,940', color:'#ff4d00' },
-        { label:'Prot', value:'143g', color:'#fb923c' },
-        { label:'Grasas', value:'138g', color:'#fbbf24' },
-        { label:'Carbos', value:'22g', color:'#0891b2' },
-      ].map(t => (
-        <div class="text-center">
-          <p class="font-black text-lg leading-tight" style={`color:${t.color};font-family:'Plus Jakarta Sans',sans-serif`}>{t.value}</p>
-          <p style="font-size:9px;color:rgba(247,244,240,0.4);font-weight:600;text-transform:uppercase;letter-spacing:0.05em">{t.label}</p>
-        </div>
-      ))}
+  <!-- Selector de días -->
+  <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none">
+    {days.map(day => (
+      <div class:list={['dpl-day', { active: day.active }]}>
+        <span class="dpl-day-l">{day.d}</span>
+        <span class="dpl-day-n">{day.n}</span>
+      </div>
+    ))}
+  </div>
+
+  <!-- Total del día -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:0 2px">
+    <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:18px;color:#f7f4f0">Miércoles · 4 comidas</h2>
+    <div style="text-align:right">
+      <div style="font-size:10.5px;color:rgba(247,244,240,0.4)">Total del día</div>
+      <div class="kc-num" style="font-weight:800;font-size:17px;color:#f7f4f0">1,940 <span style="font-size:11px;color:rgba(247,244,240,0.4)">kcal</span></div>
     </div>
   </div>
 
-  <!-- Meals -->
-  <div class="space-y-3">
-
-    <!-- Desayuno -->
-    <div class="meal-card">
-      <div class="flex items-center justify-between px-4 pt-4 pb-2">
-        <div class="flex items-center gap-2">
-          <span class="material-symbols-outlined icon-filled" style="color:#fbbf24;font-size:20px">wb_sunny</span>
-          <div>
-            <p class="font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Desayuno</p>
-            <p style="font-size:10px;color:rgba(247,244,240,0.4)">7:30 AM · 620 kcal</p>
+  <!-- Tarjetas de comida -->
+  <div class="dpl-meals">
+    {meals.map(m => (
+      <div style={`background:#161310;border:1px solid ${m.next ? 'rgba(255,77,0,0.2)' : 'rgba(255,240,225,0.06)'};border-radius:22px;overflow:hidden`}>
+        <div style={`height:96px;background:${m.grad};display:flex;align-items:center;justify-content:center;position:relative`}>
+          <span class="material-symbols-outlined icon-filled" style={`color:${m.iconColor};font-size:38px;opacity:0.85`}>{m.icon}</span>
+          <span style="position:absolute;top:10px;left:10px;font-size:9px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:4px 9px;border-radius:100px;background:rgba(11,10,8,0.6);color:#f7f4f0">{m.label}</span>
+          {m.done && <span class="material-symbols-outlined icon-filled" style="position:absolute;top:10px;right:10px;color:#22c55e;font-size:20px">check_circle</span>}
+          {m.next && <span style="position:absolute;top:10px;right:10px;font-size:9px;font-weight:700;padding:4px 9px;border-radius:100px;background:#ff4d00;color:#fff">Próxima</span>}
+        </div>
+        <div style="padding:14px">
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13.5px;color:#f7f4f0;line-height:1.25;margin-bottom:5px">{m.name}</div>
+          <div style="font-size:11px;color:rgba(247,244,240,0.4);margin-bottom:10px">{m.time}</div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="kc-num" style="font-weight:800;font-size:14px;color:#f7f4f0">{m.kcal} <span style="font-size:10px;color:rgba(247,244,240,0.4)">kcal</span></span>
+            <span style="font-size:10px;color:rgba(247,244,240,0.5)">{m.macros}</span>
           </div>
         </div>
-        <span class="material-symbols-outlined icon-filled" style="color:#22c55e;font-size:20px">check_circle</span>
       </div>
-      <div class="px-4 pb-4 space-y-2">
-        {[
-          { name:'Huevos revueltos (3)', prot:19, fat:16, carb:1, cal:220, icon:'egg_alt' },
-          { name:'Tocino de cerdo (4 tiras)', prot:8, fat:20, carb:0, cal:200, icon:'lunch_dining' },
-          { name:'Aguacate (½ mediano)', prot:2, fat:11, carb:2, cal:120, icon:'eco' },
-          { name:'Café con crema (1 taza)', prot:1, fat:5, carb:1, cal:55, icon:'coffee' },
-        ].map(f => (
-          <div class="flex items-center justify-between rounded-xl px-3 py-2.5" style="background:#1e1a15">
-            <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined icon-filled" style="color:rgba(247,244,240,0.3);font-size:16px">{f.icon}</span>
-              <p class="text-xs font-semibold" style="color:#f7f4f0">{f.name}</p>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <span class="macro-pill" style="background:rgba(234,88,12,0.1);color:#fb923c">{f.prot}P</span>
-              <span class="macro-pill" style="background:rgba(217,119,6,0.1);color:#fbbf24">{f.fat}G</span>
-              <span class="macro-pill" style="background:rgba(8,145,178,0.1);color:#60a5fa">{f.carb}C</span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-
-    <!-- Almuerzo -->
-    <div class="meal-card">
-      <div class="flex items-center justify-between px-4 pt-4 pb-2">
-        <div class="flex items-center gap-2">
-          <span class="material-symbols-outlined icon-filled" style="color:#fb923c;font-size:20px">light_mode</span>
-          <div>
-            <p class="font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Almuerzo</p>
-            <p style="font-size:10px;color:rgba(247,244,240,0.4)">1:00 PM · 580 kcal</p>
-          </div>
-        </div>
-        <span class="material-symbols-outlined icon-filled" style="color:#22c55e;font-size:20px">check_circle</span>
-      </div>
-      <div class="px-4 pb-4 space-y-2">
-        {[
-          { name:'Pechuga de pollo (180g)', prot:48, fat:5, carb:0, cal:235, icon:'kebab_dining' },
-          { name:'Brócoli al vapor (1 taza)', prot:4, fat:0, carb:4, cal:55, icon:'local_florist' },
-          { name:'Mantequilla (1 cda)', prot:0, fat:12, carb:0, cal:100, icon:'water_drop' },
-          { name:'Ensalada verde + aceite oliva', prot:1, fat:14, carb:2, cal:145, icon:'eco' },
-        ].map(f => (
-          <div class="flex items-center justify-between rounded-xl px-3 py-2.5" style="background:#1e1a15">
-            <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined icon-filled" style="color:rgba(247,244,240,0.3);font-size:16px">{f.icon}</span>
-              <p class="text-xs font-semibold" style="color:#f7f4f0">{f.name}</p>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <span class="macro-pill" style="background:rgba(234,88,12,0.1);color:#fb923c">{f.prot}P</span>
-              <span class="macro-pill" style="background:rgba(217,119,6,0.1);color:#fbbf24">{f.fat}G</span>
-              <span class="macro-pill" style="background:rgba(8,145,178,0.1);color:#60a5fa">{f.carb}C</span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-
-    <!-- Snack -->
-    <div class="meal-card">
-      <div class="flex items-center justify-between px-4 pt-4 pb-2">
-        <div class="flex items-center gap-2">
-          <span class="material-symbols-outlined icon-filled" style="color:#4ade80;font-size:20px">fastfood</span>
-          <div>
-            <p class="font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Snack</p>
-            <p style="font-size:10px;color:rgba(247,244,240,0.4)">4:30 PM · 280 kcal</p>
-          </div>
-        </div>
-        <span class="material-symbols-outlined icon-filled" style="color:#22c55e;font-size:20px">check_circle</span>
-      </div>
-      <div class="px-4 pb-4 space-y-2">
-        {[
-          { name:'Nueces de macadamia (30g)', prot:2, fat:21, carb:2, cal:200, icon:'eco' },
-          { name:'Queso cheddar (30g)', prot:7, fat:9, carb:0, cal:115, icon:'lunch_dining' },
-        ].map(f => (
-          <div class="flex items-center justify-between rounded-xl px-3 py-2.5" style="background:#1e1a15">
-            <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined icon-filled" style="color:rgba(247,244,240,0.3);font-size:16px">{f.icon}</span>
-              <p class="text-xs font-semibold" style="color:#f7f4f0">{f.name}</p>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <span class="macro-pill" style="background:rgba(234,88,12,0.1);color:#fb923c">{f.prot}P</span>
-              <span class="macro-pill" style="background:rgba(217,119,6,0.1);color:#fbbf24">{f.fat}G</span>
-              <span class="macro-pill" style="background:rgba(8,145,178,0.1);color:#60a5fa">{f.carb}C</span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-
-    <!-- Cena -->
-    <div class="meal-card">
-      <div class="flex items-center justify-between px-4 pt-4 pb-2">
-        <div class="flex items-center gap-2">
-          <span class="material-symbols-outlined icon-filled" style="color:#60a5fa;font-size:20px">bedtime</span>
-          <div>
-            <p class="font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Cena</p>
-            <p style="font-size:10px;color:rgba(247,244,240,0.4)">7:30 PM · 460 kcal · pendiente</p>
-          </div>
-        </div>
-        <span class="material-symbols-outlined" style="color:rgba(247,244,240,0.2);font-size:20px">radio_button_unchecked</span>
-      </div>
-      <div class="px-4 pb-4 space-y-2">
-        {[
-          { name:'Salmón a la plancha (180g)', prot:40, fat:20, carb:0, cal:340, icon:'set_meal' },
-          { name:'Espárragos (8 tallos)', prot:3, fat:0, carb:3, cal:35, icon:'local_florist' },
-          { name:'Aceite de oliva (1.5 cda)', prot:0, fat:20, carb:0, cal:180, icon:'water_drop' },
-        ].map(f => (
-          <div class="flex items-center justify-between rounded-xl px-3 py-2.5" style="background:#1a1a1a;opacity:0.7">
-            <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined icon-filled" style="color:rgba(247,244,240,0.3);font-size:16px">{f.icon}</span>
-              <p class="text-xs font-semibold" style="color:#f7f4f0">{f.name}</p>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <span class="macro-pill" style="background:rgba(234,88,12,0.1);color:#fb923c">{f.prot}P</span>
-              <span class="macro-pill" style="background:rgba(217,119,6,0.1);color:#fbbf24">{f.fat}G</span>
-              <span class="macro-pill" style="background:rgba(8,145,178,0.1);color:#60a5fa">{f.carb}C</span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    ))}
   </div>
 
-  <!-- CTA Block -->
-  <div class="mt-4 rounded-2xl p-4" style="background:rgba(255,77,0,0.05);border:1px solid rgba(255,77,0,0.15)">
-    <p class="text-sm font-bold mb-1" style="color:#f7f4f0">¿Quieres un plan personalizado?</p>
-    <p class="text-xs mb-3" style="color:rgba(247,244,240,0.5)">KetoCore genera tu plan de 21 días basado en tu metabolismo, peso, objetivo y preferencias alimenticias.</p>
-    <button onclick="showPaywall('plan')" class="w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2" style="background:linear-gradient(135deg,#ff4d00,#ea580c);color:#fff;box-shadow:0 4px 16px rgba(255,77,0,0.3)">
-      <span class="material-symbols-outlined icon-filled" style="font-size:18px">auto_awesome</span>
-      Obtén tu plan personalizado
-    </button>
-  </div>
+  <div class="dpl-bottom">
+    <!-- Resto de la semana -->
+    <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:24px;padding:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:16px;color:#f7f4f0">Resto de la semana</h2>
+        <span style="font-size:12px;color:rgba(247,244,240,0.45)">Promedio 1,930 kcal/día</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        {week.map(w => (
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;background:#1e1a15">
+            <div style="width:44px;text-align:center;flex-shrink:0">
+              <div style="font-size:10px;color:rgba(247,244,240,0.4);font-weight:600">{w.d}</div>
+              <div class="kc-num" style="font-weight:800;font-size:16px;color:#f7f4f0">{w.n}</div>
+            </div>
+            <div style="flex:1;display:flex;gap:6px;flex-wrap:wrap;min-width:0">
+              {w.items.map(item => (
+                <span style="font-size:11.5px;padding:4px 10px;border-radius:100px;background:#26211a;color:rgba(247,244,240,0.7);white-space:nowrap">{item}</span>
+              ))}
+            </div>
+            <span class="kc-num" style="font-weight:700;font-size:13px;color:rgba(247,244,240,0.55);flex-shrink:0">{w.kcal}</span>
+          </div>
+        ))}
+      </div>
+    </div>
 
+    <!-- Nudge lista de compras — cream -->
+    <div class="kc-tile-cream" style="border-radius:24px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;gap:16px">
+      <div>
+        <div style="width:42px;height:42px;border-radius:13px;background:rgba(96,165,250,0.16);display:flex;align-items:center;justify-content:center;margin-bottom:14px"><span class="material-symbols-outlined icon-filled" style="color:#2563eb;font-size:22px">shopping_cart</span></div>
+        <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:17px;line-height:1.15;color:#1a140e;margin-bottom:6px">Lista de compras lista</h3>
+        <p style="font-size:13px;color:rgba(26,20,14,0.6);line-height:1.55">28 ingredientes generados a partir del plan semanal, organizados por pasillo.</p>
+      </div>
+      <a href="/app/demo/compras" style="width:100%;padding:13px;border-radius:14px;background:#1a140e;color:#f3ede3;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13.5px;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none">Ver lista <span class="material-symbols-outlined" style="font-size:17px">arrow_forward</span></a>
+    </div>
+  </div>
 </div>
 </DemoLayout>
