@@ -60,8 +60,8 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
       </div>
       <div class="flex-1">
         <p class="text-[10px] font-bold mb-1" style="color:rgba(247,244,240,0.4)">Coach Keto IA · Demo</p>
-        <div class="rounded-2xl rounded-tl-none p-3.5" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06);max-width:90%">
-          <p class="text-sm leading-relaxed" style="color:#f7f4f0">
+        <div class="rounded-2xl rounded-tl-none p-4" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
+          <p class="leading-relaxed" style="color:#f7f4f0;font-size:14.5px">
             ¡Hola Carlos! 👋 Soy tu Coach Keto IA.<br><br>
             En esta versión demo respondo preguntas generales sobre keto con mi base de conocimiento local (sin internet). Puedo ayudarte con temas como alimentos permitidos, síntomas, macros, ayuno y más.<br><br>
             ¿Qué te gustaría saber?
@@ -147,8 +147,8 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
 
     div.innerHTML = avatarHtml + '<div class="flex-1 ' + (isCoach ? '' : 'flex flex-col items-end') + '">'
       + labelHtml
-      + '<div class="rounded-2xl ' + corner + ' p-3.5" style="' + bubbleStyle + ';max-width:90%">'
-      + '<p class="text-sm leading-relaxed" style="color:#f7f4f0">' + text.replace(/\n/g,'<br>') + '</p>'
+      + '<div class="rounded-2xl ' + corner + ' p-4" style="' + bubbleStyle + (isCoach ? '' : ';max-width:92%') + '">'
+      + '<p class="leading-relaxed" style="color:#f7f4f0;font-size:14.5px">' + text.replace(/\n/g,'<br>') + '</p>'
       + (highlight ? '<div class="mt-2 rounded-lg px-3 py-2" style="background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.15)"><p style="font-size:10px;color:#a78bfa;font-weight:600">💡 ' + highlight + '</p></div>' : '')
       + '</div></div>';
 

@@ -332,8 +332,8 @@ function addMessage(role, html, meta) {
 
   if (isUser) {
     wrap.innerHTML =
-      '<div class="chat-bubble-user px-4 py-2.5 max-w-[85%]">' +
-        '<p class="text-sm leading-relaxed" style="color:#f7f4f0">' + html + '</p>' +
+      '<div class="chat-bubble-user px-4 py-3 max-w-[92%]">' +
+        '<p class="leading-relaxed" style="color:#f7f4f0;font-size:14.5px">' + html + '</p>' +
       '</div>';
   } else {
     var metaHtml = meta
@@ -344,8 +344,8 @@ function addMessage(role, html, meta) {
         'style="background:linear-gradient(135deg,rgba(167,139,250,0.2),rgba(99,102,241,0.15));border:1px solid rgba(167,139,250,0.2)">' +
         '<span class="material-symbols-outlined icon-filled" style="color:#a78bfa;font-size:16px">psychology</span>' +
       '</div>' +
-      '<div class="chat-bubble-coach px-4 py-3 max-w-[88%]">' +
-        '<p class="text-sm leading-relaxed" style="color:#f7f4f0">' + html + '</p>' +
+      '<div class="chat-bubble-coach px-4 py-3.5" style="max-width:calc(100% - 42px)">' +
+        '<p class="leading-relaxed" style="color:#f7f4f0;font-size:14.5px">' + html + '</p>' +
         metaHtml +
       '</div>';
   }
