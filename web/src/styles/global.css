@@ -593,13 +593,9 @@ button, a, [role="button"] { touch-action: manipulation; }
 @media (max-width: 900px) {
   .kc-page { padding: 22px 16px 96px; }
   .kc-h1 { font-size: 30px; }
-  /* Legibilidad móvil: sube la base tipográfica de la app (afecta rem/em) */
-  html:has(body[data-theme="app"]) { font-size: 17.5px; }
-  .kc-sub { font-size: 15.5px; }
-  .kc-eyebrow { font-size: 11px; }
-  .kc-chip { font-size: 13.5px; padding: 9px 17px; }
-  [data-theme="app"] .text-xs { font-size: 0.8rem; }
-  [data-theme="app"] .text-sm { font-size: 0.9rem; }
+  /* Legibilidad móvil: escala TODA la app un 15% (px, rem, iconos y táctiles) */
+  body[data-theme="app"] { zoom: 1.15; }
+  .kc-sub { font-size: 15px; }
 }
 @media (max-width: 560px) {
   .kc-h1 { font-size: 26px; }
