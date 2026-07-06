@@ -10,13 +10,13 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
 </style>
 
 <div class="px-4 pt-2 pb-4">
-  <div class="flex items-start justify-between mb-4">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:6px 2px 16px">
     <div>
-      <h1 class="text-xl font-black" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">Entrenamientos</h1>
-      <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.5)">Semana 3 · Carlos · Moderado</p>
+      <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Entrenamiento · Semana 3</div>
+      <h1 class="kc-h1" style="font-size:30px">Muévete keto,<br><span style="color:rgba(247,244,240,0.4)">sin quemarte.</span></h1>
     </div>
-    <button onclick="showPaywall('plan')" class="text-xs font-bold px-3 py-2 rounded-xl" style="background:rgba(244,114,182,0.1);color:#f472b6;border:1px solid rgba(244,114,182,0.2)">
-      Personalizar
+    <button onclick="showPaywall('plan')" class="kc-btn" style="height:42px;font-size:13px;padding:0 16px">
+      <span class="material-symbols-outlined" style="font-size:18px">auto_awesome</span>Personalizar
     </button>
   </div>
 
@@ -47,19 +47,19 @@ import DemoLayout from '../../../layouts/DemoLayout.astro';
     </div>
   </div>
 
-  <!-- Today's Workout -->
-  <div class="mb-3" style="background:rgba(255,77,0,0.04);border:1px solid rgba(255,77,0,0.15);border-radius:16px;overflow:hidden">
-    <div class="flex items-center justify-between p-4" style="border-bottom:1px solid rgba(255,255,255,0.04)">
+  <!-- Today's Workout — tile verde del diseño -->
+  <div class="mb-3" style="background:linear-gradient(140deg,#1a7a3e,#146030);border-radius:22px;overflow:hidden">
+    <div class="flex items-center justify-between p-4" style="border-bottom:1px solid rgba(255,255,255,0.12)">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:rgba(255,77,0,0.12)">
-          <span class="material-symbols-outlined icon-filled" style="color:#ff4d00;font-size:22px">fitness_center</span>
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:rgba(255,255,255,0.16)">
+          <span class="material-symbols-outlined icon-filled" style="color:#fff;font-size:22px">fitness_center</span>
         </div>
         <div>
-          <p class="font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Entrenamiento de Hoy</p>
-          <p style="font-size:10px;color:rgba(247,244,240,0.4)">Fuerza · 45 min · Moderado</p>
+          <p class="font-bold" style="color:#fff;font-family:'Plus Jakarta Sans',sans-serif">Entrenamiento de hoy</p>
+          <p style="font-size:11px;color:rgba(255,255,255,0.75)">Fuerza · 45 min · Moderado</p>
         </div>
       </div>
-      <button onclick="showPaywall('progress')" class="text-[11px] font-bold px-3 py-2 rounded-xl" style="background:rgba(255,77,0,0.12);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">
+      <button onclick="showPaywall('progress')" class="text-[12px] font-bold px-4 py-2 rounded-xl" style="background:#fff;color:#146030;font-family:'Plus Jakarta Sans',sans-serif">
         Iniciar
       </button>
     </div>

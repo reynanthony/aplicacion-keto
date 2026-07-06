@@ -59,14 +59,14 @@ const totalEst = '$87.50';
 </style>
 
 <div class="px-4 pt-2 pb-4">
-  <!-- Header -->
-  <div class="flex items-start justify-between mb-4">
+  <!-- Header editorial -->
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:6px 2px 16px">
     <div>
-      <h1 class="text-xl font-black" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">Lista de Compras</h1>
-      <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.5)">Generada para la semana · {totalItems} artículos</p>
+      <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Compras · {totalItems} artículos</div>
+      <h1 class="kc-h1" style="font-size:30px">Tu lista,<br><span style="color:rgba(247,244,240,0.4)">generada sola.</span></h1>
     </div>
-    <button onclick="showPaywall('plan')" class="text-xs font-bold px-3 py-2 rounded-xl" style="background:rgba(255,77,0,0.1);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">
-      Regenerar IA
+    <button onclick="showPaywall('plan')" class="kc-btn" style="height:42px;font-size:13px;padding:0 16px">
+      <span class="material-symbols-outlined" style="font-size:18px">auto_awesome</span>Regenerar IA
     </button>
   </div>
 

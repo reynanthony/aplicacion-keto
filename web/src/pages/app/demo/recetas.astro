@@ -43,8 +43,11 @@ const categories = ['Todos', 'Desayuno', 'Almuerzo', 'Cena', 'Snack'];
 <style is:global>
 .recipe-card { background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:16px;overflow:hidden;cursor:pointer;transition:all 0.15s; }
 .recipe-card:hover { border-color:rgba(255,77,0,0.25);box-shadow:0 4px 20px rgba(0,0,0,0.3); }
-.cat-btn { padding:6px 14px;border-radius:100px;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;border:1px solid rgba(255,240,225,0.07);background:#1e1a15;color:rgba(247,244,240,0.5); }
-.cat-btn.active { background:rgba(255,77,0,0.12);color:#ff4d00;border-color:rgba(255,77,0,0.25); }
+.cat-btn { padding:8px 16px;border-radius:100px;font-size:12.5px;font-weight:600;cursor:pointer;transition:all 0.15s;border:1px solid rgba(255,240,225,0.08);background:#161310;color:rgba(247,244,240,0.6); }
+.cat-btn.active { background:#ff4d00;color:#fff;border-color:#ff4d00;font-weight:700; }
+#recipeGrid { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
+@media (min-width:901px){ #recipeGrid { grid-template-columns:repeat(4,1fr);gap:16px; } }
+.recipe-card { border-radius:22px !important; }
 .recipe-modal-overlay { position:fixed;inset:0;z-index:150;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center; }
 .recipe-modal-overlay.open { display:flex; }
 .recipe-modal { background:#161310;border:1px solid rgba(255,240,225,0.07);border-radius:24px 24px 0 0;width:100%;max-width:560px;max-height:85vh;overflow-y:auto;padding:24px; }
@@ -52,13 +55,13 @@ const categories = ['Todos', 'Desayuno', 'Almuerzo', 'Cena', 'Snack'];
 </style>
 
 <div class="px-4 pt-2 pb-4">
-  <div class="flex items-center justify-between mb-4">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:6px 2px 16px">
     <div>
-      <h1 class="text-xl font-black" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">Recetas Keto</h1>
-      <p class="text-xs" style="color:rgba(247,244,240,0.5)">{recipes.length} recetas · sin anuncios</p>
+      <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Recetas · {recipes.length} verificadas</div>
+      <h1 class="kc-h1" style="font-size:30px">Cocina keto,<br><span style="color:rgba(247,244,240,0.4)">sin adivinar.</span></h1>
     </div>
-    <button onclick="showPaywall('plan')" class="text-xs font-bold px-3 py-2 rounded-xl" style="background:rgba(255,77,0,0.1);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">
-      + Mis recetas
+    <button onclick="showPaywall('plan')" class="kc-btn" style="height:42px;font-size:13px;padding:0 16px">
+      <span class="material-symbols-outlined" style="font-size:18px">add</span>Mis recetas
     </button>
   </div>
 
@@ -70,22 +73,18 @@ const categories = ['Todos', 'Desayuno', 'Almuerzo', 'Cena', 'Snack'];
   </div>
 
   <!-- Recipe Grid -->
-  <div id="recipeGrid" class="grid grid-cols-2 gap-3">
+  <div id="recipeGrid">
     {recipes.map(r => (
       <div class="recipe-card" data-cat={r.cat} onclick={`openRecipe(${r.id})`}>
         <div class="flex items-center justify-center" style={`height:80px;background:rgba(${r.color.startsWith('#f') ? '251,146,60' : r.color.startsWith('#2') ? '34,197,94' : r.color.startsWith('#6') ? '96,165,250' : r.color.startsWith('#4') ? '74,222,128' : r.color.startsWith('#f4') ? '244,114,182' : '251,191,36'},0.08);border-bottom:1px solid rgba(255,255,255,0.04)`}>
           <span style="font-size:36px">{r.emoji}</span>
         </div>
-        <div class="p-3">
-          <p class="text-xs font-bold leading-tight mb-1" style="color:#f7f4f0">{r.name}</p>
+        <div class="p-3.5">
+          <span style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(247,244,240,0.4)">{r.cat}</span>
+          <p style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13.5px;line-height:1.25;color:#f7f4f0;margin:5px 0 10px">{r.name}</p>
           <div class="flex items-center justify-between">
-            <span style="font-size:9px;color:rgba(247,244,240,0.4)">{r.time} min · {r.diff}</span>
-            <span style="font-size:9px;font-weight:700;color:rgba(247,244,240,0.5)">{r.cal} kcal</span>
-          </div>
-          <div class="flex gap-1 mt-2">
-            <span style="font-size:9px;padding:1px 6px;background:rgba(234,88,12,0.1);color:#fb923c;border-radius:100px;font-weight:700">{r.prot}P</span>
-            <span style="font-size:9px;padding:1px 6px;background:rgba(217,119,6,0.1);color:#fbbf24;border-radius:100px;font-weight:700">{r.fat}G</span>
-            <span style="font-size:9px;padding:1px 6px;background:rgba(8,145,178,0.1);color:#60a5fa;border-radius:100px;font-weight:700">{r.carb}C</span>
+            <span style="font-size:11px;color:rgba(247,244,240,0.5)">{r.time} min</span>
+            <span class="kc-num" style="font-size:12px;font-weight:700;color:#22d3ee">{r.carb} g netos</span>
           </div>
         </div>
       </div>
