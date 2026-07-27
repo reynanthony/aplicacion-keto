@@ -1,0 +1,374 @@
+/* ---------------------------------------------------------------------
+   KETOCORE v3 — REDISEÑO MÓVIL (Fase 1: tokens + sistema de componentes)
+   Aditivo y aislado: namespace --v3-* / .v3-* para no colisionar nunca
+   con las variables --c-* ni las clases .kc-* del tema "Editorial Bento"
+   en producción. Ninguna página existente debe cambiar de aspecto por
+   la sola presencia de este archivo. Ver design_handoff_ketocore_v3/README.md
+   --------------------------------------------------------------------- */
+
+:root {
+  /* Superficies (app v3) */
+  --v3-surface-app:        #071410;
+  --v3-surface-1:          #0c2119;
+  --v3-surface-2:          #0f2b20;
+  --v3-surface-alert-app:  #140b07;
+  --v3-surface-alert-1:    #1d0d07;
+  --v3-surface-alert-card: #241009;
+
+  /* Señal */
+  --v3-lime:       #c8f560;
+  --v3-lime-deep:  #84cc16;
+  --v3-lime-dark:  #4d7c0f;
+  --v3-orange:     #ff4d00; /* SOLO estado de alerta */
+  --v3-orange-soft:#ff7a3c;
+  --v3-signal:     var(--v3-lime); /* color de la cifra protagonista; la cascada de alerta lo pone en naranja */
+  --v3-cream:      #f3ede3;
+  --v3-violet:     #a78bfa;
+  --v3-amber:      #fbbf24;
+
+  /* Texto */
+  --v3-text:        #e6fff2;
+  --v3-text-70:     rgba(230,255,242,0.70);
+  --v3-text-50:     rgba(230,255,242,0.50);
+  --v3-text-40:     rgba(230,255,242,0.40);
+  --v3-text-on-lime: #0a1f14;
+  --v3-text-on-cream:#1a140e;
+
+  /* Bordes */
+  --v3-border:      rgba(210,255,230,0.10);
+  --v3-border-soft: rgba(210,255,230,0.06);
+  --v3-border-alert:rgba(255,77,0,0.28);
+
+  /* Tipografía */
+  --v3-font-num:   'Archivo', sans-serif;
+  --v3-font-mono:  'JetBrains Mono', monospace;
+  --v3-font-label: 'Barlow Condensed', sans-serif;
+  --v3-font-title: 'Plus Jakarta Sans', sans-serif;
+  --v3-font-body:  'Inter', sans-serif;
+
+  /* Forma */
+  --v3-radius-hero:  26px;
+  --v3-radius-card:  22px;
+  --v3-radius-tile:  18px;
+  --v3-radius-row:   14px;
+  --v3-radius-sheet: 28px;
+  --v3-radius-pill:  100px;
+
+  /* Espaciado */
+  --v3-pad-screen: 20px;
+  --v3-gap-block:  14px;
+  --v3-pad-card:   18px;
+  --v3-pad-row:    12px;
+  --v3-dock-height:62px;
+  --v3-fab-size:   56px;
+  --v3-touch-min:  44px;
+
+  /* Movimiento */
+  --v3-ease:          cubic-bezier(.22,1,.36,1);
+  --v3-t-sheet-in:     320ms;
+  --v3-t-sheet-out:    240ms;
+  --v3-t-scrim:        180ms;
+  --v3-t-touch:        160ms;
+  --v3-t-fab-ring:     620ms;
+  --v3-t-toast-in:     260ms;
+}
+
+/* Reset/base — solo dentro de zonas que optan explícitamente con [data-v3] */
+[data-v3] {
+  color: var(--v3-text);
+  font-family: var(--v3-font-body);
+}
+[data-v3] * { box-sizing: border-box; }
+
+/* --- Estado de alerta: redefine las mismas variables, cascada automática ---
+   day-budget.js alterna [data-v3-alert] en <html> (documentElement), mientras que
+   [data-v3] vive en el wrapper de cada pantalla (nunca el mismo elemento) — por eso
+   el selector es descendiente, no compuesto. Ningún componente necesita cablearse a
+   mano: todos leen --v3-surface-N, --v3-border y --v3-signal.
+   --v3-signal es el color de la cifra protagonista (BudgetHeader): lima normalmente,
+   naranja en alerta, tal como pide el handoff ("cifra en naranja" en pantalla de alerta). */
+[data-v3-alert] [data-v3],
+[data-v3-alert][data-v3] {
+  --v3-surface-app: var(--v3-surface-alert-app);
+  --v3-surface-1:   var(--v3-surface-alert-1);
+  --v3-surface-2:   var(--v3-surface-alert-card);
+  --v3-border:      var(--v3-border-alert);
+  --v3-signal:      var(--v3-orange);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-v3] * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+
+/* --- Utilidades compartidas ------------------------------------------ */
+.v3-num-mono {
+  font-family: var(--v3-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  text-align: right;
+}
+.v3-eyebrow {
+  font-family: var(--v3-font-label);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v3-text-50);
+}
+.v3-icon-lime  { color: var(--v3-lime); }
+.v3-icon-amber { color: var(--v3-amber); }
+.v3-icon-orange{ color: var(--v3-orange); }
+
+/* ===================================================================
+   1. BudgetHeader
+   =================================================================== */
+.v3-budget-header { display: flex; flex-direction: column; gap: 8px; }
+
+.v3-bh-figure { display: flex; align-items: baseline; gap: 6px; }
+.v3-bh-num {
+  font-family: var(--v3-font-num);
+  font-weight: 900;
+  font-stretch: 125%;
+  letter-spacing: -0.04em;
+  line-height: 0.82;
+  color: var(--v3-signal);
+}
+.v3-budget-header--hero .v3-bh-num { font-size: 76px; }
+.v3-budget-header--bar  .v3-bh-num { font-size: 20px; font-stretch: 112%; }
+.v3-bh-unit { font-family: var(--v3-font-num); font-weight: 800; font-size: 22px; color: var(--v3-signal); }
+.v3-bh-of   { font-family: var(--v3-font-body); font-size: 13px; color: var(--v3-text-50); }
+
+.v3-bh-bar-track {
+  position: relative;
+  width: 100%;
+  border-radius: var(--v3-radius-pill);
+  background: rgba(230,255,242,0.08);
+  overflow: hidden;
+}
+.v3-budget-header--hero .v3-bh-bar-track { height: 9px; }
+.v3-budget-header--bar  .v3-bh-bar-track { height: 6px; }
+.v3-bh-bar-fill {
+  position: absolute; inset: 0 auto 0 0; height: 100%;
+  border-radius: var(--v3-radius-pill);
+  background: linear-gradient(90deg, var(--v3-lime-dark), var(--v3-signal));
+  transition: width var(--v3-t-sheet-in) var(--v3-ease);
+}
+.v3-bh-bar-bonus {
+  position: absolute; top: 0; bottom: 0;
+  background: rgba(200,245,96,0.28);
+}
+
+.v3-bh-footer { display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; color: var(--v3-text-50); }
+
+.v3-bonus-chip {
+  position: absolute; top: 0; right: 0;
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--v3-lime); color: var(--v3-text-on-lime);
+  font-family: var(--v3-font-label); font-weight: 700; font-size: 11px;
+  padding: 4px 10px; border-radius: var(--v3-radius-pill);
+}
+.v3-bh-wrap { position: relative; }
+
+/* ===================================================================
+   2. DataRow
+   =================================================================== */
+.v3-row-wrap { position: relative; overflow: hidden; touch-action: pan-y; }
+.v3-row {
+  position: relative;
+  padding: var(--v3-pad-row) 2px;
+  min-height: var(--v3-touch-min);
+  border-bottom: 1px solid var(--v3-border-soft);
+  background: var(--v3-surface-app); /* opaco siempre: tapa .v3-row-actions en reposo, incluso en done/blocked */
+  transition: transform var(--v3-t-touch) var(--v3-ease);
+}
+.v3-row-content { display: flex; align-items: center; gap: 12px; }
+.v3-row-lead { flex-shrink: 0; width: 20px; display: flex; align-items: center; justify-content: center; }
+.v3-row-lead .material-symbols-outlined { font-size: 20px; color: var(--v3-text-50); }
+.v3-row-lead-time { font-family: var(--v3-font-mono); font-size: 11px; color: var(--v3-text-40); width: auto; }
+.v3-row--verdict-bar { padding-left: 10px; }
+.v3-row-vbar { position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; border-radius: 2px; }
+.v3-row-vbar--lime   { background: var(--v3-lime); }
+.v3-row-vbar--amber  { background: var(--v3-amber); }
+.v3-row-vbar--orange { background: var(--v3-orange); }
+
+.v3-row-body { flex: 1; min-width: 0; }
+.v3-row-title { font-size: 14px; font-weight: 600; color: var(--v3-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.v3-row-meta  { font-size: 12px; color: var(--v3-text-40); margin-top: 2px; }
+.v3-row-value { flex-shrink: 0; font-size: 14px; }
+.v3-row-value .v3-row-unit { font-size: 11px; color: var(--v3-text-40); margin-left: 2px; }
+
+.v3-row-content--done .v3-row-title { opacity: 0.45; text-decoration: line-through; }
+.v3-row-content--done .v3-row-meta  { opacity: 0.45; }
+.v3-row-content--blocked { opacity: 0.55; }
+
+.v3-row-actions {
+  position: absolute; top: 0; right: 0; bottom: 0;
+  display: flex; align-items: stretch;
+}
+.v3-row-action {
+  display: flex; align-items: center; justify-content: center;
+  width: 64px; border: none; cursor: pointer;
+  font-family: var(--v3-font-label); font-size: 11px; font-weight: 700; text-transform: uppercase;
+  color: #fff;
+}
+.v3-row-action--edit   { background: var(--v3-lime-dark); }
+.v3-row-action--delete { background: var(--v3-orange); }
+
+/* ===================================================================
+   3. DecisionCard
+   =================================================================== */
+.v3-decision-card {
+  position: relative;
+  border-radius: var(--v3-radius-card);
+  padding: var(--v3-pad-card);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.v3-decision-card--lime  { background: var(--v3-lime); color: var(--v3-text-on-lime); }
+.v3-decision-card--cream { background: var(--v3-cream); color: var(--v3-text-on-cream); }
+.v3-decision-card--alert {
+  background: var(--v3-surface-alert-card, var(--v3-surface-2));
+  border: 1px solid var(--v3-border-alert);
+  color: var(--v3-text);
+}
+.v3-decision-card-close {
+  position: absolute; top: 12px; right: 12px;
+  width: 28px; height: 28px; border-radius: 50%;
+  border: none; background: rgba(0,0,0,0.08); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.v3-decision-card-title { font-family: var(--v3-font-title); font-weight: 800; font-size: 16px; padding-right: 24px; }
+.v3-decision-card-body  { font-size: 13.5px; line-height: 1.5; opacity: 0.9; }
+.v3-decision-card-action {
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--v3-font-title); font-weight: 700; font-size: 13.5px;
+  padding: 10px 18px; border-radius: var(--v3-radius-pill);
+  border: none; cursor: pointer; text-decoration: none;
+}
+.v3-decision-card--lime  .v3-decision-card-action { background: var(--v3-text-on-lime); color: var(--v3-lime); }
+.v3-decision-card--cream .v3-decision-card-action { background: var(--v3-text-on-cream); color: var(--v3-cream); }
+.v3-decision-card--alert .v3-decision-card-action { background: var(--v3-orange); color: #fff; }
+
+/* ===================================================================
+   4. Chip
+   =================================================================== */
+.v3-chip-group { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.v3-chip-group::-webkit-scrollbar { display: none; }
+
+.v3-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  flex-shrink: 0;
+  font-family: var(--v3-font-label);
+  font-size: 12.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 7px 14px; border-radius: var(--v3-radius-pill);
+  background: rgba(230,255,242,0.06);
+  border: 1px solid var(--v3-border);
+  color: var(--v3-text-70);
+  cursor: default; white-space: nowrap;
+}
+button.v3-chip { cursor: pointer; font: inherit; }
+.v3-chip--active {
+  background: var(--v3-lime); border-color: var(--v3-lime); color: var(--v3-text-on-lime); font-weight: 700;
+}
+.v3-chip-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+  animation: v3ChipPulse 2s infinite;
+}
+@keyframes v3ChipPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+.v3-chip--verdict-lime   { background: rgba(200,245,96,0.14); border-color: transparent; color: var(--v3-lime); }
+.v3-chip--verdict-amber  { background: rgba(251,191,36,0.14); border-color: transparent; color: var(--v3-amber); }
+.v3-chip--verdict-orange { background: rgba(255,77,0,0.14);  border-color: transparent; color: var(--v3-orange); }
+
+/* ===================================================================
+   5. Dock
+   =================================================================== */
+.v3-dock {
+  position: fixed; left: 16px; right: 16px; bottom: 18px;
+  height: var(--v3-dock-height);
+  display: flex; align-items: center;
+  background: var(--v3-surface-1);
+  border: 1px solid var(--v3-border);
+  border-radius: var(--v3-radius-pill);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  z-index: 60;
+  transition: background var(--v3-t-sheet-in) var(--v3-ease), box-shadow var(--v3-t-sheet-in) var(--v3-ease);
+}
+.v3-dock-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  text-decoration: none; color: var(--v3-text-50);
+  min-height: var(--v3-touch-min);
+}
+.v3-dock-item .material-symbols-outlined { font-size: 22px; }
+.v3-dock-item-label { font-family: var(--v3-font-label); font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+.v3-dock-item--active { color: var(--v3-lime); }
+
+.v3-dock-fab {
+  width: var(--v3-fab-size); height: var(--v3-fab-size);
+  margin-bottom: 13px;
+  border-radius: 50%; border: none; cursor: pointer;
+  background: var(--v3-lime); color: var(--v3-text-on-lime);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 24px rgba(200,245,96,0.35);
+  transition: transform var(--v3-t-touch) var(--v3-ease), background var(--v3-t-sheet-in) var(--v3-ease), box-shadow var(--v3-t-sheet-in) var(--v3-ease);
+}
+.v3-dock-fab:active { transform: scale(0.9); }
+.v3-dock-fab .material-symbols-outlined { font-size: 26px; }
+
+.v3-dock--alert .v3-dock-fab {
+  background: var(--v3-orange); color: #fff;
+  box-shadow: 0 8px 24px rgba(255,77,0,0.4);
+}
+.v3-dock--alert .v3-dock-item--active { color: var(--v3-orange); }
+
+/* ===================================================================
+   6. Sheet
+   =================================================================== */
+.v3-sheet-root { position: fixed; inset: 0; z-index: 80; display: none; }
+.v3-sheet-root.v3-sheet-open { display: block; }
+
+.v3-scrim {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.55);
+  opacity: 0;
+  transition: opacity var(--v3-t-scrim) ease-out;
+}
+.v3-sheet-root.v3-sheet-open .v3-scrim { opacity: 1; }
+
+.v3-sheet {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  max-height: 88vh; overflow-y: auto;
+  background: var(--v3-surface-1);
+  border-top-left-radius: var(--v3-radius-sheet);
+  border-top-right-radius: var(--v3-radius-sheet);
+  border: 1px solid var(--v3-border);
+  border-bottom: none;
+  padding: 10px var(--v3-pad-screen) calc(24px + env(safe-area-inset-bottom, 0px));
+  transform: translateY(100%);
+  transition: transform var(--v3-t-sheet-out) var(--v3-ease);
+}
+.v3-sheet-root.v3-sheet-open .v3-sheet {
+  transform: translateY(0);
+  transition: transform var(--v3-t-sheet-in) var(--v3-ease);
+}
+
+.v3-sheet-handle-row { display: flex; justify-content: center; padding: 10px 0 6px; touch-action: none; cursor: grab; }
+.v3-sheet-handle { width: 40px; height: 4px; border-radius: 100px; background: var(--v3-border); }
+
+.v3-sheet-header { display: flex; align-items: flex-start; justify-content: space-between; padding-bottom: 14px; border-bottom: 1px solid var(--v3-border-soft); margin-bottom: 14px; }
+.v3-sheet-title { font-family: var(--v3-font-title); font-weight: 800; font-size: 18px; }
+.v3-sheet-subtitle { font-size: 12.5px; color: var(--v3-text-50); margin-top: 4px; }
+.v3-sheet-close {
+  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(230,255,242,0.06); border: 1px solid var(--v3-border);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+
+.v3-sheet-body { display: flex; flex-direction: column; gap: var(--v3-gap-block); }
+.v3-sheet-footnote { margin-top: 14px; font-size: 11.5px; color: var(--v3-text-40); text-align: center; }
+
+@media (min-width: 901px) {
+  .v3-dock { max-width: 420px; left: 50%; right: auto; transform: translateX(-50%); }
+  .v3-sheet { max-width: 480px; left: 50%; transform: translate(-50%, 100%); }
+  .v3-sheet-root.v3-sheet-open .v3-sheet { transform: translate(-50%, 0); }
+}

@@ -1,0 +1,91 @@
+---
+// Sheet — v3. Generaliza el patrón de AppSidebar.astro (#kcDrawer / .kcd-scrim / .kcd-sheet)
+// en un componente reutilizable por id. Reemplaza los modales centrados ad-hoc de la app
+// (index.astro hoy resuelve ~7 a mano). Nunca una hoja sin salida: el botón de cerrar
+// siempre se renderiza, no es opcional.
+interface Props {
+  id: string;
+  title: string;
+  subtitle?: string; // repetir aquí el presupuesto si la hoja lo tapa
+}
+
+const { id, title, subtitle } = Astro.props;
+---
+
+<div class="v3-sheet-root" id={id} aria-hidden="true">
+  <div class="v3-scrim" data-sheet-close={id}></div>
+  <div class="v3-sheet" role="dialog" aria-label={title}>
+    <div class="v3-sheet-handle-row" data-sheet-handle={id}>
+      <span class="v3-sheet-handle"></span>
+    </div>
+    <div class="v3-sheet-header">
+      <div>
+        <div class="v3-sheet-title">{title}</div>
+        {subtitle && <div class="v3-sheet-subtitle">{subtitle}</div>}
+      </div>
+      <button type="button" class="v3-sheet-close" data-sheet-close={id} aria-label="Cerrar">
+        <span class="material-symbols-outlined" style="font-size:18px">close</span>
+      </button>
+    </div>
+    <div class="v3-sheet-body"><slot /></div>
+    <div class="v3-sheet-footnote"><slot name="footnote" /></div>
+  </div>
+</div>
+
+<script is:inline>
+(function () {
+  if (window.__v3SheetInit) return;
+  window.__v3SheetInit = true;
+
+  var DRAG_CLOSE_THRESHOLD = 80;
+
+  window.KetoSheet = {
+    open: function (id) {
+      var root = document.getElementById(id);
+      if (!root) return;
+      root.classList.add('v3-sheet-open');
+      root.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    },
+    close: function (id) {
+      var root = document.getElementById(id);
+      if (!root) return;
+      root.classList.remove('v3-sheet-open');
+      root.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    },
+    toggle: function (id) {
+      var root = document.getElementById(id);
+      if (!root) return;
+      if (root.classList.contains('v3-sheet-open')) this.close(id);
+      else this.open(id);
+    }
+  };
+
+  document.addEventListener('click', function (e) {
+    var closer = e.target.closest('[data-sheet-close]');
+    if (closer) window.KetoSheet.close(closer.getAttribute('data-sheet-close'));
+  });
+
+  // Arrastrar el asa hacia abajo para cerrar
+  var drag = null;
+  document.addEventListener('pointerdown', function (e) {
+    var handle = e.target.closest('[data-sheet-handle]');
+    if (!handle) return;
+    drag = { id: handle.getAttribute('data-sheet-handle'), startY: e.clientY, panel: handle.closest('.v3-sheet') };
+    if (drag.panel) drag.panel.style.transition = 'none';
+  });
+  document.addEventListener('pointermove', function (e) {
+    if (!drag) return;
+    var dy = Math.max(0, e.clientY - drag.startY);
+    if (drag.panel) drag.panel.style.transform = 'translateY(' + dy + 'px)';
+  });
+  document.addEventListener('pointerup', function (e) {
+    if (!drag) return;
+    var dy = Math.max(0, e.clientY - drag.startY);
+    if (drag.panel) { drag.panel.style.transition = ''; drag.panel.style.transform = ''; }
+    if (dy > DRAG_CLOSE_THRESHOLD) window.KetoSheet.close(drag.id);
+    drag = null;
+  });
+})();
+</script>

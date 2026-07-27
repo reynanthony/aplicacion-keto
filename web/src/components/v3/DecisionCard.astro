@@ -1,0 +1,56 @@
+---
+// DecisionCard — v3. La acción del momento. Regla de diseño: máximo UNA por pantalla
+// (documentado aquí, no forzado por el componente — la página consumidora decide).
+interface Props {
+  id: string;
+  variant: 'lime' | 'cream' | 'alert';
+  title: string;
+  buttonLabel: string; // debe ser un verbo — si no puedes escribir el botón, no es una DecisionCard
+  buttonHref?: string;
+  dismissible?: boolean;
+}
+
+const { id, variant, title, buttonLabel, buttonHref, dismissible = true } = Astro.props;
+
+if (!buttonLabel) {
+  console.warn('[DecisionCard] buttonLabel (un verbo) es requerido — ver design_handoff_ketocore_v3/README.md');
+}
+---
+
+<div class={`v3-decision-card v3-decision-card--${variant}`} data-decision-id={id}>
+  {dismissible && (
+    <button type="button" class="v3-decision-card-close" data-decision-dismiss aria-label="Descartar">
+      <span class="material-symbols-outlined" style="font-size:16px">close</span>
+    </button>
+  )}
+
+  <div class="v3-decision-card-title">{title}</div>
+  <div class="v3-decision-card-body"><slot /></div>
+
+  {buttonHref ? (
+    <a href={buttonHref} class="v3-decision-card-action">{buttonLabel}</a>
+  ) : (
+    <button type="button" class="v3-decision-card-action" data-decision-action>{buttonLabel}</button>
+  )}
+</div>
+
+<script is:inline>
+(function () {
+  if (window.__v3DecisionCardInit) return;
+  window.__v3DecisionCardInit = true;
+
+  document.addEventListener('click', function (e) {
+    var card = e.target.closest('.v3-decision-card');
+    if (!card) return;
+    var id = card.getAttribute('data-decision-id');
+
+    if (e.target.closest('[data-decision-dismiss]')) {
+      card.dispatchEvent(new CustomEvent('v3:decision-dismiss', { bubbles: true, detail: { id: id } }));
+      return;
+    }
+    if (e.target.closest('[data-decision-action]')) {
+      card.dispatchEvent(new CustomEvent('v3:decision-action', { bubbles: true, detail: { id: id } }));
+    }
+  });
+})();
+</script>

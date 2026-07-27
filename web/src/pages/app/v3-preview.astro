@@ -1,0 +1,122 @@
+---
+// Página de previsualización manual del sistema v3 (Fase 1). NO forma parte del
+// rediseño ni se enlaza desde AppSidebar/Dock — solo alcanzable por URL directa
+// (/app/v3-preview) para verificar los 6 componentes en el navegador antes de
+// integrarlos en cualquier pantalla real. Ver plan de verificación del handoff.
+import AppLayout from '../../layouts/AppLayout.astro';
+import BudgetHeader from '../../components/v3/BudgetHeader.astro';
+import DataRow from '../../components/v3/DataRow.astro';
+import DecisionCard from '../../components/v3/DecisionCard.astro';
+import Chip from '../../components/v3/Chip.astro';
+import Dock from '../../components/v3/Dock.astro';
+import Sheet from '../../components/v3/Sheet.astro';
+---
+
+<AppLayout title="V3 Preview" authGuard={false}>
+  <style is:global>
+    /* Ocultar la navegación Editorial Bento para ver el Dock v3 aislado — solo en esta página de prueba */
+    #appSidebar, #kcTabbar, #kcDrawer { display: none !important; }
+  </style>
+
+  <div data-v3 style="background:var(--v3-surface-app); min-height:100vh;">
+  <main style="padding:var(--v3-pad-screen) var(--v3-pad-screen) 140px; display:flex; flex-direction:column; gap:28px;">
+    <section>
+      <p class="v3-eyebrow" style="margin-bottom:10px">BudgetHeader — hero</p>
+      <BudgetHeader used={12} limit={32} bonus={7} state="warn" variant="hero" />
+    </section>
+
+    <section>
+      <p class="v3-eyebrow" style="margin-bottom:10px">BudgetHeader — bar</p>
+      <BudgetHeader used={12} limit={25} variant="bar" label="Macros" />
+    </section>
+
+    <section>
+      <p class="v3-eyebrow" style="margin-bottom:10px">Chip</p>
+      <div class="v3-chip-group" data-group="demo-filter" style="margin-bottom:10px">
+        <Chip role="filter" label="Todos" active={true} group="demo-filter" />
+        <Chip role="filter" label="Desayuno" group="demo-filter" />
+        <Chip role="filter" label="Almuerzo" group="demo-filter" />
+        <Chip role="filter" label="Cena" group="demo-filter" />
+      </div>
+      <div class="v3-chip-group" style="margin-bottom:10px">
+        <Chip role="state" label="Cetosis 16h" pulsing={true} />
+        <Chip role="state" label="Sincronizando" pulsing={true} />
+      </div>
+      <div class="v3-chip-group">
+        <Chip role="verdict" label="Keto" verdict="lime" />
+        <Chip role="verdict" label="Moderar" verdict="amber" />
+        <Chip role="verdict" label="Evitar" verdict="orange" />
+      </div>
+    </section>
+
+    <section>
+      <p class="v3-eyebrow" style="margin-bottom:10px">DecisionCard</p>
+      <DecisionCard id="demo-decision" variant="lime" buttonLabel="Registrar" title="Tu siguiente comida">
+        Te sigue sobrando margen para después del entreno.
+      </DecisionCard>
+    </section>
+
+    <section>
+      <p class="v3-eyebrow" style="margin-bottom:10px">DataRow</p>
+      <div>
+        <DataRow id="row-1" leading="time" leadingValue="08:30" title="Huevos con aguacate" meta="Desayuno" value={3} valueUnit="g" />
+        <DataRow id="row-2" leading="verdict-bar" verdict="amber" title="Yogur griego" meta="Snack" value={6} valueUnit="g" />
+        <DataRow id="row-3" leading="check" title="Tomar magnesio" state="done" />
+        <DataRow id="row-4" leading="icon" leadingValue="lock" title="Cena (bloqueada por hoy)" state="blocked" value={0} valueUnit="g" />
+      </div>
+    </section>
+
+    <section style="display:flex; flex-direction:column; gap:10px;">
+      <p class="v3-eyebrow">Pruebas de DayBudget</p>
+      <button type="button" id="btnSeed" class="v3-decision-card-action" style="background:var(--v3-lime); color:var(--v3-text-on-lime); align-self:flex-start;">Sembrar datos + refrescar</button>
+      <button type="button" id="btnOver" class="v3-decision-card-action" style="background:var(--v3-orange); color:#fff; align-self:flex-start;">Forzar estado "over"</button>
+      <button type="button" id="btnReset" class="v3-decision-card-action" style="background:rgba(230,255,242,0.1); color:var(--v3-text); align-self:flex-start;">Reset</button>
+      <pre id="budgetOut" style="font-family:var(--v3-font-mono); font-size:11px; color:var(--v3-text-50); white-space:pre-wrap;"></pre>
+    </section>
+  </main>
+
+  <Sheet id="v3-sheet-registrar" title="Registrar" subtitle="Margen de hoy · 13 g netos">
+    <p style="font-size:13.5px; color:var(--v3-text-70)">Contenido de ejemplo de la hoja — el FAB del Dock la abre, nunca navega.</p>
+    <Fragment slot="footnote">Offline · sincroniza solo</Fragment>
+  </Sheet>
+
+  <Dock active="hoy" fabSheetId="v3-sheet-registrar" />
+  </div>
+
+  <script is:inline src="/app/utils.js"></script>
+  <script is:inline src="/app/modules/day-budget.js"></script>
+  <script is:inline>
+    function printBudget() {
+      var out = document.getElementById('budgetOut');
+      if (out && window.KetoBudget) out.textContent = JSON.stringify(window.KetoBudget.compute(), null, 2);
+    }
+    document.addEventListener('v3:budget-changed', printBudget);
+    document.addEventListener('DOMContentLoaded', printBudget);
+
+    document.getElementById('btnSeed').addEventListener('click', function () {
+      var today = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().slice(0, 10);
+      localStorage.setItem('keto_macros', JSON.stringify({ carbs: 30 }));
+      localStorage.setItem('mealPlan_' + today, JSON.stringify({
+        desayuno: [{ name: 'Huevos', carbs: 3 }],
+        almuerzo: [{ name: 'Ensalada', carbs: 5 }]
+      }));
+      window.KetoBudget.refresh();
+    });
+
+    document.getElementById('btnOver').addEventListener('click', function () {
+      var today = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().slice(0, 10);
+      localStorage.setItem('keto_macros', JSON.stringify({ carbs: 20 }));
+      localStorage.setItem('mealPlan_' + today, JSON.stringify({
+        desayuno: [{ name: 'Test', carbs: 25 }]
+      }));
+      window.KetoBudget.refresh();
+    });
+
+    document.getElementById('btnReset').addEventListener('click', function () {
+      var today = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().slice(0, 10);
+      localStorage.removeItem('mealPlan_' + today);
+      localStorage.removeItem('keto_macros');
+      window.KetoBudget.refresh();
+    });
+  </script>
+</AppLayout>

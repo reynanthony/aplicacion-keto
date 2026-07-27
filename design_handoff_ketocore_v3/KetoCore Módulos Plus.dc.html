@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&family=Archivo:wdth,wght@62..125,400..900&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #050a08; }
+  a { color: #c8f560; text-decoration: none; }
+  a:hover { color: #dcff8a; }
+  .msym { font-family: 'Material Symbols Outlined'; font-style: normal; line-height: 1; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; -webkit-font-smoothing: antialiased; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .fill { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+  .disp { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+  .arch { font-family: 'Archivo', sans-serif; font-variant-numeric: tabular-nums; }
+  .cond { font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: 0.08em; }
+  @keyframes mpPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+</style>
+</helmet>
+
+<section style="min-height:100vh;background:#050a08;color:#e6fff2;font-family:'Inter',sans-serif;padding:44px 36px 80px">
+
+  <div style="max-width:1500px;margin:0 auto 36px">
+    <div style="font-size:11px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:#c8f560;margin-bottom:12px">Turno 6 · los tres módulos plus</div>
+    <h1 class="disp" style="font-weight:900;font-size:44px;line-height:0.98;letter-spacing:-0.035em;max-width:960px">Tenías razón en el qué. El problema era el cómo.</h1>
+    <p style="font-size:15px;line-height:1.65;color:rgba(226,255,238,0.55);margin-top:16px;max-width:860px">Me retiro de "quitar los tres módulos" y me quedo con la mitad que sigue siendo cierta: <strong style="color:#e6fff2">no ganan por existir, ganan por estar conectados</strong>. Un módulo de entrenamiento que solo cuenta series compite contra apps gratis y dedicadas. Un módulo de entrenamiento que <strong style="color:#c8f560">sube tu presupuesto de carbos porque hoy entrenas fuerza</strong> no tiene competencia: ninguna app de fitness sabe tu cetosis, y ninguna app de keto sabe tu entreno. Aquí están los tres reescritos con esa regla.</p>
+  </div>
+
+  <div style="max-width:1500px;margin:0 auto;display:flex;flex-direction:column;gap:22px">
+
+    <!-- EL BUCLE -->
+    <div style="background:#0a1611;border:1px solid rgba(210,255,230,0.08);border-radius:28px;padding:30px">
+      <h2 class="disp" style="font-weight:800;font-size:22px;letter-spacing:-0.02em;margin-bottom:8px">El argumento del "todo en uno", hecho explícito</h2>
+      <p style="font-size:14px;line-height:1.6;color:rgba(226,255,238,0.5);max-width:860px;margin-bottom:24px">Cada módulo tiene que <strong style="color:#e6fff2">dar</strong> un dato al presupuesto y <strong style="color:#e6fff2">recibir</strong> otro. Si solo recibe, es un adorno; si solo da, es un formulario. Este es el bucle que justifica no tener cuatro apps.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px">
+        <div style="background:#0c2119;border-radius:22px;padding:22px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:13px"><span class="msym fill" style="font-size:21px;color:#c8f560">fitness_center</span><div class="disp" style="font-weight:800;font-size:16px">Entrenamiento</div></div>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <div style="display:flex;gap:10px"><span class="cond" style="font-size:11.5px;font-weight:800;color:#c8f560;flex-shrink:0;width:34px">Da</span><span style="font-size:13px;line-height:1.5;color:rgba(226,255,238,0.65)">gasto real, tipo de esfuerzo y ventana de glucógeno.</span></div>
+            <div style="display:flex;gap:10px"><span class="cond" style="font-size:11.5px;font-weight:800;color:rgba(226,255,238,0.4);flex-shrink:0;width:34px">Recibe</span><span style="font-size:13px;line-height:1.5;color:rgba(226,255,238,0.65)">si hoy tienes combustible para entrenar fuerte o toca sesión ligera.</span></div>
+            <div style="display:flex;gap:10px"><span class="cond" style="font-size:11.5px;font-weight:800;color:#c8f560;flex-shrink:0;width:34px">Efecto</span><span style="font-size:13px;line-height:1.5;color:#c8f560">el presupuesto de hoy sube de 25 a 32 g.</span></div>
+          </div>
+        </div>
+
+        <div style="background:#0c2119;border-radius:22px;padding:22px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:13px"><span class="msym fill" style="font-size:21px;color:#c8f560">medication</span><div class="disp" style="font-weight:800;font-size:16px">Suplementación</div></div>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <div style="display:flex;gap:10px"><span class="cond" style="font-size:11.5px;font-weight:800;color:#c8f560;flex-shrink:0;width:34px">Da</span><span style="font-size:13px;line-height:1.5;color:rgba(226,255,238,0.65)">electrolitos y micros tomados, con hora.</span></div>
+            <div style="display:flex;gap:10px"><span class="cond" style="font-size:11.5px;font-weight:800;color:rgba(226,255,238,0.4);flex-shrink:0;width:34px">Recibe</span><span style="font-size:13px;line-height:1.5;color:rgba(226,255,238,0.65)">tus síntomas, tus horas de ayuno, tus días de calambres, tu entreno de hoy.</span></div>
+            <div style="display:flex;gap:10px"><span class="cond" style="font-size:11.5px;font-weight:800;color:#c8f560;flex-shrink:0;width:34px">Efecto</span><span style="font-size:13px;line-height:1.5;color:#c8f560">"potasio antes de las 18:00" en vez de una lista genérica.</span></div>
+          </div>
+        </div>
+
+        <div style="background:#0c2119;border-radius:22px;padding:22px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:13px"><span class="msym fill" style="font-size:21px;color:#c8f560">groups</span><div class="disp" style="font-weight:800;font-size:16px">Comunidad</div></div>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <div style="display:flex;gap:10px"><span class="cond" style="font-size:11.5px;font-weight:800;color:#c8f560;flex-shrink:0;width:34px">Da</span><span style="font-size:13px;line-height:1.5;color:rgba(226,255,238,0.65)">recetas reales con macros ya calculados y soluciones a síntomas.</span></div>
+            <div style="display:flex;gap:10px"><span class="cond" style="font-size:11.5px;font-weight:800;color:rgba(226,255,238,0.4);flex-shrink:0;width:34px">Recibe</span><span style="font-size:13px;line-height:1.5;color:rgba(226,255,238,0.65)">tu día exacto del proceso, para emparejarte con quien va por donde tú.</span></div>
+            <div style="display:flex;gap:10px"><span class="cond" style="font-size:11.5px;font-weight:800;color:#c8f560;flex-shrink:0;width:34px">Efecto</span><span style="font-size:13px;line-height:1.5;color:#c8f560">registras una receta de la comunidad en un toque.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#f3ede3;border-radius:22px;padding:22px;color:#1a140e;margin-top:16px">
+        <div class="cond" style="font-size:12.5px;font-weight:700;color:rgba(26,20,14,0.55)">La frase de venta que sale de esto</div>
+        <div class="disp" style="font-weight:800;font-size:20px;letter-spacing:-0.02em;margin-top:5px">La única app que sabe que hoy entrenas, que ayer tuviste calambres y que llevas 18 días — y ajusta tu día por eso.</div>
+        <div style="font-size:13.5px;line-height:1.6;color:rgba(26,20,14,0.65);margin-top:8px">Cuatro apps sueltas no pueden decir eso. Ese es el verdadero "todo en uno": no la suma de funciones, sino los cruces que solo existen cuando los datos viven juntos.</div>
+      </div>
+    </div>
+
+    <!-- PANTALLAS -->
+    <div style="background:#0a1611;border:1px solid rgba(210,255,230,0.08);border-radius:28px;padding:30px">
+      <h2 class="disp" style="font-weight:800;font-size:22px;letter-spacing:-0.02em;margin-bottom:26px">Los tres módulos, conectados</h2>
+
+      <div style="display:flex;gap:26px;flex-wrap:wrap">
+
+        <!-- HOY con presupuesto ajustado -->
+        <div style="width:390px">
+          <div style="width:390px;height:844px;border-radius:40px;overflow:hidden;position:relative;background:#071410;border:1px solid rgba(210,255,230,0.1);box-shadow:0 34px 80px rgba(0,0,0,0.65);display:flex;flex-direction:column">
+            <div style="flex-shrink:0;padding:14px 22px 0;display:flex;align-items:center;justify-content:space-between"><span class="arch" style="font-weight:700;font-size:13px">9:41</span><div style="display:flex;gap:6px"><span class="msym fill" style="font-size:15px">signal_cellular_alt</span><span class="msym fill" style="font-size:15px">battery_full</span></div></div>
+
+            <div style="flex-shrink:0;padding:16px 20px 14px;display:flex;align-items:center;justify-content:space-between">
+              <div><div class="cond" style="font-size:12px;font-weight:700;color:rgba(226,255,238,0.45)">Jueves 3 jul · día 19</div><div class="disp" style="font-weight:800;font-size:18px;letter-spacing:-0.02em;margin-top:2px">María</div></div>
+              <div style="height:32px;padding:0 11px;border-radius:100px;background:rgba(200,245,96,0.14);display:flex;align-items:center;gap:5px"><span class="msym fill" style="font-size:16px;color:#c8f560">bolt</span><span class="arch" style="font-weight:800;font-size:12px;color:#c8f560">19</span></div>
+            </div>
+
+            <div style="flex:1;overflow:hidden;padding:0 20px 4px;display:flex;flex-direction:column;gap:13px">
+              <div style="flex-shrink:0;background:#0c2119;border-radius:26px;padding:20px;position:relative;overflow:hidden">
+                <div style="position:absolute;right:-50px;bottom:-60px;width:190px;height:190px;border-radius:50%;background:rgba(200,245,96,0.05)"></div>
+                <div style="position:relative;display:flex;align-items:center;justify-content:space-between">
+                  <span class="cond" style="font-size:13px;font-weight:700;color:rgba(226,255,238,0.5)">Carbos netos disponibles</span>
+                  <span style="display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:100px;background:#c8f560"><span class="msym fill" style="font-size:13px;color:#0a1f14">fitness_center</span><span class="cond" style="font-size:11.5px;font-weight:800;color:#0a1f14">+7 g</span></span>
+                </div>
+                <div style="position:relative;display:flex;align-items:baseline;gap:10px;margin-top:4px">
+                  <span class="arch" style="font-weight:900;font-size:76px;line-height:0.82;color:#c8f560;font-stretch:125%;letter-spacing:-0.04em">15</span>
+                  <div style="padding-bottom:8px"><div class="arch" style="font-size:18px;font-weight:800;color:rgba(226,255,238,0.5)">g</div><div class="cond" style="font-size:12.5px;font-weight:600;color:rgba(226,255,238,0.4)">de 32</div></div>
+                </div>
+                <div style="position:relative;height:9px;border-radius:100px;background:rgba(210,255,230,0.09);overflow:hidden;margin-top:14px;display:flex"><div style="width:53%;height:100%;background:linear-gradient(90deg,#c8f560,#84cc16)"></div><div style="width:22%;height:100%;background:rgba(200,245,96,0.28)"></div></div>
+                <div style="position:relative;display:flex;justify-content:space-between;margin-top:8px"><span class="cond" style="font-size:12px;font-weight:600;color:rgba(226,255,238,0.4)">17 usados</span><span class="cond" style="font-size:12px;font-weight:700;color:#c8f560">margen de entreno</span></div>
+              </div>
+
+              <div style="flex-shrink:0;background:#f3ede3;border-radius:22px;padding:17px 18px;color:#1a140e">
+                <div class="cond" style="font-size:12.5px;font-weight:700;color:rgba(26,20,14,0.55)">Por qué tienes 7 g más hoy</div>
+                <div style="font-size:13.5px;line-height:1.55;color:rgba(26,20,14,0.72);margin-top:6px">Entrenas fuerza a las 19:00. Tu depósito de glucógeno acepta esos carbos sin sacarte de cetosis — úsalos <strong>después</strong> de la sesión, no antes.</div>
+              </div>
+
+              <div style="flex-shrink:0;background:#0c2119;border-radius:22px;padding:16px 17px">
+                <div style="display:flex;align-items:center;gap:12px">
+                  <div style="width:44px;height:44px;border-radius:100px;background:rgba(200,245,96,0.14);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="font-size:22px;color:#c8f560">fitness_center</span></div>
+                  <div style="flex:1;min-width:0"><div class="cond" style="font-size:12px;font-weight:700;color:rgba(226,255,238,0.45)">Hoy · 19:00</div><div class="disp" style="font-weight:800;font-size:15px">Fuerza · tren superior</div></div>
+                  <span class="arch" style="font-size:13px;font-weight:800;color:#c8f560">32 min</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;background:#0f2b20;border-radius:14px;padding:11px 13px;margin-top:12px">
+                  <span class="msym fill" style="font-size:18px;color:#c8f560;flex-shrink:0">medication</span>
+                  <span style="font-size:12.5px;line-height:1.45;color:rgba(226,255,238,0.7);flex:1">Sodio + potasio 45 min antes: los jueves de fuerza son tus días de calambres.</span>
+                </div>
+              </div>
+
+              <div style="flex-shrink:0;display:flex;align-items:center;gap:12px;background:#0c2119;border-radius:20px;padding:14px 16px">
+                <span class="msym fill" style="font-size:20px;color:#a78bfa;flex-shrink:0">psychology</span>
+                <p style="font-size:12.5px;line-height:1.5;color:rgba(226,255,238,0.68);flex:1">Cena con 12 g después del entreno. Ana P. hizo lo mismo en su día 19.</p>
+                <span class="msym" style="font-size:19px;color:rgba(226,255,238,0.3)">chevron_right</span>
+              </div>
+            </div>
+
+            <div style="flex-shrink:0;height:88px;padding:0 16px 18px;background:linear-gradient(to top,#071410 55%,rgba(7,20,16,0));display:flex;align-items:flex-end">
+              <div style="width:100%;height:62px;border-radius:100px;background:#0c2119;border:1px solid rgba(210,255,230,0.1);display:flex;align-items:center;padding:0 8px">
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:#c8f560"><span class="msym fill" style="font-size:21px">cottage</span><span class="cond" style="font-size:11px;font-weight:700">Hoy</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(226,255,238,0.4)"><span class="msym" style="font-size:21px">donut_small</span><span class="cond" style="font-size:11px;font-weight:600">Macros</span></div>
+                <div style="flex:1;display:flex;justify-content:center"><div style="width:56px;height:56px;border-radius:100px;background:#c8f560;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(200,245,96,0.35);margin-bottom:13px"><span class="msym fill" style="font-size:28px;color:#0a1f14">add</span></div></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(226,255,238,0.4)"><span class="msym" style="font-size:21px">event_note</span><span class="cond" style="font-size:11px;font-weight:600">Plan</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(226,255,238,0.4)"><span class="msym" style="font-size:21px">person</span><span class="cond" style="font-size:11px;font-weight:600">Yo</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:14px"><div class="disp" style="font-weight:800;font-size:14px">La prueba de que están conectados</div><div style="font-size:12.5px;line-height:1.5;color:rgba(226,255,238,0.45);margin-top:4px">El presupuesto no es fijo: <strong style="color:#c8f560">25 → 32 g porque hoy entrenas</strong>, con la explicación y el aviso de electrolitos derivado de tu histórico. Aquí es donde los tres módulos se pagan solos.</div></div>
+        </div>
+
+        <!-- ENTRENAR -->
+        <div style="width:390px">
+          <div style="width:390px;height:844px;border-radius:40px;overflow:hidden;position:relative;background:#071410;border:1px solid rgba(210,255,230,0.1);box-shadow:0 34px 80px rgba(0,0,0,0.65);display:flex;flex-direction:column">
+            <div style="flex-shrink:0;padding:14px 22px 0;display:flex;align-items:center;justify-content:space-between"><span class="arch" style="font-weight:700;font-size:13px">9:41</span><div style="display:flex;gap:6px"><span class="msym fill" style="font-size:15px">signal_cellular_alt</span><span class="msym fill" style="font-size:15px">battery_full</span></div></div>
+
+            <div style="flex-shrink:0;padding:14px 20px 14px;border-bottom:1px solid rgba(210,255,230,0.07)">
+              <div style="display:flex;align-items:center;gap:12px"><span class="msym" style="font-size:21px;color:rgba(226,255,238,0.5)">arrow_back</span><h3 class="disp" style="font-weight:800;font-size:25px;letter-spacing:-0.03em">Entrenar</h3></div>
+              <div style="display:flex;align-items:center;gap:10px;margin-top:13px">
+                <div style="flex:1;height:6px;border-radius:100px;background:rgba(210,255,230,0.09);overflow:hidden"><div style="height:100%;width:53%;background:linear-gradient(90deg,#c8f560,#84cc16)"></div></div>
+                <span class="arch" style="font-size:12.5px;font-weight:800;color:#c8f560">15 g</span>
+              </div>
+            </div>
+
+            <div style="flex:1;overflow:hidden;padding:14px 20px 0;display:flex;flex-direction:column;gap:13px">
+              <div style="flex-shrink:0;background:#c8f560;border-radius:24px;padding:20px;color:#0a1f14">
+                <div style="display:flex;align-items:center;justify-content:space-between"><span class="cond" style="font-weight:700;font-size:13px;color:rgba(10,31,20,0.65)">Hoy · fuerza tren superior</span><span class="msym fill" style="font-size:20px">fitness_center</span></div>
+                <div class="disp" style="font-weight:900;font-size:24px;letter-spacing:-0.025em;margin-top:10px">6 ejercicios · 32 min</div>
+                <div style="display:flex;gap:8px;margin-top:12px">
+                  <span style="padding:6px 11px;border-radius:100px;background:rgba(10,31,20,0.12)"><span class="cond" style="font-size:12px;font-weight:700">~280 kcal</span></span>
+                  <span style="padding:6px 11px;border-radius:100px;background:#0a1f14"><span class="cond" style="font-size:12px;font-weight:700;color:#c8f560">+7 g de margen</span></span>
+                </div>
+                <div style="height:50px;border-radius:100px;background:#0a1f14;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px"><span class="msym fill" style="font-size:20px;color:#c8f560">play_arrow</span><span class="disp" style="font-weight:800;font-size:15px;color:#c8f560">Empezar</span></div>
+              </div>
+
+              <div style="flex-shrink:0;background:#0c2119;border-radius:22px;padding:17px">
+                <div class="cond" style="font-size:12.5px;font-weight:700;color:rgba(226,255,238,0.45);margin-bottom:12px">Puedes entrenar fuerte hoy</div>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <div style="display:flex;align-items:center;gap:11px"><span class="msym fill" style="font-size:19px;color:#c8f560">check_circle</span><span style="flex:1;font-size:13px;color:rgba(226,255,238,0.7)">19 días keto-adaptada · usa grasa como combustible</span></div>
+                  <div style="display:flex;align-items:center;gap:11px"><span class="msym fill" style="font-size:19px;color:#c8f560">check_circle</span><span style="flex:1;font-size:13px;color:rgba(226,255,238,0.7)">Proteína al 89 % · músculo protegido</span></div>
+                  <div style="display:flex;align-items:center;gap:11px"><span class="msym fill" style="font-size:19px;color:#fbbf24">error</span><span style="flex:1;font-size:13px;color:rgba(226,255,238,0.7)">Ayer dormiste 5 h 40 · baja una serie por ejercicio</span></div>
+                </div>
+              </div>
+
+              <div style="flex-shrink:0;background:#0c2119;border-radius:22px;padding:17px;display:flex;align-items:center;gap:14px">
+                <div style="width:48px;height:48px;border-radius:100px;background:rgba(200,245,96,0.14);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="font-size:23px;color:#c8f560">monitor_heart</span></div>
+                <div style="flex:1"><div class="cond" style="font-size:12px;font-weight:700;color:rgba(226,255,238,0.45)">Zona keto-adaptada</div><div class="arch" style="font-weight:900;font-size:22px;font-stretch:110%;margin-top:2px">118 – 138 <span class="cond" style="font-size:13px;font-weight:600;color:rgba(226,255,238,0.45)">ppm</span></div></div>
+              </div>
+
+              <div style="flex-shrink:0">
+                <div class="cond" style="font-size:12.5px;font-weight:700;color:rgba(226,255,238,0.4);margin-bottom:9px">Esta semana</div>
+                <div style="display:flex;flex-direction:column">
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(210,255,230,0.06)"><span class="cond" style="font-size:12px;color:rgba(226,255,238,0.4);width:36px">Mar</span><span style="flex:1;font-size:13px;font-weight:500">Fuerza · pierna</span><span class="mono" style="font-size:11.5px;font-weight:700;color:#c8f560">+7 g</span></div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0"><span class="cond" style="font-size:12px;color:rgba(226,255,238,0.4);width:36px">Jue</span><span style="flex:1;font-size:13px;font-weight:500;color:#c8f560">Fuerza · tren superior</span><span class="mono" style="font-size:11.5px;font-weight:700;color:#c8f560">+7 g</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div style="flex-shrink:0;height:88px;padding:0 16px 18px;background:linear-gradient(to top,#071410 55%,rgba(7,20,16,0));display:flex;align-items:flex-end">
+              <div style="width:100%;height:62px;border-radius:100px;background:#0c2119;border:1px solid rgba(210,255,230,0.1);display:flex;align-items:center;padding:0 8px">
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(226,255,238,0.4)"><span class="msym" style="font-size:21px">cottage</span><span class="cond" style="font-size:11px;font-weight:600">Hoy</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(226,255,238,0.4)"><span class="msym" style="font-size:21px">donut_small</span><span class="cond" style="font-size:11px;font-weight:600">Macros</span></div>
+                <div style="flex:1;display:flex;justify-content:center"><div style="width:56px;height:56px;border-radius:100px;background:#c8f560;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(200,245,96,0.35);margin-bottom:13px"><span class="msym fill" style="font-size:28px;color:#0a1f14">add</span></div></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(226,255,238,0.4)"><span class="msym" style="font-size:21px">event_note</span><span class="cond" style="font-size:11px;font-weight:600">Plan</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:#c8f560"><span class="msym fill" style="font-size:21px">person</span><span class="cond" style="font-size:11px;font-weight:700">Yo</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:14px"><div class="disp" style="font-weight:800;font-size:14px">Entrenamiento · da y recibe</div><div style="font-size:12.5px;line-height:1.5;color:rgba(226,255,238,0.45);margin-top:4px">Da margen de carbos; recibe el veredicto de si hoy puedes ir fuerte (adaptación, proteína, sueño). Ninguna app de fitness puede hacer esa segunda mitad.</div></div>
+        </div>
+
+        <!-- SUPLEMENTOS -->
+        <div style="width:390px">
+          <div style="width:390px;height:844px;border-radius:40px;overflow:hidden;position:relative;background:#071410;border:1px solid rgba(210,255,230,0.1);box-shadow:0 34px 80px rgba(0,0,0,0.65);display:flex;flex-direction:column">
+            <div style="flex-shrink:0;padding:14px 22px 0;display:flex;align-items:center;justify-content:space-between"><span class="arch" style="font-weight:700;font-size:13px">9:41</span><div style="display:flex;gap:6px"><span class="msym fill" style="font-size:15px">signal_cellular_alt</span><span class="msym fill" style="font-size:15px">battery_full</span></div></div>
+
+            <div style="flex-shrink:0;padding:14px 20px 14px">
+              <div style="display:flex;align-items:center;gap:12px"><span class="msym" style="font-size:21px;color:rgba(226,255,238,0.5)">arrow_back</span><h3 class="disp" style="font-weight:800;font-size:25px;letter-spacing:-0.03em">Suplementos</h3></div>
+            </div>
+
+            <div style="flex:1;overflow:hidden;padding:0 20px 0;display:flex;flex-direction:column;gap:13px">
+              <div style="flex-shrink:0;background:#f3ede3;border-radius:24px;padding:20px;color:#1a140e">
+                <div style="display:flex;align-items:center;justify-content:space-between">
+                  <div><div class="cond" style="font-size:12.5px;font-weight:700;color:rgba(26,20,14,0.55)">Ahora · 18:15</div><div class="disp" style="font-weight:800;font-size:19px;letter-spacing:-0.02em;margin-top:3px">Sodio + potasio</div></div>
+                  <div style="width:48px;height:48px;border-radius:100px;background:rgba(26,20,14,0.09);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="font-size:24px;color:#c23400">water_drop</span></div>
+                </div>
+                <div style="font-size:13px;line-height:1.5;color:rgba(26,20,14,0.68);margin-top:9px">45 min antes de tu fuerza de las 19:00. Los 3 días que tuviste calambres eran jueves de pierna sin electrolitos.</div>
+                <div style="display:flex;gap:9px;margin-top:15px">
+                  <div style="flex:1;height:44px;border-radius:100px;background:#1a140e;display:flex;align-items:center;justify-content:center;gap:7px"><span class="msym fill" style="font-size:18px;color:#f3ede3">check</span><span class="cond" style="font-weight:700;font-size:14px;color:#f3ede3">Marcar tomado</span></div>
+                  <div style="width:48px;height:44px;border-radius:100px;background:rgba(26,20,14,0.09);display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:20px;color:rgba(26,20,14,0.5)">snooze</span></div>
+                </div>
+              </div>
+
+              <div style="flex-shrink:0">
+                <div class="cond" style="font-size:12.5px;font-weight:700;color:rgba(226,255,238,0.4);margin-bottom:8px">Hoy · 2 de 3</div>
+                <div style="display:flex;flex-direction:column">
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(210,255,230,0.06);opacity:0.5"><span class="msym fill" style="font-size:19px;color:#c8f560">check_circle</span><span style="flex:1;font-size:13px;font-weight:500;text-decoration:line-through">Magnesio 400 mg</span><span class="mono" style="font-size:11px;color:rgba(226,255,238,0.45)">08:00</span></div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(210,255,230,0.06);opacity:0.5"><span class="msym fill" style="font-size:19px;color:#c8f560">check_circle</span><span style="flex:1;font-size:13px;font-weight:500;text-decoration:line-through">Omega-3 · 2 g</span><span class="mono" style="font-size:11px;color:rgba(226,255,238,0.45)">13:40</span></div>
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0"><span class="msym" style="font-size:19px;color:#c8f560">radio_button_unchecked</span><span style="flex:1;font-size:13px;font-weight:600">Sodio + potasio</span><span class="mono" style="font-size:11px;color:#c8f560">18:15</span></div>
+                </div>
+              </div>
+
+              <div style="flex-shrink:0;background:#0c2119;border-radius:22px;padding:17px">
+                <div class="cond" style="font-size:12.5px;font-weight:700;color:rgba(226,255,238,0.45);margin-bottom:12px">Detectado en tus 19 días</div>
+                <div style="display:flex;flex-direction:column;gap:11px">
+                  <div style="display:flex;gap:11px"><span class="msym fill" style="font-size:18px;color:#c8f560;flex-shrink:0">insights</span><div style="font-size:12.5px;line-height:1.45;color:rgba(226,255,238,0.68)"><strong style="color:#e6fff2">Calambres:</strong> 3 de 3 en días de fuerza sin sodio. Correlación clara.</div></div>
+                  <div style="display:flex;gap:11px"><span class="msym fill" style="font-size:18px;color:#c8f560;flex-shrink:0">insights</span><div style="font-size:12.5px;line-height:1.45;color:rgba(226,255,238,0.68)"><strong style="color:#e6fff2">Bajón de las 16:00:</strong> desaparece los días con MCT en el café.</div></div>
+                  <div style="display:flex;gap:11px"><span class="msym fill" style="font-size:18px;color:#fbbf24;flex-shrink:0">error</span><div style="font-size:12.5px;line-height:1.45;color:rgba(226,255,238,0.68)"><strong style="color:#e6fff2">Magnesio:</strong> lo olvidas los fines de semana, cuando peor duermes.</div></div>
+                </div>
+              </div>
+
+              <div style="flex-shrink:0;display:flex;align-items:center;gap:10px;background:rgba(255,77,0,0.08);border:1px solid rgba(255,77,0,0.2);border-radius:16px;padding:12px 14px">
+                <span class="msym" style="font-size:18px;color:#ff7a3c;flex-shrink:0">medical_information</span>
+                <p style="font-size:11.5px;line-height:1.45;color:rgba(226,255,238,0.6)">Orientativo. Consulta con un profesional antes de suplementar.</p>
+              </div>
+            </div>
+
+            <div style="flex-shrink:0;height:88px;padding:0 16px 18px;background:linear-gradient(to top,#071410 55%,rgba(7,20,16,0));display:flex;align-items:flex-end">
+              <div style="width:100%;height:62px;border-radius:100px;background:#0c2119;border:1px solid rgba(210,255,230,0.1);display:flex;align-items:center;padding:0 8px">
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(226,255,238,0.4)"><span class="msym" style="font-size:21px">cottage</span><span class="cond" style="font-size:11px;font-weight:600">Hoy</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(226,255,238,0.4)"><span class="msym" style="font-size:21px">donut_small</span><span class="cond" style="font-size:11px;font-weight:600">Macros</span></div>
+                <div style="flex:1;display:flex;justify-content:center"><div style="width:56px;height:56px;border-radius:100px;background:#c8f560;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(200,245,96,0.35);margin-bottom:13px"><span class="msym fill" style="font-size:28px;color:#0a1f14">add</span></div></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(226,255,238,0.4)"><span class="msym" style="font-size:21px">event_note</span><span class="cond" style="font-size:11px;font-weight:600">Plan</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:#c8f560"><span class="msym fill" style="font-size:21px">person</span><span class="cond" style="font-size:11px;font-weight:700">Yo</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:14px"><div class="disp" style="font-weight:800;font-size:14px">Suplementación · deja de ser una lista
+</div><div style="font-size:12.5px;line-height:1.5;color:rgba(226,255,238,0.45);margin-top:4px">Da lo tomado; recibe tus calambres, tu ayuno y tu entreno. La recomendación cita la evidencia de <em>tus</em> 19 días, no un folleto.</div></div>
+        </div>
+
+        <!-- COMUNIDAD -->
+        <div style="width:390px">
+          <div style="width:390px;height:844px;border-radius:40px;overflow:hidden;position:relative;background:#071410;border:1px solid rgba(210,255,230,0.1);box-shadow:0 34px 80px rgba(0,0,0,0.65);display:flex;flex-direction:column">
+            <div style="flex-shrink:0;padding:14px 22px 0;display:flex;align-items:center;justify-content:space-between"><span class="arch" style="font-weight:700;font-size:13px">9:41</span><div style="display:flex;gap:6px"><span class="msym fill" style="font-size:15px">signal_cellular_alt</span><span class="msym fill" style="font-size:15px">battery_full</span></div></div>
+
+            <div style="flex-shrink:0;padding:14px 20px 14px">
+              <div style="display:flex;align-items:center;gap:12px"><span class="msym" style="font-size:21px;color:rgba(226,255,238,0.5)">arrow_back</span><h3 class="disp" style="font-weight:800;font-size:25px;letter-spacing:-0.03em">Tu cohorte</h3></div>
+              <div class="cond" style="font-size:13px;font-weight:600;color:rgba(226,255,238,0.45);margin-top:4px">312 personas entre el día 15 y el 25</div>
+            </div>
+
+            <div style="flex:1;overflow:hidden;padding:0 20px 0;display:flex;flex-direction:column;gap:13px">
+              <div style="flex-shrink:0;background:#c8f560;border-radius:24px;padding:19px;color:#0a1f14">
+                <div style="display:flex;align-items:center;justify-content:space-between"><span class="cond" style="font-weight:700;font-size:12.5px;color:rgba(10,31,20,0.65)">La pregunta de tu día 19</span><span class="msym fill" style="font-size:19px">forum</span></div>
+                <div class="disp" style="font-weight:800;font-size:18px;letter-spacing:-0.02em;margin-top:8px;line-height:1.2">"¿A alguien más se le estancó el peso justo en la semana 3?"</div>
+                <div class="cond" style="font-size:12.5px;font-weight:600;color:rgba(10,31,20,0.6);margin-top:8px">48 respuestas de gente que ya pasó por aquí</div>
+              </div>
+
+              <div style="flex-shrink:0;background:#0c2119;border-radius:22px;padding:17px">
+                <div style="display:flex;align-items:center;gap:11px">
+                  <div style="width:38px;height:38px;border-radius:100px;background:linear-gradient(135deg,#22c55e,#0891b2);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;flex-shrink:0">AN</div>
+                  <div style="flex:1;min-width:0"><div class="disp" style="font-weight:700;font-size:13.5px">Ana P.</div><div class="cond" style="font-size:12px;color:rgba(226,255,238,0.45)">Día 24 · misma cohorte</div></div>
+                  <span style="padding:5px 10px;border-radius:100px;background:rgba(200,245,96,0.16)"><span class="cond" style="font-size:11.5px;font-weight:700;color:#c8f560">Resuelto</span></span>
+                </div>
+                <p style="font-size:13px;line-height:1.55;color:rgba(226,255,238,0.75);margin-top:11px">A mí igual. Subí la proteína a 1.8 g/kg y dejé de pesarme a diario. Se movió en 5 días.</p>
+                <div style="display:flex;align-items:center;gap:11px;background:#0f2b20;border-radius:14px;padding:11px 13px;margin-top:12px">
+                  <div style="width:36px;height:36px;border-radius:12px;background:rgba(200,245,96,0.14);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="font-size:19px;color:#c8f560">set_meal</span></div>
+                  <div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:700">Su cena de ese día</div><div class="mono" style="font-size:10.5px;color:rgba(226,255,238,0.45);margin-top:2px">520 KCAL · 4.0 NETOS · 42 G PROT</div></div>
+                  <div style="width:32px;height:32px;border-radius:100px;background:#c8f560;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="font-size:18px;color:#0a1f14">add</span></div>
+                </div>
+              </div>
+
+              <div style="flex-shrink:0;background:#0c2119;border-radius:22px;padding:17px">
+                <div class="cond" style="font-size:12.5px;font-weight:700;color:rgba(226,255,238,0.45);margin-bottom:11px">Reto · 30 días sin azúcar</div>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <div style="display:flex;align-items:center;gap:11px"><span class="arch" style="font-weight:900;font-size:13px;color:rgba(226,255,238,0.4);width:22px">1</span><span style="flex:1;font-size:13px;font-weight:500">Marta G.</span><span class="mono" style="font-size:12px;font-weight:800;color:rgba(226,255,238,0.6)">98 %</span></div>
+                  <div style="display:flex;align-items:center;gap:11px;padding:9px 11px;margin:0 -11px;border-radius:13px;background:rgba(200,245,96,0.1)"><span class="arch" style="font-weight:900;font-size:13px;color:#c8f560;width:22px">14</span><span style="flex:1;font-size:13px;font-weight:800">Tú</span><span class="mono" style="font-size:12px;font-weight:800;color:#c8f560">94 %</span></div>
+                  <div style="display:flex;align-items:center;gap:11px"><span class="arch" style="font-weight:900;font-size:13px;color:rgba(226,255,238,0.4);width:22px">15</span><span style="flex:1;font-size:13px;font-weight:500">Carlos L.</span><span class="mono" style="font-size:12px;font-weight:800;color:rgba(226,255,238,0.6)">93 %</span></div>
+                </div>
+              </div>
+
+              <div style="flex-shrink:0;display:flex;align-items:center;gap:11px;background:#0c2119;border-radius:18px;padding:13px 15px">
+                <span class="msym fill" style="font-size:19px;color:#a78bfa;flex-shrink:0">shield</span>
+                <p style="font-size:11.5px;line-height:1.45;color:rgba(226,255,238,0.6);flex:1">Sin datos médicos ni peso visibles. Solo el día del proceso y lo que compartes tú.</p>
+              </div>
+            </div>
+
+            <div style="flex-shrink:0;height:88px;padding:0 16px 18px;background:linear-gradient(to top,#071410 55%,rgba(7,20,16,0));display:flex;align-items:flex-end">
+              <div style="width:100%;height:62px;border-radius:100px;background:#0c2119;border:1px solid rgba(210,255,230,0.1);display:flex;align-items:center;padding:0 8px">
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(226,255,238,0.4)"><span class="msym" style="font-size:21px">cottage</span><span class="cond" style="font-size:11px;font-weight:600">Hoy</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(226,255,238,0.4)"><span class="msym" style="font-size:21px">donut_small</span><span class="cond" style="font-size:11px;font-weight:600">Macros</span></div>
+                <div style="flex:1;display:flex;justify-content:center"><div style="width:56px;height:56px;border-radius:100px;background:#c8f560;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(200,245,96,0.35);margin-bottom:13px"><span class="msym fill" style="font-size:28px;color:#0a1f14">add</span></div></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(226,255,238,0.4)"><span class="msym" style="font-size:21px">event_note</span><span class="cond" style="font-size:11px;font-weight:600">Plan</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:#c8f560"><span class="msym fill" style="font-size:21px">person</span><span class="cond" style="font-size:11px;font-weight:700">Yo</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:14px"><div class="disp" style="font-weight:800;font-size:14px">Comunidad · cohorte, no feed</div><div style="font-size:12.5px;line-height:1.5;color:rgba(226,255,238,0.45);margin-top:4px">Deja de ser un foro genérico: te empareja por <strong style="color:#c8f560">día del proceso</strong> y cada receta compartida se registra en un toque con sus macros. Eso es lo que ninguna comunidad externa puede dar.</div></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="background:#0a1611;border:1px solid rgba(210,255,230,0.08);border-radius:28px;padding:30px">
+      <h2 class="disp" style="font-weight:800;font-size:20px;letter-spacing:-0.02em;margin-bottom:14px">Dónde sigo sin darte la razón</h2>
+      <div style="display:flex;flex-direction:column;gap:12px;font-size:13.5px;line-height:1.6;color:rgba(226,255,238,0.62);max-width:900px">
+        <div style="display:flex;gap:11px"><span class="msym" style="font-size:19px;color:#ff7a3c;flex-shrink:0">arrow_right_alt</span><span><strong style="color:#e6fff2">Comunidad tiene un coste que no es de diseño:</strong> moderación. Con datos de salud, un consejo peligroso en un hilo es un problema legal. Sale a producción con reglas, reportes y alguien mirando, o no sale.</span></div>
+        <div style="display:flex;gap:11px"><span class="msym" style="font-size:19px;color:#ff7a3c;flex-shrink:0">arrow_right_alt</span><span><strong style="color:#e6fff2">Entrenamiento no debe intentar ser completo.</strong> No compitas en biblioteca de ejercicios ni en vídeos: compite en la conexión con el presupuesto. Seis rutinas bien hechas ganan a doscientas mediocres.</span></div>
+        <div style="display:flex;gap:11px"><span class="msym" style="font-size:19px;color:#ff7a3c;flex-shrink:0">arrow_right_alt</span><span><strong style="color:#e6fff2">Cada cruce hay que ganárselo con datos.</strong> "+7 g porque entrenas fuerza" tiene que ser defendible; si es un número inventado, el usuario avanzado lo detecta y pierdes la credibilidad de toda la app.</span></div>
+        <div style="display:flex;gap:11px"><span class="msym" style="font-size:19px;color:#c8f560;flex-shrink:0">arrow_right_alt</span><span><strong style="color:#e6fff2">Y donde sí te la doy del todo:</strong> el orden. Los tres módulos van <em>después</em> del núcleo, pero ya diseñados así desde el principio, porque si el presupuesto no nace variable, luego no se le puede añadir.</span></div>
+      </div>
+    </div>
+
+  </div>
+</section></x-dc>
+</body>
+</html>

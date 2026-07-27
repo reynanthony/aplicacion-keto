@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&family=Archivo:wdth,wght@62..125,400..900&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #050a08; }
+  a { color: #c8f560; text-decoration: none; }
+  a:hover { color: #dcff8a; }
+  .msym { font-family: 'Material Symbols Outlined'; font-style: normal; line-height: 1; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; -webkit-font-smoothing: antialiased; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .fill { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+  .disp { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+  .arch { font-family: 'Archivo', sans-serif; font-variant-numeric: tabular-nums; }
+  .cond { font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: 0.08em; }
+</style>
+</helmet>
+
+<section style="min-height:100vh;background:#050a08;color:#e6fff2;font-family:'Inter',sans-serif;padding:44px 36px 80px">
+
+  <div style="max-width:1400px;margin:0 auto 40px">
+    <div style="font-size:11px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:#c8f560;margin-bottom:12px">Turno 5 · sistema y alcance</div>
+    <h1 class="disp" style="font-weight:900;font-size:44px;line-height:0.98;letter-spacing:-0.035em;max-width:900px">Seis componentes cubren las 19 pantallas.</h1>
+    <p style="font-size:15px;line-height:1.65;color:rgba(226,255,238,0.55);margin-top:16px;max-width:840px">Los puntos 3 y 4 de mi crítica. Abajo: el inventario que hay que construir en Astro/Tailwind antes de tocar una sola página —con anatomía, variantes y reglas de uso—, los tokens del híbrido <strong style="color:#e6fff2">3b + mono</strong>, y mi recomendación sobre el alcance del producto, que es el problema real que el diseño no puede arreglar.</p>
+  </div>
+
+  <div style="max-width:1400px;margin:0 auto;display:flex;flex-direction:column;gap:22px">
+
+    <!-- TOKENS -->
+    <div style="background:#0a1611;border:1px solid rgba(210,255,230,0.08);border-radius:28px;padding:30px">
+      <h2 class="disp" style="font-weight:800;font-size:22px;letter-spacing:-0.02em;margin-bottom:20px">Tokens</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
+
+        <div>
+          <div class="cond" style="font-size:13px;font-weight:700;color:rgba(226,255,238,0.4);margin-bottom:12px">Color · superficies</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:11px"><span style="width:34px;height:34px;border-radius:10px;background:#071410;border:1px solid rgba(210,255,230,0.14);flex-shrink:0"></span><div><div class="mono" style="font-size:11.5px;font-weight:700">#071410</div><div class="cond" style="font-size:12px;color:rgba(226,255,238,0.4)">fondo app</div></div></div>
+            <div style="display:flex;align-items:center;gap:11px"><span style="width:34px;height:34px;border-radius:10px;background:#0c2119;flex-shrink:0"></span><div><div class="mono" style="font-size:11.5px;font-weight:700">#0c2119</div><div class="cond" style="font-size:12px;color:rgba(226,255,238,0.4)">superficie 1 · tarjetas, dock, hojas</div></div></div>
+            <div style="display:flex;align-items:center;gap:11px"><span style="width:34px;height:34px;border-radius:10px;background:#0f2b20;flex-shrink:0"></span><div><div class="mono" style="font-size:11.5px;font-weight:700">#0f2b20</div><div class="cond" style="font-size:12px;color:rgba(226,255,238,0.4)">superficie 2 · dentro de tarjeta</div></div></div>
+            <div style="display:flex;align-items:center;gap:11px"><span style="width:34px;height:34px;border-radius:10px;background:#140b07;border:1px solid rgba(255,200,170,0.18);flex-shrink:0"></span><div><div class="mono" style="font-size:11.5px;font-weight:700">#140b07</div><div class="cond" style="font-size:12px;color:rgba(226,255,238,0.4)">fondo en estado de alerta</div></div></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="cond" style="font-size:13px;font-weight:700;color:rgba(226,255,238,0.4);margin-bottom:12px">Color · señal</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:11px"><span style="width:34px;height:34px;border-radius:10px;background:#c8f560;flex-shrink:0"></span><div><div class="mono" style="font-size:11.5px;font-weight:700">#c8f560</div><div class="cond" style="font-size:12px;color:rgba(226,255,238,0.4)">lima · cetosis, acción, "vas bien"</div></div></div>
+            <div style="display:flex;align-items:center;gap:11px"><span style="width:34px;height:34px;border-radius:10px;background:#ff4d00;flex-shrink:0"></span><div><div class="mono" style="font-size:11.5px;font-weight:700">#ff4d00</div><div class="cond" style="font-size:12px;color:rgba(226,255,238,0.4)">naranja de marca · SOLO alerta</div></div></div>
+            <div style="display:flex;align-items:center;gap:11px"><span style="width:34px;height:34px;border-radius:10px;background:#f3ede3;flex-shrink:0"></span><div><div class="mono" style="font-size:11.5px;font-weight:700">#f3ede3</div><div class="cond" style="font-size:12px;color:rgba(226,255,238,0.4)">crema · decisión editorial, máx. 1 por pantalla</div></div></div>
+            <div style="display:flex;align-items:center;gap:11px"><span style="width:34px;height:34px;border-radius:10px;background:#a78bfa;flex-shrink:0"></span><div><div class="mono" style="font-size:11.5px;font-weight:700">#a78bfa</div><div class="cond" style="font-size:12px;color:rgba(226,255,238,0.4)">violeta · Coach IA, nada más</div></div></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="cond" style="font-size:13px;font-weight:700;color:rgba(226,255,238,0.4);margin-bottom:12px">Tipografía</div>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <div><span class="arch" style="font-weight:900;font-size:30px;font-stretch:120%;color:#c8f560">74.8</span><div class="cond" style="font-size:12px;color:rgba(226,255,238,0.4);margin-top:2px">Archivo 900 · cifra protagonista (1 por pantalla)</div></div>
+            <div><span class="mono" style="font-weight:800;font-size:19px">104/128</span><div class="cond" style="font-size:12px;color:rgba(226,255,238,0.4);margin-top:2px">JetBrains Mono 700–800 · cifras en listas y tablas</div></div>
+            <div><span class="cond" style="font-weight:700;font-size:18px">Siguiente · 20:00</span><div class="cond" style="font-size:12px;color:rgba(226,255,238,0.4);margin-top:2px">Barlow Condensed · etiquetas y metadatos</div></div>
+            <div><span class="disp" style="font-weight:800;font-size:18px">Salmón + espárragos</span><div class="cond" style="font-size:12px;color:rgba(226,255,238,0.4);margin-top:2px">Plus Jakarta Sans 800 · nombres y títulos</div></div>
+            <div><span style="font-size:14px;line-height:1.55">Texto corrido del coach y explicaciones.</span><div class="cond" style="font-size:12px;color:rgba(226,255,238,0.4);margin-top:2px">Inter 400–600 · párrafos, mín. 12.5 px</div></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="cond" style="font-size:13px;font-weight:700;color:rgba(226,255,238,0.4);margin-bottom:12px">Forma y movimiento</div>
+          <div style="display:flex;flex-direction:column;gap:9px;font-size:13px;line-height:1.5;color:rgba(226,255,238,0.6)">
+            <div><span class="mono" style="font-size:11.5px;color:#c8f560">26 px</span> — tarjeta héroe · <span class="mono" style="font-size:11.5px;color:#c8f560">22</span> tarjeta · <span class="mono" style="font-size:11.5px;color:#c8f560">18</span> tile · <span class="mono" style="font-size:11.5px;color:#c8f560">14</span> fila</div>
+            <div><span class="mono" style="font-size:11.5px;color:#c8f560">100 px</span> — dock, botones, chips, avatares de acción</div>
+            <div><span class="mono" style="font-size:11.5px;color:#c8f560">28 px</span> — hojas (solo esquinas superiores)</div>
+            <div>Padding de pantalla <span class="mono" style="font-size:11.5px;color:#c8f560">20 px</span>; gap vertical entre bloques <span class="mono" style="font-size:11.5px;color:#c8f560">14 px</span></div>
+            <div>Hoja <span class="mono" style="font-size:11.5px;color:#c8f560">320 ms</span> · dato del usuario <span class="mono" style="font-size:11.5px;color:#c8f560">720 ms</span> · toque <span class="mono" style="font-size:11.5px;color:#c8f560">160 ms</span>, todo con <span class="mono" style="font-size:11.5px;color:#c8f560">cubic-bezier(.22,1,.36,1)</span></div>
+            <div>Objetivo táctil mínimo <span class="mono" style="font-size:11.5px;color:#c8f560">44 px</span> · dock 62 px · FAB 56 px</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPONENTES -->
+    <div style="background:#0a1611;border:1px solid rgba(210,255,230,0.08);border-radius:28px;padding:30px">
+      <h2 class="disp" style="font-weight:800;font-size:22px;letter-spacing:-0.02em;margin-bottom:6px">Los seis componentes</h2>
+      <p style="font-size:14px;line-height:1.6;color:rgba(226,255,238,0.5);max-width:840px;margin-bottom:26px">Nada de lo que sale abajo debería escribirse dos veces en el código. Si una pantalla nueva necesita algo que no está aquí, es una decisión de sistema, no de pantalla.</p>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+
+        <!-- 1 BudgetHeader -->
+        <div style="background:#0c2119;border-radius:24px;padding:24px;display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+          <div style="flex:1 1 300px;min-width:280px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span class="mono" style="font-size:11px;font-weight:800;padding:4px 9px;border-radius:7px;background:rgba(200,245,96,0.16);color:#c8f560">01</span><div class="disp" style="font-weight:800;font-size:17px">BudgetHeader</div></div>
+            <p style="font-size:13.5px;line-height:1.6;color:rgba(226,255,238,0.6)">La cifra que manda. Existe en dos tamaños: <strong style="color:#e6fff2">hero</strong> (solo en Hoy) y <strong style="color:#e6fff2">bar</strong> (cabecera de Plan, Recetas, Alimentos, Compras — cualquier pantalla donde se decide comida).</p>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;font-size:12.5px;line-height:1.5;color:rgba(226,255,238,0.5)">
+              <div><span class="mono" style="color:#c8f560">props</span> · used, limit, state: ok | warn | over</div>
+              <div><span class="mono" style="color:#c8f560">regla</span> · la barra crece con lo consumido; el número es lo que <em>queda</em>. Nunca al revés.</div>
+              <div><span class="mono" style="color:#c8f560">regla</span> · en <span class="mono">over</span> toda la pantalla cambia a la paleta de alerta, no solo este componente.</div>
+            </div>
+          </div>
+          <div style="flex:0 0 340px;display:flex;flex-direction:column;gap:12px">
+            <div style="background:#071410;border-radius:20px;padding:18px">
+              <div class="cond" style="font-size:12.5px;font-weight:700;color:rgba(226,255,238,0.5)">Carbos netos disponibles</div>
+              <div style="display:flex;align-items:baseline;gap:9px;margin-top:2px"><span class="arch" style="font-weight:900;font-size:60px;line-height:0.85;color:#c8f560;font-stretch:125%;letter-spacing:-0.04em">8</span><div style="padding-bottom:6px"><div class="arch" style="font-size:16px;font-weight:800;color:rgba(226,255,238,0.5)">g</div><div class="cond" style="font-size:12px;color:rgba(226,255,238,0.4)">de 25</div></div></div>
+              <div style="height:9px;border-radius:100px;background:rgba(210,255,230,0.09);overflow:hidden;margin-top:12px"><div style="height:100%;width:68%;border-radius:100px;background:linear-gradient(90deg,#c8f560,#84cc16)"></div></div>
+              <div class="cond" style="font-size:11.5px;font-weight:700;color:#c8f560;margin-top:7px;text-align:right">hero · ok</div>
+            </div>
+            <div style="background:#071410;border-radius:20px;padding:14px 18px">
+              <div style="display:flex;align-items:center;gap:10px"><div style="flex:1;height:6px;border-radius:100px;background:rgba(210,255,230,0.09);overflow:hidden"><div style="height:100%;width:68%;background:linear-gradient(90deg,#c8f560,#84cc16)"></div></div><span class="arch" style="font-size:12.5px;font-weight:800;color:#c8f560">8 g</span></div>
+              <div class="cond" style="font-size:11.5px;font-weight:700;color:rgba(226,255,238,0.4);margin-top:7px;text-align:right">bar · ok</div>
+            </div>
+            <div style="background:#140b07;border:1px solid rgba(255,77,0,0.28);border-radius:20px;padding:14px 18px">
+              <div style="display:flex;align-items:center;gap:10px"><div style="flex:1;height:6px;border-radius:100px;background:rgba(255,200,170,0.14);overflow:hidden"><div style="height:100%;width:96%;background:#ff4d00"></div></div><span class="arch" style="font-size:12.5px;font-weight:800;color:#ff4d00">1 g</span></div>
+              <div class="cond" style="font-size:11.5px;font-weight:700;color:#ff7a3c;margin-top:7px;text-align:right">bar · over</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 DataRow -->
+        <div style="background:#0c2119;border-radius:24px;padding:24px;display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+          <div style="flex:1 1 300px;min-width:280px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span class="mono" style="font-size:11px;font-weight:800;padding:4px 9px;border-radius:7px;background:rgba(200,245,96,0.16);color:#c8f560">02</span><div class="disp" style="font-weight:800;font-size:17px">DataRow</div></div>
+            <p style="font-size:13.5px;line-height:1.6;color:rgba(226,255,238,0.6)">El caballo de batalla: registro, alimentos, compras, macros, medidas, biblioteca, tabla del reto. Sustituye todas las tablas de la app.</p>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;font-size:12.5px;line-height:1.5;color:rgba(226,255,238,0.5)">
+              <div><span class="mono" style="color:#c8f560">props</span> · leading (hora | icono | check | barra de veredicto), title, meta, value, verdict, state: done | pending | blocked</div>
+              <div><span class="mono" style="color:#c8f560">regla</span> · la columna de cifras siempre en mono y alineada a la derecha; una sola cifra por fila.</div>
+              <div><span class="mono" style="color:#c8f560">regla</span> · hecho = 45 % de opacidad + tachado. Bloqueado = atenuado, nunca oculto.</div>
+              <div><span class="mono" style="color:#c8f560">gesto</span> · swipe izquierda: editar / borrar con deshacer.</div>
+            </div>
+          </div>
+          <div style="flex:0 0 340px;background:#071410;border-radius:20px;padding:16px">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(210,255,230,0.06)"><span class="mono" style="font-size:10.5px;color:rgba(226,255,238,0.35);width:38px">13:40</span><span style="flex:1;font-size:13px;font-weight:500">Ensalada César keto</span><span class="mono" style="font-size:12px;font-weight:700;color:#c8f560">6.0</span></div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(210,255,230,0.06)"><span style="width:3px;height:32px;background:#c8f560;flex-shrink:0"></span><div style="flex:1"><div style="font-size:13px;font-weight:600">Queso cheddar curado</div><div class="mono" style="font-size:10px;color:rgba(226,255,238,0.4);margin-top:2px">403 KCAL · 33 G</div></div><div style="text-align:right"><div class="mono" style="font-size:14px;font-weight:800;color:#c8f560">1.3</div><div class="mono" style="font-size:9px;color:#c8f560">KETO</div></div></div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(210,255,230,0.06)"><span style="width:3px;height:32px;background:#ff4d00;flex-shrink:0"></span><div style="flex:1"><div style="font-size:13px;font-weight:600">Barrita "keto" de tienda</div><div class="mono" style="font-size:10px;color:rgba(226,255,238,0.4);margin-top:2px">DECLARA 3 · REAL 16</div></div><div style="text-align:right"><div class="mono" style="font-size:14px;font-weight:800;color:#ff4d00">16.0</div><div class="mono" style="font-size:9px;color:#ff4d00">EVITAR</div></div></div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 0;opacity:0.45"><span class="msym fill" style="font-size:20px;color:#c8f560">check_box</span><span style="flex:1;font-size:13px;font-weight:500;text-decoration:line-through">Huevos camperos · 12 u</span><span class="mono" style="font-size:12px;font-weight:700;color:rgba(226,255,238,0.5)">4 €</span></div>
+          </div>
+        </div>
+
+        <!-- 3 DecisionCard -->
+        <div style="background:#0c2119;border-radius:24px;padding:24px;display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+          <div style="flex:1 1 300px;min-width:280px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span class="mono" style="font-size:11px;font-weight:800;padding:4px 9px;border-radius:7px;background:rgba(200,245,96,0.16);color:#c8f560">03</span><div class="disp" style="font-weight:800;font-size:17px">DecisionCard</div></div>
+            <p style="font-size:13.5px;line-height:1.6;color:rgba(226,255,238,0.6)">La acción del momento. Es el componente que más se me fue de las manos en el turno 2 — ahora tiene cupo: <strong style="color:#e6fff2">máximo uno por pantalla</strong>, y solo si hay algo que hacer <em>ahora</em>.</p>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;font-size:12.5px;line-height:1.5;color:rgba(226,255,238,0.5)">
+              <div><span class="mono" style="color:#c8f560">variantes</span> · lima (acción positiva) · crema (explicación o consecuencia) · alerta (corrección)</div>
+              <div><span class="mono" style="color:#c8f560">regla</span> · lleva verbo. Si no puedes escribir el botón, no es una DecisionCard: es una tarjeta de datos.</div>
+              <div><span class="mono" style="color:#c8f560">regla</span> · siempre descartable; nunca dos apiladas.</div>
+            </div>
+          </div>
+          <div style="flex:0 0 340px;display:flex;flex-direction:column;gap:10px">
+            <div style="background:#c8f560;border-radius:20px;padding:15px 16px;color:#0a1f14;display:flex;align-items:center;gap:12px">
+              <div style="width:42px;height:42px;border-radius:100px;background:rgba(10,31,20,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="font-size:21px">set_meal</span></div>
+              <div style="flex:1;min-width:0"><div class="cond" style="font-size:12px;font-weight:700;color:rgba(10,31,20,0.6)">Siguiente · 20:00</div><div class="disp" style="font-weight:800;font-size:15px">Salmón + espárragos</div></div>
+              <div style="width:34px;height:34px;border-radius:100px;background:#0a1f14;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="font-size:19px;color:#c8f560">check</span></div>
+            </div>
+            <div style="background:#f3ede3;border-radius:20px;padding:15px 16px;color:#1a140e">
+              <div class="cond" style="font-size:12px;font-weight:700;color:rgba(26,20,14,0.55)">Con 8 g libres</div>
+              <div style="font-size:12.5px;line-height:1.5;color:rgba(26,20,14,0.7);margin-top:5px">El cheddar entra. La ricotta se come tu margen antes de la cena.</div>
+            </div>
+            <div style="background:#241009;border:1px solid rgba(255,77,0,0.28);border-radius:20px;padding:15px 16px">
+              <div class="cond" style="font-size:12px;font-weight:700;color:#ff7a3c">Cetosis en riesgo</div>
+              <div class="disp" style="font-weight:800;font-size:15px;margin-top:3px">Cierra el día sin carbos</div>
+              <div style="height:38px;border-radius:100px;background:#ff4d00;display:flex;align-items:center;justify-content:center;margin-top:11px"><span class="cond" style="font-weight:700;font-size:13.5px;color:#fff">Ver alternativas</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Chip -->
+        <div style="background:#0c2119;border-radius:24px;padding:24px;display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+          <div style="flex:1 1 300px;min-width:280px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span class="mono" style="font-size:11px;font-weight:800;padding:4px 9px;border-radius:7px;background:rgba(200,245,96,0.16);color:#c8f560">04</span><div class="disp" style="font-weight:800;font-size:17px">Chip</div></div>
+            <p style="font-size:13.5px;line-height:1.6;color:rgba(226,255,238,0.6)">Tres papeles distintos con la misma forma: <strong style="color:#e6fff2">estado</strong> (léelo), <strong style="color:#e6fff2">filtro</strong> (púlsalo) y <strong style="color:#e6fff2">veredicto</strong> (clasifica). Es donde la app más se aleja del sitio: pastilla completa, condensada en mayúsculas.</p>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;font-size:12.5px;line-height:1.5;color:rgba(226,255,238,0.5)">
+              <div><span class="mono" style="color:#c8f560">regla</span> · el punto pulsante solo en estados en vivo (cetosis, sincronizando).</div>
+              <div><span class="mono" style="color:#c8f560">regla</span> · un filtro activo por grupo, relleno lima; el resto en superficie 6 %.</div>
+              <div><span class="mono" style="color:#c8f560">regla</span> · máximo 4 chips visibles antes de hacer scroll horizontal.</div>
+            </div>
+          </div>
+          <div style="flex:0 0 340px;background:#071410;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px">
+            <div>
+              <div class="cond" style="font-size:11.5px;font-weight:700;color:rgba(226,255,238,0.35);margin-bottom:9px">Estado</div>
+              <div style="display:flex;gap:7px;flex-wrap:wrap">
+                <span style="display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:100px;background:rgba(200,245,96,0.14)"><span style="width:6px;height:6px;border-radius:50%;background:#c8f560"></span><span class="cond" style="font-size:12px;font-weight:700;color:#c8f560">Cetosis 14 h</span></span>
+                <span style="padding:8px 12px;border-radius:100px;background:rgba(210,255,230,0.06)"><span class="cond" style="font-size:12px;font-weight:700;color:rgba(226,255,238,0.55)">1 340 kcal</span></span>
+              </div>
+            </div>
+            <div>
+              <div class="cond" style="font-size:11.5px;font-weight:700;color:rgba(226,255,238,0.35);margin-bottom:9px">Filtro</div>
+              <div style="display:flex;gap:7px;flex-wrap:wrap">
+                <span style="padding:8px 13px;border-radius:100px;background:#c8f560"><span class="cond" style="font-size:12px;font-weight:700;color:#0a1f14">Cabe en 8 g</span></span>
+                <span style="padding:8px 13px;border-radius:100px;background:rgba(210,255,230,0.06)"><span class="cond" style="font-size:12px;font-weight:600;color:rgba(226,255,238,0.55)">≤ 20 min</span></span>
+                <span style="padding:8px 13px;border-radius:100px;background:rgba(210,255,230,0.06)"><span class="cond" style="font-size:12px;font-weight:600;color:rgba(226,255,238,0.55)">Cena</span></span>
+              </div>
+            </div>
+            <div>
+              <div class="cond" style="font-size:11.5px;font-weight:700;color:rgba(226,255,238,0.35);margin-bottom:9px">Veredicto</div>
+              <div style="display:flex;gap:7px;flex-wrap:wrap">
+                <span style="padding:7px 12px;border-radius:100px;background:rgba(200,245,96,0.14);border:1px solid rgba(200,245,96,0.3)"><span class="cond" style="font-size:12px;font-weight:700;color:#c8f560">Keto</span></span>
+                <span style="padding:7px 12px;border-radius:100px;background:rgba(217,119,6,0.14);border:1px solid rgba(251,191,36,0.28)"><span class="cond" style="font-size:12px;font-weight:700;color:#fbbf24">Moderar</span></span>
+                <span style="padding:7px 12px;border-radius:100px;background:rgba(255,77,0,0.12);border:1px solid rgba(255,77,0,0.3)"><span class="cond" style="font-size:12px;font-weight:700;color:#ff7a3c">Evitar</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 Dock -->
+        <div style="background:#0c2119;border-radius:24px;padding:24px;display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+          <div style="flex:1 1 300px;min-width:280px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span class="mono" style="font-size:11px;font-weight:800;padding:4px 9px;border-radius:7px;background:rgba(200,245,96,0.16);color:#c8f560">05</span><div class="disp" style="font-weight:800;font-size:17px">Dock</div></div>
+            <p style="font-size:13.5px;line-height:1.6;color:rgba(226,255,238,0.6)">Cuatro destinos y un botón. Constante en toda la app, salvo cámara, onboarding y welcome. Es el reemplazo de la sidebar de 16 enlaces.</p>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;font-size:12.5px;line-height:1.5;color:rgba(226,255,238,0.5)">
+              <div><span class="mono" style="color:#c8f560">regla</span> · el botón central <strong style="color:#e6fff2">abre una hoja</strong>, nunca navega. Si algún día navega, deja de ser el centro.</div>
+              <div><span class="mono" style="color:#c8f560">regla</span> · "Yo" absorbe los 12 destinos secundarios con su estado a la derecha.</div>
+              <div><span class="mono" style="color:#c8f560">regla</span> · pastilla flotante de 62 px con 16 px de margen: nunca pegado al borde.</div>
+            </div>
+          </div>
+          <div style="flex:0 0 340px;background:#071410;border-radius:20px;padding:18px 14px 14px">
+            <div style="height:62px;border-radius:100px;background:#0c2119;border:1px solid rgba(210,255,230,0.1);display:flex;align-items:center;padding:0 6px">
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:#c8f560"><span class="msym fill" style="font-size:20px">cottage</span><span class="cond" style="font-size:10.5px;font-weight:700">Hoy</span></div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(226,255,238,0.4)"><span class="msym" style="font-size:20px">donut_small</span><span class="cond" style="font-size:10.5px;font-weight:600">Macros</span></div>
+              <div style="flex:1;display:flex;justify-content:center"><div style="width:52px;height:52px;border-radius:100px;background:#c8f560;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(200,245,96,0.35);margin-bottom:12px"><span class="msym fill" style="font-size:26px;color:#0a1f14">add</span></div></div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(226,255,238,0.4)"><span class="msym" style="font-size:20px">event_note</span><span class="cond" style="font-size:10.5px;font-weight:600">Plan</span></div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(226,255,238,0.4)"><span class="msym" style="font-size:20px">person</span><span class="cond" style="font-size:10.5px;font-weight:600">Yo</span></div>
+            </div>
+            <div class="cond" style="font-size:11.5px;font-weight:700;color:rgba(226,255,238,0.35);margin-top:12px;text-align:center">Hoy · Macros · Registrar · Plan · Yo</div>
+          </div>
+        </div>
+
+        <!-- 6 Sheet -->
+        <div style="background:#0c2119;border-radius:24px;padding:24px;display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+          <div style="flex:1 1 300px;min-width:280px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span class="mono" style="font-size:11px;font-weight:800;padding:4px 9px;border-radius:7px;background:rgba(200,245,96,0.16);color:#c8f560">06</span><div class="disp" style="font-weight:800;font-size:17px">Sheet</div></div>
+            <p style="font-size:13.5px;line-height:1.6;color:rgba(226,255,238,0.6)">Todo lo que en la web era modal. Registrar, resultado del escáner, editar cantidad, elegir alternativa, ajustes rápidos. Nunca hay diálogos centrados en la app.</p>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;font-size:12.5px;line-height:1.5;color:rgba(226,255,238,0.5)">
+              <div><span class="mono" style="color:#c8f560">anatomía</span> · asa 40×4 · cabecera con título + subtítulo de contexto + cerrar · cuerpo · nota de estado</div>
+              <div><span class="mono" style="color:#c8f560">regla</span> · si la hoja tapa el presupuesto, lo repite en su subtítulo.</div>
+              <div><span class="mono" style="color:#c8f560">regla</span> · cierra por scrim, asa hacia abajo o cerrar. Nada de hojas sin salida.</div>
+              <div><span class="mono" style="color:#c8f560">movimiento</span> · 320 ms subiendo, 240 ms bajando, scrim 180 ms.</div>
+            </div>
+          </div>
+          <div style="flex:0 0 340px;background:#071410;border-radius:20px;padding:18px 18px 0;overflow:hidden">
+            <div style="background:#0c2119;border-top-left-radius:24px;border-top-right-radius:24px;border:1px solid rgba(210,255,230,0.12);border-bottom:none;padding:9px 16px 20px">
+              <div style="display:flex;justify-content:center;padding:5px 0 14px"><span style="width:38px;height:4px;border-radius:100px;background:rgba(210,255,230,0.22)"></span></div>
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px">
+                <div><div class="disp" style="font-weight:800;font-size:19px">Registrar</div><div class="cond" style="font-size:12.5px;font-weight:600;color:rgba(226,255,238,0.5)">Margen de hoy · 8 g netos</div></div>
+                <div style="width:30px;height:30px;border-radius:100px;background:rgba(210,255,230,0.07);display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:17px;color:rgba(226,255,238,0.5)">close</span></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+                <div style="background:#c8f560;border-radius:15px;padding:13px;min-height:74px;display:flex;flex-direction:column;justify-content:space-between"><span class="msym fill" style="font-size:21px;color:#0a1f14">center_focus_strong</span><span class="disp" style="font-weight:800;font-size:13px;color:#0a1f14">Escanear</span></div>
+                <div style="border:1px solid rgba(210,255,230,0.12);border-radius:15px;padding:13px;min-height:74px;display:flex;flex-direction:column;justify-content:space-between"><span class="msym" style="font-size:21px;color:rgba(226,255,238,0.65)">search</span><span class="disp" style="font-weight:800;font-size:13px">Buscar</span></div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px"><span class="msym" style="font-size:14px;color:rgba(226,255,238,0.3)">cloud_off</span><span class="cond" style="font-size:11.5px;color:rgba(226,255,238,0.3)">Offline · sincroniza solo</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ALCANCE -->
+    <div style="background:#0a1611;border:1px solid rgba(210,255,230,0.08);border-radius:28px;padding:30px">
+      <h2 class="disp" style="font-weight:800;font-size:22px;letter-spacing:-0.02em;margin-bottom:6px">Punto 3 · alcance</h2>
+      <p style="font-size:14px;line-height:1.6;color:rgba(226,255,238,0.5);max-width:840px;margin-bottom:24px">Esto no lo arregla el diseño y es lo que más te va a costar en el mercado: haces ocho cosas a medias contra apps que hacen una perfecta. Mi propuesta de tres niveles, con el criterio explícito.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px">
+        <div style="background:#0c2119;border:1px solid rgba(200,245,96,0.25);border-radius:22px;padding:22px">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px"><span class="msym fill" style="font-size:19px;color:#c8f560">check_circle</span><div class="disp" style="font-weight:800;font-size:15px;color:#c8f560">Núcleo · perfecto o nada</div></div>
+          <div style="display:flex;flex-direction:column;gap:9px;font-size:13px;line-height:1.5;color:rgba(226,255,238,0.65)">
+            <div><strong style="color:#e6fff2">Presupuesto de carbos netos</strong> — la razón de existir.</div>
+            <div><strong style="color:#e6fff2">Registro</strong> (escanear, buscar, dictar, repetir) — 4 toques máximo.</div>
+            <div><strong style="color:#e6fff2">Alimentos / ¿es keto?</strong> — tu base de 4 800 alimentos es el activo real.</div>
+            <div><strong style="color:#e6fff2">Plan + compras</strong> — lo que convierte el dato en conducta.</div>
+            <div><strong style="color:#e6fff2">Progreso</strong> — la recompensa que sostiene la racha.</div>
+          </div>
+          <div class="cond" style="font-size:12.5px;font-weight:700;color:rgba(226,255,238,0.4);margin-top:14px">Criterio: sin esto la app no tiene sentido.</div>
+        </div>
+
+        <div style="background:#0c2119;border:1px solid rgba(210,255,230,0.1);border-radius:22px;padding:22px">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px"><span class="msym fill" style="font-size:19px;color:#a78bfa">psychology</span><div class="disp" style="font-weight:800;font-size:15px">Diferenciador · el Coach absorbe</div></div>
+          <div style="display:flex;flex-direction:column;gap:9px;font-size:13px;line-height:1.5;color:rgba(226,255,238,0.65)">
+            <div><strong style="color:#e6fff2">Coach IA</strong> se queda y se come a <strong style="color:#e6fff2">Inspector</strong>, <strong style="color:#e6fff2">Guía</strong> y <strong style="color:#e6fff2">Suplementos</strong>. Hoy los tres te dicen lo mismo ("te falta proteína", "hidrátate") en tres sitios distintos con tres diseños distintos.</div>
+            <div>El Inspector pasa a ser el <strong style="color:#e6fff2">resumen semanal</strong> que el Coach te manda; la Guía, sus respuestas; los suplementos, un recordatorio que él propone cuando detecta el patrón.</div>
+          </div>
+          <div class="cond" style="font-size:12.5px;font-weight:700;color:rgba(226,255,238,0.4);margin-top:14px">Criterio: tres pantallas menos, el mismo valor, una sola voz.</div>
+        </div>
+
+        <div style="background:#0c2119;border:1px solid rgba(255,77,0,0.22);border-radius:22px;padding:22px">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px"><span class="msym fill" style="font-size:19px;color:#ff7a3c">pause_circle</span><div class="disp" style="font-weight:800;font-size:15px;color:#ff7a3c">Fuera del v2 · o al menos, después</div></div>
+          <div style="display:flex;flex-direction:column;gap:9px;font-size:13px;line-height:1.5;color:rgba(226,255,238,0.65)">
+            <div><strong style="color:#e6fff2">Entrenamientos</strong> — compites con apps dedicadas y gratis; el usuario keto ya tiene una. Cambiaría el módulo por un campo de "actividad" que ajuste el presupuesto.</div>
+            <div><strong style="color:#e6fff2">Comunidad</strong> — moderar un foro es un producto entero. Está en BETA/PRONTO desde hace tiempo: o se le pone un equipo, o se quita del menú.</div>
+            <div><strong style="color:#e6fff2">Recetas</strong> — se mantiene, pero como catálogo dentro de Plan, no como destino propio.</div>
+          </div>
+          <div class="cond" style="font-size:12.5px;font-weight:700;color:rgba(226,255,238,0.4);margin-top:14px">Criterio: si no mejora el presupuesto de hoy, no va en el v2.</div>
+        </div>
+      </div>
+
+      <div style="background:#f3ede3;border-radius:22px;padding:22px;color:#1a140e;margin-top:16px">
+        <div class="cond" style="font-size:12.5px;font-weight:700;color:rgba(26,20,14,0.55)">Resultado</div>
+        <div class="disp" style="font-weight:800;font-size:19px;letter-spacing:-0.02em;margin-top:5px">De 16 destinos a 9 pantallas reales, y de 8 promesas a 1 bien cumplida.</div>
+        <div style="font-size:13.5px;line-height:1.6;color:rgba(26,20,14,0.65);margin-top:8px">Hoy · Macros · Registrar (hoja) · Plan (+ compras y recetas) · Progreso · Alimentos · Coach · Yo · Onboarding. Eso es lo que yo llevaría al mercado, con los seis componentes de arriba construidos primero.</div>
+      </div>
+    </div>
+
+    <div style="background:#0a1611;border:1px solid rgba(210,255,230,0.08);border-radius:28px;padding:30px">
+      <h2 class="disp" style="font-weight:800;font-size:20px;letter-spacing:-0.02em;margin-bottom:14px">Orden de implementación</h2>
+      <div style="display:flex;flex-direction:column;gap:11px;font-size:13.5px;line-height:1.55;color:rgba(226,255,238,0.65)">
+        <div style="display:flex;gap:12px"><span class="mono" style="font-size:12px;font-weight:800;color:#c8f560;flex-shrink:0;width:22px">1</span><span>Tokens en <span class="mono" style="font-size:12px">tailwind.config</span> y los seis componentes como <span class="mono" style="font-size:12px">.astro</span>, con el estado de alerta desde el principio (si se deja para después, no se hace).</span></div>
+        <div style="display:flex;gap:12px"><span class="mono" style="font-size:12px;font-weight:800;color:#c8f560;flex-shrink:0;width:22px">2</span><span>Hoy + hoja de Registrar + Scanner, con la animación de 720 ms. Es el 80 % de la percepción de calidad.</span></div>
+        <div style="display:flex;gap:12px"><span class="mono" style="font-size:12px;font-weight:800;color:#c8f560;flex-shrink:0;width:22px">3</span><span>Macros, Alimentos y Plan sobre <span class="mono" style="font-size:12px">DataRow</span>. Aquí se borran las tablas heredadas.</span></div>
+        <div style="display:flex;gap:12px"><span class="mono" style="font-size:12px;font-weight:800;color:#c8f560;flex-shrink:0;width:22px">4</span><span>Progreso, Yo y Coach; fusión de Inspector, Guía y Suplementos dentro del Coach.</span></div>
+        <div style="display:flex;gap:12px"><span class="mono" style="font-size:12px;font-weight:800;color:#c8f560;flex-shrink:0;width:22px">5</span><span>Onboarding y Welcome al final: se diseñan bien cuando ya sabes qué promete la app.</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</x-dc>
+</body>
+</html>

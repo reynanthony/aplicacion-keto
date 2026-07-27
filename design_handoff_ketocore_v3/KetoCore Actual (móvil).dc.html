@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0b0a08; }
+  a { color: #ff4d00; text-decoration: none; }
+  a:hover { color: #ff7a3c; }
+  .msym { font-family: 'Material Symbols Outlined'; font-style: normal; line-height: 1; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; -webkit-font-smoothing: antialiased; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .fill { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+  .nums { font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .disp { font-family: 'Plus Jakarta Sans', sans-serif; }
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#100d0a;padding:40px 32px 60px;font-family:'Inter',sans-serif;color:#f7f4f0;display:flex;flex-direction:column;align-items:center;gap:26px">
+
+  <div style="text-align:center;max-width:620px">
+    <div style="font-size:11px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Estado actual · recreación</div>
+    <h1 class="disp" style="font-weight:900;font-size:30px;letter-spacing:-0.03em">Dashboard de KetoCore hoy, en móvil (390 px)</h1>
+    <p style="font-size:14px;line-height:1.6;color:rgba(247,244,240,0.5);margin-top:10px">Recreado desde <code style="font-family:ui-monospace,monospace;font-size:12.5px;color:rgba(247,244,240,0.75)">web/src/pages/app/index.astro</code>, <code style="font-family:ui-monospace,monospace;font-size:12.5px;color:rgba(247,244,240,0.75)">AppSidebar.astro</code> y el mock Editorial Bento del handoff. El layout móvil es la grilla bento de escritorio colapsada: tiles de datos apilados, sin jerarquía de acción y sin lenguaje nativo.</p>
+  </div>
+
+  <div style="width:390px;border-radius:34px;overflow:hidden;background:#0b0a08;border:1px solid rgba(255,240,225,0.09);box-shadow:0 30px 80px rgba(0,0,0,0.6);position:relative">
+
+    <div style="height:56px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;background:rgba(11,10,8,0.97);border-bottom:1px solid rgba(255,240,225,0.06);position:sticky;top:0;z-index:20">
+      <div style="display:flex;align-items:center;gap:12px">
+        <img src="assets/logo.svg" alt="KetoCore" style="width:28px;height:28px;filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
+        <span class="disp" style="font-size:16px;font-weight:900;letter-spacing:-0.02em;color:#f7f4f0">KetoCore</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="width:36px;height:36px;border-radius:50%;background:#1e1a15;border:1px solid rgba(255,240,225,0.06);display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:20px;color:rgba(247,244,240,0.6)">account_circle</span></div>
+        <div style="width:36px;height:36px;border-radius:50%;background:#1e1a15;display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:20px;color:rgba(247,244,240,0.6)">menu</span></div>
+      </div>
+    </div>
+
+    <div style="padding:22px 16px 108px;display:flex;flex-direction:column;gap:18px">
+
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <span style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00">Miércoles · 2 Jul</span>
+          <span style="width:4px;height:4px;border-radius:50%;background:rgba(247,244,240,0.25)"></span>
+          <span style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(247,244,240,0.4)">Día 18</span>
+        </div>
+        <h2 class="disp" style="font-weight:800;font-size:30px;line-height:0.98;letter-spacing:-0.035em">Buenos días, María.<br><span style="color:rgba(247,244,240,0.4)">Vas ganando la semana.</span></h2>
+        <div style="display:flex;align-items:center;gap:12px;margin-top:18px">
+          <div style="height:46px;width:46px;border-radius:14px;background:#161310;border:1px solid rgba(255,240,225,0.08);display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0"><span class="msym" style="font-size:21px;color:rgba(247,244,240,0.55)">notifications</span><span style="position:absolute;top:10px;right:11px;width:7px;height:7px;border-radius:50%;background:#ff4d00;border:2px solid #161310"></span></div>
+          <div style="flex:1;height:46px;padding:0 22px;border-radius:14px;background:#ff4d00;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 6px 20px rgba(255,77,0,0.3)"><span class="msym" style="font-size:20px;color:#fff">add</span><span class="disp" style="font-weight:700;font-size:14px;color:#fff">Registrar comida</span></div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div style="grid-column:span 2;background:linear-gradient(150deg,#ff5a12,#e63f00);border-radius:26px;padding:24px;position:relative;overflow:hidden;box-shadow:0 12px 40px rgba(255,77,0,0.22)">
+          <div style="position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.08)"></div>
+          <div style="position:relative;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+            <div style="display:flex;align-items:center;gap:9px"><span class="msym fill" style="font-size:20px;color:rgba(26,14,5,0.85)">ecg_heart</span><span class="disp" style="font-weight:800;font-size:12px;color:rgba(26,14,5,0.85)">HEALTH SCORE</span></div>
+            <span style="font-size:11px;font-weight:800;padding:5px 11px;border-radius:100px;background:rgba(26,14,5,0.16);color:#1a0e05">+6 vs semana</span>
+          </div>
+          <div style="position:relative">
+            <div class="disp nums" style="font-weight:900;font-size:92px;line-height:0.82;color:#1a0e05">82</div>
+            <div style="font-size:13.5px;font-weight:600;color:rgba(26,14,5,0.7);margin-top:12px">de 100 · <strong>Excelente</strong></div>
+            <div style="display:flex;gap:5px;margin-top:14px">
+              <div style="flex:1;height:6px;border-radius:100px;background:#1a0e05"></div>
+              <div style="flex:1;height:6px;border-radius:100px;background:#1a0e05"></div>
+              <div style="flex:1;height:6px;border-radius:100px;background:#1a0e05"></div>
+              <div style="flex:1;height:6px;border-radius:100px;background:#1a0e05"></div>
+              <div style="flex:1;height:6px;border-radius:100px;background:rgba(26,14,5,0.22)"></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="grid-column:span 2;background:#f3ede3;border-radius:26px;padding:22px;color:#1a140e">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <span class="disp" style="font-weight:800;font-size:12px;color:rgba(26,20,14,0.55)">CALORÍAS DE HOY</span>
+            <span style="font-size:11px;font-weight:700;padding:4px 11px;border-radius:100px;background:rgba(22,163,74,0.14);color:#15803d">En meta</span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:8px">
+            <span class="disp nums" style="font-weight:900;font-size:46px;line-height:0.85">1 340</span>
+            <span style="font-size:14px;font-weight:600;color:rgba(26,20,14,0.5)">/ 1 650 kcal</span>
+          </div>
+          <div style="height:9px;border-radius:100px;background:rgba(26,20,14,0.09);overflow:hidden;margin-top:14px"><div style="height:100%;width:81%;border-radius:100px;background:#ff4d00"></div></div>
+          <div style="font-size:12.5px;font-weight:600;color:rgba(26,20,14,0.5);margin-top:8px">310 kcal restantes hoy</div>
+        </div>
+
+        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:24px;padding:20px;min-height:130px;display:flex;flex-direction:column;justify-content:space-between">
+          <span class="disp" style="font-weight:700;font-size:12px;color:rgba(247,244,240,0.5)">Adherencia</span>
+          <div><div class="disp nums" style="font-weight:900;font-size:40px;line-height:0.9;color:#ff4d00">94%</div><div style="font-size:11.5px;color:rgba(247,244,240,0.4);margin-top:4px">esta semana</div></div>
+        </div>
+
+        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:24px;padding:20px;min-height:130px;display:flex;flex-direction:column;justify-content:space-between">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span class="disp" style="font-weight:700;font-size:12px;color:rgba(247,244,240,0.5)">Racha</span><span class="msym fill" style="color:#ff4d00;font-size:22px">local_fire_department</span></div>
+          <div><div class="disp nums" style="font-weight:900;font-size:40px;line-height:0.9">18<span style="font-size:16px;color:rgba(247,244,240,0.4)"> días</span></div><div style="font-size:11.5px;color:rgba(247,244,240,0.4);margin-top:4px">mejor: 24</div></div>
+        </div>
+      </div>
+
+      <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:24px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap">
+          <h3 class="disp" style="font-weight:800;font-size:19px;letter-spacing:-0.01em">Macros de hoy</h3>
+          <div style="font-size:12px;color:rgba(247,244,240,0.45)"><span style="font-weight:700;color:#22c55e">70/25/5</span> g/p/c</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr;gap:20px">
+          <div>
+            <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px"><span class="msym fill" style="color:#ea580c;font-size:20px">egg_alt</span><span style="font-size:12.5px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:rgba(247,244,240,0.55)">Proteína</span></div>
+            <div class="disp nums" style="font-weight:900;font-size:34px;line-height:0.9">98<span style="font-size:17px;font-weight:600;color:rgba(247,244,240,0.4)"> / 110 g</span></div>
+            <div style="height:8px;border-radius:100px;background:rgba(234,88,12,0.14);overflow:hidden;margin-top:14px"><div style="height:100%;width:89%;background:#ea580c;border-radius:100px"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px"><span class="msym fill" style="color:#d97706;font-size:20px">local_fire_department</span><span style="font-size:12.5px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:rgba(247,244,240,0.55)">Grasas</span></div>
+            <div class="disp nums" style="font-weight:900;font-size:34px;line-height:0.9">104<span style="font-size:17px;font-weight:600;color:rgba(247,244,240,0.4)"> / 128 g</span></div>
+            <div style="height:8px;border-radius:100px;background:rgba(217,119,6,0.14);overflow:hidden;margin-top:14px"><div style="height:100%;width:81%;background:#d97706;border-radius:100px"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px"><span class="msym fill" style="color:#0891b2;font-size:20px">grain</span><span style="font-size:12.5px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:rgba(247,244,240,0.55)">Carbos netos</span></div>
+            <div class="disp nums" style="font-weight:900;font-size:34px;line-height:0.9">17<span style="font-size:17px;font-weight:600;color:rgba(247,244,240,0.4)"> / 25 g</span></div>
+            <div style="height:8px;border-radius:100px;background:rgba(8,145,178,0.14);overflow:hidden;margin-top:14px"><div style="height:100%;width:68%;background:#0891b2;border-radius:100px"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:24px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;gap:12px">
+          <div>
+            <h3 class="disp" style="font-weight:800;font-size:19px;letter-spacing:-0.01em">Tendencia de peso</h3>
+            <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px"><span class="disp nums" style="font-weight:900;font-size:30px;line-height:1">74.8<span style="font-size:15px;color:rgba(247,244,240,0.4)"> kg</span></span><span style="display:inline-flex;align-items:center;gap:3px;font-size:12.5px;font-weight:700;color:#22c55e"><span class="msym" style="font-size:16px">trending_down</span>−5.2 kg</span></div>
+          </div>
+          <div style="display:flex;gap:4px;flex-shrink:0">
+            <span style="font-size:11px;font-weight:700;padding:6px 10px;border-radius:100px;background:rgba(255,77,0,0.12);color:#ff4d00">30d</span>
+            <span style="font-size:11px;font-weight:600;padding:6px 10px;border-radius:100px;color:rgba(247,244,240,0.4)">90d</span>
+          </div>
+        </div>
+        <svg viewBox="0 0 640 170" width="100%" height="150" preserveAspectRatio="none" style="display:block">
+          <defs><linearGradient id="kcArea3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(255,77,0,0.3)"></stop><stop offset="100%" stop-color="rgba(255,77,0,0)"></stop></linearGradient></defs>
+          <line x1="0" y1="42" x2="640" y2="42" stroke="rgba(255,240,225,0.05)"></line>
+          <line x1="0" y1="85" x2="640" y2="85" stroke="rgba(255,240,225,0.05)"></line>
+          <line x1="0" y1="128" x2="640" y2="128" stroke="rgba(255,240,225,0.05)"></line>
+          <path d="M0,36 L91,48 L183,55 L274,76 L366,92 L457,108 L549,124 L640,134 L640,170 L0,170 Z" fill="url(#kcArea3)"></path>
+          <path d="M0,36 L91,48 L183,55 L274,76 L366,92 L457,108 L549,124 L640,134" fill="none" stroke="#ff4d00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <circle cx="634" cy="134" r="6" fill="#ff4d00" stroke="#161310" stroke-width="3.5"></circle>
+        </svg>
+        <div style="display:flex;justify-content:space-between;margin-top:12px;font-size:11px;color:rgba(247,244,240,0.32)"><span>3 Jun</span><span>12 Jun</span><span>21 Jun</span><span>Hoy</span></div>
+      </div>
+
+      <div style="background:linear-gradient(145deg,rgba(167,139,250,0.16),rgba(99,102,241,0.04));border:1px solid rgba(167,139,250,0.22);border-radius:26px;padding:24px">
+        <div style="display:flex;align-items:center;gap:11px;margin-bottom:14px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(167,139,250,0.18);display:flex;align-items:center;justify-content:center"><span class="msym fill" style="color:#a78bfa;font-size:22px">psychology</span></div><div><div class="disp" style="font-weight:800;font-size:15px">Coach IA</div><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:#a78bfa;font-weight:600"><span style="width:6px;height:6px;border-radius:50%;background:#22c55e"></span>En línea</div></div></div>
+        <p style="font-size:14.5px;line-height:1.6;color:rgba(247,244,240,0.8)">Te faltan <strong style="color:#fff">310 kcal</strong> y 12 g de proteína. Tu cena de salmón cubre justo eso — evita picar antes de las 20:00 para cerrar el día en verde.</p>
+        <div style="width:100%;padding:13px;border-radius:14px;margin-top:16px;background:rgba(167,139,250,0.18);border:1px solid rgba(167,139,250,0.28);color:#c4b5fd;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13.5px;text-align:center">Preguntar al Coach</div>
+      </div>
+
+      <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:24px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px"><h3 class="disp" style="font-weight:800;font-size:18px">Plan de hoy</h3><span style="font-size:12px;font-weight:700;padding:5px 13px;border-radius:100px;background:rgba(34,197,94,0.12);color:#22c55e">4 / 6</span></div>
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <div style="display:flex;align-items:center;gap:13px"><span class="msym fill" style="color:#22c55e;font-size:24px">check_circle</span><div style="flex:1;font-size:14.5px;font-weight:600">Desayuno keto</div><span style="font-size:12px;color:rgba(247,244,240,0.35)">08:10</span></div>
+          <div style="display:flex;align-items:center;gap:13px"><span class="msym fill" style="color:#22c55e;font-size:24px">check_circle</span><div style="flex:1;font-size:14.5px;font-weight:600">Ayuno 16:8</div><span style="font-size:12px;color:rgba(247,244,240,0.35)">✓</span></div>
+          <div style="display:flex;align-items:center;gap:13px"><span class="msym fill" style="color:#22c55e;font-size:24px">check_circle</span><div style="flex:1;font-size:14.5px;font-weight:600">Electrolitos + magnesio</div><span style="font-size:12px;color:rgba(247,244,240,0.35)">✓</span></div>
+          <div style="display:flex;align-items:center;gap:13px"><span class="msym fill" style="color:#22c55e;font-size:24px">check_circle</span><div style="flex:1;font-size:14.5px;font-weight:600">3 L de agua</div><span style="font-size:12px;color:rgba(247,244,240,0.35)">✓</span></div>
+          <div style="display:flex;align-items:center;gap:13px;opacity:0.6"><span class="msym" style="color:rgba(247,244,240,0.35);font-size:24px">radio_button_unchecked</span><div style="flex:1;font-size:14.5px;font-weight:600">Cena · Salmón + espárragos</div><span style="font-size:12px;color:rgba(247,244,240,0.35)">20:00</span></div>
+          <div style="display:flex;align-items:center;gap:13px;opacity:0.6"><span class="msym" style="color:rgba(247,244,240,0.35);font-size:24px">radio_button_unchecked</span><div style="flex:1;font-size:14.5px;font-weight:600">30 min de ejercicio</div><span style="font-size:12px;color:rgba(247,244,240,0.35)">—</span></div>
+        </div>
+      </div>
+
+      <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:24px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px"><h3 class="disp" style="font-weight:800;font-size:18px">Comidas de hoy</h3><span style="font-size:12.5px;font-weight:700;color:#ff4d00">Ver plan →</span></div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;gap:14px;padding:13px;border-radius:16px;background:#1e1a15"><div style="width:46px;height:46px;border-radius:13px;background:rgba(255,77,0,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="color:#ff4d00;font-size:21px">wb_sunny</span></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Huevos + aguacate</div><div style="font-size:12px;color:rgba(247,244,240,0.4)">Desayuno</div></div><span class="disp nums" style="font-weight:800;font-size:15px">420</span></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:13px;border-radius:16px;background:#1e1a15"><div style="width:46px;height:46px;border-radius:13px;background:rgba(255,77,0,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym fill" style="color:#ff4d00;font-size:21px">restaurant</span></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Ensalada César keto</div><div style="font-size:12px;color:rgba(247,244,240,0.4)">Almuerzo</div></div><span class="disp nums" style="font-weight:800;font-size:15px">520</span></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:13px;border-radius:16px;background:#141110;border:1px dashed rgba(255,240,225,0.12)"><div style="width:46px;height:46px;border-radius:13px;background:rgba(255,240,225,0.05);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="msym" style="color:rgba(247,244,240,0.4);font-size:21px">nightlight</span></div><div style="flex:1"><div style="font-size:14px;font-weight:600;color:rgba(247,244,240,0.6)">Salmón + espárragos</div><div style="font-size:12px;color:rgba(247,244,240,0.35)">Cena · 20:00</div></div><span class="disp nums" style="font-weight:800;font-size:15px;color:rgba(247,244,240,0.5)">400</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="position:sticky;bottom:0;height:68px;display:flex;align-items:stretch;background:rgba(15,13,10,0.94);backdrop-filter:blur(18px);border-top:1px solid rgba(255,240,225,0.08);z-index:20">
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#ff4d00"><span class="msym fill" style="font-size:23px">cottage</span><span style="font-size:11px;font-weight:600">Inicio</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:rgba(247,244,240,0.5)"><span class="msym" style="font-size:23px">donut_small</span><span style="font-size:11px;font-weight:600">Macros</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:rgba(247,244,240,0.5)"><span style="width:46px;height:34px;margin-top:-14px;border-radius:14px;background:#ff4d00;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(255,77,0,0.4)"><span class="msym" style="font-size:24px;color:#fff">center_focus_strong</span></span><span style="font-size:11px;font-weight:600">Escanear</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:rgba(247,244,240,0.5)"><span class="msym" style="font-size:23px">event_note</span><span style="font-size:11px;font-weight:600">Plan</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:rgba(247,244,240,0.5)"><span class="msym" style="font-size:23px">menu</span><span style="font-size:11px;font-weight:600">Más</span></div>
+    </div>
+  </div>
+
+  <div style="width:100%;max-width:620px;background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:22px;padding:24px">
+    <div class="disp" style="font-weight:800;font-size:15px;margin-bottom:14px">Qué falla hoy en móvil</div>
+    <div style="display:flex;flex-direction:column;gap:11px;font-size:13.5px;line-height:1.55;color:rgba(247,244,240,0.6)">
+      <div style="display:flex;gap:11px"><span class="msym" style="color:#ff4d00;font-size:19px;flex-shrink:0">arrow_right_alt</span><span>Es una grilla de escritorio apilada: 6 pantallas de scroll antes de llegar a la comida de la noche.</span></div>
+      <div style="display:flex;gap:11px"><span class="msym" style="color:#ff4d00;font-size:19px;flex-shrink:0">arrow_right_alt</span><span>El dato que define keto — <strong style="color:#f7f4f0">carbos netos restantes</strong> — está enterrado en tercer lugar dentro de una tarjeta.</span></div>
+      <div style="display:flex;gap:11px"><span class="msym" style="color:#ff4d00;font-size:19px;flex-shrink:0">arrow_right_alt</span><span>Health Score 82 ocupa el tile más grande y no es accionable.</span></div>
+      <div style="display:flex;gap:11px"><span class="msym" style="color:#ff4d00;font-size:19px;flex-shrink:0">arrow_right_alt</span><span>Registrar comida está arriba, fuera del alcance del pulgar; el tab central lleva a otra pantalla completa.</span></div>
+      <div style="display:flex;gap:11px"><span class="msym" style="color:#ff4d00;font-size:19px;flex-shrink:0">arrow_right_alt</span><span>16 destinos en un drawer "Más": sin jerarquía ni sensación de app instalada (nada de sheets, gestos u offline visible).</span></div>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+</body>
+</html>

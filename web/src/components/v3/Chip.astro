@@ -1,0 +1,57 @@
+---
+// Chip — v3. Una forma, tres roles. Máximo 4 visibles antes de scroll horizontal
+// (documentado aquí; el contenedor .v3-chip-group ya scrollea si hay más).
+interface Props {
+  role: 'state' | 'filter' | 'verdict';
+  label: string;
+  active?: boolean;
+  pulsing?: boolean;
+  verdict?: 'lime' | 'amber' | 'orange';
+  group?: string;
+}
+
+const { role, label, active = false, pulsing = false, verdict, group } = Astro.props;
+
+const classes = [
+  'v3-chip',
+  `v3-chip--${role}`,
+  active && 'v3-chip--active',
+  role === 'verdict' && verdict && `v3-chip--verdict-${verdict}`,
+];
+---
+
+{role === 'filter' ? (
+  <button type="button" class:list={classes} data-chip-group={group} aria-pressed={active}>
+    {label}
+  </button>
+) : (
+  <span class:list={classes}>
+    {pulsing && <span class="v3-chip-dot"></span>}
+    {label}
+  </span>
+)}
+
+<script is:inline>
+(function () {
+  if (window.__v3ChipInit) return;
+  window.__v3ChipInit = true;
+
+  document.addEventListener('click', function (e) {
+    var chip = e.target.closest('[data-chip-group]');
+    if (!chip) return;
+    var group = chip.getAttribute('data-chip-group');
+    var siblings = group
+      ? document.querySelectorAll('[data-chip-group="' + group + '"]')
+      : [chip];
+    siblings.forEach(function (el) {
+      var isTarget = el === chip;
+      el.classList.toggle('v3-chip--active', isTarget);
+      el.setAttribute('aria-pressed', String(isTarget));
+    });
+    chip.dispatchEvent(new CustomEvent('v3:chip-active-changed', {
+      bubbles: true,
+      detail: { group: group, label: chip.textContent.trim() }
+    }));
+  });
+})();
+</script>

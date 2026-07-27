@@ -1,0 +1,105 @@
+---
+// DataRow — v3. Sustituye todas las tablas de la app. Máximo una cifra dominante por fila.
+// Gesto de swipe: implementación propia por fila (pointer events), no reutiliza el evento
+// global "ketolab:swipe" de utils/touch-gestures.js (solo da dirección, sin arrastre visual
+// en tiempo real, insuficiente para revelar acciones). Sin lógica de borrar/deshacer aquí:
+// la página consumidora escucha el evento "v3:row-swipe" y decide qué hacer.
+interface Props {
+  id: string;
+  leading?: 'time' | 'icon' | 'check' | 'verdict-bar';
+  leadingValue?: string; // hora ("08:30"), nombre de icono Material Symbols, o color de verdict-bar
+  title: string;
+  meta?: string;
+  value?: string | number;
+  valueUnit?: string;
+  verdict?: 'lime' | 'amber' | 'orange';
+  state?: 'done' | 'pending' | 'blocked';
+}
+
+const { id, leading = 'icon', leadingValue = '', title, meta, value, valueUnit, verdict, state = 'pending' } = Astro.props;
+const vbarColor = verdict || (leading === 'verdict-bar' ? 'lime' : undefined);
+---
+
+<div class="v3-row-wrap" data-row-id={id}>
+  <div class="v3-row-actions">
+    <button type="button" class="v3-row-action v3-row-action--edit" data-row-action="edit">Editar</button>
+    <button type="button" class="v3-row-action v3-row-action--delete" data-row-action="delete">Borrar</button>
+  </div>
+
+  <div class:list={['v3-row', leading === 'verdict-bar' && 'v3-row--verdict-bar']}>
+    {vbarColor && <span class={`v3-row-vbar v3-row-vbar--${vbarColor}`}></span>}
+
+    {/* La opacidad de done/blocked se aplica solo al contenido, nunca al fondo del
+        propio .v3-row: el fondo debe seguir opaco para tapar .v3-row-actions en reposo. */}
+    <div class:list={['v3-row-content', `v3-row-content--${state}`]}>
+      {leading === 'time' && <span class="v3-row-lead v3-row-lead-time">{leadingValue}</span>}
+      {leading === 'icon' && (
+        <span class="v3-row-lead"><span class="material-symbols-outlined">{leadingValue || 'circle'}</span></span>
+      )}
+      {leading === 'check' && (
+        <span class="v3-row-lead"><span class="material-symbols-outlined">{state === 'done' ? 'check_circle' : 'radio_button_unchecked'}</span></span>
+      )}
+
+      <div class="v3-row-body">
+        <div class="v3-row-title">{title}</div>
+        {meta && <div class="v3-row-meta">{meta}</div>}
+      </div>
+
+      {value != null && (
+        <div class="v3-row-value v3-num-mono">{value}{valueUnit && <span class="v3-row-unit">{valueUnit}</span>}</div>
+      )}
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+(function () {
+  if (window.__v3DataRowInit) return;
+  window.__v3DataRowInit = true;
+
+  var REVEAL_WIDTH = 128; // ancho de .v3-row-actions (2 x 64px)
+  var THRESHOLD = 48;
+
+  var active = null; // { wrap, row, startX, dx }
+
+  function onPointerDown(e) {
+    var wrap = e.target.closest('.v3-row-wrap');
+    if (!wrap) return;
+    var row = wrap.querySelector('.v3-row');
+    active = { wrap: wrap, row: row, startX: e.clientX, dx: 0 };
+    row.style.transition = 'none';
+  }
+
+  function onPointerMove(e) {
+    if (!active) return;
+    active.dx = Math.min(0, Math.max(-REVEAL_WIDTH, e.clientX - active.startX));
+    active.row.style.transform = 'translateX(' + active.dx + 'px)';
+  }
+
+  function onPointerUp() {
+    if (!active) return;
+    var row = active.row;
+    var open = active.dx < -THRESHOLD;
+    row.style.transition = '';
+    row.style.transform = open ? 'translateX(-' + REVEAL_WIDTH + 'px)' : 'translateX(0)';
+    active = null;
+  }
+
+  document.addEventListener('pointerdown', onPointerDown);
+  document.addEventListener('pointermove', onPointerMove);
+  document.addEventListener('pointerup', onPointerUp);
+  document.addEventListener('pointercancel', onPointerUp);
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-row-action]');
+    if (!btn) return;
+    var wrap = btn.closest('.v3-row-wrap');
+    var row = wrap && wrap.querySelector('.v3-row');
+    if (row) row.style.transform = 'translateX(0)';
+    wrap.dispatchEvent(new CustomEvent('v3:row-swipe', {
+      bubbles: true,
+      detail: { id: wrap.getAttribute('data-row-id'), action: btn.getAttribute('data-row-action') }
+    }));
+  });
+})();
+</script>
