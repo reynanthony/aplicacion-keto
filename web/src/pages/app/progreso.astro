@@ -1,381 +1,279 @@
 ---
+// Progreso — v3. Peso + sparkline lima, DecisionCard con proyección temporal
+// (aritmética simple sobre keto_weight_history, no un modelo médico), 3 tiles
+// (racha/comidas/Health Score — este último ya se reutilizaba en la versión
+// anterior vía HealthScoreEngine) y DataRow de medidas corporales (100% nuevo,
+// no existía ningún dato de medidas en el repo).
 import AppLayout from '../../layouts/AppLayout.astro';
-import AppNav from '../../components/AppNav.astro';
+import DataRow from '../../components/v3/DataRow.astro';
+import DecisionCard from '../../components/v3/DecisionCard.astro';
+import Sheet from '../../components/v3/Sheet.astro';
+import Dock from '../../components/v3/Dock.astro';
+import VeredictoSheet from '../../components/v3/VeredictoSheet.astro';
 ---
 
 <AppLayout title="KetoCore | Progreso" authGuard={true}>
-<style is:global>
-html,body{margin:0;padding:0;box-sizing:border-box;background:#0b0a08;color:#f7f4f0;font-family:'Inter',sans-serif}
-*,*::before,*::after{box-sizing:border-box}
-.glass-card{background:#181818;border:1px solid rgba(255,255,255,0.09);box-shadow:0 2px 16px rgba(0,0,0,0.4)}
-.inner-surface{background:#111;border:1px solid rgba(255,240,225,0.07)}
-.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
-@media (min-width: 768px) {
-  #progresoMain {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-    align-items: start;
-    padding-top: 3.5rem;
-    padding-bottom: 3rem !important;
-  }
-  #progresoMain > * { margin-top: 0 !important; }
-  #sect-wprogress  { grid-column: 1; }
-  #sect-adherencia { grid-column: 2; }
-  #sect-rachas     { grid-column: 2; }
-  #sect-health     { grid-column: 2; }
-}
-</style>
+  <style is:global>
+    #appSidebar, #kcTabbar, #kcDrawer { display: none !important; }
+  </style>
 
-<!-- TopBar -->
-<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
-  <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
-    <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
-    <h1 class="text-base font-black" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Mi Progreso</h1>
-  </a>
-  <div class="flex items-center gap-2">
-    <button onclick="openAddWeightModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all active:scale-95" style="background:rgba(255,77,0,0.15);color:#ff4d00;border:1px solid rgba(255,77,0,0.25)">
-      <span class="material-symbols-outlined" style="font-size:15px">add</span>
-      Registrar
-    </button>
-    <button onclick="toggleHamburgerMenu()" aria-label="Menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1a15;color:rgba(247,244,240,0.6);border:1px solid rgba(255,240,225,0.06)">
-      <span class="material-symbols-outlined" style="font-size:20px">menu</span>
-    </button>
+  <div data-v3 style="background:var(--v3-surface-app); min-height:100vh;">
+    <main style="padding: var(--v3-pad-screen) var(--v3-pad-screen) 140px; max-width:520px; margin:0 auto; display:flex; flex-direction:column; gap: var(--v3-gap-block);">
+
+      <p class="v3-eyebrow">Progreso</p>
+
+      <div style="background:var(--v3-surface-1); border:1px solid var(--v3-border); border-radius:var(--v3-radius-card); padding:20px;">
+        <div style="display:flex; align-items:baseline; justify-content:space-between;">
+          <div>
+            <div class="v3-eyebrow" style="margin-bottom:6px;">Peso actual</div>
+            <div style="display:flex; align-items:baseline; gap:6px;">
+              <span id="pgCurrentWeight" class="v3-num-mono" style="font-size:34px; color:var(--v3-lime);">--</span>
+              <span style="font-size:14px; color:var(--v3-text-40);">kg</span>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div class="v3-eyebrow" style="margin-bottom:6px;">Meta</div>
+            <span id="pgGoalWeight" class="v3-num-mono" style="font-size:16px;">-- kg</span>
+          </div>
+        </div>
+        <div style="position:relative; height:70px; margin-top:14px;">
+          <svg id="pgWeightChart" width="100%" height="70" viewBox="0 0 540 70" preserveAspectRatio="none">
+            <text x="270" y="38" text-anchor="middle" fill="var(--v3-text-40)" font-size="11">Sin registros de peso</text>
+          </svg>
+        </div>
+      </div>
+
+      <DecisionCard id="pg-projection" variant="cream" buttonLabel="Registrar peso" title="Cargando…">
+        <span id="pgProjectionBody"></span>
+      </DecisionCard>
+
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
+        <div style="background:var(--v3-surface-1); border:1px solid var(--v3-border); border-radius:var(--v3-radius-tile); padding:14px; text-align:center;">
+          <div id="pgStreak" class="v3-num-mono" style="font-size:22px; justify-content:center; color:var(--v3-lime);">0</div>
+          <div class="v3-eyebrow" style="margin-top:4px; font-size:10px;">Racha</div>
+        </div>
+        <div style="background:var(--v3-surface-1); border:1px solid var(--v3-border); border-radius:var(--v3-radius-tile); padding:14px; text-align:center;">
+          <div id="pgMeals" class="v3-num-mono" style="font-size:22px; justify-content:center;">0</div>
+          <div class="v3-eyebrow" style="margin-top:4px; font-size:10px;">Comidas hoy</div>
+        </div>
+        <div style="background:var(--v3-surface-1); border:1px solid var(--v3-border); border-radius:var(--v3-radius-tile); padding:14px; text-align:center;">
+          <div id="pgHealthScore" class="v3-num-mono" style="font-size:22px; justify-content:center; color:var(--v3-amber);">--</div>
+          <div class="v3-eyebrow" style="margin-top:4px; font-size:10px;">Health Score</div>
+        </div>
+      </div>
+
+      <section>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+          <p class="v3-eyebrow" style="margin:0;">Medidas</p>
+          <button type="button" id="pgAddMeasureBtn" class="v3-chip v3-chip--filter">+ Añadir</button>
+        </div>
+        <div id="pgMeasureForm" style="display:none; background:var(--v3-surface-1); border:1px solid var(--v3-border); border-radius:var(--v3-radius-tile); padding:14px; margin-bottom:10px; flex-direction:column; gap:8px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+            <label class="v3-eyebrow">Cintura
+              <input id="pgCintura" type="number" style="width:100%; background:var(--v3-surface-2); border:1px solid var(--v3-border); border-radius:8px; padding:8px 4px; margin-top:4px; color:var(--v3-text); font-family:var(--v3-font-mono);" />
+            </label>
+            <label class="v3-eyebrow">Cadera
+              <input id="pgCadera" type="number" style="width:100%; background:var(--v3-surface-2); border:1px solid var(--v3-border); border-radius:8px; padding:8px 4px; margin-top:4px; color:var(--v3-text); font-family:var(--v3-font-mono);" />
+            </label>
+            <label class="v3-eyebrow">Pecho
+              <input id="pgPecho" type="number" style="width:100%; background:var(--v3-surface-2); border:1px solid var(--v3-border); border-radius:8px; padding:8px 4px; margin-top:4px; color:var(--v3-text); font-family:var(--v3-font-mono);" />
+            </label>
+          </div>
+          <button type="button" id="pgSaveMeasureBtn" class="v3-decision-card-action" style="background:var(--v3-lime); color:var(--v3-text-on-lime); justify-content:center;">Guardar medida</button>
+        </div>
+        <div id="pgMeasureList"></div>
+        <div style="display:none"><DataRow id="_v3-datarow-script-anchor-progreso" title="" /></div>
+      </section>
+
+    </main>
+
+    <VeredictoSheet />
+    <Sheet id="v3-sheet-registrar" title="Registrar" subtitle="Margen de hoy · — g netos">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <a href="/app/scanner" class="v3-decision-card-action" style="background:var(--v3-lime); color:var(--v3-text-on-lime); justify-content:center;">
+          <span class="material-symbols-outlined" style="font-size:18px">center_focus_strong</span> Escanear
+        </a>
+        <a href="/app/alimentos" class="v3-decision-card-action" style="background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;">
+          <span class="material-symbols-outlined" style="font-size:18px">search</span> Buscar
+        </a>
+        <button type="button" class="v3-decision-card-action" disabled style="background:var(--v3-surface-2); color:var(--v3-text-40); justify-content:center; cursor:not-allowed;">
+          <span class="material-symbols-outlined" style="font-size:18px">mic</span> Dictar · Próximamente
+        </button>
+        <a href="/app/recetas" class="v3-decision-card-action" style="background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;">
+          <span class="material-symbols-outlined" style="font-size:18px">menu_book</span> Recetas
+        </a>
+      </div>
+      <Fragment slot="footnote">Offline · sincroniza solo</Fragment>
+    </Sheet>
+    <Dock active="yo" fabSheetId="v3-sheet-registrar" />
   </div>
-</header>
 
-<!-- Main -->
-<main id="progresoMain" class="main-content pt-14 pb-24 px-4 space-y-3" style="background:#0b0a08">
+  <script is:inline src="/app/utils.js"></script>
+  <script is:inline src="/app/modules/health-score.js"></script>
+  <script is:inline src="/app/modules/day-budget.js"></script>
+  <script is:inline src="/app/modules/meal-log.js"></script>
+  <script is:inline src="/app/modules/v3-motion.js"></script>
+  <script is:inline src="/app/modules/inspectorKeto.js"></script>
+  <script is:inline src="/app/modules/v3-veredicto.js"></script>
 
-  <!-- Header editorial -->
-  <div style="margin:10px 2px 16px">
-    <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Progreso · Resultados</div>
-    <h1 class="kc-h1" style="font-size:30px">Tu progreso,<br><span style="color:rgba(247,244,240,0.4)">medido de verdad.</span></h1>
-  </div>
+  <script is:inline>
+    function fmtDec(n) { return n != null ? parseFloat(n).toFixed(1) : '--'; }
 
-  <!-- 1. PROGRESO DE PESO -->
-  <section id="sect-wprogress" class="glass-card rounded-2xl p-4">
-    <div class="flex items-center justify-between mb-3">
-      <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-lg" style="color:#ff4d00;font-variation-settings:'FILL' 1">monitor_weight</span>
-        <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Progreso de Peso</h2>
-      </div>
-    </div>
-
-    <!-- Ring (left) + Stats (right) — horizontal, compact -->
-    <div class="flex items-center gap-4 mb-3">
-      <div class="relative flex-shrink-0" style="width:88px;height:88px">
-        <svg class="w-full h-full -rotate-90" viewBox="0 0 80 80">
-          <circle cx="40" cy="40" r="32" fill="transparent" stroke="rgba(255,240,225,0.07)" stroke-width="7"/>
-          <circle id="weightProgressRing" cx="40" cy="40" r="32" fill="transparent" stroke="#ff4d00"
-            stroke-dasharray="201" stroke-dashoffset="201" stroke-linecap="round" stroke-width="7"
-            style="transition:stroke-dashoffset 0.7s cubic-bezier(0.4,0,0.2,1)"/>
-        </svg>
-        <div class="absolute inset-0 flex flex-col items-center justify-center">
-          <p id="weightProgressPct" class="font-black leading-none" style="font-size:20px;color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">0%</p>
-          <p style="font-size:8px;color:rgba(247,244,240,0.4);margin-top:3px;text-transform:uppercase;letter-spacing:0.05em">meta</p>
-        </div>
-      </div>
-
-      <div class="flex-1 flex flex-col gap-2">
-        <div class="flex items-center justify-between px-3 py-2 rounded-xl inner-surface">
-          <span style="font-size:10px;color:rgba(247,244,240,0.5);font-weight:600;text-transform:uppercase;letter-spacing:0.05em">Actual</span>
-          <span id="currentWeightDisplay" class="font-black" style="font-size:14px;color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">-- kg</span>
-        </div>
-        <div class="flex items-center justify-between px-3 py-2 rounded-xl" style="background:rgba(255,77,0,0.07);border:1px solid rgba(255,77,0,0.15)">
-          <span style="font-size:10px;color:rgba(255,77,0,0.7);font-weight:600;text-transform:uppercase;letter-spacing:0.05em">Objetivo</span>
-          <span id="goalWeightDisplay" class="font-black" style="font-size:14px;color:#ff4d00;font-family:'Plus Jakarta Sans',sans-serif">-- kg</span>
-        </div>
-        <div class="flex items-center justify-between px-3 py-2 rounded-xl" style="background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.15)">
-          <span style="font-size:10px;color:rgba(34,197,94,0.7);font-weight:600;text-transform:uppercase;letter-spacing:0.05em">Perdidos</span>
-          <span id="lostWeightDisplay" class="font-black" style="font-size:14px;color:#22c55e;font-family:'Plus Jakarta Sans',sans-serif">0 kg</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Chart -->
-    <div class="rounded-xl px-3 pt-2 pb-3 inner-surface">
-      <p style="font-size:9px;color:rgba(247,244,240,0.4);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Últimas 4 semanas</p>
-      <div style="position:relative;height:88px">
-        <svg id="weightChartProg" class="w-full h-full" viewBox="0 0 560 88" preserveAspectRatio="none">
-          <text x="280" y="48" text-anchor="middle" fill="rgba(247,244,240,0.25)" font-size="12">Sin registros de peso</text>
-        </svg>
-      </div>
-    </div>
-  </section>
-
-  <!-- 2. ADHERENCIA — 7 días -->
-  <section id="sect-adherencia" class="glass-card rounded-2xl p-4">
-    <div class="flex items-center gap-2 mb-3">
-      <span class="material-symbols-outlined text-lg" style="color:#22c55e;font-variation-settings:'FILL' 1">fact_check</span>
-      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Adherencia — 7 días</h2>
-      <span id="adherencePctBadge" class="ml-auto text-xs font-bold px-2 py-0.5 rounded-full" style="background:rgba(34,197,94,0.12);color:#22c55e"></span>
-    </div>
-    <div id="adherenceWeek" class="flex gap-1.5 justify-between"></div>
-  </section>
-
-  <!-- 3. RACHAS Y LOGROS -->
-  <section id="sect-rachas" class="glass-card rounded-2xl p-4">
-    <div class="flex items-center gap-2 mb-3">
-      <span class="material-symbols-outlined text-lg" style="color:#fbbf24;font-variation-settings:'FILL' 1">emoji_events</span>
-      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Rachas y Logros</h2>
-    </div>
-    <div class="grid grid-cols-3 gap-2 mb-3">
-      <div class="rounded-xl p-3 text-center inner-surface">
-        <div class="w-8 h-8 rounded-xl flex items-center justify-center mx-auto mb-1.5" style="background:rgba(255,77,0,0.12)">
-          <span class="material-symbols-outlined" style="color:#ff4d00;font-size:16px;font-variation-settings:'FILL' 1">bolt</span>
-        </div>
-        <p id="streakCurrent" class="text-lg font-black leading-none" style="color:#ff4d00;font-family:'Plus Jakarta Sans',sans-serif">0</p>
-        <p style="font-size:9px;color:rgba(247,244,240,0.5);margin-top:2px">Racha actual</p>
-      </div>
-      <div class="rounded-xl p-3 text-center inner-surface">
-        <div class="w-8 h-8 rounded-xl flex items-center justify-center mx-auto mb-1.5" style="background:rgba(251,191,36,0.12)">
-          <span class="material-symbols-outlined" style="color:#fbbf24;font-size:16px;font-variation-settings:'FILL' 1">emoji_events</span>
-        </div>
-        <p id="streakBest" class="text-lg font-black leading-none" style="color:#fbbf24;font-family:'Plus Jakarta Sans',sans-serif">0</p>
-        <p style="font-size:9px;color:rgba(247,244,240,0.5);margin-top:2px">Mejor racha</p>
-      </div>
-      <div class="rounded-xl p-3 text-center inner-surface">
-        <div class="w-8 h-8 rounded-xl flex items-center justify-center mx-auto mb-1.5" style="background:rgba(34,197,94,0.12)">
-          <span class="material-symbols-outlined" style="color:#22c55e;font-size:16px;font-variation-settings:'FILL' 1">local_fire_department</span>
-        </div>
-        <p id="ketoDaysTotal" class="text-lg font-black leading-none" style="color:#22c55e;font-family:'Plus Jakarta Sans',sans-serif">0</p>
-        <p style="font-size:9px;color:rgba(247,244,240,0.5);margin-top:2px">Días keto</p>
-      </div>
-    </div>
-    <div id="achievementsGrid" class="flex flex-wrap gap-2"></div>
-  </section>
-
-  <!-- 4. HEALTH SCORE -->
-  <section id="sect-health" class="glass-card rounded-2xl p-4">
-    <div class="flex items-center gap-2 mb-3">
-      <span class="material-symbols-outlined text-lg" style="color:#fbbf24;font-variation-settings:'FILL' 1">health_metrics</span>
-      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Health Score</h2>
-    </div>
-    <div class="flex items-center gap-4">
-      <div class="relative flex-shrink-0" style="width:80px;height:80px">
-        <svg class="w-full h-full -rotate-90" viewBox="0 0 80 80">
-          <circle cx="40" cy="40" r="32" fill="transparent" stroke="rgba(255,240,225,0.07)" stroke-width="7"/>
-          <circle id="healthScoreProgRing" cx="40" cy="40" r="32" fill="transparent" stroke="#fbbf24"
-            stroke-dasharray="201" stroke-dashoffset="201" stroke-linecap="round" stroke-width="7"
-            style="transition:stroke-dashoffset 0.5s ease"/>
-        </svg>
-        <div class="absolute inset-0 flex flex-col items-center justify-center">
-          <p id="healthScoreProgVal" class="font-black leading-none" style="font-size:22px;color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">--</p>
-          <p style="font-size:8px;color:rgba(247,244,240,0.4)">/100</p>
-        </div>
-      </div>
-      <div class="flex-1">
-        <p id="healthScoreProgLabel" class="text-sm font-bold mb-0.5" style="color:#f7f4f0">--</p>
-        <p class="text-xs mb-3" style="color:rgba(247,244,240,0.45)">Checklist · Macros · Peso · Ejercicio</p>
-        <div id="healthScoreBreakdown" class="space-y-1.5"></div>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<!-- Add Weight Modal -->
-<div id="addWeightModal" class="fixed inset-0 z-[80] hidden">
-  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeAddWeightModal()"></div>
-  <div class="absolute bottom-0 left-0 right-0 glass-card rounded-t-3xl p-6 shadow-2xl" style="padding-bottom:max(24px,env(safe-area-inset-bottom))">
-    <div class="w-10 h-1 bg-white/20 rounded-full mx-auto mb-5"></div>
-    <h3 class="text-lg font-bold flex items-center gap-2 mb-4" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">
-      <span class="material-symbols-outlined" style="color:#ff4d00">monitor_weight</span>
-      Registrar Peso
-    </h3>
-    <input type="number" id="newWeightInput" step="0.1" min="20" max="300"
-      class="w-full py-4 px-4 text-white rounded-2xl text-2xl font-bold text-center focus:outline-none mb-4"
-      style="background:#1e1a15;border:1.5px solid rgba(255,255,255,0.12);color:#f7f4f0" placeholder="0.0 kg">
-    <button onclick="saveProgressWeight()" class="w-full py-4 rounded-2xl text-white font-bold text-base transition-all active:scale-95"
-      style="background:linear-gradient(135deg,#ff4d00,#ff6b2c)">
-      Guardar
-    </button>
-  </div>
-</div>
-
-<!-- Toast -->
-<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 bg-green-600 text-white px-5 py-3 rounded-xl shadow-lg z-[9999] font-medium hidden opacity-0 transition-all duration-300">
-  <span id="toastMsg">✓ Guardado</span>
-</div>
-
-<!-- Bottom Navigation -->
-<AppNav active="more" />
-
-<script is:inline src="/app/utils.js"></script>
-<script is:inline src="/app/modules/health-score.js"></script>
-<script is:inline>
-function fmtDec(n){ return n != null ? parseFloat(n).toFixed(1) : '--'; }
-function showToast(msg){ var t=document.getElementById('toast'); var m=document.getElementById('toastMsg'); if(m) m.textContent=msg; t.classList.remove('hidden','opacity-0'); t.classList.add('opacity-100'); setTimeout(function(){ t.classList.add('opacity-0'); setTimeout(function(){ t.classList.add('hidden'); },300); },2000); }
-
-function openAddWeightModal(){ document.getElementById('addWeightModal').classList.remove('hidden'); var inp=document.getElementById('newWeightInput'); if(inp){ inp.value=''; inp.focus(); } }
-function closeAddWeightModal(){ document.getElementById('addWeightModal').classList.add('hidden'); }
-
-function saveProgressWeight(){
-  var inp = document.getElementById('newWeightInput');
-  var val = parseFloat(inp.value);
-  if (isNaN(val) || val < 20 || val > 300) { alert('Ingresa un peso válido'); return; }
-  var history = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
-  if (!Array.isArray(history)) history = [];
-  var today = new Date().toISOString().split('T')[0];
-  var idx = history.findIndex(function(h){ return (h.date||h.fecha) === today; });
-  if (idx >= 0) history[idx].weight = val;
-  else history.push({ date: today, weight: val });
-  localStorage.setItem('keto_weight_history', JSON.stringify(history));
-  closeAddWeightModal();
-  showToast('✓ Peso registrado: ' + val + ' kg');
-  loadProgressPage();
-}
-
-function loadProgressPage(){
-  var profile = safeParseJSON(localStorage.getItem('keto_profile'), {});
-  var history = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
-  if (!Array.isArray(history)) history = [];
-
-  var startW  = parseFloat(profile.startWeight || profile.pesoInicial) || 0;
-  var goalW   = parseFloat(profile.goalWeight  || profile.pesoObjetivo) || 0;
-  var sorted  = history.slice().sort(function(a,b){ return new Date(b.date||b.fecha) - new Date(a.date||a.fecha); });
-  var currentW = sorted.length ? (sorted[0].weight || sorted[0].peso || 0) : 0;
-  if (!currentW && profile.weight) currentW = parseFloat(profile.weight);
-
-  // Weight progress
-  var totalToLose = startW && goalW ? Math.abs(startW - goalW) : 0;
-  var lost = startW && currentW ? Math.abs(startW - currentW) : 0;
-  var pct  = totalToLose > 0 ? Math.min(100, Math.round((lost / totalToLose) * 100)) : 0;
-
-  var safeSet = function(id, txt){ var el=document.getElementById(id); if(el) el.textContent=txt; };
-  safeSet('currentWeightDisplay', currentW ? fmtDec(currentW) + ' kg' : '-- kg');
-  safeSet('goalWeightDisplay',    goalW    ? fmtDec(goalW)    + ' kg' : '-- kg');
-  safeSet('lostWeightDisplay',    lost > 0 ? '-' + fmtDec(lost) + ' kg' : '0 kg');
-  safeSet('weightProgressPct', pct + '%');
-
-  var ring = document.getElementById('weightProgressRing');
-  if (ring){ var c=201; ring.style.strokeDashoffset = c - (c * pct / 100); }
-
-  // Weight chart SVG (last 28 days)
-  var svgEl = document.getElementById('weightChartProg');
-  if (svgEl) {
-    var pts = [];
-    for (var i = 27; i >= 0; i--) {
-      var d = new Date(); d.setDate(d.getDate() - i);
-      var dk = d.toISOString().split('T')[0];
-      var entry = history.find(function(h){ return (h.date||h.fecha) === dk; });
-      if (entry) pts.push({ x: 27 - i, w: entry.weight || entry.peso || 0 });
+    function getSortedWeightHistory() {
+      var h = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
+      if (!Array.isArray(h)) h = [];
+      return h.slice().sort(function (a, b) { return new Date(a.date || a.fecha) - new Date(b.date || b.fecha); });
     }
-    if (pts.length >= 2) {
-      var ws = pts.map(function(p){ return p.w; });
-      var minW = Math.min.apply(null, ws) - 1;
-      var maxW = Math.max.apply(null, ws) + 1;
-      var rangeW = maxW - minW || 1;
-      var W = 540; var H = 78; var padX = 10; var padY = 6;
-      function px(xi){ return padX + (xi / 27) * W; }
-      function py(wi){ return (H + padY) - ((wi - minW) / rangeW) * (H - padY * 2); }
-      var line = pts.map(function(p, i){ return (i === 0 ? 'M' : 'L') + px(p.x).toFixed(1) + ' ' + py(p.w).toFixed(1); }).join(' ');
-      var area = line + ' L' + px(pts[pts.length-1].x).toFixed(1) + ' ' + (H+padY) + ' L' + px(pts[0].x).toFixed(1) + ' ' + (H+padY) + ' Z';
-      var dotsHtml = pts.map(function(p){
-        return '<circle cx="' + px(p.x).toFixed(1) + '" cy="' + py(p.w).toFixed(1) + '" r="3" fill="#ff4d00"/>';
-      }).join('');
-      svgEl.innerHTML =
-        '<defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff4d00" stop-opacity="0.3"/><stop offset="100%" stop-color="#ff4d00" stop-opacity="0"/></linearGradient></defs>' +
-        '<path d="' + area + '" fill="url(#wg)"/>' +
-        '<path d="' + line + '" fill="none" stroke="#ff4d00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
-        dotsHtml;
-    } else if (pts.length === 1) {
-      svgEl.innerHTML = '<text x="280" y="48" text-anchor="middle" fill="rgba(247,244,240,0.35)" font-size="11">Registra más días para ver la tendencia</text>';
+
+    function renderProgreso() {
+      var profile = safeParseJSON(localStorage.getItem('keto_profile'), {});
+      var sorted = getSortedWeightHistory();
+      var goalW = parseFloat(profile.goalWeight || profile.pesoObjetivo) || 0;
+      var startW = parseFloat(profile.startWeight || profile.pesoInicial) || (sorted.length ? sorted[0].weight : 0);
+      var currentW = sorted.length ? parseFloat(sorted[sorted.length - 1].weight || sorted[sorted.length - 1].peso) : (parseFloat(profile.weight) || 0);
+
+      document.getElementById('pgCurrentWeight').textContent = currentW ? fmtDec(currentW) : '--';
+      document.getElementById('pgGoalWeight').textContent = goalW ? fmtDec(goalW) + ' kg' : '-- kg';
+
+      // Sparkline (últimos 28 días), técnica ya existente en la versión anterior, re-temeada a lima
+      var svgEl = document.getElementById('pgWeightChart');
+      var pts = [];
+      for (var i = 27; i >= 0; i--) {
+        var d = new Date(); d.setDate(d.getDate() - i);
+        var dk = d.toISOString().slice(0, 10);
+        var entry = sorted.find(function (h) { return (h.date || h.fecha) === dk; });
+        if (entry) pts.push({ x: 27 - i, w: parseFloat(entry.weight || entry.peso) || 0 });
+      }
+      if (pts.length >= 2) {
+        var ws = pts.map(function (p) { return p.w; });
+        var minW = Math.min.apply(null, ws) - 1, maxW = Math.max.apply(null, ws) + 1;
+        var rangeW = maxW - minW || 1;
+        var W = 520, H = 60, padX = 10, padY = 6;
+        function px(xi) { return padX + (xi / 27) * W; }
+        function py(wi) { return (H + padY) - ((wi - minW) / rangeW) * (H - padY * 2); }
+        var line = pts.map(function (p, i) { return (i === 0 ? 'M' : 'L') + px(p.x).toFixed(1) + ' ' + py(p.w).toFixed(1); }).join(' ');
+        var area = line + ' L' + px(pts[pts.length - 1].x).toFixed(1) + ' ' + (H + padY) + ' L' + px(pts[0].x).toFixed(1) + ' ' + (H + padY) + ' Z';
+        var dots = pts.map(function (p) { return '<circle cx="' + px(p.x).toFixed(1) + '" cy="' + py(p.w).toFixed(1) + '" r="3" fill="var(--v3-lime)"/>'; }).join('');
+        svgEl.innerHTML =
+          '<defs><linearGradient id="pgg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c8f560" stop-opacity="0.3"/><stop offset="100%" stop-color="#c8f560" stop-opacity="0"/></linearGradient></defs>' +
+          '<path d="' + area + '" fill="url(#pgg)"/>' +
+          '<path d="' + line + '" fill="none" stroke="var(--v3-lime)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' + dots;
+      } else if (pts.length === 1) {
+        svgEl.innerHTML = '<text x="270" y="38" text-anchor="middle" fill="var(--v3-text-40)" font-size="11">Registra más días para ver la tendencia</text>';
+      }
+
+      // Proyección: regresión simple sobre el propio historial (aritmética, no un modelo médico)
+      var card = document.querySelector('[data-decision-id="pg-projection"]');
+      var titleEl = card.querySelector('.v3-decision-card-title');
+      var bodyEl = document.getElementById('pgProjectionBody');
+      if (!goalW || sorted.length < 2) {
+        titleEl.textContent = 'Registra tu peso para ver tu proyección';
+        bodyEl.textContent = sorted.length < 2 ? 'Necesitas al menos 2 registros de peso para calcular una tendencia.' : 'Configura tu meta de peso en Ajustes.';
+      } else {
+        var first = sorted[0], last = sorted[sorted.length - 1];
+        var days = Math.max(1, (new Date(last.date || last.fecha) - new Date(first.date || first.fecha)) / 86400000);
+        var totalChange = parseFloat(last.weight || last.peso) - parseFloat(first.weight || first.peso);
+        var perDay = totalChange / days;
+        var remaining = goalW - currentW;
+        titleEl.textContent = 'Meta: ' + fmtDec(goalW) + ' kg';
+        if (Math.abs(remaining) < 0.5) {
+          bodyEl.textContent = 'Ya estás en tu meta o muy cerca — ¡sigue así!';
+        } else if (Math.abs(perDay) < 0.005) {
+          bodyEl.textContent = 'Tu peso se mantiene estable — sigue registrando para ver una tendencia.';
+        } else if (Math.sign(perDay) === Math.sign(remaining)) {
+          var daysToGoal = Math.round(remaining / perDay);
+          bodyEl.textContent = 'A tu ritmo actual (' + fmtDec(Math.abs(perDay)) + ' kg/día), llegarías a tu meta en ~' + daysToGoal + ' días.';
+        } else {
+          bodyEl.textContent = 'Tu peso se mueve en dirección contraria a tu meta por ahora.';
+        }
+      }
+      var sub = document.querySelector('#v3-sheet-registrar .v3-sheet-subtitle');
+      if (sub && window.KetoBudget) sub.textContent = 'Margen de hoy · ' + Math.round(window.KetoBudget.compute().available) + ' g netos';
+
+      // Tiles
+      var streak = safeParseJSON(localStorage.getItem('ketoStreak'), { currentStreak: 0 });
+      document.getElementById('pgStreak').textContent = streak.currentStreak || 0;
+      document.getElementById('pgMeals').textContent = window.KetoMealLog.getRecentItems(999).length;
+      if (typeof HealthScoreEngine !== 'undefined') {
+        var hs = HealthScoreEngine.calculate();
+        document.getElementById('pgHealthScore').textContent = hs.total;
+      }
+
+      renderMeasurements();
     }
-  }
 
-  // Health Score
-  if (typeof HealthScoreEngine !== 'undefined'){
-    var hs = HealthScoreEngine.calculate();
-    var hRing = document.getElementById('healthScoreProgRing');
-    if (hRing){ var hc=201; hRing.style.strokeDashoffset = hc - (hc * hs.total / 100); hRing.style.stroke = hs.color; }
-    safeSet('healthScoreProgVal',   hs.total);
-    safeSet('healthScoreProgLabel', hs.label);
-    var breakdown = document.getElementById('healthScoreBreakdown');
-    if (breakdown){
-      var items = [
-        { label: 'Checklist', value: hs.breakdown.checklist, max: 35, color: '#ff4d00' },
-        { label: 'Macros',    value: hs.breakdown.macros,    max: 25, color: '#ffb300' },
-        { label: 'Peso',      value: hs.breakdown.weight,    max: 25, color: '#4ade80' },
-        { label: 'Ejercicio', value: hs.breakdown.exercise,  max: 15, color: '#818cf8' }
-      ];
-      breakdown.innerHTML = items.map(function(item){
-        var pct = Math.round((item.value / item.max) * 100);
-        return '<div style="display:flex;align-items:center;gap:8px">' +
-          '<span style="font-size:10px;color:rgba(247,244,240,0.5);width:52px;flex-shrink:0">' + item.label + '</span>' +
-          '<div style="flex:1;height:6px;background:rgba(255,240,225,0.07);border-radius:4px;overflow:hidden">' +
-            '<div style="height:100%;border-radius:4px;transition:width 0.3s ease;width:' + pct + '%;background:' + item.color + '"></div>' +
-          '</div>' +
-          '<span style="font-size:10px;font-weight:700;color:#f7f4f0;width:20px;text-align:right">' + item.value + '</span>' +
-        '</div>';
-      }).join('');
-    }
-  }
-
-  // Streaks
-  var streakData = safeParseJSON(localStorage.getItem('ketoStreak'), { currentStreak:0, bestStreak:0, ketoDays:0 });
-  safeSet('streakCurrent', streakData.currentStreak || 0);
-  safeSet('streakBest',    streakData.bestStreak    || 0);
-  safeSet('ketoDaysTotal', streakData.ketoDays      || 0);
-
-  // Achievements
-  var achievements = [];
-  if ((streakData.ketoDays || 0) >= 7)   achievements.push({ icon:'local_fire_department', color:'#ff4d00', bg:'rgba(255,77,0,0.12)',    label:'1 semana keto' });
-  if ((streakData.ketoDays || 0) >= 30)  achievements.push({ icon:'emoji_events',          color:'#fbbf24', bg:'rgba(251,191,36,0.12)',  label:'30 días keto' });
-  if (lost >= 2)  achievements.push({ icon:'bolt',             color:'#60a5fa', bg:'rgba(96,165,250,0.12)',  label:'Primeros 2 kg' });
-  if (lost >= 5)  achievements.push({ icon:'military_tech',    color:'#fbbf24', bg:'rgba(251,191,36,0.12)',  label:'5 kg perdidos' });
-  if (lost >= 10) achievements.push({ icon:'workspace_premium',color:'#ff4d00', bg:'rgba(255,77,0,0.12)',    label:'10 kg perdidos' });
-  if ((streakData.bestStreak || 0) >= 7) achievements.push({ icon:'star',      color:'#fbbf24', bg:'rgba(251,191,36,0.12)',  label:'Racha de 7 días' });
-
-  var grid = document.getElementById('achievementsGrid');
-  if (grid) {
-    grid.innerHTML = achievements.length
-      ? achievements.map(function(a) {
-          return '<div class="flex items-center gap-2 rounded-xl px-3 py-2" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">' +
-            '<div style="width:28px;height:28px;border-radius:8px;background:' + a.bg + ';display:flex;align-items:center;justify-content:center;flex-shrink:0">' +
-              '<span class="material-symbols-outlined" style="font-size:14px;color:' + a.color + ';font-variation-settings:\'FILL\' 1">' + a.icon + '</span>' +
+    function renderMeasurements() {
+      var list = safeParseJSON(localStorage.getItem('keto_measurements'), []);
+      var el = document.getElementById('pgMeasureList');
+      if (!list.length) {
+        el.innerHTML = '<p style="font-size:13px; color:var(--v3-text-40); padding:8px 2px;">Sin medidas registradas todavía.</p>';
+        return;
+      }
+      var sorted = list.slice().sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
+      el.innerHTML = sorted.map(function (m, i) {
+        var parts = [];
+        if (m.cintura) parts.push('Cintura ' + m.cintura + 'cm');
+        if (m.cadera) parts.push('Cadera ' + m.cadera + 'cm');
+        if (m.pecho) parts.push('Pecho ' + m.pecho + 'cm');
+        return '' +
+          '<div class="v3-row-wrap" data-row-id="measure-' + i + '">' +
+            '<div class="v3-row-actions"><button type="button" class="v3-row-action v3-row-action--delete" style="width:128px" data-remove-measure="' + i + '">Borrar</button></div>' +
+            '<div class="v3-row">' +
+              '<span class="v3-row-lead v3-row-lead-time">' + m.date + '</span>' +
+              '<div class="v3-row-content v3-row-content--pending">' +
+                '<div class="v3-row-body"><div class="v3-row-title">' + (parts.join(' · ') || 'Sin datos') + '</div></div>' +
+              '</div>' +
             '</div>' +
-            '<span class="text-xs font-medium" style="color:#f7f4f0">' + a.label + '</span>' +
           '</div>';
-        }).join('')
-      : '<p class="text-xs" style="color:rgba(247,244,240,0.45)">Completa tu primer checklist para desbloquear logros.</p>';
-  }
-
-  // 7-day adherence
-  var adherenceEl = document.getElementById('adherenceWeek');
-  if (adherenceEl){
-    var days7 = [];
-    var totalPct = 0; var daysWithData = 0;
-    for (var j=6;j>=0;j--){
-      var dd = new Date(); dd.setDate(dd.getDate()-j);
-      var dk2 = dd.toISOString().split('T')[0];
-      var chk = safeParseJSON(localStorage.getItem('checklist_' + dk2), null);
-      var count = chk ? Math.min(Object.values(chk).filter(function(v){ return v === true; }).length, 6) : 0;
-      var pct2 = Math.round((count / 6) * 100);
-      var isToday = j === 0;
-      if (chk !== null){ totalPct += pct2; daysWithData++; }
-      days7.push({ day: ['D','L','M','X','J','V','S'][dd.getDay()], pct: pct2, isToday: isToday, hasData: chk !== null });
+      }).join('');
     }
-    var avgPct = daysWithData ? Math.round(totalPct / daysWithData) : 0;
-    var badge = document.getElementById('adherencePctBadge');
-    if (badge && daysWithData) badge.textContent = avgPct + '% promedio';
-    adherenceEl.innerHTML = days7.map(function(d){
-      var barColor = d.pct >= 80 ? '#22c55e' : d.pct >= 50 ? '#fbbf24' : d.pct > 0 ? '#ff7351' : 'rgba(255,240,225,0.08)';
-      var dayColor = d.isToday ? '#ff4d00' : 'rgba(247,244,240,0.45)';
-      var valColor = d.hasData ? '#f7f4f0' : 'rgba(247,244,240,0.2)';
-      return '<div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">' +
-        '<div style="width:100%;display:flex;flex-direction:column;justify-content:flex-end;border-radius:6px;overflow:hidden;height:60px;background:rgba(255,240,225,0.05)">' +
-          '<div style="width:100%;border-radius:4px 4px 0 0;transition:height 0.3s ease;height:' + (d.pct > 0 ? Math.max(4, d.pct * 0.6) : 0) + 'px;background:' + barColor + '"></div>' +
-        '</div>' +
-        '<span style="font-size:9px;font-weight:' + (d.isToday ? '700' : '400') + ';color:' + dayColor + '">' + d.day + '</span>' +
-        '<span style="font-size:9px;font-weight:700;color:' + valColor + '">' + (d.hasData ? d.pct + '%' : '--') + '</span>' +
-      '</div>';
-    }).join('');
-  }
-}
 
-document.addEventListener('DOMContentLoaded', loadProgressPage);
-</script>
+    document.addEventListener('DOMContentLoaded', function () {
+      renderProgreso();
 
+      document.getElementById('pgAddMeasureBtn').addEventListener('click', function () {
+        var form = document.getElementById('pgMeasureForm');
+        form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+      });
+      document.getElementById('pgSaveMeasureBtn').addEventListener('click', function () {
+        var list = safeParseJSON(localStorage.getItem('keto_measurements'), []);
+        list.push({
+          date: new Date().toISOString().slice(0, 10),
+          cintura: document.getElementById('pgCintura').value || null,
+          cadera: document.getElementById('pgCadera').value || null,
+          pecho: document.getElementById('pgPecho').value || null
+        });
+        localStorage.setItem('keto_measurements', JSON.stringify(list));
+        document.getElementById('pgMeasureForm').style.display = 'none';
+        document.getElementById('pgCintura').value = '';
+        document.getElementById('pgCadera').value = '';
+        document.getElementById('pgPecho').value = '';
+        renderMeasurements();
+      });
+      document.addEventListener('click', function (e) {
+        var el = e.target.closest('[data-remove-measure]');
+        if (!el) return;
+        var idx = parseInt(el.getAttribute('data-remove-measure'));
+        var list = safeParseJSON(localStorage.getItem('keto_measurements'), []);
+        var sorted = list.slice().sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
+        var target = sorted[idx];
+        list = list.filter(function (m) { return m !== target; });
+        localStorage.setItem('keto_measurements', JSON.stringify(list));
+        renderMeasurements();
+      });
+      document.addEventListener('v3:decision-action', function (e) {
+        if (e.detail.id !== 'pg-projection') return;
+        var val = prompt('¿Cuánto pesas hoy? (kg)');
+        var num = parseFloat(val);
+        if (isNaN(num) || num < 20 || num > 300) return;
+        var history = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
+        if (!Array.isArray(history)) history = [];
+        var today = new Date().toISOString().slice(0, 10);
+        var idx = history.findIndex(function (h) { return (h.date || h.fecha) === today; });
+        if (idx >= 0) history[idx].weight = num; else history.push({ date: today, weight: num });
+        localStorage.setItem('keto_weight_history', JSON.stringify(history));
+        renderProgreso();
+      });
+    });
+  </script>
 </AppLayout>

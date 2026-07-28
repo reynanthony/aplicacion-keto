@@ -1,530 +1,352 @@
 ---
+// Coach — v3. Cabecera violeta + chips de contexto (margen/entreno hoy/peso)
+// + mensajes como tarjetas compactas (no párrafos) + resumen semanal (lógica
+// portada de inspector.astro, corrigiendo el mismo bug de doble escalado que
+// ya se corrigió en macros.astro) + enlace a Guía. El chat cliente ya llamaba
+// correctamente a la Edge Function keto-ai con action:'chat' — no se toca esa
+// parte, solo el backend (ver supabase/functions/keto-ai/index.ts).
 import AppLayout from '../../layouts/AppLayout.astro';
-import AppNav from '../../components/AppNav.astro';
+import Dock from '../../components/v3/Dock.astro';
+import Sheet from '../../components/v3/Sheet.astro';
+import VeredictoSheet from '../../components/v3/VeredictoSheet.astro';
 ---
 
 <AppLayout title="KetoCore | Coach IA" authGuard={true}>
-<style is:global>
-html, body { margin: 0; padding: 0; background: #0b0a08; color: #f7f4f0; font-family: 'Inter', sans-serif; }
-.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-.icon-filled { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+  <style is:global>
+    #appSidebar, #kcTabbar, #kcDrawer { display: none !important; }
 
-@keyframes msgIn    { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-@keyframes typingDot{ 0%,80%,100%{opacity:0.25;transform:scale(0.85)} 40%{opacity:1;transform:scale(1)} }
-@keyframes pulseGlow{ 0%,100%{opacity:0.6} 50%{opacity:1} }
+    @keyframes msgIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes typingDot { 0%,80%,100%{opacity:0.25;transform:scale(0.85)} 40%{opacity:1;transform:scale(1)} }
+    .v3-msg-in { animation: msgIn 0.3s ease-out forwards; }
+    .v3-chat-coach {
+      background: var(--v3-surface-1); border: 1px solid var(--v3-border);
+      border-radius: 18px 18px 18px 4px; padding: 14px 16px; max-width: calc(100% - 42px);
+    }
+    .v3-chat-user {
+      background: rgba(200,245,96,0.1); border: 1px solid rgba(200,245,96,0.2);
+      border-radius: 18px 18px 4px 18px; padding: 12px 16px; max-width: 92%;
+    }
+    .v3-typing-dot { width:6px; height:6px; border-radius:50%; background:var(--v3-text-40); display:inline-block; animation: typingDot 1.2s infinite ease-in-out; }
+    .v3-typing-dot:nth-child(2) { animation-delay: .18s; } .v3-typing-dot:nth-child(3) { animation-delay: .36s; }
+  </style>
 
-.msg-in { animation: msgIn 0.3s ease-out forwards; }
+  <div data-v3 style="background:var(--v3-surface-app); min-height:100vh;">
+    <main style="padding: var(--v3-pad-screen) var(--v3-pad-screen) 220px; max-width:600px; margin:0 auto; display:flex; flex-direction:column; gap: var(--v3-gap-block);">
 
-.chat-bubble-coach {
-  background: #161310;
-  border: 1px solid rgba(255,240,225,0.07);
-  border-radius: 20px 20px 20px 4px;
-}
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div style="width:36px; height:36px; border-radius:12px; background:rgba(167,139,250,0.15); border:1px solid rgba(167,139,250,0.25); display:flex; align-items:center; justify-content:center;">
+          <span class="material-symbols-outlined" style="color:var(--v3-violet); font-size:20px;">psychology</span>
+        </div>
+        <div>
+          <div style="font-family:var(--v3-font-title); font-weight:800; font-size:15px; color:var(--v3-text);">Coach IA</div>
+          <div id="aiStatusLabel" style="font-size:10px; color:var(--v3-text-40);">Verificando…</div>
+        </div>
+        <a href="/app/guia" style="margin-left:auto; font-size:11px; color:var(--v3-violet); text-decoration:none; padding:6px 12px; border-radius:100px; background:rgba(167,139,250,0.1); border:1px solid rgba(167,139,250,0.2);">Ver guía</a>
+      </div>
 
-.chat-bubble-user {
-  background: rgba(255,77,0,0.1);
-  border: 1px solid rgba(255,77,0,0.2);
-  border-radius: 20px 20px 4px 20px;
-}
+      <div class="v3-chip-group">
+        <span class="v3-chip v3-chip--state" id="ctxMargen"><span class="v3-chip-dot"></span>Margen: --</span>
+        <span class="v3-chip v3-chip--state" id="ctxEntreno">Entreno: --</span>
+        <span class="v3-chip v3-chip--state" id="ctxPeso">Peso: --</span>
+      </div>
 
-.typing-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: rgba(247,244,240,0.4);
-  display: inline-block;
-  animation: typingDot 1.2s infinite ease-in-out;
-}
-.typing-dot:nth-child(2) { animation-delay: 0.18s; }
-.typing-dot:nth-child(3) { animation-delay: 0.36s; }
+      <div id="alertsSection" style="display:flex; flex-direction:column; gap:8px;"></div>
+      <div id="chatMessages" style="display:flex; flex-direction:column; gap:14px;"></div>
 
-.suggestion-chip {
-  display: inline-flex; align-items: center;
-  padding: 6px 14px; border-radius: 100px;
-  font-size: 11px; font-weight: 600; cursor: pointer;
-  background: #161310; border: 1px solid rgba(255,240,225,0.07);
-  color: rgba(247,244,240,0.65); white-space: nowrap;
-  transition: all 0.15s;
-}
-.suggestion-chip:hover {
-  background: #1e1a15; border-color: rgba(255,77,0,0.3); color: #f7f4f0;
-}
-.suggestion-chip:active { transform: scale(0.96); }
+      <div id="suggestionsSection">
+        <p class="v3-eyebrow" style="margin-bottom:8px;">Preguntas frecuentes</p>
+        <div id="suggestionChips" class="v3-chip-group"></div>
+      </div>
 
-.alert-card { border-radius: 14px; padding: 12px 14px; }
+    </main>
 
-.status-dot { width: 6px; height: 6px; border-radius: 50%; }
-.status-online  { background: #22c55e; animation: pulseGlow 2s infinite; }
-.status-offline { background: #f59e0b; }
-
-/* Desktop: wider chat area */
-@media (min-width: 768px) {
-  #coachMain { max-width: 720px; margin: 0 auto; }
-  #coachInputBar { left: 248px; max-width: none; }
-  #chatMessages  { min-height: calc(100vh - 220px); }
-}
-</style>
-
-<!-- ── Top Header ─────────────────────────────────────────────────────── -->
-<header class="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4"
-  style="height:56px;background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
-
-  <div class="flex items-center gap-3">
-    <div class="w-9 h-9 rounded-xl flex items-center justify-center"
-      style="background:linear-gradient(135deg,rgba(167,139,250,0.2),rgba(99,102,241,0.15));border:1px solid rgba(167,139,250,0.2)">
-      <span class="material-symbols-outlined icon-filled" style="color:#a78bfa;font-size:20px">psychology</span>
-    </div>
-    <div>
-      <h1 class="font-black text-base leading-none" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Coach IA</h1>
-      <div id="aiStatusBar" class="flex items-center gap-1.5 mt-0.5">
-        <span class="status-dot status-offline"></span>
-        <span id="aiStatusLabel" style="font-size:9px;color:rgba(247,244,240,0.4);font-weight:600">Verificando...</span>
+    <div id="coachInputBar" style="position:fixed; left:0; right:0; bottom:90px; z-index:30; background:rgba(7,20,16,0.95); backdrop-filter:blur(16px); border-top:1px solid var(--v3-border); padding:10px 16px;">
+      <div style="max-width:600px; margin:0 auto; display:flex; gap:8px; align-items:center;">
+        <input id="chatInput" type="text" autocomplete="off" spellcheck="false" placeholder="Pregúntale a tu Coach…"
+          style="flex:1; border-radius:100px; padding:11px 16px; font-size:14px; outline:none; background:var(--v3-surface-1); border:1px solid var(--v3-border); color:var(--v3-text);" />
+        <button id="sendBtn" style="width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(167,139,250,0.15); border:1px solid rgba(167,139,250,0.25);">
+          <span class="material-symbols-outlined" style="color:var(--v3-violet); font-size:20px;">send</span>
+        </button>
       </div>
     </div>
+
+    <VeredictoSheet />
+    <Sheet id="v3-sheet-registrar" title="Registrar" subtitle="Margen de hoy · — g netos">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <a href="/app/scanner" class="v3-decision-card-action" style="background:var(--v3-lime); color:var(--v3-text-on-lime); justify-content:center;">
+          <span class="material-symbols-outlined" style="font-size:18px">center_focus_strong</span> Escanear
+        </a>
+        <a href="/app/alimentos" class="v3-decision-card-action" style="background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;">
+          <span class="material-symbols-outlined" style="font-size:18px">search</span> Buscar
+        </a>
+        <button type="button" class="v3-decision-card-action" disabled style="background:var(--v3-surface-2); color:var(--v3-text-40); justify-content:center; cursor:not-allowed;">
+          <span class="material-symbols-outlined" style="font-size:18px">mic</span> Dictar · Próximamente
+        </button>
+        <a href="/app/recetas" class="v3-decision-card-action" style="background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;">
+          <span class="material-symbols-outlined" style="font-size:18px">menu_book</span> Recetas
+        </a>
+      </div>
+      <Fragment slot="footnote">Offline · sincroniza solo</Fragment>
+    </Sheet>
+    <Dock active="yo" fabSheetId="v3-sheet-registrar" />
   </div>
 
-  <div class="flex items-center gap-2">
-    <button onclick="toggleContext()" id="btnCtx"
-      class="text-xs font-bold px-3 py-1.5 rounded-full transition-all"
-      style="background:#161310;color:rgba(247,244,240,0.55);border:1px solid rgba(255,240,225,0.06)">
-      Contexto
-    </button>
-    <button onclick="toggleHamburgerMenu()" aria-label="Menú"
-      class="w-9 h-9 rounded-full flex items-center justify-center"
-      style="background:#161310;color:rgba(247,244,240,0.5);border:1px solid rgba(255,240,225,0.06)">
-      <span class="material-symbols-outlined" style="font-size:20px">menu</span>
-    </button>
-  </div>
-</header>
+  <script is:inline src="/app/utils.js"></script>
+  <script is:inline src="/app/modules/day-budget.js"></script>
+  <script is:inline src="/app/modules/meal-log.js"></script>
+  <script is:inline src="/app/modules/v3-motion.js"></script>
+  <script is:inline src="/app/modules/inspectorKeto.js"></script>
+  <script is:inline src="/app/modules/v3-veredicto.js"></script>
+  <script is:inline src="/app/modules/supabase-keto-ai.js"></script>
+  <script is:inline src="/app/demo/demo-coach-kb.js"></script>
+  <script is:inline src="/app/modules/automation-engine.js"></script>
 
-<!-- ── Main ───────────────────────────────────────────────────────────── -->
-<main id="coachMain" class="main-content pt-14 pb-36 px-4 min-h-screen">
+  <script is:inline>
+    function safeJSON(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
+    function escHtml(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-  <!-- Context panel (collapsible) -->
-  <div id="contextPanel" class="hidden mb-3">
-    <div class="rounded-2xl p-4" style="background:#161310;border:1px solid rgba(255,240,225,0.07)">
-      <p class="text-xs font-bold mb-3 uppercase tracking-widest" style="color:rgba(247,244,240,0.35)">Tu contexto actual</p>
-      <div id="contextGrid" class="grid grid-cols-3 gap-3"></div>
-      <p id="contextHint" class="text-xs mt-3" style="color:rgba(247,244,240,0.3)"></p>
-    </div>
-  </div>
+    // ── Contexto (chips + prompt) ─────────────────────────────────────────
+    var _ctx = {};
+    function buildContext() {
+      var profile = safeJSON('keto_profile', {});
+      var wh = safeJSON('keto_weight_history', []);
+      if (!Array.isArray(wh)) wh = [];
+      wh.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+      var streak = safeJSON('ketoStreak', { ketoDays: 0 });
+      var budget = window.KetoBudget.compute();
 
-  <!-- Automation alerts (injected on load) -->
-  <div id="alertsSection" class="space-y-2 mb-3"></div>
+      var currW = wh.length ? parseFloat(wh[wh.length - 1].weight) : parseFloat(profile.peso || profile.weight || 0);
+      var startW = wh.length ? parseFloat(wh[0].weight) : currW;
+      var delta = Math.round((currW - startW) * 10) / 10;
 
-  <!-- Chat messages -->
-  <div id="chatMessages" class="space-y-4 pb-2"></div>
+      var today = getTodayKey();
+      var workouts = safeJSON('ketoWorkouts', []);
+      var todayWorkout = Array.isArray(workouts) ? workouts.find(function (w) { return (w.date || '').slice(0, 10) === today; }) : null;
 
-  <!-- Suggestion chips (hidden after first message) -->
-  <div id="suggestionsSection" class="mt-5">
-    <p class="text-xs mb-2.5 font-semibold" style="color:rgba(247,244,240,0.35)">Preguntas frecuentes</p>
-    <div id="suggestionChips" class="flex flex-wrap gap-2"></div>
-  </div>
+      return {
+        nombre: profile.nombre || profile.name || 'Usuario',
+        peso: currW || null, pesoDelta: delta,
+        racha: parseInt(streak.ketoDays || streak.currentStreak) || 0,
+        margenDisponible: Math.round(budget.available), margenLimite: budget.limit,
+        entrenoHoy: todayWorkout ? (todayWorkout.name || todayWorkout.type || 'Sí') : null
+      };
+    }
 
-</main>
+    function contextSummary(ctx) {
+      var parts = [
+        'Usuario: ' + ctx.nombre,
+        ctx.peso ? 'Peso: ' + ctx.peso + ' kg' : null,
+        ctx.pesoDelta !== 0 ? 'Cambio total: ' + (ctx.pesoDelta > 0 ? '+' : '') + ctx.pesoDelta + ' kg' : null,
+        'Racha keto: ' + ctx.racha + ' días',
+        'Margen de carbos disponible hoy: ' + ctx.margenDisponible + 'g de ' + ctx.margenLimite + 'g',
+        ctx.entrenoHoy ? 'Entrenó hoy: ' + ctx.entrenoHoy : 'No tiene entreno registrado hoy'
+      ];
+      return parts.filter(Boolean).join(', ');
+    }
 
-<!-- ── Fixed input (above nav) ────────────────────────────────────────── -->
-<div id="coachInputBar" class="fixed right-0 left-0 z-30"
-  style="bottom:68px;background:rgba(11,10,8,0.95);backdrop-filter:blur(16px);border-top:1px solid rgba(255,240,225,0.06);padding:10px 16px">
-  <div class="flex gap-2 items-center">
-    <input id="chatInput" type="text" autocomplete="off" spellcheck="false"
-      placeholder="Pregúntale a tu Coach..."
-      class="flex-1 rounded-2xl px-4 py-2.5 text-sm outline-none transition-all"
-      style="background:#161310;border:1px solid rgba(255,240,225,0.08);color:#f7f4f0;font-family:'Inter',sans-serif"
-      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage()}"
-      onfocus="this.style.borderColor='rgba(167,139,250,0.35)'"
-      onblur="this.style.borderColor='rgba(255,240,225,0.08)'" />
-    <button id="sendBtn" onclick="sendMessage()"
-      class="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all active:scale-90"
-      style="background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.25)">
-      <span class="material-symbols-outlined icon-filled" style="color:#a78bfa;font-size:20px">send</span>
-    </button>
-  </div>
-</div>
+    function renderContextChips(ctx) {
+      document.getElementById('ctxMargen').innerHTML = '<span class="v3-chip-dot"></span>Margen: ' + ctx.margenDisponible + 'g';
+      document.getElementById('ctxEntreno').textContent = 'Entreno: ' + (ctx.entrenoHoy || 'sin registrar');
+      document.getElementById('ctxPeso').textContent = 'Peso: ' + (ctx.peso ? ctx.peso + ' kg' : '—');
+    }
 
-<!-- Bottom nav -->
-<AppNav active="more" />
+    // ── Resumen semanal (lógica portada de inspector.astro, sin doble escalado) ──
+    function daysAgo(n) { var d = new Date(); d.setDate(d.getDate() - n); return d.toISOString().slice(0, 10); }
 
-<!-- ── Scripts ────────────────────────────────────────────────────────── -->
-<script is:inline src="/app/modules/supabase-keto-ai.js"></script>
-<script is:inline src="/app/demo/demo-coach-kb.js"></script>
-<script is:inline src="/app/modules/automation-engine.js"></script>
+    function weeklySummary() {
+      var target = safeJSON('keto_macros', { calories: 1800, protein: 150, fat: 140, carbs: 25 });
+      var wh = safeJSON('keto_weight_history', []);
+      if (!Array.isArray(wh)) wh = [];
+      wh.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
 
-<script is:inline>
-// ==================== COACH IA — real app ====================
-
-// ── helpers ───────────────────────────────────────────────────────────
-function safeJSON(k, d) {
-  try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }
-  catch (e) { return d; }
-}
-
-function escHtml(s) {
-  return String(s || '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
-}
-
-// ── Context Builder ───────────────────────────────────────────────────
-var _ctx = {};
-
-function buildContext() {
-  var profile  = safeJSON('keto_profile', {});
-  var macros   = safeJSON('keto_macros', { calories: 1800, protein: 150, fat: 140, carbs: 25 });
-  var wh       = safeJSON('keto_weight_history', []);
-  if (!Array.isArray(wh)) wh = [];
-  wh.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
-  var streak   = safeJSON('ketoStreak', { ketoDays: 0 });
-  var todayKey = new Date().toISOString().slice(0, 10);
-  var plan     = safeJSON('mealPlan_' + todayKey, {});
-
-  var currW  = wh.length ? parseFloat(wh[wh.length - 1].weight) : parseFloat(profile.peso || 0);
-  var startW = wh.length ? parseFloat(wh[0].weight) : currW;
-  var delta  = Math.round((currW - startW) * 10) / 10;
-
-  var cal = 0, carbs = 0, prot = 0;
-  Object.keys(plan).forEach(function (meal) {
-    if (!Array.isArray(plan[meal])) return;
-    plan[meal].forEach(function (item) {
-      var r = (parseFloat(item.portion) || 100) / 100;
-      cal   += (parseFloat(item.calories)                  || 0) * r;
-      carbs += (parseFloat(item.carbs || item.carbohidratos || 0)) * r;
-      prot  += (parseFloat(item.protein)                   || 0) * r;
-    });
-  });
-
-  return {
-    nombre:        profile.nombre || 'Usuario',
-    peso:          currW   || null,
-    pesoInicial:   startW  || null,
-    pesoDelta:     delta,
-    metaCal:       parseInt(macros.calories) || 1800,
-    metaCarbs:     parseInt(macros.carbs)    || 25,
-    metaProt:      parseInt(macros.protein)  || 150,
-    metaGrasa:     parseInt(macros.fat)      || 140,
-    racha:         parseInt(streak.ketoDays) || 0,
-    calHoy:        Math.round(cal),
-    carbsHoy:      Math.round(carbs),
-    protHoy:       Math.round(prot),
-    registros:     wh.length
-  };
-}
-
-function contextSummary(ctx) {
-  var parts = [
-    'Usuario: ' + ctx.nombre,
-    ctx.peso ? 'Peso: ' + ctx.peso + ' kg' : null,
-    ctx.pesoDelta !== 0 ? 'Cambio total: ' + (ctx.pesoDelta > 0 ? '+' : '') + ctx.pesoDelta + ' kg' : null,
-    'Racha keto: ' + ctx.racha + ' días',
-    'Meta cal: ' + ctx.metaCal + ' kcal',
-    'Meta carbs: ' + ctx.metaCarbs + 'g',
-    'Meta prot: ' + ctx.metaProt + 'g',
-    ctx.calHoy > 0 ? 'Hoy: ' + ctx.calHoy + ' kcal / ' + ctx.carbsHoy + 'g carbs' : null
-  ];
-  return parts.filter(Boolean).join(', ');
-}
-
-// ── Rules Engine (inline signals for welcome message) ─────────────────
-function runInlineRules(ctx) {
-  var signals = [];
-  if (ctx.racha >= 21)
-    signals.push({ type: 'success', msg: '¡' + ctx.racha + ' días en cetosis! Racha excepcional.' });
-  else if (ctx.racha >= 7)
-    signals.push({ type: 'success', msg: ctx.racha + ' días de racha keto. ¡Muy bien!' });
-
-  if (ctx.pesoDelta < -1)
-    signals.push({ type: 'success', msg: '¡Has perdido ' + Math.abs(ctx.pesoDelta) + ' kg desde que empezaste!' });
-
-  if (ctx.calHoy > 0 && ctx.carbsHoy > ctx.metaCarbs * 1.3)
-    signals.push({ type: 'warning', msg: 'Hoy llevas ' + ctx.carbsHoy + 'g de carbs vs tu meta de ' + ctx.metaCarbs + 'g.' });
-
-  return signals;
-}
-
-// ── Context panel render ───────────────────────────────────────────────
-function renderContextPanel(ctx) {
-  var grid = document.getElementById('contextGrid');
-  var hint = document.getElementById('contextHint');
-  if (!grid) return;
-
-  var items = [
-    { label: 'Peso',        value: ctx.peso ? ctx.peso + ' kg' : '—',      color: '#f7f4f0' },
-    { label: 'Cambio',      value: ctx.pesoDelta !== 0 ? (ctx.pesoDelta > 0 ? '+' : '') + ctx.pesoDelta + ' kg' : '—',
-      color: ctx.pesoDelta < 0 ? '#22c55e' : ctx.pesoDelta > 0 ? '#f87171' : '#f7f4f0' },
-    { label: 'Racha keto',  value: ctx.racha + 'd',                        color: '#ff4d00' },
-    { label: 'Cal. meta',   value: ctx.metaCal + ' kcal',                  color: '#60a5fa' },
-    { label: 'Carbs meta',  value: ctx.metaCarbs + 'g',                    color: '#f59e0b' },
-    { label: 'Prot. meta',  value: ctx.metaProt + 'g',                     color: '#a78bfa' },
-  ];
-
-  grid.innerHTML = items.map(function (item) {
-    return '<div class="text-center">' +
-      '<p class="font-black text-base leading-none" style="color:' + item.color + ';font-family:\'Plus Jakarta Sans\',sans-serif">' + item.value + '</p>' +
-      '<p style="font-size:9px;color:rgba(247,244,240,0.35);margin-top:4px">' + item.label + '</p>' +
-      '</div>';
-  }).join('');
-
-  if (hint && ctx.calHoy > 0) {
-    hint.textContent = 'Hoy: ' + ctx.calHoy + ' kcal · ' + ctx.carbsHoy + 'g carbs · ' + ctx.protHoy + 'g proteína';
-  }
-}
-
-function toggleContext() {
-  var panel = document.getElementById('contextPanel');
-  if (!panel) return;
-  panel.classList.toggle('hidden');
-  var btn = document.getElementById('btnCtx');
-  if (btn) btn.style.color = panel.classList.contains('hidden') ? 'rgba(247,244,240,0.55)' : '#a78bfa';
-}
-
-// ── Alerts render ─────────────────────────────────────────────────────
-var ALERT_STYLES = {
-  warning: { bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.2)', icon: '#f59e0b' },
-  error:   { bg: 'rgba(239,68,68,0.08)',  border: 'rgba(239,68,68,0.22)',  icon: '#ef4444' },
-  success: { bg: 'rgba(34,197,94,0.08)',  border: 'rgba(34,197,94,0.2)',   icon: '#22c55e' },
-  info:    { bg: 'rgba(96,165,250,0.08)', border: 'rgba(96,165,250,0.2)',  icon: '#60a5fa' }
-};
-
-function renderAlerts() {
-  var section = document.getElementById('alertsSection');
-  if (!section) return;
-  var alerts  = window.KetoAutomations ? KetoAutomations.getAlerts() : [];
-  if (!alerts.length) { section.innerHTML = ''; return; }
-
-  section.innerHTML = alerts.slice(0, 3).map(function (alert) {
-    var s   = ALERT_STYLES[alert.type] || ALERT_STYLES.info;
-    var btn = alert.action === 'ask_coach'
-      ? '<button onclick="prefillAndSend(\'' + escHtml(alert.actionQuery || '') + '\')" class="mt-2 text-[11px] font-bold px-3 py-1.5 rounded-full" style="background:rgba(255,77,0,0.1);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">' + escHtml(alert.actionLabel || 'Consultar') + '</button>'
-      : '';
-    return '<div class="alert-card" style="background:' + s.bg + ';border:1px solid ' + s.border + '">' +
-      '<div class="flex items-start gap-2.5">' +
-        '<span class="material-symbols-outlined icon-filled flex-shrink-0" style="color:' + s.icon + ';font-size:18px;margin-top:1px">' + escHtml(alert.icon || 'info') + '</span>' +
-        '<div class="flex-1">' +
-          '<p class="text-xs font-bold" style="color:#f7f4f0">' + escHtml(alert.title) + '</p>' +
-          '<p class="text-xs mt-0.5 leading-relaxed" style="color:rgba(247,244,240,0.6)">' + escHtml(alert.message) + '</p>' +
-          btn +
-        '</div>' +
-        '<button onclick="dismissAlert(\'' + escHtml(alert.id) + '\')" class="material-symbols-outlined flex-shrink-0" style="color:rgba(247,244,240,0.25);font-size:16px">close</button>' +
-      '</div></div>';
-  }).join('');
-}
-
-function dismissAlert(id) {
-  if (window.KetoAutomations) KetoAutomations.clearAlert(id);
-  renderAlerts();
-}
-
-function prefillAndSend(text) {
-  var input = document.getElementById('chatInput');
-  if (input) input.value = text;
-  sendMessage();
-}
-
-// ── Chat engine ───────────────────────────────────────────────────────
-var chatHistory = [];
-var busy        = false;
-
-function addMessage(role, html, meta) {
-  var container = document.getElementById('chatMessages');
-  if (!container) return;
-  var isUser = (role === 'user');
-
-  var wrap = document.createElement('div');
-  wrap.className = 'flex msg-in ' + (isUser ? 'justify-end' : 'justify-start gap-2.5');
-
-  if (isUser) {
-    wrap.innerHTML =
-      '<div class="chat-bubble-user px-4 py-3 max-w-[92%]">' +
-        '<p class="leading-relaxed" style="color:#f7f4f0;font-size:14.5px">' + html + '</p>' +
-      '</div>';
-  } else {
-    var metaHtml = meta
-      ? '<p class="text-[10px] mt-2 font-semibold" style="color:rgba(247,244,240,0.3)">' + meta + '</p>'
-      : '';
-    wrap.innerHTML =
-      '<div class="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5" ' +
-        'style="background:linear-gradient(135deg,rgba(167,139,250,0.2),rgba(99,102,241,0.15));border:1px solid rgba(167,139,250,0.2)">' +
-        '<span class="material-symbols-outlined icon-filled" style="color:#a78bfa;font-size:16px">psychology</span>' +
-      '</div>' +
-      '<div class="chat-bubble-coach px-4 py-3.5" style="max-width:calc(100% - 42px)">' +
-        '<p class="leading-relaxed" style="color:#f7f4f0;font-size:14.5px">' + html + '</p>' +
-        metaHtml +
-      '</div>';
-  }
-
-  container.appendChild(wrap);
-  wrap.scrollIntoView({ behavior: 'smooth', block: 'end' });
-}
-
-function showTyping() {
-  var container = document.getElementById('chatMessages');
-  if (!container || document.getElementById('typingBubble')) return;
-  var div = document.createElement('div');
-  div.id = 'typingBubble';
-  div.className = 'flex justify-start gap-2.5 msg-in';
-  div.innerHTML =
-    '<div class="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0" ' +
-      'style="background:linear-gradient(135deg,rgba(167,139,250,0.2),rgba(99,102,241,0.15));border:1px solid rgba(167,139,250,0.2)">' +
-      '<span class="material-symbols-outlined icon-filled" style="color:#a78bfa;font-size:16px">psychology</span>' +
-    '</div>' +
-    '<div class="chat-bubble-coach px-4 py-3.5">' +
-      '<div class="flex gap-1.5 items-center">' +
-        '<span class="typing-dot"></span>' +
-        '<span class="typing-dot"></span>' +
-        '<span class="typing-dot"></span>' +
-      '</div>' +
-    '</div>';
-  container.appendChild(div);
-  div.scrollIntoView({ behavior: 'smooth', block: 'end' });
-}
-
-function hideTyping() {
-  var el = document.getElementById('typingBubble');
-  if (el) el.remove();
-}
-
-// ── Suggestions ───────────────────────────────────────────────────────
-var SUGGESTIONS = [
-  '¿Cómo sé si estoy en cetosis?',
-  '¿Qué frutas puedo comer en keto?',
-  '¿Cuánta proteína necesito al día?',
-  '¿Qué es el keto flu y cómo evitarlo?',
-  '¿Puedo tomar café con leche?',
-  '¿Qué pasa si como carbohidratos?',
-  '¿El aguacate es bueno para keto?',
-  '¿Puedo hacer ayuno intermitente?',
-];
-
-function renderSuggestions() {
-  var chips = document.getElementById('suggestionChips');
-  if (!chips) return;
-  var list = (window.DemoCoachKB && DemoCoachKB.SUGGESTIONS) || SUGGESTIONS;
-  chips.innerHTML = list.slice(0, 6).map(function (s) {
-    return '<button class="suggestion-chip" onclick="prefillAndSend(\'' + s.replace(/'/g, "\\'") + '\')">' + s + '</button>';
-  }).join('');
-}
-
-// ── Send message ──────────────────────────────────────────────────────
-async function sendMessage() {
-  if (busy) return;
-  var input = document.getElementById('chatInput');
-  if (!input) return;
-  var text = input.value.trim();
-  if (!text) return;
-
-  input.value = '';
-  busy = true;
-
-  // Hide suggestions
-  var sugSect = document.getElementById('suggestionsSection');
-  if (sugSect) sugSect.style.display = 'none';
-
-  addMessage('user', escHtml(text));
-  chatHistory.push({ role: 'user', content: text });
-  showTyping();
-
-  var answer = '';
-  var meta   = '';
-
-  try {
-    // 1. Try KetoAI LLM (online)
-    if (window.KetoAI && KetoAI.isOnline) {
-      var result = await KetoAI.callFunction('chat', {
-        question: text,
-        context:  contextSummary(_ctx),
-        history:  chatHistory.slice(-6)
-      });
-      if (result && result.answer) {
-        answer = result.answer;
-        meta   = 'Coach IA · respuesta personalizada';
+      var daily = [];
+      for (var i = 0; i < 7; i++) {
+        var key = daysAgo(i);
+        var plan = safeJSON('mealPlan_' + key, {});
+        var carbs = 0, hasData = false;
+        Object.keys(plan).forEach(function (meal) {
+          if (!Array.isArray(plan[meal])) return;
+          plan[meal].forEach(function (item) {
+            // Los items ya vienen pre-escalados (mismo fix que macros.astro) — sin ratio extra.
+            carbs += Number(item.carbs) || 0;
+            hasData = true;
+          });
+        });
+        daily.push({ date: key, carbs: carbs, logged: hasData });
       }
+      var logged = daily.filter(function (d) { return d.logged; });
+      var adherence = Math.round((logged.length / 7) * 100);
+      var avgCarbs = logged.length ? Math.round(logged.reduce(function (s, d) { return s + d.carbs; }, 0) / logged.length) : 0;
+      var carbPct = target.carbs ? Math.round((avgCarbs / target.carbs) * 100) : 0;
+
+      var cutoff = daysAgo(7);
+      var recent = wh.filter(function (e) { return e.date >= cutoff; });
+      var weightTrend = 'stable', weightDelta = 0;
+      if (recent.length >= 2) {
+        weightDelta = Math.round((parseFloat(recent[recent.length - 1].weight) - parseFloat(recent[0].weight)) * 10) / 10;
+        weightTrend = weightDelta < -0.3 ? 'losing' : (weightDelta > 0.3 ? 'gaining' : 'stable');
+      }
+
+      var score = Math.min(40, adherence * 0.4) + (carbPct <= 100 ? 20 : Math.max(0, 20 - (carbPct - 100) * 0.5));
+      if (weightTrend === 'losing') score += 20; else if (weightTrend === 'stable' && adherence >= 70) score += 10;
+      score = Math.min(100, Math.round(score));
+
+      var verdict = score >= 80 ? 'Progreso excelente' : score >= 60 ? 'Buen progreso' : score >= 40 ? 'Puedes mejorar' : 'Necesitas ajustar el rumbo';
+      var trendText = weightTrend === 'losing' ? ('bajando ' + Math.abs(weightDelta) + 'kg') : weightTrend === 'gaining' ? ('subiendo ' + weightDelta + 'kg') : 'estable';
+
+      return { score: score, verdict: verdict, adherence: adherence, avgCarbs: avgCarbs, trendText: trendText };
     }
 
-    // 2. Fallback: local Knowledge Base
-    if (!answer && window.DemoCoachKB) {
-      var kb = DemoCoachKB.ask(text);
-      answer = escHtml(kb.a);
-      meta   = kb.found ? 'Base de conocimiento keto' : 'Respuesta general';
+    // ── Alertas de automatización (se conservan tal cual) ────────────────
+    var ALERT_STYLES = {
+      warning: { bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.2)', icon: '#f59e0b' },
+      error:   { bg: 'rgba(239,68,68,0.08)',  border: 'rgba(239,68,68,0.22)', icon: '#ef4444' },
+      success: { bg: 'rgba(34,197,94,0.08)',  border: 'rgba(34,197,94,0.2)',  icon: '#22c55e' },
+      info:    { bg: 'rgba(96,165,250,0.08)', border: 'rgba(96,165,250,0.2)', icon: '#60a5fa' }
+    };
+    function renderAlerts() {
+      var section = document.getElementById('alertsSection');
+      var alerts = window.KetoAutomations ? KetoAutomations.getAlerts() : [];
+      if (!alerts.length) { section.innerHTML = ''; return; }
+      section.innerHTML = alerts.slice(0, 3).map(function (alert) {
+        var s = ALERT_STYLES[alert.type] || ALERT_STYLES.info;
+        var btn = alert.action === 'ask_coach'
+          ? '<button onclick="prefillAndSend(\'' + escHtml(alert.actionQuery || '') + '\')" style="margin-top:8px; font-size:11px; font-weight:700; padding:6px 12px; border-radius:100px; background:rgba(200,245,96,0.12); color:var(--v3-lime); border:1px solid rgba(200,245,96,0.25);">' + escHtml(alert.actionLabel || 'Consultar') + '</button>'
+          : '';
+        return '<div style="border-radius:14px; padding:12px 14px; background:' + s.bg + '; border:1px solid ' + s.border + ';">' +
+          '<div style="display:flex; align-items:flex-start; gap:10px;">' +
+            '<span class="material-symbols-outlined" style="color:' + s.icon + '; font-size:18px;">' + escHtml(alert.icon || 'info') + '</span>' +
+            '<div style="flex:1;"><p style="font-size:12.5px; font-weight:700; color:var(--v3-text);">' + escHtml(alert.title) + '</p>' +
+            '<p style="font-size:12px; margin-top:2px; color:var(--v3-text-70);">' + escHtml(alert.message) + '</p>' + btn + '</div>' +
+            '<button onclick="dismissAlert(\'' + escHtml(alert.id) + '\')" class="material-symbols-outlined" style="color:var(--v3-text-40); font-size:16px;">close</button>' +
+          '</div></div>';
+      }).join('');
+    }
+    function dismissAlert(id) { if (window.KetoAutomations) KetoAutomations.clearAlert(id); renderAlerts(); }
+    function prefillAndSend(text) { var input = document.getElementById('chatInput'); if (input) input.value = text; sendMessage(); }
+
+    // ── Chat (tarjetas compactas, no párrafos) ───────────────────────────
+    var chatHistory = [];
+    var busy = false;
+
+    function addMessage(role, html, meta) {
+      var container = document.getElementById('chatMessages');
+      var isUser = role === 'user';
+      var wrap = document.createElement('div');
+      wrap.style.cssText = 'display:flex; ' + (isUser ? 'justify-content:flex-end;' : 'justify-content:flex-start; gap:10px;');
+      wrap.className = 'v3-msg-in';
+      if (isUser) {
+        wrap.innerHTML = '<div class="v3-chat-user"><p style="color:var(--v3-text); font-size:14px;">' + html + '</p></div>';
+      } else {
+        var metaHtml = meta ? '<p style="font-size:10px; margin-top:6px; color:var(--v3-text-40);">' + meta + '</p>' : '';
+        wrap.innerHTML =
+          '<div style="width:32px; height:32px; border-radius:10px; flex-shrink:0; margin-top:2px; display:flex; align-items:center; justify-content:center; background:rgba(167,139,250,0.15); border:1px solid rgba(167,139,250,0.2);">' +
+            '<span class="material-symbols-outlined" style="color:var(--v3-violet); font-size:16px;">psychology</span></div>' +
+          '<div class="v3-chat-coach"><p style="color:var(--v3-text); font-size:14px;">' + html + '</p>' + metaHtml + '</div>';
+      }
+      container.appendChild(wrap);
+      wrap.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
 
-    if (!answer) {
-      answer = 'En este momento estoy en modo offline. Conecta a internet para acceder a respuestas personalizadas con IA. Mientras tanto, puedes buscar en la sección de Recetas o Guía.';
-      meta   = 'Modo offline';
+    function addSummaryCard(summary) {
+      var container = document.getElementById('chatMessages');
+      var wrap = document.createElement('div');
+      wrap.className = 'v3-msg-in';
+      wrap.innerHTML =
+        '<div class="v3-decision-card v3-decision-card--cream">' +
+          '<div class="v3-decision-card-title">Resumen semanal · ' + summary.verdict + '</div>' +
+          '<div class="v3-decision-card-body">Score ' + summary.score + '/100 · Adherencia ' + summary.adherence + '% · Carbos netos promedio ' + summary.avgCarbs + 'g · Peso ' + summary.trendText + '.</div>' +
+        '</div>';
+      container.appendChild(wrap);
     }
-  } catch (e) {
-    if (window.DemoCoachKB) {
-      var kb2 = DemoCoachKB.ask(text);
-      answer = escHtml(kb2.a);
-      meta   = 'Base de conocimiento (fallback)';
-    } else {
-      answer = 'Ocurrió un error. Por favor intenta nuevamente.';
+
+    function showTyping() {
+      if (document.getElementById('typingBubble')) return;
+      var container = document.getElementById('chatMessages');
+      var div = document.createElement('div');
+      div.id = 'typingBubble';
+      div.className = 'v3-msg-in';
+      div.style.cssText = 'display:flex; gap:10px;';
+      div.innerHTML =
+        '<div style="width:32px; height:32px; border-radius:10px; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:rgba(167,139,250,0.15); border:1px solid rgba(167,139,250,0.2);">' +
+          '<span class="material-symbols-outlined" style="color:var(--v3-violet); font-size:16px;">psychology</span></div>' +
+        '<div class="v3-chat-coach"><div style="display:flex; gap:6px;"><span class="v3-typing-dot"></span><span class="v3-typing-dot"></span><span class="v3-typing-dot"></span></div></div>';
+      container.appendChild(div);
+      div.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
-  }
+    function hideTyping() { var el = document.getElementById('typingBubble'); if (el) el.remove(); }
 
-  hideTyping();
-  addMessage('coach', answer, meta);
-  chatHistory.push({ role: 'coach', content: answer });
-  busy = false;
-}
+    var SUGGESTIONS = [
+      '¿Cómo sé si estoy en cetosis?', '¿Qué frutas puedo comer en keto?',
+      '¿Cuánta proteína necesito al día?', '¿Qué es el keto flu y cómo evitarlo?',
+      '¿Puedo tomar café con leche?', '¿Qué pasa si como carbohidratos?'
+    ];
+    function renderSuggestions() {
+      var chips = document.getElementById('suggestionChips');
+      var list = (window.DemoCoachKB && DemoCoachKB.SUGGESTIONS) || SUGGESTIONS;
+      chips.innerHTML = list.slice(0, 6).map(function (s) {
+        return '<button class="v3-chip v3-chip--filter" onclick="prefillAndSend(\'' + s.replace(/'/g, "\\'") + '\')">' + s + '</button>';
+      }).join('');
+    }
 
-// ── Status badge ──────────────────────────────────────────────────────
-function updateStatusBadge() {
-  var dot   = document.querySelector('#aiStatusBar .status-dot');
-  var label = document.getElementById('aiStatusLabel');
-  var online = window.KetoAI && KetoAI.isOnline;
-  if (dot)   { dot.className = 'status-dot ' + (online ? 'status-online' : 'status-offline'); }
-  if (label) { label.textContent = online ? 'IA activa' : 'Modo offline · KB local'; }
-}
+    async function sendMessage() {
+      if (busy) return;
+      var input = document.getElementById('chatInput');
+      var text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      busy = true;
+      document.getElementById('suggestionsSection').style.display = 'none';
 
-// ── Desktop padding ───────────────────────────────────────────────────
-function applyDesktopPadding() {
-  if (window.innerWidth >= 768) {
-    var bar = document.getElementById('coachInputBar');
-    if (bar) bar.style.left = '248px';
-  }
-}
+      addMessage('user', escHtml(text));
+      chatHistory.push({ role: 'user', content: text });
+      showTyping();
 
-// ── Init ──────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', function () {
-  _ctx = buildContext();
-  renderContextPanel(_ctx);
-  renderSuggestions();
-  applyDesktopPadding();
+      var answer = '', meta = '';
+      try {
+        if (window.KetoAI && KetoAI.isOnline) {
+          var result = await KetoAI.callFunction('chat', { question: text, context: contextSummary(_ctx), history: chatHistory.slice(-6) });
+          if (result && result.answer) { answer = result.answer; meta = 'Coach IA · respuesta personalizada'; }
+        }
+        if (!answer && window.DemoCoachKB) {
+          var kb = DemoCoachKB.ask(text);
+          answer = escHtml(kb.a);
+          meta = kb.found ? 'Base de conocimiento keto' : 'Respuesta general';
+        }
+        if (!answer) { answer = 'En este momento estoy en modo offline. Conecta a internet para respuestas personalizadas.'; meta = 'Modo offline'; }
+      } catch (e) {
+        if (window.DemoCoachKB) { var kb2 = DemoCoachKB.ask(text); answer = escHtml(kb2.a); meta = 'Base de conocimiento (fallback)'; }
+        else answer = 'Ocurrió un error. Intenta de nuevo.';
+      }
+      hideTyping();
+      addMessage('coach', answer, meta);
+      chatHistory.push({ role: 'coach', content: answer });
+      busy = false;
+    }
 
-  // Run automations
-  if (window.KetoAutomations) {
-    KetoAutomations.autoRun();
-    renderAlerts();
-    KetoAutomations.on('alerts', renderAlerts);
-  }
+    function updateStatusBadge() {
+      var online = window.KetoAI && KetoAI.isOnline;
+      document.getElementById('aiStatusLabel').textContent = online ? 'IA activa' : 'Modo offline · KB local';
+    }
 
-  // AI status (check after KetoAI has time to test connection)
-  setTimeout(updateStatusBadge, 2500);
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('sendBtn').addEventListener('click', sendMessage);
+      document.getElementById('chatInput').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+      });
 
-  // Welcome message
-  var signals = runInlineRules(_ctx);
-  var greeting = '¡Hola ' + escHtml(_ctx.nombre) + '! Soy tu Coach IA. ';
+      _ctx = buildContext();
+      renderContextChips(_ctx);
+      renderSuggestions();
+      addSummaryCard(weeklySummary());
 
-  if (signals.length && signals[0].type === 'success') {
-    greeting += escHtml(signals[0].msg) + ' ';
-  } else if (_ctx.racha > 0) {
-    greeting += 'Llevas <strong>' + _ctx.racha + ' días</strong> en tu plan keto. ';
-  }
+      if (window.KetoAutomations) { KetoAutomations.autoRun(); renderAlerts(); KetoAutomations.on('alerts', renderAlerts); }
+      setTimeout(updateStatusBadge, 2500);
 
-  greeting += '¿En qué te puedo ayudar hoy?';
-  addMessage('coach', greeting);
-
-  // If there are active warning/error alerts → proactive message
-  var alerts = window.KetoAutomations ? KetoAutomations.getAlerts() : [];
-  var urgent = alerts.find(function (a) { return a.type === 'error' || a.type === 'warning'; });
-  if (urgent) {
-    setTimeout(function () {
-      addMessage('coach',
-        'He detectado algo que te puede interesar: <strong style="color:#f59e0b">' + escHtml(urgent.title) + '</strong> — ' +
-        escHtml(urgent.message) +
-        (urgent.actionQuery ? '<br><br>Puedes preguntarme sobre eso directamente.' : ''),
-        'Alerta automática');
-    }, 900);
-  }
-});
-</script>
-
+      var greeting = '¡Hola ' + escHtml(_ctx.nombre) + '! Soy tu Coach IA. ';
+      if (_ctx.racha > 0) greeting += 'Llevas <strong>' + _ctx.racha + ' días</strong> en tu plan keto. ';
+      greeting += '¿En qué te puedo ayudar hoy?';
+      addMessage('coach', greeting);
+    });
+  </script>
 </AppLayout>

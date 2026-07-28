@@ -1,0 +1,429 @@
+---
+// Ajustes de perfil — contenido trasladado tal cual desde el antiguo
+// perfil.astro (datos personales, peso/objetivo, entreno, resumen metabólico,
+// historial de peso, zona peligrosa). No es foco visual de esta fase del
+// rediseño v3 — misma lógica JS, Editorial Bento intacto, solo se agrega un
+// enlace de vuelta a "Yo" (la nueva pantalla resumen).
+import AppLayout from '../../layouts/AppLayout.astro';
+---
+
+<AppLayout title="KetoCore | Ajustes de perfil" authGuard={true}>
+<style is:global>
+html,body{margin:0;padding:0;box-sizing:border-box;background:#0b0a08;color:#f7f4f0;font-family:'Inter',sans-serif}
+*,*::before,*::after{box-sizing:border-box}
+.glass-card{background:#181818;border:1px solid rgba(255,255,255,0.09);box-shadow:0 2px 16px rgba(0,0,0,0.4)}
+.field-input{background:#111;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px 12px;font-size:14px;color:#f7f4f0;width:100%;-webkit-appearance:none;appearance:none;font-family:'Inter',sans-serif}
+.field-input:focus{outline:none;border-color:rgba(255,77,0,0.5)}
+.field-input::placeholder{color:rgba(247,244,240,0.3)}
+select.field-input option{background:#1a1a1a;color:#f7f4f0}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+@media (min-width: 768px) {
+  #perfilMain {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 1.25rem;
+    align-items: start;
+    padding-top: 4.5rem;
+    padding-bottom: 3rem !important;
+  }
+  #perfilMain > * { margin-top: 0 !important; }
+  #pf-datos   { grid-column: 1; grid-row: 1; }
+  #pf-peso    { grid-column: 1; grid-row: 2; }
+  #pf-entreno { grid-column: 1; grid-row: 3; }
+  #pf-macros    { grid-column: 2; grid-row: 1; }
+  #pf-historial { grid-column: 2; grid-row: 2; }
+  #pf-peligro   { grid-column: 2; grid-row: 3; }
+}
+</style>
+
+<!-- TopBar -->
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
+  <a href="/app/perfil" class="flex items-center gap-3" style="text-decoration:none">
+    <span class="material-symbols-outlined" style="color:#f7f4f0">arrow_back</span>
+    <h1 class="text-base font-black" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Ajustes de perfil</h1>
+  </a>
+  <button onclick="saveProfile()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all active:scale-95" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);color:#fff">
+    <span class="material-symbols-outlined" style="font-size:15px">save</span>
+    Guardar
+  </button>
+</header>
+
+<!-- Main -->
+<main id="perfilMain" class="main-content pt-14 pb-24 px-4 space-y-3" style="background:#0b0a08">
+
+  <!-- Datos Personales -->
+  <section id="pf-datos" class="glass-card rounded-2xl p-4">
+    <div class="flex items-center gap-2 mb-3">
+      <span class="material-symbols-outlined text-base" style="color:#ff4d00;font-variation-settings:'FILL' 1">person</span>
+      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Datos Personales</h2>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div class="col-span-2">
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Nombre</label>
+        <input type="text" id="userName" class="field-input" placeholder="Tu nombre">
+      </div>
+      <div>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Edad</label>
+        <input type="number" id="age" class="field-input" placeholder="30">
+      </div>
+      <div>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Sexo</label>
+        <select id="sex" class="field-input">
+          <option value="">Seleccionar</option>
+          <option value="male">Masculino</option>
+          <option value="female">Femenino</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Altura (cm)</label>
+        <input type="number" id="height" class="field-input" placeholder="170">
+      </div>
+      <div>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Meses Keto</label>
+        <input type="number" id="monthsOnKeto" class="field-input" placeholder="1">
+      </div>
+    </div>
+  </section>
+
+  <!-- Peso & Objetivo -->
+  <section id="pf-peso" class="glass-card rounded-2xl p-4">
+    <div class="flex items-center gap-2 mb-3">
+      <span class="material-symbols-outlined text-base" style="color:#ff4d00;font-variation-settings:'FILL' 1">monitor_weight</span>
+      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Peso & Objetivo</h2>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Peso Inicial (kg)</label>
+        <input type="number" id="startWeight" step="0.1" class="field-input" placeholder="85.0">
+      </div>
+      <div>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Peso Meta (kg)</label>
+        <input type="number" id="goalWeight" step="0.1" class="field-input" placeholder="70.0">
+      </div>
+      <div>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Objetivo</label>
+        <select id="trainingGoal" class="field-input">
+          <option value="lose">Perder Grasa</option>
+          <option value="maintain">Mantener</option>
+          <option value="gain">Ganar Músculo</option>
+          <option value="strength">Fuerza</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Nivel de Actividad</label>
+        <select id="activity" class="field-input">
+          <option value="1.2">Sedentario</option>
+          <option value="1.375">Ligero</option>
+          <option value="1.55">Moderado</option>
+          <option value="1.725">Activo</option>
+          <option value="1.9">Muy Activo</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- Entrenamiento -->
+  <section id="pf-entreno" class="glass-card rounded-2xl p-4">
+    <div class="flex items-center gap-2 mb-3">
+      <span class="material-symbols-outlined text-base" style="color:#4ade80;font-variation-settings:'FILL' 1">fitness_center</span>
+      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Entrenamiento</h2>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Tipo</label>
+        <select id="trainingType" class="field-input">
+          <option value="bodyweight">Peso Corporal</option>
+          <option value="dumbbells">Mancuernas</option>
+          <option value="weights">Pesas / Barra</option>
+          <option value="both">Ambos</option>
+          <option value="machines">Máquinas</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Frecuencia</label>
+        <select id="trainingFreq" class="field-input">
+          <option value="1">1 día / sem</option>
+          <option value="2">2 días / sem</option>
+          <option value="3">3 días / sem</option>
+          <option value="4">4 días / sem</option>
+          <option value="5">5 días / sem</option>
+          <option value="6">6 días / sem</option>
+          <option value="7">7 días / sem</option>
+        </select>
+      </div>
+      <div class="col-span-2">
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Experiencia</label>
+        <select id="experience" class="field-input">
+          <option value="beginner">Principiante</option>
+          <option value="intermediate">Intermedio</option>
+          <option value="advanced">Avanzado</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resumen Metabólico -->
+  <section id="pf-macros" class="glass-card rounded-2xl p-4">
+    <div class="flex items-center gap-2 mb-3">
+      <span class="material-symbols-outlined text-base" style="color:#fbbf24;font-variation-settings:'FILL' 1">insights</span>
+      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Resumen Metabólico</h2>
+    </div>
+    <div class="space-y-2">
+      <div class="flex items-center justify-between px-3 py-2.5 rounded-xl" style="background:#111;border:1px solid rgba(255,240,225,0.07)">
+        <span class="text-xs" style="color:rgba(247,244,240,0.5)">TMB (BMR)</span>
+        <span id="bmrValue" class="text-sm font-bold" style="color:#f7f4f0">-- kcal</span>
+      </div>
+      <div class="flex items-center justify-between px-3 py-2.5 rounded-xl" style="background:#111;border:1px solid rgba(255,240,225,0.07)">
+        <span class="text-xs" style="color:rgba(247,244,240,0.5)">TDEE</span>
+        <span id="tdeeValue" class="text-sm font-bold" style="color:#f7f4f0">-- kcal</span>
+      </div>
+      <div class="flex items-center justify-between px-3 py-2.5 rounded-xl" style="background:rgba(255,77,0,0.07);border:1px solid rgba(255,77,0,0.15)">
+        <span class="text-xs font-semibold" style="color:rgba(255,77,0,0.7)">Meta calórica</span>
+        <span id="caloriesValue" class="text-sm font-black" style="color:#ff4d00">-- kcal</span>
+      </div>
+      <div class="flex items-center justify-between px-3 py-2.5 rounded-xl" style="background:#111;border:1px solid rgba(255,240,225,0.07)">
+        <span class="text-xs" style="color:rgba(247,244,240,0.5)">Proteína diaria</span>
+        <span id="proteinValue" class="text-sm font-bold" style="color:#fb923c">-- g</span>
+      </div>
+    </div>
+    <p class="text-[10px] mt-2 text-center" style="color:rgba(247,244,240,0.25)">Calculado con Mifflin-St Jeor · se actualiza al guardar</p>
+  </section>
+
+  <!-- Historial de Peso -->
+  <section id="pf-historial" class="glass-card rounded-2xl p-4">
+    <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-base" style="color:#ff4d00;font-variation-settings:'FILL' 1">history</span>
+        <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Historial de Peso</h2>
+      </div>
+      <a href="/app/progreso" class="text-[10px] font-bold px-2 py-1 rounded-full" style="background:rgba(255,77,0,0.12);color:#ff4d00;text-decoration:none">Ver gráfica →</a>
+    </div>
+    <div id="weightHistoryList" class="space-y-1.5 mb-3"></div>
+    <button onclick="showWeightModal()" class="w-full py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 flex items-center justify-center gap-2" style="background:rgba(255,77,0,0.1);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">
+      <span class="material-symbols-outlined" style="font-size:16px">add</span>
+      Registrar Peso
+    </button>
+  </section>
+
+  <!-- Zona Peligrosa -->
+  <section id="pf-peligro" class="glass-card rounded-2xl p-4" style="border-color:rgba(220,38,38,0.2)">
+    <div class="flex items-center gap-2 mb-1">
+      <span class="material-symbols-outlined text-base" style="color:#dc2626;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">warning</span>
+      <h2 class="text-sm font-bold" style="color:#f7f4f0">Zona Peligrosa</h2>
+    </div>
+    <p class="text-[11px] mb-4" style="color:rgba(247,244,240,0.35)">Estas acciones son irreversibles. Asegúrate de saber lo que estás haciendo.</p>
+
+    <button onclick="handleLogout()" class="w-full py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 flex items-center justify-center gap-2 mb-2" style="background:rgba(220,38,38,0.07);color:#dc2626;border:1px solid rgba(220,38,38,0.18)">
+      <span class="material-symbols-outlined" style="font-size:16px">logout</span>
+      Cerrar Sesión
+    </button>
+
+    <button onclick="resetProgressData()" class="w-full py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 flex items-center justify-center gap-2 mb-2" style="background:rgba(220,38,38,0.04);color:rgba(220,38,38,0.65);border:1px solid rgba(220,38,38,0.12)">
+      <span class="material-symbols-outlined" style="font-size:16px">restart_alt</span>
+      Reiniciar solo el progreso
+    </button>
+
+    <button onclick="resetAllData()" class="w-full py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 flex items-center justify-center gap-2" style="background:rgba(220,38,38,0.04);color:rgba(220,38,38,0.4);border:1px solid rgba(220,38,38,0.08)">
+      <span class="material-symbols-outlined" style="font-size:16px">delete_forever</span>
+      Borrar Todos los Datos
+    </button>
+  </section>
+
+</main>
+
+<!-- Weight Modal -->
+<div id="weightModal" class="fixed inset-0 z-[80] hidden">
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWeightModal()"></div>
+  <div class="absolute bottom-0 left-0 right-0 rounded-t-3xl p-6 shadow-2xl" style="background:#181818;border:1px solid rgba(255,255,255,0.09)">
+    <div class="w-10 h-1 rounded-full mx-auto mb-5" style="background:rgba(255,255,255,0.2)"></div>
+    <h3 class="text-lg font-bold flex items-center gap-2 mb-4" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">
+      <span class="material-symbols-outlined" style="color:#ff4d00">monitor_weight</span>
+      Registrar Peso
+    </h3>
+    <input type="number" id="newWeightInput" step="0.1" min="20" max="300"
+      class="w-full py-4 px-4 rounded-2xl text-2xl font-bold text-center focus:outline-none mb-4"
+      style="background:#111;border:1.5px solid rgba(255,255,255,0.12);color:#f7f4f0" placeholder="0.0">
+    <button onclick="saveWeight()" class="w-full py-4 rounded-2xl font-bold text-base transition-all active:scale-95 mb-2"
+      style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);color:#fff">
+      Guardar
+    </button>
+    <button onclick="closeWeightModal()" class="w-full py-3 rounded-2xl font-bold text-sm transition-all active:scale-95"
+      style="background:rgba(255,240,225,0.05);color:rgba(247,244,240,0.5)">
+      Cancelar
+    </button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 px-5 py-3 rounded-xl shadow-lg z-[9999] font-medium hidden opacity-0 transition-all duration-300" style="color:#fff">
+  <span id="toastMsg">✓ Guardado</span>
+</div>
+
+<script is:inline src="/app/utils.js"></script>
+<script is:inline>
+function showToast(msg, isError) {
+  var t = document.getElementById('toast'), m = document.getElementById('toastMsg');
+  if (m) m.textContent = msg;
+  t.style.background = isError ? '#dc2626' : '#22c55e';
+  t.classList.remove('hidden','opacity-0'); t.classList.add('opacity-100');
+  setTimeout(function(){ t.classList.add('opacity-0'); setTimeout(function(){ t.classList.add('hidden'); }, 300); }, 2500);
+}
+
+function loadProfile() {
+  var p = safeParseJSON(localStorage.getItem('keto_profile'), {});
+  var sv = function(id, val){ var el=document.getElementById(id); if(el && val != null && val !== '') el.value = val; };
+  sv('userName', p.name); sv('age', p.age); sv('sex', p.sex); sv('height', p.height);
+  sv('startWeight', p.startWeight || p.weight); sv('goalWeight', p.goalWeight);
+  sv('activity', p.activityLevel); sv('monthsOnKeto', p.monthsOnKeto);
+  sv('trainingType', p.trainingType); sv('trainingFreq', p.trainingFreq);
+  sv('trainingGoal', p.trainingGoal); sv('experience', p.experience);
+  updateStats();
+  loadWeightHistoryList();
+}
+
+function saveProfile() {
+  var p = safeParseJSON(localStorage.getItem('keto_profile'), {});
+  var name       = document.getElementById('userName').value || p.name || '';
+  var age        = parseInt(document.getElementById('age').value) || p.age || 0;
+  var sex        = document.getElementById('sex').value || p.sex || 'male';
+  var height     = parseInt(document.getElementById('height').value) || p.height || 0;
+  var startWeight= parseFloat(document.getElementById('startWeight').value) || p.startWeight || 0;
+  var goalWeight = parseFloat(document.getElementById('goalWeight').value) || p.goalWeight || 0;
+  var activity   = parseFloat(document.getElementById('activity').value) || p.activityLevel || 1.55;
+  var months     = parseInt(document.getElementById('monthsOnKeto').value) || p.monthsOnKeto || 1;
+  var tType      = document.getElementById('trainingType').value || p.trainingType || 'bodyweight';
+  var tFreq      = document.getElementById('trainingFreq').value || p.trainingFreq || '3';
+  var tGoal      = document.getElementById('trainingGoal').value || p.trainingGoal || 'lose';
+  var exp        = document.getElementById('experience').value || p.experience || 'beginner';
+
+  var history = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
+  var currentWeight = 0;
+  if (history.length > 0) {
+    var sorted = history.slice().sort(function(a,b){ return new Date(b.date)-new Date(a.date); });
+    currentWeight = sorted[0].weight || 0;
+  }
+  if (!currentWeight) currentWeight = p.weight || startWeight;
+
+  var goalFactor = tGoal === 'lose' ? -0.2 : tGoal === 'gain' ? 0.1 : 0;
+  var w = currentWeight || 70, h = height || 170, a = age || 30;
+  var bmr = sex === 'female' ? 10*w + 6.25*h - 5*a - 161 : 10*w + 6.25*h - 5*a + 5;
+  var tdee = bmr * activity;
+  var calories = Math.round(tdee * (1 + goalFactor));
+
+  var profile = {
+    name: name, age: age, sex: sex, height: height,
+    weight: currentWeight, startWeight: startWeight, goalWeight: goalWeight,
+    activityLevel: activity, monthsOnKeto: months,
+    trainingType: tType, trainingFreq: tFreq, trainingGoal: tGoal, experience: exp,
+    objetivo: tGoal, goal: goalFactor, avatar_url: p.avatar_url || ''
+  };
+  var macros = {
+    calories: calories, protein: Math.round(w * 1.8),
+    fat: Math.round((calories * 0.75) / 9), carbs: 25,
+    bmr: Math.round(bmr), tdee: Math.round(tdee)
+  };
+  localStorage.setItem('keto_profile', JSON.stringify(profile));
+  localStorage.setItem('keto_macros', JSON.stringify(macros));
+  localStorage.setItem('ketocore_onboarding_done', 'true');
+  showToast('✓ Perfil guardado');
+  updateStats();
+}
+
+function updateStats() {
+  var p = safeParseJSON(localStorage.getItem('keto_profile'), {});
+  var m = safeParseJSON(localStorage.getItem('keto_macros'), {});
+  var ss = function(id, txt){ var el=document.getElementById(id); if(el) el.textContent=txt; };
+  ss('bmrValue',     m.bmr ? m.bmr + ' kcal' : '-- kcal');
+  ss('tdeeValue',    m.tdee ? m.tdee + ' kcal' : '-- kcal');
+  ss('caloriesValue',m.calories ? m.calories + ' kcal' : '-- kcal');
+  ss('proteinValue', m.protein ? m.protein + ' g' : '-- g');
+}
+
+function loadWeightHistoryList() {
+  var container = document.getElementById('weightHistoryList'); if (!container) return;
+  var history = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
+  var recent = history.slice().sort(function(a,b){ return new Date(b.date)-new Date(a.date); }).slice(0, 5);
+  if (!recent.length) {
+    container.innerHTML = '<p style="font-size:12px;color:rgba(247,244,240,0.35);text-align:center;padding:10px 0">Sin registros aún</p>';
+    return;
+  }
+  container.innerHTML = recent.map(function(h, i) {
+    var prev = recent[i+1];
+    var diff = prev ? (h.weight - prev.weight) : null;
+    var diffColor = diff === null ? '' : diff < 0 ? '#22c55e' : diff > 0 ? '#ff7351' : 'rgba(247,244,240,0.4)';
+    var diffText  = diff !== null ? (diff > 0 ? '+' : '') + diff.toFixed(1) + ' kg' : '';
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:10px;background:#111;border:1px solid rgba(255,240,225,0.07)">' +
+      '<span style="font-size:12px;color:rgba(247,244,240,0.5)">' + h.date.slice(5).replace('-','/') + '</span>' +
+      '<div style="display:flex;align-items:center;gap:8px">' +
+        (diffText ? '<span style="font-size:11px;color:' + diffColor + '">' + diffText + '</span>' : '') +
+        '<span style="font-size:13px;font-weight:700;color:#f7f4f0">' + h.weight + ' kg</span>' +
+      '</div></div>';
+  }).join('');
+}
+
+function showWeightModal() {
+  document.getElementById('weightModal').classList.remove('hidden');
+  var inp = document.getElementById('newWeightInput'); if (inp) { inp.value=''; inp.focus(); }
+}
+function closeWeightModal() { document.getElementById('weightModal').classList.add('hidden'); }
+
+function saveWeight() {
+  var inp = document.getElementById('newWeightInput');
+  var val = parseFloat(inp.value);
+  if (isNaN(val) || val < 20 || val > 300) { showToast('Peso inválido', true); return; }
+  var history = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
+  var today = new Date().toISOString().split('T')[0];
+  var idx = history.findIndex(function(h){ return (h.date||h.fecha) === today; });
+  if (idx >= 0) history[idx].weight = val; else history.push({ date: today, weight: val });
+  localStorage.setItem('keto_weight_history', JSON.stringify(history));
+  var p = safeParseJSON(localStorage.getItem('keto_profile'), {}); p.weight = val;
+  localStorage.setItem('keto_profile', JSON.stringify(p));
+  closeWeightModal(); showToast('✓ Peso registrado: ' + val + ' kg');
+  updateStats(); loadWeightHistoryList();
+}
+
+async function handleLogout() {
+  if (confirm('¿Cerrar sesión?')) {
+    if (window.supabase) await window.supabase.auth.signOut();
+    ['ketocore_user_id','ketocore_user_email','ketocore_onboarding_done'].forEach(function(k){ localStorage.removeItem(k); });
+    window.location.href = '/app/welcome';
+  }
+}
+
+function resetProgressData() {
+  customConfirm('Se borrarán: historial de peso, racha, checklist diario, plan de comidas y entrenamientos. Tu perfil y objetivos quedan intactos.').then(function(ok) {
+    if (!ok) return;
+    var toRemove = ['keto_weight_history', 'ketoStreak', 'ketoWorkouts', 'keto_meals'];
+    toRemove.forEach(function(k) { localStorage.removeItem(k); });
+    Object.keys(localStorage).forEach(function(k) {
+      if (k.startsWith('mealPlan_') || k.startsWith('checklist_')) localStorage.removeItem(k);
+    });
+    showToast('Progreso reiniciado', 2000, 'success');
+    setTimeout(function() { window.location.reload(); }, 1200);
+  });
+}
+
+function resetAllData() {
+  customConfirm('⚠️ Se borrarán TODOS los datos de la app: perfil, peso, macros, objetivos, historial y configuración. Esta acción no se puede deshacer.').then(function(ok) {
+    if (!ok) return;
+    [
+      'keto_profile', 'keto_macros', 'keto_weight_history', 'keto_objetivos',
+      'ketoStreak', 'ketoWorkouts', 'keto_meals', 'ketoFoods', 'despensa',
+      'customRecipes', 'ketocore_onboarding_done', 'KetoCore_guest',
+      'comunidad_waitlist', 'comunidad_count', 'userData', 'userData_migrated',
+      'lastBackupDate', 'push_enabled', 'push_subscription', 'reminders_enabled'
+    ].forEach(function(k) { localStorage.removeItem(k); });
+    Object.keys(localStorage).forEach(function(k) {
+      if (k.startsWith('mealPlan_') || k.startsWith('checklist_') || k.startsWith('keto')) {
+        localStorage.removeItem(k);
+      }
+    });
+    showToast('Todos los datos borrados', 2000, 'info');
+    setTimeout(function() { window.location.replace('/app/welcome'); }, 1000);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', loadProfile);
+</script>
+
+</AppLayout>
