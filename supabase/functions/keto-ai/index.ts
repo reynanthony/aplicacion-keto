@@ -49,7 +49,10 @@ serve(async (req) => {
       
       case 'analyze_recipe':
         return await handleAnalyzeRecipe(openai, data, supabaseClient)
-      
+
+      case 'chat':
+        return await handleChat(openai, data, supabaseClient)
+
       default:
         return new Response(JSON.stringify({ error: 'Acción no válida' }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -216,6 +219,47 @@ async function handleSuggestSubstitute(openai, data, supabaseClient) {
   const resultado = JSON.parse(response.choices[0].message.content)
 
   return new Response(JSON.stringify(resultado), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  })
+}
+
+async function handleChat(openai, data, supabaseClient) {
+  const { question, context, history } = data
+
+  const messages = [
+    {
+      role: 'system',
+      content: 'Eres el Coach IA de KetoCore, una app de dieta cetogénica. Respondes SIEMPRE en español, ' +
+        'corto y accionable (máximo 2-3 frases, nunca párrafos largos). Basa tus respuestas en el contexto ' +
+        'real del usuario que se te da a continuación; si falta un dato, no lo inventes. Cuando aplique, ' +
+        'termina con una sugerencia concreta de una acción que el usuario puede hacer en la app ' +
+        '(ej. "Registra tu cena de hoy" o "Programa un entreno mañana").\n' +
+        'Contexto del usuario: ' + (context || 'sin datos disponibles')
+    }
+  ]
+
+  if (Array.isArray(history)) {
+    history.forEach((h) => {
+      if (!h || !h.content) return
+      messages.push({ role: h.role === 'user' ? 'user' : 'assistant', content: String(h.content) })
+    })
+  }
+
+  messages.push({ role: 'user', content: String(question || '') })
+
+  const response = await openai.chat.completions.create({
+    model: 'gpt-4o-mini',
+    messages,
+    temperature: 0.6,
+    max_tokens: 300
+  })
+
+  const answer = response.choices[0].message.content
+
+  return new Response(JSON.stringify({
+    answer: answer,
+    modelo: 'gpt-4o-mini'
+  }), {
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   })
 }
