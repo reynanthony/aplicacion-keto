@@ -1,432 +1,756 @@
----
-// Recetas — v3. Migra header/nav legacy a AppLayout+Dock limpio. Grid de
-// recetas queda como cards custom (imagen/gradiente, no encaja en DataRow
-// plano). Chips de categoría → Chip v3 real. Los 4 modales centrados
-// (detalle/porciones/agregar-al-plan/crear) se consolidan en 2 Sheet: uno de
-// detalle (con porciones y agregar-al-plan como secciones internas, no
-// sheets separados) y uno de creación. Simplifica los 3 filtros sueltos
-// (categoría/favoritos/para-hoy) en un solo estado `currentFilter`. Corrige
-// el doble-import de keto-inspector-recetas-integration.js (antes se
-// importaba dos veces, doble inicialización).
+﻿---
 import AppLayout from '../../layouts/AppLayout.astro';
-import Dock from '../../components/v3/Dock.astro';
-import Sheet from '../../components/v3/Sheet.astro';
-import VeredictoSheet from '../../components/v3/VeredictoSheet.astro';
+import AppNav from '../../components/AppNav.astro';
 ---
 
 <AppLayout title="KetoCore | Recetas" authGuard={true}>
-  <style is:global>
-    #appSidebar, #kcTabbar, #kcDrawer { display: none !important; }
-  </style>
-  <style is:global>
-    /* is:global a propósito: .rc-card* se construye vía innerHTML en JS, y el
-       scope de Astro (atributo data-astro-cq) nunca llega al HTML inyectado
-       dinámicamente — un <style> sin is:global simplemente no aplicaría. */
-    .v3-field { background: var(--v3-surface-2); border: 1px solid var(--v3-border); border-radius: 12px; padding: 10px 12px; font-size: 14px; color: var(--v3-text); width: 100%; font-family: var(--v3-font-body); }
-    .v3-field:focus { outline: none; border-color: var(--v3-lime); }
-    .v3-field::placeholder { color: var(--v3-text-40); }
-    .rc-card { position: relative; overflow: hidden; border-radius: var(--v3-radius-card); background: var(--v3-surface-1); border: 1px solid var(--v3-border); cursor: pointer; }
-    .rc-card-img { height: 100px; display: flex; align-items: center; justify-content: center; position: relative; }
-    .rc-card-fav { position: absolute; top: 8px; left: 8px; width: 30px; height: 30px; border-radius: 50%; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; cursor: pointer; }
-    .rc-card-badge { position: absolute; top: 8px; right: 8px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; padding: 3px 8px; border-radius: 100px; background: rgba(0,0,0,0.5); color: var(--v3-text); }
-    .rc-card-body { padding: 12px; }
-    .rc-card-title { font-size: 13px; font-weight: 700; color: var(--v3-text); margin-bottom: 8px; line-height: 1.25; min-height:32px; }
-    .rc-card-macros { display: flex; gap: 10px; }
-    .rc-card-macro-val { font-size: 12.5px; font-weight: 800; }
-    .rc-card-macro-lbl { font-size: 8.5px; color: var(--v3-text-40); text-transform: uppercase; }
-  </style>
+<style is:global>
+.sidebar-link.active{background:rgba(22,19,16,1)!important;}
+.sidebar-link.active .material-symbols-outlined{color:#ff4d00!important;}
+.sidebar-link.active{color:white!important;}
+.sidebar-collapsed .sidebar-nav{width:72px;}
+.sidebar-collapsed .sidebar-nav .sidebar-text{display:none;}
+.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0;}
+.sidebar-collapsed .sidebar-logo-text{display:none;}
+.sidebar-collapsed .sidebar-logo{justify-content:center;}
+.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px;}
+.sidebar-collapsed~main .main-content{margin-left:72px;}
+.sidebar-toggle-btn{left:256px;transition:left 0.3s ease;}
+.sidebar-collapsed~.sidebar-toggle-btn{left:72px;}
 
-  <div data-v3 style="background:var(--v3-surface-app); min-height:100vh;">
-    <main style="padding: var(--v3-pad-screen) var(--v3-pad-screen) 140px; max-width:520px; margin:0 auto; display:flex; flex-direction:column; gap: var(--v3-gap-block);">
-
-      <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px;">
-        <div>
-          <p class="v3-eyebrow" style="margin-bottom:6px;">Recetas · <span id="rcTotalCount">--</span> verificadas</p>
-          <h1 style="font-family:var(--v3-font-title); font-weight:800; font-size:24px; color:var(--v3-text); line-height:1.15;">Cocina keto, sin adivinar</h1>
-        </div>
-        <button type="button" id="rcCreateBtn" class="v3-decision-card-action" style="background:var(--v3-lime); color:var(--v3-text-on-lime); flex-shrink:0; margin-top:24px;">
-          <span class="material-symbols-outlined" style="font-size:16px">add</span>
-        </button>
-      </div>
-
-      <div style="position:relative;">
-        <span class="material-symbols-outlined" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--v3-text-40); font-size:18px;">search</span>
-        <input id="rcSearchInput" type="text" class="v3-field" style="padding-left:38px;" placeholder="Buscar receta o ingrediente…">
-      </div>
-
-      <div class="v3-chip-group" id="rcFilterChips">
-        <button type="button" class="v3-chip v3-chip--active" data-filter="all">Todas</button>
-        <button type="button" class="v3-chip" data-filter="desayuno">Desayuno</button>
-        <button type="button" class="v3-chip" data-filter="almuerzo">Almuerzo</button>
-        <button type="button" class="v3-chip" data-filter="cena">Cena</button>
-        <button type="button" class="v3-chip" data-filter="snacks">Snacks</button>
-        <button type="button" class="v3-chip" data-filter="favorites">
-          <span class="material-symbols-outlined" style="font-size:14px;">favorite</span> Favoritos
-        </button>
-        <button type="button" class="v3-chip" data-filter="macrofit">
-          <span class="material-symbols-outlined" style="font-size:14px;">target</span> Para hoy
-        </button>
-      </div>
-
-      <div id="rcGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
-      <div id="rcNoResults" class="hidden" style="text-align:center; padding:40px 0;">
-        <span class="material-symbols-outlined" style="font-size:40px; color:var(--v3-text-40);">search_off</span>
-        <p style="font-size:13px; color:var(--v3-text-40); margin-top:8px;">No se encontraron recetas</p>
-      </div>
-
-    </main>
-
-    <VeredictoSheet />
-
-    <Sheet id="v3-sheet-recipe" title="Receta" subtitle="">
-      <div id="rcSheetBody"></div>
-    </Sheet>
-
-    <Sheet id="v3-sheet-create-recipe" title="Crear receta" subtitle="Se guarda solo en este dispositivo">
-      <div style="display:flex; flex-direction:column; gap:10px;">
-        <div>
-          <label class="v3-eyebrow" style="display:block; margin-bottom:6px; font-size:10px;">Nombre</label>
-          <input type="text" id="newRecipeName" class="v3-field" placeholder="Ej: Desayuno Keto">
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-          <div>
-            <label class="v3-eyebrow" style="display:block; margin-bottom:6px; font-size:10px;">Categoría</label>
-            <select id="newRecipeCategory" class="v3-field">
-              <option value="desayuno">Desayuno</option>
-              <option value="almuerzo">Almuerzo</option>
-              <option value="cena">Cena</option>
-              <option value="snacks">Snacks</option>
-            </select>
-          </div>
-          <div>
-            <label class="v3-eyebrow" style="display:block; margin-bottom:6px; font-size:10px;">Prep. (min)</label>
-            <input type="number" id="newRecipeTime" class="v3-field" value="15" min="1">
-          </div>
-        </div>
-        <div>
-          <label class="v3-eyebrow" style="display:block; margin-bottom:6px; font-size:10px;">Instrucciones</label>
-          <textarea id="newRecipeInstructions" class="v3-field" rows="3" placeholder="Describe la preparación..."></textarea>
-        </div>
-        <div>
-          <label class="v3-eyebrow" style="display:block; margin-bottom:8px; font-size:10px;">Macros por porción</label>
-          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px;">
-            <input type="number" id="newRecipeCalories" class="v3-field" style="text-align:center; padding:8px 4px;" placeholder="kcal" value="0" min="0">
-            <input type="number" id="newRecipeProtein" class="v3-field" style="text-align:center; padding:8px 4px;" placeholder="Prot" value="0" min="0">
-            <input type="number" id="newRecipeFat" class="v3-field" style="text-align:center; padding:8px 4px;" placeholder="Grasa" value="0" min="0">
-            <input type="number" id="newRecipeCarbs" class="v3-field" style="text-align:center; padding:8px 4px;" placeholder="Carbs" value="0" min="0">
-          </div>
-        </div>
-        <button type="button" id="rcSaveRecipeBtn" class="v3-decision-card-action" style="background:var(--v3-lime); color:var(--v3-text-on-lime); width:100%; justify-content:center;">Guardar receta</button>
-      </div>
-    </Sheet>
-
-    <Sheet id="v3-sheet-registrar" title="Registrar" subtitle="Margen de hoy · — g netos">
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-        <a href="/app/scanner" class="v3-decision-card-action" style="background:var(--v3-lime); color:var(--v3-text-on-lime); justify-content:center;">
-          <span class="material-symbols-outlined" style="font-size:18px">center_focus_strong</span> Escanear
-        </a>
-        <a href="/app/alimentos" class="v3-decision-card-action" style="background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;">
-          <span class="material-symbols-outlined" style="font-size:18px">search</span> Buscar
-        </a>
-        <button type="button" class="v3-decision-card-action" disabled style="background:var(--v3-surface-2); color:var(--v3-text-40); justify-content:center; cursor:not-allowed;">
-          <span class="material-symbols-outlined" style="font-size:18px">mic</span> Dictar · Próximamente
-        </button>
-        <a href="/app/recetas" class="v3-decision-card-action" style="background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;">
-          <span class="material-symbols-outlined" style="font-size:18px">menu_book</span> Recetas
-        </a>
-      </div>
-      <Fragment slot="footnote">Offline · sincroniza solo</Fragment>
-    </Sheet>
-    <Dock active="yo" fabSheetId="v3-sheet-registrar" />
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.glass-card{background:rgba(22,19,16,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1)}
+.gradient-primary{background:linear-gradient(135deg,#ff4d00 0%,#ffb300 100%)}
+.sidebar-collapsed .sidebar-nav{width:72px}
+.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}
+.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}
+.sidebar-link.active{background:#1e1a15}
+.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
+.sidebar-link.active{border-left:4px solid #ff4d00;border-radius:0}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:#0b0a08}
+::-webkit-scrollbar-thumb{background:#1e1a15;border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:#2a2a2a}
+.shadow-glow{box-shadow:0 0 20px rgba(255,77,0,0.3)}
+.shadow-glow-strong{box-shadow:0 0 30px rgba(255,77,0,0.5)}
+/* Chips de categoría — rediseño */
+.category-btn{border-radius:100px !important;padding:8px 16px !important;font-size:13px !important;font-weight:600 !important;background:#161310;border:1px solid rgba(255,240,225,0.08) !important;color:rgba(247,244,240,0.6);text-transform:none !important;letter-spacing:normal !important;transition:all .14s}
+.category-btn:hover{color:#f7f4f0;border-color:rgba(255,240,225,0.18) !important}
+.category-btn.active{background:#ff4d00 !important;border-color:#ff4d00 !important;color:#fff !important;font-weight:700 !important}
+</style>
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
+  <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
+    <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
+    <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">KetoCore</span>
+  </a>
+  <div class="flex items-center gap-1.5">
+    <button onclick="toggleMobileUserMenu()" aria-label="Mi cuenta" class="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
+      <img id="mobileHeaderAvatarImg" src="" class="hidden w-full h-full object-cover" alt="Avatar">
+      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined" style="font-size:20px;color:rgba(247,244,240,0.6)">account_circle</span>
+    </button>
+    <button onclick="toggleHamburgerMenu()" aria-label="Abrir menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1a15;color:rgba(247,244,240,0.6)">
+      <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">menu</span>
+    </button>
   </div>
+</header>
 
-  <script is:inline src="/app/utils.js"></script>
-  <script is:inline src="/app/data-loader.js"></script>
-  <script is:inline src="/app/data/recipe-details.js"></script>
-  <script is:inline src="/app/modules/keto-inspector.js"></script>
-  <script is:inline src="/app/modules/keto-inspector-recetas-integration.js"></script>
-  <script is:inline src="/app/modules/day-budget.js"></script>
-  <script is:inline src="/app/modules/meal-log.js"></script>
-  <script is:inline src="/app/modules/v3-motion.js"></script>
-  <script is:inline src="/app/modules/v3-veredicto.js"></script>
+<!-- Mobile User Dropdown -->
+<div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161310;border:1px solid rgba(255,240,225,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
+  <div class="p-3" style="border-bottom:1px solid rgba(255,240,225,0.06)">
+    <p class="text-sm font-semibold" style="color:#f7f4f0" id="mobileDropdownUserName">Usuario</p>
+    <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
+  </div>
+  <div class="p-2">
+    <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f7f4f0">
+      <span class="material-symbols-outlined text-lg" style="color:rgba(247,244,240,0.55)">person</span>
+      <span class="text-sm font-medium">Mi Perfil</span>
+    </a>
+    <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-red-50" style="color:#dc2626">
+      <span class="material-symbols-outlined text-lg">logout</span>
+      <span class="text-sm font-medium">Cerrar Sesión</span>
+    </button>
+  </div>
+</div>
+<main class="main-content pt-14 px-4 pb-20 min-h-screen" style="background:#0b0a08">
+<div class="space-y-8 kc-page" style="padding-top:12px">
 
-  <script is:inline>
-    var RC_CAT = {
-      desayuno: { color: 'var(--v3-amber)', icon: 'egg', label: 'Desayuno' },
-      almuerzo: { color: 'var(--v3-lime)', icon: 'restaurant', label: 'Almuerzo' },
-      cena:     { color: 'var(--v3-violet)', icon: 'dinner_dining', label: 'Cena' },
-      snacks:   { color: '#f472b6', icon: 'cookie', label: 'Snacks' }
-    };
+<header style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:20px">
+  <div>
+    <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px">Recetas · <span id="totalRecipesCount">--</span> verificadas</div>
+    <h1 class="kc-h1">Cocina keto,<br>sin adivinar</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <button onclick="openCreateRecipeModal()" class="kc-btn" style="height:46px"><span class="material-symbols-outlined" style="font-size:20px">add</span>Nueva receta</button>
+  </div>
+</header>
 
-    var recipesDB = [];
-    var currentFilter = 'all'; // 'all' | 'desayuno' | 'almuerzo' | 'cena' | 'snacks' | 'favorites' | 'macrofit'
-    var currentRecipeId = null;
-    var currentServings = 1;
+<section class="mb-8 flex flex-col gap-4">
+<div class="relative" style="max-width:340px">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2" style="color:rgba(247,244,240,0.4);font-size:20px">search</span>
+<input id="searchInput" oninput="filterRecipes()" style="width:100%;height:46px;padding:0 16px 0 46px;border-radius:14px;background:#161310;border:1px solid rgba(255,240,225,0.08);color:#f7f4f0;font-size:14px;outline:none" placeholder="Buscar receta o ingrediente…" type="text"/>
+</div>
+<div class="flex flex-wrap gap-2.5" id="categoryFilters">
+<button onclick="setCategory('all')" class="category-btn active bg-primary-container text-white py-3 px-6 rounded-xl text-sm font-bold border border-transparent transition-colors" data-category="all">Todas</button>
+<button onclick="setCategory('desayuno')" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors" data-category="desayuno">Desayuno</button>
+<button onclick="setCategory('almuerzo')" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors" data-category="almuerzo">Almuerzo</button>
+<button onclick="setCategory('cena')" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors" data-category="cena">Cena</button>
+<button onclick="setCategory('snacks')" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors" data-category="snacks">Snacks</button>
+<button onclick="showFavorites()" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors" data-category="favorites">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1">favorite</span>
+Favoritos
+</button>
+<button onclick="showMacroFit()" id="btnParaHoy" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors flex items-center gap-2" data-category="macrofit">
+<span class="material-symbols-outlined text-green-400 text-base" style="font-variation-settings:'FILL' 1">target</span>
+Para hoy
+</button>
+</div>
+</section>
 
-    function loadRecipes() {
-      if (typeof KETO_RECIPES === 'undefined') { console.error('KETO_RECIPES no está definido'); return; }
-      recipesDB = Object.keys(KETO_RECIPES).map(function (key) {
-        var r = KETO_RECIPES[key];
-        return {
-          id: key, title: r.title, instructions: r.instructions ? r.instructions.join('. ') : '',
-          difficulty: r.difficulty || 'facil', category: r.mealType || r.category,
-          prepTime: parseInt(r.prepTime) || 15, calories: r.calories || 0, protein: r.protein || 0,
-          fat: r.fat || 0, carbs: r.carbs || 0, source: 'local'
-        };
-      });
-      renderRecipes();
-    }
+<div id="recipesGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
 
-    function allRecipes() {
-      return recipesDB.concat(safeParseJSON(localStorage.getItem('customRecipes'), []));
-    }
+<div id="noRecipes" class="hidden text-center py-20">
+<span class="material-symbols-outlined text-6xl text-on-surface-variant/70 mb-4 block">search_off</span>
+<p class="text-on-surface-variant text-lg">No se encontraron recetas</p>
+</div>
 
-    function getFavorites() {
-      return safeParseJSON(localStorage.getItem('recipeFavorites'), []);
-    }
+</div>
+</main>
 
-    function toggleFavorite(id) {
-      var favorites = getFavorites();
-      var idx = favorites.indexOf(id);
-      if (idx === -1) { favorites.push(id); showToast('Agregado a favoritos', 1500, 'success'); }
-      else { favorites.splice(idx, 1); showToast('Eliminado de favoritos', 1500, 'info'); }
-      localStorage.setItem('recipeFavorites', JSON.stringify(favorites));
-      renderRecipes();
-    }
+<div id="recipeModal" class="fixed inset-0 z-[60] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeRecipeModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none overflow-y-auto">
+<div class="bg-surface-container-low rounded-[2rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto pointer-events-auto">
+<div id="recipeModalContent"></div>
+</div>
+</div>
+</div>
 
-    function getRemainingMacros() {
-      var macros = safeParseJSON(localStorage.getItem('keto_macros'), {});
-      var today = new Date().toISOString().slice(0, 10);
-      var plan = safeParseJSON(localStorage.getItem('mealPlan_' + today), { desayuno: [], almuerzo: [], cena: [], snacks: [] });
-      var consumed = { cal: 0, prot: 0, fat: 0, carbs: 0 };
-      ['desayuno', 'almuerzo', 'cena', 'snacks'].forEach(function (m) {
-        (plan[m] || []).forEach(function (item) {
-          consumed.cal += parseFloat(item.calories || 0);
-          consumed.prot += parseFloat(item.protein || 0);
-          consumed.fat += parseFloat(item.fat || 0);
-          consumed.carbs += parseFloat(item.carbs || 0);
+<div id="createRecipeModal" class="fixed inset-0 z-[80] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeCreateRecipeModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none overflow-y-auto">
+<div class="glass-card rounded-3xl p-8 w-full max-w-lg max-h-[90vh] overflow-y-auto pointer-events-auto border border-primary-container/20">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-2xl font-headline font-black text-white">Crear Nueva Receta</h3>
+<button onclick="closeCreateRecipeModal()" class="w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
+</div>
+<div class="space-y-6">
+<div>
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Nombre de la receta</label>
+<input type="text" id="newRecipeName" class="w-full bg-surface-container-high text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary" placeholder="Ej: Desayuno Keto">
+</div>
+<div>
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Categoría</label>
+<select id="newRecipeCategory" class="w-full bg-surface-container-high text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary">
+<option value="desayuno">Desayuno</option>
+<option value="almuerzo">Almuerzo</option>
+<option value="cena">Cena</option>
+<option value="snacks">Snacks</option>
+</select>
+</div>
+<div>
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Tiempo de preparación (min)</label>
+<input type="number" id="newRecipeTime" class="w-full bg-surface-container-high text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary" value="15" min="1">
+</div>
+<div>
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Instrucciones</label>
+<textarea id="newRecipeInstructions" class="w-full bg-surface-container-high text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary h-32" placeholder="Describe la preparación..."></textarea>
+</div>
+<div class="bg-surface-container-high rounded-xl p-4">
+<p class="text-xs text-primary-container uppercase tracking-wider mb-3">Macros por porción</p>
+<div class="grid grid-cols-4 gap-4">
+<div><label class="text-[10px] text-on-surface-variant block mb-1">kcal</label><input type="number" id="newRecipeCalories" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
+<div><label class="text-[10px] text-on-surface-variant block mb-1">Proteína</label><input type="number" id="newRecipeProtein" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
+<div><label class="text-[10px] text-on-surface-variant block mb-1">Grasa</label><input type="number" id="newRecipeFat" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
+<div><label class="text-[10px] text-on-surface-variant block mb-1">Carbs</label><input type="number" id="newRecipeCarbs" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
+</div>
+</div>
+</div>
+<div class="flex gap-3 mt-6">
+<button onclick="closeCreateRecipeModal()" class="flex-1 py-4 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>
+<button onclick="saveRecipe()" class="flex-1 py-4 rounded-xl bg-primary-container text-white font-bold hover:opacity-90 transition-colors">Guardar</button>
+</div>
+</div>
+</div>
+</div>
+
+<div id="mealPlanModal" class="fixed inset-0 z-[70] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeMealPlanModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+<div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto border border-primary-container/20">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-headline font-bold text-white">Agregar al Plan</h3>
+<button onclick="closeMealPlanModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
+</div>
+<p id="mealPlanRecipeName" class="text-primary-container mb-4"></p>
+<div class="space-y-3">
+<button onclick="addToMealPlan('desayuno')" class="w-full py-4 rounded-xl bg-yellow-500/20 text-yellow-400 font-bold hover:bg-yellow-500/30 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">wb_sunny</span> Desayuno
+</button>
+<button onclick="addToMealPlan('almuerzo')" class="w-full py-4 rounded-xl bg-orange-500/20 text-orange-400 font-bold hover:bg-orange-500/30 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">light_mode</span> Almuerzo
+</button>
+<button onclick="addToMealPlan('cena')" class="w-full py-4 rounded-xl bg-purple-500/20 text-purple-400 font-bold hover:bg-purple-500/30 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">nightlight</span> Cena
+</button>
+<button onclick="addToMealPlan('snacks')" class="w-full py-4 rounded-xl bg-pink-500/20 text-pink-400 font-bold hover:bg-pink-500/30 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">cookie</span> Snacks
+</button>
+</div>
+</div>
+</div>
+</div>
+
+<div id="servingsModal" class="fixed inset-0 z-[75] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeServingsModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+<div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto border border-primary-container/20">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-headline font-bold text-white">Ajustar Porciones</h3>
+<button onclick="closeServingsModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
+</div>
+<div class="text-center">
+<p id="servingsRecipeName" class="text-white font-bold mb-4"></p>
+<div class="flex items-center justify-center gap-6 mb-6">
+<button onclick="changeServings(-1)" class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-white text-2xl hover:bg-primary-container transition-colors">-</button>
+<span id="servingsCount" class="text-4xl font-black text-primary-container">1</span>
+<button onclick="changeServings(1)" class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-white text-2xl hover:bg-primary-container transition-colors">+</button>
+</div>
+<div class="bg-surface-container-high rounded-xl p-4 mb-6">
+<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">Macros ajustados</p>
+<div class="grid grid-cols-4 gap-4 text-center">
+<div><span id="adjustedCalories" class="text-xl font-bold text-yellow-400">0</span><span class="text-[10px] text-on-surface-variant block">kcal</span></div>
+<div><span id="adjustedProtein" class="text-xl font-bold text-orange-400">0g</span><span class="text-[10px] text-on-surface-variant block">Prot</span></div>
+<div><span id="adjustedFat" class="text-xl font-bold text-yellow-300">0g</span><span class="text-[10px] text-on-surface-variant block">Grasa</span></div>
+<div><span id="adjustedCarbs" class="text-xl font-bold text-cyan-400">0g</span><span class="text-[10px] text-on-surface-variant block">Carbs</span></div>
+</div>
+</div>
+<button onclick="confirmServings()" class="w-full py-4 rounded-xl kinetic-gradient text-white font-black hover:opacity-90 transition-colors">Aplicar</button>
+</div>
+</div>
+</div>
+</div>
+
+<nav class="md:hidden fixed bottom-0 w-full bg-surface-container-low/95 backdrop-blur-xl h-16 flex justify-around items-center z-50 border-t border-white/5">
+<a href="/app/" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[10px]">Inicio</span></a>
+<a href="/app/perfil" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
+<a href="/app/alimentos" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
+<a href="/app/plan" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">event_note</span><span class="text-[10px]">Plan</span></a>
+<a href="/app/compras" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
+<a href="/app/macros" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
+<a href="/app/recetas" class="flex flex-col items-center text-primary"><span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">menu_book</span><span class="text-[10px]">Recipes</span></a>
+<a href="/app/checklist" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
+<a href="/app/entrenamientos" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
+</nav>
+
+<script is:inline src="/app/utils.js"></script>
+<script is:inline src="/app/data-loader.js"></script>
+<script is:inline src="/app/data/recipe-details.js"></script>
+<script is:inline src="/app/modules/keto-inspector.js"></script>
+<script is:inline src="/app/modules/keto-inspector-recetas-integration.js"></script>
+<script is:inline>
+if(localStorage.getItem("sidebarCollapsed")==="true"){document.body.classList.add("sidebar-collapsed");var s=document.getElementById("sidebarNav");s.style.width="72px";s.style.overflow="hidden"}
+var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
+
+// Recetas de recipe-details.js (única fuente)
+var recipesDB = [];
+
+function loadRecipes() {
+    console.log('[loadRecipes] Ejecutando, KETO_RECIPES existe:', typeof KETO_RECIPES !== 'undefined');
+    if (typeof KETO_RECIPES !== 'undefined') {
+        recipesDB = Object.keys(KETO_RECIPES).map(function(key) {
+            var r = KETO_RECIPES[key];
+            return {
+                id: key,
+                title: r.title,
+                description: r.tips || '',
+                instructions: r.instructions ? r.instructions.join('. ') : '',
+                difficulty: r.difficulty || 'facil',
+                category: r.mealType || r.category,
+                prepTime: parseInt(r.prepTime) || 15,
+                image: r.image || '',
+                calories: r.calories || 0,
+                protein: r.protein || 0,
+                fat: r.fat || 0,
+                carbs: r.carbs || 0,
+                netCarbs: r.netCarbs || 0,
+                fiber: r.fiber || 0,
+                source: 'local'
+            };
         });
-      });
-      return {
-        cal: Math.max(0, (parseInt(macros.calories) || 1800) - consumed.cal),
-        prot: Math.max(0, (parseInt(macros.protein) || 160) - consumed.prot),
-        fat: Math.max(0, (parseInt(macros.fat) || 150) - consumed.fat),
-        carbs: Math.max(0, (parseInt(macros.carbs) || 25) - consumed.carbs)
-      };
-    }
-
-    function passesFilter(r, favorites, remaining) {
-      if (currentFilter === 'favorites') return favorites.indexOf(r.id) !== -1;
-      if (currentFilter === 'macrofit') return !!remaining && (r.carbs || 0) <= remaining.carbs + 2 && (r.calories || 0) <= remaining.cal + 50;
-      if (currentFilter !== 'all') return r.category === currentFilter;
-      return true;
-    }
-
-    function renderRecipes() {
-      var search = (document.getElementById('rcSearchInput').value || '').toLowerCase();
-      var favorites = getFavorites();
-      var remaining = currentFilter === 'macrofit' ? getRemainingMacros() : null;
-      var all = allRecipes();
-
-      var filtered = all.filter(function (r) {
-        if (search && !r.title.toLowerCase().includes(search)) return false;
-        return passesFilter(r, favorites, remaining);
-      });
-
-      document.getElementById('rcTotalCount').textContent = all.length;
-      var grid = document.getElementById('rcGrid');
-      var noResults = document.getElementById('rcNoResults');
-
-      if (!filtered.length) {
-        grid.innerHTML = '';
-        noResults.classList.remove('hidden');
-        return;
-      }
-      noResults.classList.add('hidden');
-
-      grid.innerHTML = filtered.map(function (recipe) {
-        var cat = RC_CAT[recipe.category] || RC_CAT.snacks;
-        var isFav = favorites.indexOf(recipe.id) !== -1;
-        var fitsToday = remaining && (recipe.carbs || 0) <= remaining.carbs + 2 && (recipe.calories || 0) <= remaining.cal + 50;
-        var html = '<div class="rc-card" data-recipe-id="' + recipe.id + '">';
-        html += '<div class="rc-card-img" style="background:color-mix(in srgb, ' + cat.color + ' 18%, var(--v3-surface-2));">';
-        html += '<span class="material-symbols-outlined" style="font-size:44px; color:' + cat.color + '; opacity:.9;">' + cat.icon + '</span>';
-        html += '<span class="rc-card-fav" data-recipe-fav="' + recipe.id + '"><span class="material-symbols-outlined" style="font-size:16px; color:' + (isFav ? '#f472b6' : '#fff') + ';">' + (isFav ? 'favorite' : 'favorite_border') + '</span></span>';
-        html += '<span class="rc-card-badge">' + recipe.prepTime + ' min</span>';
-        if (fitsToday) html += '<span class="rc-card-badge" style="right:auto; left:8px; top:auto; bottom:8px; background:rgba(200,245,96,0.9); color:var(--v3-text-on-lime);">Cabe hoy</span>';
-        html += '</div>';
-        html += '<div class="rc-card-body">';
-        html += '<div class="rc-card-title">' + escapeHtml(recipe.title) + '</div>';
-        html += '<div class="rc-card-macros">';
-        html += '<div><div class="rc-card-macro-val" style="color:var(--v3-lime);">' + recipe.carbs + 'g</div><div class="rc-card-macro-lbl">Carbs</div></div>';
-        html += '<div><div class="rc-card-macro-val" style="color:var(--v3-amber);">' + recipe.protein + 'g</div><div class="rc-card-macro-lbl">Prot</div></div>';
-        html += '<div><div class="rc-card-macro-val" style="color:var(--v3-violet);">' + recipe.fat + 'g</div><div class="rc-card-macro-lbl">Grasa</div></div>';
-        html += '</div></div></div>';
-        return html;
-      }).join('');
-    }
-
-    function renderRecipeSheet(recipe) {
-      var cat = RC_CAT[recipe.category] || RC_CAT.snacks;
-      var favorites = getFavorites();
-      var isFav = favorites.indexOf(recipe.id) !== -1;
-      currentServings = 1;
-
-      var html = '<div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">';
-      html += '<div style="width:52px; height:52px; border-radius:14px; background:color-mix(in srgb, ' + cat.color + ' 18%, var(--v3-surface-2)); display:flex; align-items:center; justify-content:center; flex-shrink:0;"><span class="material-symbols-outlined" style="font-size:26px; color:' + cat.color + ';">' + cat.icon + '</span></div>';
-      html += '<div style="flex:1;"><div style="font-family:var(--v3-font-title); font-weight:800; font-size:16px; color:var(--v3-text);">' + escapeHtml(recipe.title) + '</div>';
-      html += '<div style="font-size:11.5px; color:var(--v3-text-40); margin-top:2px;">' + recipe.prepTime + ' min · ' + recipe.difficulty + '</div></div>';
-      html += '<span data-recipe-fav="' + recipe.id + '" style="cursor:pointer;"><span class="material-symbols-outlined" style="color:' + (isFav ? '#f472b6' : 'var(--v3-text-40)') + ';">' + (isFav ? 'favorite' : 'favorite_border') + '</span></span>';
-      html += '</div>';
-
-      html += '<div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:14px;" id="rcSheetMacros">';
-      html += macroBox('rcAdjCalories', recipe.calories, 'kcal', 'var(--v3-amber)');
-      html += macroBox('rcAdjProtein', recipe.protein, 'g Prot', 'var(--v3-orange-soft)');
-      html += macroBox('rcAdjFat', recipe.fat, 'g Grasa', 'var(--v3-violet)');
-      html += macroBox('rcAdjCarbs', recipe.carbs, 'g Carbs', 'var(--v3-lime)');
-      html += '</div>';
-
-      html += '<p style="font-size:12.5px; line-height:1.55; color:var(--v3-text-70); margin-bottom:16px;">' + escapeHtml(recipe.instructions || 'Sin instrucciones') + '</p>';
-
-      html += '<div style="display:flex; gap:8px; margin-bottom:8px;">';
-      html += '<button type="button" id="rcTogglePorciones" class="v3-decision-card-action" style="flex:1; background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;"><span class="material-symbols-outlined" style="font-size:16px">tune</span> Porciones</button>';
-      html += '<button type="button" id="rcToggleAddPlan" class="v3-decision-card-action" style="flex:1; background:var(--v3-lime); color:var(--v3-text-on-lime); justify-content:center;"><span class="material-symbols-outlined" style="font-size:16px">add_circle</span> Agregar al plan</button>';
-      html += '</div>';
-
-      html += '<div id="rcPorcionesRow" class="hidden" style="display:flex; align-items:center; justify-content:center; gap:20px; padding:14px 0;">';
-      html += '<button type="button" id="rcServingsMinus" style="width:38px; height:38px; border-radius:50%; background:var(--v3-surface-2); border:1px solid var(--v3-border); color:var(--v3-text); font-size:18px;">-</button>';
-      html += '<span id="rcServingsCount" class="v3-num-mono" style="font-size:22px;">1</span>';
-      html += '<button type="button" id="rcServingsPlus" style="width:38px; height:38px; border-radius:50%; background:var(--v3-surface-2); border:1px solid var(--v3-border); color:var(--v3-text); font-size:18px;">+</button>';
-      html += '</div>';
-
-      html += '<div id="rcAddPlanRow" class="hidden" style="display:grid; grid-template-columns:1fr 1fr; gap:8px; padding-top:6px;">';
-      ['desayuno', 'almuerzo', 'cena', 'snacks'].forEach(function (m) {
-        html += '<button type="button" data-add-to-plan="' + m + '" class="v3-decision-card-action" style="background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;">' + m.charAt(0).toUpperCase() + m.slice(1) + '</button>';
-      });
-      html += '</div>';
-
-      document.getElementById('rcSheetBody').innerHTML = html;
-    }
-
-    function macroBox(id, val, unit, color) {
-      return '<div style="background:var(--v3-surface-2); border-radius:12px; padding:10px 4px; text-align:center;">' +
-        '<div id="' + id + '" class="v3-num-mono" style="font-size:15px; justify-content:center; color:' + color + ';">' + val + '</div>' +
-        '<div style="font-size:8.5px; color:var(--v3-text-40); text-transform:uppercase; margin-top:2px;">' + unit + '</div></div>';
-    }
-
-    function openRecipeSheet(id) {
-      var recipe = allRecipes().find(function (r) { return r.id === id; });
-      if (!recipe) return;
-      currentRecipeId = id;
-      renderRecipeSheet(recipe);
-      if (window.KetoSheet) window.KetoSheet.toggle('v3-sheet-recipe');
-    }
-
-    function updateServingsDisplay(recipe) {
-      setText('rcServingsCount', currentServings);
-      setText('rcAdjCalories', Math.round(recipe.calories * currentServings));
-      setText('rcAdjProtein', Math.round(recipe.protein * currentServings));
-      setText('rcAdjFat', Math.round(recipe.fat * currentServings));
-      setText('rcAdjCarbs', Math.round(recipe.carbs * currentServings));
-    }
-    function setText(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; }
-
-    function addToMealPlan(meal) {
-      var recipe = allRecipes().find(function (r) { return r.id === currentRecipeId; });
-      if (!recipe) { showToast('Receta no encontrada', 2000, 'error'); return; }
-
-      var today = new Date().toISOString().slice(0, 10);
-      var planKey = 'mealPlan_' + today;
-      var plan = safeParseJSON(localStorage.getItem(planKey), { desayuno: [], almuerzo: [], cena: [], snacks: [] });
-      if (!plan[meal]) plan[meal] = [];
-
-      plan[meal].push({
-        id: recipe.id, name: recipe.title,
-        calories: Math.round(recipe.calories * currentServings),
-        protein: Math.round(recipe.protein * currentServings),
-        fat: Math.round(recipe.fat * currentServings),
-        carbs: Math.round(recipe.carbs * currentServings),
-        servings: currentServings
-      });
-      localStorage.setItem(planKey, JSON.stringify(plan));
-      if (window.KetoSheet) window.KetoSheet.toggle('v3-sheet-recipe');
-      showToast('Agregado a ' + meal.charAt(0).toUpperCase() + meal.slice(1), 2000, 'success');
-    }
-
-    function saveRecipe() {
-      var name = document.getElementById('newRecipeName').value.trim();
-      if (!name) { showToast('Ingresa un nombre', 2000, 'error'); return; }
-
-      var customRecipes = safeParseJSON(localStorage.getItem('customRecipes'), []);
-      customRecipes.push({
-        id: 'custom_' + Date.now(), title: name,
-        category: document.getElementById('newRecipeCategory').value,
-        prepTime: parseInt(document.getElementById('newRecipeTime').value) || 15,
-        calories: parseInt(document.getElementById('newRecipeCalories').value) || 0,
-        protein: parseInt(document.getElementById('newRecipeProtein').value) || 0,
-        fat: parseInt(document.getElementById('newRecipeFat').value) || 0,
-        carbs: parseInt(document.getElementById('newRecipeCarbs').value) || 0,
-        instructions: document.getElementById('newRecipeInstructions').value.trim() || 'Sin instrucciones',
-        difficulty: 'facil'
-      });
-      localStorage.setItem('customRecipes', JSON.stringify(customRecipes));
-      if (window.KetoSheet) window.KetoSheet.toggle('v3-sheet-create-recipe');
-      renderRecipes();
-      showToast('Receta guardada', 2000, 'success');
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-      loadRecipes();
-
-      document.getElementById('rcSearchInput').addEventListener('input', renderRecipes);
-      document.getElementById('rcCreateBtn').addEventListener('click', function () {
-        ['newRecipeName', 'newRecipeInstructions'].forEach(function (id) { document.getElementById(id).value = ''; });
-        document.getElementById('newRecipeCategory').value = 'desayuno';
-        document.getElementById('newRecipeTime').value = '15';
-        ['newRecipeCalories', 'newRecipeProtein', 'newRecipeFat', 'newRecipeCarbs'].forEach(function (id) { document.getElementById(id).value = '0'; });
-        if (window.KetoSheet) window.KetoSheet.toggle('v3-sheet-create-recipe');
-      });
-      document.getElementById('rcSaveRecipeBtn').addEventListener('click', saveRecipe);
-
-      document.getElementById('rcFilterChips').addEventListener('click', function (e) {
-        var btn = e.target.closest('[data-filter]');
-        if (!btn) return;
-        currentFilter = btn.getAttribute('data-filter');
-        document.querySelectorAll('#rcFilterChips .v3-chip').forEach(function (c) { c.classList.toggle('v3-chip--active', c === btn); });
+        console.log('✅ Cargadas', recipesDB.length, 'recetas de recipe-details.js');
         renderRecipes();
-      });
+        return true;
+    }
+    console.error('❌ KETO_RECIPES no está definido');
+    return false;
+}
 
-      document.getElementById('rcGrid').addEventListener('click', function (e) {
-        var favBtn = e.target.closest('[data-recipe-fav]');
-        if (favBtn) { toggleFavorite(favBtn.getAttribute('data-recipe-fav')); return; }
-        var card = e.target.closest('[data-recipe-id]');
-        if (card) openRecipeSheet(card.getAttribute('data-recipe-id'));
-      });
+// Ejecutar carga de recetas al iniciar
+loadRecipes();
 
-      document.getElementById('rcSheetBody').addEventListener('click', function (e) {
-        var favBtn = e.target.closest('[data-recipe-fav]');
-        if (favBtn) {
-          toggleFavorite(favBtn.getAttribute('data-recipe-fav'));
-          var recipe = allRecipes().find(function (r) { return r.id === currentRecipeId; });
-          if (recipe) renderRecipeSheet(recipe);
-          return;
-        }
-        if (e.target.closest('#rcTogglePorciones')) {
-          document.getElementById('rcPorcionesRow').classList.toggle('hidden');
-          document.getElementById('rcAddPlanRow').classList.add('hidden');
-          return;
-        }
-        if (e.target.closest('#rcToggleAddPlan')) {
-          document.getElementById('rcAddPlanRow').classList.toggle('hidden');
-          document.getElementById('rcPorcionesRow').classList.add('hidden');
-          return;
-        }
-        var recipe = allRecipes().find(function (r) { return r.id === currentRecipeId; });
-        if (e.target.closest('#rcServingsMinus') && recipe) { currentServings = Math.max(0.5, currentServings - 0.5); updateServingsDisplay(recipe); return; }
-        if (e.target.closest('#rcServingsPlus') && recipe) { currentServings = Math.min(10, currentServings + 0.5); updateServingsDisplay(recipe); return; }
-        var planBtn = e.target.closest('[data-add-to-plan]');
-        if (planBtn) addToMealPlan(planBtn.getAttribute('data-add-to-plan'));
-      });
+var currentCategory="all";
+var showFavoritesOnly=false;
+var showMacroFitOnly=false;
+
+function getRemainingMacros(){
+  var macros=safeParseJSON(localStorage.getItem('keto_macros'),{});
+  var today=new Date().toISOString().slice(0,10);
+  var plan=safeParseJSON(localStorage.getItem('mealPlan_'+today),{desayuno:[],almuerzo:[],cena:[],snacks:[]});
+  var consumed={cal:0,prot:0,fat:0,carbs:0};
+  ['desayuno','almuerzo','cena','snacks'].forEach(function(m){
+    (plan[m]||[]).forEach(function(item){
+      consumed.cal+=parseFloat(item.calories||0);
+      consumed.prot+=parseFloat(item.protein||0);
+      consumed.fat+=parseFloat(item.fat||0);
+      consumed.carbs+=parseFloat(item.carbs||0);
     });
-  </script>
+  });
+  return {
+    cal:Math.max(0,(parseInt(macros.calories)||1800)-consumed.cal),
+    prot:Math.max(0,(parseInt(macros.protein)||160)-consumed.prot),
+    fat:Math.max(0,(parseInt(macros.fat)||150)-consumed.fat),
+    carbs:Math.max(0,(parseInt(macros.carbs)||25)-consumed.carbs)
+  };
+}
+
+function showMacroFit(){
+  showMacroFitOnly=true;
+  showFavoritesOnly=false;
+  currentCategory='all';
+  document.querySelectorAll('.category-btn').forEach(function(btn){
+    btn.classList.remove('bg-primary','bg-primary-container','text-white','active');
+    btn.classList.add('bg-surface-container-high');
+  });
+  var btn=document.getElementById('btnParaHoy');
+  if(btn){ btn.classList.add('bg-green-500/20','text-green-400','active'); btn.classList.remove('bg-surface-container-high'); }
+  renderRecipes();
+}
+var currentRecipeId=null;
+var currentServings=1;
+var currentRecipeMacros={};
+
+function getFavorites(){
+var stored=localStorage.getItem("recipeFavorites");
+if(stored){try{return JSON.parse(stored)}catch(e){}}
+return[];
+}
+
+function toggleFavorite(id){
+var favorites=getFavorites();
+var idx=favorites.indexOf(id);
+if(idx===-1){favorites.push(id);showToast("Agregado a favoritos")}else{favorites.splice(idx,1);showToast("Eliminado de favoritos")}
+localStorage.setItem("recipeFavorites",JSON.stringify(favorites));
+renderRecipes();
+}
+
+function setCategory(cat){
+currentCategory=cat;
+showFavoritesOnly=false;
+showMacroFitOnly=false;
+document.querySelectorAll(".category-btn").forEach(function(btn){
+btn.classList.remove("bg-primary","text-white","active");
+btn.classList.add("bg-surface-container");
+});
+event.target.closest(".category-btn").classList.add("bg-primary","text-white","active");
+renderRecipes();
+}
+
+function showFavorites(){
+showFavoritesOnly=true;
+showMacroFitOnly=false;
+currentCategory="all";
+document.querySelectorAll(".category-btn").forEach(function(btn){
+btn.classList.remove("bg-primary","text-white","active");
+btn.classList.add("bg-surface-container");
+});
+renderRecipes();
+}
+
+function filterRecipes(){
+renderRecipes();
+}
+
+function renderRecipes(){
+var container=document.getElementById("recipesGrid");
+var noRecipes=document.getElementById("noRecipes");
+var search=document.getElementById("searchInput").value.toLowerCase();
+var favorites=getFavorites();
+var all=recipesDB.concat(JSON.parse(localStorage.getItem("customRecipes")||"[]"));
+var remaining=showMacroFitOnly?getRemainingMacros():null;
+var filtered=all.filter(function(r){
+if(showFavoritesOnly&&favorites.indexOf(r.id)===-1)return false;
+if(currentCategory!=="all"&&r.category!==currentCategory)return false;
+if(search&&!r.title.toLowerCase().includes(search))return false;
+if(showMacroFitOnly&&remaining){
+  if((r.carbs||0)>remaining.carbs+2)return false;
+  if((r.calories||0)>remaining.cal+50)return false;
+}
+return true;
+});
+
+if(filtered.length===0){
+container.innerHTML="";
+noRecipes.classList.remove("hidden");
+return;
+}
+noRecipes.classList.add("hidden");
+
+var html="";
+filtered.forEach(function(recipe,i){
+var isFavorite=favorites.indexOf(recipe.id)!==-1;
+var isFirst=i===0&&!search&&!showFavoritesOnly&&currentCategory==="all";
+var catColors={desayuno:"bg-yellow-500/20 text-yellow-400",almuerzo:"bg-orange-500/20 text-orange-400",cena:"bg-purple-500/20 text-purple-400",snacks:"bg-pink-500/20 text-pink-400"};
+var catLabels={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snacks"};
+var catGradients={desayuno:"linear-gradient(135deg, #3a2410, #1e1509)",almuerzo:"linear-gradient(135deg, #0f2818, #0a1a10)",cena:"linear-gradient(135deg, #3a1810, #1e0d09)",snacks:"linear-gradient(135deg, #38162a, #200c17)"};
+var catIconColors={desayuno:"#ff4d00",almuerzo:"#22c55e",cena:"#fb923c",snacks:"#f472b6"};
+var catIcons={desayuno:"egg",almuerzo:"restaurant",cena:"dinner_dining",snacks:"cookie"};
+
+html+='<article class="group relative overflow-hidden rounded-[2rem] '+(isFirst?"md:col-span-2 lg:col-span-2 xl:col-span-2":"")+' bg-surface-container transition-all duration-500 hover:shadow-[0_0_40px_rgba(255,144,105,0.1)] cursor-pointer" onclick="openRecipeModal(\''+recipe.id+'\')">';
+html+='<div class="h-48 md:h-64 w-full overflow-hidden relative flex items-center justify-center" style="background:'+catGradients[recipe.category]+';">';
+html+='<span class="material-symbols-outlined icon-filled" style="font-size:100px;opacity:0.85;color:'+catIconColors[recipe.category]+'">'+catIcons[recipe.category]+'</span>';
+html+='<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>';
+html+='<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>';
+html+='<div class="absolute top-4 right-4 flex gap-2">';
+html+='<span class="'+catColors[recipe.category]+' px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">'+catLabels[recipe.category]+'</span>';
+if(remaining&&(recipe.carbs||0)<=remaining.carbs+2&&(recipe.calories||0)<=remaining.cal+50){html+='<span class="bg-green-500/30 text-green-300 px-2 py-1 rounded-full text-[10px] font-bold flex items-center gap-0.5"><span class="material-symbols-outlined text-xs" style="font-size:12px">check_circle</span>Cabe hoy</span>';};
+html+='<span class="bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold text-white flex items-center gap-1"><span class="material-symbols-outlined text-xs">schedule</span>'+recipe.prepTime+' min</span>';
+html+='</div>';
+html+='<button onclick="event.stopPropagation();toggleFavorite(\''+recipe.id+'\')" class="absolute top-4 left-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center hover:bg-primary-container transition-colors">';
+html+='<span class="material-symbols-outlined '+(isFavorite?"text-secondary":"text-white/60")+'" style="font-variation-settings:\'FILL '+(isFavorite?'1':'0')+'\'">'+(isFavorite?"favorite":"favorite_border")+'</span></button>';
+html+='</div>';
+html+='<div class="p-6">';
+html+='<h3 class="font-headline text-xl md:text-2xl font-black tracking-tight mb-4 group-hover:text-primary-container transition-colors">'+recipe.title+'</h3>';
+html+='<div class="flex items-center gap-6">';
+html+='<div class="flex flex-col"><span class="text-primary-container font-bold text-lg">'+recipe.carbs+'g</span><span class="text-[9px] uppercase font-bold text-on-surface-variant">Carbs</span></div>';
+html+='<div class="w-px h-8 bg-outline-variant/30"></div>';
+html+='<div class="flex flex-col"><span class="text-secondary font-bold text-lg">'+recipe.protein+'g</span><span class="text-[9px] uppercase font-bold text-on-surface-variant">Prot</span></div>';
+html+='<div class="w-px h-8 bg-outline-variant/30"></div>';
+html+='<div class="flex flex-col"><span class="text-tertiary font-bold text-lg">'+recipe.fat+'g</span><span class="text-[9px] uppercase font-bold text-on-surface-variant">Grasa</span></div>';
+html+='</div>';
+html+='</div>';
+html+='</article>';
+});
+
+container.innerHTML=html;
+document.getElementById("totalRecipesCount").textContent=all.length;
+}
+
+function openRecipeModal(id){
+currentRecipeId=id;
+var all=recipesDB.concat(JSON.parse(localStorage.getItem("customRecipes")||"[]"));
+var recipe=all.find(function(r){return r.id===id});
+if(!recipe)return;
+currentServings=1;
+currentRecipeMacros={calories:recipe.calories,protein:recipe.protein,fat:recipe.fat,carbs:recipe.carbs};
+
+var catGradients={desayuno:"linear-gradient(135deg, #3a2410, #1e1509)",almuerzo:"linear-gradient(135deg, #0f2818, #0a1a10)",cena:"linear-gradient(135deg, #3a1810, #1e0d09)",snacks:"linear-gradient(135deg, #38162a, #200c17)"};
+var catIconColors={desayuno:"#ff4d00",almuerzo:"#22c55e",cena:"#fb923c",snacks:"#f472b6"};
+var catIcons={desayuno:"egg",almuerzo:"restaurant",cena:"dinner_dining",snacks:"cookie"};
+
+var html='<div class="relative">';
+html+='<div class="h-64 md:h-80 w-full flex items-center justify-center rounded-t-[2rem]" style="background:'+catGradients[recipe.category]+';">';
+html+='<span class="material-symbols-outlined icon-filled" style="font-size:120px;opacity:0.85;color:'+catIconColors[recipe.category]+'">'+catIcons[recipe.category]+'</span>';
+html+='<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>';
+html+='</div>';
+html+='<button onclick="closeRecipeModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary-container transition-colors"><span class="material-symbols-outlined">close</span></button>';
+html+='<button onclick="toggleFavorite(\''+recipe.id+'\')" class="absolute top-4 left-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary-container transition-colors"><span class="material-symbols-outlined" style="font-variation-settings:\'FILL 1\'">favorite</span></button>';
+html+='</div>';
+html+='<div class="p-8">';
+html+='<h2 class="font-headline text-3xl md:text-4xl font-black tracking-tight mb-4">'+recipe.title+'</h2>';
+html+='<div class="flex flex-wrap gap-4 mb-8">';
+html+='<div class="flex items-center gap-2 text-on-surface-variant"><span class="material-symbols-outlined">schedule</span><span>'+recipe.prepTime+' min</span></div>';
+html+='<div class="flex items-center gap-2 text-on-surface-variant"><span class="material-symbols-outlined">fitness_center</span><span class="capitalize">'+recipe.difficulty+'</span></div>';
+html+='</div>';
+
+html+='<div class="grid grid-cols-4 gap-4 mb-8">';
+html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-yellow-400">'+recipe.calories+'</span><span class="text-[10px] uppercase text-on-surface-variant">kcal</span></div>';
+html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-orange-400">'+recipe.protein+'g</span><span class="text-[10px] uppercase text-on-surface-variant">Proteína</span></div>';
+html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-yellow-300">'+recipe.fat+'g</span><span class="text-[10px] uppercase text-on-surface-variant">Grasa</span></div>';
+html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-cyan-400">'+recipe.carbs+'g</span><span class="text-[10px] uppercase text-on-surface-variant">Carbs</span></div>';
+html+='</div>';
+
+html+='<div class="mb-8">';
+html+='<h4 class="text-xs text-primary-container uppercase tracking-wider font-bold mb-3">Instrucciones</h4>';
+html+='<p class="text-on-surface-variant leading-relaxed">'+recipe.instructions+'</p>';
+html+='</div>';
+
+html+='<div class="flex gap-3">';
+html+='<button onclick="openServingsModal(\''+recipe.id+'\')" class="flex-1 py-4 rounded-xl bg-surface-container-high text-white font-bold hover:bg-surface-container-highest transition-colors flex items-center justify-center gap-2"><span class="material-symbols-outlined">tune</span>Porciones</button>';
+html+='<button onclick="openMealPlanModal(\''+recipe.id+'\')" class="flex-1 py-4 rounded-xl kinetic-gradient text-white font-black hover:opacity-90 transition-colors flex items-center justify-center gap-2"><span class="material-symbols-outlined" style="font-variation-settings:\'FILL 1\'">add_circle</span>Agregar al Plan</button>';
+html+='</div>';
+html+='</div>';
+
+document.getElementById("recipeModalContent").innerHTML=html;
+document.getElementById("recipeModal").classList.remove("hidden");
+document.getElementById("recipeModal").classList.add("flex");
+}
+
+function closeRecipeModal(){
+document.getElementById("recipeModal").classList.add("hidden");
+document.getElementById("recipeModal").classList.remove("flex");
+currentRecipeId=null;
+}
+
+function openMealPlanModal(id){
+var all=recipesDB.concat(JSON.parse(localStorage.getItem("customRecipes")||"[]"));
+var recipe=all.find(function(r){return r.id===id});
+if(!recipe)return;
+currentRecipeId=id;
+document.getElementById("mealPlanRecipeName").textContent=recipe.title;
+document.getElementById("mealPlanModal").classList.remove("hidden");
+document.getElementById("mealPlanModal").classList.add("flex");
+closeRecipeModal();
+}
+
+function closeMealPlanModal(){
+document.getElementById("mealPlanModal").classList.add("hidden");
+document.getElementById("mealPlanModal").classList.remove("flex");
+}
+
+function addToMealPlan(meal){
+if(!currentRecipeId)return;
+var all=recipesDB.concat(JSON.parse(localStorage.getItem("customRecipes")||"[]"));
+var recipe=all.find(function(r){return r.id===currentRecipeId});
+if(!recipe){showToast("Receta no encontrada");return;}
+
+var today=new Date().toISOString().slice(0,10);
+var planKey="mealPlan_"+today;
+var plan=JSON.parse(localStorage.getItem(planKey)||'{"desayuno":[],"almuerzo":[],"cena":[],"snacks":[]}');
+if(!plan[meal])plan[meal]=[];
+
+var adjustedMacros=currentServings>1?{
+calories:Math.round(recipe.calories*currentServings),
+protein:Math.round(recipe.protein*currentServings),
+fat:Math.round(recipe.fat*currentServings),
+carbs:Math.round(recipe.carbs*currentServings)
+}:{calories:recipe.calories,protein:recipe.protein,fat:recipe.fat,carbs:recipe.carbs};
+
+plan[meal].push({
+id:recipe.id,
+name:recipe.title,
+calories:adjustedMacros.calories,
+protein:adjustedMacros.protein,
+fat:adjustedMacros.fat,
+carbs:adjustedMacros.carbs,
+servings:currentServings,
+image:recipe.image||""
+});
+
+localStorage.setItem(planKey,JSON.stringify(plan));
+closeMealPlanModal();
+showToast("Agregado a "+(meal.charAt(0).toUpperCase()+meal.slice(1)));
+}
+
+function openServingsModal(id){
+var all=recipesDB.concat(JSON.parse(localStorage.getItem("customRecipes")||"[]"));
+var recipe=all.find(function(r){return r.id===id});
+if(!recipe)return;
+currentRecipeId=id;
+currentServings=1;
+currentRecipeMacros={calories:recipe.calories,protein:recipe.protein,fat:recipe.fat,carbs:recipe.carbs};
+document.getElementById("servingsRecipeName").textContent=recipe.title;
+document.getElementById("servingsCount").textContent=currentServings;
+document.getElementById("adjustedCalories").textContent=recipe.calories;
+document.getElementById("adjustedProtein").textContent=recipe.protein+"g";
+document.getElementById("adjustedFat").textContent=recipe.fat+"g";
+document.getElementById("adjustedCarbs").textContent=recipe.carbs+"g";
+document.getElementById("servingsModal").classList.remove("hidden");
+document.getElementById("servingsModal").classList.add("flex");
+closeRecipeModal();
+}
+
+function closeServingsModal(){
+document.getElementById("servingsModal").classList.add("hidden");
+document.getElementById("servingsModal").classList.remove("flex");
+}
+
+function changeServings(delta){
+currentServings=Math.max(0.5,Math.min(10,currentServings+delta));
+var all=recipesDB.concat(JSON.parse(localStorage.getItem("customRecipes")||"[]"));
+var recipe=all.find(function(r){return r.id===currentRecipeId});
+if(!recipe)return;
+document.getElementById("servingsCount").textContent=currentServings;
+document.getElementById("adjustedCalories").textContent=Math.round(recipe.calories*currentServings);
+document.getElementById("adjustedProtein").textContent=Math.round(recipe.protein*currentServings)+"g";
+document.getElementById("adjustedFat").textContent=Math.round(recipe.fat*currentServings)+"g";
+document.getElementById("adjustedCarbs").textContent=Math.round(recipe.carbs*currentServings)+"g";
+}
+
+function confirmServings(){
+currentRecipeMacros={
+calories:parseInt(document.getElementById("adjustedCalories").textContent),
+protein:parseInt(document.getElementById("adjustedProtein").textContent),
+fat:parseInt(document.getElementById("adjustedFat").textContent),
+carbs:parseInt(document.getElementById("adjustedCarbs").textContent)
+};
+closeServingsModal();
+openMealPlanModal(currentRecipeId);
+}
+
+function openCreateRecipeModal(){
+document.getElementById("newRecipeName").value="";
+document.getElementById("newRecipeCategory").value="desayuno";
+document.getElementById("newRecipeTime").value="15";
+document.getElementById("newRecipeInstructions").value="";
+document.getElementById("newRecipeCalories").value="0";
+document.getElementById("newRecipeProtein").value="0";
+document.getElementById("newRecipeFat").value="0";
+document.getElementById("newRecipeCarbs").value="0";
+document.getElementById("createRecipeModal").classList.remove("hidden");
+document.getElementById("createRecipeModal").classList.add("flex");
+}
+
+function closeCreateRecipeModal(){
+document.getElementById("createRecipeModal").classList.add("hidden");
+document.getElementById("createRecipeModal").classList.remove("flex");
+}
+
+function saveRecipe(){
+var name=document.getElementById("newRecipeName").value.trim();
+var category=document.getElementById("newRecipeCategory").value;
+var time=parseInt(document.getElementById("newRecipeTime").value)||15;
+var instructions=document.getElementById("newRecipeInstructions").value.trim();
+var calories=parseInt(document.getElementById("newRecipeCalories").value)||0;
+var protein=parseInt(document.getElementById("newRecipeProtein").value)||0;
+var fat=parseInt(document.getElementById("newRecipeFat").value)||0;
+var carbs=parseInt(document.getElementById("newRecipeCarbs").value)||0;
+
+if(!name){showToast("Ingresa un nombre");return;}
+
+var customRecipes=JSON.parse(localStorage.getItem("customRecipes")||"[]");
+customRecipes.push({
+id:"custom_"+Date.now(),
+title:name,
+category:category,
+prepTime:time,
+calories:calories,
+protein:protein,
+fat:fat,
+carbs:carbs,
+image:"",
+instructions:instructions||"Sin instrucciones",
+difficulty:"easy"
+});
+localStorage.setItem("customRecipes",JSON.stringify(customRecipes));
+closeCreateRecipeModal();
+renderRecipes();
+showToast("Receta guardada!");
+}
+
+function showToast(msg){
+var toast=document.getElementById("toast");
+if(!toast){
+toast=document.createElement("div");
+toast.id="toast";
+toast.className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[100] glass-card rounded-full px-6 py-3 flex items-center gap-3 shadow-lg transition-all duration-300";
+toast.innerHTML='<span class="material-symbols-outlined text-primary">check_circle</span><span class="text-white font-medium"></span>';
+document.body.appendChild(toast);
+}
+toast.querySelector("span:last-child").textContent=msg;
+toast.style.opacity="1";
+toast.style.transform="translateX(-50%) translateY(0)";
+setTimeout(function(){
+toast.style.opacity="0";
+toast.style.transform="translateX(-50%) translateY(20px)";
+},3000);
+}
+
+renderRecipes();
+</script>
+
+<!-- BottomNavBar (Mobile) - 5 items optimizado -->
+<AppNav active="recetas" />
+<script is:inline>
+var _cp=window.location.pathname.split("/").pop()||"index.html";
+document.querySelectorAll(".sidebar-link").forEach(function(l){
+  if(l.getAttribute("href")===_cp){
+    l.classList.add("active");
+    l.style.background="rgba(22,19,16,1)";
+    l.style.color="white";
+    var ic=l.querySelector(".material-symbols-outlined");
+    if(ic)ic.style.color="#ff4d00";
+  }
+});
+if(localStorage.getItem("sidebarCollapsed")==="true"){
+  document.body.classList.add("sidebar-collapsed");
+  var _sn=document.getElementById("sidebarNav");
+  if(_sn){_sn.style.width="72px";_sn.style.overflow="hidden";}
+  var _tp=document.querySelector(".topbar-pl");
+  if(_tp)_tp.style.paddingLeft="88px";
+  var _mc=document.querySelector(".main-content");
+  if(_mc)_mc.style.marginLeft="72px";
+  var _st=document.getElementById("sidebarToggle");
+  if(_st)_st.style.left="72px";
+}
+</script>
+<script is:inline>
+// User Dropdown Menu
+function toggleUserMenu() {
+  const dropdown = document.getElementById('userDropdown');
+  dropdown.classList.toggle('hidden');
+  updateDropdownInfo();
+}
+
+function toggleMobileUserMenu() {
+  const dropdown = document.getElementById('mobileUserDropdown');
+  dropdown.classList.toggle('hidden');
+  updateDropdownInfo();
+}
+
+function updateDropdownInfo() {
+  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+  const userName = profile.nombre || profile.name || 'Usuario';
+  const userEmail = localStorage.getItem('KetoCore_user_email') || 'usuario@ejemplo.com';
+  const dn = document.getElementById('dropdownUserName');
+  const de = document.getElementById('dropdownUserEmail');
+  const mdn = document.getElementById('mobileDropdownUserName');
+  const mde = document.getElementById('mobileDropdownUserEmail');
+  if(dn) dn.textContent = userName;
+  if(de) de.textContent = userEmail;
+  if(mdn) mdn.textContent = userName;
+  if(mde) mde.textContent = userEmail;
+}
+
+function updateHeaderAvatar() {
+  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+  const avatarUrl = profile.avatar_url;
+  const hi = document.getElementById('headerAvatarImg');
+  const hi2 = document.getElementById('headerAvatarIcon');
+  const mhi = document.getElementById('mobileHeaderAvatarImg');
+  const mhi2 = document.getElementById('mobileHeaderAvatarIcon');
+  if (avatarUrl) {
+    if(hi) { hi.src = avatarUrl; hi.classList.remove('hidden'); }
+    if(hi2) hi2.classList.add('hidden');
+    if(mhi) { mhi.src = avatarUrl; mhi.classList.remove('hidden'); }
+    if(mhi2) mhi2.classList.add('hidden');
+  } else {
+    if(hi) hi.classList.add('hidden');
+    if(hi2) hi2.classList.remove('hidden');
+    if(mhi) mhi.classList.add('hidden');
+    if(mhi2) mhi2.classList.remove('hidden');
+  }
+}
+
+document.addEventListener('click', function(e) {
+  const dd = document.getElementById('userDropdown');
+  const mdd = document.getElementById('mobileUserDropdown');
+  const btn = document.getElementById('profileBtn');
+  if (dd && !dd.contains(e.target) && !btn.contains(e.target)) dd.classList.add('hidden');
+  if (mdd && !e.target.closest('#mobileUserDropdown') && !e.target.closest('button[onclick="toggleMobileUserMenu()"]')) mdd.classList.add('hidden');
+});
+
+async function handleLogout() {
+  if (confirm('¿Cerrar sesión?')) {
+    await window.supabase.auth.signOut();
+    localStorage.removeItem('KetoCore_user_id');
+    localStorage.removeItem('KetoCore_user_email');
+    localStorage.removeItem('KetoCore_onboarding_done');
+    window.location.href = '/app/welcome';
+  }
+}
+
+updateHeaderAvatar();
+</script>
+<script is:inline src="/app/modules/keto-inspector-recetas-integration.js"></script>
+
 </AppLayout>

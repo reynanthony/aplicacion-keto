@@ -1,99 +1,9 @@
 ---
-// Restauración de funcionalidad completa (grid con imágenes, búsqueda online,
-// receta rápida, grupos, historial) sobre la base pre-v3 — ver
-// [[feedback_ketolab_v3_scope]]: el rediseño v3 es solo estético, nunca debe
-// quitar funcionalidad ya implementada. Este archivo mantiene el 100% de la
-// lógica/JS original tal cual; el único cambio es la capa visual (colores,
-// nav inferior Dock, y los modales centrados repintados como hoja deslizante)
-// vía el bloque de overrides de variables CSS más abajo.
 import AppLayout from '../../layouts/AppLayout.astro';
-import Dock from '../../components/v3/Dock.astro';
-import Sheet from '../../components/v3/Sheet.astro';
-import VeredictoSheet from '../../components/v3/VeredictoSheet.astro';
+import AppNav from '../../components/AppNav.astro';
 ---
 
 <AppLayout title="KetoCore | Alimentos" authGuard={true}>
-<style is:global>
-/* ============================================================
-   REPINTADO v3 — solo estética, cero cambios de funcionalidad.
-   Redefine las mismas variables de color de Tailwind que ya usa
-   toda esta pantalla (bg-primary-container, bg-surface-container-*,
-   etc.), igual que [data-theme="app"] ya hace para todo el sitio —
-   pero acotado a [data-v3], así que no afecta ninguna otra pantalla.
-   ============================================================ */
-[data-v3] {
-  /* !important en las variables: Tailwind emite --color-* también en un
-     bloque :root (misma especificidad 0,1,0 que [data-v3] con atributo) —
-     sin !important, cuál gana depende del orden de carga entre global.css y
-     este <style>, que Vite en dev puede invertir. !important en la propiedad
-     custom (no en su uso) sí es válido y fuerza que esta capa gane siempre. */
-  --color-primary: var(--v3-lime) !important;
-  --color-primary-container: var(--v3-lime) !important;
-  --color-on-primary: var(--v3-text-on-lime) !important;
-  --color-on-primary-container: var(--v3-text-on-lime) !important;
-  --color-secondary: var(--v3-amber) !important;
-  --color-secondary-container: var(--v3-amber) !important;
-  --color-tertiary: var(--v3-violet) !important;
-  --color-cream: var(--v3-cream) !important;
-  --color-background: var(--v3-surface-app) !important;
-  --color-surface: var(--v3-surface-1) !important;
-  --color-surface-container: var(--v3-surface-1) !important;
-  --color-surface-container-low: var(--v3-surface-app) !important;
-  --color-surface-container-high: var(--v3-surface-2) !important;
-  --color-surface-container-highest: var(--v3-surface-2) !important;
-  --color-on-surface: var(--v3-text) !important;
-  --color-on-surface-variant: var(--v3-text-50) !important;
-  --color-outline: var(--v3-border) !important;
-  --color-outline-variant: var(--v3-border-soft) !important;
-  --color-error: #f87171 !important;
-  background: var(--v3-surface-app);
-  color: var(--v3-text);
-}
-[data-v3] .glass-card {
-  background: var(--v3-surface-1) !important;
-  border-color: var(--v3-border) !important;
-}
-[data-v3] input, [data-v3] select {
-  background: var(--v3-surface-2) !important;
-  border-color: var(--v3-border) !important;
-  color: var(--v3-text) !important;
-}
-[data-v3] input:focus, [data-v3] select:focus { border-color: var(--v3-lime) !important; }
-[data-v3] .filter-btn.active { background: var(--v3-lime) !important; color: var(--v3-text-on-lime) !important; }
-
-/* Modales centrados → hoja deslizante desde abajo (mismo contenido, mismo
-   JS de apertura/cierre vía classList — solo cambia el contenedor). */
-[data-v3] #quickRecipeModal .absolute.inset-0.flex,
-[data-v3] #groupsModal .absolute.inset-0.flex,
-[data-v3] #foodHistoryModal .absolute.inset-0.flex,
-[data-v3] #onlineSearchModal .absolute.inset-0.flex,
-[data-v3] #foodModal .absolute.inset-0.flex,
-[data-v3] #detailModal .absolute.inset-0.flex,
-[data-v3] #pexelsModal .absolute.inset-0.flex {
-  align-items: flex-end !important;
-  padding: 0 !important;
-}
-[data-v3] #quickRecipeModal > div > div,
-[data-v3] #groupsModal > div > div,
-[data-v3] #foodHistoryModal > div > div,
-[data-v3] #onlineSearchModal > div > div,
-[data-v3] #foodModal > div > div,
-[data-v3] #detailModal > div > div,
-[data-v3] #pexelsModal > div > div {
-  border-radius: var(--v3-radius-sheet) var(--v3-radius-sheet) 0 0 !important;
-  max-width: 560px !important;
-  width: 100% !important;
-  max-height: 88vh !important;
-  animation: v3SheetSlideUp var(--v3-t-sheet-in, 320ms) var(--v3-ease, cubic-bezier(.22,1,.36,1));
-}
-@keyframes v3SheetSlideUp { from { transform: translateY(24px); opacity: 0.4; } to { transform: translateY(0); opacity: 1; } }
-@media (prefers-reduced-motion: reduce) {
-  [data-v3] #quickRecipeModal > div > div, [data-v3] #groupsModal > div > div,
-  [data-v3] #foodHistoryModal > div > div, [data-v3] #onlineSearchModal > div > div,
-  [data-v3] #foodModal > div > div, [data-v3] #detailModal > div > div,
-  [data-v3] #pexelsModal > div > div { animation: none; }
-}
-</style>
 <style is:global>
 .sidebar-link.active{background:rgba(22,19,16,1)!important;}
 .sidebar-link.active .material-symbols-outlined{color:#ff4d00!important;}
@@ -118,18 +28,49 @@ input,select{background:#161310!important;color:#fff!important;border:1px solid 
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}#toast{animation:toastIn 0.3s ease}
 @media(min-width:768px){#ali-wrap{max-width:none!important;padding-top:1rem;}}
 </style>
-<style is:global>
-  #appSidebar, #kcTabbar, #kcDrawer { display: none !important; }
-</style>
+<!-- BottomNavBar (Mobile) - 5 items optimizado -->
+<AppNav active="more" />
 
-<div data-v3>
-<main class="main-content px-4 pt-4 pb-32 min-h-screen">
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
+  <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
+    <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
+    <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">KetoCore</span>
+  </a>
+  <div class="flex items-center gap-1.5">
+    <button onclick="toggleMobileUserMenu()" aria-label="Mi cuenta" class="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
+      <img id="mobileHeaderAvatarImg" src="" class="hidden w-full h-full object-cover" alt="Avatar">
+      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined" style="font-size:20px;color:rgba(247,244,240,0.6)">account_circle</span>
+    </button>
+    <button onclick="toggleHamburgerMenu()" aria-label="Abrir menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1a15;color:rgba(247,244,240,0.6)">
+      <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">menu</span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile User Dropdown -->
+<div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161310;border:1px solid rgba(255,240,225,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
+  <div class="p-3" style="border-bottom:1px solid rgba(255,240,225,0.06)">
+    <p class="text-sm font-semibold" style="color:#f7f4f0" id="mobileDropdownUserName">Usuario</p>
+    <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
+  </div>
+  <div class="p-2">
+    <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f7f4f0">
+      <span class="material-symbols-outlined text-lg" style="color:rgba(247,244,240,0.55)">person</span>
+      <span class="text-sm font-medium">Mi Perfil</span>
+    </a>
+    <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-red-50" style="color:#dc2626">
+      <span class="material-symbols-outlined text-lg">logout</span>
+      <span class="text-sm font-medium">Cerrar Sesión</span>
+    </button>
+  </div>
+</div>
+<main class="main-content pt-14 px-4 pb-20 min-h-screen">
 <div id="ali-wrap" class="space-y-6">
 
 <!-- Header -->
 <header class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-2">
 <div>
-<p style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:var(--v3-lime);margin-bottom:12px">Base de datos</p>
+<p style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px">Base de datos</p>
 <h1 class="kc-h1">¿Es keto?<br><span style="color:rgba(247,244,240,0.4)">Compruébalo.</span></h1>
 <p class="text-sm text-on-surface-variant mt-3 max-w-lg">Guía completa de alimentos con veredicto keto, calorías y carbos netos.</p>
 </div>
@@ -197,7 +138,7 @@ Ver macros
 </div>
 <div class="text-center">
 <div class="relative w-16 h-16 mx-auto mb-2">
-<svg class="w-16 h-16 -rotate-90"><circle cx="32" cy="32" r="28" fill="none" stroke="var(--v3-surface-2)" stroke-width="6"/><circle id="protCircle" cx="32" cy="32" r="28" fill="none" stroke="var(--v3-lime)" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="88"/></svg>
+<svg class="w-16 h-16 -rotate-90"><circle cx="32" cy="32" r="28" fill="none" stroke="#161310" stroke-width="6"/><circle id="protCircle" cx="32" cy="32" r="28" fill="none" stroke="#ff4d00" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="88"/></svg>
 <div class="absolute inset-0 flex items-center justify-center"><span id="protProgress" class="text-xs font-bold text-primary-container">50%</span></div>
 </div>
 <p class="text-xs text-on-surface-variant">Proteína</p>
@@ -539,6 +480,8 @@ Buscar
 </div>
 </div>
 </div>
+</div>
+</div>
 
 <!-- Food Modal (Add/Edit) -->
 <div id="foodModal" class="fixed inset-0 hidden" style="z-index: 9999;">
@@ -757,7 +700,7 @@ Configurar API
 </div>
 
 <!-- FAB Group -->
-<div id="fabGroup" class="fab-group fixed bottom-28 right-4 md:bottom-8 md:right-8 flex flex-col gap-3 z-50">
+<div id="fabGroup" class="fab-group fixed bottom-20 right-4 md:bottom-8 md:right-8 flex flex-col gap-3 z-50">
 <button onclick="openOnlineSearchModal()" class="group relative w-14 h-14 bg-gradient-to-br from-secondary to-primary-container hover:from-secondary/90 hover:to-primary-container/90 rounded-2xl shadow-xl flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-glow-strong">
 <span class="material-symbols-outlined text-white text-2xl">cloud_sync</span>
 <span class="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1 bg-surface-container-high rounded-lg text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
@@ -780,32 +723,6 @@ Nuevo alimento
 </div>
 </div>
 
-<VeredictoSheet />
-<Sheet id="v3-sheet-registrar" title="Registrar" subtitle="Margen de hoy · — g netos">
-  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-    <a href="/app/scanner" class="v3-decision-card-action" style="background:var(--v3-lime); color:var(--v3-text-on-lime); justify-content:center;">
-      <span class="material-symbols-outlined" style="font-size:18px">center_focus_strong</span> Escanear
-    </a>
-    <button type="button" onclick="if(window.KetoSheet)window.KetoSheet.toggle('v3-sheet-registrar');" class="v3-decision-card-action" style="background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;">
-      <span class="material-symbols-outlined" style="font-size:18px">search</span> Buscar aquí abajo
-    </button>
-    <button type="button" class="v3-decision-card-action" disabled style="background:var(--v3-surface-2); color:var(--v3-text-40); justify-content:center; cursor:not-allowed;">
-      <span class="material-symbols-outlined" style="font-size:18px">mic</span> Dictar · Próximamente
-    </button>
-    <a href="/app/recetas" class="v3-decision-card-action" style="background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;">
-      <span class="material-symbols-outlined" style="font-size:18px">menu_book</span> Recetas
-    </a>
-  </div>
-  <Fragment slot="footnote">Offline · sincroniza solo</Fragment>
-</Sheet>
-<Dock active="alimentos" fabSheetId="v3-sheet-registrar" />
-</div>
-
-<script is:inline src="/app/modules/day-budget.js"></script>
-<script is:inline src="/app/modules/meal-log.js"></script>
-<script is:inline src="/app/modules/v3-motion.js"></script>
-<script is:inline src="/app/modules/inspectorKeto.js"></script>
-<script is:inline src="/app/modules/v3-veredicto.js"></script>
 <script is:inline src="/app/utils.js"></script>
 <script is:inline src="/app/food-api.js"></script>
 <script is:inline>
@@ -1001,7 +918,6 @@ defaults.forEach(function(f){if(typeof f.fiber==="undefined")f.fiber=0;if(typeof
 currentFoods=defaults;
 localStorage.setItem("ketoFoods",JSON.stringify(currentFoods));
 }
-renderFoods();
 }
 
 function loadFoods(){
@@ -1902,19 +1818,18 @@ function updateHeaderAvatar() {
   const mobileHeaderImg = document.getElementById('mobileHeaderAvatarImg');
   const mobileHeaderIcon = document.getElementById('mobileHeaderAvatarIcon');
   
-  // Guards añadidos: el header/dropdown móvil viejo (mobileHeaderAvatarImg/Icon)
-  // ya no vive en esta pantalla (reemplazado por Dock) — headerAvatarImg/Icon
-  // siguen existiendo dentro de AppSidebar (oculto vía CSS, no removido del DOM).
   if (avatarUrl) {
-    if (headerImg) { headerImg.src = avatarUrl; headerImg.classList.remove('hidden'); }
-    if (headerIcon) headerIcon.classList.add('hidden');
-    if (mobileHeaderImg) { mobileHeaderImg.src = avatarUrl; mobileHeaderImg.classList.remove('hidden'); }
-    if (mobileHeaderIcon) mobileHeaderIcon.classList.add('hidden');
+    headerImg.src = avatarUrl;
+    headerImg.classList.remove('hidden');
+    headerIcon.classList.add('hidden');
+    mobileHeaderImg.src = avatarUrl;
+    mobileHeaderImg.classList.remove('hidden');
+    mobileHeaderIcon.classList.add('hidden');
   } else {
-    if (headerImg) headerImg.classList.add('hidden');
-    if (headerIcon) headerIcon.classList.remove('hidden');
-    if (mobileHeaderImg) mobileHeaderImg.classList.add('hidden');
-    if (mobileHeaderIcon) mobileHeaderIcon.classList.remove('hidden');
+    headerImg.classList.add('hidden');
+    headerIcon.classList.remove('hidden');
+    mobileHeaderImg.classList.add('hidden');
+    mobileHeaderIcon.classList.remove('hidden');
   }
 }
 

@@ -1,225 +1,448 @@
 ---
-// Macros — v3. Donut de reparto real + 3 filas de macro (Netos, Grasas,
-// Proteína, en ese orden) + Registro de hoy como DataRow. BMR/déficit/días
-// para meta/peso/racha se retiran de esta pantalla — pertenecen a Progreso
-// (pantalla futura del handoff), no a Macros.
 import AppLayout from '../../layouts/AppLayout.astro';
-import BudgetHeader from '../../components/v3/BudgetHeader.astro';
-import DataRow from '../../components/v3/DataRow.astro';
-import Sheet from '../../components/v3/Sheet.astro';
-import Dock from '../../components/v3/Dock.astro';
-import VeredictoSheet from '../../components/v3/VeredictoSheet.astro';
 ---
 
 <AppLayout title="KetoCore | Macros" authGuard={true}>
-  <style is:global>
-    #appSidebar, #kcTabbar, #kcDrawer { display: none !important; }
-  </style>
+<style is:global>
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,77,0,0.3);border-radius:10px}
 
-  <div data-v3 style="background:var(--v3-surface-app); min-height:100vh;">
-    <main style="padding: var(--v3-pad-screen) var(--v3-pad-screen) 140px; max-width:520px; margin:0 auto; display:flex; flex-direction:column; gap: var(--v3-gap-block);">
+/* Layout Macros — Editorial Bento */
+.mx-row1 { display:grid; grid-template-columns:1fr; gap:18px; margin-bottom:18px; }
+.mx-tiles { display:grid; grid-template-columns:1fr; gap:18px; margin-bottom:18px; }
+.mx-stats { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:18px; }
+.mx-donut-wrap { display:flex; flex-direction:column; align-items:center; gap:24px; }
+@media (min-width:901px){
+  header.fixed { display:none !important; }
+  .mx-row1 { grid-template-columns:1.4fr 1fr; }
+  .mx-tiles { grid-template-columns:repeat(3,1fr); }
+  .mx-stats { grid-template-columns:repeat(4,1fr); }
+  .mx-donut-wrap { flex-direction:row; gap:36px; }
+  #mxPage { padding-top:38px; }
+}
+#mxPage { padding-top:84px; }
 
-      <div id="macrosBudgetHeader">
-        <BudgetHeader used={0} limit={25} variant="bar" label="Macros" />
+/* Tabla registro: móvil ≤560 solo Comida + kcal */
+.mx-log-grid { display:grid; grid-template-columns:2.2fr 1fr 1fr 1fr 1fr; gap:12px; align-items:center; }
+@media (max-width:560px){
+  .mx-log-grid { grid-template-columns:1fr auto; }
+  .mx-log-grid > .mx-col-macro { display:none; }
+}
+</style>
+
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
+  <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
+    <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
+    <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">KetoCore</span>
+  </a>
+  <div class="flex items-center gap-1.5">
+    <button onclick="toggleMobileUserMenu()" aria-label="Mi cuenta" class="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
+      <img id="mobileHeaderAvatarImg" src="" class="hidden w-full h-full object-cover" alt="Avatar">
+      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined" style="font-size:20px;color:rgba(247,244,240,0.6)">account_circle</span>
+    </button>
+    <button onclick="toggleHamburgerMenu()" aria-label="Abrir menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1a15;color:rgba(247,244,240,0.6)">
+      <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">menu</span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile User Dropdown -->
+<div id="mobileUserDropdown" class="fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161310;border:1px solid rgba(255,240,225,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
+  <div class="p-3" style="border-bottom:1px solid rgba(255,240,225,0.06)">
+    <p class="text-sm font-semibold" style="color:#f7f4f0" id="mobileDropdownUserName">Usuario</p>
+    <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
+  </div>
+  <div class="p-2">
+    <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors" style="color:#f7f4f0">
+      <span class="material-symbols-outlined text-lg" style="color:rgba(247,244,240,0.55)">person</span>
+      <span class="text-sm font-medium">Mi Perfil</span>
+    </a>
+    <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors" style="color:#ef4444">
+      <span class="material-symbols-outlined text-lg">logout</span>
+      <span class="text-sm font-medium">Cerrar Sesión</span>
+    </button>
+  </div>
+</div>
+
+<main class="min-h-screen" style="background:#0b0a08">
+<div id="mxPage" class="kc-page">
+
+  <!-- Header editorial -->
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:30px;flex-wrap:wrap;gap:20px">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <span style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00">Nutrición · <span id="mxDate"></span></span>
       </div>
-
-      <div style="background:var(--v3-surface-1); border:1px solid var(--v3-border); border-radius:var(--v3-radius-card); padding:24px; display:flex; flex-direction:column; align-items:center; gap:20px;">
-        <div style="position:relative; width:190px; height:190px; flex-shrink:0;">
-          <svg width="190" height="190" viewBox="0 0 200 200">
-            <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(230,255,242,0.06)" stroke-width="22"></circle>
-            <circle id="donutCarb" cx="100" cy="100" r="80" fill="none" stroke="var(--v3-lime)" stroke-width="22" stroke-dasharray="0 503" transform="rotate(-90 100 100)" stroke-linecap="round" style="transition:stroke-dasharray 1.2s cubic-bezier(.4,0,.2,1)"></circle>
-            <circle id="donutFat" cx="100" cy="100" r="80" fill="none" stroke="var(--v3-amber)" stroke-width="22" stroke-dasharray="0 503" transform="rotate(-90 100 100)" stroke-linecap="round" style="transition:stroke-dasharray 1.2s cubic-bezier(.4,0,.2,1)"></circle>
-            <circle id="donutProt" cx="100" cy="100" r="80" fill="none" stroke="var(--v3-cream)" stroke-width="22" stroke-dasharray="0 503" transform="rotate(-90 100 100)" stroke-linecap="round" style="transition:stroke-dasharray 1.2s cubic-bezier(.4,0,.2,1)"></circle>
-          </svg>
-          <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-            <div id="mxKcalNow" class="v3-num-mono" style="font-size:32px; color:var(--v3-text);">0</div>
-            <div style="font-size:11px; color:var(--v3-text-40); margin-top:2px;">de <span id="mxKcalTarget">--</span> kcal</div>
-          </div>
-        </div>
-        <div style="width:100%; display:flex; flex-direction:column; gap:10px;">
-          <p style="font-size:12.5px; color:var(--v3-text-50); margin:0 0 4px;">Objetivo: 70% grasas · 25% proteína · 5% carbos</p>
-          <div style="display:flex; align-items:center; gap:10px;"><span style="width:10px; height:10px; border-radius:3px; background:var(--v3-lime); flex-shrink:0;"></span><span style="flex:1; font-size:13.5px; color:var(--v3-text);">Carbos netos</span><span id="mxPctCarb" class="v3-num-mono">--%</span></div>
-          <div style="display:flex; align-items:center; gap:10px;"><span style="width:10px; height:10px; border-radius:3px; background:var(--v3-amber); flex-shrink:0;"></span><span style="flex:1; font-size:13.5px; color:var(--v3-text);">Grasas</span><span id="mxPctFat" class="v3-num-mono">--%</span></div>
-          <div style="display:flex; align-items:center; gap:10px;"><span style="width:10px; height:10px; border-radius:3px; background:var(--v3-cream); flex-shrink:0;"></span><span style="flex:1; font-size:13.5px; color:var(--v3-text);">Proteína</span><span id="mxPctProt" class="v3-num-mono">--%</span></div>
-        </div>
-      </div>
-
-      <div id="mxRowNetos" data-macro-row style="background:var(--v3-surface-1); border:1px solid var(--v3-border); border-radius:var(--v3-radius-tile); padding:16px;">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-          <span class="v3-eyebrow">Carbos netos</span>
-          <span class="v3-num-mono"><span id="mxCarbNow">0</span> / <span id="mxCarbTarget">--</span> g</span>
-        </div>
-        <div class="v3-bh-bar-track" style="height:6px;"><div id="mxCarbBar" class="v3-bh-bar-fill" style="width:0%; background:var(--v3-lime);"></div></div>
-        <p id="mxCarbNote" style="font-size:11.5px; color:var(--v3-text-40); margin:8px 0 0;">--</p>
-      </div>
-
-      <div id="mxRowGrasas" data-macro-row style="background:var(--v3-surface-1); border:1px solid var(--v3-border); border-radius:var(--v3-radius-tile); padding:16px;">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-          <span class="v3-eyebrow">Grasas</span>
-          <span class="v3-num-mono"><span id="mxFatNow">0</span> / <span id="mxFatTarget">--</span> g</span>
-        </div>
-        <div class="v3-bh-bar-track" style="height:6px;"><div id="mxFatBar" class="v3-bh-bar-fill" style="width:0%; background:var(--v3-amber);"></div></div>
-        <p id="mxFatNote" style="font-size:11.5px; color:var(--v3-text-40); margin:8px 0 0;">--</p>
-      </div>
-
-      <div id="mxRowProteina" data-macro-row style="background:var(--v3-surface-1); border:1px solid var(--v3-border); border-radius:var(--v3-radius-tile); padding:16px;">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-          <span class="v3-eyebrow">Proteína</span>
-          <span class="v3-num-mono"><span id="mxProtNow">0</span> / <span id="mxProtTarget">--</span> g</span>
-        </div>
-        <div class="v3-bh-bar-track" style="height:6px;"><div id="mxProtBar" class="v3-bh-bar-fill" style="width:0%; background:var(--v3-cream);"></div></div>
-        <p id="mxProtNote" style="font-size:11.5px; color:var(--v3-text-40); margin:8px 0 0;">--</p>
-      </div>
-
-      <section>
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
-          <p class="v3-eyebrow" style="margin:0;">Registro de hoy</p>
-          <span id="mxLogSummary" style="font-size:12px; color:var(--v3-text-40);">0 comidas</span>
-        </div>
-        <div id="mxLogRows"></div>
-        <div style="display:none"><DataRow id="_v3-datarow-script-anchor-macros" title="" /></div>
-      </section>
-
-    </main>
-
-    <VeredictoSheet />
-    <Sheet id="v3-sheet-registrar" title="Registrar" subtitle="Margen de hoy · — g netos">
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-        <a href="/app/scanner" class="v3-decision-card-action" style="background:var(--v3-lime); color:var(--v3-text-on-lime); justify-content:center;">
-          <span class="material-symbols-outlined" style="font-size:18px">center_focus_strong</span> Escanear
-        </a>
-        <a href="/app/alimentos" class="v3-decision-card-action" style="background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;">
-          <span class="material-symbols-outlined" style="font-size:18px">search</span> Buscar
-        </a>
-        <button type="button" class="v3-decision-card-action" disabled style="background:var(--v3-surface-2); color:var(--v3-text-40); justify-content:center; cursor:not-allowed;">
-          <span class="material-symbols-outlined" style="font-size:18px">mic</span> Dictar · Próximamente
-        </button>
-        <a href="/app/recetas" class="v3-decision-card-action" style="background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;">
-          <span class="material-symbols-outlined" style="font-size:18px">menu_book</span> Recetas
-        </a>
-      </div>
-      <Fragment slot="footnote">Offline · sincroniza solo</Fragment>
-    </Sheet>
-    <Dock active="macros" fabSheetId="v3-sheet-registrar" />
+      <h1 class="kc-h1">Tus macros de hoy</h1>
+    </div>
+    <a href="/app/alimentos" class="kc-btn"><span class="material-symbols-outlined" style="font-size:20px">add</span>Registrar comida</a>
   </div>
 
-  <script is:inline src="/app/utils.js"></script>
-  <script is:inline src="/app/modules/day-budget.js"></script>
-  <script is:inline src="/app/modules/meal-log.js"></script>
-  <script is:inline src="/app/modules/v3-motion.js"></script>
-  <script is:inline src="/app/modules/v3-budget-header.js"></script>
-  <script is:inline src="/app/modules/inspectorKeto.js"></script>
-  <script is:inline src="/app/modules/v3-veredicto.js"></script>
+  <!-- Fila 1: donut + carbos cream -->
+  <div class="mx-row1">
+    <!-- Donut -->
+    <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:32px">
+      <div class="mx-donut-wrap">
+        <div style="position:relative;width:220px;height:220px;flex-shrink:0">
+          <svg width="220" height="220" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,240,225,0.05)" stroke-width="22"></circle>
+            <circle id="donutFat"  cx="100" cy="100" r="80" fill="none" stroke="#d97706" stroke-width="22" stroke-dasharray="0 503" transform="rotate(-90 100 100)" stroke-linecap="round" style="transition:stroke-dasharray 1.2s cubic-bezier(.4,0,.2,1)"></circle>
+            <circle id="donutProt" cx="100" cy="100" r="80" fill="none" stroke="#ea580c" stroke-width="22" stroke-dasharray="0 503" transform="rotate(-90 100 100)" stroke-linecap="round" style="transition:stroke-dasharray 1.2s cubic-bezier(.4,0,.2,1)"></circle>
+            <circle id="donutCarb" cx="100" cy="100" r="80" fill="none" stroke="#0891b2" stroke-width="22" stroke-dasharray="0 503" transform="rotate(-90 100 100)" stroke-linecap="round" style="transition:stroke-dasharray 1.2s cubic-bezier(.4,0,.2,1)"></circle>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+            <div id="mxKcalNow" class="kc-num" style="font-weight:900;font-size:46px;line-height:0.9;color:#f7f4f0">0</div>
+            <div style="font-size:12px;color:rgba(247,244,240,0.4);margin-top:2px">de <span id="mxKcalTarget">--</span> kcal</div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:0;width:100%">
+          <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:18px;margin-bottom:6px;color:#f7f4f0">Distribución keto</h2>
+          <p style="font-size:13px;color:rgba(247,244,240,0.45);line-height:1.5;margin-bottom:20px">Objetivo: 70% grasas · 25% proteína · 5% carbos</p>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;align-items:center;gap:12px"><span style="width:12px;height:12px;border-radius:4px;background:#d97706;flex-shrink:0"></span><span style="flex:1;font-size:14px;font-weight:600;color:#f7f4f0">Grasas</span><span id="mxPctFat" class="kc-num" style="font-weight:800;font-size:15px;color:#f7f4f0">--%</span></div>
+            <div style="display:flex;align-items:center;gap:12px"><span style="width:12px;height:12px;border-radius:4px;background:#ea580c;flex-shrink:0"></span><span style="flex:1;font-size:14px;font-weight:600;color:#f7f4f0">Proteína</span><span id="mxPctProt" class="kc-num" style="font-weight:800;font-size:15px;color:#f7f4f0">--%</span></div>
+            <div style="display:flex;align-items:center;gap:12px"><span style="width:12px;height:12px;border-radius:4px;background:#0891b2;flex-shrink:0"></span><span style="flex:1;font-size:14px;font-weight:600;color:#f7f4f0">Carbos netos</span><span id="mxPctCarb" class="kc-num" style="font-weight:800;font-size:15px;color:#f7f4f0">--%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <script is:inline>
-    function fmt(n){var s=String(Math.round(Number(n)));return s.replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1,');}
+    <!-- Carbos netos — cream (crítico keto) -->
+    <div class="kc-tile-cream" style="border-radius:26px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;gap:18px">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:13px;letter-spacing:0.02em;color:rgba(26,20,14,0.55)">CARBOS NETOS RESTANTES</span>
+        <span class="material-symbols-outlined icon-filled" style="color:#0891b2;font-size:22px">grain</span>
+      </div>
+      <div>
+        <div class="kc-num" style="font-weight:900;font-size:72px;line-height:0.82;color:#1a140e"><span id="mxCarbsLeft">--</span><span style="font-size:26px;font-weight:700;color:rgba(26,20,14,0.4)"> g</span></div>
+        <p id="mxCarbsNote" style="font-size:13.5px;color:rgba(26,20,14,0.55);margin-top:10px;line-height:1.5">Configura tus macros en Perfil para ver tu margen diario.</p>
+      </div>
+      <div id="mxCarbSegs" style="display:flex;gap:5px">
+        <div style="flex:1;height:8px;border-radius:100px;background:rgba(26,20,14,0.12)"></div>
+        <div style="flex:1;height:8px;border-radius:100px;background:rgba(26,20,14,0.12)"></div>
+        <div style="flex:1;height:8px;border-radius:100px;background:rgba(26,20,14,0.12)"></div>
+        <div style="flex:1;height:8px;border-radius:100px;background:rgba(26,20,14,0.12)"></div>
+        <div style="flex:1;height:8px;border-radius:100px;background:rgba(26,20,14,0.12)"></div>
+      </div>
+    </div>
+  </div>
 
-    var MEAL_META={
-      desayuno:{label:'Desayuno',icon:'wb_sunny'},
-      almuerzo:{label:'Almuerzo',icon:'restaurant'},
-      cena:{label:'Cena',icon:'nightlight'},
-      snacks:{label:'Snack',icon:'lunch_dining'}
-    };
+  <!-- Fila 2: tiles de macro -->
+  <div class="mx-tiles">
+    <div style="background:#161310;border:1px solid rgba(234,88,12,0.16);border-radius:24px;padding:24px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(234,88,12,0.12);display:flex;align-items:center;justify-content:center"><span class="material-symbols-outlined icon-filled" style="color:#ea580c;font-size:22px">egg_alt</span></div><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15px;color:#f7f4f0">Proteína</span></div>
+      <div class="kc-num" style="font-weight:900;font-size:44px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="mxProtNow">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.4)"> / <span id="mxProtTarget">--</span> g</span></div>
+      <div style="height:8px;border-radius:100px;background:rgba(234,88,12,0.14);overflow:hidden;margin:18px 0 10px"><div id="mxProtBar" style="height:100%;width:0%;background:#ea580c;border-radius:100px;transition:width .5s"></div></div>
+      <div id="mxProtNote" style="font-size:12.5px;color:rgba(247,244,240,0.45)">--</div>
+    </div>
+    <div style="background:#161310;border:1px solid rgba(217,119,6,0.16);border-radius:24px;padding:24px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(217,119,6,0.12);display:flex;align-items:center;justify-content:center"><span class="material-symbols-outlined icon-filled" style="color:#d97706;font-size:22px">local_fire_department</span></div><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15px;color:#f7f4f0">Grasas</span></div>
+      <div class="kc-num" style="font-weight:900;font-size:44px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="mxFatNow">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.4)"> / <span id="mxFatTarget">--</span> g</span></div>
+      <div style="height:8px;border-radius:100px;background:rgba(217,119,6,0.14);overflow:hidden;margin:18px 0 10px"><div id="mxFatBar" style="height:100%;width:0%;background:#d97706;border-radius:100px;transition:width .5s"></div></div>
+      <div id="mxFatNote" style="font-size:12.5px;color:rgba(247,244,240,0.45)">--</div>
+    </div>
+    <div style="background:#161310;border:1px solid rgba(8,145,178,0.16);border-radius:24px;padding:24px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(8,145,178,0.12);display:flex;align-items:center;justify-content:center"><span class="material-symbols-outlined icon-filled" style="color:#0891b2;font-size:22px">grain</span></div><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15px;color:#f7f4f0">Carbos netos</span></div>
+      <div class="kc-num" style="font-weight:900;font-size:44px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="mxCarbNow">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.4)"> / <span id="mxCarbTarget">--</span> g</span></div>
+      <div style="height:8px;border-radius:100px;background:rgba(8,145,178,0.14);overflow:hidden;margin:18px 0 10px"><div id="mxCarbBar" style="height:100%;width:0%;background:#0891b2;border-radius:100px;transition:width .5s"></div></div>
+      <div id="mxCarbNote" style="font-size:12.5px;color:rgba(247,244,240,0.45)">--</div>
+    </div>
+  </div>
 
-    function loadMacrosData(animate){
-      var m = safeParseJSON(localStorage.getItem('keto_macros'), {});
-      var protTarget = Number(m.protein) || 0, fatTarget = Number(m.fat) || 0;
-      var budget = window.KetoBudget.compute();
-      var calTarget = Number(m.calories) || 0;
+  <!-- Registro de hoy -->
+  <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:28px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:8px">
+      <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:19px;letter-spacing:-0.01em;color:#f7f4f0">Registro de hoy</h2>
+      <span id="mxLogSummary" style="font-size:12.5px;color:rgba(247,244,240,0.45)">0 comidas · 0 kcal</span>
+    </div>
+    <div class="mx-log-grid" style="padding:0 4px 12px;border-bottom:1px solid rgba(255,240,225,0.07);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(247,244,240,0.35)">
+      <span>Comida</span><span style="text-align:right">kcal</span><span class="mx-col-macro" style="text-align:right">P</span><span class="mx-col-macro" style="text-align:right">G</span><span class="mx-col-macro" style="text-align:right">C</span>
+    </div>
+    <div id="mxLogRows"></div>
+    <a href="/app/alimentos" style="width:100%;margin-top:8px;padding:15px;border-radius:16px;background:transparent;border:1.5px dashed rgba(255,77,0,0.3);color:#ff4d00;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none"><span class="material-symbols-outlined" style="font-size:20px">add</span>Añadir comida o alimento</a>
+  </div>
 
-      // Sumar consumo de hoy directo, sin re-escalar por portion/100 —
-      // item.protein/fat/carbs en mealPlan_ ya son valores absolutos
-      // pre-escalados (corrige el doble escalado que tenía esta pantalla).
-      var items = window.KetoMealLog.getRecentItems(999);
-      var cCal=0, cProt=0, cFat=0;
-      items.forEach(function(item){
-        cCal += Number(item.calories) || 0;
-        cProt += Number(item.protein) || 0;
-        cFat += Number(item.fat) || 0;
+  <!-- Stats metabólicas + progreso de peso -->
+  <div class="mx-stats">
+    <div class="kc-tile" style="padding:20px">
+      <p class="kc-eyebrow" style="margin-bottom:10px">BMR basal</p>
+      <p class="kc-num" style="font-size:28px;color:#f7f4f0"><span id="bmrResult">--</span><span style="font-size:13px;color:rgba(247,244,240,0.4)"> kcal</span></p>
+    </div>
+    <div class="kc-tile" style="padding:20px">
+      <p class="kc-eyebrow" style="margin-bottom:10px">Déficit diario</p>
+      <p id="deficitText" class="kc-num" style="font-size:28px;color:#22c55e">--</p>
+      <p style="font-size:11px;color:rgba(247,244,240,0.4);margin-top:4px">vs TDEE <span id="tdeeResult">--</span></p>
+    </div>
+    <div class="kc-tile" style="padding:20px">
+      <p class="kc-eyebrow" style="margin-bottom:10px">Días para meta</p>
+      <p id="goalDays" class="kc-num" style="font-size:28px;color:#60a5fa">--</p>
+      <p style="font-size:11px;color:rgba(247,244,240,0.4);margin-top:4px"><span id="weightDiff">--</span> kg restantes</p>
+    </div>
+    <div class="kc-tile" style="padding:20px">
+      <p class="kc-eyebrow" style="margin-bottom:10px">Peso actual</p>
+      <p class="kc-num" style="font-size:28px;color:#f7f4f0"><span id="currentWeight">--</span><span style="font-size:13px;color:rgba(247,244,240,0.4)"> kg → <span id="goalWeight">--</span> kg</span></p>
+      <div style="height:6px;border-radius:100px;background:rgba(255,240,225,0.07);overflow:hidden;margin-top:10px"><div id="progressBar" style="height:100%;width:0%;background:linear-gradient(90deg,#ff4d00,#fb923c);border-radius:100px;transition:width 1s"></div></div>
+      <p style="font-size:11px;color:rgba(247,244,240,0.4);margin-top:6px"><span id="progressPercent">--%</span> del camino · <span id="lostProgressBadge" class="hidden" style="color:#22c55e;font-weight:700"><span id="lostProgressText"></span></span></p>
+    </div>
+  </div>
+
+  <!-- Racha -->
+  <div class="kc-tile" style="margin-top:18px;display:flex;align-items:center;gap:16px">
+    <div style="width:48px;height:48px;border-radius:14px;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <span class="material-symbols-outlined icon-filled" style="color:#22c55e;font-size:26px">workspace_premium</span>
+    </div>
+    <div>
+      <p style="font-weight:700;font-size:14.5px;color:#f7f4f0">Racha de constancia</p>
+      <p id="streakText" style="font-size:13px;color:rgba(247,244,240,0.5)">Completa tu checklist diario para construir tu racha.</p>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<script is:inline src="/app/utils.js"></script>
+<script is:inline>
+function fmt(n){var s=String(Math.round(Number(n)));return s.replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1,');}
+
+var MEAL_META={
+  desayuno:{label:'Desayuno',icon:'wb_sunny'},
+  almuerzo:{label:'Almuerzo',icon:'restaurant'},
+  cena:{label:'Cena',icon:'nightlight'},
+  snacks:{label:'Snack',icon:'lunch_dining'}
+};
+
+function loadMacrosData(){
+  var p={};
+  try{p=JSON.parse(localStorage.getItem("keto_profile")||"{}")}catch(e){p={}}
+  var m={};
+  try{m=JSON.parse(localStorage.getItem("keto_macros")||"{}")}catch(e){m={}}
+
+  var bmr=m.bmr||0, tdee=m.tdee||0, calTarget=m.calories||0;
+  var protTarget=m.protein||0, fatTarget=m.fat||0, carbTarget=m.carbs||25;
+
+  // Fecha en header
+  var dateEl=document.getElementById('mxDate');
+  if(dateEl) dateEl.textContent=new Date().toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'short'});
+
+  // ── Consumo de hoy ──
+  var today=new Date().toISOString().slice(0,10);
+  var mealPlan={};
+  try{mealPlan=JSON.parse(localStorage.getItem("mealPlan_"+today)||"{}")}catch(e){}
+  var cCal=0,cProt=0,cFat=0,cCarb=0,itemCount=0,rows=[];
+  Object.keys(mealPlan).forEach(function(meal){
+    if(Array.isArray(mealPlan[meal])){
+      mealPlan[meal].forEach(function(item){
+        var r=(parseFloat(item.portion)||100)/100;
+        var kcal=Math.round((parseFloat(item.calories)||0)*r);
+        var pr=Math.round((parseFloat(item.protein)||0)*r);
+        var ft=Math.round((parseFloat(item.fat)||0)*r);
+        var cb=Math.round((parseFloat(item.carbs)||0)*r);
+        cCal+=kcal;cProt+=pr;cFat+=ft;cCarb+=cb;itemCount++;
+        rows.push({name:item.name||item.nombre||'Alimento',meal:meal,kcal:kcal,p:pr,g:ft,c:cb});
       });
-      var cCarb = budget.used;
-
-      var header = document.querySelector('#macrosBudgetHeader .v3-budget-header');
-      window.V3BudgetHeader.render(header, budget, { animate: animate });
-
-      var C = 503;
-      var totalMacroCal = (cProt*4) + (cFat*9) + (cCarb*4);
-      var carbPct=0, fatPct=0, protPct=0;
-      if (totalMacroCal > 0) {
-        carbPct = Math.round((cCarb*4/totalMacroCal)*100);
-        fatPct = Math.round((cFat*9/totalMacroCal)*100);
-        protPct = Math.max(0, 100-carbPct-fatPct);
-      }
-      var carbArc=C*carbPct/100, fatArc=C*fatPct/100, protArc=C*protPct/100;
-      var dC=document.getElementById('donutCarb'), dF=document.getElementById('donutFat'), dP=document.getElementById('donutProt');
-      if (dC) { dC.setAttribute('stroke-dasharray', carbArc+' '+C); dC.setAttribute('transform','rotate(-90 100 100)'); }
-      if (dF) { dF.setAttribute('stroke-dasharray', fatArc+' '+C); dF.setAttribute('transform','rotate('+(-90+carbPct*3.6)+' 100 100)'); }
-      if (dP) { dP.setAttribute('stroke-dasharray', protArc+' '+C); dP.setAttribute('transform','rotate('+(-90+(carbPct+fatPct)*3.6)+' 100 100)'); }
-      document.getElementById('mxKcalNow').textContent = fmt(cCal);
-      document.getElementById('mxKcalTarget').textContent = calTarget ? fmt(calTarget) : '--';
-      document.getElementById('mxPctCarb').textContent = carbPct+'%';
-      document.getElementById('mxPctFat').textContent = fatPct+'%';
-      document.getElementById('mxPctProt').textContent = protPct+'%';
-
-      function setMacro(now, target, barId, nowId, targetId, noteId, kcalPerG){
-        document.getElementById(nowId).textContent = fmt(now);
-        document.getElementById(targetId).textContent = target ? fmt(target) : '--';
-        var pct = target>0 ? Math.min(100, Math.round(now/target*100)) : 0;
-        document.getElementById(barId).style.width = pct+'%';
-        var left = Math.max(0, target-now);
-        document.getElementById(noteId).textContent = fmt(now*kcalPerG)+' kcal · '+(target?('quedan '+left+' g'):'sin meta');
-      }
-      setMacro(cCarb, budget.limit, 'mxCarbBar', 'mxCarbNow', 'mxCarbTarget', 'mxCarbNote', 4);
-      setMacro(cFat, fatTarget, 'mxFatBar', 'mxFatNow', 'mxFatTarget', 'mxFatNote', 9);
-      setMacro(cProt, protTarget, 'mxProtBar', 'mxProtNow', 'mxProtTarget', 'mxProtNote', 4);
-
-      var summary = document.getElementById('mxLogSummary');
-      if (summary) summary.textContent = items.length + (items.length===1?' comida':' comidas') + ' · ' + fmt(cCal) + ' kcal';
-
-      var logEl = document.getElementById('mxLogRows');
-      if (!items.length) {
-        logEl.innerHTML = '<p style="font-size:13px; color:var(--v3-text-40); padding:8px 2px;">No hay alimentos registrados hoy.</p>';
-      } else {
-        logEl.innerHTML = items.map(function(item){
-          var meta = MEAL_META[item.mealSlot] || { label: item.mealSlot, icon: 'restaurant' };
-          var time = item.addedAt ? new Date(item.addedAt).toTimeString().slice(0,5) : '--:--';
-          return '' +
-            '<div class="v3-row-wrap" data-row-id="'+item.id+'">' +
-              '<div class="v3-row-actions">' +
-                '<button type="button" class="v3-row-action v3-row-action--edit" data-row-action="edit">Editar</button>' +
-                '<button type="button" class="v3-row-action v3-row-action--delete" data-row-action="delete">Borrar</button>' +
-              '</div>' +
-              '<div class="v3-row">' +
-                '<span class="v3-row-lead"><span class="material-symbols-outlined">'+meta.icon+'</span></span>' +
-                '<div class="v3-row-content v3-row-content--pending">' +
-                  '<div class="v3-row-body">' +
-                    '<div class="v3-row-title">'+escapeHtml(item.name)+'</div>' +
-                    '<div class="v3-row-meta">'+time+' · '+meta.label+' · '+fmt(item.calories)+' kcal</div>' +
-                  '</div>' +
-                  '<div class="v3-row-value v3-num-mono">'+Math.round(item.carbs)+'<span class="v3-row-unit">g</span></div>' +
-                '</div>' +
-              '</div>' +
-            '</div>';
-        }).join('');
-      }
-
-      var sub = document.querySelector('#v3-sheet-registrar .v3-sheet-subtitle');
-      if (sub) sub.textContent = 'Margen de hoy · ' + Math.round(budget.available) + ' g netos';
     }
+  });
 
-    document.addEventListener('DOMContentLoaded', function () { loadMacrosData(false); });
-    document.addEventListener('v3:meal-logged', function () { loadMacrosData(true); });
-    document.addEventListener('v3:row-swipe', function (e) {
-      if (e.detail.action !== 'delete') return;
-      var today = getTodayKey();
-      var plan = safeParseJSON(localStorage.getItem('mealPlan_'+today), {});
-      Object.keys(plan).forEach(function(slot){
-        if (!Array.isArray(plan[slot])) return;
-        plan[slot] = plan[slot].filter(function(it){ return it.id !== e.detail.id; });
-      });
-      localStorage.setItem('mealPlan_'+today, JSON.stringify(plan));
-      window.KetoBudget.refresh();
-      loadMacrosData(false);
-    });
-  </script>
+  // ── Donut ──
+  var C=503; // 2π·80
+  var totalMacroCal=(cProt*4)+(cFat*9)+(cCarb*4);
+  var fatPct=0,protPct=0,carbPct=0;
+  if(totalMacroCal>0){
+    fatPct=Math.round((cFat*9/totalMacroCal)*100);
+    protPct=Math.round((cProt*4/totalMacroCal)*100);
+    carbPct=Math.max(0,100-fatPct-protPct);
+  }
+  var fatArc=C*fatPct/100, protArc=C*protPct/100, carbArc=C*carbPct/100;
+  var dF=document.getElementById('donutFat'),dP=document.getElementById('donutProt'),dC=document.getElementById('donutCarb');
+  if(dF){dF.setAttribute('stroke-dasharray',fatArc+' '+C);dF.setAttribute('transform','rotate(-90 100 100)');}
+  if(dP){dP.setAttribute('stroke-dasharray',protArc+' '+C);dP.setAttribute('transform','rotate('+(-90+fatPct*3.6)+' 100 100)');}
+  if(dC){dC.setAttribute('stroke-dasharray',carbArc+' '+C);dC.setAttribute('transform','rotate('+(-90+(fatPct+protPct)*3.6)+' 100 100)');}
+  document.getElementById('mxKcalNow').textContent=fmt(cCal);
+  document.getElementById('mxKcalTarget').textContent=calTarget?fmt(calTarget):'--';
+  document.getElementById('mxPctFat').textContent=fatPct+'%';
+  document.getElementById('mxPctProt').textContent=protPct+'%';
+  document.getElementById('mxPctCarb').textContent=carbPct+'%';
+
+  // ── Cream: carbos restantes ──
+  var carbsLeft=Math.max(0,carbTarget-cCarb);
+  document.getElementById('mxCarbsLeft').textContent=carbTarget?carbsLeft:'--';
+  var note=document.getElementById('mxCarbsNote');
+  if(note){
+    if(!carbTarget){note.textContent='Configura tus macros en Perfil para ver tu margen diario.';}
+    else if(cCarb>carbTarget){note.textContent='Has consumido '+cCarb+' g de '+carbTarget+' g. Te pasaste '+(cCarb-carbTarget)+' g — cuida la cena para volver a cetosis.';}
+    else{note.textContent='Has consumido '+cCarb+' g de '+carbTarget+' g. '+(carbsLeft>=5?'Suficiente margen para tu cena sin salir de cetosis.':'Margen justo: elige cena muy baja en carbos.');}
+  }
+  var segs=document.querySelectorAll('#mxCarbSegs > div');
+  var usedRatio=carbTarget>0?cCarb/carbTarget:0;
+  var litSegs=Math.min(5,Math.round(usedRatio*5));
+  segs.forEach(function(s,i){s.style.background=i<litSegs?'#0891b2':'rgba(26,20,14,0.12)';});
+
+  // ── Tiles de macro ──
+  function setMacro(now,target,barId,nowId,targetId,noteId,kcalPerG,unit){
+    document.getElementById(nowId).textContent=fmt(now);
+    document.getElementById(targetId).textContent=target?fmt(target):'--';
+    var pct=target>0?Math.min(100,Math.round(now/target*100)):0;
+    document.getElementById(barId).style.width=pct+'%';
+    var el=document.getElementById(noteId);
+    if(el){
+      var kcal=now*kcalPerG;
+      var left=Math.max(0,target-now);
+      el.textContent=fmt(kcal)+' kcal · '+(target?(unit==='carb'?'quedan '+left+' g':'faltan '+left+' g'):'sin meta');
+    }
+  }
+  setMacro(cProt,protTarget,'mxProtBar','mxProtNow','mxProtTarget','mxProtNote',4,'prot');
+  setMacro(cFat,fatTarget,'mxFatBar','mxFatNow','mxFatTarget','mxFatNote',9,'fat');
+  setMacro(cCarb,carbTarget,'mxCarbBar','mxCarbNow','mxCarbTarget','mxCarbNote',4,'carb');
+
+  // ── Registro de hoy ──
+  var logEl=document.getElementById('mxLogRows');
+  var summary=document.getElementById('mxLogSummary');
+  if(summary) summary.textContent=itemCount+(itemCount===1?' comida':' comidas')+' · '+fmt(cCal)+' kcal';
+  if(logEl){
+    if(rows.length===0){
+      logEl.innerHTML='<div style="text-align:center;padding:32px 0"><span class="material-symbols-outlined" style="font-size:44px;color:rgba(247,244,240,0.25);display:block;margin-bottom:10px">restaurant</span><p style="font-size:13.5px;color:rgba(247,244,240,0.45)">No hay alimentos registrados hoy</p></div>';
+    }else{
+      logEl.innerHTML=rows.map(function(rw,i){
+        var meta=MEAL_META[rw.meal]||{label:rw.meal,icon:'restaurant'};
+        return '<div class="mx-log-grid" style="padding:16px 4px;'+(i<rows.length-1?'border-bottom:1px solid rgba(255,240,225,0.05)':'')+'">'
+          +'<div style="display:flex;align-items:center;gap:13px;min-width:0"><div style="width:42px;height:42px;border-radius:12px;background:rgba(255,77,0,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="material-symbols-outlined icon-filled" style="color:#ff4d00;font-size:20px">'+meta.icon+'</span></div><div style="min-width:0"><div style="font-size:14.5px;font-weight:600;color:#f7f4f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml(String(rw.name))+'</div><div style="font-size:12px;color:rgba(247,244,240,0.4)">'+meta.label+'</div></div></div>'
+          +'<span class="kc-num" style="font-weight:700;font-size:15px;text-align:right;color:#f7f4f0">'+fmt(rw.kcal)+'</span>'
+          +'<span class="mx-col-macro nums" style="font-size:14px;color:rgba(247,244,240,0.6);text-align:right">'+rw.p+' g</span>'
+          +'<span class="mx-col-macro nums" style="font-size:14px;color:rgba(247,244,240,0.6);text-align:right">'+rw.g+' g</span>'
+          +'<span class="mx-col-macro nums" style="font-size:14px;color:rgba(247,244,240,0.6);text-align:right">'+rw.c+' g</span>'
+          +'</div>';
+      }).join('');
+    }
+  }
+
+  // ── Stats metabólicas ──
+  document.getElementById("bmrResult").textContent=bmr?fmt(bmr):'--';
+  document.getElementById("tdeeResult").textContent=tdee?fmt(tdee):'--';
+  var deficit=tdee-calTarget;
+  document.getElementById("deficitText").textContent=(tdee&&calTarget)?((deficit>=0?"-":"+")+fmt(Math.abs(Math.round(deficit)))):'--';
+
+  // ── Peso ──
+  var startWeight=p.startWeight||0, goalWeight=p.goalWeight||0;
+  var weightHistory=[];
+  try{weightHistory=JSON.parse(localStorage.getItem("keto_weight_history")||"[]")}catch(e){weightHistory=[]}
+  var currentWeight=0;
+  if(Array.isArray(weightHistory)&&weightHistory.length>0){
+    var sorted=weightHistory.slice().sort(function(a,b){return new Date(b.date)-new Date(a.date);});
+    currentWeight=sorted[0].weight||0;
+  }
+  if(!currentWeight&&p.weight)currentWeight=p.weight;
+
+  document.getElementById("currentWeight").textContent=currentWeight||"--";
+  document.getElementById("goalWeight").textContent=goalWeight||"--";
+  var weightDiff=currentWeight&&goalWeight?Math.abs(currentWeight-goalWeight):null;
+  document.getElementById("weightDiff").textContent=weightDiff!==null?weightDiff.toFixed(1):"--";
+  var daysToGoal=weightDiff!==null&&deficit>0?weightDiff*7700/deficit:null;
+  document.getElementById("goalDays").textContent=daysToGoal!==null&&isFinite(daysToGoal)&&daysToGoal>0?fmt(Math.round(daysToGoal)):"--";
+
+  var totalToLose=startWeight-goalWeight;
+  var lostSoFar=currentWeight>0&&startWeight>0?startWeight-currentWeight:0;
+  var weightProgress=0;
+  if(totalToLose>0&&currentWeight>0&&startWeight>0){weightProgress=Math.round((lostSoFar/totalToLose)*100);}
+  weightProgress=Math.max(0,Math.min(100,weightProgress));
+  document.getElementById("progressPercent").textContent=(currentWeight>0&&startWeight>0)?weightProgress+"%":"--%";
+  document.getElementById("progressBar").style.width=weightProgress+"%";
+
+  var lostBadge=document.getElementById("lostProgressBadge");
+  var lostText=document.getElementById("lostProgressText");
+  if(lostBadge&&lostText){
+    if(lostSoFar>0){
+      lostText.textContent="-"+lostSoFar.toFixed(1)+" kg";
+      lostBadge.style.color="#22c55e";
+      lostBadge.classList.remove("hidden");
+    }else if(lostSoFar<0){
+      lostText.textContent="+"+Math.abs(lostSoFar).toFixed(1)+" kg";
+      lostBadge.style.color="#ef4444";
+      lostBadge.classList.remove("hidden");
+    }else{
+      lostBadge.classList.add("hidden");
+    }
+  }
+
+  loadStreak();
+}
+
+function loadStreak(){
+  var streak=0;
+  var today=new Date();
+  var threshold=0.8;
+  for(var i=0;i<365;i++){
+    var d=new Date(today);
+    d.setDate(d.getDate()-i);
+    var dateKey=d.toISOString().slice(0,10);
+    var rawData=localStorage.getItem("checklist_"+dateKey);
+    var data={};
+    try{if(rawData)data=JSON.parse(rawData)}catch(e){}
+    var items=["water","electrolitos","workout","walk","protein","sleep"];
+    var completed=0;
+    items.forEach(function(id){if(data[id]&&data[id]>=1)completed++;});
+    var percent=completed/items.length;
+    if(percent>=threshold){streak++;}else if(i>0){break;}
+  }
+  document.getElementById("streakText").textContent=streak>0?"Has mantenido tu rutina por "+streak+" días consecutivos. ¡Imparable!":"Completa tu checklist diario para construir tu racha.";
+}
+
+try{loadMacrosData();}catch(e){console.error('Error loading macros:',e);}
+
+document.addEventListener('visibilitychange',function(){
+  if(!document.hidden){try{loadMacrosData();}catch(e){console.error(e);}}
+});
+window.addEventListener('storage',function(e){
+  if(e.key==='keto_profile'||e.key==='keto_macros'||e.key==='keto_weight_history'||e.key&&e.key.startsWith('mealPlan_')){
+    try{loadMacrosData();}catch(err){}
+  }
+});
+window.addEventListener('weightUpdated',function(){try{loadMacrosData();}catch(e){}});
+window.addEventListener('profileSaved',function(){try{loadMacrosData();}catch(e){}});
+</script>
+<script is:inline>
+function toggleMobileUserMenu() {
+  const dropdown = document.getElementById('mobileUserDropdown');
+  dropdown.classList.toggle('hidden');
+  updateDropdownInfo();
+}
+function updateDropdownInfo() {
+  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+  const userName = profile.nombre || profile.name || 'Usuario';
+  const userEmail = localStorage.getItem('KetoCore_user_email') || 'usuario@ejemplo.com';
+  const mdn = document.getElementById('mobileDropdownUserName');
+  const mde = document.getElementById('mobileDropdownUserEmail');
+  if(mdn) mdn.textContent = userName;
+  if(mde) mde.textContent = userEmail;
+}
+function updateHeaderAvatar() {
+  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+  const avatarUrl = profile.avatar_url;
+  const mhi = document.getElementById('mobileHeaderAvatarImg');
+  const mhi2 = document.getElementById('mobileHeaderAvatarIcon');
+  if (avatarUrl) {
+    if(mhi) { mhi.src = avatarUrl; mhi.classList.remove('hidden'); }
+    if(mhi2) mhi2.classList.add('hidden');
+  } else {
+    if(mhi) mhi.classList.add('hidden');
+    if(mhi2) mhi2.classList.remove('hidden');
+  }
+}
+document.addEventListener('click', function(e) {
+  const mdd = document.getElementById('mobileUserDropdown');
+  if (mdd && !e.target.closest('#mobileUserDropdown') && !e.target.closest('button[onclick="toggleMobileUserMenu()"]')) mdd.classList.add('hidden');
+});
+async function handleLogout() {
+  if (confirm('¿Cerrar sesión?')) {
+    await window.supabase.auth.signOut();
+    localStorage.removeItem('KetoCore_user_id');
+    localStorage.removeItem('KetoCore_user_email');
+    localStorage.removeItem('KetoCore_onboarding_done');
+    window.location.href = '/app/welcome';
+  }
+}
+updateHeaderAvatar();
+</script>
+
 </AppLayout>

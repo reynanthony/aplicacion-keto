@@ -1,11 +1,6 @@
 ﻿---
 import AppLayout from '../../layouts/AppLayout.astro';
-import BudgetHeader from '../../components/v3/BudgetHeader.astro';
-import DataRow from '../../components/v3/DataRow.astro';
-import DecisionCard from '../../components/v3/DecisionCard.astro';
-import Sheet from '../../components/v3/Sheet.astro';
-import Dock from '../../components/v3/Dock.astro';
-import VeredictoSheet from '../../components/v3/VeredictoSheet.astro';
+import AppNav from '../../components/AppNav.astro';
 ---
 
 <AppLayout title="KetoCore | Mi Plan" authGuard={true}>
@@ -83,97 +78,298 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
     </button>
   </div>
 </div>
-<style is:global>
-  #appSidebar, #kcTabbar, #kcDrawer { display: none !important; }
-</style>
-<div data-v3 style="background:var(--v3-surface-app); min-height:100vh;">
-<main style="padding: var(--v3-pad-screen) var(--v3-pad-screen) 140px; max-width:520px; margin:0 auto; display:flex; flex-direction:column; gap: var(--v3-gap-block);">
-
-  <p id="dateDisplay" class="v3-eyebrow"></p>
-  <div id="planBudgetHeader">
-    <BudgetHeader used={0} limit={25} variant="bar" label="Plan" />
+<main class="main-content pt-14 px-4 pb-20 min-h-screen" style="background:#0b0a08">
+<div class="space-y-6 kc-page" style="padding-top:12px">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:26px;flex-wrap:wrap;gap:20px">
+  <div>
+    <p id="dateDisplay" style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px"></p>
+    <h1 class="kc-h1">Tu semana,<br>planificada</h1>
   </div>
-
-  <div id="weekSelector" class="v3-chip-group" style="flex-wrap:nowrap; overflow-x:auto;"></div>
-
-  <button onclick="openWeeklyPlanGenerator()" class="v3-decision-card-action" style="background:var(--v3-lime); color:var(--v3-text-on-lime); width:100%; justify-content:center;">
-    <span class="material-symbols-outlined" style="font-size:18px">auto_awesome</span> Generar con IA
-  </button>
-
-  <div id="planNextMealCard">
-    <DecisionCard id="plan-next-meal" variant="cream" buttonLabel="Añadir" title="Cargando…">
-      <span id="planNextMealBody"></span>
-    </DecisionCard>
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <span id="planStatusBadge" class="hidden px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1"></span>
+    <button onclick="openWeeklyModal()" class="kc-btn-ghost" style="height:46px;padding:0 18px;font-size:13px"><span class="material-symbols-outlined" style="font-size:18px">calendar_month</span>Semana</button>
+    <button onclick="openWeeklyPlanGenerator()" class="kc-btn" style="height:46px"><span class="material-symbols-outlined" style="font-size:20px">auto_awesome</span>Generar plan con IA</button>
   </div>
-
-  <section>
-    <p class="v3-eyebrow" style="margin-bottom:10px; display:flex; align-items:center; gap:8px;"><span class="material-symbols-outlined" style="font-size:16px; color:#f59e0b;">egg</span>Desayuno</p>
-    <div id="desayunoItems"></div>
-    <button onclick="openFoodSelector('desayuno')" class="v3-decision-card-action" style="background:var(--v3-surface-1); border:1px dashed var(--v3-border); color:var(--v3-text-70); width:100%; justify-content:center; margin-top:8px;">
-      <span class="material-symbols-outlined" style="font-size:16px">add</span> Agregar alimento
-    </button>
-  </section>
-  <section>
-    <p class="v3-eyebrow" style="margin-bottom:10px; display:flex; align-items:center; gap:8px;"><span class="material-symbols-outlined" style="font-size:16px; color:#ea580c;">restaurant</span>Almuerzo</p>
-    <div id="almuerzoItems"></div>
-    <button onclick="openFoodSelector('almuerzo')" class="v3-decision-card-action" style="background:var(--v3-surface-1); border:1px dashed var(--v3-border); color:var(--v3-text-70); width:100%; justify-content:center; margin-top:8px;">
-      <span class="material-symbols-outlined" style="font-size:16px">add</span> Agregar alimento
-    </button>
-  </section>
-  <section>
-    <p class="v3-eyebrow" style="margin-bottom:10px; display:flex; align-items:center; gap:8px;"><span class="material-symbols-outlined" style="font-size:16px; color:#7c3aed;">dinner_dining</span>Cena</p>
-    <div id="cenaItems"></div>
-    <button onclick="openFoodSelector('cena')" class="v3-decision-card-action" style="background:var(--v3-surface-1); border:1px dashed var(--v3-border); color:var(--v3-text-70); width:100%; justify-content:center; margin-top:8px;">
-      <span class="material-symbols-outlined" style="font-size:16px">add</span> Agregar alimento
-    </button>
-  </section>
-  <section>
-    <p class="v3-eyebrow" style="margin-bottom:10px; display:flex; align-items:center; gap:8px;"><span class="material-symbols-outlined" style="font-size:16px; color:#db2777;">cookie</span>Snacks</p>
-    <div id="snacksItems"></div>
-    <button onclick="openFoodSelector('snacks')" class="v3-decision-card-action" style="background:var(--v3-surface-1); border:1px dashed var(--v3-border); color:var(--v3-text-70); width:100%; justify-content:center; margin-top:8px;">
-      <span class="material-symbols-outlined" style="font-size:16px">add</span> Agregar alimento
-    </button>
-  </section>
-
-  <a href="/app/compras" class="v3-decision-card-action" style="background:var(--v3-lime); color:var(--v3-text-on-lime); width:100%; justify-content:center;">
-    <span class="material-symbols-outlined" style="font-size:18px">shopping_cart</span> Ir a Compras
-  </a>
-
-  <div style="display:none"><DataRow id="_v3-datarow-script-anchor-plan" title="" /></div>
-</main>
-
-<VeredictoSheet />
-<Sheet id="v3-sheet-registrar" title="Registrar" subtitle="Margen de hoy · — g netos">
-  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-    <a href="/app/scanner" class="v3-decision-card-action" style="background:var(--v3-lime); color:var(--v3-text-on-lime); justify-content:center;">
-      <span class="material-symbols-outlined" style="font-size:18px">center_focus_strong</span> Escanear
-    </a>
-    <a href="/app/alimentos" class="v3-decision-card-action" style="background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;">
-      <span class="material-symbols-outlined" style="font-size:18px">search</span> Buscar
-    </a>
-    <button type="button" class="v3-decision-card-action" disabled style="background:var(--v3-surface-2); color:var(--v3-text-40); justify-content:center; cursor:not-allowed;">
-      <span class="material-symbols-outlined" style="font-size:18px">mic</span> Dictar · Próximamente
-    </button>
-    <a href="/app/recetas" class="v3-decision-card-action" style="background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;">
-      <span class="material-symbols-outlined" style="font-size:18px">menu_book</span> Recetas
-    </a>
-  </div>
-  <Fragment slot="footnote">Offline · sincroniza solo</Fragment>
-</Sheet>
-<Dock active="plan" fabSheetId="v3-sheet-registrar" />
 </div>
 
-<!-- Elementos ocultos que el asistente de IA y otras funciones existentes
-     todavía referencian sin guardas — se conservan invisibles para no romper
-     ese flujo, que se mantiene intacto en esta migración. -->
-<div class="hidden">
-  <span id="planStatusBadge"></span>
-  <div id="activePlanBanner"></div>
-  <button id="manualModeBtn"></button>
-  <button id="autoModeBtn"></button>
-  <div id="autoMealPanel"></div>
-  <button id="generateAutoBtn"></button>
-  <div id="autoPlanSummary"></div>
+<!-- Sub-tabs: Nutrición / Entreno / Suplementación -->
+<div class="flex gap-1 mb-5 bg-surface-container rounded-xl p-1">
+  <button id="tabNutricion" onclick="switchPlanTab('nutricion')" class="plan-subtab active flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-1.5 bg-surface-container-high text-white">
+    <span class="material-symbols-outlined text-[18px]">restaurant</span><span>Nutrición</span>
+  </button>
+  <button id="tabEntreno" onclick="switchPlanTab('entreno')" class="plan-subtab flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-1.5 text-white/50 hover:text-white/80">
+    <span class="material-symbols-outlined text-[18px]">fitness_center</span><span>Entreno</span>
+  </button>
+  <button id="tabSuple" onclick="switchPlanTab('suple')" class="plan-subtab flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-1.5 text-white/50 hover:text-white/80">
+    <span class="material-symbols-outlined text-[18px]">medication</span><span>Suplementos</span>
+  </button>
+</div>
+
+<div id="panelNutricion">
+<!-- Plan Status Banner -->
+<div id="activePlanBanner" class="hidden glass-card rounded-xl p-4 mb-4 border-l-4 border-green-500">
+</div>
+<div id="weekSelector" class="flex gap-1 mb-4 overflow-x-auto pb-2"></div>
+
+<!-- Toggle Modo Manual/Automático -->
+<div class="flex items-center justify-between mb-4">
+  <div class="mode-selector glass-card p-1 rounded-full inline-flex">
+    <button id="manualModeBtn" onclick="setMealPlanMode('manual')" class="mode-btn px-4 py-2 rounded-full text-xs font-medium transition-all flex items-center gap-2 bg-primary-container text-white">
+      <span class="material-symbols-outlined text-base">edit</span>Manual
+    </button>
+    <button id="autoModeBtn" onclick="setMealPlanMode('auto')" class="mode-btn px-4 py-2 rounded-full text-xs font-medium transition-all text-on-surface-variant hover:text-white flex items-center gap-2">
+      <span class="material-symbols-outlined text-base">auto_awesome</span>Automático
+    </button>
+  </div>
+  <button id="generateAutoBtn" onclick="generateAndApplyAutoPlan()" class="hidden bg-secondary text-black px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-secondary/80 transition-all">
+    <span class="material-symbols-outlined text-sm">refresh</span>Generar
+  </button>
+</div>
+
+<!-- Vista Automática (panel de generación) -->
+<div id="autoMealPanel" class="hidden glass-card rounded-xl p-6 mb-6">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h3 class="text-lg font-headline font-bold text-white flex items-center gap-2">
+        <span class="material-symbols-outlined text-secondary">auto_awesome</span>
+        Plan Automático
+      </h3>
+      <p class="text-xs text-on-surface-variant mt-1">Basado en tus recetas guardadas</p>
+    </div>
+  </div>
+  <div id="autoPlanSummary" class="space-y-3"></div>
+  <div class="flex gap-3 mt-4">
+    <button onclick="applyGeneratedPlan()" class="flex-1 py-3 rounded-xl bg-primary-container text-white font-bold hover:bg-primary-container/80 transition-all flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined">check</span>Aplicar Plan
+    </button>
+    <button onclick="regenerateAutoPlan()" class="py-3 px-4 rounded-xl bg-surface-container-high text-white hover:bg-surface-container-highest transition-all">
+      <span class="material-symbols-outlined">refresh</span>
+    </button>
+  </div>
+</div>
+
+<!-- Botón Plan IA - Modernizado -->
+<div class="glass-card rounded-2xl p-4 mb-6 border border-transparent hover:border-primary-container/30 transition-all">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-container/20 to-secondary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-container" style="font-size:20px;">auto_awesome</span>
+</div>
+<div>
+<h3 class="text-white font-medium text-sm">Generar con IA</h3>
+<p class="text-xs text-on-surface-variant">Plan personalizado según tus macros</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button onclick="openWeeklyPlanGenerator()" class="px-4 py-2 rounded-xl bg-primary-container/10 text-primary-container text-xs font-medium hover:bg-primary-container/20 transition-all flex items-center gap-2">
+<span>Crear plan</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+<button onclick="openAIRecipeGenerator()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 text-xs font-medium hover:from-purple-500/30 hover:to-pink-500/30 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">auto_awesome</span>
+<span>IA</span>
+</button>
+</div>
+</div>
+</div>
+
+
+
+<!-- Resumen (se mantiene igual) -->
+<div class="glass-card rounded-2xl p-5 mb-6">
+<div class="flex items-center justify-between mb-4">
+<span class="text-xs text-on-surface-variant uppercase tracking-wider">Macros del día</span>
+<span id="dayDateLabel" class="text-xs text-primary-container"></span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="bg-surface-container-high rounded-xl p-4 text-center">
+<div class="flex items-center justify-center gap-2 mb-2">
+<span class="text-[10px] text-on-surface-variant uppercase tracking-wider">Calorías</span>
+</div>
+<div class="text-3xl font-black text-yellow-400 mb-1"><span id="currentCal">0</span></div>
+<div class="text-xs text-on-surface-variant">/ <span id="targetCal">1800</span> kcal</div>
+<div class="h-2 bg-surface rounded-lg mt-2 overflow-hidden">
+<div id="calorieBar" class="h-full bg-yellow-400 rounded-lg transition-all" style="width:0%"></div>
+</div>
+</div>
+<div class="bg-surface-container-high rounded-xl p-4 text-center">
+<div class="flex items-center justify-center gap-2 mb-2">
+<span class="text-[10px] text-on-surface-variant uppercase tracking-wider">Proteína</span>
+</div>
+<div class="text-3xl font-black text-orange-400 mb-1"><span id="currentProtein">0</span><span class="text-sm text-on-surface-variant">g</span></div>
+<div class="text-xs text-on-surface-variant">Meta: <span id="targetProtein">160</span>g</div>
+<div class="h-2 bg-surface rounded-lg mt-2 overflow-hidden">
+<div id="proteinBar" class="h-full bg-orange-400 rounded-lg transition-all" style="width:0%"></div>
+</div>
+</div>
+<div class="bg-surface-container-high rounded-xl p-4 text-center">
+<div class="flex items-center justify-center gap-2 mb-2">
+<span class="text-[10px] text-on-surface-variant uppercase tracking-wider">Grasa</span>
+</div>
+<div class="text-3xl font-black text-yellow-300 mb-1"><span id="currentFat">0</span><span class="text-sm text-on-surface-variant">g</span></div>
+<div class="text-xs text-on-surface-variant">Meta: <span id="targetFat">150</span>g</div>
+<div class="h-2 bg-surface rounded-lg mt-2 overflow-hidden">
+<div id="fatBar" class="h-full bg-yellow-300 rounded-lg transition-all" style="width:0%"></div>
+</div>
+</div>
+<div class="bg-surface-container-high rounded-xl p-4 text-center">
+<div class="flex items-center justify-center gap-2 mb-2">
+<span class="text-[10px] text-on-surface-variant uppercase tracking-wider">Carbos</span>
+</div>
+<div class="text-3xl font-black text-cyan-400 mb-1"><span id="currentCarbs">0</span><span class="text-sm text-on-surface-variant">g</span></div>
+<div class="text-xs text-on-surface-variant">Meta: <span id="targetCarbs">25</span>g</div>
+<div class="h-2 bg-surface rounded-lg mt-2 overflow-hidden">
+<div id="carbsBar" class="h-full bg-cyan-400 rounded-lg transition-all" style="width:0%"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between mt-4 pt-4 border-t border-white/10">
+<span class="text-xs text-on-surface-variant"><span id="mealCount">0</span> alimentos</span>
+<div class="flex gap-2">
+<button onclick="copyPlan()" class="text-xs text-primary-container hover:underline">Copiar ayer</button>
+<span class="text-white/20">|</span>
+<button onclick="resetPlan()" class="text-xs text-error hover:underline">Reiniciar</button>
+</div>
+</div>
+</div>
+
+<!-- Tarjetas de Comidas -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6" id="mealCardsContainer">
+<!-- Desayuno -->
+<div class="meal-card glass-card rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-primary-container/10" onclick="toggleMealCard('desayuno')" data-meal="desayuno">
+<div class="p-5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg, #f59e0b20, #fbbf2420)">
+<span class="material-symbols-outlined text-2xl" style="color:#f59e0b">egg</span>
+</div>
+<div>
+<h3 class="font-bold text-white">Desayuno</h3>
+<p id="desayunoCal" class="text-sm text-on-surface-variant"><span class="text-yellow-400 font-bold">0</span> kcal</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span id="desayunoCount" class="text-xs text-on-surface-variant bg-surface-container px-2 py-1 rounded-full">0 items</span>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300" id="desayunoArrow">expand_more</span>
+</div>
+</div>
+<div class="flex gap-3 mt-3 text-xs">
+<span class="text-orange-400"><span id="desayunoProtein">0</span>g prot</span>
+<span class="text-yellow-300"><span id="desayunoFat">0</span>g grasa</span>
+<span class="text-cyan-400"><span id="desayunoCarbs">0</span>g carbs</span>
+</div>
+</div>
+<div id="desayunoDetail" class="hidden border-t border-white/10">
+<div class="p-4">
+<div id="desayunoItems" class="space-y-2 mb-4"></div>
+<button onclick="event.stopPropagation(); openFoodSelector('desayuno')" class="w-full py-3 rounded-xl bg-surface-container text-primary-container font-medium flex items-center justify-center gap-2 hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined text-sm">add</span>Agregar alimento
+</button>
+</div>
+</div>
+</div>
+
+<!-- Almuerzo -->
+<div class="meal-card glass-card rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-primary-container/10" onclick="toggleMealCard('almuerzo')" data-meal="almuerzo">
+<div class="p-5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg, #ea580c20, #f9731620)">
+<span class="material-symbols-outlined text-2xl" style="color:#ea580c">restaurant</span>
+</div>
+<div>
+<h3 class="font-bold text-white">Almuerzo</h3>
+<p id="almuerzoCal" class="text-sm text-on-surface-variant"><span class="text-yellow-400 font-bold">0</span> kcal</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span id="almuerzoCount" class="text-xs text-on-surface-variant bg-surface-container px-2 py-1 rounded-full">0 items</span>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300" id="almuerzoArrow">expand_more</span>
+</div>
+</div>
+<div class="flex gap-3 mt-3 text-xs">
+<span class="text-orange-400"><span id="almuerzoProtein">0</span>g prot</span>
+<span class="text-yellow-300"><span id="almuerzoFat">0</span>g grasa</span>
+<span class="text-cyan-400"><span id="almuerzoCarbs">0</span>g carbs</span>
+</div>
+</div>
+<div id="almuerzoDetail" class="hidden border-t border-white/10">
+<div class="p-4">
+<div id="almuerzoItems" class="space-y-2 mb-4"></div>
+<button onclick="event.stopPropagation(); openFoodSelector('almuerzo')" class="w-full py-3 rounded-xl bg-surface-container text-primary-container font-medium flex items-center justify-center gap-2 hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined text-sm">add</span>Agregar alimento
+</button>
+</div>
+</div>
+</div>
+
+<!-- Cena -->
+<div class="meal-card glass-card rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-primary-container/10" onclick="toggleMealCard('cena')" data-meal="cena">
+<div class="p-5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg, #7c3aed20, #8b5cf620)">
+<span class="material-symbols-outlined text-2xl" style="color:#7c3aed">dinner_dining</span>
+</div>
+<div>
+<h3 class="font-bold text-white">Cena</h3>
+<p id="cenaCal" class="text-sm text-on-surface-variant"><span class="text-yellow-400 font-bold">0</span> kcal</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span id="cenaCount" class="text-xs text-on-surface-variant bg-surface-container px-2 py-1 rounded-full">0 items</span>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300" id="cenaArrow">expand_more</span>
+</div>
+</div>
+<div class="flex gap-3 mt-3 text-xs">
+<span class="text-orange-400"><span id="cenaProtein">0</span>g prot</span>
+<span class="text-yellow-300"><span id="cenaFat">0</span>g grasa</span>
+<span class="text-cyan-400"><span id="cenaCarbs">0</span>g carbs</span>
+</div>
+</div>
+<div id="cenaDetail" class="hidden border-t border-white/10">
+<div class="p-4">
+<div id="cenaItems" class="space-y-2 mb-4"></div>
+<button onclick="event.stopPropagation(); openFoodSelector('cena')" class="w-full py-3 rounded-xl bg-surface-container text-primary-container font-medium flex items-center justify-center gap-2 hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined text-sm">add</span>Agregar alimento
+</button>
+</div>
+</div>
+</div>
+
+<!-- Snacks -->
+<div class="meal-card glass-card rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-primary-container/10" onclick="toggleMealCard('snacks')" data-meal="snacks">
+<div class="p-5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg, #db277720, #ec489920)">
+<span class="material-symbols-outlined text-2xl" style="color:#db2777">cookie</span>
+</div>
+<div>
+<h3 class="font-bold text-white">Snacks</h3>
+<p id="snacksCal" class="text-sm text-on-surface-variant"><span class="text-yellow-400 font-bold">0</span> kcal</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span id="snacksCount" class="text-xs text-on-surface-variant bg-surface-container px-2 py-1 rounded-full">0 items</span>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300" id="snacksArrow">expand_more</span>
+</div>
+</div>
+<div class="flex gap-3 mt-3 text-xs">
+<span class="text-orange-400"><span id="snacksProtein">0</span>g prot</span>
+<span class="text-yellow-300"><span id="snacksFat">0</span>g grasa</span>
+<span class="text-cyan-400"><span id="snacksCarbs">0</span>g carbs</span>
+</div>
+</div>
+<div id="snacksDetail" class="hidden border-t border-white/10">
+<div class="p-4">
+<div id="snacksItems" class="space-y-2 mb-4"></div>
+<button onclick="event.stopPropagation(); openFoodSelector('snacks')" class="w-full py-3 rounded-xl bg-surface-container text-primary-container font-medium flex items-center justify-center gap-2 hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined text-sm">add</span>Agregar alimento
+</button>
+</div>
+</div>
+</div>
 </div>
 
 <script is:inline>
@@ -205,12 +401,11 @@ card.style.borderLeftColor = 'transparent';
 function renderMealCardItems() {
 ['desayuno', 'almuerzo', 'cena', 'snacks'].forEach(function(meal) {
 const container = document.getElementById(meal + 'Items');
-if (!container) return;
 const plan = getMealPlan(currentDay);
 const items = plan[meal] || [];
 
 if (items.length === 0) {
-container.innerHTML = '<p style="font-size:13px;color:var(--v3-text-40);padding:8px 2px;">Sin alimentos agregados.</p>';
+container.innerHTML = '<p class="text-center text-on-surface-variant py-4 text-sm">Sin alimentos agregados</p>';
 return;
 }
 
@@ -218,65 +413,44 @@ var html = '';
 items.forEach(function(item, idx) {
 var food = currentFoods.find(function(f) { return f.id === item.id; }) || defaultFoods.find(function(f) { return f.id === item.id; }) || item;
 var portion = parseFloat(item.portion) || 100;
-var cal, carbs;
+var cal, prot, fat, carbs;
 
 // Use stored values if available (for auto-generated recipes), otherwise calculate
 if (item.isRecipe && item.calories !== undefined) {
   cal = Math.round(item.calories);
+  prot = Math.round((item.protein || 0) * 10) / 10;
+  fat = Math.round((item.fat || 0) * 10) / 10;
   carbs = Math.round((item.carbs || 0) * 10) / 10;
 } else if (item.isRecipe && item.baseCalories) {
   var basePort = parseFloat(item.basePortion) || 100;
   var ratio = portion / basePort;
   cal = Math.round(item.baseCalories * ratio);
+  prot = Math.round(item.baseProtein * ratio * 10) / 10;
+  fat = Math.round(item.baseFat * ratio * 10) / 10;
   carbs = Math.round(item.baseCarbs * ratio * 10) / 10;
 } else {
   var foodPort = parseFloat(food.portion) || 100;
   var ratio = portion / foodPort;
   cal = Math.round((food.calories || 0) * ratio);
+  prot = Math.round((food.protein || 0) * ratio * 10) / 10;
+  fat = Math.round((food.fat || 0) * ratio * 10) / 10;
   carbs = Math.round((food.carbs || 0) * ratio * 10) / 10;
 }
 
-var eaten = !!item.eaten;
-var rowId = meal + '-' + idx;
-html += '' +
-  '<div class="v3-row-wrap" data-row-id="' + rowId + '">' +
-    '<div class="v3-row-actions">' +
-      '<button type="button" class="v3-row-action v3-row-action--edit" data-meal-toggle-eaten="' + meal + '" data-idx="' + idx + '">' + (eaten ? 'Deshacer' : 'Comido') + '</button>' +
-      '<button type="button" class="v3-row-action v3-row-action--delete" data-meal-remove="' + meal + '" data-idx="' + idx + '">Borrar</button>' +
-    '</div>' +
-    '<div class="v3-row">' +
-      '<span class="v3-row-lead"><span class="material-symbols-outlined">' + (eaten ? 'check_circle' : 'radio_button_unchecked') + '</span></span>' +
-      '<div class="v3-row-content v3-row-content--' + (eaten ? 'done' : 'pending') + '" data-meal-toggle-eaten="' + meal + '" data-idx="' + idx + '" style="cursor:pointer;">' +
-        '<div class="v3-row-body">' +
-          '<div class="v3-row-title">' + escapeHtml(item.name || food.name) + '</div>' +
-          '<div class="v3-row-meta">' + portion + 'g</div>' +
-        '</div>' +
-        '<div class="v3-row-value v3-num-mono">' + cal + '<span class="v3-row-unit"> kcal</span></div>' +
-      '</div>' +
-    '</div>' +
-  '</div>';
+html += '<div class="flex items-center justify-between bg-surface-container rounded-lg p-3">';
+html += '<div class="flex-1 min-w-0">';
+html += '<p class="text-white text-sm font-medium truncate">' + (item.name || food.name) + '</p>';
+html += '<p class="text-xs text-on-surface-variant">' + portion + 'g · ' + cal + ' kcal</p>';
+html += '</div>';
+html += '<button onclick="removeMealItem(\'' + meal + '\', ' + idx + ')" class="w-8 h-8 rounded-lg flex items-center justify-center text-error/60 hover:text-error hover:bg-error/10 transition-colors">';
+html += '<span class="material-symbols-outlined text-sm">delete</span>';
+html += '</button>';
+html += '</div>';
 });
 
 container.innerHTML = html;
 });
 }
-
-function toggleMealItemEaten(meal, idx) {
-  var plan = getMealPlan(currentDay);
-  var item = plan[meal] && plan[meal][idx];
-  if (!item) return;
-  item.eaten = !item.eaten;
-  saveMealPlanForDate(currentDay, plan);
-  renderMealCardItems();
-  if (typeof window.v3RenderPlan === 'function') window.v3RenderPlan();
-}
-
-document.addEventListener('click', function (e) {
-  var toggleEl = e.target.closest('[data-meal-toggle-eaten]');
-  if (toggleEl) { toggleMealItemEaten(toggleEl.getAttribute('data-meal-toggle-eaten'), parseInt(toggleEl.getAttribute('data-idx'))); return; }
-  var removeEl = e.target.closest('[data-meal-remove]');
-  if (removeEl) { removeMealItem(removeEl.getAttribute('data-meal-remove'), parseInt(removeEl.getAttribute('data-idx'))); }
-});
 
 // Remove meal item
 function removeMealItem(meal, idx) {
@@ -326,16 +500,11 @@ if (item.isRecipe && item.calories !== undefined) {
 }
 });
 
-// v3: las tarjetas de acordeón por franja (con sus spans de kcal/P/G/C) ya no
-// existen en el layout nuevo — este bloque queda defensivo (no-op) en vez de
-// borrarse, porque ~15 sitios repartidos por el asistente de IA (que se
-// conserva intacto) siguen llamando a esta función y no deben romperse.
-var _elCal = document.getElementById(meal + 'Cal');
-if (_elCal) _elCal.innerHTML = '<span class="text-yellow-400 font-bold">' + mealCal + '</span> kcal';
-var _elProt = document.getElementById(meal + 'Protein'); if (_elProt) _elProt.textContent = mealProt;
-var _elFat = document.getElementById(meal + 'Fat'); if (_elFat) _elFat.textContent = mealFat;
-var _elCarbs = document.getElementById(meal + 'Carbs'); if (_elCarbs) _elCarbs.textContent = mealCarbs;
-var _elCount = document.getElementById(meal + 'Count'); if (_elCount) _elCount.textContent = items.length + ' items';
+document.getElementById(meal + 'Cal').innerHTML = '<span class="text-yellow-400 font-bold">' + mealCal + '</span> kcal';
+document.getElementById(meal + 'Protein').textContent = mealProt;
+document.getElementById(meal + 'Fat').textContent = mealFat;
+document.getElementById(meal + 'Carbs').textContent = mealCarbs;
+document.getElementById(meal + 'Count').textContent = items.length + ' items';
 
 totalCal += mealCal;
 totalProt += mealProt;
@@ -343,37 +512,29 @@ totalFat += mealFat;
 totalCarbs += mealCarbs;
 });
 
-var _idsSimple = ['currentCal','currentProtein','currentFat','currentCarbs','targetCal','targetProtein','targetFat','targetCarbs','mealCount'];
-var _valsSimple = [totalCal, totalProt, totalFat, totalCarbs];
+document.getElementById('currentCal').textContent = totalCal;
+document.getElementById('currentProtein').textContent = totalProt;
+document.getElementById('currentFat').textContent = totalFat;
+document.getElementById('currentCarbs').textContent = totalCarbs;
 
+// Update progress bars
 var macros = JSON.parse(localStorage.getItem('keto_macros') || '{}');
 var targetCal = parseInt(macros.calories) || 1800;
 var targetProt = parseInt(macros.protein) || 160;
 var targetFat = parseInt(macros.fat) || 150;
 var targetCarbs = parseInt(macros.carbs) || 25;
 
-function _setText(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; }
-function _setWidth(id, pct) { var el = document.getElementById(id); if (el) el.style.width = pct + '%'; }
+document.getElementById('calorieBar').style.width = Math.min(100, (totalCal / targetCal * 100)) + '%';
+document.getElementById('proteinBar').style.width = Math.min(100, (totalProt / targetProt * 100)) + '%';
+document.getElementById('fatBar').style.width = Math.min(100, (totalFat / targetFat * 100)) + '%';
+document.getElementById('carbsBar').style.width = Math.min(100, (totalCarbs / targetCarbs * 100)) + '%';
 
-_setText('currentCal', totalCal);
-_setText('currentProtein', totalProt);
-_setText('currentFat', totalFat);
-_setText('currentCarbs', totalCarbs);
+document.getElementById('targetCal').textContent = targetCal;
+document.getElementById('targetProtein').textContent = targetProt;
+document.getElementById('targetFat').textContent = targetFat;
+document.getElementById('targetCarbs').textContent = targetCarbs;
 
-_setWidth('calorieBar', Math.min(100, (totalCal / targetCal * 100)));
-_setWidth('proteinBar', Math.min(100, (totalProt / targetProt * 100)));
-_setWidth('fatBar', Math.min(100, (totalFat / targetFat * 100)));
-_setWidth('carbsBar', Math.min(100, (totalCarbs / targetCarbs * 100)));
-
-_setText('targetCal', targetCal);
-_setText('targetProtein', targetProt);
-_setText('targetFat', targetFat);
-_setText('targetCarbs', targetCarbs);
-
-_setText('mealCount', (plan.desayuno.length + plan.almuerzo.length + plan.cena.length + plan.snacks.length));
-
-// v3: refresca también la cabecera/lista nueva si están montadas en esta página.
-if (typeof window.v3RenderPlan === 'function') window.v3RenderPlan();
+document.getElementById('mealCount').textContent = (plan.desayuno.length + plan.almuerzo.length + plan.cena.length + plan.snacks.length);
 }
 
 // Initialize calendar
@@ -673,13 +834,9 @@ function toggleSupleTaken(id) {
   </div>
 </div>
 <div id="autoPlanWarningModal" class="fixed inset-0 z-[80] hidden"><div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto text-center border-2 border-yellow-500/50"><div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-4xl text-yellow-400">warning</span></div><h3 class="text-xl font-headline font-bold text-yellow-400 mb-2">Advertencia</h3><p class="text-white/80 mb-2">Estás modificando un plan generado automáticamente.</p><p class="text-white/60 text-sm mb-6">Los resultados pueden no ser los indicados para tu objetivo. ¿Deseas continuar?</p><div class="flex gap-3"><button onclick="closeAutoPlanWarning()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="confirmAutoPlanModification()" class="flex-1 py-3 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors">Continuar</button></div></div></div></div>
+<!-- BottomNavBar (Mobile) - 5 items optimizado -->
+<AppNav active="plan" />
 <script is:inline src="/app/utils.js"></script>
-<script is:inline src="/app/modules/day-budget.js"></script>
-<script is:inline src="/app/modules/meal-log.js"></script>
-<script is:inline src="/app/modules/v3-motion.js"></script>
-<script is:inline src="/app/modules/v3-budget-header.js"></script>
-<script is:inline src="/app/modules/inspectorKeto.js"></script>
-<script is:inline src="/app/modules/v3-veredicto.js"></script>
 <script is:inline src="/app/data/recipe-details.js"></script>
 <script is:inline>
 // Crear recipesDB desde KETO_RECIPES para compatibilidad
@@ -984,10 +1141,8 @@ var defaultFoods=[
 {id:"f45",name:"Chocolate negro 90%",portion:30,calories:150,protein:2,fat:13,carbs:4,category:"Otros",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]}
 ];
 var mealNames={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snacks"};
-// getMealPlan/saveMealPlan (dateKey-aware) están definidas más abajo (L1601/1610);
-// aquí había un segundo par que ignoraba su parámetro y siempre leía "today" —
-// como ambos eran declaraciones de función en el mismo scope, el de abajo ganaba
-// silenciosamente. Se elimina para no dejar la trampa de sombra.
+function getMealPlan(){var stored=safeParseJSON(localStorage.getItem("mealPlan_"+today), {});if(Object.keys(stored).length===0){stored={desayuno:[],almuerzo:[],cena:[],snacks:[]};localStorage.setItem("mealPlan_"+today,JSON.stringify(stored))}return stored}
+function saveMealPlan(plan){localStorage.setItem("mealPlan_"+today,JSON.stringify(plan))}
 function renderMealPlan(){
   try{
     var plan=getMealPlan(currentDay);
@@ -1299,32 +1454,9 @@ return;
 executeAdd(meal,foodId,totalGrams);
 }
 function executeAdd(meal,foodId,totalGrams){
-// currentDay puede ser cualquier día de la semana visible en el rail, no
-// necesariamente hoy — por eso no se usa KetoMealLog.logItem() (que siempre
-// escribe en el día de hoy); se corrige solo la forma del item (snapshot
-// completo, no solo {id,portion}) usando la misma proporción que ya calcula
-// updatePlanPreview() para este mismo food+cantidad.
-var food=currentFoods.find(function(f){return f.id===foodId})||defaultFoods.find(function(f){return f.id===foodId});
-var foodPortion=food?(parseFloat(food.portion)||100):100;
-var ratio=food?totalGrams/foodPortion:1;
-var item={
-  id:foodId,
-  name:food?food.name:'Alimento',
-  portion:totalGrams,
-  calories:Math.round((food?parseFloat(food.calories):0||0)*ratio),
-  protein:Math.round((food?parseFloat(food.protein):0||0)*ratio*10)/10,
-  fat:Math.round((food?parseFloat(food.fat):0||0)*ratio*10)/10,
-  carbs:Math.round((food?parseFloat(food.carbs):0||0)*ratio*10)/10,
-  addedAt:new Date().toISOString()
-};
 var plan=getMealPlan(currentDay);
-if(!plan[meal])plan[meal]=[];
-plan[meal].push(item);
+plan[meal].push({id:foodId,portion:totalGrams});
 saveMealPlanForDate(currentDay,plan);
-if(typeof getTodayKey==='function'&&currentDay===getTodayKey()&&window.KetoBudget){
-  window.KetoBudget.refresh();
-  document.dispatchEvent(new CustomEvent('v3:meal-logged',{detail:{item:item,mealSlot:meal}}));
-}
 
 updateMonthlyMealStats(1);
 
@@ -3509,72 +3641,6 @@ if(localStorage.getItem("sidebarCollapsed")==="true"){
   var _st=document.getElementById("sidebarToggle");
   if(_st)_st.style.left="72px";
 }
-</script>
-
-<script is:inline>
-  var V3_MEAL_ORDER = [
-    { key: 'desayuno', label: 'Desayuno' },
-    { key: 'almuerzo', label: 'Almuerzo' },
-    { key: 'cena', label: 'Cena' },
-    { key: 'snacks', label: 'Snack' }
-  ];
-
-  function v3ComputeDayBudget(dateKey) {
-    var isToday = dateKey === getTodayKey();
-    if (isToday) return window.KetoBudget.compute();
-    var baseLimit = window.KetoBudget.getBaseLimit();
-    var plan = getMealPlan(dateKey);
-    var used = 0;
-    Object.keys(plan).forEach(function (slot) {
-      (plan[slot] || []).forEach(function (item) { used += Number(item.carbs) || 0; });
-    });
-    var available = Math.round((baseLimit - used) * 10) / 10;
-    var state = 'ok';
-    if (available <= 0) state = 'over';
-    else if (available <= baseLimit * 0.15) state = 'warn';
-    return { baseLimit: baseLimit, trainingBonus: 0, limit: baseLimit, used: used, available: available, state: state };
-  }
-
-  window.v3RenderPlan = function () {
-    var header = document.querySelector('#planBudgetHeader .v3-budget-header');
-    if (!header) return;
-    var budget = v3ComputeDayBudget(currentDay);
-    window.V3BudgetHeader.render(header, budget, { animate: false });
-
-    var plan = getMealPlan(currentDay);
-    var next = V3_MEAL_ORDER.find(function (m) {
-      var items = plan[m.key] || [];
-      return items.length === 0 || items.some(function (it) { return !it.eaten; });
-    });
-    var card = document.querySelector('[data-decision-id="plan-next-meal"]');
-    if (card && next) {
-      var titleEl = card.querySelector('.v3-decision-card-title');
-      var bodyEl = document.getElementById('planNextMealBody');
-      var items = plan[next.key] || [];
-      if (titleEl) titleEl.textContent = next.label;
-      if (bodyEl) bodyEl.textContent = items.length === 0 ? 'Todavía no tienes nada planeado.' : 'Te falta marcar ' + items.filter(function (it) { return !it.eaten; }).length + ' alimento(s) como comido.';
-    }
-
-    var sub = document.querySelector('#v3-sheet-registrar .v3-sheet-subtitle');
-    if (sub) sub.textContent = 'Margen de hoy · ' + Math.round(window.KetoBudget.compute().available) + ' g netos';
-  };
-
-  document.addEventListener('DOMContentLoaded', function () {
-    setTimeout(function () { window.v3RenderPlan(); }, 50);
-  });
-  document.addEventListener('v3:decision-dismiss', function (e) {
-    var card = document.querySelector('[data-decision-id="' + e.detail.id + '"]');
-    if (card) card.style.display = 'none';
-  });
-  document.addEventListener('v3:decision-action', function (e) {
-    if (e.detail.id !== 'plan-next-meal') return;
-    var plan = getMealPlan(currentDay);
-    var next = V3_MEAL_ORDER.find(function (m) {
-      var items = plan[m.key] || [];
-      return items.length === 0 || items.some(function (it) { return !it.eaten; });
-    });
-    if (next) openFoodSelector(next.key);
-  });
 </script>
 
 </AppLayout>

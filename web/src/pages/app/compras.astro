@@ -1,182 +1,304 @@
 ---
-// Compras — v3. Progreso + 3 tiles + secciones Frescos/Despensa con DataRow
-// check. "Vive dentro de Plan" en la IA final del handoff; mientras Plan no
-// se rediseñe (paso dedicado aparte), esta pantalla sigue alcanzable por la
-// misma ruta /app/compras (AppSidebar no se toca, su enlace sigue sirviendo).
 import AppLayout from '../../layouts/AppLayout.astro';
-import DataRow from '../../components/v3/DataRow.astro';
-import Dock from '../../components/v3/Dock.astro';
-import Sheet from '../../components/v3/Sheet.astro';
-import VeredictoSheet from '../../components/v3/VeredictoSheet.astro';
+import AppNav from '../../components/AppNav.astro';
 ---
 
-<AppLayout title="KetoCore | Compras" authGuard={true}>
-  <style is:global>
-    #appSidebar, #kcTabbar, #kcDrawer { display: none !important; }
-  </style>
+<AppLayout title="KetoCore | Lista de Compras" authGuard={true}>
+<style is:global>
+.sidebar-link.active{background:rgba(22,19,16,1)!important;}
+.sidebar-link.active .material-symbols-outlined{color:#ff4d00!important;}
+.sidebar-link.active{color:white!important;}
+.sidebar-collapsed .sidebar-nav{width:72px;}
+.sidebar-collapsed .sidebar-nav .sidebar-text{display:none;}
+.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0;}
+.sidebar-collapsed .sidebar-logo-text{display:none;}
+.sidebar-collapsed .sidebar-logo{justify-content:center;}
+.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px;}
+.sidebar-collapsed~main .main-content{margin-left:72px;}
+.sidebar-toggle-btn{left:256px;transition:left 0.3s ease;}
+.sidebar-collapsed~.sidebar-toggle-btn{left:72px;}
 
-  <div data-v3 style="background:var(--v3-surface-app); min-height:100vh;">
-    <main style="padding: var(--v3-pad-screen) var(--v3-pad-screen) 140px; max-width:520px; margin:0 auto; display:flex; flex-direction:column; gap: var(--v3-gap-block);">
-
-      <div style="display:flex; align-items:center; justify-content:space-between;">
-        <p class="v3-eyebrow" style="margin:0;">Compras · próximos 7 días</p>
-        <span id="cmpProgress" class="v3-num-mono" style="font-size:14px;">0/0</span>
-      </div>
-      <div class="v3-bh-bar-track" style="height:6px;"><div id="cmpProgressBar" class="v3-bh-bar-fill" style="width:0%; background:var(--v3-lime);"></div></div>
-
-      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
-        <div style="background:var(--v3-surface-1); border:1px solid var(--v3-border); border-radius:var(--v3-radius-tile); padding:14px; text-align:center;">
-          <div id="cmpTotal" class="v3-num-mono" style="font-size:22px; justify-content:center;">0</div>
-          <div class="v3-eyebrow" style="margin-top:4px; font-size:10px;">Total</div>
-        </div>
-        <div style="background:var(--v3-surface-1); border:1px solid var(--v3-border); border-radius:var(--v3-radius-tile); padding:14px; text-align:center;">
-          <div id="cmpFalta" class="v3-num-mono" style="font-size:22px; justify-content:center; color:var(--v3-amber);">0</div>
-          <div class="v3-eyebrow" style="margin-top:4px; font-size:10px;">Por comprar</div>
-        </div>
-        <div style="background:var(--v3-surface-1); border:1px solid var(--v3-border); border-radius:var(--v3-radius-tile); padding:14px; text-align:center;">
-          <div id="cmpComprados" class="v3-num-mono" style="font-size:22px; justify-content:center; color:var(--v3-lime);">0</div>
-          <div class="v3-eyebrow" style="margin-top:4px; font-size:10px;">Comprados</div>
-        </div>
-      </div>
-
-      <section>
-        <p class="v3-eyebrow" style="margin-bottom:10px;">Frescos</p>
-        <div id="cmpFrescos"></div>
-      </section>
-      <section>
-        <p class="v3-eyebrow" style="margin-bottom:10px;">Despensa</p>
-        <div id="cmpDespensa"></div>
-      </section>
-      <div style="display:none"><DataRow id="_v3-datarow-script-anchor-compras" title="" /></div>
-
-    </main>
-
-    <VeredictoSheet />
-    <Sheet id="v3-sheet-registrar" title="Registrar" subtitle="Margen de hoy · — g netos">
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-        <a href="/app/scanner" class="v3-decision-card-action" style="background:var(--v3-lime); color:var(--v3-text-on-lime); justify-content:center;">
-          <span class="material-symbols-outlined" style="font-size:18px">center_focus_strong</span> Escanear
-        </a>
-        <a href="/app/alimentos" class="v3-decision-card-action" style="background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;">
-          <span class="material-symbols-outlined" style="font-size:18px">search</span> Buscar
-        </a>
-        <button type="button" class="v3-decision-card-action" disabled style="background:var(--v3-surface-2); color:var(--v3-text-40); justify-content:center; cursor:not-allowed;">
-          <span class="material-symbols-outlined" style="font-size:18px">mic</span> Dictar · Próximamente
-        </button>
-        <a href="/app/recetas" class="v3-decision-card-action" style="background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;">
-          <span class="material-symbols-outlined" style="font-size:18px">menu_book</span> Recetas
-        </a>
-      </div>
-      <Fragment slot="footnote">Offline · sincroniza solo</Fragment>
-    </Sheet>
-    <Dock active="plan" fabSheetId="v3-sheet-registrar" />
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.glass-card{background:rgba(22,19,16,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.primary-gradient{background:linear-gradient(135deg,#ff4d00 0%,#ff7346 100%)}
+.secondary-gradient{background:linear-gradient(135deg,#ffb300 0%,#ffc94f 100%)}
+.custom-scrollbar::-webkit-scrollbar{width:4px}
+.custom-scrollbar::-webkit-scrollbar-track{background:#0b0a08}
+.custom-scrollbar::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:10px}
+.sidebar-collapsed .sidebar-nav{width:72px}
+.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}
+.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}
+.sidebar-link.active{background:#161310}
+.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.float-animation{animation:float 3s ease-in-out infinite}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 10px currentColor}50%{box-shadow:0 0 25px currentColor}}
+.pulse-glow{animation:pulse-glow 2s ease-in-out infinite}
+@media(min-width:768px){#cmp-wrap{max-width:none!important;padding-top:1rem;}}
+</style>
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
+  <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
+    <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
+    <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">KetoCore</span>
+  </a>
+  <div class="flex items-center gap-1.5">
+    <button onclick="toggleMobileUserMenu()" aria-label="Mi cuenta" class="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
+      <img id="mobileHeaderAvatarImg" src="" class="hidden w-full h-full object-cover" alt="Avatar">
+      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined" style="font-size:20px;color:rgba(247,244,240,0.6)">account_circle</span>
+    </button>
+    <button onclick="toggleHamburgerMenu()" aria-label="Abrir menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1a15;color:rgba(247,244,240,0.6)">
+      <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">menu</span>
+    </button>
   </div>
+</header>
 
-  <script is:inline src="/app/utils.js"></script>
-  <script is:inline src="/app/modules/day-budget.js"></script>
-  <script is:inline src="/app/modules/meal-log.js"></script>
-  <script is:inline src="/app/modules/v3-motion.js"></script>
-  <script is:inline src="/app/compras.js"></script>
-  <script is:inline src="/app/modules/inspectorKeto.js"></script>
-  <script is:inline src="/app/modules/v3-veredicto.js"></script>
+<!-- Mobile User Dropdown -->
+<div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161310;border:1px solid rgba(255,240,225,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
+  <div class="p-3" style="border-bottom:1px solid rgba(255,240,225,0.06)">
+    <p class="text-sm font-semibold" style="color:#f7f4f0" id="mobileDropdownUserName">Usuario</p>
+    <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
+  </div>
+  <div class="p-2">
+    <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f7f4f0">
+      <span class="material-symbols-outlined text-lg" style="color:rgba(247,244,240,0.55)">person</span>
+      <span class="text-sm font-medium">Mi Perfil</span>
+    </a>
+    <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-red-50" style="color:#dc2626">
+      <span class="material-symbols-outlined text-lg">logout</span>
+      <span class="text-sm font-medium">Cerrar Sesión</span>
+    </button>
+  </div>
+</div>
+<main class="main-content pt-14 px-4 pb-20 min-h-screen">
+<div id="cmp-wrap" class="space-y-8">
 
-  <script is:inline>
-    var CATEGORY_TO_AISLE = {
-      'Verduras': 'Frescos', 'Lácteos': 'Frescos', 'Proteínas': 'Frescos',
-      'Grasas': 'Despensa', 'Frutos secos': 'Despensa', 'Otros': 'Despensa'
-    };
+<!-- Hero Header -->
+<div class="relative overflow-hidden bg-surface-container rounded-3xl p-8 md:p-12">
+<div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
+<div class="absolute -bottom-20 -left-20 w-48 h-48 bg-secondary/10 rounded-full blur-3xl"></div>
+<div class="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div>
+<span style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00">Control de inventario</span>
+<h1 class="kc-h1" style="margin-top:10px">Mi despensa</h1>
+<p class="text-on-surface-variant mt-3 max-w-lg">Controla tu stock de alimentos y optimiza tus compras semanalmente.</p>
+</div>
+<button onclick="switchTab('available');document.getElementById('tabAvailable').click();" class="primary-gradient px-8 py-4 rounded-2xl text-white font-bold flex items-center gap-3 hover:opacity-90 transition-all shadow-[0_10px_30px_rgba(255,77,0,0.3)] float-animation">
+<span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">add_circle</span>
+Agregar Alimento
+</button>
+</div>
+</div>
 
-    function computeNeeded(){
-      var needed = {};
-      var today = new Date();
-      for (var i = 0; i < 7; i++) {
-        var d = new Date(today); d.setDate(today.getDate() + i);
-        var dk = d.toISOString().slice(0, 10);
-        var plan = safeParseJSON(localStorage.getItem('mealPlan_' + dk), {});
-        ['desayuno', 'almuerzo', 'cena', 'snacks'].forEach(function (meal) {
-          (plan[meal] || []).forEach(function (item) {
-            var key = item.id || item.name || 'item';
-            if (!needed[key]) needed[key] = { id: item.id, name: item.name || key, totalG: 0, days: 0 };
-            needed[key].totalG += parseFloat(item.portion || 100);
-            needed[key].days++;
-          });
-        });
-      }
-      return Object.values(needed);
-    }
+<!-- Tab Navigation -->
+<div class="flex gap-2 flex-wrap">
+<button id="tabDespensa" onclick="switchTab('despensa')" class="px-6 py-3 rounded-2xl text-sm font-bold bg-primary text-white transition-all flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">inventory_2</span>
+Mi Despensa
+</button>
+<button id="tabAvailable" onclick="switchTab('available')" class="px-6 py-3 rounded-2xl text-sm font-bold bg-surface-container text-on-surface-variant transition-all flex items-center gap-2 hover:bg-surface-container-high">
+<span class="material-symbols-outlined">add_circle</span>
+Agregar Alimentos
+</button>
+<button id="tabPlan" onclick="switchTab('plan')" class="px-6 py-3 rounded-2xl text-sm font-bold bg-surface-container text-on-surface-variant transition-all flex items-center gap-2 hover:bg-surface-container-high">
+<span class="material-symbols-outlined text-secondary">calendar_today</span>
+Desde Plan
+</button>
+</div>
 
-    function getCheckedMap(){
-      return safeParseJSON(localStorage.getItem('comprasChecked_' + getWeekKey()), {});
-    }
-    function setChecked(key, checked){
-      var map = getCheckedMap();
-      map[key] = checked;
-      localStorage.setItem('comprasChecked_' + getWeekKey(), JSON.stringify(map));
-    }
+<!-- Mi Despensa Section -->
+<section id="despensaSection" class="space-y-6">
+<div id="despensaList" class="space-y-4"></div>
+</section>
 
-    function renderCompras(){
-      initFoods();
-      var foods = getFoods();
-      var despensa = getDespensa();
-      var checkedMap = getCheckedMap();
-      var items = computeNeeded();
+<!-- Desde Plan Section -->
+<section id="planSection" class="space-y-6 hidden">
+  <div class="bg-surface-container rounded-2xl p-6">
+    <div class="flex items-start gap-4">
+      <div class="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings:'FILL' 1">calendar_today</span>
+      </div>
+      <div>
+        <h4 class="font-headline font-bold text-white">Alimentos de tu plan esta semana</h4>
+        <p class="text-on-surface-variant text-sm mt-1">Generado desde los 7 días del plan de alimentación.</p>
+      </div>
+    </div>
+  </div>
+  <div id="planShoppingList" class="space-y-3"></div>
+</section>
 
-      var byAisle = { Frescos: [], Despensa: [] };
-      items.forEach(function(item){
-        var food = item.id ? foods.find(function(f){ return f.id === item.id; }) : null;
-        var aisle = food ? (CATEGORY_TO_AISLE[food.category] || 'Despensa') : 'Despensa';
-        var stockG = (item.id && despensa[item.id]) ? (parseFloat(despensa[item.id].stock) || 0) : 0;
-        var neededG = Math.round(item.totalG);
-        var enough = stockG >= neededG;
-        byAisle[aisle].push({
-          key: item.id || item.name,
-          name: item.name,
-          meta: enough ? 'Tienes suficiente' : ('Necesitas ' + neededG + 'g · ' + item.days + (item.days>1?' comidas':' comida')),
-          checked: !!checkedMap[item.id || item.name]
-        });
-      });
+<!-- Available Foods Section -->
+<section id="availableSection" class="space-y-6 hidden">
+<div class="bg-surface-container rounded-2xl p-6">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-secondary text-2xl">info</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-white">Selecciona alimentos</h4>
+<p class="text-on-surface-variant text-sm mt-1">Toca un alimento para agregarlo a tu despensa con cantidad personalizada.</p>
+</div>
+</div>
+</div>
+<div id="availableList" class="space-y-4"></div>
+</section>
 
-      var total = items.length;
-      var checkedCount = items.filter(function(it){ return checkedMap[it.id || it.name]; }).length;
-      document.getElementById('cmpProgress').textContent = checkedCount + '/' + total;
-      document.getElementById('cmpProgressBar').style.width = (total ? Math.round(checkedCount/total*100) : 0) + '%';
-      document.getElementById('cmpTotal').textContent = total;
-      document.getElementById('cmpFalta').textContent = total - checkedCount;
-      document.getElementById('cmpComprados').textContent = checkedCount;
+</div>
+</main>
 
-      function renderSection(elId, rows){
-        var el = document.getElementById(elId);
-        if (!rows.length) { el.innerHTML = '<p style="font-size:13px; color:var(--v3-text-40); padding:8px 2px;">Nada por aquí esta semana.</p>'; return; }
-        el.innerHTML = rows.map(function(row){
-          return '' +
-            '<div class="v3-row-wrap" data-row-id="'+row.key+'">' +
-              '<div class="v3-row-actions"><button type="button" class="v3-row-action v3-row-action--edit" style="width:128px" data-toggle-checked="'+row.key+'">'+(row.checked?'Desmarcar':'Comprado')+'</button></div>' +
-              '<div class="v3-row">' +
-                '<span class="v3-row-lead"><span class="material-symbols-outlined">'+(row.checked?'check_circle':'radio_button_unchecked')+'</span></span>' +
-                '<div class="v3-row-content v3-row-content--'+(row.checked?'done':'pending')+'" data-toggle-checked="'+row.key+'" style="cursor:pointer;">' +
-                  '<div class="v3-row-body">' +
-                    '<div class="v3-row-title">'+escapeHtml(row.name)+'</div>' +
-                    '<div class="v3-row-meta">'+row.meta+'</div>' +
-                  '</div>' +
-                '</div>' +
-              '</div>' +
-            '</div>';
-        }).join('');
-      }
-      renderSection('cmpFrescos', byAisle.Frescos);
-      renderSection('cmpDespensa', byAisle.Despensa);
-    }
+<!-- Add Modal -->
+<div id="addModal" class="fixed inset-0 z-[60] hidden">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeAddModal()"></div>
+<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+<div class="glass-card rounded-3xl p-8 w-full max-w-md pointer-events-auto border border-primary/20">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h3 class="text-2xl font-headline font-black text-white">Agregar a Despensa</h3>
+<p id="addFoodName" class="text-primary mt-1 font-bold"></p>
+<div id="addRiskInfo" class="mt-3"></div>
+</div>
+<button onclick="closeAddModal()" class="w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
+</div>
+<div class="bg-surface-container-high rounded-2xl p-4 mb-6">
+<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">Presentacion por unidad</p>
+<p id="addFoodPortion" class="text-white font-bold"></p>
+</div>
+<div class="mb-6">
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-3">Unidad de medida</label>
+<div id="unitSelector" class="flex flex-wrap gap-2"></div>
+</div>
+<div class="mb-6">
+<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-3">Cantidad</label>
+<div class="flex items-center gap-3">
+<button onclick="var inp=document.getElementById('addQuantity');inp.value=Math.max(0.1,parseFloat(inp.value)-1);updateAddPreview()" class="w-14 h-14 rounded-2xl bg-surface-container-high text-white font-bold text-2xl hover:bg-surface-container-highest transition-all flex items-center justify-center">-</button>
+<input type="number" id="addQuantity" value="1" min="0.1" max="10000" step="0.1" class="flex-1 bg-surface-container text-white border border-outline rounded-2xl px-4 py-4 text-center text-2xl font-bold focus:outline-none focus:border-primary">
+<button onclick="var inp=document.getElementById('addQuantity');inp.value=Math.min(10000,parseFloat(inp.value)+1);updateAddPreview()" class="w-14 h-14 rounded-2xl bg-surface-container-high text-white font-bold text-2xl hover:bg-surface-container-highest transition-all flex items-center justify-center">+</button>
+</div>
+</div>
+<div class="bg-surface-container-high rounded-2xl p-6 mb-6">
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant">Total en gramos:</span>
+<span id="addPreview" class="text-3xl font-headline font-black text-primary">0 g</span>
+</div>
+</div>
+<div class="flex gap-3">
+<button onclick="closeAddModal()" class="flex-1 py-4 rounded-2xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>
+<button onclick="confirmAdd()" class="flex-1 py-4 rounded-2xl primary-gradient text-white font-bold hover:opacity-90 transition-colors">Agregar</button>
+</div>
+</div>
+</div>
+</div>
 
-    document.addEventListener('DOMContentLoaded', function () {
-      renderCompras();
-      document.addEventListener('click', function (e) {
-        var el = e.target.closest('[data-toggle-checked]');
-        if (!el) return;
-        var key = el.getAttribute('data-toggle-checked');
-        var map = getCheckedMap();
-        setChecked(key, !map[key]);
-        renderCompras();
-      });
-    });
-  </script>
+<!-- Toast -->
+<div id="toast" class="fixed bottom-28 left-1/2 -translate-x-1/2 z-[70] hidden">
+<div class="glass-card rounded-full px-6 py-3 flex items-center gap-3 shadow-lg border border-primary/20">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1">check_circle</span>
+<span id="toastMessage" class="text-white font-bold">Guardado!</span>
+</div>
+</div>
+
+<!-- BottomNavBar (Mobile) - 5 items optimizado -->
+<AppNav active="more" />
+
+<script is:inline src="/app/utils.js"></script>
+<script is:inline src="/app/data/keto-inspector-ingredientes.js"></script>
+<script is:inline src="/app/modules/inspectorKeto.js"></script>
+<script is:inline src="/app/modules/keto-inspector-api.js"></script>
+<script is:inline src="/app/modules/keto-inspector-ui.js"></script>
+<script is:inline src="/app/compras.js?v=4"></script>
+<script is:inline>
+if(localStorage.getItem("sidebarCollapsed")==="true"){document.body.classList.add("sidebar-collapsed");var s=document.getElementById("sidebarNav");s.style.width="72px";s.style.overflow="hidden"}
+var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
+</script>
+<script is:inline>
+var _cp=window.location.pathname.split("/").pop()||"index.html";
+document.querySelectorAll(".sidebar-link").forEach(function(l){
+  if(l.getAttribute("href")===_cp){
+    l.classList.add("active");
+    l.style.background="rgba(22,19,16,1)";
+    l.style.color="white";
+    var ic=l.querySelector(".material-symbols-outlined");
+    if(ic)ic.style.color="#ff4d00";
+  }
+});
+if(localStorage.getItem("sidebarCollapsed")==="true"){
+  document.body.classList.add("sidebar-collapsed");
+  var _sn=document.getElementById("sidebarNav");
+  if(_sn){_sn.style.width="72px";_sn.style.overflow="hidden";}
+  var _tp=document.querySelector(".topbar-pl");
+  if(_tp)_tp.style.paddingLeft="88px";
+  var _mc=document.querySelector(".main-content");
+  if(_mc)_mc.style.marginLeft="72px";
+  var _st=document.getElementById("sidebarToggle");
+  if(_st)_st.style.left="72px";
+}
+</script>
+<script is:inline>
+// User Dropdown Menu
+function toggleUserMenu() {
+  const dropdown = document.getElementById('userDropdown');
+  dropdown.classList.toggle('hidden');
+  updateDropdownInfo();
+}
+
+function toggleMobileUserMenu() {
+  const dropdown = document.getElementById('mobileUserDropdown');
+  dropdown.classList.toggle('hidden');
+  updateDropdownInfo();
+}
+
+function updateDropdownInfo() {
+  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+  const userName = profile.nombre || profile.name || 'Usuario';
+  const userEmail = localStorage.getItem('KetoCore_user_email') || 'usuario@ejemplo.com';
+  const dn = document.getElementById('dropdownUserName');
+  const de = document.getElementById('dropdownUserEmail');
+  const mdn = document.getElementById('mobileDropdownUserName');
+  const mde = document.getElementById('mobileDropdownUserEmail');
+  if(dn) dn.textContent = userName;
+  if(de) de.textContent = userEmail;
+  if(mdn) mdn.textContent = userName;
+  if(mde) mde.textContent = userEmail;
+}
+
+function updateHeaderAvatar() {
+  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+  const avatarUrl = profile.avatar_url;
+  const hi = document.getElementById('headerAvatarImg');
+  const hi2 = document.getElementById('headerAvatarIcon');
+  const mhi = document.getElementById('mobileHeaderAvatarImg');
+  const mhi2 = document.getElementById('mobileHeaderAvatarIcon');
+  if (avatarUrl) {
+    if(hi) { hi.src = avatarUrl; hi.classList.remove('hidden'); }
+    if(hi2) hi2.classList.add('hidden');
+    if(mhi) { mhi.src = avatarUrl; mhi.classList.remove('hidden'); }
+    if(mhi2) mhi2.classList.add('hidden');
+  } else {
+    if(hi) hi.classList.add('hidden');
+    if(hi2) hi2.classList.remove('hidden');
+    if(mhi) mhi.classList.add('hidden');
+    if(mhi2) mhi2.classList.remove('hidden');
+  }
+}
+
+document.addEventListener('click', function(e) {
+  const dd = document.getElementById('userDropdown');
+  const mdd = document.getElementById('mobileUserDropdown');
+  const btn = document.getElementById('profileBtn');
+  if (dd && !dd.contains(e.target) && !btn.contains(e.target)) dd.classList.add('hidden');
+  if (mdd && !e.target.closest('#mobileUserDropdown') && !e.target.closest('button[onclick="toggleMobileUserMenu()"]')) mdd.classList.add('hidden');
+});
+
+async function handleLogout() {
+  if (confirm('¿Cerrar sesión?')) {
+    await window.supabase.auth.signOut();
+    localStorage.removeItem('KetoCore_user_id');
+    localStorage.removeItem('KetoCore_user_email');
+    localStorage.removeItem('KetoCore_onboarding_done');
+    window.location.href = '/app/welcome';
+  }
+}
+
+updateHeaderAvatar();
+</script>
+
 </AppLayout>
