@@ -1,235 +1,205 @@
 ---
+// Comunidad — v3. El leaderboard y el feed siguen siendo mock (MOCK_USERS) —
+// no se inventa backend social real aquí, solo se re-temea a v3. La waitlist
+// es la única pieza funcional (contador local incremental).
 import AppLayout from '../../layouts/AppLayout.astro';
-import AppNav from '../../components/AppNav.astro';
+import Dock from '../../components/v3/Dock.astro';
+import Sheet from '../../components/v3/Sheet.astro';
+import VeredictoSheet from '../../components/v3/VeredictoSheet.astro';
 ---
 
 <AppLayout title="KetoCore | Comunidad" authGuard={true}>
-<style is:global>
-*{box-sizing:border-box}
-body{background:#0b0a08;color:#fff;font-family:'Inter',sans-serif;min-height:100vh;}
-.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px)}
-.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
-.glass{background:rgba(22,19,16,0.85);border:1px solid rgba(255,240,225,0.07);backdrop-filter:blur(16px)}
-.feed-card{background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:1rem}
-.avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0}
-@keyframes shimmer{0%{opacity:0.4}50%{opacity:0.7}100%{opacity:0.4}}
-.coming-soon-blur{filter:blur(3px);pointer-events:none;user-select:none}
-.coming-soon-overlay{position:relative}
-.coming-soon-overlay::after{content:"Próximamente";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(11,10,8,0.55);border-radius:inherit;font-weight:800;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.5);backdrop-filter:blur(1px)}
-</style>
-<!-- TopBar -->
-<header class="fixed top-0 left-0 right-0 z-40 h-14 flex items-center justify-between px-4 border-b border-white/5" style="background:rgba(11,10,8,0.95);backdrop-filter:blur(20px)">
-  <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
-    <img src="/app/logo.svg" alt="KetoCore" class="w-8 h-8" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
-    <h1 class="text-base font-headline font-black text-white">Comunidad</h1>
-  </a>
-  <div class="flex items-center gap-2">
-    <span class="text-[10px] font-bold px-2 py-1 rounded-full" style="background:rgba(255,77,0,0.15);color:#ff4d00">BETA PRONTO</span>
-    <button onclick="toggleHamburgerMenu()" aria-label="Menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:rgba(255,240,225,0.05);color:rgba(247,244,240,0.6);border:1px solid rgba(255,240,225,0.06)">
-      <span class="material-symbols-outlined" style="font-size:20px">menu</span>
-    </button>
+  <style is:global>
+    #appSidebar, #kcTabbar, #kcDrawer { display: none !important; }
+  </style>
+
+  <div data-v3 style="background:var(--v3-surface-app); min-height:100vh;">
+    <main style="padding: var(--v3-pad-screen) var(--v3-pad-screen) 140px; max-width:520px; margin:0 auto; display:flex; flex-direction:column; gap: var(--v3-gap-block);">
+
+      <div>
+        <p class="v3-eyebrow" style="margin-bottom:6px;">Comunidad · Juntos</p>
+        <h1 style="font-family:var(--v3-font-title); font-weight:800; font-size:24px; color:var(--v3-text); line-height:1.15;">No estás haciendo esto solo.</h1>
+      </div>
+
+      <section style="background:var(--v3-surface-1); border:1px solid var(--v3-border); border-radius:var(--v3-radius-card); padding:var(--v3-pad-card);">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+          <div id="cmAvatar" class="v3-num-mono" style="width:44px; height:44px; border-radius:14px; background:var(--v3-lime); color:var(--v3-text-on-lime); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0;">?</div>
+          <div style="flex:1; min-width:0;">
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <span id="cmName" style="font-family:var(--v3-font-title); font-weight:800; font-size:15px; color:var(--v3-text);">Tu perfil</span>
+              <span id="cmBadge" class="v3-chip v3-chip--verdict-lime hidden" style="padding:3px 10px; font-size:10px;"></span>
+            </div>
+            <div style="font-size:12px; color:var(--v3-text-40); margin-top:2px;">Así te verán en la comunidad</div>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+          <div style="background:var(--v3-surface-2); border-radius:var(--v3-radius-tile); padding:12px 6px; text-align:center;">
+            <div id="cmStreak" class="v3-num-mono" style="font-size:19px; justify-content:center; color:var(--v3-lime);">--</div>
+            <div class="v3-eyebrow" style="margin-top:3px; font-size:9.5px;">Racha</div>
+          </div>
+          <div style="background:var(--v3-surface-2); border-radius:var(--v3-radius-tile); padding:12px 6px; text-align:center;">
+            <div id="cmLost" class="v3-num-mono" style="font-size:19px; justify-content:center; color:var(--v3-amber);">--</div>
+            <div class="v3-eyebrow" style="margin-top:3px; font-size:9.5px;">Kg logrados</div>
+          </div>
+          <div style="background:var(--v3-surface-2); border-radius:var(--v3-radius-tile); padding:12px 6px; text-align:center;">
+            <div id="cmDays" class="v3-num-mono" style="font-size:19px; justify-content:center; color:var(--v3-text);">--</div>
+            <div class="v3-eyebrow" style="margin-top:3px; font-size:9.5px;">Días keto</div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+          <p class="v3-eyebrow">Ranking semanal · por racha</p>
+        </div>
+        <div id="cmLeaderboard" style="background:var(--v3-surface-1); border:1px solid var(--v3-border); border-radius:var(--v3-radius-card); padding:6px var(--v3-pad-card);"></div>
+      </section>
+
+      <section>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+          <p class="v3-eyebrow">Feed de la comunidad</p>
+          <span class="v3-chip" style="padding:3px 10px; font-size:10px;">Vista previa</span>
+        </div>
+        <div id="cmFeed" style="position:relative; display:flex; flex-direction:column; gap:10px; filter:blur(3px); pointer-events:none; user-select:none;"></div>
+      </section>
+
+      <div class="v3-decision-card v3-decision-card--lime" style="text-align:center;">
+        <span class="material-symbols-outlined" style="font-size:28px;">notifications_active</span>
+        <div class="v3-decision-card-title" style="padding-right:0;">Sé el primero en entrar</div>
+        <div class="v3-decision-card-body">Lanzamos cuando tengamos 50 usuarios activos. Actualmente <strong id="cmWaitlistCount">--</strong> personas esperan.</div>
+        <button type="button" id="cmWaitlistBtn" class="v3-decision-card-action" style="align-self:center;">Unirme a la lista de espera</button>
+      </div>
+
+    </main>
+
+    <VeredictoSheet />
+    <Sheet id="v3-sheet-registrar" title="Registrar" subtitle="Margen de hoy · — g netos">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <a href="/app/scanner" class="v3-decision-card-action" style="background:var(--v3-lime); color:var(--v3-text-on-lime); justify-content:center;">
+          <span class="material-symbols-outlined" style="font-size:18px">center_focus_strong</span> Escanear
+        </a>
+        <a href="/app/alimentos" class="v3-decision-card-action" style="background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;">
+          <span class="material-symbols-outlined" style="font-size:18px">search</span> Buscar
+        </a>
+        <button type="button" class="v3-decision-card-action" disabled style="background:var(--v3-surface-2); color:var(--v3-text-40); justify-content:center; cursor:not-allowed;">
+          <span class="material-symbols-outlined" style="font-size:18px">mic</span> Dictar · Próximamente
+        </button>
+        <a href="/app/recetas" class="v3-decision-card-action" style="background:var(--v3-surface-2); color:var(--v3-text); justify-content:center;">
+          <span class="material-symbols-outlined" style="font-size:18px">menu_book</span> Recetas
+        </a>
+      </div>
+      <Fragment slot="footnote">Offline · sincroniza solo</Fragment>
+    </Sheet>
+    <Dock active="yo" fabSheetId="v3-sheet-registrar" />
   </div>
-</header>
 
-<main class="main-content pt-14 pb-28 px-4 space-y-4" style="background:#0b0a08">
+  <script is:inline src="/app/utils.js"></script>
+  <script is:inline src="/app/modules/day-budget.js"></script>
+  <script is:inline src="/app/modules/meal-log.js"></script>
+  <script is:inline src="/app/modules/v3-motion.js"></script>
+  <script is:inline src="/app/modules/inspectorKeto.js"></script>
+  <script is:inline src="/app/modules/v3-veredicto.js"></script>
 
-  <!-- Header editorial -->
-  <div style="margin:10px 2px 16px">
-    <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Comunidad · Juntos</div>
-    <h1 class="kc-h1" style="font-size:30px">No estás<br><span style="color:rgba(247,244,240,0.4)">haciendo esto solo.</span></h1>
-  </div>
+  <script is:inline>
+    var CM_MOCK_USERS = [
+      { name: 'Carlos M.', initials: 'CM', streak: 21, emoji: '💪' },
+      { name: 'Ana R.', initials: 'AR', streak: 14, emoji: '🔥' },
+      { name: 'Luis P.', initials: 'LP', streak: 7, emoji: '⚡' },
+      { name: 'María F.', initials: 'MF', streak: 30, emoji: '🏆' }
+    ];
+    var CM_MOCK_POSTS = [
+      { name: 'Carlos M.', initials: 'CM', streak: 21, time: 'hace 2h', post: 'Día 45 en keto. Nunca me sentí tan bien. La energía es constante 💪' },
+      { name: 'Ana R.', initials: 'AR', streak: 14, time: 'hace 4h', post: 'Mi primera semana sin carbos fue difícil, pero ahora el cuerpo lo pide solo 🍳' },
+      { name: 'Luis P.', initials: 'LP', streak: 7, time: 'hace 6h', post: 'Nuevo PR en el gym y keto-adaptado. La combinación funciona ✅' }
+    ];
 
-  <!-- Mi tarjeta de comunidad -->
-  <section class="glass rounded-2xl p-4 mt-2">
-    <div class="flex items-center gap-3 mb-3">
-      <div id="myAvatar" class="avatar text-white" style="background:linear-gradient(135deg,#ff4d00,#ffb300)">?</div>
-      <div class="flex-1 min-w-0">
-        <p id="myName" class="font-bold text-white text-sm">Tu perfil</p>
-        <p class="text-on-surface-variant text-xs">Así te verán en la comunidad</p>
-      </div>
-      <span id="myBadge" class="text-[11px] font-bold px-2.5 py-1 rounded-full hidden" style="background:rgba(255,179,0,0.15);color:#ffb300"></span>
-    </div>
-    <div class="grid grid-cols-3 gap-2" id="myStats">
-      <div class="bg-surface-container-highest rounded-xl p-3 text-center">
-        <p id="statStreak" class="text-xl font-headline font-black text-primary-container">--</p>
-        <p class="text-[9px] text-on-surface-variant uppercase tracking-wider mt-0.5">Racha</p>
-      </div>
-      <div class="bg-surface-container-highest rounded-xl p-3 text-center">
-        <p id="statLost" class="text-xl font-headline font-black text-green-400">--</p>
-        <p class="text-[9px] text-on-surface-variant uppercase tracking-wider mt-0.5">kg logrados</p>
-      </div>
-      <div class="bg-surface-container-highest rounded-xl p-3 text-center">
-        <p id="statDays" class="text-xl font-headline font-black text-secondary">--</p>
-        <p class="text-[9px] text-on-surface-variant uppercase tracking-wider mt-0.5">Días keto</p>
-      </div>
-    </div>
-  </section>
+    function cmLoadProfile() {
+      var profile = safeParseJSON(localStorage.getItem('keto_profile'), {});
+      var streak = safeParseJSON(localStorage.getItem('ketoStreak'), {});
+      var history = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
 
-  <!-- Leaderboard semanal -->
-  <section class="glass rounded-2xl p-4">
-    <div class="flex items-center justify-between mb-3">
-      <h2 class="text-sm font-headline font-bold text-white flex items-center gap-2">
-        <span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings:'FILL' 1">leaderboard</span>
-        Ranking semanal
-      </h2>
-      <span class="text-[10px] text-on-surface-variant">Por racha</span>
-    </div>
-    <div class="space-y-2" id="leaderboard"></div>
-  </section>
+      var name = profile.nombre || profile.name || 'Tú';
+      var initials = name.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase() || 'TU';
+      document.getElementById('cmAvatar').textContent = initials;
+      document.getElementById('cmName').textContent = name;
 
-  <!-- Feed preview -->
-  <section>
-    <div class="flex items-center justify-between mb-3">
-      <h2 class="text-sm font-headline font-bold text-white flex items-center gap-2">
-        <span class="material-symbols-outlined text-base text-primary-container" style="font-variation-settings:'FILL' 1">dynamic_feed</span>
-        Feed de la comunidad
-      </h2>
-      <span class="text-[10px] font-bold px-2 py-0.5 rounded-full" style="background:rgba(255,77,0,0.12);color:#ff4d00">Vista previa</span>
-    </div>
-    <div class="space-y-3 coming-soon-overlay rounded-2xl" id="feedContainer"></div>
-  </section>
+      var currentStreak = streak.currentStreak || 0;
+      var ketoDays = streak.ketoDays || 0;
 
-  <!-- CTA notificación -->
-  <section class="glass rounded-2xl p-5 text-center">
-    <span class="material-symbols-outlined text-3xl text-primary-container block mb-2" style="font-variation-settings:'FILL' 1">notifications_active</span>
-    <h3 class="font-headline font-bold text-white mb-1">Sé el primero en entrar</h3>
-    <p class="text-on-surface-variant text-xs mb-4 max-w-xs mx-auto">Lanzamos cuando tengamos 50 usuarios activos. Actualmente <span id="waitlistCount" class="text-white font-bold">--</span> personas esperan.</p>
-    <button onclick="joinWaitlist()" id="waitlistBtn" class="px-7 py-3 rounded-xl text-white font-bold text-sm transition-all active:scale-95" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);box-shadow:0 4px 16px rgba(255,77,0,0.3)">
-      Unirme a la lista de espera
-    </button>
-  </section>
+      var sorted = history.slice().sort(function (a, b) { return new Date(b.date || b.fecha) - new Date(a.date || a.fecha); });
+      var currentW = sorted.length ? (sorted[0].weight || sorted[0].peso || 0) : (parseFloat(profile.weight) || 0);
+      var startW = parseFloat(profile.startWeight || profile.pesoInicial) || currentW;
+      var lost = Math.max(0, startW - currentW);
 
-</main>
+      document.getElementById('cmStreak').textContent = currentStreak;
+      document.getElementById('cmLost').textContent = lost > 0 ? '-' + lost.toFixed(1) : '0';
+      document.getElementById('cmDays').textContent = ketoDays;
 
-<!-- Toast -->
-<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 px-5 py-3 rounded-xl shadow-lg z-[9999] font-medium hidden text-white text-sm" style="background:#22c55e;min-width:200px;text-align:center">
-  <span id="toastMsg">✓</span>
-</div>
+      var badge = document.getElementById('cmBadge');
+      if (currentStreak >= 7) {
+        badge.textContent = currentStreak >= 30 ? '🏆 Élite' : currentStreak >= 14 ? '🔥 Constante' : '⚡ En racha';
+        badge.classList.remove('hidden');
+      }
 
-<!-- Bottom Nav -->
-<AppNav active="more" />
+      return { name: name, streak: currentStreak };
+    }
 
-<script is:inline>
-var MOCK_USERS = [
-  { name:'Carlos M.', initials:'CM', color:'#7c3aed', streak:21, lost:8.2, days:45, post:'Día 45 en keto. Nunca me sentí tan bien. La energía es constante y ya no tengo antojos de azúcar 💪', time:'hace 2h', likes:24, emoji:'💪' },
-  { name:'Ana R.',    initials:'AR', color:'#0ea5e9', streak:14, lost:5.4, days:30, post:'Mi primera semana sin carbos fue difícil, pero ahora el cuerpo lo pide solo. ¡Receta de hoy: huevos benedictinos keto! 🍳', time:'hace 4h', likes:18, emoji:'🔥' },
-  { name:'Luis P.',  initials:'LP', color:'#22c55e', streak:7,  lost:3.1, days:14, post:'Nuevo PR en el gym y keto-adaptado. La combinación funciona. Semana 2 superada ✅', time:'hace 6h', likes:31, emoji:'⚡' },
-  { name:'María F.', initials:'MF', color:'#f59e0b', streak:30, lost:11.0, days:60, post:'Mes 2 completado. -11kg. Antes no podía subir un piso sin cansarme. Ahora hago senderismo los fines de semana 🏔️', time:'hace 1d', likes:67, emoji:'🏆' }
-];
+    function cmLoadLeaderboard(me) {
+      var board = CM_MOCK_USERS.map(function (u) { return { name: u.name, initials: u.initials, streak: u.streak, isMe: false }; });
+      board.push({ name: me.name + ' (tú)', initials: (me.name[0] || 'T').toUpperCase(), streak: me.streak, isMe: true });
+      board.sort(function (a, b) { return b.streak - a.streak; });
 
-function showToast(msg, color) {
-  var t = document.getElementById('toast');
-  var m = document.getElementById('toastMsg');
-  if(m) m.textContent = msg;
-  t.style.background = color || '#22c55e';
-  t.classList.remove('hidden');
-  setTimeout(function(){ t.classList.add('hidden'); }, 2500);
-}
+      var html = '';
+      board.forEach(function (u, i) {
+        var medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1) + '.';
+        html += '<div style="display:flex; align-items:center; gap:12px; padding:10px 0; ' + (i < board.length - 1 ? 'border-bottom:1px solid var(--v3-border-soft);' : '') + '">';
+        html += '<span style="width:22px; text-align:center; font-size:13px;">' + medal + '</span>';
+        html += '<div class="v3-num-mono" style="width:30px; height:30px; border-radius:10px; background:' + (u.isMe ? 'var(--v3-lime)' : 'var(--v3-surface-2)') + '; color:' + (u.isMe ? 'var(--v3-text-on-lime)' : 'var(--v3-text-70)') + '; display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0;">' + u.initials + '</div>';
+        html += '<span style="flex:1; font-size:13.5px; font-weight:' + (u.isMe ? '700' : '500') + '; color:var(--v3-text);">' + escapeHtml(u.name) + '</span>';
+        html += '<span class="v3-num-mono" style="font-size:13px; color:' + (u.isMe ? 'var(--v3-lime)' : 'var(--v3-text-40)') + ';">' + u.streak + 'd</span>';
+        html += '</div>';
+      });
+      document.getElementById('cmLeaderboard').innerHTML = html;
+    }
 
-function loadMyProfile() {
-  var profile = safeParseJSON(localStorage.getItem('keto_profile'), {});
-  var streak  = safeParseJSON(localStorage.getItem('ketoStreak'), {});
-  var history = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
+    function cmLoadFeed() {
+      var html = '';
+      CM_MOCK_POSTS.forEach(function (u) {
+        html += '<div style="background:var(--v3-surface-1); border:1px solid var(--v3-border); border-radius:var(--v3-radius-card); padding:14px;">';
+        html += '<div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">';
+        html += '<div class="v3-num-mono" style="width:32px; height:32px; border-radius:10px; background:var(--v3-surface-2); color:var(--v3-text-70); display:flex; align-items:center; justify-content:center; font-size:11px;">' + u.initials + '</div>';
+        html += '<div style="flex:1;"><div style="font-size:13.5px; font-weight:700; color:var(--v3-text);">' + escapeHtml(u.name) + '</div><div style="font-size:11px; color:var(--v3-text-40);">' + u.streak + ' días keto · ' + u.time + '</div></div>';
+        html += '</div>';
+        html += '<div style="font-size:13px; color:var(--v3-text-70); line-height:1.5;">' + escapeHtml(u.post) + '</div>';
+        html += '</div>';
+      });
+      document.getElementById('cmFeed').innerHTML = html;
+    }
 
-  var name = profile.nombre || profile.name || 'Tú';
-  var initials = name.split(' ').map(function(w){ return w[0]; }).join('').slice(0,2).toUpperCase() || 'TU';
-  document.getElementById('myAvatar').textContent = initials;
-  document.getElementById('myName').textContent = name;
+    function cmLoadWaitlist() {
+      var count = localStorage.getItem('comunidad_count') || '34';
+      document.getElementById('cmWaitlistCount').textContent = count;
+      if (localStorage.getItem('comunidad_waitlist')) {
+        var btn = document.getElementById('cmWaitlistBtn');
+        btn.textContent = '¡Ya estás en la lista! 🎉';
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+      }
+    }
 
-  var currentStreak = streak.currentStreak || 0;
-  var ketoDays = streak.ketoDays || 0;
+    document.addEventListener('DOMContentLoaded', function () {
+      var me = cmLoadProfile();
+      cmLoadLeaderboard(me);
+      cmLoadFeed();
+      cmLoadWaitlist();
 
-  var sorted = history.slice().sort(function(a,b){ return new Date(b.date||b.fecha) - new Date(a.date||a.fecha); });
-  var currentW = sorted.length ? (sorted[0].weight || sorted[0].peso || 0) : (parseFloat(profile.weight)||0);
-  var startW   = parseFloat(profile.startWeight || profile.pesoInicial) || currentW;
-  var lost     = Math.max(0, startW - currentW);
-
-  document.getElementById('statStreak').textContent = currentStreak + (currentStreak === 1 ? ' día' : ' días');
-  document.getElementById('statLost').textContent   = lost > 0 ? '-' + lost.toFixed(1) : '0';
-  document.getElementById('statDays').textContent   = ketoDays;
-
-  var badge = document.getElementById('myBadge');
-  if (currentStreak >= 7) {
-    badge.textContent = currentStreak >= 30 ? '🏆 Élite' : currentStreak >= 14 ? '🔥 Constante' : '⚡ En racha';
-    badge.classList.remove('hidden');
-  }
-}
-
-function loadLeaderboard() {
-  var profile = safeParseJSON(localStorage.getItem('keto_profile'), {});
-  var streak  = safeParseJSON(localStorage.getItem('ketoStreak'), {});
-  var myStreak = streak.currentStreak || 0;
-  var myName   = profile.nombre || profile.name || 'Tú';
-
-  var board = MOCK_USERS.map(function(u){ return { name:u.name, initials:u.initials, color:u.color, streak:u.streak, isMe:false }; });
-  board.push({ name: myName + ' (tú)', initials: (myName[0]||'T').toUpperCase(), color:'#ff4d00', streak: myStreak, isMe:true });
-  board.sort(function(a,b){ return b.streak - a.streak; });
-
-  var html = '';
-  board.forEach(function(u, i) {
-    var medal = i===0 ? '🥇' : i===1 ? '🥈' : i===2 ? '🥉' : (i+1)+'.';
-    html += '<div class="flex items-center gap-3 rounded-xl px-3 py-2.5 ' + (u.isMe ? '' : '') + '" style="' + (u.isMe ? 'background:rgba(255,77,0,0.08);border:1px solid rgba(255,77,0,0.2)' : 'background:#0b0a08') + '">';
-    html += '<span class="text-sm w-6 text-center">' + medal + '</span>';
-    html += '<div class="avatar text-white text-xs" style="background:' + u.color + '">' + u.initials + '</div>';
-    html += '<p class="flex-1 text-sm ' + (u.isMe ? 'text-white font-bold' : 'text-white/80') + '">' + escapeHtml(u.name) + '</p>';
-    html += '<span class="text-[11px] font-bold ' + (u.isMe ? 'text-primary-container' : 'text-on-surface-variant') + '">' + u.streak + 'd</span>';
-    html += '</div>';
-  });
-  document.getElementById('leaderboard').innerHTML = html;
-}
-
-function loadFeed() {
-  var html = '';
-  MOCK_USERS.slice(0, 3).forEach(function(u) {
-    html += '<div class="feed-card p-4">';
-    html += '<div class="flex items-center gap-3 mb-3">';
-    html += '<div class="avatar text-white text-xs" style="background:' + u.color + '">' + u.initials + '</div>';
-    html += '<div class="flex-1"><p class="text-white font-bold text-sm">' + escapeHtml(u.name) + '</p><p class="text-on-surface-variant text-[10px]">' + u.streak + ' días keto · ' + u.time + '</p></div>';
-    html += '<span class="text-lg">' + u.emoji + '</span>';
-    html += '</div>';
-    html += '<p class="text-white/80 text-sm leading-relaxed mb-3">' + escapeHtml(u.post) + '</p>';
-    html += '<div class="flex items-center gap-4 pt-2 border-t border-white/5">';
-    html += '<button class="flex items-center gap-1.5 text-white/40 text-xs"><span class="material-symbols-outlined text-base">favorite_border</span>' + u.likes + '</button>';
-    html += '<button class="flex items-center gap-1.5 text-white/40 text-xs"><span class="material-symbols-outlined text-base">chat_bubble_outline</span>Comentar</button>';
-    html += '<button class="flex items-center gap-1.5 text-white/40 text-xs ml-auto"><span class="material-symbols-outlined text-base">share</span>Compartir</button>';
-    html += '</div></div>';
-  });
-  document.getElementById('feedContainer').innerHTML = html;
-}
-
-function joinWaitlist() {
-  var saved = localStorage.getItem('comunidad_waitlist');
-  if (saved) {
-    showToast('Ya estás en la lista ✓', '#ff4d00');
-    return;
-  }
-  localStorage.setItem('comunidad_waitlist', '1');
-  var count = parseInt(localStorage.getItem('comunidad_count') || '34') + 1;
-  localStorage.setItem('comunidad_count', count);
-  document.getElementById('waitlistCount').textContent = count;
-  document.getElementById('waitlistBtn').textContent = '¡Ya estás en la lista! 🎉';
-  document.getElementById('waitlistBtn').disabled = true;
-  document.getElementById('waitlistBtn').style.opacity = '0.7';
-  showToast('¡Listo! Te avisamos cuando lancemos 🚀', '#22c55e');
-}
-
-function loadWaitlistState() {
-  var count = localStorage.getItem('comunidad_count') || '34';
-  document.getElementById('waitlistCount').textContent = count;
-  if (localStorage.getItem('comunidad_waitlist')) {
-    var btn = document.getElementById('waitlistBtn');
-    btn.textContent = '¡Ya estás en la lista! 🎉';
-    btn.disabled = true;
-    btn.style.opacity = '0.7';
-  }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  loadMyProfile();
-  loadLeaderboard();
-  loadFeed();
-  loadWaitlistState();
-});
-</script>
-
+      document.getElementById('cmWaitlistBtn').addEventListener('click', function () {
+        if (localStorage.getItem('comunidad_waitlist')) return;
+        localStorage.setItem('comunidad_waitlist', '1');
+        var count = parseInt(localStorage.getItem('comunidad_count') || '34') + 1;
+        localStorage.setItem('comunidad_count', count);
+        cmLoadWaitlist();
+      });
+    });
+  </script>
 </AppLayout>
