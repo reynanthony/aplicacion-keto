@@ -3261,7 +3261,7 @@ function toggleMobileUserMenu() {
 function updateDropdownInfo() {
   const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
   const userName = profile.nombre || profile.name || 'Usuario';
-  const userEmail = localStorage.getItem('KetoCore_user_email') || 'usuario@ejemplo.com';
+  const userEmail = localStorage.getItem('ketocore_user_email') || 'usuario@ejemplo.com';
   const dn = document.getElementById('dropdownUserName');
   const de = document.getElementById('dropdownUserEmail');
   const mdn = document.getElementById('mobileDropdownUserName');
@@ -3303,9 +3303,9 @@ document.addEventListener('click', function(e) {
 async function handleLogout() {
   if (confirm('¿Cerrar sesión?')) {
     await window.supabase.auth.signOut();
-    localStorage.removeItem('KetoCore_user_id');
-    localStorage.removeItem('KetoCore_user_email');
-    localStorage.removeItem('KetoCore_onboarding_done');
+    localStorage.removeItem('ketocore_user_id');
+    localStorage.removeItem('ketocore_user_email');
+    localStorage.removeItem('ketocore_onboarding_done');
     window.location.href = '/app/welcome';
   }
 }
