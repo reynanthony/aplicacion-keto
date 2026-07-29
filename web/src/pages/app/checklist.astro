@@ -4,19 +4,6 @@ import AppLayout from '../../layouts/AppLayout.astro';
 
 <AppLayout title="KetoCore | Checklist" authGuard={true}>
 <style is:global>
-.sidebar-link.active{background:rgba(22,19,16,1)!important;}
-.sidebar-link.active .material-symbols-outlined{color:#ff4d00!important;}
-.sidebar-link.active{color:white!important;}
-.sidebar-collapsed .sidebar-nav{width:72px;}
-.sidebar-collapsed .sidebar-nav .sidebar-text{display:none;}
-.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0;}
-.sidebar-collapsed .sidebar-logo-text{display:none;}
-.sidebar-collapsed .sidebar-logo{justify-content:center;}
-.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px;}
-.sidebar-collapsed~main .main-content{margin-left:72px;}
-.sidebar-toggle-btn{left:256px;transition:left 0.3s ease;}
-.sidebar-collapsed~.sidebar-toggle-btn{left:72px;}
-
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
 .glass-card{background:rgba(22,19,16,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 .ghost-border{border:1px solid rgba(73,72,71,0.15)}
@@ -30,15 +17,6 @@ import AppLayout from '../../layouts/AppLayout.astro';
 .animate-shimmer{animation:shimmer 2s infinite}
 @keyframes progressGlow{0%,100%{box-shadow:0 0 10px currentColor}50%{box-shadow:0 0 25px currentColor}}
 .progress-glow{animation:progressGlow 2s ease-in-out infinite}
-.sidebar-collapsed .sidebar-nav{width:72px}
-.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}
-.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}
-.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px}
-.sidebar-collapsed~main .main-content{margin-left:72px}
-.sidebar-toggle-btn{left:256px;transition:left 0.3s ease}
-.sidebar-collapsed~.sidebar-toggle-btn{left:72px}
-.sidebar-link.active{background:#161310}
-.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}
 #toast{animation:toastIn 0.3s ease}
 @media(min-width:768px){
@@ -85,8 +63,8 @@ import AppLayout from '../../layouts/AppLayout.astro';
     </button>
   </div>
 </div>
-<main class="main-content pt-14 px-4 pb-20 min-h-screen">
-<div id="ck-grid" class="space-y-4">
+<main class="main-content pt-14 px-4 pb-20 min-h-screen" style="background:#0b0a08">
+<div id="ck-grid" class="space-y-4 kc-page" style="padding-top:12px">
 
 <!-- Bento Grid Header Section -->
 <div id="ck-hero" class="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -167,7 +145,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
 <h2 class="font-headline text-2xl font-extrabold tracking-tight mb-1">Daily Checklist</h2>
 <p class="text-on-surface-variant font-medium">Track your daily habits and goals.</p>
 </div>
-<button onclick="openCrudModal()" class="primary-gradient px-6 py-3 rounded-xl text-white font-bold flex items-center gap-2 transition-all active:scale-95 shadow-[0_0_20px_rgba(255,144,109,0.3)]">
+<button onclick="openCrudModal()" class="kc-btn">
 <span class="material-symbols-outlined">add</span>
 Agregar
 </button>
@@ -215,7 +193,7 @@ Agregar
 <div id="modalContent" class="space-y-4"></div>
 <div class="flex gap-3 mt-6">
 <button onclick="closeInputModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>
-<button onclick="saveInputValue()" class="flex-1 py-3 rounded-xl primary-gradient text-white font-bold hover:opacity-90 transition-colors">Guardar</button>
+<button onclick="saveInputValue()" class="kc-btn flex-1">Guardar</button>
 </div>
 </div>
 </div>
@@ -237,7 +215,7 @@ Agregar
 </div>
 <div class="flex gap-3 mt-6">
 <button onclick="closeElectrolitoModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>
-<button onclick="saveElectrolito()" class="flex-1 py-3 rounded-xl primary-gradient text-white font-bold hover:opacity-90 transition-colors">Guardar</button>
+<button onclick="saveElectrolito()" class="kc-btn flex-1">Guardar</button>
 </div>
 </div>
 </div>
@@ -299,7 +277,7 @@ Agregar
 </div>
 <div class="flex gap-3 mt-6">
 <button onclick="closeItemForm()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>
-<button onclick="saveItem()" class="flex-1 py-3 rounded-xl primary-gradient text-white font-bold hover:opacity-90 transition-colors">Guardar</button>
+<button onclick="saveItem()" class="kc-btn flex-1">Guardar</button>
 </div>
 </div>
 </div>
@@ -316,7 +294,7 @@ Agregar
 </div>
 <div class="space-y-4" id="notificationList"></div>
 <div class="flex gap-3 mt-6">
-<button onclick="requestNotificationPermission()" class="flex-1 py-3 rounded-xl primary-gradient text-white font-bold hover:opacity-90 transition-colors">Activar Notificaciones</button>
+<button onclick="requestNotificationPermission()" class="kc-btn flex-1">Activar Notificaciones</button>
 </div>
 </div>
 </div>
@@ -669,7 +647,7 @@ html+='<button onclick="deleteItem('+index+')" class="w-11 h-11 rounded-lg flex 
 html+='</div>';
 });
 html+='</div>';
-html+='<button onclick="openItemForm(-1)" class="w-full py-3 rounded-xl primary-gradient text-white font-bold hover:opacity-90 transition-colors flex items-center justify-center gap-2">';
+html+='<button onclick="openItemForm(-1)" class="kc-btn w-full" style="justify-content:center">';
 html+='<span class="material-symbols-outlined">add</span>Agregar Nuevo Item</button>';
 container.innerHTML=html;
 }
