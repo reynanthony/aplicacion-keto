@@ -1,6 +1,5 @@
 ﻿---
 import AppLayout from '../../layouts/AppLayout.astro';
-import AppNav from '../../components/AppNav.astro';
 ---
 
 <AppLayout title="KetoCore | Mi Plan" authGuard={true}>
@@ -793,8 +792,6 @@ function toggleSupleTaken(id) {
   </div>
 </div>
 <div id="autoPlanWarningModal" class="fixed inset-0 z-[80] hidden"><div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto text-center border-2 border-yellow-500/50"><div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-4xl text-yellow-400">warning</span></div><h3 class="text-xl font-headline font-bold text-yellow-400 mb-2">Advertencia</h3><p class="text-white/80 mb-2">Estás modificando un plan generado automáticamente.</p><p class="text-white/60 text-sm mb-6">Los resultados pueden no ser los indicados para tu objetivo. ¿Deseas continuar?</p><div class="flex gap-3"><button onclick="closeAutoPlanWarning()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="confirmAutoPlanModification()" class="flex-1 py-3 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors">Continuar</button></div></div></div></div>
-<!-- BottomNavBar (Mobile) - 5 items optimizado -->
-<AppNav active="plan" />
 <script is:inline src="/app/utils.js"></script>
 <script is:inline src="/app/data/recipe-details.js"></script>
 <script is:inline>

@@ -1,6 +1,5 @@
 ---
 import AppLayout from '../../layouts/AppLayout.astro';
-import AppNav from '../../components/AppNav.astro';
 ---
 
 <AppLayout title="KetoCore | Progreso" authGuard={true}>
@@ -199,8 +198,6 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#0b0a08;color:#f7f
   <span id="toastMsg">✓ Guardado</span>
 </div>
 
-<!-- Bottom Navigation -->
-<AppNav active="more" />
 
 <script is:inline src="/app/utils.js"></script>
 <script is:inline src="/app/modules/meal-plan.js"></script>

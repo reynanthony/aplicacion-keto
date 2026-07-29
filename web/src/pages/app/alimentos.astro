@@ -1,6 +1,5 @@
 ---
 import AppLayout from '../../layouts/AppLayout.astro';
-import AppNav from '../../components/AppNav.astro';
 ---
 
 <AppLayout title="KetoCore | Alimentos" authGuard={true}>
@@ -28,8 +27,6 @@ input,select{background:#161310!important;color:#fff!important;border:1px solid 
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}#toast{animation:toastIn 0.3s ease}
 @media(min-width:768px){#ali-wrap{max-width:none!important;padding-top:1rem;}}
 </style>
-<!-- BottomNavBar (Mobile) - 5 items optimizado -->
-<AppNav active="more" />
 
 <header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
   <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
