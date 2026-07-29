@@ -191,11 +191,6 @@ main { margin-left: 0 !important; padding-bottom: 2rem !important; }
       </a>
     </div>
 
-    <!-- Terms -->
-    <p class="text-center text-xs mt-7" style="color:rgba(247,244,240,0.38)">
-      Al continuar aceptas nuestros
-      <a href="#" class="hover:underline" style="color:#ff4d00">Términos de Servicio</a>
-    </p>
   </div>
 </main>
 
@@ -346,11 +341,6 @@ main { margin-left: 0 !important; padding-bottom: 2rem !important; }
         await window.supabase.from('progreso_racha').insert({ usuario_id: user.id, racha_actual: 0, racha_maxima: 0 });
       }
     } catch (e) { /* offline */ }
-  }
-
-  function continueAsGuest() {
-    localStorage.setItem('KetoCore_guest', 'true');
-    window.location.href = '/app/';
   }
 
   async function checkAuth() {
