@@ -66,12 +66,8 @@ import AppLayout from '../../layouts/AppLayout.astro';
 <main class="main-content pt-14 px-4 pb-20 min-h-screen" style="background:#0b0a08">
 <div id="ck-grid" class="space-y-4 kc-page" style="padding-top:12px">
 
-<!-- Bento Grid Header Section -->
-<div id="ck-hero" class="grid grid-cols-1 md:grid-cols-12 gap-6">
-
-<!-- Circular Progress Hero -->
-<div class="md:col-span-5 lg:col-span-4 bg-surface-container-low rounded-2xl p-8 flex flex-col items-center justify-center relative overflow-hidden group">
-<div class="absolute -top-12 -right-12 w-48 h-48 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all duration-700"></div>
+<!-- Progreso de hoy -->
+<div id="ck-hero" class="bg-surface-container-low rounded-2xl p-8 flex flex-col items-center justify-center relative overflow-hidden">
 <div class="flex items-center justify-between w-full mb-6">
   <h1 class="kc-h1" style="font-size:26px">Tu progreso de hoy</h1>
   <div class="flex items-center gap-2">
@@ -97,22 +93,10 @@ import AppLayout from '../../layouts/AppLayout.astro';
 </svg>
 <div class="absolute inset-0 flex flex-col items-center justify-center">
 <span id="progressPercent" class="font-headline text-5xl font-black tracking-tighter">0%</span>
-<span class="text-on-surface-variant text-sm font-medium uppercase tracking-widest">Completed</span>
+<span class="text-on-surface-variant text-sm font-medium uppercase tracking-widest">Completado</span>
 </div>
 </div>
 <p id="progressText" class="mt-8 text-on-surface-variant font-medium text-sm">0 de 6 tareas completadas</p>
-</div>
-
-<!-- Bio-Metrics Trackers -->
-<div class="md:col-span-7 lg:col-span-8 bg-surface-container rounded-2xl p-8">
-<div class="flex items-center justify-between mb-8">
-<h2 class="font-headline text-xl font-extrabold tracking-tight">Bio-Metric Trackers</h2>
-<span class="material-symbols-outlined text-primary">analytics</span>
-</div>
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-8" id="biometricsContainer">
-<!-- Dynamic content -->
-</div>
-</div>
 </div>
 
 <!-- Supplements Section -->
@@ -142,8 +126,8 @@ import AppLayout from '../../layouts/AppLayout.astro';
 <div id="ck-checklist" class="bg-surface-container rounded-2xl p-8 relative overflow-hidden">
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
 <div>
-<h2 class="font-headline text-2xl font-extrabold tracking-tight mb-1">Daily Checklist</h2>
-<p class="text-on-surface-variant font-medium">Track your daily habits and goals.</p>
+<h2 class="font-headline text-2xl font-extrabold tracking-tight mb-1">Checklist diario</h2>
+<p class="text-on-surface-variant font-medium">Sigue tus hábitos y metas de cada día.</p>
 </div>
 <button onclick="openCrudModal()" class="kc-btn">
 <span class="material-symbols-outlined">add</span>
@@ -160,7 +144,7 @@ Agregar
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
 <div>
 <h2 class="font-headline text-2xl font-extrabold tracking-tight mb-1">Comidas del día</h2>
-<p class="text-on-surface-variant font-medium">Fuel your performance with precision nutrition.</p>
+<p class="text-on-surface-variant font-medium">Registra lo que comiste hoy.</p>
 </div>
 </div>
 
@@ -345,8 +329,6 @@ var checklistData=safeParseJSON(rawData, {});
 var userData=getLocalData("userData", schemas.userData, getDefaultUserData());
 var container=document.getElementById("dailyChecklist");
 container.innerHTML="";
-var biometricsContainer=document.getElementById("biometricsContainer");
-biometricsContainer.innerHTML="";
 var completedCount=0;
 var allItems=getEffectiveItems();
 var totalPercent=0;
@@ -360,24 +342,6 @@ totalPercent+=percent;
 
 var displayValue=item.step<1?value.toFixed(1).replace('.0',''):value;
 var color=item.iconColor||'#ff4d00';
-
-// Add to biometrics grid — with click handler and visual affordance
-var bioHtml='<div class="space-y-3 p-3 rounded-xl cursor-pointer transition-all duration-200 hover:bg-surface-container-highest group" onclick="openInputModal(\''+item.id+'\')" title="Registrar '+item.label+'">'
-  +'<div class="flex justify-between items-center">'
-    +'<div class="flex items-center gap-2">'
-      +'<span class="material-symbols-outlined" style="color:'+color+'">'+item.icon+'</span>'
-      +'<span class="text-sm font-bold uppercase tracking-wider text-on-surface">'+item.label+'</span>'
-    +'</div>'
-    +'<div class="flex items-center gap-2">'
-      +'<span class="text-xs font-bold text-on-surface-variant">'+displayValue+' / '+item.target+item.unit+'</span>'
-      +'<span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity" style="color:'+color+'">add_circle</span>'
-    +'</div>'
-  +'</div>'
-  +'<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">'
-    +'<div class="h-full rounded-full transition-all duration-1000" style="width:'+percent+'%;background:'+color+'"></div>'
-  +'</div>'
-+'</div>';
-biometricsContainer.innerHTML+=bioHtml;
 
 // Add checklist card
 var glowStyle=percent>=80?'box-shadow: 0 0 20px '+color+'40;':'';
@@ -758,7 +722,7 @@ var html="";
 var hasAnyMeal=Object.keys(plan).some(function(m){return(plan[m]||[]).length>0});
 
 if(!hasAnyMeal){
-html='<div class="flex flex-col items-center justify-center text-center py-12 px-6"><div class="relative mb-8"><div class="w-32 h-32 bg-surface-container-highest rounded-full flex items-center justify-center opacity-40"><span class="material-symbols-outlined text-6xl text-on-surface-variant">restaurant_menu</span></div><div class="absolute -bottom-2 -right-2 w-10 h-10 bg-primary/20 rounded-full blur-xl animate-pulse"></div></div><h3 class="font-headline text-xl font-bold text-on-surface mb-2">No meals planned yet</h3><p class="text-on-surface-variant max-w-sm mb-8">Ready to track your macros? Start by adding your first meal or select a nutrition plan.</p></div>';
+html='<div class="flex flex-col items-center justify-center text-center py-12 px-6"><div class="w-32 h-32 bg-surface-container-highest rounded-full flex items-center justify-center opacity-40 mb-8"><span class="material-symbols-outlined text-6xl text-on-surface-variant">restaurant_menu</span></div><h3 class="font-headline text-xl font-bold text-on-surface mb-2">Todavía no hay comidas</h3><p class="text-on-surface-variant max-w-sm mb-8">Agrega tu primera comida o elige un plan de nutrición para empezar a seguir tus macros.</p></div>';
 }else{
 Object.keys(mealLabels).forEach(function(meal){
 var items=plan[meal]||[];
