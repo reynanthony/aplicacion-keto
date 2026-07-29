@@ -7,8 +7,8 @@ var autoWorkoutGenerator = (function() {
   var weekDays = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
 
   function getAllExercises() {
-    if (typeof getExercises === 'function') {
-      return getExercises();
+    if (typeof getExercisesSync === 'function') {
+      return getExercisesSync();
     }
     return [];
   }
