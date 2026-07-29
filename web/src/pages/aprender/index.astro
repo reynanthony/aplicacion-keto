@@ -23,10 +23,10 @@ const rest = allArticles.filter(a => !a.data.featured || a.id !== featured?.id);
 <!-- Categories filter -->
 <section style="padding:0 0 2rem;border-bottom:1px solid var(--c-border)">
   <div class="wrap">
-    <div class="scroll-x" style="gap:0.5rem">
-      <a href="/aprender" class="chip" style="background:var(--c-primary);color:#fff;border-color:var(--c-primary);text-decoration:none;cursor:pointer">Todo</a>
+    <div class="scroll-x" style="gap:0.5rem" id="cat-filters">
+      <a href="/aprender" class="chip cat-chip" data-cat="" style="background:var(--c-primary);color:#fff;border-color:var(--c-primary);text-decoration:none;cursor:pointer">Todo</a>
       {categories.map(cat => (
-        <a href={`/aprender?cat=${encodeURIComponent(cat)}`} class="badge" style="padding:0.375rem 0.875rem;font-size:0.75rem;cursor:pointer;text-decoration:none;transition:background 0.15s;white-space:nowrap">{cat}</a>
+        <a href={`/aprender?cat=${encodeURIComponent(cat)}`} class="badge cat-chip" data-cat={cat} style="padding:0.375rem 0.875rem;font-size:0.75rem;cursor:pointer;text-decoration:none;transition:background 0.15s;white-space:nowrap">{cat}</a>
       ))}
     </div>
   </div>
@@ -34,7 +34,7 @@ const rest = allArticles.filter(a => !a.data.featured || a.id !== featured?.id);
 
 <!-- Featured article -->
 {featured && (
-  <section class="section-sm">
+  <section class="section-sm" id="featured-section">
     <div class="wrap">
       <a href={`/aprender/${featured.id}`} class="card card-link" style="display:grid;grid-template-columns:1fr 1fr;gap:0;overflow:hidden" id="featured-card">
         {featured.data.image && <img src={featured.data.image} alt={featured.data.title} style="width:100%;height:320px;object-fit:cover">}
@@ -58,10 +58,10 @@ const rest = allArticles.filter(a => !a.data.featured || a.id !== featured?.id);
 <!-- All articles grid -->
 <section class="section-sm">
   <div class="wrap">
-    <h2 style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;margin-bottom:1.5rem">Todos los artículos</h2>
-    <div class="grid-3">
+    <h2 style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;margin-bottom:1.5rem" id="articles-heading">Todos los artículos</h2>
+    <div class="grid-3" id="articles-grid">
       {rest.map(a => (
-        <a href={`/aprender/${a.id}`} class="card card-link">
+        <a href={`/aprender/${a.id}`} class="card card-link" data-category={a.data.category}>
           {a.data.image && <img src={a.data.image} alt={a.data.title} loading="lazy" style="width:100%;height:180px;object-fit:cover">}
           <div style="padding:1.25rem">
             <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;flex-wrap:wrap">
@@ -99,4 +99,36 @@ const rest = allArticles.filter(a => !a.data.featured || a.id !== featured?.id);
     #featured-card img { height: 220px !important; }
   }
 </style>
+
+<script>
+  const params = new URLSearchParams(location.search);
+  const activeCat = params.get('cat') || '';
+
+  document.querySelectorAll<HTMLElement>('.cat-chip').forEach(chip => {
+    const isActive = (chip.dataset.cat || '') === activeCat;
+    chip.style.background = isActive ? 'var(--c-primary)' : '';
+    chip.style.color = isActive ? '#fff' : '';
+    chip.style.borderColor = isActive ? 'var(--c-primary)' : '';
+  });
+
+  if (activeCat) {
+    const featuredSection = document.getElementById('featured-section');
+    if (featuredSection) featuredSection.style.display = 'none';
+
+    const heading = document.getElementById('articles-heading');
+    if (heading) heading.textContent = activeCat;
+
+    let visibleCount = 0;
+    document.querySelectorAll<HTMLElement>('#articles-grid a[data-category]').forEach(card => {
+      const show = card.dataset.category === activeCat;
+      card.hidden = !show;
+      if (show) visibleCount++;
+    });
+
+    if (visibleCount === 0) {
+      const grid = document.getElementById('articles-grid');
+      if (grid) grid.insertAdjacentHTML('afterend', '<p style="text-align:center;padding:3rem;color:var(--c-text-dim)">Todavía no hay artículos en esta categoría.</p>');
+    }
+  }
+</script>
 </Layout>

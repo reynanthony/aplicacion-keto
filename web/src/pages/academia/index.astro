@@ -2,22 +2,22 @@
 import Layout from '../../layouts/Layout.astro';
 ---
 
-<Layout title="Academia KetoCore" description="Cursos gratuitos de keto, ayuno intermitente, macros y hábitos saludables. Aprende de forma estructurada con el sistema de cursos de KetoCore.">
+<Layout title="Academia KetoCore" description="Cursos estructurados de keto, ayuno intermitente, macros y hábitos saludables — en preparación. Mientras tanto, aprende con los artículos del Centro de Aprendizaje.">
 
 <section style="padding:3rem 0 2rem">
   <div class="wrap">
-    <span class="chip" style="margin-bottom:1rem;display:inline-block">Academia</span>
+    <span class="chip" style="margin-bottom:1rem;display:inline-block">Academia · En preparación</span>
     <h1 class="d" style="font-size:clamp(2rem,4vw,3.25rem);margin-bottom:1rem">Aprende en orden.<br>No a saltos.</h1>
-    <p style="color:var(--c-text-muted);font-size:1.0625rem;max-width:560px">La diferencia entre leer artículos sueltos y completar un curso estructurado es la diferencia entre saber y aplicar.</p>
+    <p style="color:var(--c-text-muted);font-size:1.0625rem;max-width:560px">La diferencia entre leer artículos sueltos y completar un curso estructurado es la diferencia entre saber y aplicar. Estamos construyendo el sistema de cursos — mientras tanto, el <a href="/aprender" style="color:var(--c-primary)">Centro de Aprendizaje</a> ya tiene artículos disponibles.</p>
   </div>
 </section>
 
-<!-- Free courses -->
+<!-- Courses roadmap -->
 <section style="padding:0 0 4rem">
   <div class="wrap">
     <h2 style="font-family:var(--font-display);font-weight:800;font-size:1.125rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.625rem">
-      <span class="icon icon-fill" style="color:var(--c-green)">lock_open</span>
-      Cursos gratuitos
+      <span class="icon icon-fill" style="color:var(--c-green)">schedule</span>
+      Cursos en preparación
     </h2>
     <div class="grid-2">
       {[
@@ -25,25 +25,25 @@ import Layout from '../../layouts/Layout.astro';
           icon: 'local_fire_department', title: 'Keto desde cero', level: 'Principiante',
           desc: 'Todo lo que necesitas para empezar keto correctamente. Qué es la cetosis, cómo calcular macros, qué comer y cómo evitar los errores más comunes.',
           modules: 6, duration: '90 min', tags: ['Cetosis', 'Macros', 'Alimentos', 'Keto flu'],
-          available: true
+          available: false
         },
         {
           icon: 'timer', title: 'Ayuno intermitente básico', level: 'Principiante',
           desc: 'Qué es el ayuno intermitente, sus beneficios reales, cómo empezar el 16/8 y cómo combinarlo con keto para resultados óptimos.',
           modules: 4, duration: '60 min', tags: ['16/8', 'Autofagia', 'Electrolitos'],
-          available: true
+          available: false
         },
         {
           icon: 'calculate', title: 'Entendiendo los macros', level: 'Principiante',
           desc: 'Cómo calcular calorías y macros. Por qué la proteína importa más de lo que crees. Cómo ajustar cuando el progreso se estanca.',
           modules: 5, duration: '75 min', tags: ['Calorías', 'Proteína', 'Déficit', 'TDEE'],
-          available: true
+          available: false
         },
         {
           icon: 'receipt_long', title: 'Leyendo etiquetas', level: 'Principiante',
           desc: 'Cómo identificar azúcar escondido, calcular carbohidratos netos y elegir productos sin arruinar la cetosis.',
           modules: 3, duration: '45 min', tags: ['Etiquetas', 'Azúcar oculto', 'Compras'],
-          available: true
+          available: false
         },
         {
           icon: 'psychology', title: 'Formación de hábitos keto', level: 'Intermedio',

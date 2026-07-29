@@ -3,16 +3,17 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
 const allRecipes = await getCollection('recipes');
+const recipeCount = allRecipes.length;
 const mealTypes = [...new Set(allRecipes.map(r => r.data.mealType))];
 const difficulties = ['Fácil', 'Medio', 'Difícil'];
 ---
 
-<Layout title="Recetas Keto" description="195 recetas keto verificadas con macros calculados. Desayunos, almuerzos, cenas y snacks que mantienen la cetosis.">
+<Layout title="Recetas Keto" description={`${recipeCount} recetas keto verificadas con macros calculados. Desayunos, almuerzos, cenas y snacks que mantienen la cetosis.`}>
 
 <section style="padding:3rem 0 2rem">
   <div class="wrap">
     <span class="chip" style="margin-bottom:1rem;display:inline-block">Biblioteca de recetas</span>
-    <h1 class="d" style="font-size:clamp(2rem,4vw,3.25rem);margin-bottom:1rem">195 recetas. Cetosis garantizada.</h1>
+    <h1 class="d" style="font-size:clamp(2rem,4vw,3.25rem);margin-bottom:1rem">{recipeCount} recetas. Cetosis garantizada.</h1>
     <p style="color:var(--c-text-muted);font-size:1.0625rem;max-width:560px">Cada receta con macros verificados, tiempo de preparación y nivel de dificultad. Sin trampa, sin azúcar escondido.</p>
   </div>
 </section>
@@ -94,9 +95,9 @@ const difficulties = ['Fácil', 'Medio', 'Difícil'];
     <!-- App CTA -->
     <div class="card" style="margin-top:3rem;padding:2.5rem;text-align:center;background:var(--c-surface);border-color:var(--c-primary-border)">
       <span class="chip" style="margin-bottom:1rem;display:inline-block">En la app</span>
-      <h2 class="d" style="font-size:clamp(1.5rem,2.5vw,2rem);margin-bottom:0.875rem">192 recetas más esperan</h2>
+      <h2 class="d" style="font-size:clamp(1.5rem,2.5vw,2rem);margin-bottom:0.875rem">Más recetas te esperan en la app</h2>
       <p style="color:var(--c-text-muted);font-size:0.9375rem;margin-bottom:1.75rem">Con búsqueda avanzada, filtros por macros, plan semanal automático y lista de compras.</p>
-      <a href="/app/welcome" class="btn">Acceder a las 195 recetas</a>
+      <a href="/app/welcome" class="btn">Acceder a la app</a>
     </div>
   </div>
 </section>

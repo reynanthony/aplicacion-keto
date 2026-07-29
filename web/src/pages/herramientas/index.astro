@@ -136,13 +136,13 @@ import Layout from '../../layouts/Layout.astro';
     </div>
     <div class="grid-4">
       {[
-        { icon: 'monitor_weight', title: 'IMC', desc: 'Índice de Masa Corporal y categoría de peso', status: 'disponible' },
-        { icon: 'water_drop', title: 'Agua', desc: 'Ingesta diaria de agua según peso y actividad', status: 'disponible' },
-        { icon: 'fitness_center', title: 'Proteína', desc: 'Requerimiento proteico para masa muscular', status: 'disponible' },
+        { icon: 'monitor_weight', title: 'IMC', desc: 'Índice de Masa Corporal y categoría de peso', status: 'próximo' },
+        { icon: 'water_drop', title: 'Agua', desc: 'Ingesta diaria de agua según peso y actividad', status: 'próximo' },
+        { icon: 'fitness_center', title: 'Proteína', desc: 'Requerimiento proteico para masa muscular', status: 'próximo' },
         { icon: 'percent', title: 'Grasa corporal', desc: 'Estimación de porcentaje de grasa corporal', status: 'próximo' },
         { icon: 'psychology', title: 'Evaluación metabólica', desc: 'Diagnóstico inicial de salud metabólica', status: 'próximo' },
         { icon: 'quiz', title: 'Readiness keto', desc: '¿Estás listo para empezar keto?', status: 'próximo' },
-        { icon: 'local_dining', title: 'Calórica', desc: 'Calorías necesarias para tu objetivo exacto', status: 'disponible' },
+        { icon: 'local_dining', title: 'Calórica', desc: 'Calorías necesarias para tu objetivo exacto', status: 'próximo' },
         { icon: 'bedtime', title: 'Ventana de ayuno', desc: 'Calcula tu ventana óptima de ayuno', status: 'próximo' },
       ].map(t => (
         <div class="card" style={`padding:1.25rem;${t.status === 'próximo' ? 'opacity:0.5' : 'cursor:pointer'}`}>

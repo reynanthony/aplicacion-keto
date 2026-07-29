@@ -3,6 +3,10 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 
 const stories = await getCollection('stories');
+const totalKgLost = stories.reduce((sum, s) => sum + s.data.weightLost, 0);
+const storyCount = stories.length;
+const durations = stories.map(s => parseInt(s.data.duration)).filter(n => !isNaN(n));
+const avgDuration = durations.length ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length) : null;
 ---
 
 <Layout title="Historias de Transformación" description="Historias reales de personas que transformaron su salud con KetoCore. Resultados reales, protocolos reales.">
@@ -20,17 +24,19 @@ const stories = await getCollection('stories');
   <div class="wrap">
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem" id="story-stats">
       <div class="stat-card">
-        <div class="stat-value">87,000 kg</div>
-        <div class="stat-label">Perdidos por la comunidad</div>
+        <div class="stat-value">{totalKgLost} kg</div>
+        <div class="stat-label">Perdidos, documentados historia por historia</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value">12,400+</div>
-        <div class="stat-label">Transformaciones activas</div>
+        <div class="stat-value">{storyCount}</div>
+        <div class="stat-label">Historias completas publicadas</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-value">6.2 meses</div>
-        <div class="stat-label">Tiempo promedio al objetivo</div>
-      </div>
+      {avgDuration && (
+        <div class="stat-card">
+          <div class="stat-value">{avgDuration} meses</div>
+          <div class="stat-label">Tiempo promedio documentado</div>
+        </div>
+      )}
     </div>
   </div>
 </section>

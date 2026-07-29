@@ -2,129 +2,27 @@
 import Layout from '../../layouts/Layout.astro';
 ---
 
-<Layout title="Comunidad" description="La comunidad keto más activa. Comparte progreso, haz preguntas, celebra logros. Vista pública gratuita, participación requiere registro.">
+<Layout title="Comunidad" description="La comunidad KetoCore está en construcción. Únete a la lista de espera desde la app y sé de los primeros en participar.">
 
 <section style="padding:3rem 0 2rem">
   <div class="wrap">
-    <span class="chip" style="margin-bottom:1rem;display:inline-block">Comunidad</span>
+    <span class="chip" style="margin-bottom:1rem;display:inline-block">Comunidad · En construcción</span>
     <h1 class="d" style="font-size:clamp(2rem,4vw,3.25rem);margin-bottom:1rem">Nadie lo hace<br>mejor solo.</h1>
-    <p style="color:var(--c-text-muted);font-size:1.0625rem;max-width:560px">La comunidad KetoCore es donde el conocimiento se vuelve conversación. Preguntas reales, respuestas reales, resultados reales.</p>
-  </div>
-</section>
-
-<!-- Stats bar -->
-<section style="padding:0 0 3rem">
-  <div class="wrap">
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem" id="comm-stats">
-      <div class="stat-card">
-        <div class="stat-value">12,400+</div>
-        <div class="stat-label">Miembros</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">847</div>
-        <div class="stat-label">Posts esta semana</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">94%</div>
-        <div class="stat-label">Preguntas respondidas</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">24h</div>
-        <div class="stat-label">Tiempo de respuesta promedio</div>
-      </div>
-    </div>
+    <p style="color:var(--c-text-muted);font-size:1.0625rem;max-width:560px">Estamos construyendo un espacio para compartir progreso, hacer preguntas y celebrar logros con otras personas en su protocolo keto. Todavía no está activo — puedes anotarte para ser de los primeros en entrar.</p>
   </div>
 </section>
 
 <hr class="rule">
 
-<!-- Public feed preview -->
+<!-- Preview + waitlist -->
 <section class="section">
-  <div class="wrap">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem">
-      <h2 style="font-family:var(--font-display);font-weight:800;font-size:1.375rem">Feed de la comunidad</h2>
-      <span class="badge" style="padding:0.375rem 0.875rem;font-size:0.75rem">Solo lectura · Regístrate para participar</span>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:1rem;max-width:680px">
-      {[
-        { user: 'Carlos M.', tag: 'Transformación', time: 'hace 2h', content: '4 meses de keto y acabo de hacerme análisis de sangre. Triglicéridos de 340 a 98. El médico no se lo creía. Vale la pena.', reactions: 47, type: 'milestone' },
-        { user: 'Ana L.', tag: 'Pregunta', time: 'hace 3h', content: '¿Cuándo empiezo a ver resultados reales en la báscula? Llevo 10 días y ya perdí 3kg pero quiero saber si es normal que la semana 2 sea más lenta.', reactions: 12, type: 'question' },
-        { user: 'Roberto S.', tag: 'Consejo', time: 'hace 5h', content: 'Para el keto flu, el caldo de huesos con sal y limón en la mañana es game changer. Comprado en cualquier supermercado o hecho en casa.', reactions: 31, type: 'tip' },
-        { user: 'María G.', tag: 'Receta', time: 'hace 8h', content: 'Probé los huevos revueltos con aguacate de la biblioteca de recetas. Ya los hice 4 veces esta semana. El nivel de saciedad es increíble comparado con mi desayuno anterior.', reactions: 23, type: 'recipe' },
-        { user: 'Diego P.', tag: 'Logro', time: 'hace 12h', content: '30 días de reto keto completados. -8.5 kg. Empiezo el siguiente ciclo de 30 días. El primero es para adaptarte, el segundo es para resultados reales.', reactions: 89, type: 'milestone' },
-      ].map(post => (
-        <div class="card" style="padding:1.5rem;pointer-events:none">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.875rem">
-            <div style="display:flex;align-items:center;gap:0.75rem">
-              <div style="width:36px;height:36px;border-radius:50%;background:var(--c-surface-3);border:1px solid var(--c-border);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                <span class="icon icon-fill" style="font-size:18px;color:var(--c-text-dim)">person</span>
-              </div>
-              <div>
-                <p style="font-weight:700;font-size:0.875rem">{post.user}</p>
-                <p style="font-size:0.7rem;color:var(--c-text-dim)">{post.time}</p>
-              </div>
-            </div>
-            <span class={`chip${post.type === 'milestone' ? '' : post.type === 'tip' ? '" style="background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.2);color:var(--c-green)' : post.type === 'question' ? '" style="background:rgba(129,140,248,0.1);border-color:rgba(129,140,248,0.2);color:#818cf8' : ''}`}>{post.tag}</span>
-          </div>
-          <p style="font-size:0.9375rem;color:rgba(255,255,255,0.75);line-height:1.65">{post.content}</p>
-          <div style="display:flex;align-items:center;gap:1rem;margin-top:1rem">
-            <span style="display:flex;align-items:center;gap:0.375rem;font-size:0.8125rem;color:var(--c-text-dim)">
-              <span class="icon" style="font-size:16px">favorite_border</span>
-              {post.reactions}
-            </span>
-            <span style="display:flex;align-items:center;gap:0.375rem;font-size:0.8125rem;color:var(--c-text-dim)">
-              <span class="icon" style="font-size:16px">chat_bubble_outline</span>
-              Responder
-            </span>
-          </div>
-        </div>
-      ))}
-    </div>
-
-    <!-- Login gate -->
-    <div class="card" style="padding:2.5rem;margin-top:1.5rem;text-align:center;background:var(--c-surface);border-style:dashed;max-width:680px;border-color:var(--c-border-2)">
-      <span class="icon" style="font-size:36px;color:var(--c-text-dim);display:block;margin-bottom:0.875rem">lock</span>
-      <h3 style="font-family:var(--font-display);font-weight:800;font-size:1.125rem;margin-bottom:0.625rem">Únete para participar</h3>
-      <p style="color:var(--c-text-muted);font-size:0.875rem;margin-bottom:1.5rem">Crea una cuenta gratuita para hacer preguntas, compartir progreso y conectar con la comunidad.</p>
-      <div style="display:flex;gap:0.75rem;justify-content:center">
-        <a href="/app/welcome" class="btn btn-sm">Crear cuenta</a>
-        <a href="/app/welcome" class="btn-ghost btn-sm">Ya tengo cuenta</a>
-      </div>
+  <div class="wrap" style="max-width:680px;margin:0 auto">
+    <div class="card" style="padding:2rem;text-align:center;background:var(--c-surface)">
+      <span class="icon icon-fill" style="font-size:40px;color:var(--c-primary);display:block;margin-bottom:1rem">forum</span>
+      <h2 style="font-family:var(--font-display);font-weight:800;font-size:1.25rem;margin-bottom:0.625rem">Feed de comunidad — próximamente</h2>
+      <p style="color:var(--c-text-muted);font-size:0.9375rem;margin-bottom:1.5rem">Transformaciones, preguntas, consejos y recetas compartidas por otras personas usando KetoCore. Lo estamos construyendo dentro de la app.</p>
+      <a href="/app/welcome" class="btn">Crear cuenta y unirme a la lista de espera</a>
     </div>
   </div>
 </section>
-
-<hr class="rule">
-
-<!-- Community categories -->
-<section class="section" style="background:var(--c-surface)">
-  <div class="wrap">
-    <h2 style="font-family:var(--font-display);font-weight:800;font-size:1.25rem;margin-bottom:1.5rem">Categorías activas</h2>
-    <div class="grid-3">
-      {[
-        { icon: 'emoji_events', title: 'Transformaciones', count: '2,847 posts', color: 'var(--c-primary)' },
-        { icon: 'help', title: 'Preguntas', count: '4,210 posts', color: '#818cf8' },
-        { icon: 'lightbulb', title: 'Consejos', count: '1,893 posts', color: 'var(--c-gold)' },
-        { icon: 'restaurant_menu', title: 'Recetas', count: '987 posts', color: 'var(--c-green)' },
-        { icon: 'military_tech', title: 'Logros', count: '3,102 posts', color: 'var(--c-primary)' },
-        { icon: 'psychology', title: 'Mentalidad', count: '641 posts', color: '#818cf8' },
-      ].map(cat => (
-        <div class="card" style="padding:1.25rem;display:flex;align-items:center;gap:1rem">
-          <span class="icon icon-fill" style={`font-size:24px;color:${cat.color};flex-shrink:0`}>{cat.icon}</span>
-          <div>
-            <p style="font-family:var(--font-display);font-weight:800;font-size:0.9375rem">{cat.title}</p>
-            <p style="font-size:0.75rem;color:var(--c-text-dim)">{cat.count}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
-
-<style>
-  @media (max-width: 768px) {
-    #comm-stats { grid-template-columns: repeat(2, 1fr) !important; }
-  }
-</style>
 </Layout>

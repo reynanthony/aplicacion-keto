@@ -3,16 +3,17 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
 const foods = await getCollection('foods');
+const foodCount = foods.length;
 const categories = [...new Set(foods.map(f => f.data.category))];
 ---
 
-<Layout title="Base de Datos de Alimentos" description="Enciclopedia nutricional keto. Encuentra cualquier alimento con su perfil nutricional completo, compatibilidad con dietas y guía de uso.">
+<Layout title="Base de Datos de Alimentos" description={`Guía nutricional keto: ${foodCount} alimentos con perfil nutricional completo, compatibilidad con dietas y guía de uso.`}>
 
 <section style="padding:3rem 0 2rem">
   <div class="wrap">
-    <span class="chip" style="margin-bottom:1rem;display:inline-block">Base de datos nutricional</span>
+    <span class="chip" style="margin-bottom:1rem;display:inline-block">Base de datos nutricional · En crecimiento</span>
     <h1 class="d" style="font-size:clamp(2rem,4vw,3.25rem);margin-bottom:1rem">¿Puedo comerlo en keto?</h1>
-    <p style="color:var(--c-text-muted);font-size:1.0625rem;max-width:560px">La guía definitiva de alimentos: macros, beneficios, compatibilidad con dietas y cómo incorporarlos en tu protocolo.</p>
+    <p style="color:var(--c-text-muted);font-size:1.0625rem;max-width:560px">Macros, beneficios, compatibilidad con dietas y cómo incorporar cada alimento en tu protocolo. La base de datos pública tiene {foodCount} alimentos hoy — en la app tienes búsqueda completa y escáner de código de barras.</p>
   </div>
 </section>
 
