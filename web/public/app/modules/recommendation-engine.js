@@ -88,9 +88,9 @@ var RecommendationEngine = (function() {
     Object.keys(mealPlan).forEach(function(meal) {
       if (Array.isArray(mealPlan[meal])) {
         mealPlan[meal].forEach(function(item) {
-          var ratio = (parseFloat(item.portion) || 100) / 100;
-          consumed.cal  += Math.round((parseFloat(item.calories) || 0) * ratio);
-          consumed.prot += Math.round((parseFloat(item.protein)  || 0) * ratio);
+          var t = KetoMealPlan.itemTotals(item);
+          consumed.cal  += t.calories;
+          consumed.prot += t.protein;
         });
       }
     });

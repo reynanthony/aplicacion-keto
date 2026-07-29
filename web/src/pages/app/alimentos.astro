@@ -724,6 +724,7 @@ Nuevo alimento
 </div>
 
 <script is:inline src="/app/utils.js"></script>
+<script is:inline src="/app/modules/meal-plan.js"></script>
 <script is:inline src="/app/food-api.js"></script>
 <script is:inline>
 if(localStorage.getItem("theme")==="dark"||!localStorage.getItem("theme")){document.documentElement.classList.add("dark")}
@@ -834,6 +835,8 @@ var currentFoods=[];
 var currentFilter="";
 var currentDetailId=null;
 var currentDetailFood=null;
+var pendingMealFood=null;
+var pendingMealPortion=null;
 
 // Cargar alimentos desde Supabase
 async function loadFoodsFromSupabase() {
@@ -1245,6 +1248,17 @@ document.getElementById("detailNetCarbs").style.color=ketoScore.color;
 
 window.addToPlanNew=function(){
 if(!currentDetailFood)return;
+var unitSelectEl=document.getElementById("unitSelect");
+var customPortionEl=document.getElementById("customPortion");
+var grams=currentDetailFood.portion;
+if(unitSelectEl&&unitSelectEl.value&&currentDetailFood.units){
+var unit=currentDetailFood.units.find(function(u){return u.name===unitSelectEl.value});
+var customQty=parseFloat(customPortionEl?customPortionEl.value:"")||0;
+if(unit&&customQty>0)grams=Math.round(customQty*unit.grams);
+}
+pendingMealFood=currentDetailFood;
+pendingMealPortion=grams;
+var foodName=currentDetailFood.name;
 closeDetailModal();
 var meals=[{name:"Desayuno",icon:"wb_sunny",color:"rgba(255,179,0,0.2)",textColor:"text-yellow-400"},{name:"Almuerzo",icon:"light_mode",color:"rgba(255,77,0,0.2)",textColor:"text-orange-400"},{name:"Cena",icon:"nightlight",color:"rgba(139,92,246,0.2)",textColor:"text-purple-400"},{name:"Snack",icon:"cookie",color:"rgba(34,197,94,0.2)",textColor:"text-green-400"}];
 var html='<div class="space-y-2">';
@@ -1255,26 +1269,21 @@ html+='<span class="font-bold '+m.textColor+'">'+m.name+'</span>';
 html+='</button>';
 });
 html+='</div>';
-showModal("Seleccionar comida","Elige la comida para "+currentDetailFood.name,html,"");
+showModal("Seleccionar comida","Elige la comida para "+foodName,html,"");
 };
 
 window.selectMeal=function(meal){
-if(!currentDetailFood)return;
+if(!pendingMealFood)return;
 try{
 var today=new Date().toISOString().split("T")[0];
-var qty=currentDetailFood.portion;
-var storageKey="mealPlan_"+today;
-var existing=localStorage.getItem(storageKey);
-var plan=existing?JSON.parse(existing):{desayuno:[],almuerzo:[],cena:[],snacks:[]};
 var mealKey=meal.toLowerCase();
 if(mealKey==="snack")mealKey="snacks";
-if(!plan[mealKey])plan[mealKey]=[];
-var item={id:currentDetailFood.id,name:currentDetailFood.name,portion:qty,calories:Math.round(currentDetailFood.calories*qty/currentDetailFood.portion),protein:(currentDetailFood.protein*qty/currentDetailFood.portion).toFixed(1),fat:(currentDetailFood.fat*qty/currentDetailFood.portion).toFixed(1),carbs:(currentDetailFood.carbs*qty/currentDetailFood.portion).toFixed(1)};
-plan[mealKey].push(item);
-localStorage.setItem(storageKey,JSON.stringify(plan));
+KetoMealPlan.addItem(today,mealKey,pendingMealFood,pendingMealPortion);
 closeModal();
 showToast("Añadido a "+meal);
 }catch(e){showToast("Error: "+e.message)}
+pendingMealFood=null;
+pendingMealPortion=null;
 };
 
 window.addToShoppingNew=function(){

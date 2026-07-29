@@ -146,6 +146,7 @@ html, body { margin: 0; padding: 0; background: #0b0a08; color: #f7f4f0; font-fa
 <!-- ── Scripts ────────────────────────────────────────────────────────── -->
 <script is:inline src="/app/modules/supabase-keto-ai.js"></script>
 <script is:inline src="/app/demo/demo-coach-kb.js"></script>
+<script is:inline src="/app/modules/meal-plan.js"></script>
 <script is:inline src="/app/modules/automation-engine.js"></script>
 
 <script is:inline>
@@ -184,10 +185,10 @@ function buildContext() {
   Object.keys(plan).forEach(function (meal) {
     if (!Array.isArray(plan[meal])) return;
     plan[meal].forEach(function (item) {
-      var r = (parseFloat(item.portion) || 100) / 100;
-      cal   += (parseFloat(item.calories)                  || 0) * r;
-      carbs += (parseFloat(item.carbs || item.carbohidratos || 0)) * r;
-      prot  += (parseFloat(item.protein)                   || 0) * r;
+      var t = KetoMealPlan.itemTotals(item);
+      cal   += t.calories;
+      carbs += t.carbs;
+      prot  += t.protein;
     });
   });
 

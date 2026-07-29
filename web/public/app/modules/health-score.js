@@ -37,8 +37,7 @@ var HealthScoreEngine = (function() {
     Object.keys(mealPlan).forEach(function(meal) {
       if (Array.isArray(mealPlan[meal])) {
         mealPlan[meal].forEach(function(item) {
-          var ratio = (parseFloat(item.portion) || 100) / 100;
-          consumed += Math.round((parseFloat(item.calories) || 0) * ratio);
+          consumed += KetoMealPlan.itemTotals(item).calories;
         });
       }
     });

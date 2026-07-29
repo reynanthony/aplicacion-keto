@@ -734,6 +734,7 @@ Ver plan completo
 </div>
 
 <script is:inline src="/app/utils.js"></script>
+<script is:inline src="/app/modules/meal-plan.js"></script>
 <script is:inline src="/app/modules/health-score.js"></script>
 <script is:inline src="/app/modules/recommendation-engine.js"></script>
 <script is:inline src="/app/modules/automation-engine.js"></script>
@@ -774,10 +775,10 @@ function populateNotifications() {
   Object.keys(mealPlan).forEach(function(meal) {
     if (Array.isArray(mealPlan[meal])) {
       mealPlan[meal].forEach(function(item) {
-        var ratio = (parseFloat(item.portion) || 100) / 100;
-        consumedCal += Math.round((parseFloat(item.calories) || 0) * ratio);
-        consumedProt += Math.round((parseFloat(item.protein) || 0) * ratio);
-        consumedFat += Math.round((parseFloat(item.fat) || 0) * ratio);
+        var totals = KetoMealPlan.itemTotals(item);
+        consumedCal += totals.calories;
+        consumedProt += totals.protein;
+        consumedFat += totals.fat;
       });
     }
   });
@@ -1248,12 +1249,11 @@ function loadDashboard() {
       if (Array.isArray(mealPlan[meal])) {
         totalMealItems += mealPlan[meal].length;
         mealPlan[meal].forEach(function(item) {
-          var foodPort = parseFloat(item.portion) || 100;
-          var ratio = foodPort / 100;
-          consumedCal += Math.round((parseFloat(item.calories) || 0) * ratio);
-          consumedProt += Math.round((parseFloat(item.protein) || 0) * ratio);
-          consumedFat += Math.round((parseFloat(item.fat) || 0) * ratio);
-          consumedCarbs += Math.round((parseFloat(item.carbs) || 0) * ratio);
+          var totals = KetoMealPlan.itemTotals(item);
+          consumedCal += totals.calories;
+          consumedProt += totals.protein;
+          consumedFat += totals.fat;
+          consumedCarbs += totals.carbs;
         });
       }
     });
@@ -1590,9 +1590,7 @@ function renderTodayMealsSummary(mealPlan) {
   meals.forEach(function(meal) {
     var items = mealPlan[meal.key] || [];
     var totalCal = items.reduce(function(sum, item) {
-      var port = parseFloat(item.portion) || 100;
-      var ratio = port / 100;
-      return sum + Math.round((parseFloat(item.calories) || 0) * ratio);
+      return sum + KetoMealPlan.itemTotals(item).calories;
     }, 0);
     
     html += '<a href="/app/plan" class="rounded-xl p-4 text-center transition-all hover:bg-white/5 active:scale-95" style="display:block;background:#1e1a15;border:1px solid rgba(255,240,225,0.06);text-decoration:none">' +
@@ -1997,31 +1995,16 @@ function filterQuickFoods(query) {
 function selectQuickFood(foodId) {
   // Add to today's meal plan
   var todayKey = new Date().toISOString().slice(0, 10);
-  var mealPlan = safeParseJSON(localStorage.getItem('mealPlan_' + todayKey), {
-    desayuno: [], almuerzo: [], cena: [], snacks: []
-  });
-  
   var foods = safeParseJSON(localStorage.getItem('ketoFoods'), []);
   var food = foods.find(function(f) { return f.id === foodId; });
-  
+
   if (food) {
-    mealPlan.snacks.push({
-      id: food.id,
-      name: food.name,
-      calories: food.calories,
-      protein: food.protein,
-      fat: food.fat,
-      carbs: food.carbs,
-      portion: 100,
-      addedAt: new Date().toISOString()
-    });
-    
-    localStorage.setItem('mealPlan_' + todayKey, JSON.stringify(mealPlan));
-    
+    KetoMealPlan.addItem(todayKey, 'snacks', food, 100);
+
     // Update meals logged counter
     var mealsLogged = safeParseJSON(localStorage.getItem('mealsLoggedTotal'), 0);
     localStorage.setItem('mealsLoggedTotal', mealsLogged + 1);
-    
+
     // Log activity for streak
     logActivity();
     

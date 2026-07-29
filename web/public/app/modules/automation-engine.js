@@ -48,11 +48,11 @@ var KetoAutomations = (function () {
       Object.keys(plan).forEach(function (meal) {
         if (!Array.isArray(plan[meal])) return;
         plan[meal].forEach(function (item) {
-          var ratio = (parseFloat(item.portion) || 100) / 100;
-          cal     += (parseFloat(item.calories)              || 0) * ratio;
-          carbs   += (parseFloat(item.carbs || item.carbohidratos || 0)) * ratio;
-          protein += (parseFloat(item.protein)               || 0) * ratio;
-          fat     += (parseFloat(item.fat)                   || 0) * ratio;
+          var t = KetoMealPlan.itemTotals(item);
+          cal     += t.calories;
+          carbs   += t.carbs;
+          protein += t.protein;
+          fat     += t.fat;
         });
       });
       rows.push({ date: key, cal: Math.round(cal), carbs: Math.round(carbs), protein: Math.round(protein), fat: Math.round(fat) });

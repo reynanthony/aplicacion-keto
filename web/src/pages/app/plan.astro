@@ -411,35 +411,13 @@ return;
 
 var html = '';
 items.forEach(function(item, idx) {
-var food = currentFoods.find(function(f) { return f.id === item.id; }) || defaultFoods.find(function(f) { return f.id === item.id; }) || item;
 var portion = parseFloat(item.portion) || 100;
-var cal, prot, fat, carbs;
-
-// Use stored values if available (for auto-generated recipes), otherwise calculate
-if (item.isRecipe && item.calories !== undefined) {
-  cal = Math.round(item.calories);
-  prot = Math.round((item.protein || 0) * 10) / 10;
-  fat = Math.round((item.fat || 0) * 10) / 10;
-  carbs = Math.round((item.carbs || 0) * 10) / 10;
-} else if (item.isRecipe && item.baseCalories) {
-  var basePort = parseFloat(item.basePortion) || 100;
-  var ratio = portion / basePort;
-  cal = Math.round(item.baseCalories * ratio);
-  prot = Math.round(item.baseProtein * ratio * 10) / 10;
-  fat = Math.round(item.baseFat * ratio * 10) / 10;
-  carbs = Math.round(item.baseCarbs * ratio * 10) / 10;
-} else {
-  var foodPort = parseFloat(food.portion) || 100;
-  var ratio = portion / foodPort;
-  cal = Math.round((food.calories || 0) * ratio);
-  prot = Math.round((food.protein || 0) * ratio * 10) / 10;
-  fat = Math.round((food.fat || 0) * ratio * 10) / 10;
-  carbs = Math.round((food.carbs || 0) * ratio * 10) / 10;
-}
+var totals = KetoMealPlan.itemTotals(item);
+var cal = totals.calories, prot = totals.protein, fat = totals.fat, carbs = totals.carbs;
 
 html += '<div class="flex items-center justify-between bg-surface-container rounded-lg p-3">';
 html += '<div class="flex-1 min-w-0">';
-html += '<p class="text-white text-sm font-medium truncate">' + (item.name || food.name) + '</p>';
+html += '<p class="text-white text-sm font-medium truncate">' + (item.name || '?') + '</p>';
 html += '<p class="text-xs text-on-surface-variant">' + portion + 'g · ' + cal + ' kcal</p>';
 html += '</div>';
 html += '<button onclick="removeMealItem(\'' + meal + '\', ' + idx + ')" class="w-8 h-8 rounded-lg flex items-center justify-center text-error/60 hover:text-error hover:bg-error/10 transition-colors">';
@@ -474,30 +452,11 @@ var items = plan[meal] || [];
 var mealCal = 0, mealProt = 0, mealFat = 0, mealCarbs = 0;
 
 items.forEach(function(item) {
-var food = currentFoods.find(function(f) { return f.id === item.id; }) || defaultFoods.find(function(f) { return f.id === item.id; }) || item;
-var portion = parseFloat(item.portion) || 100;
-
-// Use stored values if available (for auto-generated recipes), otherwise calculate
-if (item.isRecipe && item.calories !== undefined) {
-  mealCal += Math.round(item.calories);
-  mealProt += Math.round((item.protein || 0) * 10) / 10;
-  mealFat += Math.round((item.fat || 0) * 10) / 10;
-  mealCarbs += Math.round((item.carbs || 0) * 10) / 10;
-} else if (item.isRecipe && item.baseCalories) {
-  var basePort = parseFloat(item.basePortion) || 100;
-  var ratio = portion / basePort;
-  mealCal += Math.round(item.baseCalories * ratio);
-  mealProt += Math.round(item.baseProtein * ratio * 10) / 10;
-  mealFat += Math.round(item.baseFat * ratio * 10) / 10;
-  mealCarbs += Math.round(item.baseCarbs * ratio * 10) / 10;
-} else {
-  var foodPort = parseFloat(food.portion) || 100;
-  var ratio = portion / foodPort;
-  mealCal += Math.round((food.calories || 0) * ratio);
-  mealProt += Math.round((food.protein || 0) * ratio * 10) / 10;
-  mealFat += Math.round((food.fat || 0) * ratio * 10) / 10;
-  mealCarbs += Math.round((food.carbs || 0) * ratio * 10) / 10;
-}
+var totals = KetoMealPlan.itemTotals(item);
+mealCal += totals.calories;
+mealProt += totals.protein;
+mealFat += totals.fat;
+mealCarbs += totals.carbs;
 });
 
 document.getElementById(meal + 'Cal').innerHTML = '<span class="text-yellow-400 font-bold">' + mealCal + '</span> kcal';
@@ -845,6 +804,7 @@ if (typeof KETO_RECIPES !== 'undefined') {
   console.log('[Plan] recipesDB creado desde KETO_RECIPES:', Object.keys(window.recipesDB).length);
 }
 </script>
+<script is:inline src="/app/modules/meal-plan.js"></script>
 <script is:inline src="/app/modules/keto-inspector.js"></script>
 <script is:inline src="/app/modules/keto-score-calculator.js"></script>
 <script is:inline src="/app/modules/user-learning.js"></script>
@@ -1141,8 +1101,6 @@ var defaultFoods=[
 {id:"f45",name:"Chocolate negro 90%",portion:30,calories:150,protein:2,fat:13,carbs:4,category:"Otros",units:[{name:"gramos",grams:1},{name:"libras",grams:453.6},{name:"kilos",grams:1000}]}
 ];
 var mealNames={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snacks"};
-function getMealPlan(){var stored=safeParseJSON(localStorage.getItem("mealPlan_"+today), {});if(Object.keys(stored).length===0){stored={desayuno:[],almuerzo:[],cena:[],snacks:[]};localStorage.setItem("mealPlan_"+today,JSON.stringify(stored))}return stored}
-function saveMealPlan(plan){localStorage.setItem("mealPlan_"+today,JSON.stringify(plan))}
 function renderMealPlan(){
   try{
     var plan=getMealPlan(currentDay);
@@ -1155,7 +1113,7 @@ function renderMealPlan(){
         if(container)container.innerHTML='<p class="text-center text-on-surface-variant text-sm py-4">Sin alimentos. Toca "Agregar" para anadir.</p>';
       }else{
         if(container)container.innerHTML="";
-        mealPlan.forEach(function(item,idx){if(!item)return;var food=defaultFoods.find(function(f){return f.id===item.id})||item;var itemPort=parseFloat(item.portion)||100;var foodPort=parseFloat(food.portion)||100;var ratio=itemPort>0?itemPort/foodPort:1;var cal=Math.round((parseFloat(food.calories)||0)*ratio);if(container)container.innerHTML+='<div class="flex items-center gap-3 bg-surface-container-low rounded-lg p-3"><div class="flex-1 min-w-0"><p class="font-medium text-white truncate">'+(food.name||'?')+'</p><p class="text-xs text-on-surface-variant">'+itemPort+'g - '+cal+' kcal</p></div></div>'});
+        mealPlan.forEach(function(item,idx){if(!item)return;var totals=KetoMealPlan.itemTotals(item);var itemPort=parseFloat(item.portion)||100;if(container)container.innerHTML+='<div class="flex items-center gap-3 bg-surface-container-low rounded-lg p-3"><div class="flex-1 min-w-0"><p class="font-medium text-white truncate">'+(item.name||'?')+'</p><p class="text-xs text-on-surface-variant">'+itemPort+'g - '+totals.calories+' kcal</p></div></div>'});
       }
     });
     updateMealCardMacros();
@@ -1172,7 +1130,25 @@ if (!sessionStorage.getItem(sessionKey)) {
 }
 executeChangePortion(meal, idx, delta);
 }
-function executeChangePortion(meal,idx,delta){var plan=getMealPlan(currentDay);var newPortion=Math.max(10,plan[meal][idx].portion+delta);plan[meal][idx].portion=newPortion;saveMealPlanForDate(currentDay,plan);updateMealCardMacros();renderMealCardItems();initWeekSelector();initCalendar()}
+function migrateItemToBaseShape(item){
+if(item.baseCalories!==undefined)return;
+var food=currentFoods.find(function(f){return f.id===item.id})||defaultFoods.find(function(f){return f.id===item.id});
+if(food&&item.calories===undefined){
+item.baseCalories=parseFloat(food.calories)||0;
+item.baseProtein=parseFloat(food.protein)||0;
+item.baseFat=parseFloat(food.fat)||0;
+item.baseCarbs=parseFloat(food.carbs)||0;
+item.basePortion=parseFloat(food.portion)||100;
+if(!item.name)item.name=food.name;
+}else{
+item.baseCalories=parseFloat(item.calories)||0;
+item.baseProtein=parseFloat(item.protein)||0;
+item.baseFat=parseFloat(item.fat)||0;
+item.baseCarbs=parseFloat(item.carbs)||0;
+item.basePortion=parseFloat(item.portion)||100;
+}
+}
+function executeChangePortion(meal,idx,delta){var plan=getMealPlan(currentDay);var item=plan[meal][idx];migrateItemToBaseShape(item);var newPortion=Math.max(10,item.portion+delta);item.portion=newPortion;saveMealPlanForDate(currentDay,plan);updateMealCardMacros();renderMealCardItems();initWeekSelector();initCalendar()}
 function removeFromMeal(meal,idx){var sessionKey = 'autoPlanWarningMeal_' + currentDay;if(!sessionStorage.getItem(sessionKey)){showAutoPlanWarning(function(){executeRemoveFromMeal(meal,idx)});return;}executeRemoveFromMeal(meal,idx)}
 function executeRemoveFromMeal(meal,idx){var plan=getMealPlan(currentDay);plan[meal].splice(idx,1);saveMealPlanForDate(currentDay,plan);updateMealCardMacros();renderMealCardItems();initWeekSelector();initCalendar()}
 var currentFoods=[];
@@ -1454,9 +1430,9 @@ return;
 executeAdd(meal,foodId,totalGrams);
 }
 function executeAdd(meal,foodId,totalGrams){
-var plan=getMealPlan(currentDay);
-plan[meal].push({id:foodId,portion:totalGrams});
-saveMealPlanForDate(currentDay,plan);
+var food=currentFoods.find(function(f){return f.id===foodId})||defaultFoods.find(function(f){return f.id===foodId});
+if(!food)return;
+KetoMealPlan.addItem(currentDay,meal,food,totalGrams);
 
 updateMonthlyMealStats(1);
 
@@ -1547,11 +1523,7 @@ function calculateDayCalories(plan){
 var totalCal=0;
 Object.keys(plan).forEach(function(meal){
 plan[meal].forEach(function(item){
-var food=currentFoods.find(function(f){return f.id===item.id})||defaultFoods.find(function(f){return f.id===item.id})||item;
-var itemPort=parseFloat(item.portion)||100;
-var foodPort=parseFloat(food.portion)||100;
-var ratio=itemPort/foodPort;
-totalCal+=Math.round((parseFloat(food.calories)||0)*ratio);
+totalCal+=KetoMealPlan.itemTotals(item).calories;
 });
 });
 return totalCal;
@@ -1599,13 +1571,7 @@ renderMealPlan();
 renderWeeklyOverview();
 }
 function getMealPlan(dateKey){
-dateKey=dateKey||currentDay;
-var stored=JSON.parse(localStorage.getItem("mealPlan_"+dateKey)||"{}");
-if(Object.keys(stored).length===0){
-stored={desayuno:[],almuerzo:[],cena:[],snacks:[]};
-localStorage.setItem("mealPlan_"+dateKey,JSON.stringify(stored));
-}
-return stored;
+return KetoMealPlan.getPlan(dateKey||currentDay);
 }
 function saveMealPlan(plan){
 saveMealPlanForDate(currentDay,plan);
@@ -1624,11 +1590,7 @@ var plan=getMealPlan(dateKey);
 var totalCal=0;
 ["desayuno","almuerzo","cena","snacks"].forEach(function(meal){
 (plan[meal]||[]).forEach(function(item){
-var food=defaultFoods.find(function(f){return f.id===item.id})||item;
-var itemPort=parseFloat(item.portion)||100;
-var foodPort=parseFloat(food.portion)||100;
-var ratio=itemPort/foodPort;
-totalCal+=Math.round((parseFloat(food.calories)||0)*ratio);
+totalCal+=KetoMealPlan.itemTotals(item).calories;
 });
 });
 var isToday=dateKey===new Date().toISOString().slice(0,10);

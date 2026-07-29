@@ -346,6 +346,7 @@ Cerrar
 <AppNav active="more" />
 
 <script is:inline src="/app/utils.js"></script>
+<script is:inline src="/app/modules/meal-plan.js"></script>
 <script is:inline>
 var defaultChecklistConfig=[
 {id:"water",icon:"water_drop",iconColor:"#00bcd4",bg:"bg-cyan-500/20",label:"Agua",unit:"L",target:3,step:0.25},
@@ -771,7 +772,7 @@ var mealColors={desayuno:"bg-amber-500/20",almuerzo:"bg-orange-500/20",cena:"bg-
 var mealLabels={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snacks"};
 
 function getToday(){return new Date().toISOString().slice(0,10)}
-function getMealPlan(dateKey){var stored=safeParseJSON(localStorage.getItem("mealPlan_"+dateKey), {});if(Object.keys(stored).length===0){stored={desayuno:[],almuerzo:[],cena:[],snacks:[]};localStorage.setItem("mealPlan_"+dateKey,JSON.stringify(stored))}return stored}
+function getMealPlan(dateKey){return KetoMealPlan.getPlan(dateKey)}
 
 function loadMealConsumption(){
 var container=document.getElementById("mealsContainer");

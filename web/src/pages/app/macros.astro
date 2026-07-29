@@ -203,6 +203,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
 </main>
 
 <script is:inline src="/app/utils.js"></script>
+<script is:inline src="/app/modules/meal-plan.js"></script>
 <script is:inline>
 function fmt(n){var s=String(Math.round(Number(n)));return s.replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1,');}
 
@@ -234,13 +235,9 @@ function loadMacrosData(){
   Object.keys(mealPlan).forEach(function(meal){
     if(Array.isArray(mealPlan[meal])){
       mealPlan[meal].forEach(function(item){
-        var r=(parseFloat(item.portion)||100)/100;
-        var kcal=Math.round((parseFloat(item.calories)||0)*r);
-        var pr=Math.round((parseFloat(item.protein)||0)*r);
-        var ft=Math.round((parseFloat(item.fat)||0)*r);
-        var cb=Math.round((parseFloat(item.carbs)||0)*r);
-        cCal+=kcal;cProt+=pr;cFat+=ft;cCarb+=cb;itemCount++;
-        rows.push({name:item.name||item.nombre||'Alimento',meal:meal,kcal:kcal,p:pr,g:ft,c:cb});
+        var t=KetoMealPlan.itemTotals(item);
+        cCal+=t.calories;cProt+=t.protein;cFat+=t.fat;cCarb+=t.carbs;itemCount++;
+        rows.push({name:item.name||item.nombre||'Alimento',meal:meal,kcal:t.calories,p:t.protein,g:t.fat,c:t.carbs});
       });
     }
   });
