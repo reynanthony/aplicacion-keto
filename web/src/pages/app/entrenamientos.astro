@@ -4,19 +4,6 @@ import AppLayout from '../../layouts/AppLayout.astro';
 
 <AppLayout title="KetoCore | Entrenamientos" authGuard={true}>
 <style is:global>
-.sidebar-link.active{background:rgba(22,19,16,1)!important;}
-.sidebar-link.active .material-symbols-outlined{color:#ff4d00!important;}
-.sidebar-link.active{color:white!important;}
-.sidebar-collapsed .sidebar-nav{width:72px;}
-.sidebar-collapsed .sidebar-nav .sidebar-text{display:none;}
-.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0;}
-.sidebar-collapsed .sidebar-logo-text{display:none;}
-.sidebar-collapsed .sidebar-logo{justify-content:center;}
-.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px;}
-.sidebar-collapsed~main .main-content{margin-left:72px;}
-.sidebar-toggle-btn{left:256px;transition:left 0.3s ease;}
-.sidebar-collapsed~.sidebar-toggle-btn{left:72px;}
-
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
 .glass-card{background:rgba(22,19,16,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,77,0,0.15)}
 .keto-glass{background:rgba(22,19,16,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
@@ -26,16 +13,6 @@ import AppLayout from '../../layouts/AppLayout.astro';
 .ghost-border{border:1px solid rgba(73,72,71,0.15)}
 .primary-gradient{background:linear-gradient(135deg,#ff4d00 0%,#ff7346 100%)}
 .badge-glow{filter:drop-shadow(0 0 8px rgba(255,144,109,0.4))}
-.sidebar-collapsed .sidebar-nav{width:72px}
-.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}
-.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}
-.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px}
-.sidebar-collapsed~main .main-content{margin-left:72px}
-.sidebar-toggle-btn{left:256px;transition:left 0.3s ease}
-.sidebar-collapsed~.sidebar-toggle-btn{left:72px}
-.sidebar-link.active{background:#161310}
-.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
-@keyframes toastIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}
 .animate-toastIn{animation:toastIn 0.3s ease forwards}
 #toast{animation:toastIn 0.3s ease}
@@ -3218,30 +3195,6 @@ function showToast(message, type) {
       setTimeout(function() { toast.remove(); }, 300);
     }
   }, 3500);
-}
-</script>
-<script is:inline>var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active");link.style.background="#161310";link.querySelector(".material-symbols-outlined").style.color="#ff4d00"}});</script>
-<script is:inline>
-var _cp=window.location.pathname.split("/").pop()||"index.html";
-document.querySelectorAll(".sidebar-link").forEach(function(l){
-  if(l.getAttribute("href")===_cp){
-    l.classList.add("active");
-    l.style.background="rgba(22,19,16,1)";
-    l.style.color="white";
-    var ic=l.querySelector(".material-symbols-outlined");
-    if(ic)ic.style.color="#ff4d00";
-  }
-});
-if(localStorage.getItem("sidebarCollapsed")==="true"){
-  document.body.classList.add("sidebar-collapsed");
-  var _sn=document.getElementById("sidebarNav");
-  if(_sn){_sn.style.width="72px";_sn.style.overflow="hidden";}
-  var _tp=document.querySelector(".topbar-pl");
-  if(_tp)_tp.style.paddingLeft="88px";
-  var _mc=document.querySelector(".main-content");
-  if(_mc)_mc.style.marginLeft="72px";
-  var _st=document.getElementById("sidebarToggle");
-  if(_st)_st.style.left="72px";
 }
 </script>
 <script is:inline>
