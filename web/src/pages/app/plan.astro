@@ -4,24 +4,10 @@ import AppLayout from '../../layouts/AppLayout.astro';
 
 <AppLayout title="KetoCore | Mi Plan" authGuard={true}>
 <style is:global>
-.sidebar-link.active{background:rgba(22,19,16,1)!important;}
-.sidebar-link.active .material-symbols-outlined{color:#ff4d00!important;}
-.sidebar-link.active{color:white!important;}
-.sidebar-collapsed .sidebar-nav{width:72px;}
-.sidebar-collapsed .sidebar-nav .sidebar-text{display:none;}
-.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0;}
-.sidebar-collapsed .sidebar-logo-text{display:none;}
-.sidebar-collapsed .sidebar-logo{justify-content:center;}
-.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px;}
-.sidebar-collapsed~main .main-content{margin-left:72px;}
-.sidebar-toggle-btn{left:256px;transition:left 0.3s ease;}
-.sidebar-collapsed~.sidebar-toggle-btn{left:72px;}
-
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
 .glass-card{background:#161310;backdrop-filter:none;border:1px solid rgba(255,240,225,0.06);border-radius:24px}
 .day-btn{border-radius:16px !important;border-width:1px !important}
 main .glass-card, main .rounded-2xl { border-radius: 24px; }
-.sidebar-collapsed .sidebar-nav{width:72px}.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}.sidebar-collapsed .sidebar-logo-text{display:none}.sidebar-collapsed .sidebar-logo{justify-content:center}.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px}.sidebar-collapsed~main .main-content{margin-left:72px}.sidebar-toggle-btn{left:256px;transition:left 0.3s ease}.sidebar-collapsed~.sidebar-toggle-btn{left:72px}.sidebar-link.active{background:#161310}.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
 .glow-orange{box-shadow:0 0 20px rgba(255,77,0,0.25)}
 .meal-card{transition:transform 0.2s ease,box-shadow 0.2s ease}.meal-card:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,0.3)}
 .macro-bar{transition:width 0.5s cubic-bezier(0.4,0,0.2,1)}
@@ -814,10 +800,7 @@ if (typeof KETO_RECIPES !== 'undefined') {
 <script is:inline src="/app/modules/plan-generator-ui.js"></script>
 <script is:inline>
 function toggleTheme(){document.documentElement.classList.toggle("dark");localStorage.setItem("theme",document.documentElement.classList.contains("dark")?"dark":"light")}
-function toggleSidebar(){var b=document.body;var s=document.getElementById("sidebarNav");var t=document.getElementById("sidebarToggle");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");b.classList.toggle("sidebar-collapsed");if(b.classList.contains("sidebar-collapsed")){s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px";localStorage.setItem("sidebarCollapsed","true")}else{s.style.width="256px";s.style.overflow="";if(p)p.style.paddingLeft="272px";if(m)m.style.marginLeft="256px";if(t)t.style.left="256px";localStorage.setItem("sidebarCollapsed","false")}}
-function initSidebar(){var s=document.getElementById("sidebarNav");var t=document.getElementById("sidebarToggle");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");if(localStorage.getItem("sidebarCollapsed")==="true"){document.body.classList.add("sidebar-collapsed");s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px"}}
 if(localStorage.getItem("theme")==="dark"||!localStorage.getItem("theme")){document.documentElement.classList.add("dark")}
-initSidebar();
 </script>
 <script is:inline>
 // User Dropdown Menu
@@ -1046,7 +1029,6 @@ function calculateAdvancedKetoScore(receta) {
   return null;
 }
 
-var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
 var today=new Date().toISOString().slice(0,10);
 var planFoodUnits={};
 var planCurrentUnit=0;
@@ -3577,29 +3559,5 @@ setMealPlanMode('manual');
 </script>
 
 <!-- (FAB de escáner eliminado: el acceso vive en el botón central de la bottom-nav) -->
-
-<script is:inline>
-var _cp=window.location.pathname.split("/").pop()||"index.html";
-document.querySelectorAll(".sidebar-link").forEach(function(l){
-  if(l.getAttribute("href")===_cp){
-    l.classList.add("active");
-    l.style.background="rgba(22,19,16,1)";
-    l.style.color="white";
-    var ic=l.querySelector(".material-symbols-outlined");
-    if(ic)ic.style.color="#ff4d00";
-  }
-});
-if(localStorage.getItem("sidebarCollapsed")==="true"){
-  document.body.classList.add("sidebar-collapsed");
-  var _sn=document.getElementById("sidebarNav");
-  if(_sn){_sn.style.width="72px";_sn.style.overflow="hidden";}
-  var _tp=document.querySelector(".topbar-pl");
-  if(_tp)_tp.style.paddingLeft="88px";
-  var _mc=document.querySelector(".main-content");
-  if(_mc)_mc.style.marginLeft="72px";
-  var _st=document.getElementById("sidebarToggle");
-  if(_st)_st.style.left="72px";
-}
-</script>
 
 </AppLayout>
