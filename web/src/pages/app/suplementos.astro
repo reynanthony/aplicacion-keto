@@ -1,6 +1,5 @@
 ---
 import AppLayout from '../../layouts/AppLayout.astro';
-import AppNav from '../../components/AppNav.astro';
 ---
 
 <AppLayout title="KetoCore | Suplementos" authGuard={true}>
@@ -286,18 +285,6 @@ Agregar Suplemento
 </div>
 </div>
 
-<nav class="md:hidden fixed bottom-0 w-full bg-surface-container-low/95 backdrop-blur-xl h-16 flex justify-around items-center z-50 border-t border-white/5">
-<a href="/app/" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">dashboard</span><span class="text-[10px]">Inicio</span></a>
-<a href="/app/perfil" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">person</span><span class="text-[10px]">Perfil</span></a>
-<a href="/app/alimentos" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">restaurant</span><span class="text-[10px]">Alim</span></a>
-<a href="/app/plan" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">event_note</span><span class="text-[10px]">Plan</span></a>
-<a href="/app/compras" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">shopping_cart</span><span class="text-[10px]">Desp</span></a>
-<a href="/app/macros" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">donut_small</span><span class="text-[10px]">Macros</span></a>
-<a href="/app/checklist" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">fact_check</span><span class="text-[10px]">Check</span></a>
-<a href="/app/entrenamientos" class="flex flex-col items-center text-white/50"><span class="material-symbols-outlined text-2xl">fitness_center</span><span class="text-[10px]">Gym</span></a>
-<a href="/app/suplementos" class="flex flex-col items-center text-primary"><span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">medication</span><span class="text-[10px]">Sup</span></a>
-</nav>
-
 <script is:inline src="/app/utils.js"></script>
 <script is:inline src="/app/modules/supplement-recommender.js"></script>
 <script is:inline>
@@ -569,8 +556,6 @@ function toggleSupleNow(id){
 }
 </script>
 
-<!-- BottomNavBar (Mobile) - 5 items optimizado -->
-<AppNav active="more" />
 <script is:inline>
 var _cp=window.location.pathname.split("/").pop()||"index.html";
 document.querySelectorAll(".sidebar-link").forEach(function(l){
