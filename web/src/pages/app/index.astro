@@ -64,9 +64,15 @@ body {
 /* ── Dashboard Editorial Bento ── */
 #dashGrid > * + * { margin-top: 18px; }
 #dashGrid { padding-top: 84px; } /* header fijo móvil */
-.dash-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 30px; flex-wrap: wrap; gap: 20px; }
+.dash-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 26px; flex-wrap: wrap; gap: 16px; }
+.dash-greeting { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:26px; letter-spacing:-0.02em; line-height:1.2; color:#f7f4f0; margin:0; }
+.dash-subgreeting { font-size:14px; color:rgba(247,244,240,0.4); margin-top:4px; }
 .dash-bento { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .db-score, .db-cal { grid-column: span 2; }
+.db-score-top { position:relative; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.db-score-segs { position:relative; display:flex; gap:5px; margin-top:16px; }
+.db-score-segs > div { flex:1; height:5px; border-radius:100px; background:rgba(26,14,5,0.18); }
+.db-score-foot { position:relative; display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:14px; flex-wrap:wrap; }
 .dash-two, .dash-two2, .dash-lower { display: grid; grid-template-columns: 1fr; gap: 18px; }
 .macro-band-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
 @media (min-width: 901px) {
@@ -327,12 +333,13 @@ Importar Backup
 <!-- ========== HEADER EDITORIAL ========== -->
 <div class="dash-head">
   <div>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
       <span id="todayDateDisplay" style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00">Hoy</span>
       <span style="width:4px;height:4px;border-radius:50%;background:rgba(247,244,240,0.25)"></span>
       <span style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(247,244,240,0.4)">Día <span id="streakCount">0</span> en cetosis</span>
     </div>
-    <h1 class="kc-h1"><span id="coachDayPart">Buenos días</span>, <span id="coachUserName">Campeón</span><br><span style="color:rgba(247,244,240,0.4)">Vas ganando la semana.</span></h1>
+    <h1 class="dash-greeting"><span id="coachDayPart">Buenos días</span>, <span id="coachUserName">Campeón</span></h1>
+    <p class="dash-subgreeting">Vas ganando la semana.</p>
   </div>
   <div style="display:flex;align-items:center;gap:12px">
     <button onclick="showNotifications()" aria-label="Notificaciones" style="height:46px;width:46px;border-radius:14px;background:#161310;border:1px solid rgba(255,240,225,0.08);cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0">
@@ -346,55 +353,50 @@ Importar Backup
 <!-- ========== BENTO SUPERIOR: score + calorías + stats ========== -->
 <div class="dash-bento">
 
-  <!-- HEALTH SCORE — tile naranja sólido -->
-  <div class="db-score" style="background:linear-gradient(150deg,#ff5a12,#e63f00);border-radius:26px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;box-shadow:0 12px 40px rgba(255,77,0,0.22);min-height:250px">
-    <div style="position:absolute;right:-40px;top:-40px;width:220px;height:220px;border-radius:50%;background:rgba(255,240,225,0.08)"></div>
-    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px">
-      <div style="display:flex;align-items:center;gap:9px"><span class="material-symbols-outlined icon-filled" style="font-size:22px;color:rgba(26,14,5,0.85)">ecg_heart</span><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:13px;letter-spacing:0.02em;color:rgba(26,14,5,0.85)">HEALTH SCORE</span></div>
-      <span id="coachObjective" style="font-size:12px;font-weight:800;padding:5px 12px;border-radius:100px;background:rgba(26,14,5,0.16);color:#1a0e05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55%">--</span>
+  <!-- HEALTH SCORE — único foco visual de la sección -->
+  <div class="db-score" style="background:linear-gradient(150deg,#ff5a12,#e63f00);border-radius:26px;padding:26px 28px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 12px 36px rgba(255,77,0,0.2);min-height:250px">
+    <div class="db-score-top">
+      <div style="display:flex;align-items:center;gap:9px"><span class="material-symbols-outlined icon-filled" style="font-size:19px;color:rgba(26,14,5,0.75)">ecg_heart</span><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:12px;letter-spacing:0.04em;color:rgba(26,14,5,0.75)">HEALTH SCORE</span></div>
+      <a href="/app/progreso" style="display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:700;color:rgba(26,14,5,0.65);text-decoration:none"><span id="coachProgress">--</span><span class="material-symbols-outlined" style="font-size:15px">arrow_forward</span></a>
     </div>
-    <div style="position:relative">
-      <div class="kc-num" id="coachScoreNum" style="font-weight:900;font-size:clamp(72px,12vw,118px);line-height:0.82;color:#1a0e05">--</div>
-      <div style="display:flex;align-items:center;gap:14px;margin-top:14px">
-        <div style="font-size:14px;font-weight:600;color:rgba(26,14,5,0.7)">de 100 · <strong id="coachScoreLabel">--</strong></div>
-      </div>
-      <div id="scoreSegs" style="display:flex;gap:5px;margin-top:16px">
-        <div style="flex:1;height:6px;border-radius:100px;background:rgba(26,14,5,0.22)"></div>
-        <div style="flex:1;height:6px;border-radius:100px;background:rgba(26,14,5,0.22)"></div>
-        <div style="flex:1;height:6px;border-radius:100px;background:rgba(26,14,5,0.22)"></div>
-        <div style="flex:1;height:6px;border-radius:100px;background:rgba(26,14,5,0.22)"></div>
-        <div style="flex:1;height:6px;border-radius:100px;background:rgba(26,14,5,0.22)"></div>
-      </div>
-      <a href="/app/progreso" style="display:inline-flex;align-items:center;gap:4px;margin-top:14px;font-size:12.5px;font-weight:700;color:rgba(26,14,5,0.75);text-decoration:none"><span id="coachProgress">--</span><span class="material-symbols-outlined" style="font-size:15px">arrow_forward</span></a>
+    <div style="position:relative;margin-top:18px">
+      <div class="kc-num" id="coachScoreNum" style="font-weight:900;font-size:clamp(56px,9vw,84px);line-height:0.85;color:#1a0e05">--</div>
+      <div style="font-size:14px;font-weight:600;color:rgba(26,14,5,0.6);margin-top:6px">de 100 · <strong id="coachScoreLabel">--</strong></div>
+    </div>
+    <div id="scoreSegs" class="db-score-segs">
+      <div></div><div></div><div></div><div></div><div></div>
+    </div>
+    <div class="db-score-foot">
+      <span id="coachObjective" style="font-size:12.5px;font-weight:700;color:rgba(26,14,5,0.6)">--</span>
     </div>
   </div>
 
-  <!-- CALORÍAS — tile crema -->
-  <div class="db-cal kc-tile-cream" style="border-radius:26px;padding:24px 26px;display:flex;flex-direction:column;justify-content:space-between;gap:14px">
+  <!-- CALORÍAS — misma familia oscura que el resto, sin competir con el score -->
+  <div class="db-cal kc-tile" style="display:flex;flex-direction:column;justify-content:space-between;gap:12px">
     <div style="display:flex;align-items:center;justify-content:space-between">
-      <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:13px;letter-spacing:0.02em;color:rgba(26,20,14,0.55)">CALORÍAS DE HOY</span>
-      <span id="calorieStatus" class="text-xs px-2 py-0.5 rounded-full font-bold" style="background:rgba(26,20,14,0.08);color:rgba(26,20,14,0.55)">Sin meta</span>
+      <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.02em;color:rgba(247,244,240,0.5)">Calorías de hoy</span>
+      <span id="calorieStatus" class="text-xs px-2 py-0.5 rounded-full font-bold" style="background:rgba(255,240,225,0.06);color:rgba(247,244,240,0.5)">Sin meta</span>
     </div>
     <div>
       <div style="display:flex;align-items:baseline;gap:8px">
-        <span id="consumedCalDisplay" class="kc-num" style="font-weight:900;font-size:52px;line-height:0.85;color:#1a140e">0</span>
-        <span style="font-size:15px;font-weight:600;color:rgba(26,20,14,0.5)">/ <span id="targetCalDisplay">--</span> kcal</span>
+        <span id="consumedCalDisplay" class="kc-num" style="font-weight:800;font-size:36px;line-height:0.9;color:#f7f4f0">0</span>
+        <span style="font-size:14px;font-weight:600;color:rgba(247,244,240,0.4)">/ <span id="targetCalDisplay">--</span> kcal</span>
       </div>
-      <div style="height:9px;border-radius:100px;background:rgba(26,20,14,0.09);overflow:hidden;margin-top:14px"><div id="caloriesBar" style="height:100%;width:0%;border-radius:100px;background:#ff4d00;transition:width .5s"></div></div>
-      <div style="font-size:12.5px;font-weight:600;color:rgba(26,20,14,0.5);margin-top:8px"><span id="caloriesRemaining">--</span> kcal restantes hoy</div>
+      <div style="height:6px;border-radius:100px;background:rgba(255,240,225,0.08);overflow:hidden;margin-top:12px"><div id="caloriesBar" style="height:100%;width:0%;border-radius:100px;background:#ff4d00;transition:width .5s"></div></div>
+      <div style="font-size:12px;color:rgba(247,244,240,0.4);margin-top:8px"><span id="caloriesRemaining">--</span> kcal restantes hoy</div>
     </div>
   </div>
 
   <!-- Adherencia -->
-  <div class="kc-tile" style="display:flex;flex-direction:column;justify-content:space-between;gap:14px">
+  <div class="kc-tile" style="display:flex;flex-direction:column;justify-content:space-between;gap:12px">
     <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.02em;color:rgba(247,244,240,0.5)">Adherencia</span>
-    <div><div id="coachAdherence" class="kc-num" style="font-size:42px;line-height:0.9;color:#ff4d00">--%</div><div style="font-size:11.5px;color:rgba(247,244,240,0.4);margin-top:4px">esta semana</div></div>
+    <div><div id="coachAdherence" class="kc-num" style="font-size:36px;line-height:0.9;color:#60a5fa">--%</div><div style="font-size:11.5px;color:rgba(247,244,240,0.4);margin-top:4px">esta semana</div></div>
   </div>
 
   <!-- Racha -->
-  <div class="kc-tile" style="display:flex;flex-direction:column;justify-content:space-between;gap:14px">
-    <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.02em;color:rgba(247,244,240,0.5)">Racha</span><span class="material-symbols-outlined icon-filled" style="color:#ff4d00;font-size:22px">local_fire_department</span></div>
-    <div><div class="kc-num" style="font-size:42px;line-height:0.9;color:#f7f4f0"><span id="streakDaysCount">0</span><span style="font-size:18px;color:rgba(247,244,240,0.4)"> días</span></div><div style="font-size:11.5px;color:rgba(247,244,240,0.4);margin-top:4px">mejor: <span id="bestStreakCount">0</span></div></div>
+  <div class="kc-tile" style="display:flex;flex-direction:column;justify-content:space-between;gap:12px">
+    <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.02em;color:rgba(247,244,240,0.5)">Racha</span><span class="material-symbols-outlined icon-filled" style="color:#ff4d00;font-size:19px">local_fire_department</span></div>
+    <div><div class="kc-num" style="font-size:36px;line-height:0.9;color:#f7f4f0"><span id="streakDaysCount">0</span><span style="font-size:16px;color:rgba(247,244,240,0.4)"> días</span></div><div style="font-size:11.5px;color:rgba(247,244,240,0.4);margin-top:4px">mejor: <span id="bestStreakCount">0</span></div></div>
   </div>
 </div>
 
