@@ -837,14 +837,8 @@ var pendingMealPortion=null;
 
 // Cargar alimentos desde Supabase
 async function loadFoodsFromSupabase() {
-    const headers = {
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYnF6c29udWp3dnFtZmhqamdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQzMDAsImV4cCI6MjA4ODgzMDMwMH0.SBsTQCh844rtGx0wLNZaEGO8NDmAVZjUj1YiDkRSm1k',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYnF6c29udWp3dnFtZmhqamdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQzMDAsImV4cCI6MjA4ODgzMDMwMH0.SBsTQCh844rtGx0wLNZaEGO8NDmAVZjUj1YiDkRSm1k'
-    };
-    
     try {
-        const response = await fetch('https://lmbqzsonujwvqmfhjjgf.supabase.co/rest/v1/alimentos?activo=eq.true&select=*&order=nombre.asc', { headers });
-        const data = await response.json();
+        const { data } = await window.supabase.from('alimentos').select('*').eq('activo', true).order('nombre');
         
         if (data && data.length > 0) {
             // Convertir formato Supabase a formato de la app

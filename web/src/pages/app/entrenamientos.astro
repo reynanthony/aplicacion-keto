@@ -2628,7 +2628,7 @@ function showExerciseHistory(exerciseName) {
   html += '</div>';
   html += '<svg viewBox="0 0 ' + chartWidth + ' ' + chartHeight + '" class="w-full h-28">';
   html += '<defs><linearGradient id="chartGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ff4d00" stop-opacity="0.3"/><stop offset="100%" stop-color="#ff4d00" stop-opacity="0"/></linearGradient></defs>';
-  html += '<polyline fill="url('/app/#chartGrad')" stroke="none" points="0,' + chartHeight + ' ' + points + ' ' + chartWidth + ',' + chartHeight + '"/>';
+  html += '<polyline fill="url(#chartGrad)" stroke="none" points="0,' + chartHeight + ' ' + points + ' ' + chartWidth + ',' + chartHeight + '"/>';
   html += '<polyline fill="none" stroke="#ff4d00" stroke-width="3" points="' + points + '" stroke-linecap="round" stroke-linejoin="round"/>';
   data.forEach(function(d, i) {
     var x = (i / (data.length - 1)) * chartWidth;
@@ -2755,15 +2755,9 @@ function saveWorkouts(workouts) {
 
 // Cargar ejercicios desde Supabase
 async function loadExercisesFromSupabase() {
-  const headers = {
-    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYnF6c29udWp3dnFtZmhqamdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQzMDAsImV4cCI6MjA4ODgzMDMwMH0.SBsTQCh844rtGx0wLNZaEGO8NDmAVZjUj1YiDkRSm1k',
-    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYnF6c29udWp3dnFtZmhqamdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQzMDAsImV4cCI6MjA4ODgzMDMwMH0.SBsTQCh844rtGx0wLNZaEGO8NDmAVZjUj1YiDkRSm1k'
-  };
-  
   try {
-    const response = await fetch('https://lmbqzsonujwvqmfhjjgf.supabase.co/rest/v1/ejercicios?activo=eq.true&select=*&order=nombre.asc', { headers });
-    const data = await response.json();
-    
+    const { data } = await window.supabase.from('ejercicios').select('*').eq('activo', true).order('nombre');
+
     if (data && data.length > 0) {
       const supabaseExercises = data.map(e => ({
         id: e.id,
