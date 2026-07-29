@@ -915,15 +915,6 @@ if(netCarbs<=8)return{score:2,label:"Moderado",color:"#f97316"};
 return{score:1,label:"Bajo",color:"#ff4d00"};
 }
 
-function getKetoStars(score){
-var html='<div class="flex gap-0.5">';
-for(var i=1;i<=5;i++){
-if(i<=score)html+='<span class="material-symbols-outlined text-xs" style="color:#ffb300">star</span>';
-else html+='<span class="material-symbols-outlined text-xs text-white/20">star</span>';
-}
-html+='</div>';
-return html;
-}
 function saveFoods(){localStorage.setItem("ketoFoods",JSON.stringify(currentFoods))}
 
 function setFilter(filter){currentFilter=filter;document.querySelectorAll(".filter-btn").forEach(function(btn){var f=btn.getAttribute("data-filter");if(f===filter){btn.classList.remove("bg-surface-container","text-on-surface-variant");btn.classList.add("bg-primary-container","text-white")}else{btn.classList.remove("bg-primary-container","text-white");btn.classList.add("bg-surface-container","text-on-surface-variant")}});renderFoods()}
@@ -962,39 +953,30 @@ var color=catColors[f.category]||"#ff4d00";
 var catLabel=catLabels[f.category]||f.category;
 var ketoScore=getKetoScore(f);
 var netCarbs=getNetCarbs(f);
-html+='<div class="group relative glass-card rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-glow cursor-pointer" onclick="openDetail(\''+f.id+'\')">';
-html+='<div class="h-40 w-full overflow-hidden relative">';
+html+='<div class="group relative glass-card rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.01] hover:shadow-glow cursor-pointer flex gap-3 p-3" onclick="openDetail(\''+f.id+'\')">';
+html+='<div class="w-20 h-20 flex-shrink-0 rounded-xl overflow-hidden relative">';
 if(f.image){
-html+='<img loading="lazy" src="/app/'+f.image+'" alt="'+f.name+'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.style.display=\'none\'; this.parentElement.innerHTML=\'<div class=\\\'w-full h-full flex items-center justify-center bg-surface-container\\\'><span class=\\\'material-symbols-outlined text-5xl text-white/20\\\'>restaurant</span></div>\'" loading="lazy">';
+html+='<img loading="lazy" src="/app/'+f.image+'" alt="'+f.name+'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.style.display=\'none\'; this.parentElement.innerHTML=\'<div class=\\\'w-full h-full flex items-center justify-center bg-surface-container\\\'><span class=\\\'material-symbols-outlined text-2xl text-white/20\\\'>restaurant</span></div>\'" loading="lazy">';
 }else{
-html+='<div class="w-full h-full flex items-center justify-center bg-surface-container"><span class="material-symbols-outlined text-5xl text-white/20">restaurant</span></div>';
+html+='<div class="w-full h-full flex items-center justify-center bg-surface-container"><span class="material-symbols-outlined text-2xl text-white/20">restaurant</span></div>';
 }
-html+='<div class="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent"></div>';
-html+='<div class="absolute top-3 left-3 flex gap-2 flex-wrap">';
-html+='<span class="px-2 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider backdrop-blur-sm" style="background:'+color+'/20;color:'+color+';border:1px solid '+color+'/30">'+catLabel+'</span>';
-html+='<span class="px-2 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider backdrop-blur-sm flex items-center gap-1" style="background:'+ketoScore.color+'/20;color:'+ketoScore.color+';border:1px solid '+ketoScore.color+'/30"><span class="material-symbols-outlined text-xs" style="font-size:10px">local_fire_department</span>'+ketoScore.label+'</span>';
-if(f.favorite)html+='<span class="px-2 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider backdrop-blur-sm bg-secondary/20 text-secondary border border-secondary/30 flex items-center gap-1"><span class="material-symbols-outlined text-xs" style="font-size:10px">star</span></span>';
 html+='</div>';
-html+='<button onclick="event.stopPropagation();toggleFavoriteFood(\''+f.id+'\')" class="absolute top-3 right-3 w-11 h-11 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors">';
-html+='<span class="material-symbols-outlined '+(f.favorite?'text-secondary':'text-white/60')+'" style="font-variation-settings:\'FILL '+(f.favorite?1:0)+'\'">star</span></button>';
+html+='<div class="flex-1 min-w-0">';
+html+='<div class="flex items-start justify-between gap-2">';
+html+='<h3 class="font-headline text-base font-bold text-white leading-tight line-clamp-2 group-hover:text-primary-container transition-colors">'+f.name+'</h3>';
+html+='<button onclick="event.stopPropagation();toggleFavoriteFood(\''+f.id+'\')" class="flex-shrink-0 w-7 h-7 -mt-1 -mr-1 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">';
+html+='<span class="material-symbols-outlined text-base '+(f.favorite?'text-secondary':'text-white/40')+'" style="font-variation-settings:\'FILL '+(f.favorite?1:0)+'\'">star</span></button>';
 html+='</div>';
-html+='<div class="p-4">';
-html+='<h3 class="font-headline text-lg font-bold text-white mb-1 group-hover:text-primary-container transition-colors">'+f.name+'</h3>';
-html+='<p class="text-xs text-on-surface-variant mb-2">'+f.portion+'g porcion</p>';
-html+='<div class="flex items-center justify-between mb-3">';
-html+='<div class="flex items-center gap-1 text-xs"><span class="material-symbols-outlined text-xs text-green-400">local_fire_department</span><span class="text-green-400 font-medium">Net: '+netCarbs+'g</span></div>';
-html+=getKetoStars(ketoScore.score);
+html+='<div class="flex items-center gap-1.5 flex-wrap my-1.5">';
+html+='<span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider" style="background:'+color+'/20;color:'+color+'">'+catLabel+'</span>';
+html+='<span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider" style="background:'+ketoScore.color+'/20;color:'+ketoScore.color+'">'+ketoScore.label+'</span>';
+html+='<span class="text-[10px] text-on-surface-variant">'+f.portion+'g porcion</span>';
 html+='</div>';
-html+='<div class="flex gap-2">';
-html+='<div class="flex-1 bg-surface-container-high rounded-lg p-2 text-center">';
-html+='<p class="text-[10px] text-on-surface-variant uppercase mb-0.5">Prot</p>';
-html+='<p class="text-sm font-bold text-primary-container">'+f.protein+'g</p></div>';
-html+='<div class="flex-1 bg-surface-container-high rounded-lg p-2 text-center">';
-html+='<p class="text-[10px] text-on-surface-variant uppercase mb-0.5">Grasa</p>';
-html+='<p class="text-sm font-bold text-secondary">'+f.fat+'g</p></div>';
-html+='<div class="flex-1 bg-surface-container-high rounded-lg p-2 text-center">';
-html+='<p class="text-[10px] text-on-surface-variant uppercase mb-0.5">Carbs</p>';
-html+='<p class="text-sm font-bold text-green-400">'+f.carbs+'g</p></div>';
+html+='<div class="flex gap-1.5">';
+html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[9px] text-on-surface-variant uppercase leading-none mb-0.5">Net</p><p class="text-xs font-bold text-green-400 leading-none">'+netCarbs+'g</p></div>';
+html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[9px] text-on-surface-variant uppercase leading-none mb-0.5">Prot</p><p class="text-xs font-bold text-primary-container leading-none">'+f.protein+'g</p></div>';
+html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[9px] text-on-surface-variant uppercase leading-none mb-0.5">Grasa</p><p class="text-xs font-bold text-secondary leading-none">'+f.fat+'g</p></div>';
+html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[9px] text-on-surface-variant uppercase leading-none mb-0.5">Carbs</p><p class="text-xs font-bold text-green-400 leading-none">'+f.carbs+'g</p></div>';
 html+='</div>';
 html+='</div>';
 html+='</div>';
