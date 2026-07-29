@@ -4,22 +4,8 @@ import AppLayout from '../../layouts/AppLayout.astro';
 
 <AppLayout title="KetoCore | Alimentos" authGuard={true}>
 <style is:global>
-.sidebar-link.active{background:rgba(22,19,16,1)!important;}
-.sidebar-link.active .material-symbols-outlined{color:#ff4d00!important;}
-.sidebar-link.active{color:white!important;}
-.sidebar-collapsed .sidebar-nav{width:72px;}
-.sidebar-collapsed .sidebar-nav .sidebar-text{display:none;}
-.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0;}
-.sidebar-collapsed .sidebar-logo-text{display:none;}
-.sidebar-collapsed .sidebar-logo{justify-content:center;}
-.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px;}
-.sidebar-collapsed~main .main-content{margin-left:72px;}
-.sidebar-toggle-btn{left:256px;transition:left 0.3s ease;}
-.sidebar-collapsed~.sidebar-toggle-btn{left:72px;}
-
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
 .glass-card{background:rgba(22,19,16,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1)}
-.sidebar-collapsed .sidebar-nav{width:72px}.sidebar-collapsed .sidebar-nav .sidebar-text{display:none}.sidebar-collapsed .sidebar-nav .sidebar-link{justify-content:center;padding-left:0;padding-right:0}.sidebar-collapsed~.topbar-desktop .topbar-pl{padding-left:88px}.sidebar-collapsed~main .main-content{margin-left:72px}.sidebar-toggle-btn{left:256px;transition:left 0.3s ease}.sidebar-collapsed~.sidebar-toggle-btn{left:72px}.sidebar-link.active{background:#161310}.sidebar-link.active .material-symbols-outlined{color:#ff4d00}
 .shadow-glow{box-shadow:0 0 20px rgba(255,77,0,0.3)}
 .shadow-glow-strong{box-shadow:0 0 30px rgba(255,77,0,0.5)}
 ::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:#0b0a08}::-webkit-scrollbar-thumb{background:#1e1a15;border-radius:4px}::-webkit-scrollbar-thumb:hover{background:#2a2a2a}
@@ -61,8 +47,8 @@ input,select{background:#161310!important;color:#fff!important;border:1px solid 
     </button>
   </div>
 </div>
-<main class="main-content pt-14 px-4 pb-20 min-h-screen">
-<div id="ali-wrap" class="space-y-6">
+<main class="main-content pt-14 px-4 pb-20 min-h-screen" style="background:#0b0a08">
+<div id="ali-wrap" class="space-y-6 kc-page" style="padding-top:12px">
 
 <!-- Header -->
 <header class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-2">
@@ -95,7 +81,7 @@ input,select{background:#161310!important;color:#fff!important;border:1px solid 
 <span class="material-symbols-outlined text-lg">upload</span>
 <span class="hidden md:inline">Importar</span>
 </button>
-<button onclick="openAddFoodModal()" class="bg-primary-container text-white px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-primary-container/80 transition-all shadow-glow">
+<button onclick="openAddFoodModal()" class="kc-btn" style="padding:8px 16px;height:auto">
 <span class="material-symbols-outlined">add</span>
 Nuevo
 </button>
@@ -104,12 +90,12 @@ Nuevo
 
 <!-- Daily Macros Tracker -->
 <section id="dailyMacrosBar" class="mb-6 glass-card rounded-2xl p-4">
-<div class="flex items-center justify-between mb-3">
+<div class="flex items-center justify-between mb-3 flex-wrap gap-2">
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-secondary">today</span>
 <h3 class="font-headline font-bold text-white">Tu día hoy</h3>
 </div>
-<div class="flex gap-2">
+<div class="flex gap-2 flex-wrap">
 <button onclick="openQuickRecipeModal()" class="px-3 py-1.5 rounded-lg bg-primary-container/20 text-primary-container text-xs font-bold hover:bg-primary-container/30 transition-all flex items-center gap-1">
 <span class="material-symbols-outlined text-sm">restaurant_menu</span>
 Receta rápida
@@ -725,8 +711,6 @@ Nuevo alimento
 <script is:inline src="/app/food-api.js"></script>
 <script is:inline>
 if(localStorage.getItem("theme")==="dark"||!localStorage.getItem("theme")){document.documentElement.classList.add("dark")}
-if(localStorage.getItem("sidebarCollapsed")==="true"){document.body.classList.add("sidebar-collapsed");var s=document.getElementById("sidebarNav");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");var t=document.getElementById("sidebarToggle");s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px"}
-var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
 
 var defaultFoods=[
 {id:"f1",name:"Huevos",portion:50,calories:78,protein:6,fat:5,carbs:0.6,category:"Proteínas",units:[{name:"unidades",grams:50},{name:"gramos",grams:1}],image:"https://images.pexels.com/photos/162967/pexels-photo-162967.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"},
@@ -1762,28 +1746,6 @@ originalOpenDetail(id);
 if("serviceWorker"in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/app/sw.js").catch(function(){})})}
 </script>
 <script is:inline>
-var _cp=window.location.pathname.split("/").pop()||"index.html";
-document.querySelectorAll(".sidebar-link").forEach(function(l){
-  if(l.getAttribute("href")===_cp){
-    l.classList.add("active");
-    l.style.background="rgba(22,19,16,1)";
-    l.style.color="white";
-    var ic=l.querySelector(".material-symbols-outlined");
-    if(ic)ic.style.color="#ff4d00";
-  }
-});
-if(localStorage.getItem("sidebarCollapsed")==="true"){
-  document.body.classList.add("sidebar-collapsed");
-  var _sn=document.getElementById("sidebarNav");
-  if(_sn){_sn.style.width="72px";_sn.style.overflow="hidden";}
-  var _tp=document.querySelector(".topbar-pl");
-  if(_tp)_tp.style.paddingLeft="88px";
-  var _mc=document.querySelector(".main-content");
-  if(_mc)_mc.style.marginLeft="72px";
-  var _st=document.getElementById("sidebarToggle");
-  if(_st)_st.style.left="72px";
-}
-
 // User Dropdown Menu (Desktop)
 function toggleUserMenu() {
   const dropdown = document.getElementById('userDropdown');
