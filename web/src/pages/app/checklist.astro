@@ -11,7 +11,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
 .primary-gradient{background:linear-gradient(135deg,#ff4d00 0%,#ff7346 100%)}
 .secondary-gradient{background:linear-gradient(135deg,#ffb300 0%,#ffc94f 100%)}
 .custom-scrollbar::-webkit-scrollbar{width:4px}
-.custom-scrollbar::-webkit-scrollbar-track{background:#0b0a08}
+.custom-scrollbar::-webkit-scrollbar-track{background:#131315}
 .custom-scrollbar::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:10px}
 @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 .animate-shimmer{animation:shimmer 2s infinite}
@@ -30,7 +30,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
 }
 </style>
 <!-- Sidebar -->
-<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(19,19,21,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
   <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
     <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
     <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">KetoCore</span>
@@ -63,11 +63,11 @@ import AppLayout from '../../layouts/AppLayout.astro';
     </button>
   </div>
 </div>
-<main class="main-content pt-14 px-4 pb-20 min-h-screen" style="background:#0b0a08">
+<main class="main-content pt-14 px-4 pb-20 min-h-screen" style="background:#131315">
 <div id="ck-grid" class="space-y-4 kc-page" style="padding-top:12px">
 
 <!-- Progreso de hoy -->
-<div id="ck-hero" class="bg-surface-container-low rounded-2xl p-8 flex flex-col items-center justify-center relative overflow-hidden">
+<div id="ck-hero" class="bg-surface-container-low rounded-2xl p-[22px] flex flex-col items-center justify-center relative overflow-hidden">
 <div class="flex items-center justify-between w-full mb-6">
   <h1 class="kc-h1" style="font-size:26px">Tu progreso de hoy</h1>
   <div class="flex items-center gap-2">
@@ -100,7 +100,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
 </div>
 
 <!-- Supplements Section -->
-<div id="ck-supplements" class="bg-surface-container rounded-2xl p-8">
+<div id="ck-supplements" class="bg-surface-container rounded-2xl p-[22px]">
 <div class="flex items-center justify-between mb-6">
 <div>
 <h2 class="font-headline text-xl font-extrabold tracking-tight">Suplementos</h2>
@@ -114,7 +114,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
 </div>
 
 <!-- Weekly History Chart -->
-<div id="ck-history" class="bg-surface-container rounded-2xl p-8">
+<div id="ck-history" class="bg-surface-container rounded-2xl p-[22px]">
 <div class="flex items-center justify-between mb-6">
 <h2 class="font-headline text-xl font-extrabold tracking-tight">Historial Semanal</h2>
 <span class="material-symbols-outlined text-primary">bar_chart</span>
@@ -123,7 +123,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
 </div>
 
 <!-- Checklist Section -->
-<div id="ck-checklist" class="bg-surface-container rounded-2xl p-8 relative overflow-hidden">
+<div id="ck-checklist" class="bg-surface-container rounded-2xl p-[22px] relative overflow-hidden">
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
 <div>
 <h2 class="font-headline text-2xl font-extrabold tracking-tight mb-1">Checklist diario</h2>
@@ -140,7 +140,7 @@ Agregar
 </div>
 
 <!-- Meals Section -->
-<div id="ck-meals" class="bg-surface-container rounded-2xl p-8 relative overflow-hidden">
+<div id="ck-meals" class="bg-surface-container rounded-2xl p-[22px] relative overflow-hidden">
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
 <div>
 <h2 class="font-headline text-2xl font-extrabold tracking-tight mb-1">Comidas del día</h2>

@@ -51,7 +51,7 @@
     line-height: 1.6;
   }
   body[data-theme="app"] {
-    background: #0b0a08 !important;
+    background: #131315 !important;
     color: #f7f4f0 !important;
   }
 }
@@ -280,13 +280,13 @@
   --c-primary-dim: rgba(255,77,0,0.12);
   --c-primary-border: rgba(255,77,0,0.28);
 
-  /* Surfaces (warm toasted near-black — Editorial Bento) */
-  --c-bg: #0b0a08;
-  --c-bg-sidebar: #0f0d0a;
-  --c-surface: #161310;
-  --c-surface-2: #1e1a15;
-  --c-surface-3: #26211a;
-  --c-surface-4: #2c261e;
+  /* Surfaces (neutral charcoal — Editorial Bento) */
+  --c-bg: #131315;
+  --c-bg-sidebar: #101012;
+  --c-surface: #1c1c20;
+  --c-surface-2: #202024;
+  --c-surface-3: #28282d;
+  --c-surface-4: #303035;
   --c-cream: #f3ede3;
 
   /* Borders (warm cream alpha) */
@@ -314,12 +314,12 @@
   --g-surface: linear-gradient(135deg, rgba(255,77,0,0.1) 0%, rgba(255,122,0,0.04) 100%);
 
   /* Override Tailwind @theme tokens for app scope */
-  --color-background: #0b0a08;
-  --color-surface: #161310;
-  --color-surface-container: #1e1a15;
-  --color-surface-container-low: #0b0a08;
-  --color-surface-container-high: #26211a;
-  --color-surface-container-highest: #2c261e;
+  --color-background: #131315;
+  --color-surface: #1c1c20;
+  --color-surface-container: #202024;
+  --color-surface-container-low: #1a1a1d;
+  --color-surface-container-high: #28282d;
+  --color-surface-container-highest: #303035;
   --color-on-surface: #f7f4f0;
   --color-on-surface-variant: rgba(247,244,240,0.55);
 }
@@ -331,16 +331,16 @@
   --color-on-primary: #ffffff;
   --color-on-primary-container: #ffffff;
   --color-cream: #f3ede3;
-  --color-surface: #161310;
-  --color-surface-container: #1e1a15;
-  --color-surface-container-low: #0b0a08;
-  --color-surface-container-high: #26211a;
-  --color-surface-container-highest: #2c261e;
+  --color-surface: #1c1c20;
+  --color-surface-container: #202024;
+  --color-surface-container-low: #1a1a1d;
+  --color-surface-container-high: #28282d;
+  --color-surface-container-highest: #303035;
   --color-on-surface: #f7f4f0;
   --color-on-surface-variant: rgba(247,244,240,0.55);
   --color-outline: rgba(255,240,225,0.16);
   --color-outline-variant: rgba(255,240,225,0.06);
-  --color-background: #0b0a08;
+  --color-background: #131315;
   --color-secondary: #22c55e;
   --color-secondary-container: #22c55e;
   --color-tertiary: #60a5fa;
@@ -399,7 +399,7 @@ button, a, [role="button"] { touch-action: manipulation; }
 
 .bg-background { background-color: #f4efe6; }
 [data-theme="app"] .bg-background,
-[data-theme="app"].bg-background { background-color: #0b0a08; }
+[data-theme="app"].bg-background { background-color: #131315; }
 
 /* Gradient text utility */
 .text-gradient-primary {
