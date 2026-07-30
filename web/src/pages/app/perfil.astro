@@ -4,7 +4,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
 
 <AppLayout title="KetoCore | Mi Perfil" authGuard={true}>
 <style is:global>
-html,body{margin:0;padding:0;box-sizing:border-box;background:#0b0a08;color:#f7f4f0;font-family:'Inter',sans-serif}
+html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f4f0;font-family:'Inter',sans-serif}
 *,*::before,*::after{box-sizing:border-box}
 .glass-card{background:#181818;border:1px solid rgba(255,255,255,0.09);box-shadow:0 2px 16px rgba(0,0,0,0.4)}
 .field-input{background:#111;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px 12px;font-size:14px;color:#f7f4f0;width:100%;-webkit-appearance:none;appearance:none;font-family:'Inter',sans-serif}
@@ -13,7 +13,7 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#0b0a08;color:#f7f
 select.field-input option{background:#1a1a1a;color:#f7f4f0}
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
 @media (min-width: 768px) {
-  #perfilMain {
+  #perfilGrid {
     display: grid;
     grid-template-columns: 1fr 360px;
     gap: 1.25rem;
@@ -21,20 +21,21 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
     padding-top: 4.5rem;
     padding-bottom: 3rem !important;
   }
-  #perfilMain > * { margin-top: 0 !important; }
-  #pf-hero    { grid-column: 1 / -1; grid-row: 1; }
-  #pf-metrics { grid-column: 1 / -1; grid-row: 2; }
-  #pf-datos   { grid-column: 1; grid-row: 3; }
-  #pf-peso    { grid-column: 1; grid-row: 4; }
-  #pf-entreno { grid-column: 1; grid-row: 5; }
-  #pf-macros    { grid-column: 2; grid-row: 3; }
-  #pf-historial { grid-column: 2; grid-row: 4; }
-  #pf-peligro   { grid-column: 2; grid-row: 5; }
+  #perfilGrid > * { margin-top: 0 !important; }
+  #pf-header  { grid-column: 1 / -1; grid-row: 1; }
+  #pf-hero    { grid-column: 1 / -1; grid-row: 2; }
+  #pf-metrics { grid-column: 1 / -1; grid-row: 3; }
+  #pf-datos   { grid-column: 1; grid-row: 4; }
+  #pf-peso    { grid-column: 1; grid-row: 5; }
+  #pf-entreno { grid-column: 1; grid-row: 6; }
+  #pf-macros    { grid-column: 2; grid-row: 4; }
+  #pf-historial { grid-column: 2; grid-row: 5; }
+  #pf-peligro   { grid-column: 2; grid-row: 6; }
 }
 </style>
 
 <!-- TopBar -->
-<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(19,19,21,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
   <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
     <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
     <h1 class="text-base font-black" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Mi Perfil</h1>
@@ -51,10 +52,11 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
 </header>
 
 <!-- Main -->
-<main id="perfilMain" class="main-content pt-14 pb-24 px-4 space-y-3" style="background:#0b0a08">
+<main id="perfilMain" class="main-content pt-14 pb-20 min-h-screen" style="background:#131315">
+<div id="perfilGrid" class="space-y-3 kc-page" style="padding-top:12px">
 
   <!-- Header editorial -->
-  <div style="margin:10px 2px 16px">
+  <div id="pf-header" style="margin:10px 2px 16px">
     <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Cuenta · Ajustes</div>
     <h1 class="kc-h1" style="font-size:30px">Tu perfil<br><span style="color:rgba(247,244,240,0.4)">metabólico.</span></h1>
   </div>
@@ -287,6 +289,7 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
     </button>
   </section>
 
+</div>
 </main>
 
 <!-- Weight Modal -->
