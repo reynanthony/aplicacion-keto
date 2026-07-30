@@ -81,10 +81,19 @@ const { title = 'KetoCore', authGuard = true, bodyClass = '' } = Astro.props;
           });
         });
       }).catch(function () {});
-      var swReloaded = false;
+      // Guard en sessionStorage (no una variable de página): evita loops de
+      // recarga si controllerchange dispara mas de una vez entre distintas
+      // navegaciones mientras el SW nuevo termina de tomar control. El flag
+      // se limpia a los 5s -- tiempo de sobra para que la recarga termine,
+      // dejando la puerta abierta a futuras actualizaciones legítimas.
       navigator.serviceWorker.addEventListener('controllerchange', function () {
-        if (swReloaded) return;
-        swReloaded = true;
+        var alreadyReloading = false;
+        try { alreadyReloading = sessionStorage.getItem('kc_sw_reloading') === '1'; } catch (e) {}
+        if (alreadyReloading) return;
+        try {
+          sessionStorage.setItem('kc_sw_reloading', '1');
+          setTimeout(function () { try { sessionStorage.removeItem('kc_sw_reloading'); } catch (e) {} }, 5000);
+        } catch (e) {}
         window.location.reload();
       });
     });
