@@ -274,7 +274,7 @@ salud:{icon:"health_and_safety",color:"#2196f3",bg:"bg-blue-500/20"}
 
 function loadSupplementData(){
 var data=getSupplementRecommendations();
-var goalLabels={salud:"Salud",perdida_peso:"Perdida peso",musculo:"Ganar musculo",mantenimiento:"Mantenimiento",lose:"Perder grasa",gain:"Ganar musculo",maintain:"Mantener",strength:"Fuerza"};
+var goalLabels={salud:"Salud",perdida_peso:"Perdida peso",musculo:"Ganar musculo",mantenimiento:"Mantener",lose:"Perder grasa",gain:"Ganar musculo",maintain:"Mantener",strength:"Fuerza"};
 document.getElementById("profileWeight").textContent=(data.profile.weight||"--")+" kg";
 document.getElementById("profileGoal").textContent=goalLabels[data.profile.goal]||"Salud";
 document.getElementById("profileExercise").textContent=data.profile.activityLevel||(data.profile.hasExercise?(data.profile.workoutDays+" dias/sem"):"No");
