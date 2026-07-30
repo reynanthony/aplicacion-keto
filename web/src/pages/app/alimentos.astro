@@ -10,6 +10,9 @@ import AppLayout from '../../layouts/AppLayout.astro';
 .shadow-glow-strong{box-shadow:0 0 30px rgba(255,77,0,0.5)}
 ::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:#131315}::-webkit-scrollbar-thumb{background:#1e1a15;border-radius:4px}::-webkit-scrollbar-thumb:hover{background:#2a2a2a}
 input,select{background:#161310!important;color:#fff!important;border:1px solid #2a2a2a!important;border-radius:0.5rem;padding:0.75rem 1rem;font-size:1rem;-webkit-appearance:none;-moz-appearance:none;appearance:none}input:focus,select:focus{outline:none;border-color:#ff4d00!important}input::placeholder{color:rgba(247,244,240,0.4)}select option{background:#161310;color:#fff}
+/* Los inputs con icono de lupa a la izquierda necesitan mas padding-left que
+   el generico de arriba (que pisaba el pl-12 de Tailwind y tapaba el texto). */
+#searchInput,#onlineSearchInput{padding-left:3rem}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}#toast{animation:toastIn 0.3s ease}
 @media(min-width:768px){#ali-wrap{max-width:none!important;padding-top:1rem;}}
 </style>
@@ -113,7 +116,7 @@ Ver macros
 <div id="dailyMacrosContent" class="grid grid-cols-2 md:grid-cols-4 gap-4">
 <div class="text-center">
 <div class="relative w-16 h-16 mx-auto mb-2">
-<svg class="w-16 h-16 -rotate-90"><circle cx="32" cy="32" r="28" fill="none" stroke="#161310" stroke-width="6"/><circle id="calCircle" cx="32" cy="32" r="28" fill="none" stroke="#ffb300" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="140"/></svg>
+<svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="#161310" stroke-width="6"/><circle id="calCircle" cx="32" cy="32" r="28" fill="none" stroke="#ffb300" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="140"/></svg>
 <div class="absolute inset-0 flex items-center justify-center"><span id="calProgress" class="text-xs font-bold text-yellow-400">20%</span></div>
 </div>
 <p class="text-xs text-on-surface-variant">Calorías</p>
@@ -121,7 +124,7 @@ Ver macros
 </div>
 <div class="text-center">
 <div class="relative w-16 h-16 mx-auto mb-2">
-<svg class="w-16 h-16 -rotate-90"><circle cx="32" cy="32" r="28" fill="none" stroke="#161310" stroke-width="6"/><circle id="protCircle" cx="32" cy="32" r="28" fill="none" stroke="#ff4d00" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="88"/></svg>
+<svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="#161310" stroke-width="6"/><circle id="protCircle" cx="32" cy="32" r="28" fill="none" stroke="#ff4d00" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="88"/></svg>
 <div class="absolute inset-0 flex items-center justify-center"><span id="protProgress" class="text-xs font-bold text-primary-container">50%</span></div>
 </div>
 <p class="text-xs text-on-surface-variant">Proteína</p>
@@ -129,7 +132,7 @@ Ver macros
 </div>
 <div class="text-center">
 <div class="relative w-16 h-16 mx-auto mb-2">
-<svg class="w-16 h-16 -rotate-90"><circle cx="32" cy="32" r="28" fill="none" stroke="#161310" stroke-width="6"/><circle id="fatCircle" cx="32" cy="32" r="28" fill="none" stroke="#ffb300" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="132"/></svg>
+<svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="#161310" stroke-width="6"/><circle id="fatCircle" cx="32" cy="32" r="28" fill="none" stroke="#ffb300" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="132"/></svg>
 <div class="absolute inset-0 flex items-center justify-center"><span id="fatProgress" class="text-xs font-bold text-secondary">25%</span></div>
 </div>
 <p class="text-xs text-on-surface-variant">Grasa</p>
@@ -137,7 +140,7 @@ Ver macros
 </div>
 <div class="text-center">
 <div class="relative w-16 h-16 mx-auto mb-2">
-<svg class="w-16 h-16 -rotate-90"><circle cx="32" cy="32" r="28" fill="none" stroke="#161310" stroke-width="6"/><circle id="carbsCircle" cx="32" cy="32" r="28" fill="none" stroke="#22c55e" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="160"/></svg>
+<svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="#161310" stroke-width="6"/><circle id="carbsCircle" cx="32" cy="32" r="28" fill="none" stroke="#22c55e" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="160"/></svg>
 <div class="absolute inset-0 flex items-center justify-center"><span id="carbsProgress" class="text-xs font-bold text-green-400">9%</span></div>
 </div>
 <p class="text-xs text-on-surface-variant">Net Carbs</p>
@@ -829,6 +832,10 @@ async function loadFoodsFromSupabase() {
             const supabaseFoods = data.map(r => ({
                 id: r.id,
                 name: r.nombre,
+                // Los valores de Supabase vienen por 100g/100ml (convencion USDA),
+                // no por una porcion especifica -- portion:100 refleja esa base real.
+                portion: 100,
+                units: [{ name: 'gramos', grams: 1 }],
                 calories: parseFloat(r.calorias) || 0,
                 protein: parseFloat(r.proteinas) || 0,
                 fat: parseFloat(r.grasas) || 0,
@@ -1189,7 +1196,7 @@ document.getElementById("detailNetCarbs").textContent=netCarbs.toFixed(1)+"g";
 document.getElementById("detailNetCarbs").style.color=ketoScore.color;
 return;
 }
-var unit=currentDetailFood.units.find(function(u){return u.name===unitName});
+var unit=(currentDetailFood.units||[]).find(function(u){return u.name===unitName});
 if(!unit)return;
 var ratio=qty*unit.grams/currentDetailFood.portion;
 document.getElementById("detailPortion").textContent=Math.round(qty*unit.grams)+"g";
