@@ -32,7 +32,7 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
 select.field-input option{background:#1a1a1a;color:#f7f4f0}
 textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
 .obj-btn{background:#111;border:1px solid rgba(255,240,225,0.08);border-radius:14px;padding:14px 10px;cursor:pointer;transition:border-color 0.15s,background 0.15s;text-align:center;color:#f7f4f0;font-family:'Inter',sans-serif}
-.rate-btn{background:#111;border:1px solid rgba(255,240,225,0.08);border-radius:10px;padding:7px 11px;cursor:pointer;font-size:12px;font-weight:700;color:rgba(247,244,240,0.5);transition:all 0.15s;font-family:'Inter',sans-serif;text-align:center;line-height:1.3}
+.rate-btn{background:#111;border:1px solid rgba(255,240,225,0.08);border-radius:10px;padding:7px 11px;cursor:pointer;font-size:13px;font-weight:700;color:rgba(247,244,240,0.5);transition:all 0.15s;font-family:'Inter',sans-serif;text-align:center;line-height:1.3}
 .rate-btn.active{background:rgba(255,77,0,0.12);border-color:rgba(255,77,0,0.35);color:#ff4d00}
 .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,240,225,0.05)}
 .toggle-row:last-child{border-bottom:none}
@@ -55,7 +55,7 @@ textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
     <h1 class="text-base font-black" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Mis Objetivos</h1>
   </a>
   <div class="flex items-center gap-2">
-    <button onclick="saveObjetivos()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all active:scale-95" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);color:#fff">
+    <button onclick="saveObjetivos()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-bold transition-all active:scale-95" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);color:#fff">
       <span class="material-symbols-outlined" style="font-size:15px">save</span>
       Guardar
     </button>
@@ -70,7 +70,7 @@ textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
 
   <!-- Header editorial -->
   <div style="margin:10px 2px 16px">
-    <div style="font-size:12px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Metas · Camino</div>
+    <div style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Metas · Camino</div>
     <h1 class="kc-h1" style="font-size:30px">Tus objetivos,<br><span style="color:rgba(247,244,240,0.57)">hito a hito.</span></h1>
   </div>
 
@@ -82,7 +82,7 @@ textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="objGrid"></div>
     <div id="objDescription" class="mt-3 rounded-xl px-3 py-2.5" style="background:#111;border:1px solid rgba(255,240,225,0.07);display:none">
-      <p id="objDescText" class="text-xs leading-relaxed" style="color:rgba(247,244,240,0.65)"></p>
+      <p id="objDescText" class="text-[13px] leading-relaxed" style="color:rgba(247,244,240,0.65)"></p>
     </div>
   </section>
 
@@ -141,7 +141,7 @@ textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
       <h2 class="text-sm font-bold" style="color:#f7f4f0">Tu proyección</h2>
     </div>
     <div id="projectionContent">
-      <p class="text-xs text-center py-3" style="color:rgba(247,244,240,0.55)">Completa tu peso actual y meta para ver la proyección</p>
+      <p class="text-[13px] text-center py-3" style="color:rgba(247,244,240,0.55)">Completa tu peso actual y meta para ver la proyección</p>
     </div>
   </section>
 
@@ -153,7 +153,7 @@ textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
         <h2 class="text-sm font-bold" style="color:#f7f4f0">Macros diarios</h2>
       </div>
       <button onclick="calcMacros()" class="flex items-center gap-1 text-[12px] font-bold px-2.5 py-1.5 rounded-full active:scale-95 transition-all" style="background:rgba(255,77,0,0.12);color:#ff4d00;border:1px solid rgba(255,77,0,0.18)">
-        <span class="material-symbols-outlined" style="font-size:13px">calculate</span>
+        <span class="material-symbols-outlined" style="font-size:14px">calculate</span>
         Auto-calcular
       </button>
     </div>
@@ -235,7 +235,7 @@ textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
       <h2 class="text-sm font-bold" style="color:#f7f4f0">Próximos hitos</h2>
     </div>
     <div id="hitosContainer">
-      <p class="text-xs" style="color:rgba(247,244,240,0.55)">Ingresa tu peso actual para ver tus hitos</p>
+      <p class="text-[13px]" style="color:rgba(247,244,240,0.55)">Ingresa tu peso actual para ver tus hitos</p>
     </div>
   </section>
 
@@ -298,7 +298,7 @@ function renderObjGrid() {
     var fillIcon  = 'font-variation-settings:\'FILL\' 1,\'wght\' 400,\'GRAD\' 0,\'opsz\' 24';
     html += '<button class="obj-btn" onclick="selectObjective(\'' + o.id + '\')" style="' + spanStyle + bgStyle + 'border-color:' + borderCol + '">';
     html += '<span class="material-symbols-outlined" style="font-size:22px;color:' + (isActive ? o.color : 'rgba(247,244,240,0.52)') + ';display:block;margin-bottom:6px;' + fillIcon + '">' + o.icon + '</span>';
-    html += '<span style="font-size:12px;font-weight:700;color:' + (isActive ? '#f7f4f0' : 'rgba(247,244,240,0.55)') + '">' + o.label + '</span>';
+    html += '<span style="font-size:13px;font-weight:700;color:' + (isActive ? '#f7f4f0' : 'rgba(247,244,240,0.55)') + '">' + o.label + '</span>';
     html += '</button>';
   });
   grid.innerHTML = html;
@@ -360,7 +360,7 @@ function updateProjection() {
   if (!content) return;
 
   if (!cw || !gw || Math.abs(cw - gw) < 0.1) {
-    content.innerHTML = '<p class="text-xs text-center py-3" style="color:rgba(247,244,240,0.55)">Completa tu peso actual y meta para ver la proyección</p>';
+    content.innerHTML = '<p class="text-[13px] text-center py-3" style="color:rgba(247,244,240,0.55)">Completa tu peso actual y meta para ver la proyección</p>';
     return;
   }
 
@@ -381,7 +381,7 @@ function updateProjection() {
 
   html += '<div class="rounded-xl p-3 text-center" style="background:rgba(255,77,0,0.06);border:1px solid rgba(255,77,0,0.12)">';
   html += '<span class="material-symbols-outlined" style="color:#ff4d00;font-size:20px;display:block;margin-bottom:4px;font-variation-settings:\'FILL\' 1,\'wght\' 400,\'GRAD\' 0,\'opsz\' 24">event_available</span>';
-  html += '<p style="font-size:12px;color:rgba(247,244,240,0.6);margin-bottom:2px">' + verb + '</p>';
+  html += '<p style="font-size:13px;color:rgba(247,244,240,0.6);margin-bottom:2px">' + verb + '</p>';
   html += '<p style="font-size:15px;font-weight:800;color:#ff4d00">' + dateStr + '</p>';
   html += '<p style="font-size:11px;color:rgba(247,244,240,0.55);margin-top:3px">A ' + selectedRate + ' kg/semana</p>';
   html += '</div>';
@@ -473,7 +473,7 @@ function renderCompromisos() {
     html += '<div class="toggle-row">';
     html += '<div style="display:flex;align-items:center;gap:10px">';
     html += '<span class="material-symbols-outlined" style="font-size:18px;color:' + c.color + ';' + fillVars + '">' + c.icon + '</span>';
-    html += '<span style="font-size:13px;color:#f7f4f0">' + c.label + '</span>';
+    html += '<span style="font-size:14px;color:#f7f4f0">' + c.label + '</span>';
     html += '</div>';
     html += '<label class="toggle-switch">';
     html += '<input type="checkbox" id="comp_' + c.id + '"' + (chk ? ' checked' : '') + ' onchange="compromisos[\'' + c.id + '\']=this.checked">';
@@ -494,7 +494,7 @@ function updateHitos() {
   if (!container) return;
 
   if (!cw) {
-    container.innerHTML = '<p style="font-size:12px;color:rgba(247,244,240,0.55)">Ingresa tu peso actual para ver tus hitos</p>';
+    container.innerHTML = '<p style="font-size:13px;color:rgba(247,244,240,0.55)">Ingresa tu peso actual para ver tus hitos</p>';
     return;
   }
 
@@ -522,7 +522,7 @@ function updateHitos() {
     html += '<div style="display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.04)">';
     html += '<div class="milestone-dot ' + dotClass + '"></div>';
     html += '<div style="flex:1">';
-    html += '<span style="font-size:13px;font-weight:700;color:' + lblColor + '">' + h.label + '</span>';
+    html += '<span style="font-size:14px;font-weight:700;color:' + lblColor + '">' + h.label + '</span>';
     html += '<span style="font-size:11px;color:' + subColor + ';margin-left:6px">' + h.sub + '</span>';
     html += '</div>';
     if (h.reached) {

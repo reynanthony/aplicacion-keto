@@ -38,7 +38,7 @@ html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-fa
 .suggestion-chip {
   display: inline-flex; align-items: center;
   padding: 6px 14px; border-radius: 100px;
-  font-size:12px; font-weight: 600; cursor: pointer;
+  font-size:13px; font-weight: 600; cursor: pointer;
   background: #161310; border: 1px solid rgba(255,240,225,0.07);
   color: rgba(247,244,240,0.65); white-space: nowrap;
   transition: all 0.15s;
@@ -82,7 +82,7 @@ html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-fa
 
   <div class="flex items-center gap-2">
     <button onclick="toggleContext()" id="btnCtx"
-      class="text-xs font-bold px-3 py-1.5 rounded-full transition-all"
+      class="text-[13px] font-bold px-3 py-1.5 rounded-full transition-all"
       style="background:#161310;color:rgba(247,244,240,0.55);border:1px solid rgba(255,240,225,0.06)">
       Contexto
     </button>
@@ -100,9 +100,9 @@ html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-fa
   <!-- Context panel (collapsible) -->
   <div id="contextPanel" class="hidden mb-3">
     <div class="rounded-2xl p-4" style="background:#161310;border:1px solid rgba(255,240,225,0.07)">
-      <p class="text-xs font-bold mb-3 uppercase tracking-widest" style="color:rgba(247,244,240,0.55)">Tu contexto actual</p>
+      <p class="text-[13px] font-bold mb-3 uppercase tracking-widest" style="color:rgba(247,244,240,0.55)">Tu contexto actual</p>
       <div id="contextGrid" class="grid grid-cols-3 gap-3"></div>
-      <p id="contextHint" class="text-xs mt-3" style="color:rgba(247,244,240,0.52)"></p>
+      <p id="contextHint" class="text-[13px] mt-3" style="color:rgba(247,244,240,0.52)"></p>
     </div>
   </div>
 
@@ -114,7 +114,7 @@ html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-fa
 
   <!-- Suggestion chips (hidden after first message) -->
   <div id="suggestionsSection" class="mt-5">
-    <p class="text-xs mb-2.5 font-semibold" style="color:rgba(247,244,240,0.55)">Preguntas frecuentes</p>
+    <p class="text-[13px] mb-2.5 font-semibold" style="color:rgba(247,244,240,0.55)">Preguntas frecuentes</p>
     <div id="suggestionChips" class="flex flex-wrap gap-2"></div>
   </div>
 
@@ -296,8 +296,8 @@ function renderAlerts() {
       '<div class="flex items-start gap-2.5">' +
         '<span class="material-symbols-outlined icon-filled flex-shrink-0" style="color:' + s.icon + ';font-size:18px;margin-top:1px">' + escHtml(alert.icon || 'info') + '</span>' +
         '<div class="flex-1">' +
-          '<p class="text-xs font-bold" style="color:#f7f4f0">' + escHtml(alert.title) + '</p>' +
-          '<p class="text-xs mt-0.5 leading-relaxed" style="color:rgba(247,244,240,0.6)">' + escHtml(alert.message) + '</p>' +
+          '<p class="text-[13px] font-bold" style="color:#f7f4f0">' + escHtml(alert.title) + '</p>' +
+          '<p class="text-[13px] mt-0.5 leading-relaxed" style="color:rgba(247,244,240,0.6)">' + escHtml(alert.message) + '</p>' +
           btn +
         '</div>' +
         '<button onclick="dismissAlert(\'' + escHtml(alert.id) + '\')" class="material-symbols-outlined flex-shrink-0" style="color:rgba(247,244,240,0.5);font-size:16px">close</button>' +

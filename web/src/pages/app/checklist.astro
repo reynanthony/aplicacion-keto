@@ -50,7 +50,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
 <div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161310;border:1px solid rgba(255,240,225,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
   <div class="p-3" style="border-bottom:1px solid rgba(255,240,225,0.06)">
     <p class="text-sm font-semibold" style="color:#f7f4f0" id="mobileDropdownUserName">Usuario</p>
-    <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
+    <p class="text-[13px] mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
   </div>
   <div class="p-2">
     <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f7f4f0">
@@ -230,11 +230,11 @@ Agregar
 </div>
 <div class="space-y-4">
 <div>
-<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Nombre</label>
+<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Nombre</label>
 <input type="text" id="itemName" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary" placeholder="Ej: Meditacion">
 </div>
 <div>
-<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Icono</label>
+<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Icono</label>
 <select id="itemIcon" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary">
 <option value="water_drop">Agua</option>
 <option value="science">Ciencia/Electrolitos</option>
@@ -250,11 +250,11 @@ Agregar
 </div>
 <div class="grid grid-cols-2 gap-4">
 <div>
-<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Meta</label>
+<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Meta</label>
 <input type="number" id="itemTarget" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary" value="1" min="1">
 </div>
 <div>
-<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Unidad</label>
+<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Unidad</label>
 <input type="text" id="itemUnit" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary" value="min" placeholder="min, g, hrs...">
 </div>
 </div>
@@ -355,7 +355,7 @@ cardHtml+='<div class="w-14 h-14 rounded-2xl flex items-center justify-center fl
 cardHtml+='<span class="material-symbols-outlined text-2xl '+pulseClass+'" style="color:'+color+'">'+item.icon+'</span>';
 if(isCompleted){
 cardHtml+='<div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">';
-cardHtml+='<span class="material-symbols-outlined text-white text-xs" style="font-variation-settings:\'FILL\' 1">check</span></div>';
+cardHtml+='<span class="material-symbols-outlined text-white text-[13px]" style="font-variation-settings:\'FILL\' 1">check</span></div>';
 }
 cardHtml+='</div>';
 cardHtml+='<div class="flex-1">';
@@ -366,8 +366,8 @@ cardHtml+='<div class="relative h-3 rounded-full bg-surface-container-highest ov
 cardHtml+='<div class="absolute inset-y-0 left-0 rounded-full transition-all duration-500 '+(isCompleted?'':'primary-gradient')+'" style="width:'+percent+'%;'+(isCompleted?'background:#4ade80':('background:'+color))+'"></div>';
 cardHtml+='<div class="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-white/30 to-transparent" style="width:'+percent+'%"></div></div>';
 cardHtml+='<div class="flex justify-between items-center mt-2">';
-cardHtml+='<span class="text-xs text-on-surface-variant">'+displayValue+' '+item.unit+'</span>';
-cardHtml+='<span class="text-xs text-on-surface-variant">Meta: '+item.target+' '+item.unit+'</span></div></div>';
+cardHtml+='<span class="text-[13px] text-on-surface-variant">'+displayValue+' '+item.unit+'</span>';
+cardHtml+='<span class="text-[13px] text-on-surface-variant">Meta: '+item.target+' '+item.unit+'</span></div></div>';
 cardHtml+='</div></div>';
 container.innerHTML+=cardHtml;
 });
@@ -449,7 +449,7 @@ function renderWeeklyChart(){
     var glowClass=percent>=80?"shadow-[0_0_20px_rgba(255,77,0,0.5)]":percent>=50?"shadow-[0_0_15px_rgba(255,179,0,0.4)]":"";
     
     html+='<div class="flex flex-col items-center gap-3 flex-1">';
-    html+='<span class="text-xs font-bold '+(isToday?"text-primary":"text-on-surface-variant")+'">'+(percent>0?percent+"%":"-")+'</span>';
+    html+='<span class="text-[13px] font-bold '+(isToday?"text-primary":"text-on-surface-variant")+'">'+(percent>0?percent+"%":"-")+'</span>';
     html+='<div class="w-full flex justify-center">';
     html+='<div class="w-8 sm:w-10 relative" style="height:140px">';
     html+='<div class="absolute bottom-0 left-0 right-0 rounded-2xl transition-all duration-700 '+(isFuture?"opacity-20":(percent>=80?"bg-primary-gradient":percent>=50?"bg-secondary-gradient":"bg-surface-variant"))+' '+glowClass+'" style="height:'+barHeight+'%;background:'+color+'"></div>';
@@ -605,7 +605,7 @@ html+='<div class="w-10 h-10 rounded-lg flex items-center justify-center" style=
 html+='<span class="material-symbols-outlined" style="color:'+color+'">'+item.icon+'</span></div>';
 html+='<div class="flex-1">';
 html+='<p class="font-medium text-white">'+item.label+'</p>';
-html+='<p class="text-xs text-on-surface-variant">Meta: '+item.target+' '+item.unit+'</p></div>';
+html+='<p class="text-[13px] text-on-surface-variant">Meta: '+item.target+' '+item.unit+'</p></div>';
 html+='<button onclick="editItem('+index+')" class="w-11 h-11 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-white/10 hover:text-white transition-all"><span class="material-symbols-outlined text-sm">edit</span></button>';
 html+='<button onclick="deleteItem('+index+')" class="w-11 h-11 rounded-lg flex items-center justify-center text-error hover:bg-error/20 transition-all"><span class="material-symbols-outlined text-sm">delete</span></button>';
 html+='</div>';
@@ -732,7 +732,7 @@ var colorClass=mealColors[meal]||"bg-surface-container-high";
 var borderClass=isConsumed?"border-primary":"border-surface-container-high";
 html+='<div class="flex items-center gap-4 p-4 rounded-2xl border-2 '+borderClass+' bg-surface-container-low cursor-pointer hover:bg-surface-container transition-all" onclick="toggleMealConsumed(\''+meal+'\')">';
 html+='<div class="w-12 h-12 rounded-xl '+colorClass+' flex items-center justify-center"><span class="material-symbols-outlined text-xl text-white">'+icon+'</span></div>';
-html+='<div class="flex-1"><p class="font-bold text-white">'+mealLabels[meal]+'</p><p class="text-xs text-on-surface-variant">'+(items.length>0?items.length+" items":"Sin alimentos")+'</p></div>';
+html+='<div class="flex-1"><p class="font-bold text-white">'+mealLabels[meal]+'</p><p class="text-[13px] text-on-surface-variant">'+(items.length>0?items.length+" items":"Sin alimentos")+'</p></div>';
 html+='<span class="material-symbols-outlined '+(isConsumed?"text-primary":"text-on-surface-variant/70")+'" style="font-variation-settings:'+(isConsumed?"'FILL' 1":"0")+'">'+(isConsumed?"check_circle":"radio_button_unchecked")+'</span>';
 html+='</div>';
 });
@@ -935,7 +935,7 @@ function renderSupplements(){
     html+='<span class="material-symbols-outlined text-2xl" style="color:'+supp.color+'">'+supp.icon+'</span></div>';
     html+='<div class="flex-1">';
     html+='<p class="font-bold text-white">'+supp.name+'</p>';
-    html+='<p class="text-xs text-on-surface-variant">'+taken+' / '+supp.dose+' '+supp.unit+'</p>';
+    html+='<p class="text-[13px] text-on-surface-variant">'+taken+' / '+supp.dose+' '+supp.unit+'</p>';
     html+='<div class="w-full h-1.5 bg-surface-container-highest rounded-full mt-2 overflow-hidden">';
     html+='<div class="h-full rounded-full transition-all" style="width:'+Math.min((taken/supp.dose)*100,100)+'%;background:'+supp.color+'"></div></div>';
     html+='</div>';
@@ -1014,7 +1014,7 @@ function renderSupplementsConfig(){
   var sportsSupps=supps.filter(function(s){return s.category==="deportivo"});
   var vitaminSupps=supps.filter(function(s){return s.category==="vitaminas"});
   
-  var html='<div class="mb-4"><h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3">Suplementos Deportivos</h4><div class="grid grid-cols-2 gap-2">';
+  var html='<div class="mb-4"><h4 class="text-[13px] font-bold text-on-surface-variant uppercase tracking-wider mb-3">Suplementos Deportivos</h4><div class="grid grid-cols-2 gap-2">';
   sportsSupps.forEach(function(supp){
     var isSelected=selected.indexOf(supp.id)!==-1;
     html+='<button onclick="toggleSupplement(\''+supp.id+'\')" class="p-3 rounded-xl text-left transition-all '+(isSelected?'bg-primary/20 border border-primary':'bg-surface-container-high border border-transparent hover:border-primary/30')+'">';
@@ -1027,7 +1027,7 @@ function renderSupplementsConfig(){
   });
   html+='</div></div>';
   
-  html+='<div><h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3">Vitaminas y Minerales</h4><div class="grid grid-cols-2 gap-2">';
+  html+='<div><h4 class="text-[13px] font-bold text-on-surface-variant uppercase tracking-wider mb-3">Vitaminas y Minerales</h4><div class="grid grid-cols-2 gap-2">';
   vitaminSupps.forEach(function(supp){
     var isSelected=selected.indexOf(supp.id)!==-1;
     html+='<button onclick="toggleSupplement(\''+supp.id+'\')" class="p-3 rounded-xl text-left transition-all '+(isSelected?'bg-primary/20 border border-primary':'bg-surface-container-high border border-transparent hover:border-primary/30')+'">';

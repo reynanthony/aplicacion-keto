@@ -34,7 +34,7 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
     <h1 class="text-base font-black" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Mi Progreso</h1>
   </a>
   <div class="flex items-center gap-2">
-    <button onclick="openAddWeightModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all active:scale-95" style="background:rgba(255,77,0,0.15);color:#ff4d00;border:1px solid rgba(255,77,0,0.25)">
+    <button onclick="openAddWeightModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-bold transition-all active:scale-95" style="background:rgba(255,77,0,0.15);color:#ff4d00;border:1px solid rgba(255,77,0,0.25)">
       <span class="material-symbols-outlined" style="font-size:15px">add</span>
       Registrar
     </button>
@@ -50,7 +50,7 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
 
   <!-- Header editorial -->
   <div id="prog-header" style="margin:10px 2px 16px">
-    <div style="font-size:12px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Progreso · Resultados</div>
+    <div style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Progreso · Resultados</div>
     <h1 class="kc-h1" style="font-size:30px">Tu progreso,<br><span style="color:rgba(247,244,240,0.57)">medido de verdad.</span></h1>
   </div>
 
@@ -110,7 +110,7 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
     <div class="flex items-center gap-2 mb-3">
       <span class="material-symbols-outlined text-lg" style="color:#22c55e;font-variation-settings:'FILL' 1">fact_check</span>
       <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Adherencia — 7 días</h2>
-      <span id="adherencePctBadge" class="ml-auto text-xs font-bold px-2 py-0.5 rounded-full" style="background:rgba(34,197,94,0.12);color:#22c55e"></span>
+      <span id="adherencePctBadge" class="ml-auto text-[13px] font-bold px-2 py-0.5 rounded-full" style="background:rgba(34,197,94,0.12);color:#22c55e"></span>
     </div>
     <div id="adherenceWeek" class="flex gap-1.5 justify-between"></div>
   </section>
@@ -168,7 +168,7 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
       </div>
       <div class="flex-1">
         <p id="healthScoreProgLabel" class="text-sm font-bold mb-0.5" style="color:#f7f4f0">--</p>
-        <p class="text-xs mb-3" style="color:rgba(247,244,240,0.6)">Checklist · Macros · Peso · Ejercicio</p>
+        <p class="text-[13px] mb-3" style="color:rgba(247,244,240,0.6)">Checklist · Macros · Peso · Ejercicio</p>
         <div id="healthScoreBreakdown" class="space-y-1.5"></div>
       </div>
     </div>
@@ -337,10 +337,10 @@ function loadProgressPage(){
             '<div style="width:28px;height:28px;border-radius:8px;background:' + a.bg + ';display:flex;align-items:center;justify-content:center;flex-shrink:0">' +
               '<span class="material-symbols-outlined" style="font-size:14px;color:' + a.color + ';font-variation-settings:\'FILL\' 1">' + a.icon + '</span>' +
             '</div>' +
-            '<span class="text-xs font-medium" style="color:#f7f4f0">' + a.label + '</span>' +
+            '<span class="text-[13px] font-medium" style="color:#f7f4f0">' + a.label + '</span>' +
           '</div>';
         }).join('')
-      : '<p class="text-xs" style="color:rgba(247,244,240,0.6)">Completa tu primer checklist para desbloquear logros.</p>';
+      : '<p class="text-[13px]" style="color:rgba(247,244,240,0.6)">Completa tu primer checklist para desbloquear logros.</p>';
   }
 
   // 7-day adherence

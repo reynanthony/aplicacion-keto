@@ -42,7 +42,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
 <div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161310;border:1px solid rgba(255,240,225,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
   <div class="p-3" style="border-bottom:1px solid rgba(255,240,225,0.06)">
     <p class="text-sm font-semibold" style="color:#f7f4f0" id="mobileDropdownUserName">Usuario</p>
-    <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
+    <p class="text-[13px] mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
   </div>
   <div class="p-2">
     <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f7f4f0">
@@ -64,7 +64,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
 <div class="absolute -bottom-20 -left-20 w-48 h-48 bg-secondary/10 rounded-full blur-3xl"></div>
 <div class="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
 <div>
-<span style="font-size:12px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00">Optimización nutricional</span>
+<span style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00">Optimización nutricional</span>
 <h1 class="kc-h1" style="margin-top:10px">Tu stack de<br>suplementos</h1>
 <p class="text-on-surface-variant mt-3 max-w-lg">Optimiza tu rendimiento con suplementos personalizados segun tu perfil y objetivos.</p>
 </div>
@@ -97,7 +97,7 @@ Agregar Suplemento
 <div class="relative">
 <span class="text-[11px] font-bold text-primary uppercase tracking-widest">Peso</span>
 <p id="profileWeight" class="font-headline text-3xl font-black text-white mt-1 break-words">--</p>
-<span class="text-xs text-on-surface-variant">kg</span>
+<span class="text-[13px] text-on-surface-variant">kg</span>
 </div>
 </div>
 <div class="bg-surface-container rounded-2xl p-6 relative overflow-hidden group">
@@ -137,9 +137,9 @@ Agregar Suplemento
     </div>
     <div>
       <h3 class="font-headline font-bold text-white text-lg">Tomar ahora</h3>
-      <p id="tomarAhoraContext" class="text-on-surface-variant text-xs"></p>
+      <p id="tomarAhoraContext" class="text-on-surface-variant text-[13px]"></p>
     </div>
-    <span id="tomarAhoraCount" class="ml-auto bg-primary-container/20 text-primary-container text-xs font-bold px-3 py-1 rounded-full"></span>
+    <span id="tomarAhoraCount" class="ml-auto bg-primary-container/20 text-primary-container text-[13px] font-bold px-3 py-1 rounded-full"></span>
   </div>
   <div id="tomarAhoraList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
 </div>
@@ -207,28 +207,28 @@ Agregar Suplemento
 <span class="material-symbols-outlined text-orange-400 text-2xl">star</span>
 </div>
 <h4 class="font-headline font-bold text-white mb-1">Esenciales</h4>
-<p class="text-xs text-on-surface-variant">Fundamentos diarios</p>
+<p class="text-[13px] text-on-surface-variant">Fundamentos diarios</p>
 </div>
 <div class="bg-surface-container-high rounded-2xl p-6 cursor-pointer hover:bg-surface-container-highest transition-all group" onclick="filterByCategory('performance')">
 <div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
 <span class="material-symbols-outlined text-red-400 text-2xl">bolt</span>
 </div>
 <h4 class="font-headline font-bold text-white mb-1">Rendimiento</h4>
-<p class="text-xs text-on-surface-variant">Musculo y energia</p>
+<p class="text-[13px] text-on-surface-variant">Musculo y energia</p>
 </div>
 <div class="bg-surface-container-high rounded-2xl p-6 cursor-pointer hover:bg-surface-container-highest transition-all group" onclick="filterByCategory('weight')">
 <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
 <span class="material-symbols-outlined text-green-400 text-2xl">trending_down</span>
 </div>
 <h4 class="font-headline font-bold text-white mb-1">Control Peso</h4>
-<p class="text-xs text-on-surface-variant">Optimizacion keto</p>
+<p class="text-[13px] text-on-surface-variant">Optimizacion keto</p>
 </div>
 <div class="bg-surface-container-high rounded-2xl p-6 cursor-pointer hover:bg-surface-container-highest transition-all group" onclick="filterByCategory('general')">
 <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
 <span class="material-symbols-outlined text-blue-400 text-2xl">health_and_safety</span>
 </div>
 <h4 class="font-headline font-bold text-white mb-1">Salud General</h4>
-<p class="text-xs text-on-surface-variant">Bienestar integral</p>
+<p class="text-[13px] text-on-surface-variant">Bienestar integral</p>
 </div>
 </div>
 </div>
@@ -438,7 +438,7 @@ html+='<div class="w-12 h-12 rounded-xl '+catInfo.bg+' flex items-center justify
 html+='<span class="material-symbols-outlined text-xl" style="color:'+catInfo.color+'">'+catInfo.icon+'</span></div>';
 html+='<div class="flex-1">';
 html+='<p class="font-bold text-white">'+sup.name+'</p>';
-html+='<p class="text-xs text-on-surface-variant">'+(sup.dosage||sup.timing||'diario')+'</p></div>';
+html+='<p class="text-[13px] text-on-surface-variant">'+(sup.dosage||sup.timing||'diario')+'</p></div>';
 html+='<span class="material-symbols-outlined text-primary">add_circle</span></div>';
 });
 document.getElementById("supplementListModal").innerHTML=html||'<p class="text-center text-on-surface-variant py-8">No hay suplementos en esta categoria</p>';
@@ -518,7 +518,7 @@ function renderTomarAhora(){
       '</div>' +
       '<div class="flex-1 min-w-0">' +
         '<p class="text-white text-sm font-medium '+(isTaken?'line-through':'')+'">'+ escapeHtml(s.name)+'</p>' +
-        '<p class="text-on-surface-variant text-xs truncate">'+escapeHtml(s.dosage||'')+'</p>' +
+        '<p class="text-on-surface-variant text-[13px] truncate">'+escapeHtml(s.dosage||'')+'</p>' +
       '</div>' +
       '<span class="text-[11px] font-bold '+(isTaken?'text-green-400':'text-on-surface-variant')+'">'+(isTaken?'✓ Tomado':'Tomar')+'</span>' +
     '</div>';

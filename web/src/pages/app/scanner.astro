@@ -44,7 +44,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
       <h1 class="kc-h1" style="font-size:34px">Scanner Keto IA</h1>
       <p style="font-size:15px;color:rgba(247,244,240,0.5);margin-top:8px;max-width:440px">Apunta la cámara a cualquier alimento o etiqueta y obtén macros + veredicto keto al instante.</p>
     </div>
-    <a href="/app/alimentos" class="kc-btn-ghost" style="height:44px;padding:0 16px;font-size:13px"><span class="material-symbols-outlined" style="font-size:18px">arrow_back</span>Alimentos</a>
+    <a href="/app/alimentos" class="kc-btn-ghost" style="height:44px;padding:0 16px;font-size:14px"><span class="material-symbols-outlined" style="font-size:18px">arrow_back</span>Alimentos</a>
   </div>
 
   <div class="sc-grid">
@@ -64,7 +64,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
         </div>
         <!-- hint -->
         <div id="scanner-status" style="position:absolute;top:6%;left:0;right:0;text-align:center;z-index:5">
-          <span style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.85);padding:7px 16px;border-radius:100px;background:rgba(0,0,0,0.4);backdrop-filter:blur(8px)">Toca el botón para iniciar la cámara</span>
+          <span style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.85);padding:7px 16px;border-radius:100px;background:rgba(0,0,0,0.4);backdrop-filter:blur(8px)">Toca el botón para iniciar la cámara</span>
         </div>
         <!-- controles -->
         <div style="position:absolute;bottom:0;left:0;right:0;padding:0 0 22px;z-index:5">
@@ -121,7 +121,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
           Escaneos recientes
         </h3>
         <div id="recent-scans" class="space-y-2">
-          <p style="color:rgba(247,244,240,0.6);font-size:13px;text-align:center;padding:16px 0">No hay escaneos recientes</p>
+          <p style="color:rgba(247,244,240,0.6);font-size:14px;text-align:center;padding:16px 0">No hay escaneos recientes</p>
         </div>
       </div>
 
@@ -145,7 +145,7 @@ var scanMode = 'codigo';
 function setStatus(msg, color) {
   var statusEl = document.getElementById('scanner-status');
   if (!statusEl) return;
-  statusEl.innerHTML = '<span style="font-size:13px;font-weight:600;color:' + (color || 'rgba(255,255,255,0.85)') + ';padding:7px 16px;border-radius:100px;background:rgba(0,0,0,0.4);backdrop-filter:blur(8px)">' + msg + '</span>';
+  statusEl.innerHTML = '<span style="font-size:14px;font-weight:600;color:' + (color || 'rgba(255,255,255,0.85)') + ';padding:7px 16px;border-radius:100px;background:rgba(0,0,0,0.4);backdrop-filter:blur(8px)">' + msg + '</span>';
 }
 
 function setScanMode(mode) {
@@ -311,11 +311,11 @@ function saveRecentScan(code) {
 function renderRecentScans() {
   var scans = safeParseJSON(localStorage.getItem('recentScans'), []);
   var container = document.getElementById('recent-scans');
-  if (!scans.length) { container.innerHTML = '<p style="color:rgba(247,244,240,0.6);font-size:13px;text-align:center;padding:16px 0">No hay escaneos recientes</p>'; return; }
+  if (!scans.length) { container.innerHTML = '<p style="color:rgba(247,244,240,0.6);font-size:14px;text-align:center;padding:16px 0">No hay escaneos recientes</p>'; return; }
 
   container.innerHTML = scans.map(function (s) {
     var t = new Date(s.time).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#1e1a15;border-radius:14px"><div style="display:flex;align-items:center;gap:12px"><span class="material-symbols-outlined" style="color:rgba(247,244,240,0.57);font-size:20px">qr_code</span><div><p style="color:#f7f4f0;font-size:13px;font-family:monospace">' + s.code + '</p><p style="color:rgba(247,244,240,0.57);font-size:12px">' + t + '</p></div></div></div>';
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#1e1a15;border-radius:14px"><div style="display:flex;align-items:center;gap:12px"><span class="material-symbols-outlined" style="color:rgba(247,244,240,0.57);font-size:20px">qr_code</span><div><p style="color:#f7f4f0;font-size:14px;font-family:monospace">' + s.code + '</p><p style="color:rgba(247,244,240,0.57);font-size:13px">' + t + '</p></div></div></div>';
   }).join('');
 }
 

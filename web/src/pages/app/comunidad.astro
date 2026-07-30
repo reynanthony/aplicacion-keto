@@ -14,7 +14,7 @@ body{background:#131315;color:#fff;font-family:'Inter',sans-serif;min-height:100
 @keyframes shimmer{0%{opacity:0.4}50%{opacity:0.7}100%{opacity:0.4}}
 .coming-soon-blur{filter:blur(3px);pointer-events:none;user-select:none}
 .coming-soon-overlay{position:relative}
-.coming-soon-overlay::after{content:"Próximamente";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(19,19,21,0.55);border-radius:inherit;font-weight:800;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.5);backdrop-filter:blur(1px)}
+.coming-soon-overlay::after{content:"Próximamente";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(19,19,21,0.55);border-radius:inherit;font-weight:800;font-size:13px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.5);backdrop-filter:blur(1px)}
 </style>
 <!-- TopBar -->
 <header class="fixed top-0 left-0 right-0 z-40 h-14 flex items-center justify-between px-4 border-b border-white/5" style="background:rgba(19,19,21,0.95);backdrop-filter:blur(20px)">
@@ -35,7 +35,7 @@ body{background:#131315;color:#fff;font-family:'Inter',sans-serif;min-height:100
 
   <!-- Header editorial -->
   <div style="margin:10px 2px 16px">
-    <div style="font-size:12px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Comunidad · Juntos</div>
+    <div style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Comunidad · Juntos</div>
     <h1 class="kc-h1" style="font-size:30px">No estás<br><span style="color:rgba(247,244,240,0.57)">haciendo esto solo.</span></h1>
   </div>
 
@@ -45,7 +45,7 @@ body{background:#131315;color:#fff;font-family:'Inter',sans-serif;min-height:100
       <div id="myAvatar" class="avatar text-white" style="background:linear-gradient(135deg,#ff4d00,#ffb300)">?</div>
       <div class="flex-1 min-w-0">
         <p id="myName" class="font-bold text-white text-sm">Tu perfil</p>
-        <p class="text-on-surface-variant text-xs">Así te verán en la comunidad</p>
+        <p class="text-on-surface-variant text-[13px]">Así te verán en la comunidad</p>
       </div>
       <span id="myBadge" class="text-[12px] font-bold px-2.5 py-1 rounded-full hidden" style="background:rgba(255,179,0,0.15);color:#ffb300"></span>
     </div>
@@ -93,7 +93,7 @@ body{background:#131315;color:#fff;font-family:'Inter',sans-serif;min-height:100
   <section class="glass rounded-2xl p-5 text-center">
     <span class="material-symbols-outlined text-3xl text-primary-container block mb-2" style="font-variation-settings:'FILL' 1">notifications_active</span>
     <h3 class="font-headline font-bold text-white mb-1">Sé el primero en entrar</h3>
-    <p class="text-on-surface-variant text-xs mb-4 max-w-xs mx-auto">Lanzamos cuando tengamos 50 usuarios activos. Actualmente <span id="waitlistCount" class="text-white font-bold">--</span> personas esperan.</p>
+    <p class="text-on-surface-variant text-[13px] mb-4 max-w-xs mx-auto">Lanzamos cuando tengamos 50 usuarios activos. Actualmente <span id="waitlistCount" class="text-white font-bold">--</span> personas esperan.</p>
     <button onclick="joinWaitlist()" id="waitlistBtn" class="px-7 py-3 rounded-xl text-white font-bold text-sm transition-all active:scale-95" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);box-shadow:0 4px 16px rgba(255,77,0,0.3)">
       Unirme a la lista de espera
     </button>
@@ -170,7 +170,7 @@ function loadLeaderboard() {
     var medal = i===0 ? '🥇' : i===1 ? '🥈' : i===2 ? '🥉' : (i+1)+'.';
     html += '<div class="flex items-center gap-3 rounded-xl px-3 py-2.5 ' + (u.isMe ? '' : '') + '" style="' + (u.isMe ? 'background:rgba(255,77,0,0.08);border:1px solid rgba(255,77,0,0.2)' : 'background:#131315') + '">';
     html += '<span class="text-sm w-6 text-center">' + medal + '</span>';
-    html += '<div class="avatar text-white text-xs" style="background:' + u.color + '">' + u.initials + '</div>';
+    html += '<div class="avatar text-white text-[13px]" style="background:' + u.color + '">' + u.initials + '</div>';
     html += '<p class="flex-1 text-sm ' + (u.isMe ? 'text-white font-bold' : 'text-white/80') + '">' + escapeHtml(u.name) + '</p>';
     html += '<span class="text-[12px] font-bold ' + (u.isMe ? 'text-primary-container' : 'text-on-surface-variant') + '">' + u.streak + 'd</span>';
     html += '</div>';
@@ -183,15 +183,15 @@ function loadFeed() {
   MOCK_USERS.slice(0, 3).forEach(function(u) {
     html += '<div class="feed-card p-4">';
     html += '<div class="flex items-center gap-3 mb-3">';
-    html += '<div class="avatar text-white text-xs" style="background:' + u.color + '">' + u.initials + '</div>';
+    html += '<div class="avatar text-white text-[13px]" style="background:' + u.color + '">' + u.initials + '</div>';
     html += '<div class="flex-1"><p class="text-white font-bold text-sm">' + escapeHtml(u.name) + '</p><p class="text-on-surface-variant text-[11px]">' + u.streak + ' días keto · ' + u.time + '</p></div>';
     html += '<span class="text-lg">' + u.emoji + '</span>';
     html += '</div>';
     html += '<p class="text-white/80 text-sm leading-relaxed mb-3">' + escapeHtml(u.post) + '</p>';
     html += '<div class="flex items-center gap-4 pt-2 border-t border-white/5">';
-    html += '<button class="flex items-center gap-1.5 text-white/40 text-xs"><span class="material-symbols-outlined text-base">favorite_border</span>' + u.likes + '</button>';
-    html += '<button class="flex items-center gap-1.5 text-white/40 text-xs"><span class="material-symbols-outlined text-base">chat_bubble_outline</span>Comentar</button>';
-    html += '<button class="flex items-center gap-1.5 text-white/40 text-xs ml-auto"><span class="material-symbols-outlined text-base">share</span>Compartir</button>';
+    html += '<button class="flex items-center gap-1.5 text-white/40 text-[13px]"><span class="material-symbols-outlined text-base">favorite_border</span>' + u.likes + '</button>';
+    html += '<button class="flex items-center gap-1.5 text-white/40 text-[13px]"><span class="material-symbols-outlined text-base">chat_bubble_outline</span>Comentar</button>';
+    html += '<button class="flex items-center gap-1.5 text-white/40 text-[13px] ml-auto"><span class="material-symbols-outlined text-base">share</span>Compartir</button>';
     html += '</div></div>';
   });
   document.getElementById('feedContainer').innerHTML = html;

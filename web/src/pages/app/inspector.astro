@@ -34,7 +34,7 @@ html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-fa
 .verdict-warning { background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.2) !important; }
 .verdict-info    { background: rgba(96,165,250,0.06); border-color: rgba(96,165,250,0.2) !important; }
 
-.period-tab { display:inline-flex;align-items:center;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid transparent;transition:all 0.15s; }
+.period-tab { display:inline-flex;align-items:center;padding:5px 12px;border-radius:100px;font-size:13px;font-weight:700;cursor:pointer;border:1px solid transparent;transition:all 0.15s; }
 .period-tab.active { background:rgba(255,77,0,0.12);color:#ff4d00;border-color:rgba(255,77,0,0.25); }
 .period-tab:not(.active) { color:rgba(247,244,240,0.6);background:#1a1a1a;border-color:rgba(255,240,225,0.06); }
 
@@ -75,7 +75,7 @@ html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-fa
   </div>
 
   <div class="flex items-center gap-2">
-    <button onclick="refreshAnalysis()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all active:scale-95"
+    <button onclick="refreshAnalysis()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-bold transition-all active:scale-95"
       style="background:rgba(255,77,0,0.12);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">
       <span class="material-symbols-outlined" style="font-size:14px">refresh</span>
       Analizar
@@ -94,7 +94,7 @@ html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-fa
 
   <!-- Header editorial -->
   <div id="insp-header" style="margin:10px 2px 16px">
-    <div style="font-size:12px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Inteligencia · Análisis</div>
+    <div style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Inteligencia · Análisis</div>
     <h1 class="kc-h1" style="font-size:30px">El Inspector<br><span style="color:rgba(247,244,240,0.57)">cuida tu cetosis.</span></h1>
   </div>
 
@@ -107,7 +107,7 @@ html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-fa
       </div>
       <div class="flex-1">
         <p id="verdictTitle" class="font-black text-lg leading-tight" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Analizando tus datos...</p>
-        <p id="verdictSub" class="text-xs mt-0.5 leading-relaxed" style="color:rgba(247,244,240,0.5)">El inspector está revisando tu progreso reciente.</p>
+        <p id="verdictSub" class="text-[13px] mt-0.5 leading-relaxed" style="color:rgba(247,244,240,0.5)">El inspector está revisando tu progreso reciente.</p>
       </div>
       <div id="verdictScore" class="text-right flex-shrink-0">
         <p class="font-black text-2xl leading-none" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">—</p>
@@ -140,7 +140,7 @@ html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-fa
     <div id="adherenceGrid" class="grid grid-cols-3 gap-3 mb-4"></div>
     <!-- Weekly bar chart -->
     <div>
-      <p class="text-xs mb-2 font-semibold" style="color:rgba(247,244,240,0.55)">Últimos 7 días</p>
+      <p class="text-[13px] mb-2 font-semibold" style="color:rgba(247,244,240,0.55)">Últimos 7 días</p>
       <div id="weekBars" class="flex gap-1.5 items-end" style="height:48px"></div>
       <div id="weekLabels" class="flex gap-1.5 mt-1"></div>
     </div>
@@ -173,7 +173,7 @@ html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-fa
         <path id="weightFill" d="" fill="url(#wGrad)"/>
         <path id="weightLine" d="" fill="none" stroke="#ff4d00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      <p id="noWeightData" class="absolute inset-0 flex items-center justify-center text-xs" style="color:rgba(247,244,240,0.52)">
+      <p id="noWeightData" class="absolute inset-0 flex items-center justify-center text-[13px]" style="color:rgba(247,244,240,0.52)">
         Registra tu peso para ver la tendencia
       </p>
     </div>
@@ -306,8 +306,8 @@ function metricRow(label, value, unit, pct, color, subtitle) {
   var barPct = Math.min(100, pct);
   return '<div>' +
     '<div class="flex items-center justify-between mb-1">' +
-      '<p class="text-xs font-semibold" style="color:rgba(247,244,240,0.7)">' + label + '</p>' +
-      '<p class="text-xs font-bold" style="color:' + color + '">' + value + '<span style="font-size:11px;color:rgba(247,244,240,0.55);font-weight:400"> ' + unit + '</span></p>' +
+      '<p class="text-[13px] font-semibold" style="color:rgba(247,244,240,0.7)">' + label + '</p>' +
+      '<p class="text-[13px] font-bold" style="color:' + color + '">' + value + '<span style="font-size:11px;color:rgba(247,244,240,0.55);font-weight:400"> ' + unit + '</span></p>' +
     '</div>' +
     '<div class="metric-bar-bg"><div class="metric-bar" style="width:0;--bar-w:' + barPct + '%;background:' + color + '" data-pct="' + barPct + '"></div></div>' +
     (subtitle ? '<p style="font-size:10px;color:rgba(247,244,240,0.52);margin-top:3px">' + subtitle + '</p>' : '') +
@@ -540,14 +540,14 @@ function renderAlerts() {
   section.innerHTML = alerts.slice(0, 4).map(function (a) {
     var s = ALERT_STYLES[a.type] || ALERT_STYLES.info;
     var btn = a.action === 'ask_coach'
-      ? '<a href="/app/coach" class="mt-2 inline-flex items-center gap-1 text-[12px] font-bold px-3 py-1.5 rounded-full" style="background:rgba(255,77,0,0.1);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)"><span class="material-symbols-outlined icon-filled" style="font-size:13px">psychology</span>' + (a.actionLabel || 'Coach') + '</a>'
+      ? '<a href="/app/coach" class="mt-2 inline-flex items-center gap-1 text-[12px] font-bold px-3 py-1.5 rounded-full" style="background:rgba(255,77,0,0.1);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)"><span class="material-symbols-outlined icon-filled" style="font-size:14px">psychology</span>' + (a.actionLabel || 'Coach') + '</a>'
       : '';
     return '<div class="ik-card p-3.5" style="background:' + s.bg + ';border-color:' + s.border + '">' +
       '<div class="flex items-start gap-2.5">' +
         '<span class="material-symbols-outlined icon-filled flex-shrink-0" style="font-size:18px;color:' + s.icon + ';margin-top:1px">' + (a.icon||'info') + '</span>' +
         '<div class="flex-1">' +
-          '<p class="text-xs font-bold" style="color:#f7f4f0">' + (a.title||'') + '</p>' +
-          '<p class="text-xs mt-0.5 leading-relaxed" style="color:rgba(247,244,240,0.55)">' + (a.message||'') + '</p>' +
+          '<p class="text-[13px] font-bold" style="color:#f7f4f0">' + (a.title||'') + '</p>' +
+          '<p class="text-[13px] mt-0.5 leading-relaxed" style="color:rgba(247,244,240,0.55)">' + (a.message||'') + '</p>' +
           btn +
         '</div>' +
         '<button onclick="dismissAlert(\'' + (a.id||'') + '\')" class="material-symbols-outlined flex-shrink-0" style="color:rgba(247,244,240,0.5);font-size:16px">close</button>' +

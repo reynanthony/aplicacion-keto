@@ -50,7 +50,7 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 <div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161310;border:1px solid rgba(255,240,225,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
   <div class="p-3" style="border-bottom:1px solid rgba(255,240,225,0.06)">
     <p class="text-sm font-semibold" style="color:#f7f4f0" id="mobileDropdownUserName">Usuario</p>
-    <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
+    <p class="text-[13px] mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
   </div>
   <div class="p-2">
     <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f7f4f0">
@@ -67,12 +67,12 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 <div class="space-y-6 kc-page" style="padding-top:12px">
 <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:26px;flex-wrap:wrap;gap:20px">
   <div>
-    <p id="dateDisplay" style="font-size:12px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px"></p>
+    <p id="dateDisplay" style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px"></p>
     <h1 class="kc-h1">Tu semana,<br>planificada</h1>
   </div>
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-    <span id="planStatusBadge" class="hidden px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1"></span>
-    <button onclick="openWeeklyModal()" class="kc-btn-ghost" style="height:46px;padding:0 18px;font-size:13px"><span class="material-symbols-outlined" style="font-size:18px">calendar_month</span>Semana</button>
+    <span id="planStatusBadge" class="hidden px-3 py-1.5 rounded-full text-[13px] font-bold flex items-center gap-1"></span>
+    <button onclick="openWeeklyModal()" class="kc-btn-ghost" style="height:46px;padding:0 18px;font-size:14px"><span class="material-symbols-outlined" style="font-size:18px">calendar_month</span>Semana</button>
     <button onclick="openWeeklyPlanGenerator()" class="kc-btn" style="height:46px"><span class="material-symbols-outlined" style="font-size:20px">auto_awesome</span>Generar plan con IA</button>
   </div>
 </div>
@@ -99,14 +99,14 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 <!-- Toggle Modo Manual/Automático -->
 <div class="flex items-center justify-between mb-4">
   <div class="mode-selector glass-card p-1 rounded-full inline-flex">
-    <button id="manualModeBtn" onclick="setMealPlanMode('manual')" class="mode-btn px-4 py-2 rounded-full text-xs font-medium transition-all flex items-center gap-2 bg-primary-container text-white">
+    <button id="manualModeBtn" onclick="setMealPlanMode('manual')" class="mode-btn px-4 py-2 rounded-full text-[13px] font-medium transition-all flex items-center gap-2 bg-primary-container text-white">
       <span class="material-symbols-outlined text-base">edit</span>Manual
     </button>
-    <button id="autoModeBtn" onclick="setMealPlanMode('auto')" class="mode-btn px-4 py-2 rounded-full text-xs font-medium transition-all text-on-surface-variant hover:text-white flex items-center gap-2">
+    <button id="autoModeBtn" onclick="setMealPlanMode('auto')" class="mode-btn px-4 py-2 rounded-full text-[13px] font-medium transition-all text-on-surface-variant hover:text-white flex items-center gap-2">
       <span class="material-symbols-outlined text-base">auto_awesome</span>Automático
     </button>
   </div>
-  <button id="generateAutoBtn" onclick="generateAndApplyAutoPlan()" class="hidden bg-secondary text-black px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-secondary/80 transition-all">
+  <button id="generateAutoBtn" onclick="generateAndApplyAutoPlan()" class="hidden bg-secondary text-black px-3 py-2 rounded-lg text-[13px] font-bold flex items-center gap-1 hover:bg-secondary/80 transition-all">
     <span class="material-symbols-outlined text-sm">refresh</span>Generar
   </button>
 </div>
@@ -119,7 +119,7 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
         <span class="material-symbols-outlined text-secondary">auto_awesome</span>
         Plan Automático
       </h3>
-      <p class="text-xs text-on-surface-variant mt-1">Basado en tus recetas guardadas</p>
+      <p class="text-[13px] text-on-surface-variant mt-1">Basado en tus recetas guardadas</p>
     </div>
   </div>
   <div id="autoPlanSummary" class="space-y-3"></div>
@@ -142,15 +142,15 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 </div>
 <div>
 <h3 class="text-white font-medium text-sm">Generar con IA</h3>
-<p class="text-xs text-on-surface-variant">Plan personalizado según tus macros</p>
+<p class="text-[13px] text-on-surface-variant">Plan personalizado según tus macros</p>
 </div>
 </div>
 <div class="flex gap-2">
-<button onclick="openWeeklyPlanGenerator()" class="px-4 py-2 rounded-xl bg-primary-container/10 text-primary-container text-xs font-medium hover:bg-primary-container/20 transition-all flex items-center gap-2">
+<button onclick="openWeeklyPlanGenerator()" class="px-4 py-2 rounded-xl bg-primary-container/10 text-primary-container text-[13px] font-medium hover:bg-primary-container/20 transition-all flex items-center gap-2">
 <span>Crear plan</span>
 <span class="material-symbols-outlined text-sm">arrow_forward</span>
 </button>
-<button onclick="openAIRecipeGenerator()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 text-xs font-medium hover:from-purple-500/30 hover:to-pink-500/30 transition-all flex items-center gap-2">
+<button onclick="openAIRecipeGenerator()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 text-[13px] font-medium hover:from-purple-500/30 hover:to-pink-500/30 transition-all flex items-center gap-2">
 <span class="material-symbols-outlined text-sm">auto_awesome</span>
 <span>IA</span>
 </button>
@@ -163,8 +163,8 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 <!-- Resumen (se mantiene igual) -->
 <div class="glass-card rounded-2xl p-5 mb-6">
 <div class="flex items-center justify-between mb-4">
-<span class="text-xs text-on-surface-variant uppercase tracking-wider">Macros del día</span>
-<span id="dayDateLabel" class="text-xs text-primary-container"></span>
+<span class="text-[13px] text-on-surface-variant uppercase tracking-wider">Macros del día</span>
+<span id="dayDateLabel" class="text-[13px] text-primary-container"></span>
 </div>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
 <div class="bg-surface-container-high rounded-xl p-4 text-center">
@@ -172,7 +172,7 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 <span class="text-[11px] text-on-surface-variant uppercase tracking-wider">Calorías</span>
 </div>
 <div class="text-3xl font-black text-yellow-400 mb-1"><span id="currentCal">0</span></div>
-<div class="text-xs text-on-surface-variant">/ <span id="targetCal">1800</span> kcal</div>
+<div class="text-[13px] text-on-surface-variant">/ <span id="targetCal">1800</span> kcal</div>
 <div class="h-2 bg-surface rounded-lg mt-2 overflow-hidden">
 <div id="calorieBar" class="h-full bg-yellow-400 rounded-lg transition-all" style="width:0%"></div>
 </div>
@@ -182,7 +182,7 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 <span class="text-[11px] text-on-surface-variant uppercase tracking-wider">Proteína</span>
 </div>
 <div class="text-3xl font-black text-orange-400 mb-1"><span id="currentProtein">0</span><span class="text-sm text-on-surface-variant">g</span></div>
-<div class="text-xs text-on-surface-variant">Meta: <span id="targetProtein">160</span>g</div>
+<div class="text-[13px] text-on-surface-variant">Meta: <span id="targetProtein">160</span>g</div>
 <div class="h-2 bg-surface rounded-lg mt-2 overflow-hidden">
 <div id="proteinBar" class="h-full bg-orange-400 rounded-lg transition-all" style="width:0%"></div>
 </div>
@@ -192,7 +192,7 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 <span class="text-[11px] text-on-surface-variant uppercase tracking-wider">Grasa</span>
 </div>
 <div class="text-3xl font-black text-yellow-300 mb-1"><span id="currentFat">0</span><span class="text-sm text-on-surface-variant">g</span></div>
-<div class="text-xs text-on-surface-variant">Meta: <span id="targetFat">150</span>g</div>
+<div class="text-[13px] text-on-surface-variant">Meta: <span id="targetFat">150</span>g</div>
 <div class="h-2 bg-surface rounded-lg mt-2 overflow-hidden">
 <div id="fatBar" class="h-full bg-yellow-300 rounded-lg transition-all" style="width:0%"></div>
 </div>
@@ -202,18 +202,18 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 <span class="text-[11px] text-on-surface-variant uppercase tracking-wider">Carbos</span>
 </div>
 <div class="text-3xl font-black text-cyan-400 mb-1"><span id="currentCarbs">0</span><span class="text-sm text-on-surface-variant">g</span></div>
-<div class="text-xs text-on-surface-variant">Meta: <span id="targetCarbs">25</span>g</div>
+<div class="text-[13px] text-on-surface-variant">Meta: <span id="targetCarbs">25</span>g</div>
 <div class="h-2 bg-surface rounded-lg mt-2 overflow-hidden">
 <div id="carbsBar" class="h-full bg-cyan-400 rounded-lg transition-all" style="width:0%"></div>
 </div>
 </div>
 </div>
 <div class="flex items-center justify-between mt-4 pt-4 border-t border-white/10">
-<span class="text-xs text-on-surface-variant"><span id="mealCount">0</span> alimentos</span>
+<span class="text-[13px] text-on-surface-variant"><span id="mealCount">0</span> alimentos</span>
 <div class="flex gap-2">
-<button onclick="copyPlan()" class="text-xs text-primary-container hover:underline">Copiar ayer</button>
+<button onclick="copyPlan()" class="text-[13px] text-primary-container hover:underline">Copiar ayer</button>
 <span class="text-white/20">|</span>
-<button onclick="resetPlan()" class="text-xs text-error hover:underline">Reiniciar</button>
+<button onclick="resetPlan()" class="text-[13px] text-error hover:underline">Reiniciar</button>
 </div>
 </div>
 </div>
@@ -234,11 +234,11 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 </div>
 </div>
 <div class="flex items-center gap-2">
-<span id="desayunoCount" class="text-xs text-on-surface-variant bg-surface-container px-2 py-1 rounded-full">0 items</span>
+<span id="desayunoCount" class="text-[13px] text-on-surface-variant bg-surface-container px-2 py-1 rounded-full">0 items</span>
 <span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300" id="desayunoArrow">expand_more</span>
 </div>
 </div>
-<div class="flex gap-3 mt-3 text-xs">
+<div class="flex gap-3 mt-3 text-[13px]">
 <span class="text-orange-400"><span id="desayunoProtein">0</span>g prot</span>
 <span class="text-yellow-300"><span id="desayunoFat">0</span>g grasa</span>
 <span class="text-cyan-400"><span id="desayunoCarbs">0</span>g carbs</span>
@@ -268,11 +268,11 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 </div>
 </div>
 <div class="flex items-center gap-2">
-<span id="almuerzoCount" class="text-xs text-on-surface-variant bg-surface-container px-2 py-1 rounded-full">0 items</span>
+<span id="almuerzoCount" class="text-[13px] text-on-surface-variant bg-surface-container px-2 py-1 rounded-full">0 items</span>
 <span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300" id="almuerzoArrow">expand_more</span>
 </div>
 </div>
-<div class="flex gap-3 mt-3 text-xs">
+<div class="flex gap-3 mt-3 text-[13px]">
 <span class="text-orange-400"><span id="almuerzoProtein">0</span>g prot</span>
 <span class="text-yellow-300"><span id="almuerzoFat">0</span>g grasa</span>
 <span class="text-cyan-400"><span id="almuerzoCarbs">0</span>g carbs</span>
@@ -302,11 +302,11 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 </div>
 </div>
 <div class="flex items-center gap-2">
-<span id="cenaCount" class="text-xs text-on-surface-variant bg-surface-container px-2 py-1 rounded-full">0 items</span>
+<span id="cenaCount" class="text-[13px] text-on-surface-variant bg-surface-container px-2 py-1 rounded-full">0 items</span>
 <span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300" id="cenaArrow">expand_more</span>
 </div>
 </div>
-<div class="flex gap-3 mt-3 text-xs">
+<div class="flex gap-3 mt-3 text-[13px]">
 <span class="text-orange-400"><span id="cenaProtein">0</span>g prot</span>
 <span class="text-yellow-300"><span id="cenaFat">0</span>g grasa</span>
 <span class="text-cyan-400"><span id="cenaCarbs">0</span>g carbs</span>
@@ -336,11 +336,11 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 </div>
 </div>
 <div class="flex items-center gap-2">
-<span id="snacksCount" class="text-xs text-on-surface-variant bg-surface-container px-2 py-1 rounded-full">0 items</span>
+<span id="snacksCount" class="text-[13px] text-on-surface-variant bg-surface-container px-2 py-1 rounded-full">0 items</span>
 <span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300" id="snacksArrow">expand_more</span>
 </div>
 </div>
-<div class="flex gap-3 mt-3 text-xs">
+<div class="flex gap-3 mt-3 text-[13px]">
 <span class="text-orange-400"><span id="snacksProtein">0</span>g prot</span>
 <span class="text-yellow-300"><span id="snacksFat">0</span>g grasa</span>
 <span class="text-cyan-400"><span id="snacksCarbs">0</span>g carbs</span>
@@ -403,7 +403,7 @@ var cal = totals.calories, prot = totals.protein, fat = totals.fat, carbs = tota
 html += '<div class="flex items-center justify-between bg-surface-container rounded-lg p-3">';
 html += '<div class="flex-1 min-w-0">';
 html += '<p class="text-white text-sm font-medium truncate">' + (item.name || '?') + '</p>';
-html += '<p class="text-xs text-on-surface-variant">' + portion + 'g · ' + cal + ' kcal</p>';
+html += '<p class="text-[13px] text-on-surface-variant">' + portion + 'g · ' + cal + ' kcal</p>';
 html += '</div>';
 html += '<button onclick="removeMealItem(\'' + meal + '\', ' + idx + ')" class="w-8 h-8 rounded-lg flex items-center justify-center text-error/60 hover:text-error hover:bg-error/10 transition-colors">';
 html += '<span class="material-symbols-outlined text-sm">delete</span>';
@@ -648,9 +648,9 @@ function renderEntrenoPanel() {
   var todayHtml;
   if (todayWorkout) {
     var exList = (todayWorkout.exercises || []).slice(0, 4).map(function(ex) {
-      return '<div class="flex items-center justify-between py-2 border-b border-white/5 last:border-0"><span class="text-white/80 text-sm">' + escapeHtml(ex.name || ex.exerciseName || 'Ejercicio') + '</span><span class="text-primary-container text-xs font-bold">' + (ex.sets ? ex.sets.length : (ex.sets || 0)) + ' series</span></div>';
+      return '<div class="flex items-center justify-between py-2 border-b border-white/5 last:border-0"><span class="text-white/80 text-sm">' + escapeHtml(ex.name || ex.exerciseName || 'Ejercicio') + '</span><span class="text-primary-container text-[13px] font-bold">' + (ex.sets ? ex.sets.length : (ex.sets || 0)) + ' series</span></div>';
     }).join('');
-    todayHtml = '<div class="glass-card rounded-2xl p-4 border-l-4 border-green-500"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-green-400">check_circle</span></div><div><p class="text-white font-bold">Entrenamiento hoy</p><p class="text-on-surface-variant text-xs">' + escapeHtml(todayWorkout.name || 'Sesión completada') + ' · ' + (todayWorkout.duration || '—') + ' min</p></div></div>' + (exList ? '<div class="mt-2">' + exList + '</div>' : '') + '</div>';
+    todayHtml = '<div class="glass-card rounded-2xl p-4 border-l-4 border-green-500"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-green-400">check_circle</span></div><div><p class="text-white font-bold">Entrenamiento hoy</p><p class="text-on-surface-variant text-[13px]">' + escapeHtml(todayWorkout.name || 'Sesión completada') + ' · ' + (todayWorkout.duration || '—') + ' min</p></div></div>' + (exList ? '<div class="mt-2">' + exList + '</div>' : '') + '</div>';
   } else {
     todayHtml = '<div class="glass-card rounded-2xl p-6 text-center border border-dashed border-white/10"><span class="material-symbols-outlined text-4xl text-white/20 mb-3 block">fitness_center</span><p class="text-white font-bold mb-1">Sin entrenamiento hoy</p><p class="text-on-surface-variant text-sm mb-4">¿Listo para entrenar?</p><a href="/app/entrenamientos" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-container text-white font-bold text-sm hover:bg-primary-container/80 transition-all"><span class="material-symbols-outlined text-sm">add</span>Registrar entreno</a></div>';
   }
@@ -659,10 +659,10 @@ function renderEntrenoPanel() {
   // Recent workouts (last 3, skip today)
   var recent = workouts.filter(function(w) { return (w.date || '').slice(0, 10) !== today; }).slice(-3).reverse();
   if (recent.length) {
-    document.getElementById('entrenoRecentList').innerHTML = '<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">Recientes</p>' + recent.map(function(w) {
+    document.getElementById('entrenoRecentList').innerHTML = '<p class="text-[13px] text-on-surface-variant uppercase tracking-wider mb-2">Recientes</p>' + recent.map(function(w) {
       var d = new Date(w.date);
       var label = isNaN(d.getTime()) ? '' : d.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
-      return '<div class="glass-card rounded-xl p-3 flex items-center gap-3"><div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-primary-container text-lg">fitness_center</span></div><div class="flex-1 min-w-0"><p class="text-white text-sm font-medium truncate">' + escapeHtml(w.name || 'Sesión') + '</p><p class="text-on-surface-variant text-xs">' + label + (w.duration ? ' · ' + w.duration + ' min' : '') + '</p></div><span class="text-green-400 text-xs font-bold">' + (w.totalVolume ? Math.round(w.totalVolume) + ' kg' : '') + '</span></div>';
+      return '<div class="glass-card rounded-xl p-3 flex items-center gap-3"><div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-primary-container text-lg">fitness_center</span></div><div class="flex-1 min-w-0"><p class="text-white text-sm font-medium truncate">' + escapeHtml(w.name || 'Sesión') + '</p><p class="text-on-surface-variant text-[13px]">' + label + (w.duration ? ' · ' + w.duration + ' min' : '') + '</p></div><span class="text-green-400 text-[13px] font-bold">' + (w.totalVolume ? Math.round(w.totalVolume) + ' kg' : '') + '</span></div>';
     }).join('');
   } else {
     document.getElementById('entrenoRecentList').innerHTML = '';
@@ -709,7 +709,7 @@ function renderSuplePanel() {
     html += '<div class="glass-card rounded-xl p-4 flex items-center gap-3 cursor-pointer transition-all ' + (isTaken ? 'opacity-60' : '') + '" onclick="toggleSupleTaken(\'' + escapeHtml(id) + '\')">';
     html += '<div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ' + (isTaken ? 'bg-green-500/20' : 'bg-surface-container-high') + '">';
     html += '<span class="material-symbols-outlined text-[20px] ' + (isTaken ? 'text-green-400' : 'text-primary-container') + '">' + (isTaken ? 'check_circle' : (s.icon || 'medication')) + '</span>';
-    html += '</div><div class="flex-1 min-w-0"><p class="text-white text-sm font-medium ' + (isTaken ? 'line-through' : '') + '">' + escapeHtml(s.name) + '</p><p class="text-on-surface-variant text-xs truncate">' + escapeHtml(s.dosage || '') + '</p></div>';
+    html += '</div><div class="flex-1 min-w-0"><p class="text-white text-sm font-medium ' + (isTaken ? 'line-through' : '') + '">' + escapeHtml(s.name) + '</p><p class="text-on-surface-variant text-[13px] truncate">' + escapeHtml(s.dosage || '') + '</p></div>';
     html += '<span class="text-[11px] bg-surface-container px-2 py-1 rounded-full text-on-surface-variant whitespace-nowrap">' + escapeHtml(s.timing || '—') + '</span>';
     html += '</div>';
   });
@@ -727,8 +727,8 @@ function toggleSupleTaken(id) {
 </script>
 </div>
 </main>
-<div id="foodSelectorModal" class="fixed inset-0 z-[60] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeFoodSelector()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-2xl max-h-[85vh] flex flex-col pointer-events-auto"><div class="flex justify-between items-center mb-4"><div><h3 class="text-lg font-headline font-bold text-white">Agregar a <span id="selectedMeal"></span></h3><p class="text-xs text-on-surface-variant mt-1">Desde tu despensa</p></div><button onclick="closeFoodSelector()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div class="relative mb-4"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span><input type="text" id="foodSearch" placeholder="Buscar en despensa..." class="w-full bg-surface-container text-white border border-outline rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-primary-container" oninput="filterFoods()"></div><div id="foodList" class="flex-1 overflow-y-auto"></div></div></div></div>
-<div id="portionModal" class="fixed inset-0 z-[60] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closePortionModal()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-headline font-bold text-white" id="portionFoodName"></h3><button onclick="closePortionModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div class="bg-surface-container-high rounded-xl p-4 mb-4"><div class="grid grid-cols-4 gap-2 text-center"><div><p class="text-[11px] text-on-surface-variant uppercase">Cal</p><p id="portionCalories" class="text-lg font-bold text-yellow-400">0</p></div><div><p class="text-[11px] text-on-surface-variant uppercase">Prot</p><p id="portionProtein" class="text-lg font-bold text-orange-400">0g</p></div><div><p class="text-[11px] text-on-surface-variant uppercase">Gras</p><p id="portionFat" class="text-lg font-bold text-yellow-300">0g</p></div><div><p class="text-[11px] text-on-surface-variant uppercase">Carb</p><p id="portionCarbs" class="text-lg font-bold text-cyan-400">0g</p></div></div></div><div class="mb-3"><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Unidad de medida</label><div id="planUnitSelector" class="flex flex-wrap gap-2"></div></div><div class="mb-4"><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Cantidad</label><div class="flex items-center gap-3"><button onclick="adjustTempQty(-1)" class="w-12 h-12 rounded-xl bg-surface-container-high text-white font-bold text-xl hover:bg-surface-container-highest transition-all">−</button><input type="number" id="tempQty" value="1" min="0.1" step="0.1" class="flex-1 bg-surface-container text-white border border-outline rounded-xl px-4 py-3 text-center text-xl font-bold focus:outline-none focus:border-primary-container"><button onclick="adjustTempQty(1)" class="w-12 h-12 rounded-xl bg-surface-container-high text-white font-bold text-xl hover:bg-surface-container-highest transition-all">+</button></div></div><div class="bg-primary-container/20 rounded-xl p-3 mb-4 border border-primary-container/30"><div class="flex justify-between items-center"><span class="text-sm text-white/70">Total en gramos:</span><span id="portionPreview" class="text-2xl font-bold text-primary-container">0 g</span></div></div><div id="stockWarning" class="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3 mb-4 hidden"><div class="flex items-center gap-2 text-yellow-400 text-sm"><span class="material-symbols-outlined">warning</span><span id="stockWarningText"></span></div></div><input type="hidden" id="selectedFoodId"><input type="hidden" id="selectedMealType"><div class="flex gap-3"><button onclick="closePortionModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="addFoodToMeal()" class="flex-1 py-3 rounded-xl bg-primary-container text-white font-bold hover:bg-primary-container/80 transition-colors">Agregar</button></div></div></div></div>
+<div id="foodSelectorModal" class="fixed inset-0 z-[60] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeFoodSelector()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-2xl max-h-[85vh] flex flex-col pointer-events-auto"><div class="flex justify-between items-center mb-4"><div><h3 class="text-lg font-headline font-bold text-white">Agregar a <span id="selectedMeal"></span></h3><p class="text-[13px] text-on-surface-variant mt-1">Desde tu despensa</p></div><button onclick="closeFoodSelector()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div class="relative mb-4"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span><input type="text" id="foodSearch" placeholder="Buscar en despensa..." class="w-full bg-surface-container text-white border border-outline rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-primary-container" oninput="filterFoods()"></div><div id="foodList" class="flex-1 overflow-y-auto"></div></div></div></div>
+<div id="portionModal" class="fixed inset-0 z-[60] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closePortionModal()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-headline font-bold text-white" id="portionFoodName"></h3><button onclick="closePortionModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div class="bg-surface-container-high rounded-xl p-4 mb-4"><div class="grid grid-cols-4 gap-2 text-center"><div><p class="text-[11px] text-on-surface-variant uppercase">Cal</p><p id="portionCalories" class="text-lg font-bold text-yellow-400">0</p></div><div><p class="text-[11px] text-on-surface-variant uppercase">Prot</p><p id="portionProtein" class="text-lg font-bold text-orange-400">0g</p></div><div><p class="text-[11px] text-on-surface-variant uppercase">Gras</p><p id="portionFat" class="text-lg font-bold text-yellow-300">0g</p></div><div><p class="text-[11px] text-on-surface-variant uppercase">Carb</p><p id="portionCarbs" class="text-lg font-bold text-cyan-400">0g</p></div></div></div><div class="mb-3"><label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Unidad de medida</label><div id="planUnitSelector" class="flex flex-wrap gap-2"></div></div><div class="mb-4"><label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Cantidad</label><div class="flex items-center gap-3"><button onclick="adjustTempQty(-1)" class="w-12 h-12 rounded-xl bg-surface-container-high text-white font-bold text-xl hover:bg-surface-container-highest transition-all">−</button><input type="number" id="tempQty" value="1" min="0.1" step="0.1" class="flex-1 bg-surface-container text-white border border-outline rounded-xl px-4 py-3 text-center text-xl font-bold focus:outline-none focus:border-primary-container"><button onclick="adjustTempQty(1)" class="w-12 h-12 rounded-xl bg-surface-container-high text-white font-bold text-xl hover:bg-surface-container-highest transition-all">+</button></div></div><div class="bg-primary-container/20 rounded-xl p-3 mb-4 border border-primary-container/30"><div class="flex justify-between items-center"><span class="text-sm text-white/70">Total en gramos:</span><span id="portionPreview" class="text-2xl font-bold text-primary-container">0 g</span></div></div><div id="stockWarning" class="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3 mb-4 hidden"><div class="flex items-center gap-2 text-yellow-400 text-sm"><span class="material-symbols-outlined">warning</span><span id="stockWarningText"></span></div></div><input type="hidden" id="selectedFoodId"><input type="hidden" id="selectedMealType"><div class="flex gap-3"><button onclick="closePortionModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="addFoodToMeal()" class="flex-1 py-3 rounded-xl bg-primary-container text-white font-bold hover:bg-primary-container/80 transition-colors">Agregar</button></div></div></div></div>
 <div id="stockModal" class="fixed inset-0 z-[70] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto text-center"><div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-4xl text-yellow-400">warning</span></div><h3 class="text-xl font-headline font-bold text-white mb-2">Stock Insuficiente</h3><p class="text-white/70 mb-2">Solo tienes disponible:</p><p id="availableStock" class="text-3xl font-bold text-yellow-400 mb-4">0 g</p><p class="text-white/50 text-sm mb-6">de <span id="requestedStock" class="text-white">0 g</span></p><div class="flex gap-3"><button onclick="closeStockModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="addAvailableStock()" class="flex-1 py-3 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors">Agregar lo disponible</button></div></div></div></div>
 <div id="weeklyModal" class="fixed inset-0 z-[70] hidden">
   <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeWeeklyModal()"></div>
@@ -740,7 +740,7 @@ function toggleSupleTaken(id) {
         </div>
         <div>
           <h3 class="text-xl font-headline font-bold text-white">Plan Semanal</h3>
-          <p class="text-xs text-on-surface-variant">Gestiona tu semana</p>
+          <p class="text-[13px] text-on-surface-variant">Gestiona tu semana</p>
         </div>
       </div>
       <button onclick="closeWeeklyModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10">
@@ -958,8 +958,8 @@ function showUserProfileModal() {
       
       '<div class="bg-surface-container-high rounded-xl p-4 mb-4">' +
         '<div class="grid grid-cols-2 gap-4 text-center">' +
-          '<div><p class="text-xs text-on-surface-variant">Experiencia</p><p class="font-bold ' + nivelColor + '">' + (perfil ? perfil.nivelExperiencia : 'nuevo') + '</p></div>' +
-          '<div><p class="text-xs text-on-surface-variant">Feedback</p><p class="font-bold text-white">' + totalFeedbacks + '</p></div>' +
+          '<div><p class="text-[13px] text-on-surface-variant">Experiencia</p><p class="font-bold ' + nivelColor + '">' + (perfil ? perfil.nivelExperiencia : 'nuevo') + '</p></div>' +
+          '<div><p class="text-[13px] text-on-surface-variant">Feedback</p><p class="font-bold text-white">' + totalFeedbacks + '</p></div>' +
         '</div>' +
       '</div>' +
       
@@ -974,7 +974,7 @@ function showUserProfileModal() {
         '<span class="text-green-400">+' + item.score + '</span></div>';
     });
   } else {
-    modal.innerHTML += '<p class="text-xs text-on-surface-variant">No hay favoritos aun. ¡Dale like a recetas!</p>';
+    modal.innerHTML += '<p class="text-[13px] text-on-surface-variant">No hay favoritos aun. ¡Dale like a recetas!</p>';
   }
   
   modal.innerHTML += '</div><div class="mb-4">' +
@@ -988,7 +988,7 @@ function showUserProfileModal() {
         '<span class="text-red-400">' + item.score + '</span></div>';
     });
   } else {
-    modal.innerHTML += '<p class="text-xs text-on-surface-variant">No hay ingredientes evitados</p>';
+    modal.innerHTML += '<p class="text-[13px] text-on-surface-variant">No hay ingredientes evitados</p>';
   }
   
   modal.innerHTML += '</div></div>' +
@@ -1092,7 +1092,7 @@ function renderMealPlan(){
         if(container)container.innerHTML='<p class="text-center text-on-surface-variant text-sm py-4">Sin alimentos. Toca "Agregar" para anadir.</p>';
       }else{
         if(container)container.innerHTML="";
-        mealPlan.forEach(function(item,idx){if(!item)return;var totals=KetoMealPlan.itemTotals(item);var itemPort=parseFloat(item.portion)||100;if(container)container.innerHTML+='<div class="flex items-center gap-3 bg-surface-container-low rounded-lg p-3"><div class="flex-1 min-w-0"><p class="font-medium text-white truncate">'+(item.name||'?')+'</p><p class="text-xs text-on-surface-variant">'+itemPort+'g - '+totals.calories+' kcal</p></div></div>'});
+        mealPlan.forEach(function(item,idx){if(!item)return;var totals=KetoMealPlan.itemTotals(item);var itemPort=parseFloat(item.portion)||100;if(container)container.innerHTML+='<div class="flex items-center gap-3 bg-surface-container-low rounded-lg p-3"><div class="flex-1 min-w-0"><p class="font-medium text-white truncate">'+(item.name||'?')+'</p><p class="text-[13px] text-on-surface-variant">'+itemPort+'g - '+totals.calories+' kcal</p></div></div>'});
       }
     });
     updateMealCardMacros();
@@ -1274,11 +1274,11 @@ if(despensa[f.id])stock=despensa[f.id].stock;
 html+='<div class="food-item flex items-center gap-3 p-2 rounded-lg bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer" data-food-id="'+f.id+'" data-food-name="'+f.name.replace(/"/g, '&quot;')+'" data-food-cal="'+f.calories+'" data-food-protein="'+f.protein+'" data-food-fat="'+f.fat+'" data-food-carbs="'+f.carbs+'" data-food-portion="'+foodPort+'">';
 html+='<div class="flex-1 min-w-0">';
 html+='<p class="font-medium text-white truncate">'+f.name+'</p>';
-html+='<p class="text-xs text-on-surface-variant">'+cal100+' cal/100g · '+foodPort+'g</p>';
+html+='<p class="text-[13px] text-on-surface-variant">'+cal100+' cal/100g · '+foodPort+'g</p>';
 html+='</div>';
 html+='<div class="text-right flex-shrink-0">';
-html+='<span class="text-xs px-2 py-0.5 rounded" style="background:'+status.color+'20;color:'+status.color+'">'+status.text+'</span>';
-html+='<p class="text-xs text-on-surface-variant mt-0.5">'+(stock>=1000?(stock/1000).toFixed(1)+"kg":stock+"g")+'</p>';
+html+='<span class="text-[13px] px-2 py-0.5 rounded" style="background:'+status.color+'20;color:'+status.color+'">'+status.text+'</span>';
+html+='<p class="text-[13px] text-on-surface-variant mt-0.5">'+(stock>=1000?(stock/1000).toFixed(1)+"kg":stock+"g")+'</p>';
 html+='</div>';
 html+='<span class="material-symbols-outlined text-primary-container">add_circle</span>';
 html+='</div>';
@@ -1306,7 +1306,7 @@ var altText=inspeccion.alternativas && inspeccion.alternativas.length > 0
 : '';
 var warningHtml='<div class="mt-3 p-3 rounded-lg '+(inspeccion.nivel==='critico'?'bg-red-500/20 border border-red-500/50':'bg-yellow-500/20 border border-yellow-500/50')+'">';
 warningHtml+='<p class="text-sm '+(inspeccion.nivel==='critico'?'text-red-400':'text-yellow-400')+' font-bold">'+(inspeccion.nivel==='critico'?'🛑 ALTO RIESGO':'⚠️ RIESGO MODERADO')+'</p>';
-warningHtml+='<p class="text-xs text-white/70 mt-1">'+inspeccion.razon+'</p>';
+warningHtml+='<p class="text-[13px] text-white/70 mt-1">'+inspeccion.razon+'</p>';
 warningHtml+=altText;
 warningHtml+='</div>';
 document.getElementById("portionFoodName").innerHTML=food.name+warningHtml;
@@ -1337,7 +1337,7 @@ var container=document.getElementById("planUnitSelector");
 var html="";
 units.forEach(function(unit,idx){
 var active=idx===planCurrentUnit?"bg-primary-container text-white":"bg-surface-container text-white/70";
-html+='<button onclick="selectPlanUnit('+idx+')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all '+active+'">'+unit.name+'</button>';
+html+='<button onclick="selectPlanUnit('+idx+')" class="px-3 py-1.5 rounded-lg text-[13px] font-medium transition-all '+active+'">'+unit.name+'</button>';
 });
 container.innerHTML=html;
 }
@@ -1607,13 +1607,13 @@ var planStatus="";
 if(weekPlan&&weekPlan.confirmed&&weeklyDayData&&weeklyDayData.meals){
 var mealTypes=Object.keys(weeklyDayData.meals);
 var macros=weeklyDayData.dayMacros||{};
-planStatus='<div class="text-xs text-green-400">'+(macros.calories||0)+' kcal</div>';
+planStatus='<div class="text-[13px] text-green-400">'+(macros.calories||0)+' kcal</div>';
 }
 html+='<div class="flex items-center justify-between p-3 rounded-lg '+(isToday?"bg-primary-container/20 border border-primary-container/30":"bg-surface-container")+'">';
 html+='<div><div class="text-sm font-medium text-white">'+(isToday?"Hoy - ":"")+weekDays[i]+" "+d.getDate()+'</div>';
-html+='<div class="text-xs '+(hasPlan?"text-green-400":"text-white/50")+'">'+planLabel+'</div>'+planStatus+'</div>';
+html+='<div class="text-[13px] '+(hasPlan?"text-green-400":"text-white/50")+'">'+planLabel+'</div>'+planStatus+'</div>';
 html+='<div class="flex gap-2">';
-html+='<button onclick="selectDayFromModal(\''+dateKey+'\')" class="px-3 py-1 rounded bg-surface-container-high text-white text-xs">Ver</button>';
+html+='<button onclick="selectDayFromModal(\''+dateKey+'\')" class="px-3 py-1 rounded bg-surface-container-high text-white text-[13px]">Ver</button>';
 html+='</div></div>';
 }
 container.innerHTML=html;
@@ -1659,9 +1659,9 @@ modal.innerHTML='<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" oncl
 '<p class="text-sm text-on-surface-variant">Registra tus avances para mejorar tu siguiente plan</p>'+
 '</div>'+
 '<div class="space-y-4 mb-6">'+
-'<div><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Peso actual (kg)</label>'+
+'<div><label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Peso actual (kg)</label>'+
 '<input type="number" id="finalizeWeight" step="0.1" class="w-full bg-surface-container text-white rounded-xl px-4 py-3 text-lg" placeholder="Ej: 75.5"></div>'+
-'<div><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Nivel de energía (1-5)</label>'+
+'<div><label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Nivel de energía (1-5)</label>'+
 '<div class="flex gap-2">'+
 '<button onclick="selectEnergy(1)" class="energy-btn flex-1 py-3 rounded-xl bg-surface-container text-white/50 hover:bg-surface-container-high" data-energy="1">1</button>'+
 '<button onclick="selectEnergy(2)" class="energy-btn flex-1 py-3 rounded-xl bg-surface-container text-white/50 hover:bg-surface-container-high" data-energy="2">2</button>'+
@@ -1669,7 +1669,7 @@ modal.innerHTML='<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" oncl
 '<button onclick="selectEnergy(4)" class="energy-btn flex-1 py-3 rounded-xl bg-surface-container text-white/50 hover:bg-surface-container-high" data-energy="4">4</button>'+
 '<button onclick="selectEnergy(5)" class="energy-btn flex-1 py-3 rounded-xl bg-surface-container text-white/50 hover:bg-surface-container-high" data-energy="5">5</button>'+
 '</div></div>'+
-'<div><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Notas (opcional)</label>'+
+'<div><label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Notas (opcional)</label>'+
 '<textarea id="finalizeNotes" rows="3" class="w-full bg-surface-container text-white rounded-xl px-4 py-3 text-sm resize-none" placeholder="¿Cómo te sentiste? ¿Cumpliste el plan?"></textarea></div>'+
 '</div>'+
 '<button onclick="confirmFinalizePlan()" class="w-full py-4 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold hover:opacity-90 transition-all">Guardar y Cerrar Plan</button>'+
@@ -1812,7 +1812,7 @@ var html='<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="cl
 '<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none overflow-y-auto">'+
 '<div class="bg-surface-container rounded-2xl p-5 w-full max-w-lg pointer-events-auto max-h-[85vh] overflow-y-auto">'+
 '<div class="flex justify-between items-center mb-4">'+
-'<div><h3 class="text-lg font-headline font-bold text-white">'+d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"})+'</h3><p class="text-xs text-green-400">Plan Semanal IA</p></div>'+
+'<div><h3 class="text-lg font-headline font-bold text-white">'+d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"})+'</h3><p class="text-[13px] text-green-400">Plan Semanal IA</p></div>'+
 '<button onclick="closeDayWeeklyPlanModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10"><span class="material-symbols-outlined">close</span></button>'+
 '</div>';
 Object.keys(dayData.meals).forEach(function(mealType){
@@ -1821,13 +1821,13 @@ if(meal&&meal.recipe){
 html+='<div class="bg-surface-container-high rounded-xl p-4 mb-3">';
 html+='<div class="flex items-center gap-2 mb-2">'+
 '<span class="material-symbols-outlined '+mealColors[mealType]+'">'+mealIcons[mealType]+'</span>'+
-'<span class="text-xs text-on-surface-variant uppercase">'+mealType+'</span>'+
+'<span class="text-[13px] text-on-surface-variant uppercase">'+mealType+'</span>'+
 '</div>';
 html+='<p class="font-medium text-white mb-1">'+meal.recipe.title+'</p>';
-html+='<div class="flex gap-3 text-xs text-on-surface-variant mb-2">';
+html+='<div class="flex gap-3 text-[13px] text-on-surface-variant mb-2">';
 html+='<span>'+meal.recipe.calories+' kcal</span><span>'+meal.recipe.protein+'g P</span><span>'+meal.recipe.fat+'g G</span><span>'+meal.recipe.netCarbs+'g CN</span>';
 html+='</div>';
-html+='<button onclick="openRecipeDetail(\''+(meal.recipe.id||'')+'\')" class="text-xs text-primary-container hover:text-white">Ver receta completa</button>';
+html+='<button onclick="openRecipeDetail(\''+(meal.recipe.id||'')+'\')" class="text-[13px] text-primary-container hover:text-white">Ver receta completa</button>';
 html+='</div>';
 }
 });
@@ -1945,19 +1945,19 @@ function generateAndApplyAutoPlan() {
       if (!result || !result.success) {
         var errorMsg = result.error || 'Error al generar plan';
         if (result.despensaVacia) {
-          summaryDiv.innerHTML = '<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-yellow-400 mb-2">inventory_2</span><p class="text-white font-medium mt-2">Tu despensa esta vacia</p><p class="text-on-surface-variant text-sm mt-1">' + errorMsg + '</p><p class="text-xs text-on-surface-variant/70 mt-3">Ve a Compras para agregar alimentos</p></div>';
+          summaryDiv.innerHTML = '<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-yellow-400 mb-2">inventory_2</span><p class="text-white font-medium mt-2">Tu despensa esta vacia</p><p class="text-on-surface-variant text-sm mt-1">' + errorMsg + '</p><p class="text-[13px] text-on-surface-variant/70 mt-3">Ve a Compras para agregar alimentos</p></div>';
         } else if (result.criticalOnly) {
           var compras = (result.comprasPrioritarias || []).slice(0, 6).map(function(item) {
-            return '<li class="text-xs text-yellow-300">- ' + item.nombre + ' <span class="text-on-surface-variant">(' + item.motivo + ')</span></li>';
+            return '<li class="text-[13px] text-yellow-300">- ' + item.nombre + ' <span class="text-on-surface-variant">(' + item.motivo + ')</span></li>';
           }).join('');
           summaryDiv.innerHTML = '<div class="py-6 px-4 bg-red-500/10 border border-red-500/30 rounded-xl' +
             '"><div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-red-400">warning</span><p class="text-white font-medium">Despensa con riesgo alto</p></div>' +
             '<p class="text-on-surface-variant text-sm mb-3">' + errorMsg + '</p>' +
-            '<p class="text-xs text-yellow-300 mb-2">Compras prioritarias sugeridas:</p>' +
-            '<ul class="space-y-1">' + (compras || '<li class="text-xs text-on-surface-variant">Agrega vegetales de hoja, huevos y grasas saludables.</li>') + '</ul></div>';
+            '<p class="text-[13px] text-yellow-300 mb-2">Compras prioritarias sugeridas:</p>' +
+            '<ul class="space-y-1">' + (compras || '<li class="text-[13px] text-on-surface-variant">Agrega vegetales de hoja, huevos y grasas saludables.</li>') + '</ul></div>';
         } else if (result.rejectedByInspector) {
           var descartadas = Object.keys(result.rejectedByInspector || {}).length;
-          summaryDiv.innerHTML = '<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-yellow-400 mb-2">rule</span><p class="text-white font-medium mt-2">Inspector Keto filtro recetas</p><p class="text-on-surface-variant text-sm mt-1">' + errorMsg + '</p><p class="text-xs text-on-surface-variant/70 mt-2">Recetas excluidas: ' + descartadas + ' | Umbral: > ' + (result.ketoThreshold || 70) + '</p></div>';
+          summaryDiv.innerHTML = '<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-yellow-400 mb-2">rule</span><p class="text-white font-medium mt-2">Inspector Keto filtro recetas</p><p class="text-on-surface-variant text-sm mt-1">' + errorMsg + '</p><p class="text-[13px] text-on-surface-variant/70 mt-2">Recetas excluidas: ' + descartadas + ' | Umbral: > ' + (result.ketoThreshold || 70) + '</p></div>';
         } else {
           summaryDiv.innerHTML = '<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-on-surface-variant/70 mb-2">menu_book</span><p class="text-on-surface-variant">' + errorMsg + '</p></div>';
         }
@@ -1990,7 +1990,7 @@ function renderAutoPlanSummary(result, container) {
   html += '<span class="text-sm text-on-surface-variant">Recetas disponibles: <span class="text-white font-medium">' + (result.availableRecipeCount || 0) + '</span></span></div>';
   html += '</div>';
   
-  html += '<p class="text-xs text-on-surface-variant mb-2">Toca una comida para ver detalles de las recetas</p>';
+  html += '<p class="text-[13px] text-on-surface-variant mb-2">Toca una comida para ver detalles de las recetas</p>';
   
   ['desayuno', 'almuerzo', 'cena', 'snacks'].forEach(function(meal) {
     var items = plan[meal];
@@ -2003,27 +2003,27 @@ function renderAutoPlanSummary(result, container) {
     html += '<div class="flex items-center gap-3">';
     html += '<span class="material-symbols-outlined ' + colors[meal] + '">' + icons[meal] + '</span>';
     html += '<div><p class="font-medium text-white">' + mealName + '</p>';
-    html += '<p class="text-xs text-on-surface-variant">' + items.length + ' items - ' + mealCal + ' kcal</p></div></div>';
+    html += '<p class="text-[13px] text-on-surface-variant">' + items.length + ' items - ' + mealCal + ' kcal</p></div></div>';
     html += '<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>';
     html += '</div>';
   });
   
   html += '<div class="bg-surface-container-high rounded-xl p-4 mt-4">';
   html += '<div class="grid grid-cols-4 gap-2 text-center mb-3">';
-  html += '<div><p class="text-xs text-on-surface-variant">Cal</p><p class="font-bold text-yellow-400">' + Math.round(macros.calories) + '</p></div>';
-  html += '<div><p class="text-xs text-on-surface-variant">Prot</p><p class="font-bold text-orange-400">' + Math.round(macros.protein) + 'g</p></div>';
-  html += '<div><p class="text-xs text-on-surface-variant">Gras</p><p class="font-bold text-yellow-300">' + Math.round(macros.fat) + 'g</p></div>';
-  html += '<div><p class="text-xs text-on-surface-variant">Carb</p><p class="font-bold text-cyan-400">' + Math.round(macros.carbs) + 'g</p></div>';
+  html += '<div><p class="text-[13px] text-on-surface-variant">Cal</p><p class="font-bold text-yellow-400">' + Math.round(macros.calories) + '</p></div>';
+  html += '<div><p class="text-[13px] text-on-surface-variant">Prot</p><p class="font-bold text-orange-400">' + Math.round(macros.protein) + 'g</p></div>';
+  html += '<div><p class="text-[13px] text-on-surface-variant">Gras</p><p class="font-bold text-yellow-300">' + Math.round(macros.fat) + 'g</p></div>';
+  html += '<div><p class="text-[13px] text-on-surface-variant">Carb</p><p class="font-bold text-cyan-400">' + Math.round(macros.carbs) + 'g</p></div>';
   html += '</div>';
   
-  html += '<div class="text-center text-xs text-on-surface-variant">';
+  html += '<div class="text-center text-[13px] text-on-surface-variant">';
   html += 'Objetivo: ' + target.calories + ' kcal | ' + target.protein + 'g P | ' + target.fat + 'g G | ' + target.carbs + 'g C';
   html += '</div></div>';
   
   if (warnings.length > 0) {
     html += '<div class="mt-3 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30">';
     warnings.forEach(function(w) {
-      html += '<p class="text-xs text-yellow-400 flex items-center gap-2"><span class="material-symbols-outlined text-xs">warning</span>' + w.message + '</p>';
+      html += '<p class="text-[13px] text-yellow-400 flex items-center gap-2"><span class="material-symbols-outlined text-[13px]">warning</span>' + w.message + '</p>';
     });
     html += '</div>';
   }
@@ -2076,12 +2076,12 @@ function showAutoMealDetails(meal) {
   var totalCarbs = items.reduce(function(s, i) { return s + (i.carbs || 0); }, 0);
   
   html += '<div class="bg-primary-container/20 rounded-xl p-3 mb-4">';
-  html += '<div class="flex items-center justify-between text-xs text-on-surface-variant mb-2"><span>Total comida</span><button onclick="addFoodToAutoMeal(\'' + meal + '\')" class="text-primary-container hover:text-white"><span class="material-symbols-outlined text-sm">add</span> Agregar alimento</button></div>';
+  html += '<div class="flex items-center justify-between text-[13px] text-on-surface-variant mb-2"><span>Total comida</span><button onclick="addFoodToAutoMeal(\'' + meal + '\')" class="text-primary-container hover:text-white"><span class="material-symbols-outlined text-sm">add</span> Agregar alimento</button></div>';
   html += '<div class="grid grid-cols-4 gap-2 text-center">';
-  html += '<div><p class="text-xs text-on-surface-variant">Cal</p><p class="font-bold text-yellow-400">' + totalCal + '</p></div>';
-  html += '<div><p class="text-xs text-on-surface-variant">Prot</p><p class="font-bold text-orange-400">' + totalProt.toFixed(1) + 'g</p></div>';
-  html += '<div><p class="text-xs text-on-surface-variant">Gras</p><p class="font-bold text-yellow-300">' + totalFat.toFixed(1) + 'g</p></div>';
-  html += '<div><p class="text-xs text-on-surface-variant">Carb</p><p class="font-bold text-cyan-400">' + totalCarbs.toFixed(1) + 'g</p></div>';
+  html += '<div><p class="text-[13px] text-on-surface-variant">Cal</p><p class="font-bold text-yellow-400">' + totalCal + '</p></div>';
+  html += '<div><p class="text-[13px] text-on-surface-variant">Prot</p><p class="font-bold text-orange-400">' + totalProt.toFixed(1) + 'g</p></div>';
+  html += '<div><p class="text-[13px] text-on-surface-variant">Gras</p><p class="font-bold text-yellow-300">' + totalFat.toFixed(1) + 'g</p></div>';
+  html += '<div><p class="text-[13px] text-on-surface-variant">Carb</p><p class="font-bold text-cyan-400">' + totalCarbs.toFixed(1) + 'g</p></div>';
   html += '</div></div>';
   
   if (items.length === 0) {
@@ -2115,13 +2115,13 @@ function showAutoMealDetails(meal) {
     html += '</div>';
     
     html += '<div class="grid grid-cols-4 gap-2 text-center mb-3">';
-    html += '<div class="bg-surface-container-low rounded-lg p-2"><p class="text-xs text-on-surface-variant">Cal</p><p class="font-bold text-yellow-400">' + item.calories + '</p></div>';
-    html += '<div class="bg-surface-container-low rounded-lg p-2"><p class="text-xs text-on-surface-variant">Prot</p><p class="font-bold text-orange-400">' + item.protein + 'g</p></div>';
-    html += '<div class="bg-surface-container-low rounded-lg p-2"><p class="text-xs text-on-surface-variant">Gras</p><p class="font-bold text-yellow-300">' + item.fat + 'g</p></div>';
-    html += '<div class="bg-surface-container-low rounded-lg p-2"><p class="text-xs text-on-surface-variant">Carb</p><p class="font-bold text-cyan-400">' + item.carbs + 'g</p></div>';
+    html += '<div class="bg-surface-container-low rounded-lg p-2"><p class="text-[13px] text-on-surface-variant">Cal</p><p class="font-bold text-yellow-400">' + item.calories + '</p></div>';
+    html += '<div class="bg-surface-container-low rounded-lg p-2"><p class="text-[13px] text-on-surface-variant">Prot</p><p class="font-bold text-orange-400">' + item.protein + 'g</p></div>';
+    html += '<div class="bg-surface-container-low rounded-lg p-2"><p class="text-[13px] text-on-surface-variant">Gras</p><p class="font-bold text-yellow-300">' + item.fat + 'g</p></div>';
+    html += '<div class="bg-surface-container-low rounded-lg p-2"><p class="text-[13px] text-on-surface-variant">Carb</p><p class="font-bold text-cyan-400">' + item.carbs + 'g</p></div>';
     html += '</div>';
     
-    html += '<div class="flex items-center justify-between text-xs text-on-surface-variant">';
+    html += '<div class="flex items-center justify-between text-[13px] text-on-surface-variant">';
     html += '<span>Porción: <span class="text-white font-medium">' + item.portion + 'g</span></span>';
     html += '<div class="flex gap-1">';
     html += '<button onclick="adjustAutoPortion(\'' + meal + '\',' + idx + ',-10)" class="px-2 py-1 bg-surface-container-low rounded hover:bg-surface-container-highest">-10g</button>';
@@ -2130,7 +2130,7 @@ function showAutoMealDetails(meal) {
     
     if (recipe && recipe.prep) {
       html += '<div class="mt-3 pt-3 border-t border-white/10">';
-      html += '<p class="text-xs text-primary-container uppercase tracking-wider mb-1">Preparación</p>';
+      html += '<p class="text-[13px] text-primary-container uppercase tracking-wider mb-1">Preparación</p>';
       html += '<p class="text-sm text-white/80">' + recipe.prep + '</p>';
       html += '</div>';
     }
@@ -2280,7 +2280,7 @@ function openAddFoodModalForAutoMeal(meal) {
     var btn = document.createElement('button');
     btn.className = 'w-full p-3 text-left bg-surface-container rounded-xl hover:bg-primary-container transition text-white';
     btn.onclick = function() { addFoodFromDespensa(meal, k); };
-    btn.innerHTML = '<div class="flex justify-between items-start"><div><div class="font-medium">' + name + '</div><div class="text-xs text-white/60 mt-1">Cal: ' + cal + ' | P: ' + prot + 'g | G: ' + fat + 'g | C: ' + carbs + 'g</div></div><div class="text-sm text-white/60">' + stock + 'g</div></div>';
+    btn.innerHTML = '<div class="flex justify-between items-start"><div><div class="font-medium">' + name + '</div><div class="text-[13px] text-white/60 mt-1">Cal: ' + cal + ' | P: ' + prot + 'g | G: ' + fat + 'g | C: ' + carbs + 'g</div></div><div class="text-sm text-white/60">' + stock + 'g</div></div>';
     listContainer.appendChild(btn);
   });
   
@@ -2399,15 +2399,15 @@ function showMacroLimitModal(meal, idx, item, maxPortion, target, testTotal) {
     '<div class="glass-card rounded-2xl p-5 w-full max-w-sm pointer-events-auto">' +
       '<div class="flex items-center gap-3 mb-4">' +
         '<div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-yellow-400">warning</span></div>' +
-        '<div><h3 class="text-lg font-headline font-bold text-white">Límite de Macros</h3><p class="text-xs text-white/60">No puedes exceder tus objetivos</p></div>' +
+        '<div><h3 class="text-lg font-headline font-bold text-white">Límite de Macros</h3><p class="text-[13px] text-white/60">No puedes exceder tus objetivos</p></div>' +
         '<button onclick="closeMacroLimitModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all ml-auto"><span class="material-symbols-outlined text-lg">close</span></button>' +
       '</div>' +
       '<div class="bg-surface-container rounded-xl p-4 mb-4">' +
         '<div class="grid grid-cols-2 gap-4 mb-3">' +
-          '<div><p class="text-xs text-white/60">Calorías</p><p class="text-sm font-bold text-yellow-400">' + currentCal + ' / ' + target.calories + '</p></div>' +
-          '<div><p class="text-xs text-white/60">Proteína</p><p class="text-sm font-bold text-orange-400">' + currentProt.toFixed(1) + ' / ' + target.protein + 'g</p></div>' +
+          '<div><p class="text-[13px] text-white/60">Calorías</p><p class="text-sm font-bold text-yellow-400">' + currentCal + ' / ' + target.calories + '</p></div>' +
+          '<div><p class="text-[13px] text-white/60">Proteína</p><p class="text-sm font-bold text-orange-400">' + currentProt.toFixed(1) + ' / ' + target.protein + 'g</p></div>' +
         '</div>' +
-        '<p class="text-xs text-white/60">Puedes agregar hasta <span class="text-white font-bold">' + suggestedPortion + 'g</span> de este alimento</p>' +
+        '<p class="text-[13px] text-white/60">Puedes agregar hasta <span class="text-white font-bold">' + suggestedPortion + 'g</span> de este alimento</p>' +
       '</div>' +
       '<div class="flex gap-3">' +
         '<button onclick="closeMacroLimitModal()" class="flex-1 py-3 rounded-xl bg-surface-container text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>' +
@@ -2434,23 +2434,23 @@ function showMacroLimitModalForAdd(meal, itemKey, food, maxPortion, target, curr
     '<div class="glass-card rounded-2xl p-5 w-full max-w-sm pointer-events-auto">' +
       '<div class="flex items-center gap-3 mb-4">' +
         '<div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-yellow-400">warning</span></div>' +
-        '<div><h3 class="text-lg font-headline font-bold text-white">Límite de Macros</h3><p class="text-xs text-white/60">' + (food ? food.name : 'Alimento') + ' excedería objetivos</p></div>' +
+        '<div><h3 class="text-lg font-headline font-bold text-white">Límite de Macros</h3><p class="text-[13px] text-white/60">' + (food ? food.name : 'Alimento') + ' excedería objetivos</p></div>' +
         '<button onclick="closeMacroLimitModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all ml-auto"><span class="material-symbols-outlined text-lg">close</span></button>' +
       '</div>' +
       '<div class="bg-surface-container rounded-xl p-4 mb-4">' +
         '<div class="grid grid-cols-2 gap-4 mb-3">' +
-          '<div><p class="text-xs text-white/60">Calorías</p><p class="text-sm font-bold text-yellow-400">' + currentTotal.calories + ' / ' + target.calories + '</p></div>' +
-          '<div><p class="text-xs text-white/60">Proteína</p><p class="text-sm font-bold text-orange-400">' + currentTotal.protein.toFixed(1) + ' / ' + target.protein + 'g</p></div>' +
+          '<div><p class="text-[13px] text-white/60">Calorías</p><p class="text-sm font-bold text-yellow-400">' + currentTotal.calories + ' / ' + target.calories + '</p></div>' +
+          '<div><p class="text-[13px] text-white/60">Proteína</p><p class="text-sm font-bold text-orange-400">' + currentTotal.protein.toFixed(1) + ' / ' + target.protein + 'g</p></div>' +
         '</div>';
   
   if (suggestedPortion > 0) {
-    modal.querySelector('.glass-card').innerHTML += '<p class="text-xs text-white/60">Puedes agregar hasta <span class="text-white font-bold">' + suggestedPortion + 'g</span> (' + newCal + ' cal, ' + newProt + 'g prot)</p></div>' +
+    modal.querySelector('.glass-card').innerHTML += '<p class="text-[13px] text-white/60">Puedes agregar hasta <span class="text-white font-bold">' + suggestedPortion + 'g</span> (' + newCal + ' cal, ' + newProt + 'g prot)</p></div>' +
       '<div class="flex gap-3">' +
         '<button onclick="closeMacroLimitModal()" class="flex-1 py-3 rounded-xl bg-surface-container text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>' +
         '<button onclick="addFoodWithPortion(\'' + meal + '\',\'' + itemKey + '\',' + suggestedPortion + ')" class="flex-1 py-3 rounded-xl bg-primary-container text-white font-bold hover:bg-primary-container/80 transition-colors">Agregar ' + suggestedPortion + 'g</button>' +
       '</div>';
   } else {
-    modal.querySelector('.glass-card').innerHTML += '<p class="text-xs text-red-400">No hay espacio suficiente para agregar este alimento</p></div>' +
+    modal.querySelector('.glass-card').innerHTML += '<p class="text-[13px] text-red-400">No hay espacio suficiente para agregar este alimento</p></div>' +
       '<button onclick="closeMacroLimitModal()" class="w-full py-3 rounded-xl bg-surface-container text-white font-medium hover:bg-surface-container-highest transition-colors">Aceptar</button>';
   }
   
@@ -2570,10 +2570,10 @@ function initPlanStatus() {
     if (badge) {
       badge.classList.remove('hidden');
       if (isConfirmed) {
-        badge.className = 'px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 bg-green-500/20 text-green-400 border border-green-500/30';
+        badge.className = 'px-3 py-1.5 rounded-full text-[13px] font-bold flex items-center gap-1 bg-green-500/20 text-green-400 border border-green-500/30';
         badge.innerHTML = '<span class="material-symbols-outlined text-sm">check_circle</span>Plan Activo';
       } else {
-        badge.className = 'px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 bg-yellow-500/20 text-yellow-400 border border-yellow-500/30';
+        badge.className = 'px-3 py-1.5 rounded-full text-[13px] font-bold flex items-center gap-1 bg-yellow-500/20 text-yellow-400 border border-yellow-500/30';
         badge.innerHTML = '<span class="material-symbols-outlined text-sm">schedule</span>Sin Confirmar';
       }
     }
@@ -2586,9 +2586,9 @@ function initPlanStatus() {
         '</div>' +
         '<div class="flex-1">' +
           '<p class="font-bold text-white">Plan Semanal Activo</p>' +
-          '<p class="text-xs text-on-surface-variant">Generado el ' + generatedDate + ' - ' + (weekPlan.totalMacros.calories / 7).toFixed(0) + ' kcal/dia promedio</p>' +
+          '<p class="text-[13px] text-on-surface-variant">Generado el ' + generatedDate + ' - ' + (weekPlan.totalMacros.calories / 7).toFixed(0) + ' kcal/dia promedio</p>' +
         '</div>' +
-        '<button onclick="openWeeklyPlanPreview()" class="px-4 py-2 rounded-lg bg-green-500/20 text-green-400 text-xs font-bold hover:bg-green-500/30 transition-all">Ver Plan</button>' +
+        '<button onclick="openWeeklyPlanPreview()" class="px-4 py-2 rounded-lg bg-green-500/20 text-green-400 text-[13px] font-bold hover:bg-green-500/30 transition-all">Ver Plan</button>' +
       '</div>';
     }
   } else {
@@ -2649,11 +2649,11 @@ function getWeeklyPlanPreviewHTML(weekPlan) {
           '</div>' +
           '<div>' +
             '<h2 class="text-lg font-headline font-bold text-white">Tu Plan Semanal</h2>' +
-            '<p class="text-xs text-on-surface-variant">Promedio diario: <span class="text-yellow-400">' + (weekPlan.totalMacros.calories / 7).toFixed(0) + ' kcal</span></p>' +
+            '<p class="text-[13px] text-on-surface-variant">Promedio diario: <span class="text-yellow-400">' + (weekPlan.totalMacros.calories / 7).toFixed(0) + ' kcal</span></p>' +
           '</div>' +
         '</div>' +
         '<div class="flex items-center gap-2">' +
-          '<button onclick="openModifyPlanModal()" class="px-3 py-1.5 rounded-lg bg-surface-container-high text-white text-xs font-medium flex items-center gap-1 hover:bg-surface-container-highest transition-all">' +
+          '<button onclick="openModifyPlanModal()" class="px-3 py-1.5 rounded-lg bg-surface-container-high text-white text-[13px] font-medium flex items-center gap-1 hover:bg-surface-container-highest transition-all">' +
             '<span class="material-symbols-outlined text-sm">edit</span>Modificar' +
           '</button>' +
           '<button onclick="closeWeeklyPlanPreview()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">' +
@@ -2674,8 +2674,8 @@ function getWeeklyPlanPreviewHTML(weekPlan) {
       '<span class="material-symbols-outlined ' + inspectorText + '">' + inspectorIcon + '</span>' +
       '<span class="' + inspectorText + ' font-bold text-sm">Inspector Keto</span>' +
     '</div>' +
-    '<p class="text-xs text-on-surface-variant mb-2">' + inspectorIssues + ' recetas con alertas (revisa el detalle)</p>' +
-    '<button onclick="openPlanInspectorReview()" class="text-xs text-primary-container hover:text-white">Ver análisis completo →</button>' +
+    '<p class="text-[13px] text-on-surface-variant mb-2">' + inspectorIssues + ' recetas con alertas (revisa el detalle)</p>' +
+    '<button onclick="openPlanInspectorReview()" class="text-[13px] text-primary-container hover:text-white">Ver análisis completo →</button>' +
   '</div>';
   
   Object.keys(weekPlan.days).forEach(function(dateKey) {
@@ -2689,7 +2689,7 @@ function getWeeklyPlanPreviewHTML(weekPlan) {
     if (isToday) html += '<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-primary-container text-white">HOY</span>';
     html += '<span class="font-headline font-bold text-white">' + dayName + '</span>';
     html += '</div>';
-    html += '<div class="flex items-center gap-3 text-xs">';
+    html += '<div class="flex items-center gap-3 text-[13px]">';
     html += '<span class="text-yellow-400">' + day.dayMacros.calories + ' kcal</span>';
     html += '<span class="text-orange-400">' + day.dayMacros.protein + 'g P</span>';
     html += '<span class="text-cyan-400">' + day.dayMacros.netCarbs + 'g CN</span>';
@@ -2706,12 +2706,12 @@ function getWeeklyPlanPreviewHTML(weekPlan) {
         html += '<div class="flex items-center justify-between mb-2">';
         html += '<div class="flex items-center gap-2">';
         html += '<span class="material-symbols-outlined ' + mealColors[mealType] + ' text-sm">' + mealIcons[mealType] + '</span>';
-        html += '<span class="text-xs text-on-surface-variant uppercase">' + mealName + '</span>';
+        html += '<span class="text-[13px] text-on-surface-variant uppercase">' + mealName + '</span>';
         if (meal.recipe.basePortion && meal.recipe.basePortion !== 100) {
           html += '<span class="text-[11px] text-secondary bg-secondary/20 px-1.5 py-0.5 rounded">x' + Math.round(meal.recipe.basePortion / 100 * 10) / 10 + '</span>';
         }
         html += '</div>';
-        html += '<button onclick="openRecipeDetail(\'' + (meal.recipe.id || '') + '\')" class="text-xs text-primary-container hover:text-white flex items-center gap-1">';
+        html += '<button onclick="openRecipeDetail(\'' + (meal.recipe.id || '') + '\')" class="text-[13px] text-primary-container hover:text-white flex items-center gap-1">';
         html += '<span class="material-symbols-outlined text-sm">visibility</span>Ver receta';
         html += '</button>';
         html += '</div>';
@@ -2720,9 +2720,9 @@ function getWeeklyPlanPreviewHTML(weekPlan) {
         html += '<div class="flex-1">';
         html += '<p class="font-medium text-white text-sm mb-1">' + meal.recipe.title + '</p>';
         
-        html += '<div class="flex items-center gap-2 text-xs text-on-surface-variant mb-2">';
+        html += '<div class="flex items-center gap-2 text-[13px] text-on-surface-variant mb-2">';
         if (meal.recipe.prepTime) {
-          html += '<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">schedule</span>' + meal.recipe.prepTime + '</span>';
+          html += '<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">schedule</span>' + meal.recipe.prepTime + '</span>';
         }
         if (meal.recipe.difficulty) {
           html += '<span class="px-2 py-0.5 rounded bg-surface-container-high">' + meal.recipe.difficulty + '</span>';
@@ -2732,14 +2732,14 @@ function getWeeklyPlanPreviewHTML(weekPlan) {
         }
         html += '</div>';
         
-        html += '<div class="flex items-center gap-3 text-xs mb-2">';
+        html += '<div class="flex items-center gap-3 text-[13px] mb-2">';
         html += '<span class="text-yellow-400 font-medium">' + meal.recipe.calories + ' kcal</span>';
         html += '<span class="text-orange-400">' + meal.recipe.protein + 'g P</span>';
         html += '<span class="text-yellow-300">' + meal.recipe.fat + 'g G</span>';
         html += '<span class="text-cyan-400">' + meal.recipe.netCarbs + 'g CN</span>';
         html += '</div>';
         
-        html += '<div class="text-xs text-on-surface-variant">';
+        html += '<div class="text-[13px] text-on-surface-variant">';
         html += '<span class="text-on-surface-variant/60">Ingredientes: </span>';
         if (meal.recipe.ingredients) {
           var ingNames = meal.recipe.ingredients.slice(0, 4).map(function(i) { return i.name; }).join(', ');
@@ -2766,24 +2766,24 @@ function getWeeklyPlanPreviewHTML(weekPlan) {
   var shoppingList = weekPlan.shoppingList || {};
   var itemCount = Object.keys(shoppingList).length;
   
-  html += '<p class="text-xs text-on-surface-variant mb-2">' + itemCount + ' ingredientes necesarios</p>';
+  html += '<p class="text-[13px] text-on-surface-variant mb-2">' + itemCount + ' ingredientes necesarios</p>';
   html += '<div class="space-y-1 max-h-32 overflow-y-auto">';
   
   Object.keys(shoppingList).slice(0, 8).forEach(function(foodId) {
     var item = shoppingList[foodId];
-    html += '<div class="flex items-center justify-between text-xs">';
+    html += '<div class="flex items-center justify-between text-[13px]">';
     html += '<span class="text-white">' + item.name + '</span>';
     html += '<span class="text-on-surface-variant">' + Math.round(item.quantity) + ' ' + (item.unit || 'g') + '</span>';
     html += '</div>';
   });
   
   if (itemCount > 8) {
-    html += '<p class="text-xs text-on-surface-variant text-center">...y ' + (itemCount - 8) + ' más</p>';
+    html += '<p class="text-[13px] text-on-surface-variant text-center">...y ' + (itemCount - 8) + ' más</p>';
   }
   html += '</div></div>';
   
   html += '<div class="bg-green-500/10 border border-green-500/30 rounded-xl p-3 mb-3">';
-  html += '<p class="text-xs text-green-400 mb-2">Paso final: Confirma para activar el plan y agregar ingredientes a tu despensa.</p>';
+  html += '<p class="text-[13px] text-green-400 mb-2">Paso final: Confirma para activar el plan y agregar ingredientes a tu despensa.</p>';
   html += '</div>';
   
   html += '<button onclick="openShoppingConfirmation()" class="w-full py-4 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2 text-base">' +
@@ -2842,8 +2842,8 @@ function openShoppingConfirmation() {
         '</div>' +
         
         '<div class="bg-surface-container-high rounded-xl p-3 mb-4">' +
-          '<p class="text-xs text-on-surface-variant mb-2 font-bold">Lo que obtendras:</p>' +
-          '<ul class="text-xs text-on-surface-variant space-y-2">' +
+          '<p class="text-[13px] text-on-surface-variant mb-2 font-bold">Lo que obtendras:</p>' +
+          '<ul class="text-[13px] text-on-surface-variant space-y-2">' +
             '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-sm">calendar_today</span>Plan semanal completo listo</li>' +
             '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-sm">kitchen</span>Ingredientes en tu despensa</li>' +
             '<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-400 text-sm">menu_book</span>Recetas con preparacion detallada</li>' +
@@ -2851,7 +2851,7 @@ function openShoppingConfirmation() {
         '</div>' +
         
         '<div class="bg-surface-container-high rounded-xl p-3 mb-4 max-h-48 overflow-y-auto space-y-2">' +
-          '<p class="text-xs text-on-surface-variant mb-2 font-bold">Ingredientes a agregar:</p>' +
+          '<p class="text-[13px] text-on-surface-variant mb-2 font-bold">Ingredientes a agregar:</p>' +
           toBuy.slice(0, 20).map(function(foodId) {
             var item = shoppingList[foodId];
             return '<div class="flex items-center justify-between text-sm py-1 border-b border-white/5">' +
@@ -2859,7 +2859,7 @@ function openShoppingConfirmation() {
               '<span class="text-secondary font-medium">' + Math.round(item.toBuy) + ' ' + (item.unit || 'g') + '</span>' +
             '</div>';
           }).join('') +
-          (totalToBuy > 20 ? '<p class="text-xs text-on-surface-variant text-center py-2">...y ' + (totalToBuy - 20) + ' mas</p>' : '') +
+          (totalToBuy > 20 ? '<p class="text-[13px] text-on-surface-variant text-center py-2">...y ' + (totalToBuy - 20) + ' mas</p>' : '') +
         '</div>' +
         
         '<div class="flex gap-3">' +
@@ -2931,10 +2931,10 @@ function confirmShoppingAndApplyPlan() {
     '<h3 class="text-2xl font-headline font-bold text-white mb-3">¡Plan Activado!</h3>' +
     '<p class="text-on-surface-variant mb-6">Tu plan semanal esta listo. Los ingredientes estan en tu despensa.</p>' +
     '<div class="bg-surface-container-high rounded-xl p-4 mb-6 text-left">' +
-      '<p class="text-xs text-on-surface-variant mb-2">Resumen:</p>' +
+      '<p class="text-[13px] text-on-surface-variant mb-2">Resumen:</p>' +
       '<div class="grid grid-cols-2 gap-3 text-center">' +
-        '<div><p class="text-2xl font-bold text-yellow-400">' + (weekPlan.totalMacros.calories / 7).toFixed(0) + '</p><p class="text-xs text-on-surface-variant">kcal/dia</p></div>' +
-        '<div><p class="text-2xl font-bold text-cyan-400">' + (weekPlan.totalMacros.netCarbs / 7).toFixed(0) + 'g</p><p class="text-xs text-on-surface-variant">carbos netos</p></div>' +
+        '<div><p class="text-2xl font-bold text-yellow-400">' + (weekPlan.totalMacros.calories / 7).toFixed(0) + '</p><p class="text-[13px] text-on-surface-variant">kcal/dia</p></div>' +
+        '<div><p class="text-2xl font-bold text-cyan-400">' + (weekPlan.totalMacros.netCarbs / 7).toFixed(0) + 'g</p><p class="text-[13px] text-on-surface-variant">carbos netos</p></div>' +
       '</div>' +
     '</div>' +
     '<p class="text-sm text-on-surface-variant">El plan estara visible en tu calendario diario.</p>' +
@@ -3027,7 +3027,7 @@ function getModifyPlanHTML(weekPlan) {
             '</div>' +
             '<div>' +
               '<h3 class="text-lg font-headline font-bold text-white">Modificar Plan</h3>' +
-              '<p class="text-xs text-on-surface-variant">Excluye alimentos que no comes</p>' +
+              '<p class="text-[13px] text-on-surface-variant">Excluye alimentos que no comes</p>' +
             '</div>' +
           '</div>' +
           '<button onclick="closeModifyPlanModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">' +
@@ -3036,7 +3036,7 @@ function getModifyPlanHTML(weekPlan) {
         '</div>' +
         
         '<div class="flex gap-2 mb-4">' +
-          '<button onclick="showExcludedIngredients()" class="flex-1 py-2 px-3 rounded-lg text-xs font-medium bg-surface-container-high text-white border border-yellow-500/50">' +
+          '<button onclick="showExcludedIngredients()" class="flex-1 py-2 px-3 rounded-lg text-[13px] font-medium bg-surface-container-high text-white border border-yellow-500/50">' +
             '<span class="material-symbols-outlined text-sm align-middle mr-1">block</span>Excluidos (<span id="excludedCount">' + excludedList.length + '</span>)' +
           '</button>' +
         '</div>' +
@@ -3060,14 +3060,14 @@ function getModifyPlanHTML(weekPlan) {
     }
     html += '<span class="font-medium text-sm ' + (isExcluded ? 'text-white/50 line-through' : 'text-white') + '">' + ing.name + '</span>';
     html += '</div>';
-    html += '<p class="text-xs text-on-surface-variant ml-5">' + ing.recipes.slice(0, 2).join(', ') + (ing.recipes.length > 2 ? '...' : '') + '</p>';
+    html += '<p class="text-[13px] text-on-surface-variant ml-5">' + ing.recipes.slice(0, 2).join(', ') + (ing.recipes.length > 2 ? '...' : '') + '</p>';
     html += '<p class="text-[11px] text-white/60 ml-5">' + ing.quantity + ' ' + (ing.unit || 'g') + ' x ' + ing.days.length + ' dia(s)</p>';
     html += '</div>';
     
     if (isExcluded) {
-      html += '<button onclick="includeIngredient(\'' + ing.id + '\'); openModifyPlanModal();" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-500/20 text-green-400 hover:bg-green-500/30 transition-all">Incluir</button>';
+      html += '<button onclick="includeIngredient(\'' + ing.id + '\'); openModifyPlanModal();" class="px-3 py-1.5 rounded-lg text-[13px] font-medium bg-green-500/20 text-green-400 hover:bg-green-500/30 transition-all">Incluir</button>';
     } else {
-      html += '<button onclick="excludeIngredient(\'' + ing.id + '\'); openModifyPlanModal();" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-all">Excluir</button>';
+      html += '<button onclick="excludeIngredient(\'' + ing.id + '\'); openModifyPlanModal();" class="px-3 py-1.5 rounded-lg text-[13px] font-medium bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-all">Excluir</button>';
     }
     html += '</div>';
   });
@@ -3075,7 +3075,7 @@ function getModifyPlanHTML(weekPlan) {
   html += '</div>';
   
   html += '<div class="mt-4 pt-4 border-t border-white/10 space-y-2">';
-  html += '<p class="text-xs text-on-surface-variant mb-2">Si excluyes un alimento, el plan se regenerara con recetas alternativas.</p>';
+  html += '<p class="text-[13px] text-on-surface-variant mb-2">Si excluyes un alimento, el plan se regenerara con recetas alternativas.</p>';
   html += '<button onclick="regeneratePlanWithExclusionsUI(); closeModifyPlanModal();" class="w-full py-3 rounded-xl bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2">' +
     '<span class="material-symbols-outlined text-sm">refresh</span>Regenerar Plan' +
   '</button>';
@@ -3164,16 +3164,16 @@ function openRecipeDetail(recipeId) {
       '<div class="flex items-center justify-between p-4 bg-surface-container-high border-b border-white/10">' +
         '<div>' +
           '<h3 class="text-lg font-headline font-bold text-white">' + recipe.title + '</h3>' +
-          '<div class="flex items-center gap-2 text-xs text-on-surface-variant mt-1">';
+          '<div class="flex items-center gap-2 text-[13px] text-on-surface-variant mt-1">';
   
   if (recipe.prepTime) {
-    html += '<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">schedule</span>' + recipe.prepTime + '</span>';
+    html += '<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">schedule</span>' + recipe.prepTime + '</span>';
   }
   if (recipe.difficulty) {
     html += '<span class="px-2 py-0.5 rounded bg-surface-container-high">' + recipe.difficulty + '</span>';
   }
   if (recipe.servings) {
-    html += '<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">people</span>' + recipe.servings + ' porcion</span>';
+    html += '<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">people</span>' + recipe.servings + ' porcion</span>';
   }
   
   html += '</div></div>' +
@@ -3214,7 +3214,7 @@ function openRecipeDetail(recipeId) {
         html += '<ol class="space-y-3">';
         recipe.instructions.forEach(function(step, idx) {
           html += '<li class="flex gap-3">';
-          html += '<span class="flex-shrink-0 w-6 h-6 rounded-full bg-primary-container text-white text-xs font-bold flex items-center justify-center">' + (idx + 1) + '</span>';
+          html += '<span class="flex-shrink-0 w-6 h-6 rounded-full bg-primary-container text-white text-[13px] font-bold flex items-center justify-center">' + (idx + 1) + '</span>';
           html += '<span class="text-sm text-white/90 pt-0.5">' + step + '</span>';
           html += '</li>';
         });
@@ -3272,7 +3272,7 @@ function getAIRecipeGeneratorHTML() {
           '</div>' +
           '<div>' +
             '<h2 class="text-lg font-headline font-bold text-white">Generar Receta con IA</h2>' +
-            '<p class="text-xs text-on-surface-variant">Recetas únicas basadas en tus preferencias</p>' +
+            '<p class="text-[13px] text-on-surface-variant">Recetas únicas basadas en tus preferencias</p>' +
           '</div>' +
         '</div>' +
         '<button onclick="closeAIRecipeGenerator()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">' +
@@ -3292,10 +3292,10 @@ function getAIRecipeGeneratorHTML() {
         '<div class="bg-surface-container-high rounded-xl p-4">' +
           '<h3 class="text-sm font-bold text-white mb-3">Objetivos de Macros</h3>' +
           '<div class="grid grid-cols-2 gap-3">' +
-            '<div><label class="text-xs text-on-surface-variant">Calorías</label><input type="number" id="aiRecipeCalories" value="400" class="w-full mt-1 px-3 py-2 rounded-lg bg-surface-container text-white border border-white/10 focus:border-primary-container"></div>' +
-            '<div><label class="text-xs text-on-surface-variant">Net Carbs (g)</label><input type="number" id="aiRecipeNetCarbs" value="8" class="w-full mt-1 px-3 py-2 rounded-lg bg-surface-container text-white border border-white/10 focus:border-primary-container"></div>' +
-            '<div><label class="text-xs text-on-surface-variant">Proteína (g)</label><input type="number" id="aiRecipeProtein" value="25" class="w-full mt-1 px-3 py-2 rounded-lg bg-surface-container text-white border border-white/10 focus:border-primary-container"></div>' +
-            '<div><label class="text-xs text-on-surface-variant">Grasa (g)</label><input type="number" id="aiRecipeFat" value="30" class="w-full mt-1 px-3 py-2 rounded-lg bg-surface-container text-white border border-white/10 focus:border-primary-container"></div>' +
+            '<div><label class="text-[13px] text-on-surface-variant">Calorías</label><input type="number" id="aiRecipeCalories" value="400" class="w-full mt-1 px-3 py-2 rounded-lg bg-surface-container text-white border border-white/10 focus:border-primary-container"></div>' +
+            '<div><label class="text-[13px] text-on-surface-variant">Net Carbs (g)</label><input type="number" id="aiRecipeNetCarbs" value="8" class="w-full mt-1 px-3 py-2 rounded-lg bg-surface-container text-white border border-white/10 focus:border-primary-container"></div>' +
+            '<div><label class="text-[13px] text-on-surface-variant">Proteína (g)</label><input type="number" id="aiRecipeProtein" value="25" class="w-full mt-1 px-3 py-2 rounded-lg bg-surface-container text-white border border-white/10 focus:border-primary-container"></div>' +
+            '<div><label class="text-[13px] text-on-surface-variant">Grasa (g)</label><input type="number" id="aiRecipeFat" value="30" class="w-full mt-1 px-3 py-2 rounded-lg bg-surface-container text-white border border-white/10 focus:border-primary-container"></div>' +
           '</div>' +
         '</div>' +
         '<div class="bg-surface-container-high rounded-xl p-4">' +
@@ -3364,7 +3364,7 @@ async function generateAIReccipe() {
         '</div>' +
         '<div class="bg-surface-container rounded-lg p-3 mb-3">' +
           '<h5 class="font-bold text-white text-lg">' + receta.nombre + '</h5>' +
-          '<div class="flex gap-3 text-xs mt-2 text-on-surface-variant">' +
+          '<div class="flex gap-3 text-[13px] mt-2 text-on-surface-variant">' +
             '<span>Tiempo: ' + (receta.tiempoPrep || 20) + ' min</span>' +
             '<span>Dificultad: ' + (receta.dificultad || 'fácil') + '</span>' +
           '</div>' +
@@ -3525,9 +3525,9 @@ function renderWeeklyModalContent(){
         html += '<div class="flex items-center justify-between p-3 rounded-xl ' + (isToday ? 'bg-primary-container/20' : 'bg-surface-container') + '">';
         html += '<div>';
         html += '<p class="text-sm font-medium text-white">' + (isToday ? 'Hoy - ' : '') + weekDays[i] + ' ' + d.getDate() + '</p>';
-        html += '<p class="text-xs ' + (itemCount > 0 ? 'text-green-400' : 'text-white/50') + '">' + itemCount + ' alimentos</p>';
+        html += '<p class="text-[13px] ' + (itemCount > 0 ? 'text-green-400' : 'text-white/50') + '">' + itemCount + ' alimentos</p>';
         html += '</div>';
-        html += '<button onclick="selectDay(\'' + dateKey + '\'); closeWeeklyModal();" class="px-3 py-1.5 rounded-lg bg-surface-container-high text-white text-xs">Ver</button>';
+        html += '<button onclick="selectDay(\'' + dateKey + '\'); closeWeeklyModal();" class="px-3 py-1.5 rounded-lg bg-surface-container-high text-white text-[13px]">Ver</button>';
         html += '</div>';
     }
     container.innerHTML = html;

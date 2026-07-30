@@ -37,7 +37,7 @@ input,select{background:#161310!important;color:#fff!important;border:1px solid 
 <div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161310;border:1px solid rgba(255,240,225,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
   <div class="p-3" style="border-bottom:1px solid rgba(255,240,225,0.06)">
     <p class="text-sm font-semibold" style="color:#f7f4f0" id="mobileDropdownUserName">Usuario</p>
-    <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
+    <p class="text-[13px] mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
   </div>
   <div class="p-2">
     <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f7f4f0">
@@ -56,22 +56,22 @@ input,select{background:#161310!important;color:#fff!important;border:1px solid 
 <!-- Header -->
 <header class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-2">
 <div>
-<p style="font-size:12px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px">Base de datos</p>
+<p style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px">Base de datos</p>
 <h1 class="kc-h1">¿Es keto?<br><span style="color:rgba(247,244,240,0.57)">Compruébalo.</span></h1>
 <p class="text-sm text-on-surface-variant mt-3 max-w-lg">Guía completa de alimentos con veredicto keto, calorías y carbos netos.</p>
 </div>
 <div id="statsContainer" class="hidden md:flex gap-4">
 <div class="glass-card rounded-xl px-4 py-3 text-center">
 <p class="text-2xl font-black text-white" id="totalFoodsCount">0</p>
-<p class="text-xs text-on-surface-variant uppercase">Total</p>
+<p class="text-[13px] text-on-surface-variant uppercase">Total</p>
 </div>
 <div class="glass-card rounded-xl px-4 py-3 text-center border-green-500/30">
 <p class="text-2xl font-black text-green-400" id="ketoFoodsCount">0</p>
-<p class="text-xs text-on-surface-variant uppercase">Keto ✓</p>
+<p class="text-[13px] text-on-surface-variant uppercase">Keto ✓</p>
 </div>
 <div class="glass-card rounded-xl px-4 py-3 text-center">
 <p class="text-2xl font-black text-secondary" id="favoritesCount">0</p>
-<p class="text-xs text-on-surface-variant uppercase">Favoritos</p>
+<p class="text-[13px] text-on-surface-variant uppercase">Favoritos</p>
 </div>
 </div>
 <div class="flex items-center gap-2">
@@ -99,15 +99,15 @@ Nuevo
 <h3 class="font-headline font-bold text-white">Tu día hoy</h3>
 </div>
 <div class="flex gap-2 flex-wrap">
-<button onclick="openQuickRecipeModal()" class="px-3 py-1.5 rounded-lg bg-primary-container/20 text-primary-container text-xs font-bold hover:bg-primary-container/30 transition-all flex items-center gap-1">
+<button onclick="openQuickRecipeModal()" class="px-3 py-1.5 rounded-lg bg-primary-container/20 text-primary-container text-[13px] font-bold hover:bg-primary-container/30 transition-all flex items-center gap-1">
 <span class="material-symbols-outlined text-sm">restaurant_menu</span>
 Receta rápida
 </button>
-<button onclick="openGroupsModal()" class="px-3 py-1.5 rounded-lg bg-secondary/20 text-secondary text-xs font-bold hover:bg-secondary/30 transition-all flex items-center gap-1">
+<button onclick="openGroupsModal()" class="px-3 py-1.5 rounded-lg bg-secondary/20 text-secondary text-[13px] font-bold hover:bg-secondary/30 transition-all flex items-center gap-1">
 <span class="material-symbols-outlined text-sm">folder</span>
 Grupos
 </button>
-<a href="/app/macros" class="px-3 py-1.5 rounded-lg bg-green-500/20 text-green-400 text-xs font-bold hover:bg-green-500/30 transition-all flex items-center gap-1">
+<a href="/app/macros" class="px-3 py-1.5 rounded-lg bg-green-500/20 text-green-400 text-[13px] font-bold hover:bg-green-500/30 transition-all flex items-center gap-1">
 <span class="material-symbols-outlined text-sm">trending_up</span>
 Ver macros
 </a>
@@ -117,33 +117,33 @@ Ver macros
 <div class="text-center">
 <div class="relative w-16 h-16 mx-auto mb-2">
 <svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="#161310" stroke-width="6"/><circle id="calCircle" cx="32" cy="32" r="28" fill="none" stroke="#ffb300" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="140"/></svg>
-<div class="absolute inset-0 flex items-center justify-center"><span id="calProgress" class="text-xs font-bold text-yellow-400">20%</span></div>
+<div class="absolute inset-0 flex items-center justify-center"><span id="calProgress" class="text-[13px] font-bold text-yellow-400">20%</span></div>
 </div>
-<p class="text-xs text-on-surface-variant">Calorías</p>
+<p class="text-[13px] text-on-surface-variant">Calorías</p>
 <p class="text-sm font-bold"><span id="calEaten">0</span>/<span id="calGoal">1800</span></p>
 </div>
 <div class="text-center">
 <div class="relative w-16 h-16 mx-auto mb-2">
 <svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="#161310" stroke-width="6"/><circle id="protCircle" cx="32" cy="32" r="28" fill="none" stroke="#ff4d00" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="88"/></svg>
-<div class="absolute inset-0 flex items-center justify-center"><span id="protProgress" class="text-xs font-bold text-primary-container">50%</span></div>
+<div class="absolute inset-0 flex items-center justify-center"><span id="protProgress" class="text-[13px] font-bold text-primary-container">50%</span></div>
 </div>
-<p class="text-xs text-on-surface-variant">Proteína</p>
+<p class="text-[13px] text-on-surface-variant">Proteína</p>
 <p class="text-sm font-bold"><span id="protEaten">0</span>g/<span id="protGoal">160</span>g</p>
 </div>
 <div class="text-center">
 <div class="relative w-16 h-16 mx-auto mb-2">
 <svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="#161310" stroke-width="6"/><circle id="fatCircle" cx="32" cy="32" r="28" fill="none" stroke="#ffb300" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="132"/></svg>
-<div class="absolute inset-0 flex items-center justify-center"><span id="fatProgress" class="text-xs font-bold text-secondary">25%</span></div>
+<div class="absolute inset-0 flex items-center justify-center"><span id="fatProgress" class="text-[13px] font-bold text-secondary">25%</span></div>
 </div>
-<p class="text-xs text-on-surface-variant">Grasa</p>
+<p class="text-[13px] text-on-surface-variant">Grasa</p>
 <p class="text-sm font-bold"><span id="fatEaten">0</span>g/<span id="fatGoal">150</span>g</p>
 </div>
 <div class="text-center">
 <div class="relative w-16 h-16 mx-auto mb-2">
 <svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="#161310" stroke-width="6"/><circle id="carbsCircle" cx="32" cy="32" r="28" fill="none" stroke="#22c55e" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="160"/></svg>
-<div class="absolute inset-0 flex items-center justify-center"><span id="carbsProgress" class="text-xs font-bold text-green-400">9%</span></div>
+<div class="absolute inset-0 flex items-center justify-center"><span id="carbsProgress" class="text-[13px] font-bold text-green-400">9%</span></div>
 </div>
-<p class="text-xs text-on-surface-variant">Net Carbs</p>
+<p class="text-[13px] text-on-surface-variant">Net Carbs</p>
 <p class="text-sm font-bold"><span id="carbsEaten">0</span>g/<span id="carbsGoal">25</span>g</p>
 </div>
 </div>
@@ -156,7 +156,7 @@ Ver macros
 <span class="material-symbols-outlined text-primary-container">lightbulb</span>
 <h3 class="font-headline font-bold text-white">Sugerencias para ti</h3>
 </div>
-<button onclick="refreshSuggestions()" class="px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant text-xs hover:bg-surface-container-high hover:text-white transition-all flex items-center gap-1">
+<button onclick="refreshSuggestions()" class="px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant text-[13px] hover:bg-surface-container-high hover:text-white transition-all flex items-center gap-1">
 <span class="material-symbols-outlined text-sm">refresh</span>
 Actualizar
 </button>
@@ -177,7 +177,7 @@ Actualizar
 </div>
 <div>
 <h3 class="text-xl font-black text-white">Receta Rápida</h3>
-<p class="text-xs text-white/60">Combina alimentos para crear una receta</p>
+<p class="text-[13px] text-white/60">Combina alimentos para crear una receta</p>
 </div>
 </div>
 <button onclick="closeQuickRecipeModal()" class="w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
@@ -187,16 +187,16 @@ Actualizar
 </div>
 <div class="p-4 overflow-y-auto max-h-[60vh]">
 <div class="mb-4">
-<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Nombre de la receta</label>
+<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Nombre de la receta</label>
 <input type="text" id="recipeName" placeholder="Ej: Desayuno keto" class="w-full bg-surface-container-high border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary-container">
 </div>
 <div class="mb-4">
-<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Ingredientes añadidos</label>
+<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Ingredientes añadidos</label>
 <div id="recipeIngredients" class="space-y-2 min-h-[100px] bg-surface-container/50 rounded-xl p-3">
 <p class="text-on-surface-variant text-sm text-center py-4">Selecciona alimentos de abajo para añadir</p>
 </div>
 <div id="recipeTotals" class="mt-3 p-3 bg-primary-container/10 rounded-xl border border-primary-container/20 hidden">
-<div class="grid grid-cols-4 gap-2 text-center text-xs">
+<div class="grid grid-cols-4 gap-2 text-center text-[13px]">
 <div><span class="text-yellow-400 font-bold" id="recipeCal">0</span><br><span class="text-on-surface-variant">kcal</span></div>
 <div><span class="text-primary-container font-bold" id="recipeProt">0g</span><br><span class="text-on-surface-variant">Prot</span></div>
 <div><span class="text-secondary font-bold" id="recipeFat">0g</span><br><span class="text-on-surface-variant">Grasa</span></div>
@@ -205,7 +205,7 @@ Actualizar
 </div>
 </div>
 <div class="mb-4">
-<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Buscar ingrediente</label>
+<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Buscar ingrediente</label>
 <input type="text" id="recipeSearchInput" placeholder="Buscar..." class="w-full bg-surface-container border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-secondary" oninput="filterRecipeFoods()">
 </div>
 <div id="recipeFoodsList" class="grid grid-cols-2 gap-2 max-h-[200px] overflow-y-auto"></div>
@@ -234,7 +234,7 @@ Guardar
 </div>
 <div>
 <h3 class="text-xl font-black text-white">Grupos Personalizados</h3>
-<p class="text-xs text-white/60">Organiza tus alimentos favoritos</p>
+<p class="text-[13px] text-white/60">Organiza tus alimentos favoritos</p>
 </div>
 </div>
 <button onclick="closeGroupsModal()" class="w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
@@ -264,7 +264,7 @@ Guardar
 <span class="material-symbols-outlined text-primary-container">history</span>
 <h3 class="font-headline font-bold text-white">Historial Reciente</h3>
 </div>
-<button onclick="openFoodHistory()" class="px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant text-xs hover:bg-surface-container-high hover:text-white transition-all flex items-center gap-1">
+<button onclick="openFoodHistory()" class="px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant text-[13px] hover:bg-surface-container-high hover:text-white transition-all flex items-center gap-1">
 <span class="material-symbols-outlined text-sm">open_in_new</span>
 Ver todo
 </button>
@@ -285,7 +285,7 @@ Ver todo
 </div>
 <div>
 <h3 class="text-xl font-black text-white">Historial de Alimentos</h3>
-<p class="text-xs text-white/60">Alimentos que has consumido</p>
+<p class="text-[13px] text-white/60">Alimentos que has consumido</p>
 </div>
 </div>
 <button onclick="closeFoodHistory()" class="w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
@@ -387,35 +387,35 @@ Alimentos a Evitar
 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
 <div class="glass-card p-4 rounded-xl flex items-center gap-3">
 <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-error text-sm">grass</span></div>
-<div class="min-w-0"><p class="font-headline font-bold text-white text-sm truncate">Tubérculos</p><p class="text-xs text-on-surface-variant truncate">Papa, batata, maíz</p></div>
+<div class="min-w-0"><p class="font-headline font-bold text-white text-sm truncate">Tubérculos</p><p class="text-[13px] text-on-surface-variant truncate">Papa, batata, maíz</p></div>
 </div>
 <div class="glass-card p-4 rounded-xl flex items-center gap-3">
 <div class="w-10 h-10 rounded-lg bg-pink-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-pink-400 text-sm">icecream</span></div>
-<div class="min-w-0"><p class="font-headline font-bold text-white text-sm truncate">Frutas Dulces</p><p class="text-xs text-on-surface-variant truncate">Banana, mango, piña</p></div>
+<div class="min-w-0"><p class="font-headline font-bold text-white text-sm truncate">Frutas Dulces</p><p class="text-[13px] text-on-surface-variant truncate">Banana, mango, piña</p></div>
 </div>
 <div class="glass-card p-4 rounded-xl flex items-center gap-3">
 <div class="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-orange-400 text-sm">bakery_dining</span></div>
-<div class="min-w-0"><p class="font-headline font-bold text-white text-sm truncate">Cereales</p><p class="text-xs text-on-surface-variant truncate">Pan, arroz, avena</p></div>
+<div class="min-w-0"><p class="font-headline font-bold text-white text-sm truncate">Cereales</p><p class="text-[13px] text-on-surface-variant truncate">Pan, arroz, avena</p></div>
 </div>
 <div class="glass-card p-4 rounded-xl flex items-center gap-3">
 <div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-yellow-400 text-sm">cookie</span></div>
-<div class="min-w-0"><p class="font-headline font-bold text-white text-sm truncate">Azúcares</p><p class="text-xs text-on-surface-variant truncate">Dulces, chocolates</p></div>
+<div class="min-w-0"><p class="font-headline font-bold text-white text-sm truncate">Azúcares</p><p class="text-[13px] text-on-surface-variant truncate">Dulces, chocolates</p></div>
 </div>
 <div class="glass-card p-4 rounded-xl flex items-center gap-3">
 <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-purple-400 text-sm">liquor</span></div>
-<div class="min-w-0"><p class="font-headline font-bold text-white text-sm truncate">Alcohol</p><p class="text-xs text-on-surface-variant truncate">Cerveza, cócteles</p></div>
+<div class="min-w-0"><p class="font-headline font-bold text-white text-sm truncate">Alcohol</p><p class="text-[13px] text-on-surface-variant truncate">Cerveza, cócteles</p></div>
 </div>
 <div class="glass-card p-4 rounded-xl flex items-center gap-3">
 <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-blue-400 text-sm">local_drink</span></div>
-<div class="min-w-0"><p class="font-headline font-bold text-white text-sm truncate">Bebidas Azucaradas</p><p class="text-xs text-on-surface-variant truncate">Refrescos, jugos</p></div>
+<div class="min-w-0"><p class="font-headline font-bold text-white text-sm truncate">Bebidas Azucaradas</p><p class="text-[13px] text-on-surface-variant truncate">Refrescos, jugos</p></div>
 </div>
 <div class="glass-card p-4 rounded-xl flex items-center gap-3">
 <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-amber-400 text-sm">breakfast_dining</span></div>
-<div class="min-w-0"><p class="font-headline font-bold text-white text-sm truncate">Legumbres</p><p class="text-xs text-on-surface-variant truncate">Frijoles, lentejas</p></div>
+<div class="min-w-0"><p class="font-headline font-bold text-white text-sm truncate">Legumbres</p><p class="text-[13px] text-on-surface-variant truncate">Frijoles, lentejas</p></div>
 </div>
 <div class="glass-card p-4 rounded-xl flex items-center gap-3">
 <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-cyan-400 text-sm">egg_alt</span></div>
-<div class="min-w-0"><p class="font-headline font-bold text-white text-sm truncate">Lácteos Azucarados</p><p class="text-xs text-on-surface-variant truncate">Yogur con azúcar</p></div>
+<div class="min-w-0"><p class="font-headline font-bold text-white text-sm truncate">Lácteos Azucarados</p><p class="text-[13px] text-on-surface-variant truncate">Yogur con azúcar</p></div>
 </div>
 </div>
 </section>
@@ -436,7 +436,7 @@ Alimentos a Evitar
 </div>
 <div>
 <h3 class="text-xl font-black text-white">USDA Search</h3>
-<p class="text-xs text-white/60">Base de datos nutricional</p>
+<p class="text-[13px] text-white/60">Base de datos nutricional</p>
 </div>
 </div>
 <button onclick="closeOnlineSearchModal()" class="w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
@@ -457,7 +457,7 @@ Buscar
 <div class="text-center py-8">
 <span class="material-symbols-outlined text-4xl text-white/20 mb-2 block">search</span>
 <p class="text-on-surface-variant text-sm">Busca cualquier alimento</p>
-<p class="text-on-surface-variant/50 text-xs mt-1">Ej: pechuga pollo, aguacate, salmón</p>
+<p class="text-on-surface-variant/50 text-[13px] mt-1">Ej: pechuga pollo, aguacate, salmón</p>
 </div>
 </div>
 <div class="p-3 border-t border-white/5 bg-surface-container-low/50">
@@ -483,21 +483,21 @@ Buscar
 <div class="space-y-4">
 <input type="hidden" id="foodId">
 <div>
-<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Nombre</label>
+<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Nombre</label>
 <input type="text" id="foodName" class="w-full" placeholder="Ej: Pechuga de pollo">
 </div>
 <div class="grid grid-cols-2 gap-4">
 <div>
-<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Calorías</label>
+<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Calorías</label>
 <input type="number" id="foodCalories" class="w-full" placeholder="165">
 </div>
 <div>
-<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Porción (g)</label>
+<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Porción (g)</label>
 <input type="number" id="foodPortion" class="w-full" placeholder="100">
 </div>
 </div>
 <div>
-<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Categoría</label>
+<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Categoría</label>
 <select id="foodCategory" class="w-full">
 <option value="Proteínas">Proteínas</option>
 <option value="Verduras">Verduras</option>
@@ -509,26 +509,26 @@ Buscar
 </div>
 <div class="grid grid-cols-2 gap-4">
 <div>
-<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Proteína (g)</label>
+<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Proteína (g)</label>
 <input type="number" id="foodProtein" class="w-full" placeholder="31">
 </div>
 <div>
-<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Grasa (g)</label>
+<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Grasa (g)</label>
 <input type="number" id="foodFat" class="w-full" placeholder="3.6">
 </div>
 <div>
-<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Carbos (g)</label>
+<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Carbos (g)</label>
 <input type="number" id="foodCarbs" class="w-full" placeholder="0">
 </div>
 <div>
-<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Fibra (g)</label>
+<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Fibra (g)</label>
 <input type="number" id="foodFiber" class="w-full" placeholder="0">
 </div>
 </div>
 
 <!-- Image Upload -->
 <div class="mt-4">
-<label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Imagen del alimento</label>
+<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Imagen del alimento</label>
 <div class="relative">
 <input type="file" id="foodImage" accept="image/*" class="hidden" onchange="previewFoodImage(this)">
 <div id="imagePreviewContainer" class="hidden glass-card rounded-xl p-2 mb-2">
@@ -576,7 +576,7 @@ Eliminar imagen
 
 <!-- Portion Converter -->
 <div class="mb-4 p-4 bg-primary-container/10 border border-primary-container/30 rounded-xl">
-<p class="text-xs text-primary-container uppercase font-bold mb-2 flex items-center gap-1">
+<p class="text-[13px] text-primary-container uppercase font-bold mb-2 flex items-center gap-1">
 <span class="material-symbols-outlined text-sm">swap_horiz</span>
 Convertir porción
 </p>
@@ -648,7 +648,7 @@ Editar
 </div>
 <div>
 <h3 class="text-lg font-bold text-white">Buscar imagen</h3>
-<p class="text-xs text-on-surface-variant">Powered by Pexels</p>
+<p class="text-[13px] text-on-surface-variant">Powered by Pexels</p>
 </div>
 </div>
 <button onclick="closePexelsModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-colors">
@@ -667,7 +667,7 @@ Editar
 <input type="password" id="pexelsApiKeyInput" placeholder="Tu API Key de Pexels" class="flex-1 px-4 py-2 rounded-lg bg-surface-container-high border border-outline/50 text-white text-sm">
 <button onclick="savePexelsApiKey()" class="px-3 py-2 rounded-lg bg-secondary/20 text-secondary text-sm hover:bg-secondary/30 transition-colors">Guardar</button>
 </div>
-<p class="text-xs text-on-surface-variant mt-1">Obtén tu API key gratis en pexels.com/api</p>
+<p class="text-[13px] text-on-surface-variant mt-1">Obtén tu API key gratis en pexels.com/api</p>
 </div>
 </div>
 <div id="pexelsResults" class="flex-1 overflow-y-auto p-4">
@@ -689,13 +689,13 @@ Configurar API
 <div id="fabGroup" class="fab-group fixed bottom-20 right-4 md:bottom-8 md:right-8 flex flex-col gap-3 z-50">
 <button onclick="openOnlineSearchModal()" class="group relative w-14 h-14 bg-gradient-to-br from-secondary to-primary-container hover:from-secondary/90 hover:to-primary-container/90 rounded-2xl shadow-xl flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-glow-strong">
 <span class="material-symbols-outlined text-white text-2xl">cloud_sync</span>
-<span class="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1 bg-surface-container-high rounded-lg text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+<span class="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1 bg-surface-container-high rounded-lg text-white text-[13px] font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
 Buscar online
 </span>
 </button>
 <button onclick="openAddFoodModal()" class="group relative w-14 h-14 bg-gradient-to-br from-primary-container to-red-500 hover:from-primary-container/90 hover:to-red-500/90 rounded-2xl shadow-xl flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-glow">
 <span class="material-symbols-outlined text-white text-2xl">add</span>
-<span class="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1 bg-surface-container-high rounded-lg text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+<span class="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1 bg-surface-container-high rounded-lg text-white text-[13px] font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
 Nuevo alimento
 </span>
 </button>
@@ -980,10 +980,10 @@ html+='<span class="px-1.5 py-0.5 rounded text-[10px] font-black uppercase track
 html+='<span class="text-[11px] text-on-surface-variant">'+f.portion+'g porcion</span>';
 html+='</div>';
 html+='<div class="flex gap-1.5">';
-html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[10px] text-on-surface-variant uppercase leading-none mb-0.5">Net</p><p class="text-xs font-bold text-green-400 leading-none">'+netCarbs+'g</p></div>';
-html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[10px] text-on-surface-variant uppercase leading-none mb-0.5">Prot</p><p class="text-xs font-bold text-primary-container leading-none">'+f.protein+'g</p></div>';
-html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[10px] text-on-surface-variant uppercase leading-none mb-0.5">Grasa</p><p class="text-xs font-bold text-secondary leading-none">'+f.fat+'g</p></div>';
-html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[10px] text-on-surface-variant uppercase leading-none mb-0.5">Carbs</p><p class="text-xs font-bold text-green-400 leading-none">'+f.carbs+'g</p></div>';
+html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[10px] text-on-surface-variant uppercase leading-none mb-0.5">Net</p><p class="text-[13px] font-bold text-green-400 leading-none">'+netCarbs+'g</p></div>';
+html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[10px] text-on-surface-variant uppercase leading-none mb-0.5">Prot</p><p class="text-[13px] font-bold text-primary-container leading-none">'+f.protein+'g</p></div>';
+html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[10px] text-on-surface-variant uppercase leading-none mb-0.5">Grasa</p><p class="text-[13px] font-bold text-secondary leading-none">'+f.fat+'g</p></div>';
+html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[10px] text-on-surface-variant uppercase leading-none mb-0.5">Carbs</p><p class="text-[13px] font-bold text-green-400 leading-none">'+f.carbs+'g</p></div>';
 html+='</div>';
 html+='</div>';
 html+='</div>';
@@ -1070,8 +1070,8 @@ document.getElementById("detailNetCarbs").style.color=ketoScore.color;
 
 var starsHtml="";
 for(var i=1;i<=5;i++){
-if(i<=ketoScore.score)starsHtml+='<span class="material-symbols-outlined text-xs" style="color:'+ketoScore.color+'">star</span>';
-else starsHtml+='<span class="material-symbols-outlined text-xs text-white/20">star</span>';
+if(i<=ketoScore.score)starsHtml+='<span class="material-symbols-outlined text-[13px]" style="color:'+ketoScore.color+'">star</span>';
+else starsHtml+='<span class="material-symbols-outlined text-[13px] text-white/20">star</span>';
 }
 document.getElementById("ketoScoreStars").innerHTML=starsHtml;
 
@@ -1287,7 +1287,7 @@ function openOnlineSearchModal(){document.getElementById("onlineSearchModal").cl
 function closeOnlineSearchModal(){
 document.getElementById("onlineSearchModal").classList.add("hidden");
 document.getElementById("onlineSearchInput").value="";
-document.getElementById("onlineSearchResults").innerHTML='<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-white/20 mb-2 block">search</span><p class="text-on-surface-variant text-sm">Busca cualquier alimento</p><p class="text-on-surface-variant/50 text-xs mt-1">Ej: pechuga pollo, aguacate, salmon</p></div>';
+document.getElementById("onlineSearchResults").innerHTML='<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-white/20 mb-2 block">search</span><p class="text-on-surface-variant text-sm">Busca cualquier alimento</p><p class="text-on-surface-variant/50 text-[13px] mt-1">Ej: pechuga pollo, aguacate, salmon</p></div>';
 }
 
 async function performOnlineSearch(){
@@ -1303,7 +1303,7 @@ showToast("Sin resultados",3000,"info");
 container.innerHTML=results.map(function(r){
 var ketoClass=parseFloat(r.carbs)<=5?'border-green-500/30':'border-orange-500/30';
 var ketoBadge=parseFloat(r.carbs)<=5?'<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-green-500/20 text-green-400">Keto</span>':'<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-orange-500/20 text-orange-400">'+(parseFloat(r.carbs)).toFixed(1)+'g</span>';
-return'<div class="group p-3 bg-surface-container-high/50 hover:bg-surface-container-high rounded-xl border border-transparent hover:border-secondary/30 cursor-pointer transition-all" onclick="addOnlineFood(\''+r.name.replace(/'/g,"\\'")+'\','+r.calories+','+r.protein+','+r.fat+','+r.carbs+')"><div class="flex items-center justify-between"><p class="font-bold text-white group-hover:text-secondary transition-colors">'+r.name+'</p>'+ketoBadge+'</div><div class="flex gap-4 mt-2 text-xs text-on-surface-variant"><span>'+r.calories+' cal</span><span class="text-primary-container">P: '+r.protein+'g</span><span class="text-secondary">F: '+r.fat+'g</span><span class="text-green-400">C: '+r.carbs+'g</span></div></div>';
+return'<div class="group p-3 bg-surface-container-high/50 hover:bg-surface-container-high rounded-xl border border-transparent hover:border-secondary/30 cursor-pointer transition-all" onclick="addOnlineFood(\''+r.name.replace(/'/g,"\\'")+'\','+r.calories+','+r.protein+','+r.fat+','+r.carbs+')"><div class="flex items-center justify-between"><p class="font-bold text-white group-hover:text-secondary transition-colors">'+r.name+'</p>'+ketoBadge+'</div><div class="flex gap-4 mt-2 text-[13px] text-on-surface-variant"><span>'+r.calories+' cal</span><span class="text-primary-container">P: '+r.protein+'g</span><span class="text-secondary">F: '+r.fat+'g</span><span class="text-green-400">C: '+r.carbs+'g</span></div></div>';
 }).join('');
 showToast(results.length+" alimentos encontrados",3000,"success");
 }
@@ -1400,7 +1400,7 @@ var data=await response.json();
 if(data.photos&&data.photos.length>0){
 container.innerHTML='<div class="grid grid-cols-2 gap-3">'+
 data.photos.map(function(p){return'<div class="aspect-video rounded-xl overflow-hidden bg-surface-container-high cursor-pointer hover:ring-2 hover:ring-primary-container transition-all" onclick="selectPexelsImage(\''+p.src.large2x.replace(/'/g,"\\'")+'\')"><img src="/app/'+p.src.medium+'" alt="'+p.alt+'" class="w-full h-full object-cover" loading="lazy"></div>'}).join("")+
-'</div><p class="text-xs text-on-surface-variant text-center mt-3">'+data.total_results+' resultados - Toca una imagen para seleccionarla</p>';
+'</div><p class="text-[13px] text-on-surface-variant text-center mt-3">'+data.total_results+' resultados - Toca una imagen para seleccionarla</p>';
 showToast(data.photos.length+" imagenes encontradas",3000,"success");
 }else{
 container.innerHTML='<p class="text-center text-on-surface-variant py-8">No se encontraron imagenes</p>';
@@ -1527,10 +1527,10 @@ suggestions=unique.slice(0,8);
 var goalLabel=trainingGoal==="musculo"?"Ganar músculo":trainingGoal==="perder"?"Perder peso":"Mantener peso";
 var container=document.getElementById("suggestionsContainer");
 if(suggestions.length>0){
-container.innerHTML='<div class="col-span-full mb-2"><span class="px-3 py-1 rounded-full text-xs font-bold bg-primary-container/20 text-primary-container">Objetivo: '+goalLabel+'</span></div>'+
+container.innerHTML='<div class="col-span-full mb-2"><span class="px-3 py-1 rounded-full text-[13px] font-bold bg-primary-container/20 text-primary-container">Objetivo: '+goalLabel+'</span></div>'+
 suggestions.map(function(f){
 var ketoScore=getKetoScore(f);
-return'<div class="glass-card rounded-xl p-3 cursor-pointer hover:scale-105 transition-all" onclick="openDetail(\''+f.id+'\')"><div class="aspect-video rounded-lg bg-surface-container-high mb-2 overflow-hidden relative">'+(f.image?'<img src="/app/'+f.image+'" class="w-full h-full object-cover" loading="lazy">':'<div class="w-full h-full flex items-center justify-center"><span class="material-symbols-outlined text-3xl text-white/20">restaurant</span></div>')+'<span class="absolute top-1 right-1 px-1.5 py-0.5 rounded text-[9px] font-bold" style="background:'+ketoScore.color+'/80;color:white">'+ketoScore.label+'</span></div><p class="text-sm font-bold text-white truncate">'+f.name+'</p><div class="flex justify-between text-xs mt-1"><span class="text-primary-container">P:'+f.protein+'g</span><span class="text-secondary">F:'+f.fat+'g</span><span class="text-green-400">'+getNetCarbs(f)+'g</span></div></div>';
+return'<div class="glass-card rounded-xl p-3 cursor-pointer hover:scale-105 transition-all" onclick="openDetail(\''+f.id+'\')"><div class="aspect-video rounded-lg bg-surface-container-high mb-2 overflow-hidden relative">'+(f.image?'<img src="/app/'+f.image+'" class="w-full h-full object-cover" loading="lazy">':'<div class="w-full h-full flex items-center justify-center"><span class="material-symbols-outlined text-3xl text-white/20">restaurant</span></div>')+'<span class="absolute top-1 right-1 px-1.5 py-0.5 rounded text-[9px] font-bold" style="background:'+ketoScore.color+'/80;color:white">'+ketoScore.label+'</span></div><p class="text-sm font-bold text-white truncate">'+f.name+'</p><div class="flex justify-between text-[13px] mt-1"><span class="text-primary-container">P:'+f.protein+'g</span><span class="text-secondary">F:'+f.fat+'g</span><span class="text-green-400">'+getNetCarbs(f)+'g</span></div></div>';
 }).join('');
 document.getElementById("suggestionsSection").classList.remove("hidden");
 }else{
@@ -1548,7 +1548,7 @@ var seen={};
 foodHistory.forEach(function(h){if(!seen[h.id]){unique.push(h);seen[h.id]=true;}});
 unique=unique.slice(0,6);
 container.innerHTML=unique.map(function(h){
-return'<div class="glass-card rounded-xl p-2 cursor-pointer hover:scale-105 transition-all" onclick="openDetail(\''+h.id+'\')"><div class="w-12 h-12 rounded-lg bg-surface-container-high mb-2 overflow-hidden mx-auto">'+(h.image?'<img src="/app/'+h.image+'" class="w-full h-full object-cover" loading="lazy">':'<div class="w-full h-full flex items-center justify-center"><span class="material-symbols-outlined text-2xl text-white/20">restaurant</span></div>')+'</div><p class="text-xs font-bold text-white text-center truncate">'+h.name+'</p></div>';
+return'<div class="glass-card rounded-xl p-2 cursor-pointer hover:scale-105 transition-all" onclick="openDetail(\''+h.id+'\')"><div class="w-12 h-12 rounded-lg bg-surface-container-high mb-2 overflow-hidden mx-auto">'+(h.image?'<img src="/app/'+h.image+'" class="w-full h-full object-cover" loading="lazy">':'<div class="w-full h-full flex items-center justify-center"><span class="material-symbols-outlined text-2xl text-white/20">restaurant</span></div>')+'</div><p class="text-[13px] font-bold text-white text-center truncate">'+h.name+'</p></div>';
 }).join('');
 }else{
 container.innerHTML='<div class="col-span-full text-center py-8 text-on-surface-variant"><span class="material-symbols-outlined text-4xl text-white/20 mb-2 block">history</span><p class="text-sm">Aún no has visto alimentos hoy</p></div>';
@@ -1563,7 +1563,7 @@ recipeItems=[];
 document.getElementById("recipeName").value="";
 updateRecipeIngredients();
 document.getElementById("recipeFoodsList").innerHTML=currentFoods.slice(0,20).map(function(f){
-return'<div class="p-2 bg-surface-container-high rounded-lg cursor-pointer hover:bg-surface-container-highest transition-colors" onclick="addToRecipe(\''+f.id+'\')"><p class="text-xs font-bold text-white truncate">'+f.name+'</p><p class="text-[11px] text-on-surface-variant">'+f.calories+' cal</p></div>';
+return'<div class="p-2 bg-surface-container-high rounded-lg cursor-pointer hover:bg-surface-container-highest transition-colors" onclick="addToRecipe(\''+f.id+'\')"><p class="text-[13px] font-bold text-white truncate">'+f.name+'</p><p class="text-[11px] text-on-surface-variant">'+f.calories+' cal</p></div>';
 }).join('');
 document.getElementById("quickRecipeModal").classList.remove("hidden");
 }
@@ -1611,7 +1611,7 @@ function filterRecipeFoods(){
 var search=document.getElementById("recipeSearchInput").value.toLowerCase();
 var filtered=currentFoods.filter(function(f){return f.name.toLowerCase().includes(search)});
 document.getElementById("recipeFoodsList").innerHTML=filtered.slice(0,20).map(function(f){
-return'<div class="p-2 bg-surface-container-high rounded-lg cursor-pointer hover:bg-surface-container-highest transition-colors" onclick="addToRecipe(\''+f.id+'\')"><p class="text-xs font-bold text-white truncate">'+f.name+'</p><p class="text-[11px] text-on-surface-variant">'+f.calories+' cal</p></div>';
+return'<div class="p-2 bg-surface-container-high rounded-lg cursor-pointer hover:bg-surface-container-highest transition-colors" onclick="addToRecipe(\''+f.id+'\')"><p class="text-[13px] font-bold text-white truncate">'+f.name+'</p><p class="text-[11px] text-on-surface-variant">'+f.calories+' cal</p></div>';
 }).join('');
 }
 
@@ -1642,12 +1642,12 @@ function renderGroups(){
 var groups=JSON.parse(localStorage.getItem("foodGroups")||"[]");
 var container=document.getElementById("groupsList");
 if(groups.length===0){
-container.innerHTML='<div class="text-center py-8 text-on-surface-variant"><span class="material-symbols-outlined text-4xl text-white/20 mb-2 block">folder_open</span><p class="text-sm">No tienes grupos creados</p><p class="text-xs mt-1">Crea uno para organizar tus alimentos</p></div>';
+container.innerHTML='<div class="text-center py-8 text-on-surface-variant"><span class="material-symbols-outlined text-4xl text-white/20 mb-2 block">folder_open</span><p class="text-sm">No tienes grupos creados</p><p class="text-[13px] mt-1">Crea uno para organizar tus alimentos</p></div>';
 }else{
 container.innerHTML=groups.map(function(g){
 var foodNames=g.foodIds.map(function(id){var f=currentFoods.find(function(cf){return cf.id===id});return f?f.name:id;}).slice(0,3).join(", ");
 var more=g.foodIds.length>3?" +"+(g.foodIds.length-3)+" más":"";
-return'<div class="glass-card rounded-xl p-4"><div class="flex items-center justify-between mb-2"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary">'+g.icon+'</span><h4 class="font-bold text-white">'+g.name+'</h4></div><div class="flex gap-1"><button onclick="editGroup(\''+g.id+'\')" class="w-11 h-11 rounded-lg bg-surface-container-high hover:bg-surface-container-highest flex items-center justify-center"><span class="material-symbols-outlined text-sm text-white/60">edit</span></button><button onclick="deleteGroup(\''+g.id+'\')" class="w-11 h-11 rounded-lg bg-error/20 hover:bg-error/30 flex items-center justify-center"><span class="material-symbols-outlined text-sm text-error">delete</span></button></div></div><p class="text-xs text-on-surface-variant">'+foodNames+more+'</p><p class="text-xs text-white/60 mt-1">'+g.foodIds.length+' alimentos</p></div>';
+return'<div class="glass-card rounded-xl p-4"><div class="flex items-center justify-between mb-2"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary">'+g.icon+'</span><h4 class="font-bold text-white">'+g.name+'</h4></div><div class="flex gap-1"><button onclick="editGroup(\''+g.id+'\')" class="w-11 h-11 rounded-lg bg-surface-container-high hover:bg-surface-container-highest flex items-center justify-center"><span class="material-symbols-outlined text-sm text-white/60">edit</span></button><button onclick="deleteGroup(\''+g.id+'\')" class="w-11 h-11 rounded-lg bg-error/20 hover:bg-error/30 flex items-center justify-center"><span class="material-symbols-outlined text-sm text-error">delete</span></button></div></div><p class="text-[13px] text-on-surface-variant">'+foodNames+more+'</p><p class="text-[13px] text-white/60 mt-1">'+g.foodIds.length+' alimentos</p></div>';
 }).join('');
 }
 }
@@ -1693,7 +1693,7 @@ dayHistory.forEach(function(h){h.date=date.toISOString().split("T")[0];history.p
 }
 var container=document.getElementById("historyList");
 if(history.length===0){
-container.innerHTML='<div class="text-center py-8 text-on-surface-variant"><span class="material-symbols-outlined text-4xl text-white/20 mb-2 block">history</span><p class="text-sm">No hay historial todavía</p><p class="text-xs mt-1">Los alimentos que veas se registrarán aquí</p></div>';
+container.innerHTML='<div class="text-center py-8 text-on-surface-variant"><span class="material-symbols-outlined text-4xl text-white/20 mb-2 block">history</span><p class="text-sm">No hay historial todavía</p><p class="text-[13px] mt-1">Los alimentos que veas se registrarán aquí</p></div>';
 }else{
 var grouped={};
 history.forEach(function(h){if(!grouped[h.date])grouped[h.date]=[];grouped[h.date].push(h);});
@@ -1702,10 +1702,10 @@ Object.keys(grouped).sort().reverse().forEach(function(date){
 var foods=grouped[date];
 var dateObj=new Date(date);
 var dateStr=dateObj.toLocaleDateString("es-ES",{weekday:"short",month:"short",day:"numeric"});
-html+='<div class="mb-4"><h4 class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">'+dateStr+'</h4><div class="space-y-1">';
+html+='<div class="mb-4"><h4 class="text-[13px] text-on-surface-variant uppercase tracking-wider mb-2">'+dateStr+'</h4><div class="space-y-1">';
 foods.forEach(function(h){
 var food=currentFoods.find(function(f){return f.id===h.id})||h;
-html+='<div class="flex items-center justify-between p-3 bg-surface-container rounded-xl cursor-pointer hover:bg-surface-container-high" onclick="openDetail(\''+h.id+'\')"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-surface-container-high overflow-hidden">'+(food.image?'<img loading="lazy" src="/app/'+food.image+'" class="w-full h-full object-cover">':'<span class="material-symbols-outlined text-xl text-white/20 flex items-center justify-center w-full h-full">restaurant</span>')+'</div><div><p class="text-sm font-bold text-white">'+food.name+'</p><p class="text-xs text-on-surface-variant">'+Math.round(food.calories)+' cal | P:'+food.protein+'g | F:'+food.fat+'g</p></div></div><span class="material-symbols-outlined text-white/60">chevron_right</span></div>';
+html+='<div class="flex items-center justify-between p-3 bg-surface-container rounded-xl cursor-pointer hover:bg-surface-container-high" onclick="openDetail(\''+h.id+'\')"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-surface-container-high overflow-hidden">'+(food.image?'<img loading="lazy" src="/app/'+food.image+'" class="w-full h-full object-cover">':'<span class="material-symbols-outlined text-xl text-white/20 flex items-center justify-center w-full h-full">restaurant</span>')+'</div><div><p class="text-sm font-bold text-white">'+food.name+'</p><p class="text-[13px] text-on-surface-variant">'+Math.round(food.calories)+' cal | P:'+food.protein+'g | F:'+food.fat+'g</p></div></div><span class="material-symbols-outlined text-white/60">chevron_right</span></div>';
 });
 html+='</div></div>';
 });

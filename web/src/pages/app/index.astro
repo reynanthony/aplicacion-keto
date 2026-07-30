@@ -112,7 +112,7 @@ body {
 <div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161310;border:1px solid rgba(255,240,225,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
   <div class="p-3" style="border-bottom:1px solid rgba(255,240,225,0.06)">
     <p class="text-sm font-semibold" style="color:#f7f4f0" id="mobileDropdownUserName">Usuario</p>
-    <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
+    <p class="text-[13px] mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
   </div>
   <div class="p-2">
     <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f7f4f0">
@@ -321,7 +321,7 @@ Exportar Backup
 <span class="material-symbols-outlined">upload</span>
 Importar Backup
 </button>
-<p class="text-xs text-center" style="color:rgba(247,244,240,0.42)">Último backup: <span id="lastBackupDate">Nunca</span></p>
+<p class="text-[13px] text-center" style="color:rgba(247,244,240,0.42)">Último backup: <span id="lastBackupDate">Nunca</span></p>
 </div>
 </div>
 </div>
@@ -334,9 +334,9 @@ Importar Backup
 <div class="dash-head">
   <div>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
-      <span id="todayDateDisplay" style="font-size:12px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00">Hoy</span>
+      <span id="todayDateDisplay" style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00">Hoy</span>
       <span style="width:4px;height:4px;border-radius:50%;background:rgba(247,244,240,0.5)"></span>
-      <span style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(247,244,240,0.57)">Día <span id="streakCount">0</span> en cetosis</span>
+      <span style="font-size:13px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(247,244,240,0.57)">Día <span id="streakCount">0</span> en cetosis</span>
     </div>
     <h1 class="dash-greeting"><span id="coachDayPart">Buenos días</span>, <span id="coachUserName">Campeón</span></h1>
     <p class="dash-subgreeting">Vas ganando la semana.</p>
@@ -356,7 +356,7 @@ Importar Backup
   <!-- HEALTH SCORE — único foco visual de la sección -->
   <div class="db-score" style="background:linear-gradient(150deg,#ff5a12,#e63f00);border-radius:26px;padding:26px 28px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 12px 36px rgba(255,77,0,0.2);min-height:250px">
     <div class="db-score-top">
-      <div style="display:flex;align-items:center;gap:9px"><span class="material-symbols-outlined icon-filled" style="font-size:19px;color:rgba(26,14,5,0.75)">ecg_heart</span><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:12px;letter-spacing:0.04em;color:rgba(26,14,5,0.75)">HEALTH SCORE</span></div>
+      <div style="display:flex;align-items:center;gap:9px"><span class="material-symbols-outlined icon-filled" style="font-size:19px;color:rgba(26,14,5,0.75)">ecg_heart</span><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:13px;letter-spacing:0.04em;color:rgba(26,14,5,0.75)">HEALTH SCORE</span></div>
       <a href="/app/progreso" style="display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:700;color:rgba(26,14,5,0.65);text-decoration:none"><span id="coachProgress">--</span><span class="material-symbols-outlined" style="font-size:15px">arrow_forward</span></a>
     </div>
     <div style="position:relative;margin-top:18px">
@@ -374,8 +374,8 @@ Importar Backup
   <!-- CALORÍAS — misma familia oscura que el resto, sin competir con el score -->
   <div class="db-cal kc-tile" style="display:flex;flex-direction:column;justify-content:space-between;gap:12px">
     <div style="display:flex;align-items:center;justify-content:space-between">
-      <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.02em;color:rgba(247,244,240,0.5)">Calorías de hoy</span>
-      <span id="calorieStatus" class="text-xs px-2 py-0.5 rounded-full font-bold" style="background:rgba(255,240,225,0.06);color:rgba(247,244,240,0.5)">Sin meta</span>
+      <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.02em;color:rgba(247,244,240,0.5)">Calorías de hoy</span>
+      <span id="calorieStatus" class="text-[13px] px-2 py-0.5 rounded-full font-bold" style="background:rgba(255,240,225,0.06);color:rgba(247,244,240,0.5)">Sin meta</span>
     </div>
     <div>
       <div style="display:flex;align-items:baseline;gap:8px">
@@ -383,19 +383,19 @@ Importar Backup
         <span style="font-size:14px;font-weight:600;color:rgba(247,244,240,0.57)">/ <span id="targetCalDisplay">--</span> kcal</span>
       </div>
       <div style="height:6px;border-radius:100px;background:rgba(255,240,225,0.08);overflow:hidden;margin-top:12px"><div id="caloriesBar" style="height:100%;width:0%;border-radius:100px;background:#ff4d00;transition:width .5s"></div></div>
-      <div style="font-size:12px;color:rgba(247,244,240,0.57);margin-top:8px"><span id="caloriesRemaining">--</span> kcal restantes hoy</div>
+      <div style="font-size:13px;color:rgba(247,244,240,0.57);margin-top:8px"><span id="caloriesRemaining">--</span> kcal restantes hoy</div>
     </div>
   </div>
 
   <!-- Adherencia -->
   <div class="kc-tile" style="display:flex;flex-direction:column;justify-content:space-between;gap:12px">
-    <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.02em;color:rgba(247,244,240,0.5)">Adherencia</span>
+    <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.02em;color:rgba(247,244,240,0.5)">Adherencia</span>
     <div><div id="coachAdherence" class="kc-num" style="font-size:36px;line-height:0.9;color:#60a5fa">--%</div><div style="font-size:11.5px;color:rgba(247,244,240,0.57);margin-top:4px">esta semana</div></div>
   </div>
 
   <!-- Racha -->
   <div class="kc-tile" style="display:flex;flex-direction:column;justify-content:space-between;gap:12px">
-    <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.02em;color:rgba(247,244,240,0.5)">Racha</span><span class="material-symbols-outlined icon-filled" style="color:#ff4d00;font-size:19px">local_fire_department</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.02em;color:rgba(247,244,240,0.5)">Racha</span><span class="material-symbols-outlined icon-filled" style="color:#ff4d00;font-size:19px">local_fire_department</span></div>
     <div><div class="kc-num" style="font-size:36px;line-height:0.9;color:#f7f4f0"><span id="streakDaysCount">0</span><span style="font-size:16px;color:rgba(247,244,240,0.57)"> días</span></div><div style="font-size:11.5px;color:rgba(247,244,240,0.57);margin-top:4px">mejor: <span id="bestStreakCount">0</span></div></div>
   </div>
 </div>
@@ -450,17 +450,17 @@ Importar Backup
   </div>
   <div class="macro-band-grid">
     <div>
-      <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span class="material-symbols-outlined icon-filled" style="color:#ea580c;font-size:20px">egg_alt</span><span style="font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:rgba(247,244,240,0.55)">Proteína</span></div>
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span class="material-symbols-outlined icon-filled" style="color:#ea580c;font-size:20px">egg_alt</span><span style="font-size:14px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:rgba(247,244,240,0.55)">Proteína</span></div>
       <div class="kc-num" style="font-size:38px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="consumedProtDisplay">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.57)"> / <span id="targetProtDisplay">--</span> g</span></div>
       <div style="height:8px;border-radius:100px;background:rgba(234,88,12,0.14);overflow:hidden;margin-top:16px"><div id="proteinBar" style="height:100%;width:0%;background:#ea580c;border-radius:100px;transition:width .4s"></div></div>
     </div>
     <div class="macro-band-mid">
-      <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span class="material-symbols-outlined icon-filled" style="color:#d97706;font-size:20px">local_fire_department</span><span style="font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:rgba(247,244,240,0.55)">Grasas</span></div>
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span class="material-symbols-outlined icon-filled" style="color:#d97706;font-size:20px">local_fire_department</span><span style="font-size:14px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:rgba(247,244,240,0.55)">Grasas</span></div>
       <div class="kc-num" style="font-size:38px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="consumedFatDisplay">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.57)"> / <span id="targetFatDisplay">--</span> g</span></div>
       <div style="height:8px;border-radius:100px;background:rgba(217,119,6,0.14);overflow:hidden;margin-top:16px"><div id="fatBar" style="height:100%;width:0%;background:#d97706;border-radius:100px;transition:width .4s"></div></div>
     </div>
     <div>
-      <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span class="material-symbols-outlined icon-filled" style="color:#0891b2;font-size:20px">grain</span><span style="font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:rgba(247,244,240,0.55)">Carbos netos</span></div>
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span class="material-symbols-outlined icon-filled" style="color:#0891b2;font-size:20px">grain</span><span style="font-size:14px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:rgba(247,244,240,0.55)">Carbos netos</span></div>
       <div class="kc-num" style="font-size:38px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="consumedCarbsDisplay">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.57)"> / <span id="targetCarbsDisplay">--</span> g</span></div>
       <div style="height:8px;border-radius:100px;background:rgba(8,145,178,0.14);overflow:hidden;margin-top:16px"><div id="carbsBar" style="height:100%;width:0%;background:#0891b2;border-radius:100px;transition:width .4s"></div></div>
     </div>
@@ -486,7 +486,7 @@ Importar Backup
       <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:19px;letter-spacing:-0.01em;color:#f7f4f0">Tendencia de peso</h2>
       <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px">
         <span id="weightAvg" class="kc-num" style="font-weight:900;font-size:34px;line-height:1;color:#f7f4f0">-- kg</span>
-        <span id="lostProgressBadge" class="hidden items-center gap-1" style="font-size:13px;font-weight:700;color:#22c55e"><span class="material-symbols-outlined" style="font-size:16px;vertical-align:-3px">trending_down</span><span id="lostProgressText"></span></span>
+        <span id="lostProgressBadge" class="hidden items-center gap-1" style="font-size:14px;font-weight:700;color:#22c55e"><span class="material-symbols-outlined" style="font-size:16px;vertical-align:-3px">trending_down</span><span id="lostProgressText"></span></span>
       </div>
     </div>
     <a href="/app/progreso" style="font-size:12.5px;font-weight:700;color:#ff4d00;text-decoration:none">Ver progreso →</a>
@@ -502,7 +502,7 @@ Importar Backup
     <div style="width:40px;height:40px;border-radius:12px;background:rgba(167,139,250,0.18);display:flex;align-items:center;justify-content:center"><span class="material-symbols-outlined icon-filled" style="color:#a78bfa;font-size:22px">psychology</span></div>
     <div>
       <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:15px;color:#f7f4f0">Coach IA</div>
-      <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#a78bfa;font-weight:600"><span style="width:6px;height:6px;border-radius:50%;background:#22c55e"></span>En línea</div>
+      <div style="display:flex;align-items:center;gap:5px;font-size:13px;color:#a78bfa;font-weight:600"><span style="width:6px;height:6px;border-radius:50%;background:#22c55e"></span>En línea</div>
     </div>
   </div>
   <p id="dailyTipText" style="font-size:14.5px;line-height:1.6;color:rgba(247,244,240,0.8);flex:1">Registra tus comidas de hoy y te daré recomendaciones personalizadas para cerrar el día en verde.</p>
@@ -517,7 +517,7 @@ Importar Backup
     <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:18px;color:#f7f4f0">Plan de hoy</h2>
     <div style="display:flex;align-items:center;gap:8px;border-radius:100px;padding:5px 13px;background:rgba(34,197,94,0.12)">
       <div id="planDots" class="flex gap-1"></div>
-      <span id="planCounter" style="font-size:12px;font-weight:700;color:#22c55e">0/6</span>
+      <span id="planCounter" style="font-size:13px;font-weight:700;color:#22c55e">0/6</span>
     </div>
   </div>
   <div id="dailyPlanList" class="grid grid-cols-2 gap-3"></div>
@@ -542,11 +542,11 @@ Importar Backup
 <div class="grid grid-cols-2 gap-3" id="achievementsGrid">
 <div class="rounded-2xl p-4 text-center" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
 <p id="ketoDaysCount" class="kc-num" style="font-size:26px;color:#f7f4f0">0</p>
-<p class="text-xs mt-1" style="color:rgba(247,244,240,0.6)">Días Keto</p>
+<p class="text-[13px] mt-1" style="color:rgba(247,244,240,0.6)">Días Keto</p>
 </div>
 <div class="rounded-2xl p-4 text-center" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
 <p id="mealsLoggedCount" class="kc-num" style="font-size:26px;color:#22c55e">0</p>
-<p class="text-xs mt-1" style="color:rgba(247,244,240,0.6)">Comidas registradas</p>
+<p class="text-[13px] mt-1" style="color:rgba(247,244,240,0.6)">Comidas registradas</p>
 </div>
 </div>
 <div class="mt-4">
@@ -593,7 +593,7 @@ Importar Backup
     </div>
     <div class="flex-1">
       <p class="font-bold text-sm" style="color:#f7f4f0">Ver mi progreso</p>
-      <p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.55)">Peso, logros y adherencia</p>
+      <p class="text-[13px] mt-0.5" style="color:rgba(247,244,240,0.55)">Peso, logros y adherencia</p>
     </div>
     <span class="material-symbols-outlined" style="color:rgba(247,244,240,0.38)">chevron_right</span>
   </a>
@@ -963,7 +963,7 @@ function populateNotifications() {
       '</div>' +
       '<div class="flex-1 min-w-0">' +
       '<p class="text-sm font-semibold" style="color:#f7f4f0">' + n.title + '</p>' +
-      '<p class="text-xs mt-0.5" style="color:rgba(247,244,240,0.6)">' + n.text + '</p>' +
+      '<p class="text-[13px] mt-0.5" style="color:rgba(247,244,240,0.6)">' + n.text + '</p>' +
       '<p class="text-[11px] mt-1.5" style="color:rgba(247,244,240,0.38)">' + n.time + '</p>' +
       '</div>' +
       (n.dot ? '<div class="w-2 h-2 rounded-full flex-shrink-0 mt-2" style="background:#ff4d00"></div>' : '') +
@@ -1361,16 +1361,16 @@ function updateMacrosDisplay(consumedCal, consumedProt, consumedFat, consumedCar
   if (calStatusEl) {
     if (!hasTargets) {
       calStatusEl.textContent = 'Sin meta';
-      calStatusEl.className = 'text-xs px-2 py-1 rounded-full bg-gray-500/20 text-gray-400';
+      calStatusEl.className = 'text-[13px] px-2 py-1 rounded-full bg-gray-500/20 text-gray-400';
     } else if (consumedCal > targetCal) {
       calStatusEl.textContent = 'Excedido';
-      calStatusEl.className = 'text-xs px-2 py-1 rounded-full bg-red-500/20 text-red-400';
+      calStatusEl.className = 'text-[13px] px-2 py-1 rounded-full bg-red-500/20 text-red-400';
     } else if (consumedCal >= targetCal * 0.8) {
       calStatusEl.textContent = 'Casi completo';
-      calStatusEl.className = 'text-xs px-2 py-1 rounded-full bg-yellow-500/20 text-yellow-400';
+      calStatusEl.className = 'text-[13px] px-2 py-1 rounded-full bg-yellow-500/20 text-yellow-400';
     } else {
       calStatusEl.textContent = 'En camino';
-      calStatusEl.className = 'text-xs px-2 py-1 rounded-full bg-green-500/20 text-green-400';
+      calStatusEl.className = 'text-[13px] px-2 py-1 rounded-full bg-green-500/20 text-green-400';
     }
   }
   
@@ -1562,7 +1562,7 @@ function renderTodayMealsSummary(mealPlan) {
       '<div style="width:40px;height:40px;border-radius:12px;background:' + meal.iconBg + ';display:flex;align-items:center;justify-content:center;margin:0 auto 8px">' +
         '<span class="material-symbols-outlined" style="color:' + meal.iconColor + ';font-size:20px">' + meal.icon + '</span>' +
       '</div>' +
-      '<p class="text-xs mb-1" style="color:rgba(247,244,240,0.55)">' + meal.name + '</p>' +
+      '<p class="text-[13px] mb-1" style="color:rgba(247,244,240,0.55)">' + meal.name + '</p>' +
       '<p class="text-lg font-black" style="color:#f7f4f0;font-family:Plus Jakarta Sans,sans-serif">' + fmtNum(totalCal) + '</p>' +
       '<p class="text-[11px]" style="color:rgba(247,244,240,0.42)">' + fmtNum(items.length) + ' items</p>' +
     '</a>';
@@ -1642,7 +1642,7 @@ function renderAchievementBadges() {
     '</div>';
   }).join('');
 
-  container.innerHTML = badges || '<div class="text-xs" style="color:rgba(247,244,240,0.6)">Completa tareas para desbloquear logros</div>';
+  container.innerHTML = badges || '<div class="text-[13px]" style="color:rgba(247,244,240,0.6)">Completa tareas para desbloquear logros</div>';
 }
 
 function getUnlockedAchievements() {
@@ -1690,7 +1690,7 @@ function initAchievements() {
       '<div style="width:40px;height:40px;border-radius:12px;background:' + a.bg + ';display:flex;align-items:center;justify-content:center;margin:0 auto 6px">' +
         '<span class="material-symbols-outlined" style="font-size:20px;color:' + a.color + ';font-variation-settings:\'FILL\' 1">' + a.icon + '</span>' +
       '</div>' +
-      '<p class="text-xs font-bold" style="color:#f7f4f0">' + a.name + '</p>' +
+      '<p class="text-[13px] font-bold" style="color:#f7f4f0">' + a.name + '</p>' +
       '<p class="text-[11px]" style="color:rgba(247,244,240,0.5)">' + a.desc + '</p>' +
     '</div>';
   }).join('');
@@ -1797,10 +1797,10 @@ function loadWeeklyGoals() {
     return '<div style="background:#1e1a15;border-radius:14px;padding:14px;border:1px solid rgba(255,240,225,0.06)">' +
       '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">' +
         '<span class="material-symbols-outlined" style="font-size:16px;color:' + g.iconColor + '">' + g.icon + '</span>' +
-        '<span style="font-size:12px;color:rgba(247,244,240,0.5)">' + g.label + '</span>' +
+        '<span style="font-size:13px;color:rgba(247,244,240,0.5)">' + g.label + '</span>' +
       '</div>' +
       '<p style="font-size:20px;font-weight:900;color:#f7f4f0;line-height:1;margin-bottom:8px;font-family:\'Plus Jakarta Sans\',sans-serif">' +
-        g.value + '<span style="font-size:12px;color:rgba(247,244,240,0.57)">/' + g.target + (g.suffix || '') + '</span>' +
+        g.value + '<span style="font-size:13px;color:rgba(247,244,240,0.57)">/' + g.target + (g.suffix || '') + '</span>' +
       '</p>' +
       '<div style="height:4px;background:rgba(255,240,225,0.07);border-radius:4px;overflow:hidden">' +
         '<div style="height:100%;border-radius:4px;transition:width 0.4s ease;width:' + percent + '%;background:' + fillColor + '"></div>' +
@@ -1950,7 +1950,7 @@ function filterQuickFoods(query) {
     return '<div class="flex items-center justify-between p-3 bg-surface-container-high rounded-xl hover:bg-surface-container-highest transition-all cursor-pointer" onclick="selectQuickFood(\'' + f.id + '\')">' +
       '<div class="flex-1 min-w-0">' +
         '<p class="text-white font-medium truncate">' + f.name + '</p>' +
-        '<p class="text-xs text-on-surface-variant">' + fmtNum(f.calories) + ' cal · ' + fmtNum(f.protein) + 'g P</p>' +
+        '<p class="text-[13px] text-on-surface-variant">' + fmtNum(f.calories) + ' cal · ' + fmtNum(f.protein) + 'g P</p>' +
       '</div>' +
       '<span class="material-symbols-outlined text-primary-container">add_circle</span>' +
     '</div>';
@@ -2212,19 +2212,19 @@ document.addEventListener('DOMContentLoaded', initModernTour);
       <div class="grid grid-cols-2 gap-3">
         <a href="/app/plan?meal=desayuno" class="p-4 rounded-xl bg-surface-container hover:bg-primary-container/20 border border-transparent hover:border-primary-container/50 transition-all text-center flex flex-col items-center justify-center gap-2 text-yellow-400">
            <span class="material-symbols-outlined">wb_sunny</span>
-           <span class="text-white text-xs font-bold">Desayuno</span>
+           <span class="text-white text-[13px] font-bold">Desayuno</span>
         </a>
         <a href="/app/plan?meal=almuerzo" class="p-4 rounded-xl bg-surface-container hover:bg-primary-container/20 border border-transparent hover:border-primary-container/50 transition-all text-center flex flex-col items-center justify-center gap-2 text-orange-400">
            <span class="material-symbols-outlined">light_mode</span>
-           <span class="text-white text-xs font-bold">Almuerzo</span>
+           <span class="text-white text-[13px] font-bold">Almuerzo</span>
         </a>
         <a href="/app/plan?meal=cena" class="p-4 rounded-xl bg-surface-container hover:bg-primary-container/20 border border-transparent hover:border-primary-container/50 transition-all text-center flex flex-col items-center justify-center gap-2 text-purple-400">
            <span class="material-symbols-outlined">nightlight</span>
-           <span class="text-white text-xs font-bold">Cena</span>
+           <span class="text-white text-[13px] font-bold">Cena</span>
         </a>
         <a href="/app/plan?meal=snacks" class="p-4 rounded-xl bg-surface-container hover:bg-primary-container/20 border border-transparent hover:border-primary-container/50 transition-all text-center flex flex-col items-center justify-center gap-2 text-pink-400">
            <span class="material-symbols-outlined">cookie</span>
-           <span class="text-white text-xs font-bold">Snacks</span>
+           <span class="text-white text-[13px] font-bold">Snacks</span>
         </a>
       </div>
     </div>
@@ -2250,7 +2250,7 @@ document.addEventListener('DOMContentLoaded', initModernTour);
        
        <!-- Slide 1 -->
        <div id="tourSlide1" class="absolute inset-x-0 top-0 p-8 flex flex-col items-center text-center transition-all duration-500 transform translate-x-0 opacity-100 h-full">
-          <div class="w-full flex justify-end"><button onclick="skipGuidedTour()" class="text-xs text-on-surface-variant hover:text-white uppercase tracking-widest font-bold">Omitir</button></div>
+          <div class="w-full flex justify-end"><button onclick="skipGuidedTour()" class="text-[13px] text-on-surface-variant hover:text-white uppercase tracking-widest font-bold">Omitir</button></div>
           <div class="w-24 h-24 mt-4 rounded-full bg-primary-container/20 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(255,77,0,0.3)]">
              <span class="material-symbols-outlined text-5xl text-primary-container">explore</span>
           </div>
@@ -2261,7 +2261,7 @@ document.addEventListener('DOMContentLoaded', initModernTour);
 
        <!-- Slide 2 -->
        <div id="tourSlide2" class="absolute inset-x-0 top-0 p-8 flex flex-col items-center text-center transition-all duration-500 transform translate-x-full opacity-0 h-full">
-          <div class="w-full flex justify-start"><button onclick="prevTourSlide(1)" class="text-xs text-on-surface-variant hover:text-white"><span class="material-symbols-outlined">arrow_back</span></button></div>
+          <div class="w-full flex justify-start"><button onclick="prevTourSlide(1)" class="text-[13px] text-on-surface-variant hover:text-white"><span class="material-symbols-outlined">arrow_back</span></button></div>
           <div class="w-24 h-24 mt-4 rounded-full bg-secondary/20 flex items-center justify-center mb-6">
              <span class="material-symbols-outlined text-5xl text-secondary">donut_small</span>
           </div>
@@ -2272,7 +2272,7 @@ document.addEventListener('DOMContentLoaded', initModernTour);
 
        <!-- Slide 3 -->
        <div id="tourSlide3" class="absolute inset-x-0 top-0 p-8 flex flex-col items-center text-center transition-all duration-500 transform translate-x-full opacity-0 h-full">
-          <div class="w-full flex justify-start"><button onclick="prevTourSlide(2)" class="text-xs text-on-surface-variant hover:text-white"><span class="material-symbols-outlined">arrow_back</span></button></div>
+          <div class="w-full flex justify-start"><button onclick="prevTourSlide(2)" class="text-[13px] text-on-surface-variant hover:text-white"><span class="material-symbols-outlined">arrow_back</span></button></div>
           <div class="w-24 h-24 mt-4 rounded-full bg-cyan-500/20 flex items-center justify-center mb-6">
              <span class="material-symbols-outlined text-5xl text-cyan-400">fitness_center</span>
           </div>
@@ -2389,7 +2389,7 @@ function renderDailyPlan(plan) {
     return '<div ' + navAttr + ' style="border-radius:18px;padding:14px;background:' + cardBg + ';border:1px solid ' + cardBorder + ';box-shadow:0 2px 10px rgba(0,0,0,0.15);position:relative;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:opacity 0.15s">' +
       (isDone
         ? '<div style="position:absolute;top:10px;right:10px;width:20px;height:20px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center">' +
-            '<span class="material-symbols-outlined" style="font-size:12px;color:#fff;font-variation-settings:\'FILL\' 1,\'wght\' 400">check</span>' +
+            '<span class="material-symbols-outlined" style="font-size:13px;color:#fff;font-variation-settings:\'FILL\' 1,\'wght\' 400">check</span>' +
           '</div>'
         : '') +
       '<div style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;background:' + iconBg + '">' +
