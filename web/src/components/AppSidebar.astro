@@ -172,10 +172,13 @@ const quickAddLinks = [
       </button>
     </div>
     <div class="kcd-grid">
-      {drawerSections.map(section => (
+      {drawerSections.map((section, i) => (
         <>
-          <p class="kcd-label">{section.label}</p>
-          <div class="kcd-row">
+          <button type="button" class="kcd-label" onclick={`toggleDrawerSection(${i})`} aria-expanded="true" aria-controls={`kcd-section-${i}`}>
+            <span>{section.label}</span>
+            <span class="material-symbols-outlined kcd-label-chevron" data-chevron={i}>expand_more</span>
+          </button>
+          <div class="kcd-row" id={`kcd-section-${i}`}>
             {section.links.map(link => (
               <a href={link.href} class:list={['kcd-link', { 'kc-web-link': link.web }]}>
                 <span class="material-symbols-outlined" style={`font-size:21px;color:${link.color || 'rgba(247,244,240,0.6)'}`}>{link.icon}</span>
@@ -244,8 +247,8 @@ const quickAddLinks = [
 .kcs-nav::-webkit-scrollbar-thumb { background: rgba(255,77,0,0.3); border-radius: 10px; }
 
 .kcs-label {
-  font-size: 9px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;
-  color: rgba(255,240,225,0.25); padding: 0 8px; margin: 18px 0 8px;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,240,225,0.55); padding: 0 8px; margin: 18px 0 8px;
 }
 .kcs-nav .kcs-label:first-child { margin-top: 12px; }
 
@@ -350,11 +353,16 @@ const quickAddLinks = [
 }
 .kcd-grid { display: flex; flex-direction: column; }
 .kcd-label {
-  font-size: 9px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;
-  color: rgba(255,240,225,0.25); padding: 0 4px; margin: 16px 0 8px;
+  display: flex; align-items: center; justify-content: space-between; width: 100%;
+  font-size: 12px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,240,225,0.6); padding: 10px 4px; margin: 8px 0 2px;
+  background: none; border: none; cursor: pointer; font-family: inherit;
 }
-.kcd-grid > .kcd-label:first-child { margin-top: 4px; }
-.kcd-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.kcd-grid > .kcd-label:first-child { margin-top: 0; }
+.kcd-label-chevron { font-size: 18px !important; transition: transform .18s; color: rgba(255,240,225,0.4); }
+.kcd-label[aria-expanded="false"] .kcd-label-chevron { transform: rotate(-90deg); }
+.kcd-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; overflow: hidden; }
+.kcd-row.kcd-row-collapsed { display: none; }
 .kcd-link {
   position: relative;
   display: flex; align-items: center; gap: 11px;
@@ -432,6 +440,14 @@ function toggleQuickAdd() {
   var open = qa.classList.toggle('open');
   qa.setAttribute('aria-hidden', open ? 'false' : 'true');
   document.body.style.overflow = open ? 'hidden' : '';
+}
+// Secciones plegables del drawer "Más" (Herramientas / Inteligencia / etc.)
+function toggleDrawerSection(i) {
+  var row = document.getElementById('kcd-section-' + i);
+  var btn = document.querySelector('.kcd-label[aria-controls="kcd-section-' + i + '"]');
+  if (!row || !btn) return;
+  var collapsed = row.classList.toggle('kcd-row-collapsed');
+  btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
 }
 // Instalación de la PWA
 window.kcInstallPrompt = window.kcInstallPrompt || null;
