@@ -4,7 +4,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
 
 <AppLayout title="KetoCore | Inspector Inteligente" authGuard={true}>
 <style is:global>
-html, body { margin: 0; padding: 0; background: #0b0a08; color: #f7f4f0; font-family: 'Inter', sans-serif; }
+html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-family: 'Inter', sans-serif; }
 .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 .icon-filled { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
 
@@ -39,7 +39,7 @@ html, body { margin: 0; padding: 0; background: #0b0a08; color: #f7f4f0; font-fa
 .period-tab:not(.active) { color:rgba(247,244,240,0.45);background:#1a1a1a;border-color:rgba(255,240,225,0.06); }
 
 @media (min-width: 768px) {
-  #inspMain {
+  #inspGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.25rem;
@@ -47,19 +47,20 @@ html, body { margin: 0; padding: 0; background: #0b0a08; color: #f7f4f0; font-fa
     padding-top: 3.5rem;
     padding-bottom: 3rem !important;
   }
-  #inspMain > * { margin-top: 0 !important; }
-  #insp-verdict   { grid-column: 1/-1; }
-  #insp-alerts    { grid-column: 2; }
-  #insp-metrics   { grid-column: 1; }
-  #insp-adherence { grid-column: 1; }
-  #insp-macros    { grid-column: 2; }
-  #insp-weight    { grid-column: 1/-1; }
+  #inspGrid > * { margin-top: 0 !important; }
+  #insp-header    { grid-column: 1/-1; grid-row: 1; }
+  #insp-verdict   { grid-column: 1/-1; grid-row: 2; }
+  #insp-alerts    { grid-column: 2; grid-row: 3; }
+  #insp-metrics   { grid-column: 1; grid-row: 3; }
+  #insp-adherence { grid-column: 1; grid-row: 4; }
+  #insp-macros    { grid-column: 2; grid-row: 4; }
+  #insp-weight    { grid-column: 1/-1; grid-row: 5; }
 }
 </style>
 
 <!-- ── Header ─────────────────────────────────────────────────────────── -->
 <header class="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4"
-  style="height:56px;background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
+  style="height:56px;background:rgba(19,19,21,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
 
   <div class="flex items-center gap-3">
     <div class="relative w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
@@ -88,10 +89,11 @@ html, body { margin: 0; padding: 0; background: #0b0a08; color: #f7f4f0; font-fa
 </header>
 
 <!-- ── Main ───────────────────────────────────────────────────────────── -->
-<main id="inspMain" class="main-content pt-14 pb-24 px-4 space-y-3" style="background:#0b0a08">
+<main id="inspMain" class="main-content pt-14 pb-20 min-h-screen" style="background:#131315">
+<div id="inspGrid" class="space-y-3 kc-page" style="padding-top:12px">
 
   <!-- Header editorial -->
-  <div style="margin:10px 2px 16px">
+  <div id="insp-header" style="margin:10px 2px 16px">
     <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Inteligencia · Análisis</div>
     <h1 class="kc-h1" style="font-size:30px">El Inspector<br><span style="color:rgba(247,244,240,0.4)">cuida tu cetosis.</span></h1>
   </div>
@@ -178,6 +180,7 @@ html, body { margin: 0; padding: 0; background: #0b0a08; color: #f7f4f0; font-fa
     <div class="flex justify-between mt-2" id="weightStats"></div>
   </section>
 
+</div>
 </main>
 
 
