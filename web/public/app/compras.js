@@ -290,10 +290,10 @@ categories.forEach(function(cat){
 if(catData[cat].items.length>0)activeCats++;
 });
 if(totalItems===0){
-container.innerHTML='<div style="background:#1e1c1c;border-radius:12px;padding:32px;text-align:center;border:1px solid rgba(255,255,255,0.1);">';
-container.innerHTML+='<span class="material-symbols-outlined" style="font-size:48px;color:rgba(255,255,255,0.2)">inventory_2</span>';
-container.innerHTML+='<p style="color:rgba(255,255,255,0.6);margin:12px 0 4px">Tu despensa está vacía</p>';
-container.innerHTML+='<p style="color:rgba(255,255,255,0.4);font-size:13px">Ve a "Agregar Alimentos" para empezar</p></div>';
+container.innerHTML='<div style="background:#1e1c1c;border-radius:12px;padding:32px;text-align:center;border:1px solid rgba(255,255,255,0.1);">'
++'<span class="material-symbols-outlined" style="font-size:48px;color:rgba(255,255,255,0.2)">inventory_2</span>'
++'<p style="color:rgba(255,255,255,0.6);margin:12px 0 4px">Tu despensa está vacía</p>'
++'<p style="color:rgba(255,255,255,0.4);font-size:13px">Ve a "Agregar Alimentos" para empezar</p></div>';
 return;
 }
 var html='<div style="background:linear-gradient(135deg,rgba(255,77,0,0.15),rgba(255,179,0,0.1));border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid rgba(255,77,0,0.2);">';
