@@ -1101,40 +1101,6 @@ function fmtNumDec(num) {
   return n.toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 }
 
-function headerFoodSearch(query) {
-  var resultsDiv = document.getElementById('headerSearchResults');
-  if (!query || query.length < 2) {
-    resultsDiv.classList.add('hidden');
-    return;
-  }
-  var foods = safeParseJSON(localStorage.getItem('ketoFoods'), []);
-  var queryLower = query.toLowerCase();
-  var filtered = foods.filter(function(f) {
-    return f.name.toLowerCase().includes(queryLower);
-  }).slice(0, 8);
-  
-  if (filtered.length === 0) {
-    resultsDiv.innerHTML = '<div class="p-4 text-center text-on-surface-variant text-sm">Sin resultados</div>';
-  } else {
-    var html = '';
-    filtered.forEach(function(f) {
-      html += '<a href="/app/alimentos?search=' + encodeURIComponent(f.name) + '" class="block p-3 hover:bg-surface-container-high transition-colors border-b border-white/5 last:border-0">';
-      html += '<p class="text-white text-sm font-bold truncate">' + f.name + '</p>';
-      html += '<p class="text-xs text-on-surface-variant">' + fmtNum(f.calories) + ' cal - ' + fmtNum(f.protein) + 'g P</p>';
-      html += '</a>';
-    });
-    resultsDiv.innerHTML = html;
-  }
-  resultsDiv.classList.remove('hidden');
-}
-
-document.addEventListener('click', function(e) {
-  var searchContainer = document.querySelector('.relative');
-  if (searchContainer && !searchContainer.contains(e.target)) {
-    document.getElementById('headerSearchResults').classList.add('hidden');
-  }
-});
-
 // ==================== NEW DASHBOARD FUNCTIONS ====================
 
 // Initialize dashboard on page load
