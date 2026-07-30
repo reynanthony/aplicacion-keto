@@ -482,20 +482,20 @@ button, a, [role="button"] { touch-action: manipulation; }
   margin: 0 auto;
 }
 
-/* Editorial page title — 42 → 30 → 26 */
+/* Editorial page title — 46 → 34 → 29 */
 .kc-h1 {
   font-family: var(--font-display);
-  font-size: 42px;
+  font-size: 46px;
   font-weight: 800;
   letter-spacing: -0.035em;
   line-height: 0.98;
   color: var(--c-text);
 }
-.kc-sub { font-size: 14.5px; color: var(--c-text-muted); margin-top: 10px; }
+.kc-sub { font-size: 16px; color: var(--c-text-muted); margin-top: 10px; }
 
 /* Eyebrow label */
 .kc-eyebrow {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -542,7 +542,7 @@ button, a, [role="button"] { touch-action: manipulation; }
 .kc-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   background: #ff4d00; color: #fff;
-  font-family: var(--font-display); font-weight: 700; font-size: 14px;
+  font-family: var(--font-display); font-weight: 700; font-size: 15px;
   padding: 12px 22px; border-radius: 14px;
   border: none; cursor: pointer; text-decoration: none;
   box-shadow: 0 6px 20px rgba(255,77,0,0.3);
@@ -554,7 +554,7 @@ button, a, [role="button"] { touch-action: manipulation; }
 .kc-btn-ghost {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   background: var(--c-surface-2); color: var(--c-text);
-  font-family: var(--font-display); font-weight: 700; font-size: 14px;
+  font-family: var(--font-display); font-weight: 700; font-size: 15px;
   padding: 12px 22px; border-radius: 14px;
   border: 1px solid var(--c-border-2); cursor: pointer; text-decoration: none;
   transition: background .14s, border-color .14s;
@@ -567,7 +567,7 @@ button, a, [role="button"] { touch-action: manipulation; }
   display: inline-flex; align-items: center; gap: 6px;
   padding: 8px 16px; border-radius: 100px;
   background: var(--c-surface); border: 1px solid var(--c-border-2);
-  color: var(--c-text-muted); font-size: 12.5px; font-weight: 600;
+  color: var(--c-text-muted); font-size: 13.5px; font-weight: 600;
   cursor: pointer; white-space: nowrap; text-decoration: none;
   transition: background .14s, color .14s, border-color .14s;
   font-family: var(--font-body);
@@ -578,7 +578,7 @@ button, a, [role="button"] { touch-action: manipulation; }
 }
 
 /* Semantic badges (Keto / Moderar / Evitar) */
-.kc-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 11px; border-radius: 100px; font-size: 11px; font-weight: 700; }
+.kc-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 11px; border-radius: 100px; font-size: 12px; font-weight: 700; }
 .kc-badge-green { background: rgba(34,197,94,0.12); color: #22c55e; }
 .kc-badge-amber { background: rgba(251,191,36,0.12); color: #fbbf24; }
 .kc-badge-red   { background: rgba(239,68,68,0.12);  color: #ef4444; }
@@ -593,19 +593,19 @@ button, a, [role="button"] { touch-action: manipulation; }
 /* Responsive (app ≤900 / fine ≤560) */
 @media (max-width: 900px) {
   .kc-page { padding: 22px 16px 96px; }
-  .kc-h1 { font-size: 30px; }
+  .kc-h1 { font-size: 34px; }
   body[data-theme="app"], body[data-theme="demo"] { overflow-x: hidden; }
-  .kc-sub { font-size: 15px; }
+  .kc-sub { font-size: 16.5px; }
 }
 @media (max-width: 560px) {
-  .kc-h1 { font-size: 26px; }
+  .kc-h1 { font-size: 29px; }
 }
 
 /* Filter button */
 .filter-btn {
   padding: 0.375rem 0.875rem;
   border-radius: 100px;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   background: var(--c-surface);
   border: 1.5px solid var(--c-border);
