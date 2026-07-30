@@ -6,7 +6,7 @@
  *    fallback a la página offline sin conexión.
  *  - Assets (/app/, /_astro/): stale-while-revalidate.
  */
-const VERSION = 'ketocore-v3';
+const VERSION = 'ketocore-v4';
 const OFFLINE_URL = '/app/offline/';
 
 self.addEventListener('install', (event) => {

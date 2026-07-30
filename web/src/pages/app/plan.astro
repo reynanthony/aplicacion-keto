@@ -1878,29 +1878,8 @@ localStorage.setItem("mealPlan_"+dateKey,JSON.stringify(plan));
 </script>
 
 <script is:inline>
-// ==================== REGISTRO DE SERVICE WORKER ====================
+// Registro de Service Worker: centralizado en AppLayout.astro.
 (function() {
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/app/sw.js')
-        .then(registration => {
-          registration.update();
-          registration.addEventListener('updatefound', () => {
-            const newWorker = registration.installing;
-            if (!newWorker) return;
-            newWorker.addEventListener('statechange', () => {
-              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                newWorker.postMessage('SKIP_WAITING');
-              }
-            });
-          });
-        })
-        .catch(error => {
-          console.error('[PWA] Error al registrar Service Worker:', error);
-        });
-    });
-    navigator.serviceWorker.addEventListener('message', event => {});
-  }
   let deferredPrompt;
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();

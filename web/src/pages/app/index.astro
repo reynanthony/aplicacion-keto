@@ -2107,32 +2107,9 @@ function confirmGlobalReset() {
 // Implementación PWA para KetoCore
 
 (function() {
-  // Registrar Service Worker (v3: auto-actualiza y purga cachés viejos)
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/app/sw.js')
-        .then(registration => {
-          registration.update();
-          registration.addEventListener('updatefound', () => {
-            const newWorker = registration.installing;
-            if (!newWorker) return;
-            newWorker.addEventListener('statechange', () => {
-              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                newWorker.postMessage('SKIP_WAITING');
-              }
-            });
-          });
-        })
-        .catch(() => {});
-      let swReloaded = false;
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (swReloaded) return;
-        swReloaded = true;
-        window.location.reload();
-      });
-    });
-  }
-   
+  // Registro de Service Worker: centralizado en AppLayout.astro (antes
+  // duplicado aquí, sin actualización automática consistente entre pantallas).
+
   // Listen for storage changes
   window.addEventListener('storage', function(e) {
     if (e.key === 'keto_profile' || e.key === 'keto_weight_history') {

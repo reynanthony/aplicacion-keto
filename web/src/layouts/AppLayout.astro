@@ -61,6 +61,35 @@ const { title = 'KetoCore', authGuard = true, bodyClass = '' } = Astro.props;
   <!-- Shared PWA scripts -->
   <script is:inline src="/app/supabase-client.js"></script>
   <script is:inline src="/app/storage-manager.js"></script>
+  <!-- Service Worker: registro único para toda la app (antes duplicado e
+       inconsistente en index/plan/alimentos -- solo index.astro tenía la
+       recarga automática al detectar versión nueva, por lo que abrir la
+       app en otra pantalla podía dejarla pegada en una versión vieja). -->
+  <script is:inline>
+  (function () {
+    if (!('serviceWorker' in navigator)) return;
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/app/sw.js').then(function (registration) {
+        registration.update();
+        registration.addEventListener('updatefound', function () {
+          var newWorker = registration.installing;
+          if (!newWorker) return;
+          newWorker.addEventListener('statechange', function () {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              newWorker.postMessage('SKIP_WAITING');
+            }
+          });
+        });
+      }).catch(function () {});
+      var swReloaded = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function () {
+        if (swReloaded) return;
+        swReloaded = true;
+        window.location.reload();
+      });
+    });
+  })();
+  </script>
 </head>
 <body data-theme="app" class={`min-h-screen bg-background text-on-surface font-body overflow-x-hidden${bodyClass ? ' ' + bodyClass : ''}`}>
   <slot />
