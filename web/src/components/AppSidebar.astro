@@ -43,22 +43,52 @@ const sections = [
   },
 ];
 
-const drawerLinks = [
-  { href: '/app/recetas',        icon: 'menu_book',      color: '#fb923c', label: 'Recetas' },
-  { href: '/app/checklist',      icon: 'task_alt',       color: '#22c55e', label: 'Checklist' },
-  { href: '/app/entrenamientos', icon: 'fitness_center', color: '#4ade80', label: 'Entrenar' },
-  { href: '/app/alimentos',      icon: 'restaurant',     color: '#fb923c', label: 'Alimentos' },
-  { href: '/app/suplementos',    icon: 'medication',     color: '#f59e0b', label: 'Suplementos' },
-  { href: '/app/compras',        icon: 'shopping_cart',  color: '#60a5fa', label: 'Compras' },
-  { href: '/app/coach',          icon: 'psychology',     color: '#a78bfa', label: 'Coach IA' },
-  { href: '/app/inspector',      icon: 'analytics',      color: '#ff4d00', label: 'Inspector' },
-  { href: '/app/comunidad',      icon: 'groups',         color: '#f472b6', label: 'Comunidad' },
-  { href: '/app/progreso',       icon: 'trending_up',    color: '#ff4d00', label: 'Progreso' },
-  { href: '/app/objetivos',      icon: 'flag',           color: '#ff4d00', label: 'Objetivos' },
-  { href: '/app/perfil',         icon: 'person',         color: '', label: 'Mi Perfil' },
-  { href: '/app/guia',           icon: 'help',           color: '#60a5fa', label: 'Guía' },
-  { href: '/app/demo/',          icon: 'play_circle',    color: '#ff4d00', label: 'Modo Prueba' },
-  { href: '/',                   icon: 'language',       color: '#22d3ee', label: 'Sitio Web', web: true },
+// Drawer móvil "Más" — agrupado igual que el aside de escritorio (antes era
+// una grilla plana de 15 items sin jerarquía). Dashboard/Macros/Plan/Scanner
+// quedan fuera: ya tienen su propio tab fijo en la bottom bar.
+const drawerSections = [
+  {
+    label: 'Herramientas',
+    links: [
+      { href: '/app/recetas',        icon: 'menu_book',      color: '#fb923c', label: 'Recetas' },
+      { href: '/app/checklist',      icon: 'task_alt',       color: '#22c55e', label: 'Checklist' },
+      { href: '/app/entrenamientos', icon: 'fitness_center', color: '#4ade80', label: 'Entrenar' },
+      { href: '/app/alimentos',      icon: 'restaurant',     color: '#fb923c', label: 'Alimentos' },
+      { href: '/app/suplementos',    icon: 'medication',     color: '#f59e0b', label: 'Suplementos' },
+      { href: '/app/compras',        icon: 'shopping_cart',  color: '#60a5fa', label: 'Compras' },
+    ],
+  },
+  {
+    label: 'Inteligencia',
+    links: [
+      { href: '/app/coach',     icon: 'psychology', color: '#a78bfa', label: 'Coach IA' },
+      { href: '/app/inspector', icon: 'analytics',  color: '#ff4d00', label: 'Inspector' },
+      { href: '/app/comunidad', icon: 'groups',     color: '#f472b6', label: 'Comunidad', badge: 'PRONTO' },
+    ],
+  },
+  {
+    label: 'Progreso & Perfil',
+    links: [
+      { href: '/app/progreso',  icon: 'trending_up', color: '#ff4d00', label: 'Progreso' },
+      { href: '/app/objetivos', icon: 'flag',        color: '#ff4d00', label: 'Objetivos' },
+      { href: '/app/perfil',    icon: 'person',      color: '',       label: 'Mi Perfil' },
+    ],
+  },
+  {
+    label: 'Más',
+    links: [
+      { href: '/app/guia',  icon: 'help',        color: '#60a5fa', label: 'Guía' },
+      { href: '/app/demo/', icon: 'play_circle', color: '#ff4d00', label: 'Modo Prueba' },
+      { href: '/',          icon: 'language',    color: '#22d3ee', label: 'Sitio Web', web: true },
+    ],
+  },
+];
+
+// Sheet "Agregar" del botón central — reemplaza el salto directo a Scanner.
+const quickAddLinks = [
+  { href: '/app/scanner',   icon: 'center_focus_strong', color: '#22d3ee', label: 'Escanear' },
+  { href: '/app/alimentos', icon: 'restaurant',          color: '#fb923c', label: 'Alimentos' },
+  { href: '/app/checklist', icon: 'task_alt',            color: '#22c55e', label: 'Checklist' },
 ];
 ---
 
@@ -118,10 +148,10 @@ const drawerLinks = [
 <nav id="kcTabbar" aria-label="Navegación principal">
   <a href="/app/"       data-tab="home"   class="kct-item"><span class="material-symbols-outlined kct-ic">cottage</span><span class="kct-lbl">Inicio</span></a>
   <a href="/app/macros" data-tab="macros" class="kct-item"><span class="material-symbols-outlined kct-ic">donut_small</span><span class="kct-lbl">Macros</span></a>
-  <a href="/app/scanner" data-tab="scanner" class="kct-item">
-    <span class="kct-scan"><span class="material-symbols-outlined" style="font-size:24px;color:#fff">center_focus_strong</span></span>
-    <span class="kct-lbl">Escanear</span>
-  </a>
+  <button type="button" onclick="toggleQuickAdd()" data-tab="add" class="kct-item" aria-label="Agregar" aria-haspopup="true">
+    <span class="kct-scan"><span class="material-symbols-outlined" style="font-size:26px;color:#fff">add</span></span>
+    <span class="kct-lbl">Agregar</span>
+  </button>
   <a href="/app/plan"   data-tab="plan"   class="kct-item"><span class="material-symbols-outlined kct-ic">event_note</span><span class="kct-lbl">Plan</span></a>
   <button type="button" onclick="toggleHamburgerMenu()" class="kct-item" aria-label="Más opciones"><span class="material-symbols-outlined kct-ic">menu</span><span class="kct-lbl">Más</span></button>
 </nav>
@@ -142,20 +172,49 @@ const drawerLinks = [
       </button>
     </div>
     <div class="kcd-grid">
-      {drawerLinks.map(link => (
-        <a href={link.href} class:list={['kcd-link', { 'kc-web-link': link.web }]}>
-          <span class="material-symbols-outlined" style={`font-size:21px;color:${link.color || 'rgba(247,244,240,0.6)'}`}>{link.icon}</span>
+      {drawerSections.map(section => (
+        <>
+          <p class="kcd-label">{section.label}</p>
+          <div class="kcd-row">
+            {section.links.map(link => (
+              <a href={link.href} class:list={['kcd-link', { 'kc-web-link': link.web }]}>
+                <span class="material-symbols-outlined" style={`font-size:21px;color:${link.color || 'rgba(247,244,240,0.6)'}`}>{link.icon}</span>
+                <span>{link.label}</span>
+                {link.badge && <span class="kcd-badge">{link.badge}</span>}
+              </a>
+            ))}
+          </div>
+        </>
+      ))}
+    </div>
+    <div class="kcd-footer">
+      <button type="button" class="kcd-foot-btn kc-install-btn" onclick="kcInstallApp()">
+        <span class="material-symbols-outlined" style="font-size:19px;color:#22c55e">install_mobile</span>
+        <span>Instalar app</span>
+      </button>
+      <button type="button" class="kcd-foot-btn kcd-foot-danger" onclick="kcLogout()">
+        <span class="material-symbols-outlined" style="font-size:19px">logout</span>
+        <span>Salir</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== QUICK ADD SHEET (botón central) ===== -->
+<div id="kcQuickAdd" aria-hidden="true">
+  <div class="kcd-scrim" onclick="toggleQuickAdd()"></div>
+  <div class="kcqa-sheet" role="dialog" aria-label="Agregar">
+    <div class="kcd-handle-row"><span class="kcd-handle"></span></div>
+    <p class="kcqa-title">¿Qué quieres registrar?</p>
+    <div class="kcqa-row">
+      {quickAddLinks.map(link => (
+        <a href={link.href} class="kcqa-item">
+          <span class="kcqa-ic" style={`background:${link.color}26`}>
+            <span class="material-symbols-outlined" style={`font-size:22px;color:${link.color}`}>{link.icon}</span>
+          </span>
           <span>{link.label}</span>
         </a>
       ))}
-      <button type="button" class="kcd-link kc-install-btn" onclick="kcInstallApp()">
-        <span class="material-symbols-outlined" style="font-size:21px;color:#22c55e">install_mobile</span>
-        <span>Instalar app</span>
-      </button>
-      <button type="button" class="kcd-link" onclick="kcLogout()">
-        <span class="material-symbols-outlined" style="font-size:21px;color:#ef4444">logout</span>
-        <span>Salir</span>
-      </button>
     </div>
   </div>
 </div>
@@ -289,8 +348,15 @@ const drawerLinks = [
   background: #161310; border: 1px solid rgba(255,240,225,0.08);
   cursor: pointer; display: flex; align-items: center; justify-content: center;
 }
-.kcd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.kcd-grid { display: flex; flex-direction: column; }
+.kcd-label {
+  font-size: 9px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(255,240,225,0.25); padding: 0 4px; margin: 16px 0 8px;
+}
+.kcd-grid > .kcd-label:first-child { margin-top: 4px; }
+.kcd-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .kcd-link {
+  position: relative;
   display: flex; align-items: center; gap: 11px;
   padding: 14px; border-radius: 14px;
   background: #161310; border: none; cursor: pointer;
@@ -299,10 +365,51 @@ const drawerLinks = [
   transition: background .13s;
 }
 .kcd-link:hover { background: #1e1a15; }
+.kcd-badge {
+  margin-left: auto; font-size: 8px; font-weight: 800; padding: 2px 6px; border-radius: 999px;
+  background: rgba(244,114,182,0.12); color: #f472b6; letter-spacing: 0.05em; white-space: nowrap;
+}
+.kcd-footer {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255,240,225,0.06);
+}
+.kcd-foot-btn {
+  display: flex; align-items: center; gap: 11px;
+  padding: 13px 14px; border-radius: 14px;
+  background: #161310; border: none; cursor: pointer;
+  text-decoration: none; color: #f7f4f0;
+  font-size: 14.5px; font-weight: 600; font-family: inherit; text-align: left;
+  transition: background .13s;
+}
+.kcd-foot-btn:hover { background: #1e1a15; }
+.kcd-foot-danger { color: #ef4444; }
 
-/* Desktop: ocultar bottom bar y drawer */
+/* ── Quick-add sheet (botón central "+") ── */
+#kcQuickAdd { position: fixed; inset: 0; z-index: 70; display: none; font-family: 'Inter', sans-serif; }
+#kcQuickAdd.open { display: block; }
+.kcqa-sheet {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: #0f0d0a;
+  border-top-left-radius: 24px; border-top-right-radius: 24px;
+  border-top: 1px solid rgba(255,240,225,0.1);
+  padding: 10px 16px calc(28px + env(safe-area-inset-bottom, 0px));
+  animation: kcdUp .22s cubic-bezier(.4,0,.2,1);
+}
+.kcqa-title { font-size: 15px; font-weight: 700; color: #f7f4f0; text-align: center; margin: 4px 0 16px; }
+.kcqa-row { display: flex; gap: 10px; }
+.kcqa-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 16px 8px; border-radius: 16px;
+  background: #161310; text-decoration: none; color: #f7f4f0;
+  font-size: 12.5px; font-weight: 600; text-align: center;
+  transition: background .13s;
+}
+.kcqa-item:hover { background: #1e1a15; }
+.kcqa-ic { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; }
+
+/* Desktop: ocultar bottom bar, drawer y quick-add */
 @media (min-width: 901px) {
-  #kcTabbar, #kcDrawer { display: none !important; }
+  #kcTabbar, #kcDrawer, #kcQuickAdd { display: none !important; }
 }
 </style>
 
@@ -311,8 +418,19 @@ const drawerLinks = [
 function toggleHamburgerMenu() {
   var d = document.getElementById('kcDrawer');
   if (!d) return;
+  var qa = document.getElementById('kcQuickAdd');
+  if (qa) { qa.classList.remove('open'); qa.setAttribute('aria-hidden', 'true'); }
   var open = d.classList.toggle('open');
   d.setAttribute('aria-hidden', open ? 'false' : 'true');
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function toggleQuickAdd() {
+  var qa = document.getElementById('kcQuickAdd');
+  if (!qa) return;
+  var d = document.getElementById('kcDrawer');
+  if (d) { d.classList.remove('open'); d.setAttribute('aria-hidden', 'true'); }
+  var open = qa.classList.toggle('open');
+  qa.setAttribute('aria-hidden', open ? 'false' : 'true');
   document.body.style.overflow = open ? 'hidden' : '';
 }
 // Instalación de la PWA
