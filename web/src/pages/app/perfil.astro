@@ -9,7 +9,7 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
 .glass-card{background:#181818;border:1px solid rgba(255,255,255,0.09);box-shadow:0 2px 16px rgba(0,0,0,0.4)}
 .field-input{background:#111;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px 12px;font-size:14px;color:#f7f4f0;width:100%;-webkit-appearance:none;appearance:none;font-family:'Inter',sans-serif}
 .field-input:focus{outline:none;border-color:rgba(255,77,0,0.5)}
-.field-input::placeholder{color:rgba(247,244,240,0.3)}
+.field-input::placeholder{color:rgba(247,244,240,0.52)}
 select.field-input option{background:#1a1a1a;color:#f7f4f0}
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
 @media (min-width: 768px) {
@@ -58,7 +58,7 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
   <!-- Header editorial -->
   <div id="pf-header" style="margin:10px 2px 16px">
     <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Cuenta · Ajustes</div>
-    <h1 class="kc-h1" style="font-size:30px">Tu perfil<br><span style="color:rgba(247,244,240,0.4)">metabólico.</span></h1>
+    <h1 class="kc-h1" style="font-size:30px">Tu perfil<br><span style="color:rgba(247,244,240,0.57)">metabólico.</span></h1>
   </div>
 
   <!-- Hero: avatar + nombre + chips -->
@@ -116,15 +116,15 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
     </div>
     <div class="grid grid-cols-2 gap-3">
       <div class="col-span-2">
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Nombre</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Nombre</label>
         <input type="text" id="userName" class="field-input" placeholder="Tu nombre">
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Edad</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Edad</label>
         <input type="number" id="age" class="field-input" placeholder="30">
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Sexo</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Sexo</label>
         <select id="sex" class="field-input">
           <option value="">Seleccionar</option>
           <option value="male">Masculino</option>
@@ -132,11 +132,11 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
         </select>
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Altura (cm)</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Altura (cm)</label>
         <input type="number" id="height" class="field-input" placeholder="170">
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Meses Keto</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Meses Keto</label>
         <input type="number" id="monthsOnKeto" class="field-input" placeholder="1">
       </div>
     </div>
@@ -150,15 +150,15 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
     </div>
     <div class="grid grid-cols-2 gap-3">
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Peso Inicial (kg)</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Peso Inicial (kg)</label>
         <input type="number" id="startWeight" step="0.1" class="field-input" placeholder="85.0">
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Peso Meta (kg)</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Peso Meta (kg)</label>
         <input type="number" id="goalWeight" step="0.1" class="field-input" placeholder="70.0">
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Objetivo</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Objetivo</label>
         <select id="trainingGoal" class="field-input">
           <option value="lose">Perder Grasa</option>
           <option value="maintain">Mantener</option>
@@ -167,7 +167,7 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
         </select>
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Nivel de Actividad</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Nivel de Actividad</label>
         <select id="activity" class="field-input">
           <option value="1.2">Sedentario</option>
           <option value="1.375">Ligero</option>
@@ -187,7 +187,7 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
     </div>
     <div class="grid grid-cols-2 gap-3">
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Tipo</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Tipo</label>
         <select id="trainingType" class="field-input">
           <option value="bodyweight">Peso Corporal</option>
           <option value="dumbbells">Mancuernas</option>
@@ -197,7 +197,7 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
         </select>
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Frecuencia</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Frecuencia</label>
         <select id="trainingFreq" class="field-input">
           <option value="1">1 día / sem</option>
           <option value="2">2 días / sem</option>
@@ -209,7 +209,7 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
         </select>
       </div>
       <div class="col-span-2">
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.45)">Experiencia</label>
+        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Experiencia</label>
         <select id="experience" class="field-input">
           <option value="beginner">Principiante</option>
           <option value="intermediate">Intermedio</option>
@@ -243,7 +243,7 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
         <span id="proteinValue" class="text-sm font-bold" style="color:#fb923c">-- g</span>
       </div>
     </div>
-    <p class="text-[10px] mt-2 text-center" style="color:rgba(247,244,240,0.25)">Calculado con Mifflin-St Jeor · se actualiza al guardar</p>
+    <p class="text-[10px] mt-2 text-center" style="color:rgba(247,244,240,0.5)">Calculado con Mifflin-St Jeor · se actualiza al guardar</p>
   </section>
 
   <!-- Historial de Peso -->
@@ -268,7 +268,7 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
       <span class="material-symbols-outlined text-base" style="color:#dc2626;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">warning</span>
       <h2 class="text-sm font-bold" style="color:#f7f4f0">Zona Peligrosa</h2>
     </div>
-    <p class="text-[11px] mb-4" style="color:rgba(247,244,240,0.35)">Estas acciones son irreversibles. Asegúrate de saber lo que estás haciendo.</p>
+    <p class="text-[11px] mb-4" style="color:rgba(247,244,240,0.55)">Estas acciones son irreversibles. Asegúrate de saber lo que estás haciendo.</p>
 
     <!-- Cerrar sesión -->
     <button onclick="handleLogout()" class="w-full py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 flex items-center justify-center gap-2 mb-2" style="background:rgba(220,38,38,0.07);color:#dc2626;border:1px solid rgba(220,38,38,0.18)">
@@ -455,13 +455,13 @@ function loadWeightHistoryList() {
   var history = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
   var recent = history.slice().sort(function(a,b){ return new Date(b.date)-new Date(a.date); }).slice(0, 5);
   if (!recent.length) {
-    container.innerHTML = '<p style="font-size:12px;color:rgba(247,244,240,0.35);text-align:center;padding:10px 0">Sin registros aún</p>';
+    container.innerHTML = '<p style="font-size:12px;color:rgba(247,244,240,0.55);text-align:center;padding:10px 0">Sin registros aún</p>';
     return;
   }
   container.innerHTML = recent.map(function(h, i) {
     var prev = recent[i+1];
     var diff = prev ? (h.weight - prev.weight) : null;
-    var diffColor = diff === null ? '' : diff < 0 ? '#22c55e' : diff > 0 ? '#ff7351' : 'rgba(247,244,240,0.4)';
+    var diffColor = diff === null ? '' : diff < 0 ? '#22c55e' : diff > 0 ? '#ff7351' : 'rgba(247,244,240,0.57)';
     var diffText  = diff !== null ? (diff > 0 ? '+' : '') + diff.toFixed(1) + ' kg' : '';
     return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:10px;background:#111;border:1px solid rgba(255,240,225,0.07)">' +
       '<span style="font-size:12px;color:rgba(247,244,240,0.5)">' + h.date.slice(5).replace('-','/') + '</span>' +

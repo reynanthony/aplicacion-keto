@@ -94,12 +94,12 @@ import AppLayout from '../../layouts/AppLayout.astro';
           </svg>
           <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
             <div id="mxKcalNow" class="kc-num" style="font-weight:900;font-size:46px;line-height:0.9;color:#f7f4f0">0</div>
-            <div style="font-size:12px;color:rgba(247,244,240,0.4);margin-top:2px">de <span id="mxKcalTarget">--</span> kcal</div>
+            <div style="font-size:12px;color:rgba(247,244,240,0.57);margin-top:2px">de <span id="mxKcalTarget">--</span> kcal</div>
           </div>
         </div>
         <div style="flex:1;min-width:0;width:100%">
           <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:18px;margin-bottom:6px;color:#f7f4f0">Distribución keto</h2>
-          <p style="font-size:13px;color:rgba(247,244,240,0.45);line-height:1.5;margin-bottom:20px">Objetivo: 70% grasas · 25% proteína · 5% carbos</p>
+          <p style="font-size:13px;color:rgba(247,244,240,0.6);line-height:1.5;margin-bottom:20px">Objetivo: 70% grasas · 25% proteína · 5% carbos</p>
           <div style="display:flex;flex-direction:column;gap:14px">
             <div style="display:flex;align-items:center;gap:12px"><span style="width:12px;height:12px;border-radius:4px;background:#d97706;flex-shrink:0"></span><span style="flex:1;font-size:14px;font-weight:600;color:#f7f4f0">Grasas</span><span id="mxPctFat" class="kc-num" style="font-weight:800;font-size:15px;color:#f7f4f0">--%</span></div>
             <div style="display:flex;align-items:center;gap:12px"><span style="width:12px;height:12px;border-radius:4px;background:#ea580c;flex-shrink:0"></span><span style="flex:1;font-size:14px;font-weight:600;color:#f7f4f0">Proteína</span><span id="mxPctProt" class="kc-num" style="font-weight:800;font-size:15px;color:#f7f4f0">--%</span></div>
@@ -133,21 +133,21 @@ import AppLayout from '../../layouts/AppLayout.astro';
   <div class="mx-tiles">
     <div style="background:#161310;border:1px solid rgba(234,88,12,0.16);border-radius:24px;padding:24px">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(234,88,12,0.12);display:flex;align-items:center;justify-content:center"><span class="material-symbols-outlined icon-filled" style="color:#ea580c;font-size:22px">egg_alt</span></div><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15px;color:#f7f4f0">Proteína</span></div>
-      <div class="kc-num" style="font-weight:900;font-size:44px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="mxProtNow">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.4)"> / <span id="mxProtTarget">--</span> g</span></div>
+      <div class="kc-num" style="font-weight:900;font-size:44px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="mxProtNow">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.57)"> / <span id="mxProtTarget">--</span> g</span></div>
       <div style="height:8px;border-radius:100px;background:rgba(234,88,12,0.14);overflow:hidden;margin:18px 0 10px"><div id="mxProtBar" style="height:100%;width:0%;background:#ea580c;border-radius:100px;transition:width .5s"></div></div>
-      <div id="mxProtNote" style="font-size:12.5px;color:rgba(247,244,240,0.45)">--</div>
+      <div id="mxProtNote" style="font-size:12.5px;color:rgba(247,244,240,0.6)">--</div>
     </div>
     <div style="background:#161310;border:1px solid rgba(217,119,6,0.16);border-radius:24px;padding:24px">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(217,119,6,0.12);display:flex;align-items:center;justify-content:center"><span class="material-symbols-outlined icon-filled" style="color:#d97706;font-size:22px">local_fire_department</span></div><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15px;color:#f7f4f0">Grasas</span></div>
-      <div class="kc-num" style="font-weight:900;font-size:44px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="mxFatNow">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.4)"> / <span id="mxFatTarget">--</span> g</span></div>
+      <div class="kc-num" style="font-weight:900;font-size:44px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="mxFatNow">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.57)"> / <span id="mxFatTarget">--</span> g</span></div>
       <div style="height:8px;border-radius:100px;background:rgba(217,119,6,0.14);overflow:hidden;margin:18px 0 10px"><div id="mxFatBar" style="height:100%;width:0%;background:#d97706;border-radius:100px;transition:width .5s"></div></div>
-      <div id="mxFatNote" style="font-size:12.5px;color:rgba(247,244,240,0.45)">--</div>
+      <div id="mxFatNote" style="font-size:12.5px;color:rgba(247,244,240,0.6)">--</div>
     </div>
     <div style="background:#161310;border:1px solid rgba(8,145,178,0.16);border-radius:24px;padding:24px">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(8,145,178,0.12);display:flex;align-items:center;justify-content:center"><span class="material-symbols-outlined icon-filled" style="color:#0891b2;font-size:22px">grain</span></div><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15px;color:#f7f4f0">Carbos netos</span></div>
-      <div class="kc-num" style="font-weight:900;font-size:44px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="mxCarbNow">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.4)"> / <span id="mxCarbTarget">--</span> g</span></div>
+      <div class="kc-num" style="font-weight:900;font-size:44px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="mxCarbNow">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.57)"> / <span id="mxCarbTarget">--</span> g</span></div>
       <div style="height:8px;border-radius:100px;background:rgba(8,145,178,0.14);overflow:hidden;margin:18px 0 10px"><div id="mxCarbBar" style="height:100%;width:0%;background:#0891b2;border-radius:100px;transition:width .5s"></div></div>
-      <div id="mxCarbNote" style="font-size:12.5px;color:rgba(247,244,240,0.45)">--</div>
+      <div id="mxCarbNote" style="font-size:12.5px;color:rgba(247,244,240,0.6)">--</div>
     </div>
   </div>
 
@@ -155,9 +155,9 @@ import AppLayout from '../../layouts/AppLayout.astro';
   <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:28px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:8px">
       <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:19px;letter-spacing:-0.01em;color:#f7f4f0">Registro de hoy</h2>
-      <span id="mxLogSummary" style="font-size:12.5px;color:rgba(247,244,240,0.45)">0 comidas · 0 kcal</span>
+      <span id="mxLogSummary" style="font-size:12.5px;color:rgba(247,244,240,0.6)">0 comidas · 0 kcal</span>
     </div>
-    <div class="mx-log-grid" style="padding:0 4px 12px;border-bottom:1px solid rgba(255,240,225,0.07);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(247,244,240,0.35)">
+    <div class="mx-log-grid" style="padding:0 4px 12px;border-bottom:1px solid rgba(255,240,225,0.07);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(247,244,240,0.55)">
       <span>Comida</span><span style="text-align:right">kcal</span><span class="mx-col-macro" style="text-align:right">P</span><span class="mx-col-macro" style="text-align:right">G</span><span class="mx-col-macro" style="text-align:right">C</span>
     </div>
     <div id="mxLogRows"></div>
@@ -168,23 +168,23 @@ import AppLayout from '../../layouts/AppLayout.astro';
   <div class="mx-stats">
     <div class="kc-tile" style="padding:20px">
       <p class="kc-eyebrow" style="margin-bottom:10px">BMR basal</p>
-      <p class="kc-num" style="font-size:28px;color:#f7f4f0"><span id="bmrResult">--</span><span style="font-size:13px;color:rgba(247,244,240,0.4)"> kcal</span></p>
+      <p class="kc-num" style="font-size:28px;color:#f7f4f0"><span id="bmrResult">--</span><span style="font-size:13px;color:rgba(247,244,240,0.57)"> kcal</span></p>
     </div>
     <div class="kc-tile" style="padding:20px">
       <p class="kc-eyebrow" style="margin-bottom:10px">Déficit diario</p>
       <p id="deficitText" class="kc-num" style="font-size:28px;color:#22c55e">--</p>
-      <p style="font-size:11px;color:rgba(247,244,240,0.4);margin-top:4px">vs TDEE <span id="tdeeResult">--</span></p>
+      <p style="font-size:11px;color:rgba(247,244,240,0.57);margin-top:4px">vs TDEE <span id="tdeeResult">--</span></p>
     </div>
     <div class="kc-tile" style="padding:20px">
       <p class="kc-eyebrow" style="margin-bottom:10px">Días para meta</p>
       <p id="goalDays" class="kc-num" style="font-size:28px;color:#60a5fa">--</p>
-      <p style="font-size:11px;color:rgba(247,244,240,0.4);margin-top:4px"><span id="weightDiff">--</span> kg restantes</p>
+      <p style="font-size:11px;color:rgba(247,244,240,0.57);margin-top:4px"><span id="weightDiff">--</span> kg restantes</p>
     </div>
     <div class="kc-tile" style="padding:20px">
       <p class="kc-eyebrow" style="margin-bottom:10px">Peso actual</p>
-      <p class="kc-num" style="font-size:28px;color:#f7f4f0"><span id="currentWeight">--</span><span style="font-size:13px;color:rgba(247,244,240,0.4)"> kg → <span id="goalWeight">--</span> kg</span></p>
+      <p class="kc-num" style="font-size:28px;color:#f7f4f0"><span id="currentWeight">--</span><span style="font-size:13px;color:rgba(247,244,240,0.57)"> kg → <span id="goalWeight">--</span> kg</span></p>
       <div style="height:6px;border-radius:100px;background:rgba(255,240,225,0.07);overflow:hidden;margin-top:10px"><div id="progressBar" style="height:100%;width:0%;background:linear-gradient(90deg,#ff4d00,#fb923c);border-radius:100px;transition:width 1s"></div></div>
-      <p style="font-size:11px;color:rgba(247,244,240,0.4);margin-top:6px"><span id="progressPercent">--%</span> del camino · <span id="lostProgressBadge" class="hidden" style="color:#22c55e;font-weight:700"><span id="lostProgressText"></span></span></p>
+      <p style="font-size:11px;color:rgba(247,244,240,0.57);margin-top:6px"><span id="progressPercent">--%</span> del camino · <span id="lostProgressBadge" class="hidden" style="color:#22c55e;font-weight:700"><span id="lostProgressText"></span></span></p>
     </div>
   </div>
 
@@ -299,12 +299,12 @@ function loadMacrosData(){
   if(summary) summary.textContent=itemCount+(itemCount===1?' comida':' comidas')+' · '+fmt(cCal)+' kcal';
   if(logEl){
     if(rows.length===0){
-      logEl.innerHTML='<div style="text-align:center;padding:32px 0"><span class="material-symbols-outlined" style="font-size:44px;color:rgba(247,244,240,0.25);display:block;margin-bottom:10px">restaurant</span><p style="font-size:13.5px;color:rgba(247,244,240,0.45)">No hay alimentos registrados hoy</p></div>';
+      logEl.innerHTML='<div style="text-align:center;padding:32px 0"><span class="material-symbols-outlined" style="font-size:44px;color:rgba(247,244,240,0.5);display:block;margin-bottom:10px">restaurant</span><p style="font-size:13.5px;color:rgba(247,244,240,0.6)">No hay alimentos registrados hoy</p></div>';
     }else{
       logEl.innerHTML=rows.map(function(rw,i){
         var meta=MEAL_META[rw.meal]||{label:rw.meal,icon:'restaurant'};
         return '<div class="mx-log-grid" style="padding:16px 4px;'+(i<rows.length-1?'border-bottom:1px solid rgba(255,240,225,0.05)':'')+'">'
-          +'<div style="display:flex;align-items:center;gap:13px;min-width:0"><div style="width:42px;height:42px;border-radius:12px;background:rgba(255,77,0,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="material-symbols-outlined icon-filled" style="color:#ff4d00;font-size:20px">'+meta.icon+'</span></div><div style="min-width:0"><div style="font-size:14.5px;font-weight:600;color:#f7f4f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml(String(rw.name))+'</div><div style="font-size:12px;color:rgba(247,244,240,0.4)">'+meta.label+'</div></div></div>'
+          +'<div style="display:flex;align-items:center;gap:13px;min-width:0"><div style="width:42px;height:42px;border-radius:12px;background:rgba(255,77,0,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span class="material-symbols-outlined icon-filled" style="color:#ff4d00;font-size:20px">'+meta.icon+'</span></div><div style="min-width:0"><div style="font-size:14.5px;font-weight:600;color:#f7f4f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml(String(rw.name))+'</div><div style="font-size:12px;color:rgba(247,244,240,0.57)">'+meta.label+'</div></div></div>'
           +'<span class="kc-num" style="font-weight:700;font-size:15px;text-align:right;color:#f7f4f0">'+fmt(rw.kcal)+'</span>'
           +'<span class="mx-col-macro nums" style="font-size:14px;color:rgba(247,244,240,0.6);text-align:right">'+rw.p+' g</span>'
           +'<span class="mx-col-macro nums" style="font-size:14px;color:rgba(247,244,240,0.6);text-align:right">'+rw.g+' g</span>'

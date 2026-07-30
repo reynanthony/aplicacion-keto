@@ -83,7 +83,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
         </div>
       </div>
       <input type="file" id="galleryInput" accept="image/*" class="hidden" onchange="scanFromImage(this)">
-      <p style="text-align:center;margin-top:14px;font-size:12.5px;font-weight:600;color:rgba(247,244,240,0.4);letter-spacing:0.03em">Apunta y captura · el veredicto llega al instante</p>
+      <p style="text-align:center;margin-top:14px;font-size:12.5px;font-weight:600;color:rgba(247,244,240,0.57);letter-spacing:0.03em">Apunta y captura · el veredicto llega al instante</p>
     </div>
 
     <!-- Resultado + recientes -->
@@ -97,14 +97,14 @@ import AppLayout from '../../layouts/AppLayout.astro';
           </div>
           <div style="padding:20px">
             <input type="text" id="product-name" placeholder="Nombre del producto" style="width:100%;background:#1e1a15;color:#f7f4f0;border:1px solid rgba(255,240,225,0.1);border-radius:14px;padding:12px 14px;font-size:16px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;outline:none;margin-bottom:4px">
-            <div style="font-size:12.5px;color:rgba(247,244,240,0.4);margin:6px 0 14px">Porción · 100 g</div>
+            <div style="font-size:12.5px;color:rgba(247,244,240,0.57);margin:6px 0 14px">Porción · 100 g</div>
 
             <!-- macros editables -->
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
-              <div style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06);border-radius:14px;padding:12px 14px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:rgba(247,244,240,0.4);margin-bottom:5px">Calorías</div><input type="number" id="product-calories" placeholder="0" style="width:100%;background:transparent;border:none;outline:none;color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:22px"></div>
-              <div style="background:#1e1a15;border:1px solid rgba(8,145,178,0.18);border-radius:14px;padding:12px 14px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:rgba(247,244,240,0.4);margin-bottom:5px">Carbos (g)</div><input type="number" id="product-carbs" placeholder="0" style="width:100%;background:transparent;border:none;outline:none;color:#22d3ee;font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:22px"></div>
-              <div style="background:#1e1a15;border:1px solid rgba(217,119,6,0.18);border-radius:14px;padding:12px 14px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:rgba(247,244,240,0.4);margin-bottom:5px">Grasas (g)</div><input type="number" id="product-fat" placeholder="0" style="width:100%;background:transparent;border:none;outline:none;color:#d97706;font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:22px"></div>
-              <div style="background:#1e1a15;border:1px solid rgba(234,88,12,0.18);border-radius:14px;padding:12px 14px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:rgba(247,244,240,0.4);margin-bottom:5px">Proteína (g)</div><input type="number" id="product-protein" placeholder="0" style="width:100%;background:transparent;border:none;outline:none;color:#ea580c;font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:22px"></div>
+              <div style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06);border-radius:14px;padding:12px 14px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:rgba(247,244,240,0.57);margin-bottom:5px">Calorías</div><input type="number" id="product-calories" placeholder="0" style="width:100%;background:transparent;border:none;outline:none;color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:22px"></div>
+              <div style="background:#1e1a15;border:1px solid rgba(8,145,178,0.18);border-radius:14px;padding:12px 14px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:rgba(247,244,240,0.57);margin-bottom:5px">Carbos (g)</div><input type="number" id="product-carbs" placeholder="0" style="width:100%;background:transparent;border:none;outline:none;color:#22d3ee;font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:22px"></div>
+              <div style="background:#1e1a15;border:1px solid rgba(217,119,6,0.18);border-radius:14px;padding:12px 14px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:rgba(247,244,240,0.57);margin-bottom:5px">Grasas (g)</div><input type="number" id="product-fat" placeholder="0" style="width:100%;background:transparent;border:none;outline:none;color:#d97706;font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:22px"></div>
+              <div style="background:#1e1a15;border:1px solid rgba(234,88,12,0.18);border-radius:14px;padding:12px 14px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:rgba(247,244,240,0.57);margin-bottom:5px">Proteína (g)</div><input type="number" id="product-protein" placeholder="0" style="width:100%;background:transparent;border:none;outline:none;color:#ea580c;font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:22px"></div>
             </div>
 
             <button onclick="addToDespensa()" class="kc-btn" style="width:100%;height:50px;font-size:15px">
@@ -121,7 +121,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
           Escaneos recientes
         </h3>
         <div id="recent-scans" class="space-y-2">
-          <p style="color:rgba(247,244,240,0.45);font-size:13px;text-align:center;padding:16px 0">No hay escaneos recientes</p>
+          <p style="color:rgba(247,244,240,0.6);font-size:13px;text-align:center;padding:16px 0">No hay escaneos recientes</p>
         </div>
       </div>
 
@@ -311,11 +311,11 @@ function saveRecentScan(code) {
 function renderRecentScans() {
   var scans = safeParseJSON(localStorage.getItem('recentScans'), []);
   var container = document.getElementById('recent-scans');
-  if (!scans.length) { container.innerHTML = '<p style="color:rgba(247,244,240,0.45);font-size:13px;text-align:center;padding:16px 0">No hay escaneos recientes</p>'; return; }
+  if (!scans.length) { container.innerHTML = '<p style="color:rgba(247,244,240,0.6);font-size:13px;text-align:center;padding:16px 0">No hay escaneos recientes</p>'; return; }
 
   container.innerHTML = scans.map(function (s) {
     var t = new Date(s.time).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#1e1a15;border-radius:14px"><div style="display:flex;align-items:center;gap:12px"><span class="material-symbols-outlined" style="color:rgba(247,244,240,0.4);font-size:20px">qr_code</span><div><p style="color:#f7f4f0;font-size:13px;font-family:monospace">' + s.code + '</p><p style="color:rgba(247,244,240,0.4);font-size:11px">' + t + '</p></div></div></div>';
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#1e1a15;border-radius:14px"><div style="display:flex;align-items:center;gap:12px"><span class="material-symbols-outlined" style="color:rgba(247,244,240,0.57);font-size:20px">qr_code</span><div><p style="color:#f7f4f0;font-size:13px;font-family:monospace">' + s.code + '</p><p style="color:rgba(247,244,240,0.57);font-size:11px">' + t + '</p></div></div></div>';
   }).join('');
 }
 

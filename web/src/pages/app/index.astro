@@ -66,7 +66,7 @@ body {
 #dashGrid { padding-top: 84px; } /* header fijo móvil */
 .dash-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 26px; flex-wrap: wrap; gap: 16px; }
 .dash-greeting { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:26px; letter-spacing:-0.02em; line-height:1.2; color:#f7f4f0; margin:0; }
-.dash-subgreeting { font-size:14px; color:rgba(247,244,240,0.4); margin-top:4px; }
+.dash-subgreeting { font-size:14px; color:rgba(247,244,240,0.57); margin-top:4px; }
 .dash-bento { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .db-score, .db-cal { grid-column: span 2; }
 .db-score-top { position:relative; display:flex; align-items:center; justify-content:space-between; gap:10px; }
@@ -335,8 +335,8 @@ Importar Backup
   <div>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
       <span id="todayDateDisplay" style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00">Hoy</span>
-      <span style="width:4px;height:4px;border-radius:50%;background:rgba(247,244,240,0.25)"></span>
-      <span style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(247,244,240,0.4)">Día <span id="streakCount">0</span> en cetosis</span>
+      <span style="width:4px;height:4px;border-radius:50%;background:rgba(247,244,240,0.5)"></span>
+      <span style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(247,244,240,0.57)">Día <span id="streakCount">0</span> en cetosis</span>
     </div>
     <h1 class="dash-greeting"><span id="coachDayPart">Buenos días</span>, <span id="coachUserName">Campeón</span></h1>
     <p class="dash-subgreeting">Vas ganando la semana.</p>
@@ -380,23 +380,23 @@ Importar Backup
     <div>
       <div style="display:flex;align-items:baseline;gap:8px">
         <span id="consumedCalDisplay" class="kc-num" style="font-weight:800;font-size:36px;line-height:0.9;color:#f7f4f0">0</span>
-        <span style="font-size:14px;font-weight:600;color:rgba(247,244,240,0.4)">/ <span id="targetCalDisplay">--</span> kcal</span>
+        <span style="font-size:14px;font-weight:600;color:rgba(247,244,240,0.57)">/ <span id="targetCalDisplay">--</span> kcal</span>
       </div>
       <div style="height:6px;border-radius:100px;background:rgba(255,240,225,0.08);overflow:hidden;margin-top:12px"><div id="caloriesBar" style="height:100%;width:0%;border-radius:100px;background:#ff4d00;transition:width .5s"></div></div>
-      <div style="font-size:12px;color:rgba(247,244,240,0.4);margin-top:8px"><span id="caloriesRemaining">--</span> kcal restantes hoy</div>
+      <div style="font-size:12px;color:rgba(247,244,240,0.57);margin-top:8px"><span id="caloriesRemaining">--</span> kcal restantes hoy</div>
     </div>
   </div>
 
   <!-- Adherencia -->
   <div class="kc-tile" style="display:flex;flex-direction:column;justify-content:space-between;gap:12px">
     <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.02em;color:rgba(247,244,240,0.5)">Adherencia</span>
-    <div><div id="coachAdherence" class="kc-num" style="font-size:36px;line-height:0.9;color:#60a5fa">--%</div><div style="font-size:11.5px;color:rgba(247,244,240,0.4);margin-top:4px">esta semana</div></div>
+    <div><div id="coachAdherence" class="kc-num" style="font-size:36px;line-height:0.9;color:#60a5fa">--%</div><div style="font-size:11.5px;color:rgba(247,244,240,0.57);margin-top:4px">esta semana</div></div>
   </div>
 
   <!-- Racha -->
   <div class="kc-tile" style="display:flex;flex-direction:column;justify-content:space-between;gap:12px">
     <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.02em;color:rgba(247,244,240,0.5)">Racha</span><span class="material-symbols-outlined icon-filled" style="color:#ff4d00;font-size:19px">local_fire_department</span></div>
-    <div><div class="kc-num" style="font-size:36px;line-height:0.9;color:#f7f4f0"><span id="streakDaysCount">0</span><span style="font-size:16px;color:rgba(247,244,240,0.4)"> días</span></div><div style="font-size:11.5px;color:rgba(247,244,240,0.4);margin-top:4px">mejor: <span id="bestStreakCount">0</span></div></div>
+    <div><div class="kc-num" style="font-size:36px;line-height:0.9;color:#f7f4f0"><span id="streakDaysCount">0</span><span style="font-size:16px;color:rgba(247,244,240,0.57)"> días</span></div><div style="font-size:11.5px;color:rgba(247,244,240,0.57);margin-top:4px">mejor: <span id="bestStreakCount">0</span></div></div>
   </div>
 </div>
 
@@ -407,7 +407,7 @@ Importar Backup
       <span class="material-symbols-outlined" style="color:#fbbf24;font-variation-settings:'FILL' 1;font-size:20px">emoji_events</span>
     </div>
     <div>
-      <p class="text-[9px] uppercase tracking-wider font-bold" style="color:rgba(247,244,240,0.45)">Próximo hito</p>
+      <p class="text-[9px] uppercase tracking-wider font-bold" style="color:rgba(247,244,240,0.6)">Próximo hito</p>
       <p id="coachMilestoneText" class="text-sm font-bold" style="color:#f7f4f0">--</p>
     </div>
   </div>
@@ -446,28 +446,28 @@ Importar Backup
 <section id="sect-macros" style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:28px">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:8px">
     <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:19px;letter-spacing:-0.01em;color:#f7f4f0">Macros de hoy</h2>
-    <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(247,244,240,0.45)"><span id="macroDistributionRatio" style="font-weight:700;color:#22c55e">-- / -- / --</span> reparto grasa/proteína/carbos</div>
+    <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(247,244,240,0.6)"><span id="macroDistributionRatio" style="font-weight:700;color:#22c55e">-- / -- / --</span> reparto grasa/proteína/carbos</div>
   </div>
   <div class="macro-band-grid">
     <div>
       <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span class="material-symbols-outlined icon-filled" style="color:#ea580c;font-size:20px">egg_alt</span><span style="font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:rgba(247,244,240,0.55)">Proteína</span></div>
-      <div class="kc-num" style="font-size:38px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="consumedProtDisplay">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.4)"> / <span id="targetProtDisplay">--</span> g</span></div>
+      <div class="kc-num" style="font-size:38px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="consumedProtDisplay">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.57)"> / <span id="targetProtDisplay">--</span> g</span></div>
       <div style="height:8px;border-radius:100px;background:rgba(234,88,12,0.14);overflow:hidden;margin-top:16px"><div id="proteinBar" style="height:100%;width:0%;background:#ea580c;border-radius:100px;transition:width .4s"></div></div>
     </div>
     <div class="macro-band-mid">
       <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span class="material-symbols-outlined icon-filled" style="color:#d97706;font-size:20px">local_fire_department</span><span style="font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:rgba(247,244,240,0.55)">Grasas</span></div>
-      <div class="kc-num" style="font-size:38px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="consumedFatDisplay">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.4)"> / <span id="targetFatDisplay">--</span> g</span></div>
+      <div class="kc-num" style="font-size:38px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="consumedFatDisplay">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.57)"> / <span id="targetFatDisplay">--</span> g</span></div>
       <div style="height:8px;border-radius:100px;background:rgba(217,119,6,0.14);overflow:hidden;margin-top:16px"><div id="fatBar" style="height:100%;width:0%;background:#d97706;border-radius:100px;transition:width .4s"></div></div>
     </div>
     <div>
       <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><span class="material-symbols-outlined icon-filled" style="color:#0891b2;font-size:20px">grain</span><span style="font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:rgba(247,244,240,0.55)">Carbos netos</span></div>
-      <div class="kc-num" style="font-size:38px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="consumedCarbsDisplay">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.4)"> / <span id="targetCarbsDisplay">--</span> g</span></div>
+      <div class="kc-num" style="font-size:38px;line-height:0.9;white-space:nowrap;color:#f7f4f0"><span id="consumedCarbsDisplay">0</span><span style="font-size:18px;font-weight:600;color:rgba(247,244,240,0.57)"> / <span id="targetCarbsDisplay">--</span> g</span></div>
       <div style="height:8px;border-radius:100px;background:rgba(8,145,178,0.14);overflow:hidden;margin-top:16px"><div id="carbsBar" style="height:100%;width:0%;background:#0891b2;border-radius:100px;transition:width .4s"></div></div>
     </div>
   </div>
   <div style="margin-top:22px;padding-top:16px;border-top:1px solid rgba(255,240,225,0.06)">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-      <p style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:rgba(247,244,240,0.45)">Distribución</p>
+      <p style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;color:rgba(247,244,240,0.6)">Distribución</p>
       <a href="/app/macros" style="font-size:12.5px;font-weight:700;color:#ff4d00;text-decoration:none">Detalles →</a>
     </div>
     <div style="height:8px;border-radius:100px;overflow:hidden;display:flex;gap:2px">
@@ -542,11 +542,11 @@ Importar Backup
 <div class="grid grid-cols-2 gap-3" id="achievementsGrid">
 <div class="rounded-2xl p-4 text-center" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
 <p id="ketoDaysCount" class="kc-num" style="font-size:26px;color:#f7f4f0">0</p>
-<p class="text-xs mt-1" style="color:rgba(247,244,240,0.45)">Días Keto</p>
+<p class="text-xs mt-1" style="color:rgba(247,244,240,0.6)">Días Keto</p>
 </div>
 <div class="rounded-2xl p-4 text-center" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
 <p id="mealsLoggedCount" class="kc-num" style="font-size:26px;color:#22c55e">0</p>
-<p class="text-xs mt-1" style="color:rgba(247,244,240,0.45)">Comidas registradas</p>
+<p class="text-xs mt-1" style="color:rgba(247,244,240,0.6)">Comidas registradas</p>
 </div>
 </div>
 <div class="mt-4">
@@ -560,7 +560,7 @@ Importar Backup
 <section id="sect-week" style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:26px;padding:28px">
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
 <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:18px;color:#f7f4f0">Esta semana</h2>
-<span style="font-size:11.5px;color:rgba(247,244,240,0.4)">desde el lunes</span>
+<span style="font-size:11.5px;color:rgba(247,244,240,0.57)">desde el lunes</span>
 </div>
 <div class="grid grid-cols-3 gap-3" id="weeklyGoalsGrid"></div>
 </section>
@@ -569,19 +569,19 @@ Importar Backup
 <section id="sect-links" class="grid grid-cols-2 gap-3">
 <a href="/app/checklist" class="rounded-2xl p-4 flex items-center gap-3 transition-all active:scale-95" style="background:#161310;border:1px solid rgba(255,240,225,0.06);text-decoration:none">
 <span class="material-symbols-outlined" style="color:#22c55e;font-size:22px">task_alt</span>
-<div><p class="text-sm font-bold" style="color:#f7f4f0">Checklist</p><p class="text-[10px] mt-0.5" style="color:rgba(247,244,240,0.45)">Tareas del día</p></div>
+<div><p class="text-sm font-bold" style="color:#f7f4f0">Checklist</p><p class="text-[10px] mt-0.5" style="color:rgba(247,244,240,0.6)">Tareas del día</p></div>
 </a>
 <a href="/app/recetas" class="rounded-2xl p-4 flex items-center gap-3 transition-all active:scale-95" style="background:#161310;border:1px solid rgba(255,240,225,0.06);text-decoration:none">
 <span class="material-symbols-outlined" style="color:#fb923c;font-size:22px">menu_book</span>
-<div><p class="text-sm font-bold" style="color:#f7f4f0">Recetas</p><p class="text-[10px] mt-0.5" style="color:rgba(247,244,240,0.45)">Recetas keto</p></div>
+<div><p class="text-sm font-bold" style="color:#f7f4f0">Recetas</p><p class="text-[10px] mt-0.5" style="color:rgba(247,244,240,0.6)">Recetas keto</p></div>
 </a>
 <a href="/app/compras" class="rounded-2xl p-4 flex items-center gap-3 transition-all active:scale-95" style="background:#161310;border:1px solid rgba(255,240,225,0.06);text-decoration:none">
 <span class="material-symbols-outlined" style="color:#60a5fa;font-size:22px">shopping_cart</span>
-<div><p class="text-sm font-bold" style="color:#f7f4f0">Compras</p><p class="text-[10px] mt-0.5" style="color:rgba(247,244,240,0.45)">Lista semanal</p></div>
+<div><p class="text-sm font-bold" style="color:#f7f4f0">Compras</p><p class="text-[10px] mt-0.5" style="color:rgba(247,244,240,0.6)">Lista semanal</p></div>
 </a>
 <a href="/app/entrenamientos" class="rounded-2xl p-4 flex items-center gap-3 transition-all active:scale-95" style="background:#161310;border:1px solid rgba(255,240,225,0.06);text-decoration:none">
 <span class="material-symbols-outlined" style="color:#4ade80;font-size:22px">fitness_center</span>
-<div><p class="text-sm font-bold" style="color:#f7f4f0">Entrenos</p><p class="text-[10px] mt-0.5" style="color:rgba(247,244,240,0.45)">Seguimiento gym</p></div>
+<div><p class="text-sm font-bold" style="color:#f7f4f0">Entrenos</p><p class="text-[10px] mt-0.5" style="color:rgba(247,244,240,0.6)">Seguimiento gym</p></div>
 </a>
 </section>
 
@@ -1468,7 +1468,7 @@ function renderWeightChart() {
     var tw = minW + (rng * t / 2);
     var ty = yP(tw);
     h += '<line x1="' + PL + '" y1="' + f1(ty) + '" x2="' + (W-PR) + '" y2="' + f1(ty) + '" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>';
-    h += '<text x="' + (PL-3) + '" y="' + f1(ty+3.5) + '" text-anchor="end" fill="rgba(247,244,240,0.3)" font-size="8.5" font-family="Inter,sans-serif">' + tw.toFixed(1) + '</text>';
+    h += '<text x="' + (PL-3) + '" y="' + f1(ty+3.5) + '" text-anchor="end" fill="rgba(247,244,240,0.52)" font-size="8.5" font-family="Inter,sans-serif">' + tw.toFixed(1) + '</text>';
   }
 
   // Goal weight dashed line
@@ -1532,7 +1532,7 @@ function renderWeightChart() {
 function statCard(val, label, color) {
   return '<div class="text-center py-2 rounded-xl" style="background:#100e0b;border:1px solid rgba(255,240,225,0.06)">'
     + '<p class="text-sm font-black" style="color:' + color + '">' + val + '</p>'
-    + '<p class="text-[9px] uppercase tracking-wider mt-0.5" style="color:rgba(247,244,240,0.4)">' + label + '</p>'
+    + '<p class="text-[9px] uppercase tracking-wider mt-0.5" style="color:rgba(247,244,240,0.57)">' + label + '</p>'
     + '</div>';
 }
 
@@ -1642,7 +1642,7 @@ function renderAchievementBadges() {
     '</div>';
   }).join('');
 
-  container.innerHTML = badges || '<div class="text-xs" style="color:rgba(247,244,240,0.45)">Completa tareas para desbloquear logros</div>';
+  container.innerHTML = badges || '<div class="text-xs" style="color:rgba(247,244,240,0.6)">Completa tareas para desbloquear logros</div>';
 }
 
 function getUnlockedAchievements() {
@@ -1681,7 +1681,7 @@ function initAchievements() {
   var achievements = getUnlockedAchievements();
   
   if (achievements.length === 0) {
-    recentContainer.innerHTML = '<div class="text-center py-4 text-sm" style="color:rgba(247,244,240,0.45)">Completa tareas para desbloquear logros</div>';
+    recentContainer.innerHTML = '<div class="text-center py-4 text-sm" style="color:rgba(247,244,240,0.6)">Completa tareas para desbloquear logros</div>';
     return;
   }
 
@@ -1800,7 +1800,7 @@ function loadWeeklyGoals() {
         '<span style="font-size:11px;color:rgba(247,244,240,0.5)">' + g.label + '</span>' +
       '</div>' +
       '<p style="font-size:20px;font-weight:900;color:#f7f4f0;line-height:1;margin-bottom:8px;font-family:\'Plus Jakarta Sans\',sans-serif">' +
-        g.value + '<span style="font-size:12px;color:rgba(247,244,240,0.4)">/' + g.target + (g.suffix || '') + '</span>' +
+        g.value + '<span style="font-size:12px;color:rgba(247,244,240,0.57)">/' + g.target + (g.suffix || '') + '</span>' +
       '</p>' +
       '<div style="height:4px;background:rgba(255,240,225,0.07);border-radius:4px;overflow:hidden">' +
         '<div style="height:100%;border-radius:4px;transition:width 0.4s ease;width:' + percent + '%;background:' + fillColor + '"></div>' +
@@ -2396,7 +2396,7 @@ function renderDailyPlan(plan) {
         '<span class="material-symbols-outlined" style="font-size:20px;color:' + iconHex + '">' + action.icon + '</span>' +
       '</div>' +
       '<p style="font-size:14px;font-weight:900;line-height:1;margin-bottom:3px;color:' + (isDone ? 'rgba(247,244,240,0.38)' : '#f7f4f0') + '">' + escapeHtml(action.detail) + '</p>' +
-      '<p style="font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:rgba(247,244,240,0.45);margin-bottom:' + (hasProgress ? '8px' : '0') + '">' + escapeHtml(action.label) + '</p>' +
+      '<p style="font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:rgba(247,244,240,0.6);margin-bottom:' + (hasProgress ? '8px' : '0') + '">' + escapeHtml(action.label) + '</p>' +
       (hasProgress
         ? '<div style="height:3px;background:rgba(255,240,225,0.08);border-radius:4px;overflow:hidden">' +
             '<div style="height:100%;width:' + action.progress + '%;background:' + col.hex + ';border-radius:4px;transition:width 0.4s ease"></div>' +
