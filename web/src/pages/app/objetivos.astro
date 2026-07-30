@@ -8,7 +8,7 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
 *,*::before,*::after{box-sizing:border-box}
 .glass-card{background:#181818;border:1px solid rgba(255,255,255,0.09);border-radius:16px;box-shadow:0 2px 16px rgba(0,0,0,0.4)}
 @media (min-width: 768px) {
-  #objetivosMain {
+  #objetivosGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.25rem;
@@ -16,7 +16,7 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
     padding-top: 3.5rem;
     padding-bottom: 3rem !important;
   }
-  #objetivosMain > * { margin-top: 0 !important; }
+  #objetivosGrid > * { margin-top: 0 !important; }
   #obj-objetivo   { grid-column: 1; }
   #obj-peso       { grid-column: 1; }
   #obj-proyeccion { grid-column: 1; }
@@ -66,7 +66,7 @@ textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
 </header>
 
 <main id="objetivosMain" class="main-content pt-14 pb-20 min-h-screen" style="background:#131315">
-<div class="space-y-3 kc-page" style="padding-top:12px">
+<div id="objetivosGrid" class="space-y-3 kc-page" style="padding-top:12px">
 
   <!-- Header editorial -->
   <div style="margin:10px 2px 16px">
