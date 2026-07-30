@@ -4,7 +4,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
 
 <AppLayout title="KetoCore | Mis Objetivos" authGuard={true}>
 <style is:global>
-html,body{margin:0;padding:0;box-sizing:border-box;background:#0b0a08;color:#f7f4f0;font-family:'Inter',sans-serif}
+html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f4f0;font-family:'Inter',sans-serif}
 *,*::before,*::after{box-sizing:border-box}
 .glass-card{background:#181818;border:1px solid rgba(255,255,255,0.09);border-radius:16px;box-shadow:0 2px 16px rgba(0,0,0,0.4)}
 @media (min-width: 768px) {
@@ -49,7 +49,7 @@ textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
 </style>
 
 <!-- TopBar -->
-<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(19,19,21,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
   <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
     <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
     <h1 class="text-base font-black" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Mis Objetivos</h1>
@@ -65,7 +65,8 @@ textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
   </div>
 </header>
 
-<main id="objetivosMain" class="main-content pt-14 pb-24 px-4 space-y-3" style="background:#0b0a08">
+<main id="objetivosMain" class="main-content pt-14 pb-20 min-h-screen" style="background:#131315">
+<div class="space-y-3 kc-page" style="padding-top:12px">
 
   <!-- Header editorial -->
   <div style="margin:10px 2px 16px">
@@ -250,6 +251,7 @@ textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
     </button>
   </section>
 
+</div>
 </main>
 
 

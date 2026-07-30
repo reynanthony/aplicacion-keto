@@ -92,7 +92,7 @@ body {
 }
 </style>
 <!-- Header -->
-<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(19,19,21,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
   <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
     <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
     <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">KetoCore</span>
@@ -327,7 +327,7 @@ Importar Backup
 </div>
 
 <!-- Main Canvas -->
-<main class="min-h-screen" style="background:#0b0a08">
+<main class="min-h-screen" style="background:#131315">
 <div id="dashGrid" class="kc-page">
 
 <!-- ========== HEADER EDITORIAL ========== -->
@@ -1539,7 +1539,7 @@ function renderWeightChart() {
     if (p.y !== null) {
       if (p.isToday) {
         h += '<circle cx="' + f1(p.x) + '" cy="' + f1(p.y) + '" r="9" fill="rgba(255,77,0,0.13)"/>';
-        h += '<circle cx="' + f1(p.x) + '" cy="' + f1(p.y) + '" r="4.5" fill="#ff4d00" stroke="rgba(11,10,8,0.5)" stroke-width="1.5"/>';
+        h += '<circle cx="' + f1(p.x) + '" cy="' + f1(p.y) + '" r="4.5" fill="#ff4d00" stroke="rgba(19,19,21,0.5)" stroke-width="1.5"/>';
         h += '<text x="' + f1(p.x) + '" y="' + f1(p.y - 14) + '" text-anchor="middle" fill="#ff4d00" font-size="10" font-weight="700" font-family="Inter,sans-serif">' + p.w.toFixed(1) + '</text>';
       } else {
         h += '<circle cx="' + f1(p.x) + '" cy="' + f1(p.y) + '" r="3" fill="#ff4d00" opacity="0.6"/>';

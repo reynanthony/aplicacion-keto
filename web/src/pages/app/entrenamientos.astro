@@ -35,7 +35,7 @@ button:active{transform:scale(0.97)}
 @media(min-width:768px){#gym-wrap{max-width:none!important;padding-top:1rem;}}
 </style>
 <!-- Sidebar -->
-<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(11,10,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(19,19,21,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
   <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
     <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
     <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">KetoCore</span>
@@ -68,8 +68,8 @@ button:active{transform:scale(0.97)}
     </button>
   </div>
 </div>
-<main class="main-content pt-14 px-4 pb-20 min-h-screen">
-<div id="gym-wrap">
+<main class="main-content pt-14 pb-20 min-h-screen" style="background:#131315">
+<div id="gym-wrap" class="kc-page" style="padding-top:12px">
 
 <!-- ==================== DASHBOARD VIEW ==================== -->
 <div id="dashboardView">
@@ -960,8 +960,8 @@ function showView(view) {
     var icon = view === 'history' ? '📊' : '🏆';
     
     overlay.innerHTML = 
-      '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:#0b0a08;z-index:1000;overflow-y:auto;font-family:Inter,sans-serif;">' +
-        '<div style="position:sticky;top:0;background:rgba(11,10,8,0.95);backdrop-filter:blur(10px);padding:20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.1);z-index:1001;">' +
+      '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:#131315;z-index:1000;overflow-y:auto;font-family:Inter,sans-serif;">' +
+        '<div style="position:sticky;top:0;background:rgba(19,19,21,0.95);backdrop-filter:blur(10px);padding:20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.1);z-index:1001;">' +
           '<button onclick="closeOverlay()" style="background:none;border:none;color:#adaaaa;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:16px;">' +
             '<span style="font-size:20px;">←</span> Volver' +
           '</button>' +
@@ -2230,8 +2230,8 @@ function showWorkoutSummaryModal(duration, totalVolume, calories, completedExerc
   }).join('');
   
   overlay.innerHTML = 
-    '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:#0b0a08;z-index:1000;overflow-y:auto;font-family:Inter,sans-serif;">' +
-      '<div style="position:sticky;top:0;background:rgba(11,10,8,0.95);backdrop-filter:blur(10px);padding:20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.1);z-index:1001;">' +
+    '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:#131315;z-index:1000;overflow-y:auto;font-family:Inter,sans-serif;">' +
+      '<div style="position:sticky;top:0;background:rgba(19,19,21,0.95);backdrop-filter:blur(10px);padding:20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.1);z-index:1001;">' +
         '<button onclick="cancelWorkoutSummary()" style="background:none;border:none;color:#ef4444;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:16px;font-weight:600;">' +
           '<span style="font-size:20px;">✕</span> Descartar' +
         '</button>' +
