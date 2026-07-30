@@ -174,11 +174,11 @@ const quickAddLinks = [
     <div class="kcd-grid">
       {drawerSections.map((section, i) => (
         <>
-          <button type="button" class="kcd-label" onclick={`toggleDrawerSection(${i})`} aria-expanded="true" aria-controls={`kcd-section-${i}`}>
+          <button type="button" class="kcd-label" onclick={`toggleDrawerSection(${i})`} aria-expanded="false" aria-controls={`kcd-section-${i}`}>
             <span>{section.label}</span>
             <span class="material-symbols-outlined kcd-label-chevron" data-chevron={i}>expand_more</span>
           </button>
-          <div class="kcd-row" id={`kcd-section-${i}`}>
+          <div class="kcd-row kcd-row-collapsed" id={`kcd-section-${i}`}>
             {section.links.map(link => (
               <a href={link.href} class:list={['kcd-link', { 'kc-web-link': link.web }]}>
                 <span class="material-symbols-outlined" style={`font-size:21px;color:${link.color || 'rgba(247,244,240,0.6)'}`}>{link.icon}</span>
