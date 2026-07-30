@@ -371,7 +371,12 @@ var catIcons={desayuno:"egg",almuerzo:"restaurant",cena:"dinner_dining",snacks:"
 
 html+='<article class="group relative overflow-hidden rounded-[2rem] '+(isFirst?"md:col-span-2 lg:col-span-2 xl:col-span-2":"")+' bg-surface-container transition-all duration-500 hover:shadow-[0_0_40px_rgba(255,144,105,0.1)] cursor-pointer" onclick="openRecipeModal(\''+recipe.id+'\')">';
 html+='<div class="h-48 md:h-64 w-full overflow-hidden relative flex items-center justify-center" style="background:'+catGradients[recipe.category]+';">';
+if(recipe.image){
+html+='<img loading="lazy" src="'+recipe.image+'" alt="'+recipe.title+'" class="w-full h-full object-cover" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
+html+='<span class="material-symbols-outlined icon-filled" style="display:none;font-size:100px;opacity:0.85;color:'+catIconColors[recipe.category]+'">'+catIcons[recipe.category]+'</span>';
+}else{
 html+='<span class="material-symbols-outlined icon-filled" style="font-size:100px;opacity:0.85;color:'+catIconColors[recipe.category]+'">'+catIcons[recipe.category]+'</span>';
+}
 html+='<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>';
 html+='<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>';
 html+='<div class="absolute top-4 right-4 flex gap-2">';
@@ -412,8 +417,13 @@ var catIconColors={desayuno:"#ff4d00",almuerzo:"#22c55e",cena:"#fb923c",snacks:"
 var catIcons={desayuno:"egg",almuerzo:"restaurant",cena:"dinner_dining",snacks:"cookie"};
 
 var html='<div class="relative">';
-html+='<div class="h-64 md:h-80 w-full flex items-center justify-center rounded-t-[2rem]" style="background:'+catGradients[recipe.category]+';">';
+html+='<div class="h-64 md:h-80 w-full flex items-center justify-center rounded-t-[2rem] overflow-hidden" style="background:'+catGradients[recipe.category]+';">';
+if(recipe.image){
+html+='<img loading="lazy" src="'+recipe.image+'" alt="'+recipe.title+'" class="w-full h-full object-cover" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
+html+='<span class="material-symbols-outlined icon-filled" style="display:none;font-size:120px;opacity:0.85;color:'+catIconColors[recipe.category]+'">'+catIcons[recipe.category]+'</span>';
+}else{
 html+='<span class="material-symbols-outlined icon-filled" style="font-size:120px;opacity:0.85;color:'+catIconColors[recipe.category]+'">'+catIcons[recipe.category]+'</span>';
+}
 html+='<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>';
 html+='</div>';
 html+='<button onclick="closeRecipeModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary-container transition-colors"><span class="material-symbols-outlined">close</span></button>';
