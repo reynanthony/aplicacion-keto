@@ -64,7 +64,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
 <div class="absolute -bottom-20 -left-20 w-48 h-48 bg-secondary/10 rounded-full blur-3xl"></div>
 <div class="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
 <div>
-<span style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00">Optimización nutricional</span>
+<span style="font-size:12px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00">Optimización nutricional</span>
 <h1 class="kc-h1" style="margin-top:10px">Tu stack de<br>suplementos</h1>
 <p class="text-on-surface-variant mt-3 max-w-lg">Optimiza tu rendimiento con suplementos personalizados segun tu perfil y objetivos.</p>
 </div>
@@ -95,7 +95,7 @@ Agregar Suplemento
 <span class="material-symbols-outlined text-6xl text-primary">monitor_weight</span>
 </div>
 <div class="relative">
-<span class="text-[10px] font-bold text-primary uppercase tracking-widest">Peso</span>
+<span class="text-[11px] font-bold text-primary uppercase tracking-widest">Peso</span>
 <p id="profileWeight" class="font-headline text-3xl font-black text-white mt-1 break-words">--</p>
 <span class="text-xs text-on-surface-variant">kg</span>
 </div>
@@ -105,7 +105,7 @@ Agregar Suplemento
 <span class="material-symbols-outlined text-6xl text-secondary">flag</span>
 </div>
 <div class="relative">
-<span class="text-[10px] font-bold text-secondary uppercase tracking-widest">Objetivo</span>
+<span class="text-[11px] font-bold text-secondary uppercase tracking-widest">Objetivo</span>
 <p id="profileGoal" class="font-headline text-lg font-black text-white mt-1 break-words leading-snug">--</p>
 </div>
 </div>
@@ -114,7 +114,7 @@ Agregar Suplemento
 <span class="material-symbols-outlined text-6xl text-green-400">fitness_center</span>
 </div>
 <div class="relative">
-<span class="text-[10px] font-bold text-green-400 uppercase tracking-widest">Entrenamiento</span>
+<span class="text-[11px] font-bold text-green-400 uppercase tracking-widest">Entrenamiento</span>
 <p id="profileExercise" class="font-headline text-lg font-black text-white mt-1 break-words leading-snug">--</p>
 </div>
 </div>
@@ -123,7 +123,7 @@ Agregar Suplemento
 <span class="material-symbols-outlined text-6xl text-purple-400">schedule</span>
 </div>
 <div class="relative">
-<span class="text-[10px] font-bold text-purple-400 uppercase tracking-widest">Tiempo Keto</span>
+<span class="text-[11px] font-bold text-purple-400 uppercase tracking-widest">Tiempo Keto</span>
 <p id="profileKetoTime" class="font-headline text-lg font-black text-white mt-1 break-words leading-snug">--</p>
 </div>
 </div>
@@ -312,7 +312,7 @@ html+='<div class="w-14 h-14 rounded-2xl '+catInfo.bg+' flex items-center justif
 html+='<span class="material-symbols-outlined text-2xl" style="color:'+catInfo.color+'">'+catInfo.icon+'</span></div>';
 html+='<div>';
 html+='<h4 class="font-headline font-bold text-white text-lg">'+sup.name+'</h4>';
-html+='<span class="text-[10px] font-bold uppercase tracking-wider '+colors.badge+' px-2 py-1 rounded-full">Prioridad '+sup.priority+'</span>';
+html+='<span class="text-[11px] font-bold uppercase tracking-wider '+colors.badge+' px-2 py-1 rounded-full">Prioridad '+sup.priority+'</span>';
 html+='</div></div>';
 if(isCurrent){
 html+='<button onclick="removeUserSupplement(\''+sup.id+'\')" class="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all">';
@@ -325,10 +325,10 @@ html+='</div>';
 html+='<p class="text-on-surface-variant text-sm mb-4">'+sup.description+'</p>';
 html+='<div class="grid grid-cols-2 gap-4">';
 html+='<div class="bg-surface-container-high rounded-xl p-3">';
-html+='<p class="text-[10px] text-on-surface-variant uppercase tracking-wider mb-1">Dosis</p>';
+html+='<p class="text-[11px] text-on-surface-variant uppercase tracking-wider mb-1">Dosis</p>';
 html+='<p class="font-bold text-white">'+sup.dosage+'</p></div>';
 html+='<div class="bg-surface-container-high rounded-xl p-3">';
-html+='<p class="text-[10px] text-on-surface-variant uppercase tracking-wider mb-1">Momento</p>';
+html+='<p class="text-[11px] text-on-surface-variant uppercase tracking-wider mb-1">Momento</p>';
 html+='<p class="font-bold text-white">'+sup.timing+'</p></div>';
 html+='</div></div>';
 return html;
@@ -520,7 +520,7 @@ function renderTomarAhora(){
         '<p class="text-white text-sm font-medium '+(isTaken?'line-through':'')+'">'+ escapeHtml(s.name)+'</p>' +
         '<p class="text-on-surface-variant text-xs truncate">'+escapeHtml(s.dosage||'')+'</p>' +
       '</div>' +
-      '<span class="text-[10px] font-bold '+(isTaken?'text-green-400':'text-on-surface-variant')+'">'+(isTaken?'✓ Tomado':'Tomar')+'</span>' +
+      '<span class="text-[11px] font-bold '+(isTaken?'text-green-400':'text-on-surface-variant')+'">'+(isTaken?'✓ Tomado':'Tomar')+'</span>' +
     '</div>';
   }).join('');
 }

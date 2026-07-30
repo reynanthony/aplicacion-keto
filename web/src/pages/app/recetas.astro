@@ -55,7 +55,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
 
 <header style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:20px">
   <div>
-    <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px">Recetas · <span id="totalRecipesCount">--</span> verificadas</div>
+    <div style="font-size:12px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px">Recetas · <span id="totalRecipesCount">--</span> verificadas</div>
     <h1 class="kc-h1">Cocina keto,<br>sin adivinar</h1>
   </div>
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
@@ -137,10 +137,10 @@ Para hoy
 <div class="bg-surface-container-high rounded-xl p-4">
 <p class="text-xs text-primary-container uppercase tracking-wider mb-3">Macros por porción</p>
 <div class="grid grid-cols-4 gap-4">
-<div><label class="text-[10px] text-on-surface-variant block mb-1">kcal</label><input type="number" id="newRecipeCalories" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
-<div><label class="text-[10px] text-on-surface-variant block mb-1">Proteína</label><input type="number" id="newRecipeProtein" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
-<div><label class="text-[10px] text-on-surface-variant block mb-1">Grasa</label><input type="number" id="newRecipeFat" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
-<div><label class="text-[10px] text-on-surface-variant block mb-1">Carbs</label><input type="number" id="newRecipeCarbs" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
+<div><label class="text-[11px] text-on-surface-variant block mb-1">kcal</label><input type="number" id="newRecipeCalories" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
+<div><label class="text-[11px] text-on-surface-variant block mb-1">Proteína</label><input type="number" id="newRecipeProtein" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
+<div><label class="text-[11px] text-on-surface-variant block mb-1">Grasa</label><input type="number" id="newRecipeFat" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
+<div><label class="text-[11px] text-on-surface-variant block mb-1">Carbs</label><input type="number" id="newRecipeCarbs" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
 </div>
 </div>
 </div>
@@ -197,10 +197,10 @@ Para hoy
 <div class="bg-surface-container-high rounded-xl p-4 mb-6">
 <p class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">Macros ajustados</p>
 <div class="grid grid-cols-4 gap-4 text-center">
-<div><span id="adjustedCalories" class="text-xl font-bold text-yellow-400">0</span><span class="text-[10px] text-on-surface-variant block">kcal</span></div>
-<div><span id="adjustedProtein" class="text-xl font-bold text-orange-400">0g</span><span class="text-[10px] text-on-surface-variant block">Prot</span></div>
-<div><span id="adjustedFat" class="text-xl font-bold text-yellow-300">0g</span><span class="text-[10px] text-on-surface-variant block">Grasa</span></div>
-<div><span id="adjustedCarbs" class="text-xl font-bold text-cyan-400">0g</span><span class="text-[10px] text-on-surface-variant block">Carbs</span></div>
+<div><span id="adjustedCalories" class="text-xl font-bold text-yellow-400">0</span><span class="text-[11px] text-on-surface-variant block">kcal</span></div>
+<div><span id="adjustedProtein" class="text-xl font-bold text-orange-400">0g</span><span class="text-[11px] text-on-surface-variant block">Prot</span></div>
+<div><span id="adjustedFat" class="text-xl font-bold text-yellow-300">0g</span><span class="text-[11px] text-on-surface-variant block">Grasa</span></div>
+<div><span id="adjustedCarbs" class="text-xl font-bold text-cyan-400">0g</span><span class="text-[11px] text-on-surface-variant block">Carbs</span></div>
 </div>
 </div>
 <button onclick="confirmServings()" class="w-full py-4 rounded-xl kinetic-gradient text-white font-black hover:opacity-90 transition-colors">Aplicar</button>
@@ -375,9 +375,9 @@ html+='<span class="material-symbols-outlined icon-filled" style="font-size:100p
 html+='<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>';
 html+='<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>';
 html+='<div class="absolute top-4 right-4 flex gap-2">';
-html+='<span class="'+catColors[recipe.category]+' px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">'+catLabels[recipe.category]+'</span>';
-if(remaining&&(recipe.carbs||0)<=remaining.carbs+2&&(recipe.calories||0)<=remaining.cal+50){html+='<span class="bg-green-500/30 text-green-300 px-2 py-1 rounded-full text-[10px] font-bold flex items-center gap-0.5"><span class="material-symbols-outlined text-xs" style="font-size:12px">check_circle</span>Cabe hoy</span>';};
-html+='<span class="bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold text-white flex items-center gap-1"><span class="material-symbols-outlined text-xs">schedule</span>'+recipe.prepTime+' min</span>';
+html+='<span class="'+catColors[recipe.category]+' px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest">'+catLabels[recipe.category]+'</span>';
+if(remaining&&(recipe.carbs||0)<=remaining.carbs+2&&(recipe.calories||0)<=remaining.cal+50){html+='<span class="bg-green-500/30 text-green-300 px-2 py-1 rounded-full text-[11px] font-bold flex items-center gap-0.5"><span class="material-symbols-outlined text-xs" style="font-size:12px">check_circle</span>Cabe hoy</span>';};
+html+='<span class="bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full text-[11px] font-bold text-white flex items-center gap-1"><span class="material-symbols-outlined text-xs">schedule</span>'+recipe.prepTime+' min</span>';
 html+='</div>';
 html+='<button onclick="event.stopPropagation();toggleFavorite(\''+recipe.id+'\')" class="absolute top-4 left-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center hover:bg-primary-container transition-colors">';
 html+='<span class="material-symbols-outlined '+(isFavorite?"text-secondary":"text-white/60")+'" style="font-variation-settings:\'FILL '+(isFavorite?'1':'0')+'\'">'+(isFavorite?"favorite":"favorite_border")+'</span></button>';
@@ -385,11 +385,11 @@ html+='</div>';
 html+='<div class="p-6">';
 html+='<h3 class="font-headline text-xl md:text-2xl font-black tracking-tight mb-4 group-hover:text-primary-container transition-colors">'+recipe.title+'</h3>';
 html+='<div class="flex items-center gap-6">';
-html+='<div class="flex flex-col"><span class="text-primary-container font-bold text-lg">'+recipe.carbs+'g</span><span class="text-[9px] uppercase font-bold text-on-surface-variant">Carbs</span></div>';
+html+='<div class="flex flex-col"><span class="text-primary-container font-bold text-lg">'+recipe.carbs+'g</span><span class="text-[10px] uppercase font-bold text-on-surface-variant">Carbs</span></div>';
 html+='<div class="w-px h-8 bg-outline-variant/30"></div>';
-html+='<div class="flex flex-col"><span class="text-secondary font-bold text-lg">'+recipe.protein+'g</span><span class="text-[9px] uppercase font-bold text-on-surface-variant">Prot</span></div>';
+html+='<div class="flex flex-col"><span class="text-secondary font-bold text-lg">'+recipe.protein+'g</span><span class="text-[10px] uppercase font-bold text-on-surface-variant">Prot</span></div>';
 html+='<div class="w-px h-8 bg-outline-variant/30"></div>';
-html+='<div class="flex flex-col"><span class="text-tertiary font-bold text-lg">'+recipe.fat+'g</span><span class="text-[9px] uppercase font-bold text-on-surface-variant">Grasa</span></div>';
+html+='<div class="flex flex-col"><span class="text-tertiary font-bold text-lg">'+recipe.fat+'g</span><span class="text-[10px] uppercase font-bold text-on-surface-variant">Grasa</span></div>';
 html+='</div>';
 html+='</div>';
 html+='</article>';
@@ -427,10 +427,10 @@ html+='<div class="flex items-center gap-2 text-on-surface-variant"><span class=
 html+='</div>';
 
 html+='<div class="grid grid-cols-4 gap-4 mb-8">';
-html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-yellow-400">'+recipe.calories+'</span><span class="text-[10px] uppercase text-on-surface-variant">kcal</span></div>';
-html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-orange-400">'+recipe.protein+'g</span><span class="text-[10px] uppercase text-on-surface-variant">Proteína</span></div>';
-html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-yellow-300">'+recipe.fat+'g</span><span class="text-[10px] uppercase text-on-surface-variant">Grasa</span></div>';
-html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-cyan-400">'+recipe.carbs+'g</span><span class="text-[10px] uppercase text-on-surface-variant">Carbs</span></div>';
+html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-yellow-400">'+recipe.calories+'</span><span class="text-[11px] uppercase text-on-surface-variant">kcal</span></div>';
+html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-orange-400">'+recipe.protein+'g</span><span class="text-[11px] uppercase text-on-surface-variant">Proteína</span></div>';
+html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-yellow-300">'+recipe.fat+'g</span><span class="text-[11px] uppercase text-on-surface-variant">Grasa</span></div>';
+html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-cyan-400">'+recipe.carbs+'g</span><span class="text-[11px] uppercase text-on-surface-variant">Carbs</span></div>';
 html+='</div>';
 
 html+='<div class="mb-8">';

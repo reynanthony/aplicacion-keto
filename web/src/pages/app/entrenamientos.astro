@@ -80,7 +80,7 @@ button:active{transform:scale(0.97)}
 <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djJoLTJ2LTJoMnptLTItNHYyaC0ydi0yaDJ6bTQtOGgydjJoLTJ2LTJ6bS04LTR2MmgtMnYtMmgydjJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-30"></div>
 <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-background to-transparent"></div>
 <div class="relative h-full flex flex-col justify-end p-4 md:p-10">
-<span style="display:inline-block;font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Entrenamiento · Hoy</span>
+<span style="display:inline-block;font-size:12px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Entrenamiento · Hoy</span>
 <h2 class="kc-h1" style="font-size:clamp(26px,5vw,46px);margin-bottom:10px">Muévete keto,<br><span style="color:rgba(247,244,240,0.55)">sin quemarte.</span></h2>
 <p class="text-on-surface-variant text-xs md:text-base max-w-md hidden md:block mb-4 md:mb-6">Tu sesión optimizada por IA está lista. Mantén la consistencia para alcanzar tus metas.</p>
 <div class="flex flex-wrap gap-2 md:gap-4">
@@ -128,16 +128,16 @@ button:active{transform:scale(0.97)}
 <span class="text-xs md:text-sm font-bold text-white">Tipo de Entrenamiento</span>
 </div>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-<button onclick="setWorkoutType('calistenia')" id="btn-calistenia" class="workout-type-btn px-2 py-2 md:px-3 md:py-3 rounded-lg md:rounded-xl text-[10px] md:text-xs font-bold uppercase tracking-wider bg-surface-container-high text-white/70 border border-transparent hover:border-primary/30 transition-all">
+<button onclick="setWorkoutType('calistenia')" id="btn-calistenia" class="workout-type-btn px-2 py-2 md:px-3 md:py-3 rounded-lg md:rounded-xl text-[11px] md:text-xs font-bold uppercase tracking-wider bg-surface-container-high text-white/70 border border-transparent hover:border-primary/30 transition-all">
 🏃 <span class="hidden md:inline">Calistenia</span><span class="md:hidden">Calis.</span>
 </button>
-<button onclick="setWorkoutType('fuerza')" id="btn-fuerza" class="workout-type-btn px-2 py-2 md:px-3 md:py-3 rounded-lg md:rounded-xl text-[10px] md:text-xs font-bold uppercase tracking-wider bg-surface-container-high text-white/70 border border-transparent hover:border-primary/30 transition-all">
+<button onclick="setWorkoutType('fuerza')" id="btn-fuerza" class="workout-type-btn px-2 py-2 md:px-3 md:py-3 rounded-lg md:rounded-xl text-[11px] md:text-xs font-bold uppercase tracking-wider bg-surface-container-high text-white/70 border border-transparent hover:border-primary/30 transition-all">
 💪 <span class="hidden md:inline">Fuerza</span><span class="md:hidden">Fuerza</span>
 </button>
-<button onclick="setWorkoutType('maquina')" id="btn-maquina" class="workout-type-btn px-2 py-2 md:px-3 md:py-3 rounded-lg md:rounded-xl text-[10px] md:text-xs font-bold uppercase tracking-wider bg-surface-container-high text-white/70 border border-transparent hover:border-primary/30 transition-all">
+<button onclick="setWorkoutType('maquina')" id="btn-maquina" class="workout-type-btn px-2 py-2 md:px-3 md:py-3 rounded-lg md:rounded-xl text-[11px] md:text-xs font-bold uppercase tracking-wider bg-surface-container-high text-white/70 border border-transparent hover:border-primary/30 transition-all">
 ⚙️ <span class="hidden md:inline">Máquinas</span><span class="md:hidden">Máq.</span>
 </button>
-<button onclick="setWorkoutType('mixto')" id="btn-mixto" class="workout-type-btn px-2 py-2 md:px-3 md:py-3 rounded-lg md:rounded-xl text-[10px] md:text-xs font-bold uppercase tracking-wider bg-surface-container-high text-white/70 border border-transparent hover:border-primary/30 transition-all">
+<button onclick="setWorkoutType('mixto')" id="btn-mixto" class="workout-type-btn px-2 py-2 md:px-3 md:py-3 rounded-lg md:rounded-xl text-[11px] md:text-xs font-bold uppercase tracking-wider bg-surface-container-high text-white/70 border border-transparent hover:border-primary/30 transition-all">
 🔄 <span class="hidden md:inline">Mezclar</span><span class="md:hidden">Mix</span>
 </button>
 </div>
@@ -150,13 +150,13 @@ button:active{transform:scale(0.97)}
 <span class="material-symbols-outlined text-secondary text-sm md:text-base">speed</span>
 Intensidad
 </span>
-<span id="intensityLevel" class="text-[10px] md:text-xs text-primary font-bold">--</span>
+<span id="intensityLevel" class="text-[11px] md:text-xs text-primary font-bold">--</span>
 </div>
 <div class="flex items-center gap-2 md:gap-3">
 <div class="flex-1 h-1.5 md:h-2 bg-surface-container-high rounded-full overflow-hidden">
 <div id="intensityBar" class="h-full bg-gradient-to-r from-green-400 via-yellow-400 to-red-400 transition-all duration-500" style="width:0%"></div>
 </div>
-<span id="intensityDetails" class="text-[10px] md:text-xs text-on-surface-variant hidden md:inline">Sin datos</span>
+<span id="intensityDetails" class="text-[11px] md:text-xs text-on-surface-variant hidden md:inline">Sin datos</span>
 </div>
 </div>
 
@@ -167,7 +167,7 @@ Intensidad
 <span class="material-symbols-outlined text-primary text-base md:text-xl">calendar_month</span>
 <span class="hidden md:inline">Plan Semanal</span><span class="md:hidden">Esta Semana</span>
 </h3>
-<button onclick="regenerateWeeklyPlan()" class="text-[10px] md:text-xs text-primary hover:text-white transition-colors flex items-center gap-1">
+<button onclick="regenerateWeeklyPlan()" class="text-[11px] md:text-xs text-primary hover:text-white transition-colors flex items-center gap-1">
 <span class="material-symbols-outlined text-sm">refresh</span>
 <span class="hidden md:inline">Regenerar</span>
 </button>
@@ -188,7 +188,7 @@ Intensidad
 <div class="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden mt-2 md:mt-3">
 <div id="monthProgressBarDash" class="h-full bg-primary rounded-full transition-all duration-1000" style="width:0%"></div>
 </div>
-<p class="text-[8px] md:text-[10px] text-on-surface-variant mt-1 md:mt-3 hidden md:block">¡Uno más para la recompensa!</p>
+<p class="text-[9px] md:text-[11px] text-on-surface-variant mt-1 md:mt-3 hidden md:block">¡Uno más para la recompensa!</p>
 </div>
 
 <!-- Calories -->
@@ -198,7 +198,7 @@ Intensidad
 </div>
 <div class="flex items-baseline gap-1 md:gap-2">
 <h3 class="text-2xl md:text-4xl font-headline font-extrabold text-secondary"><span id="monthCaloriesDash">0</span></h3>
-<span class="text-on-surface-variant text-[10px] md:text-xs font-bold">KCAL</span>
+<span class="text-on-surface-variant text-[11px] md:text-xs font-bold">KCAL</span>
 </div>
 <div class="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden mt-2 md:mt-3">
 <div id="caloriesProgressBarDash" class="h-full bg-secondary rounded-full transition-all duration-1000" style="width:0%"></div>
@@ -212,9 +212,9 @@ Intensidad
 </div>
 <div class="flex items-baseline gap-1 md:gap-2">
 <h3 class="text-2xl md:text-4xl font-headline font-extrabold text-blue-400"><span id="monthMinutesDash">0</span></h3>
-<span class="text-on-surface-variant text-[10px] md:text-xs font-bold">MIN</span>
+<span class="text-on-surface-variant text-[11px] md:text-xs font-bold">MIN</span>
 </div>
-<p class="text-[8px] md:text-[10px] text-on-surface-variant mt-1 md:mt-3 hidden md:block">Minutos activos</p>
+<p class="text-[9px] md:text-[11px] text-on-surface-variant mt-1 md:mt-3 hidden md:block">Minutos activos</p>
 </div>
 
 <!-- Streak -->
@@ -231,7 +231,7 @@ Intensidad
 <div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-surface-container-highest"></div>
 <div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-surface-container-highest"></div>
 </div>
-<p class="text-[10px] md:text-xs text-green-400 mt-2 md:mt-3 font-bold flex items-center gap-1">
+<p class="text-[11px] md:text-xs text-green-400 mt-2 md:mt-3 font-bold flex items-center gap-1">
 <span class="material-symbols-outlined text-sm">auto_awesome</span>
 <span class="hidden md:inline">¡Nuevo Récord!</span><span class="md:hidden">Récord</span>
 </p>
@@ -255,7 +255,7 @@ Intensidad
 <div class="bg-surface-container-low rounded-2xl p-8 ghost-border">
 <h3 class="text-xl font-headline font-extrabold mb-6">Victorias Recientes</h3>
 <div id="victoriasRecientesList" class="space-y-4"></div>
-<button onclick="showView('records')" class="w-full mt-8 py-3 bg-surface-container-high text-[10px] font-black uppercase tracking-widest hover:text-primary transition-all rounded-xl">
+<button onclick="showView('records')" class="w-full mt-8 py-3 bg-surface-container-high text-[11px] font-black uppercase tracking-widest hover:text-primary transition-all rounded-xl">
 Ver Todos los Récords
 </button>
 </div>
@@ -265,15 +265,15 @@ Ver Todos los Récords
 <div class="grid grid-cols-3 gap-4">
 <div class="bg-surface-container-low rounded-2xl p-5 text-center ghost-border hover:bg-surface-container transition-colors cursor-pointer">
 <p id="totalWorkoutsDash" class="text-3xl font-extrabold text-white">0</p>
-<p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Entrenos Totales</p>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-widest font-bold">Entrenos Totales</p>
 </div>
 <div class="bg-surface-container-low rounded-2xl p-5 text-center ghost-border hover:bg-surface-container transition-colors cursor-pointer">
 <p id="totalCaloriesDash" class="text-3xl font-extrabold text-white">0</p>
-<p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Kcal Totales</p>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-widest font-bold">Kcal Totales</p>
 </div>
 <div class="bg-surface-container-low rounded-2xl p-5 text-center ghost-border hover:bg-surface-container transition-colors cursor-pointer">
 <p id="totalMinutesDash" class="text-3xl font-extrabold text-white">0</p>
-<p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Min Totales</p>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-widest font-bold">Min Totales</p>
 </div>
 </div>
 
@@ -285,7 +285,7 @@ Ver Todos los Récords
 <!-- Main Session Header -->
 <section class="grid grid-cols-2 md:grid-cols-2 gap-4 md:gap-6 items-center mb-4 md:mb-8">
 <div class="space-y-1">
-<span class="text-on-surface-variant font-headline font-bold uppercase tracking-[0.2em] text-[10px] md:text-xs">Sesión</span>
+<span class="text-on-surface-variant font-headline font-bold uppercase tracking-[0.2em] text-[11px] md:text-xs">Sesión</span>
 <div class="flex items-baseline gap-1 md:gap-2">
 <h1 id="workoutTimerDash" class="font-headline font-extrabold text-4xl md:text-7xl tracking-tighter text-primary timer-glow">00:00</h1>
 <span class="text-primary font-bold text-sm md:text-xl hidden md:inline">MIN</span>
@@ -306,14 +306,14 @@ Finalizar
 <div class="bg-surface-container-low rounded-2xl p-4 md:p-6 ring-1 ring-white/5 space-y-4 md:space-y-6 mb-4 md:mb-6">
 <div class="flex justify-between items-start">
 <div class="flex-1">
-<div class="flex items-center gap-2 text-primary font-headline font-bold text-[10px] md:text-sm uppercase tracking-widest mb-1">
+<div class="flex items-center gap-2 text-primary font-headline font-bold text-[11px] md:text-sm uppercase tracking-widest mb-1">
 <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
 <span class="hidden md:inline">Entrenando Ahora</span><span class="md:hidden">Ejercicio</span>
 </div>
 <h2 id="currentExerciseName" class="text-xl md:text-4xl font-headline font-extrabold tracking-tight text-white truncate pr-2">Selecciona ejercicio</h2>
 <div class="flex gap-2 mt-2 flex-wrap">
-<span class="px-2 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-[10px] md:text-xs font-bold uppercase tracking-wider" id="currentSetInfo">S1/3</span>
-<span class="px-2 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-[10px] md:text-xs font-bold uppercase tracking-wider hidden md:inline">Ant: <span id="lastWeight">-</span></span>
+<span class="px-2 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-[11px] md:text-xs font-bold uppercase tracking-wider" id="currentSetInfo">S1/3</span>
+<span class="px-2 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-[11px] md:text-xs font-bold uppercase tracking-wider hidden md:inline">Ant: <span id="lastWeight">-</span></span>
 </div>
 </div>
 <div class="flex gap-1">
@@ -324,7 +324,7 @@ Finalizar
 <!-- Metrics Selectors -->
 <div class="grid grid-cols-3 gap-2 md:gap-4" id="exerciseInputs">
 <div id="weightContainer" class="bg-surface-container rounded-xl md:rounded-2xl p-3 md:p-5 flex flex-col items-center justify-center space-y-1 md:space-y-2 group transition-all hover:bg-surface-bright cursor-pointer">
-<span class="text-[9px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest">KG</span>
+<span class="text-[10px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest">KG</span>
 <div class="text-2xl md:text-4xl font-headline font-extrabold flex items-center gap-2 md:gap-4 text-primary">
 <span class="material-symbols-outlined text-base md:text-xl cursor-pointer" onclick="adjustWeight(-5)">remove</span>
 <span id="weightInput" class="w-12 md:w-20 text-center">0</span>
@@ -332,7 +332,7 @@ Finalizar
 </div>
 </div>
 <div id="repsContainer" class="bg-surface-container rounded-xl md:rounded-2xl p-3 md:p-5 flex flex-col items-center justify-center space-y-1 md:space-y-2 group transition-all hover:bg-surface-bright cursor-pointer">
-<span class="text-[9px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest">Reps</span>
+<span class="text-[10px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest">Reps</span>
 <div class="text-2xl md:text-4xl font-headline font-extrabold flex items-center gap-2 md:gap-4 text-primary">
 <span class="material-symbols-outlined text-base md:text-xl cursor-pointer" onclick="adjustReps(-1)">remove</span>
 <span id="repsInput" class="w-12 md:w-20 text-center">10</span>
@@ -340,7 +340,7 @@ Finalizar
 </div>
 </div>
 <div id="rpeContainer" class="bg-surface-container rounded-xl md:rounded-2xl p-3 md:p-5 flex flex-col items-center justify-center space-y-1 md:space-y-2 group transition-all hover:bg-surface-bright cursor-pointer">
-<span class="text-[9px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest">RPE</span>
+<span class="text-[10px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest">RPE</span>
 <div class="text-2xl md:text-4xl font-headline font-extrabold flex items-center gap-2 md:gap-4 text-secondary">
 <span class="material-symbols-outlined text-base md:text-xl cursor-pointer" onclick="adjustRPE(-1)">remove</span>
 <span id="currentRPE">8</span>
@@ -381,15 +381,15 @@ Iniciar
 <!-- Bottom Stats -->
 <section class="grid grid-cols-3 md:grid-cols-3 gap-2 md:gap-4 mt-4 md:mt-6">
 <div class="bg-surface-container rounded-xl md:rounded-2xl p-3 md:p-6 relative overflow-hidden">
-<p class="text-[9px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest mb-1 md:mb-4">Volumen</p>
-<h4 class="text-xl md:text-3xl font-headline font-black"><span id="totalVolumeDash">0</span> <span class="text-[9px] md:text-sm font-normal text-on-surface-variant not-italic uppercase">KG</span></h4>
+<p class="text-[10px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest mb-1 md:mb-4">Volumen</p>
+<h4 class="text-xl md:text-3xl font-headline font-black"><span id="totalVolumeDash">0</span> <span class="text-[10px] md:text-sm font-normal text-on-surface-variant not-italic uppercase">KG</span></h4>
 </div>
 <div class="bg-surface-container rounded-xl md:rounded-2xl p-3 md:p-6 relative overflow-hidden">
-<p class="text-[9px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest mb-1 md:mb-4">Calorías</p>
+<p class="text-[10px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest mb-1 md:mb-4">Calorías</p>
 <h4 class="text-xl md:text-3xl font-headline font-black"><span id="caloriesDash">0</span></h4>
 </div>
 <div class="bg-surface-container rounded-xl md:rounded-2xl p-3 md:p-6 relative overflow-hidden">
-<p class="text-[9px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest mb-1 md:mb-4">Descanso</p>
+<p class="text-[10px] md:text-xs font-headline font-bold text-on-surface-variant uppercase tracking-widest mb-1 md:mb-4">Descanso</p>
 <h4 class="text-xl md:text-3xl font-headline font-black" id="restTimerDisplay">00:00</h4>
 </div>
 </section>
@@ -651,14 +651,14 @@ function renderWeeklyPlanDays(weekPlan) {
     }
     
     html += '<div class="' + bgClass + ' ' + borderClass + ' rounded-xl p-2 md:p-3 text-center cursor-pointer hover:scale-105 transition-all" onclick="selectDayWorkout(\'' + dayKeys[i] + '\')">';
-    html += '<div class="text-[10px] md:text-xs ' + (isToday ? 'text-primary font-bold' : 'text-on-surface-variant') + ' mb-1">' + name + '</div>';
+    html += '<div class="text-[11px] md:text-xs ' + (isToday ? 'text-primary font-bold' : 'text-on-surface-variant') + ' mb-1">' + name + '</div>';
     html += '<div class="text-xl md:text-lg mb-1 ' + iconColor + '">' + icon + '</div>';
     if (isTraining) {
       var catIcon = dayData.mainCategory === 'calistenia' ? '🏃' : (dayData.mainCategory === 'fuerza' ? '💪' : '⚙️');
-      html += '<div class="text-[9px] md:text-[10px] ' + textColor + ' font-bold truncate">' + muscleLabel + '</div>';
-      html += '<div class="text-[9px] md:text-[10px] ' + iconColor + '">' + catIcon + '</div>';
+      html += '<div class="text-[10px] md:text-[11px] ' + textColor + ' font-bold truncate">' + muscleLabel + '</div>';
+      html += '<div class="text-[10px] md:text-[11px] ' + iconColor + '">' + catIcon + '</div>';
     } else {
-      html += '<div class="text-[9px] md:text-[10px] text-gray-500">Descanso</div>';
+      html += '<div class="text-[10px] md:text-[11px] text-gray-500">Descanso</div>';
     }
     html += '</div>';
   });
@@ -1031,8 +1031,8 @@ function loadHistoryOverlay() {
       '<div style="font-size:14px;font-weight:800;letter-spacing:0.2em;color:#ff4d00;text-transform:uppercase;margin-bottom:8px;">Mi Progreso</div>' +
       '<div style="font-size:48px;font-weight:900;color:#fff;line-height:1;">' + totalWorkouts + '<span style="font-size:20px;font-weight:500;color:#adaaaa;margin-left:8px;">entrenos</span></div>' +
       '<div style="display:flex;justify-content:center;gap:24px;margin-top:16px;">' +
-        '<div style="text-align:center;"><div style="font-size:20px;font-weight:700;color:#ffb300;">' + totalCalories + '</div><div style="font-size:10px;color:#adaaaa;text-transform:uppercase;">Kcal</div></div>' +
-        '<div style="text-align:center;"><div style="font-size:20px;font-weight:700;color:#4ade80;">' + streak + '</div><div style="font-size:10px;color:#adaaaa;text-transform:uppercase;">Racha</div></div>' +
+        '<div style="text-align:center;"><div style="font-size:20px;font-weight:700;color:#ffb300;">' + totalCalories + '</div><div style="font-size:11px;color:#adaaaa;text-transform:uppercase;">Kcal</div></div>' +
+        '<div style="text-align:center;"><div style="font-size:20px;font-weight:700;color:#4ade80;">' + streak + '</div><div style="font-size:11px;color:#adaaaa;text-transform:uppercase;">Racha</div></div>' +
       '</div>' +
     '</div>' +
   '</div>';
@@ -1061,7 +1061,7 @@ function loadHistoryOverlay() {
     var height = d.duration > 0 ? Math.max(20, (d.duration / maxDuration) * 80) : 10;
     html += '<div style="flex:1;text-align:center;">' +
       '<div style="height:' + height + 'px;background:' + (d.duration > 0 ? 'linear-gradient(to top, #ff4d00, #ff8030)' : '#1e1a15') + ';border-radius:6px;transition:all 0.3s;"></div>' +
-      '<div style="font-size:11px;color:#adaaaa;margin-top:8px;">' + d.day + '</div>' +
+      '<div style="font-size:12px;color:#adaaaa;margin-top:8px;">' + d.day + '</div>' +
     '</div>';
   });
   
@@ -1119,8 +1119,8 @@ function loadRecordsOverlay() {
       '<div style="font-size:14px;font-weight:800;letter-spacing:0.2em;color:#ff4d00;text-transform:uppercase;margin-bottom:8px;">Récord Totales</div>' +
       '<div style="font-size:48px;font-weight:900;color:#fff;line-height:1;">' + keys.length + '<span style="font-size:20px;font-weight:500;color:#adaaaa;margin-left:8px;">ejercicios</span></div>' +
       '<div style="display:flex;justify-content:center;gap:24px;margin-top:16px;">' +
-        '<div style="text-align:center;"><div style="font-size:20px;font-weight:700;color:#ffb300;">' + Math.round(totalVolume/1000).toFixed(1) + 'k</div><div style="font-size:10px;color:#adaaaa;text-transform:uppercase;">Volumen Total</div></div>' +
-        '<div style="text-align:center;"><div style="font-size:20px;font-weight:700;color:#4ade80;">' + keys.filter(function(k){return prs[k].lastPR && new Date(prs[k].lastPR) > new Date(Date.now()-7*24*60*60*1000)}).length + '</div><div style="font-size:10px;color:#adaaaa;text-transform:uppercase;">Esta Semana</div></div>' +
+        '<div style="text-align:center;"><div style="font-size:20px;font-weight:700;color:#ffb300;">' + Math.round(totalVolume/1000).toFixed(1) + 'k</div><div style="font-size:11px;color:#adaaaa;text-transform:uppercase;">Volumen Total</div></div>' +
+        '<div style="text-align:center;"><div style="font-size:20px;font-weight:700;color:#4ade80;">' + keys.filter(function(k){return prs[k].lastPR && new Date(prs[k].lastPR) > new Date(Date.now()-7*24*60*60*1000)}).length + '</div><div style="font-size:11px;color:#adaaaa;text-transform:uppercase;">Esta Semana</div></div>' +
       '</div>' +
     '</div>' +
   '</div>';
@@ -1134,7 +1134,7 @@ function loadRecordsOverlay() {
     if (sortedPRs[1]) {
       html += '<div style="flex:1;max-width:120px;order:1;background:linear-gradient(180deg, rgba(156,163,175,0.2) 0%, transparent 100%);border:1px solid rgba(156,163,175,0.3);border-radius:16px 16px 0 0;padding:16px;text-align:center;">' +
         '<div style="width:40px;height:40px;margin:0 auto 8px;background:linear-gradient(135deg, #9ca3af, #4b5563);border-radius:50%;display:flex;align-items:center;justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg></div>' +
-        '<div style="color:#9ca3af;font-weight:600;font-size:11px;text-transform:capitalize;margin-bottom:4px;">' + sortedPRs[1].name + '</div>' +
+        '<div style="color:#9ca3af;font-weight:600;font-size:12px;text-transform:capitalize;margin-bottom:4px;">' + sortedPRs[1].name + '</div>' +
         '<div style="color:#fff;font-weight:800;font-size:24px;">' + sortedPRs[1].data.maxWeight + '<span style="font-size:12px;font-weight:400;color:#adaaaa;">kg</span></div>' +
       '</div>';
     }
@@ -1142,10 +1142,10 @@ function loadRecordsOverlay() {
     // 1st Place (Featured)
     var topPR = sortedPRs[0].data;
     var hasProgress = topPR.maxVolume && topPR.maxWeight && topPR.maxVolume > 0;
-    var progressBadge = hasProgress ? '<div style="margin-top:8px;padding:4px 12px;background:rgba(255,77,0,0.2);border-radius:20px;display:inline-flex;align-items:center;gap:4px;"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg><span style="color:#4ade80;font-size:10px;font-weight:700;">+Progresando</span></div>' : '';
+    var progressBadge = hasProgress ? '<div style="margin-top:8px;padding:4px 12px;background:rgba(255,77,0,0.2);border-radius:20px;display:inline-flex;align-items:center;gap:4px;"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg><span style="color:#4ade80;font-size:11px;font-weight:700;">+Progresando</span></div>' : '';
     html += '<div style="flex:1;max-width:160px;order:2;background:linear-gradient(180deg, rgba(255,77,0,0.3) 0%, rgba(255,77,0,0.05) 100%);border:2px solid #ff4d00;border-radius:20px 20px 0 0;padding:20px;text-align:center;position:relative;">' +
       '<div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:32px;height:32px;background:linear-gradient(135deg, #ffb300, #fbbf24);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(255,179,0,0.4);"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg></div>' +
-      '<div style="color:#ff4d00;font-weight:700;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px;">' + sortedPRs[0].name + '</div>' +
+      '<div style="color:#ff4d00;font-weight:700;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px;">' + sortedPRs[0].name + '</div>' +
       '<div style="color:#fff;font-weight:900;font-size:36px;line-height:1.1;">' + sortedPRs[0].data.maxWeight + '<span style="font-size:16px;font-weight:500;color:#adaaaa;">kg</span></div>' +
       progressBadge +
     '</div>';
@@ -1154,7 +1154,7 @@ function loadRecordsOverlay() {
     if (sortedPRs[2]) {
       html += '<div style="flex:1;max-width:120px;order:3;background:linear-gradient(180deg, rgba(217,119,6,0.2) 0%, transparent 100%);border:1px solid rgba(217,119,6,0.3);border-radius:16px 16px 0 0;padding:16px;text-align:center;">' +
         '<div style="width:40px;height:40px;margin:0 auto 8px;background:linear-gradient(135deg, #d97706, #78350f);border-radius:50%;display:flex;align-items:center;justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg></div>' +
-        '<div style="color:#d97706;font-weight:600;font-size:11px;text-transform:capitalize;margin-bottom:4px;">' + sortedPRs[2].name + '</div>' +
+        '<div style="color:#d97706;font-weight:600;font-size:12px;text-transform:capitalize;margin-bottom:4px;">' + sortedPRs[2].name + '</div>' +
         '<div style="color:#fff;font-weight:800;font-size:24px;">' + sortedPRs[2].data.maxWeight + '<span style="font-size:12px;font-weight:400;color:#adaaaa;">kg</span></div>' +
       '</div>';
     }
@@ -1187,12 +1187,12 @@ function loadRecordsOverlay() {
           '</div>' +
           '<div>' +
             '<div style="color:#fff;font-weight:600;font-size:14px;text-transform:capitalize;">' + item.name + '</div>' +
-            '<div style="color:#adaaaa;font-size:11px;display:flex;align-items:center;gap:6px;"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + date + '</div>' +
+            '<div style="color:#adaaaa;font-size:12px;display:flex;align-items:center;gap:6px;"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + date + '</div>' +
           '</div>' +
         '</div>' +
         '<div style="display:flex;align-items:center;gap:16px;">' +
           '<div style="text-align:right;">' +
-            '<div style="color:#ff4d00;font-weight:800;font-size:22px;">' + pr.maxWeight + '<span style="font-size:11px;font-weight:500;color:#adaaaa;margin-left:2px;">kg</span></div>' +
+            '<div style="color:#ff4d00;font-weight:800;font-size:22px;">' + pr.maxWeight + '<span style="font-size:12px;font-weight:500;color:#adaaaa;margin-left:2px;">kg</span></div>' +
           '</div>' +
           '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#adaaaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
         '</div>' +
@@ -1366,7 +1366,7 @@ function renderWeekDaysDash(workouts) {
       html += '<div class="absolute bottom-0 w-full ' + activeClass + ' rounded-t-lg h-full"></div>';
     }
     html += '</div>';
-    html += '<span class="text-[8px] md:text-[10px] ' + textClass + ' ' + fontClass + ' uppercase">' + d.day + '</span>';
+    html += '<span class="text-[9px] md:text-[11px] ' + textClass + ' ' + fontClass + ' uppercase">' + d.day + '</span>';
     html += '</div>';
   });
   
@@ -1487,7 +1487,7 @@ function renderVictoriasRecientes() {
     html += '</div>';
     html += '<div>';
     html += '<p class="text-xs font-bold text-on-surface">' + v.titulo + '</p>';
-    html += '<p class="text-[10px] text-on-surface-variant">' + v.detalle + '</p>';
+    html += '<p class="text-[11px] text-on-surface-variant">' + v.detalle + '</p>';
     html += '</div></div>';
   });
   
@@ -1684,7 +1684,7 @@ function renderExerciseList() {
       html += '<span class="material-symbols-outlined text-emerald-500" style="font-variation-settings:\'FILL\' 1;">check_circle</span>';
       html += '<div>';
       html += '<p class="font-headline font-bold text-sm line-through">' + exName + '</p>';
-      html += '<p class="text-[10px] text-on-surface-variant uppercase tracking-widest">' + (e.completedSets || 0) + ' series • ' + (e.reps || 10) + ' repeticiones</p>';
+      html += '<p class="text-[11px] text-on-surface-variant uppercase tracking-widest">' + (e.completedSets || 0) + ' series • ' + (e.reps || 10) + ' repeticiones</p>';
       html += '</div>';
       html += '</div>';
     } else if (isCurrent) {
@@ -1695,7 +1695,7 @@ function renderExerciseList() {
       html += '<div class="w-2 h-8 bg-primary rounded-full"></div>';
       html += '<div>';
       html += '<p class="font-headline font-extrabold text-sm text-primary uppercase">' + exName + '</p>';
-      html += '<p class="text-[10px] text-on-surface-variant uppercase tracking-widest">Serie ' + currentSet + ' de ' + (e.sets || 3) + ' • ' + catLabel + '</p>';
+      html += '<p class="text-[11px] text-on-surface-variant uppercase tracking-widest">Serie ' + currentSet + ' de ' + (e.sets || 3) + ' • ' + catLabel + '</p>';
       html += '</div>';
       html += '</div>';
     }
@@ -1718,7 +1718,7 @@ function renderExerciseList() {
       html += '<span class="material-symbols-outlined text-on-surface-variant">circle</span>';
       html += '<div>';
       html += '<p class="font-headline font-bold text-sm text-on-surface">' + catLabel + ' ' + exName + (isSuperset ? ' <span class="text-secondary">(S)</span>' : '') + '</p>';
-      html += '<p class="text-[10px] text-on-surface-variant uppercase tracking-widest">' + (e.sets || 3) + ' series • ' + (e.reps || 10) + ' repeticiones</p>';
+      html += '<p class="text-[11px] text-on-surface-variant uppercase tracking-widest">' + (e.sets || 3) + ' series • ' + (e.reps || 10) + ' repeticiones</p>';
       html += '</div>';
       html += '</div>';
     }
@@ -2065,8 +2065,8 @@ function showExerciseLibrary() {
       '<div class="flex-1">' +
       '<p class="font-bold text-white group-hover:text-primary transition-colors">' + e.name + '</p>' +
       '<div class="flex items-center gap-2 mt-1">' +
-      '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase" style="background:' + muscleColor + '30;color:' + muscleColor + '">' + e.muscle + '</span>' +
-      '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold" style="background:' + catColor + '30;color:' + catColor + '">' + catLabel + '</span>' +
+      '<span class="px-2 py-0.5 rounded-full text-[11px] font-bold uppercase" style="background:' + muscleColor + '30;color:' + muscleColor + '">' + e.muscle + '</span>' +
+      '<span class="px-2 py-0.5 rounded-full text-[11px] font-bold" style="background:' + catColor + '30;color:' + catColor + '">' + catLabel + '</span>' +
       '</div>' +
       '</div>' +
       '<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">' +
@@ -2529,7 +2529,7 @@ function showPRsModal() {
       html += '<div onclick="showExerciseHistory(\'' + safeKey + '\')" class="flex items-center gap-3 p-3 rounded-xl bg-surface-container-high mb-2 cursor-pointer hover:bg-surface-container-highest hover:scale-[1.02] transition-all">';
       html += '<div class="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center"><span class="material-symbols-outlined text-lg text-primary">fitness_center</span></div>';
       html += '<div class="flex-1"><p class="font-bold text-white capitalize">' + key + '</p><p class="text-xs text-on-surface-variant">' + date + '</p></div>';
-      html += '<div class="text-right"><p class="text-xl font-black text-primary">' + pr.maxWeight + '</p><p class="text-[10px] text-on-surface-variant">kg</p></div></div>';
+      html += '<div class="text-right"><p class="text-xl font-black text-primary">' + pr.maxWeight + '</p><p class="text-[11px] text-on-surface-variant">kg</p></div></div>';
     });
   }
   
@@ -2698,7 +2698,7 @@ function loadRecords() {
       listHtml += '<p class="text-xs text-on-surface-variant">' + date + '</p></div>';
       listHtml += '<div class="text-right">';
       listHtml += '<p class="text-2xl font-black text-primary group-hover:text-yellow-400 transition-colors">' + pr.maxWeight + '</p>';
-      listHtml += '<p class="text-[10px] text-on-surface-variant">kg</p></div></div>';
+      listHtml += '<p class="text-[11px] text-on-surface-variant">kg</p></div></div>';
     });
   }
   

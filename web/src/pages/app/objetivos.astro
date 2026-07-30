@@ -70,7 +70,7 @@ textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
 
   <!-- Header editorial -->
   <div style="margin:10px 2px 16px">
-    <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Metas · Camino</div>
+    <div style="font-size:12px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Metas · Camino</div>
     <h1 class="kc-h1" style="font-size:30px">Tus objetivos,<br><span style="color:rgba(247,244,240,0.57)">hito a hito.</span></h1>
   </div>
 
@@ -95,41 +95,41 @@ textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
     <!-- Current → Goal visual -->
     <div class="flex items-center gap-3 mb-4">
       <div class="text-center flex-shrink-0">
-        <p class="text-[9px] uppercase tracking-wider mb-0.5" style="color:rgba(247,244,240,0.57)">Actual</p>
+        <p class="text-[10px] uppercase tracking-wider mb-0.5" style="color:rgba(247,244,240,0.57)">Actual</p>
         <p id="currentWeightDisp" class="text-2xl font-black" style="color:#f7f4f0">--</p>
-        <p class="text-[9px]" style="color:rgba(247,244,240,0.52)">kg</p>
+        <p class="text-[10px]" style="color:rgba(247,244,240,0.52)">kg</p>
       </div>
       <div class="flex-1">
         <div class="relative h-2 rounded-full overflow-hidden" style="background:rgba(255,240,225,0.08)">
           <div id="weightProgressBar" class="absolute left-0 top-0 h-full rounded-full" style="background:linear-gradient(to right,#ff4d00,#22c55e);width:0%;transition:width 0.5s ease"></div>
         </div>
-        <p id="weightProgressPct" class="text-center text-[10px] mt-1" style="color:rgba(247,244,240,0.55)">Ingresa tus datos</p>
+        <p id="weightProgressPct" class="text-center text-[11px] mt-1" style="color:rgba(247,244,240,0.55)">Ingresa tus datos</p>
       </div>
       <div class="text-center flex-shrink-0">
-        <p class="text-[9px] uppercase tracking-wider mb-0.5" style="color:rgba(247,244,240,0.57)">Meta</p>
+        <p class="text-[10px] uppercase tracking-wider mb-0.5" style="color:rgba(247,244,240,0.57)">Meta</p>
         <p id="goalWeightDisp" class="text-2xl font-black" style="color:#22c55e">--</p>
-        <p class="text-[9px]" style="color:rgba(247,244,240,0.52)">kg</p>
+        <p class="text-[10px]" style="color:rgba(247,244,240,0.52)">kg</p>
       </div>
     </div>
     <!-- Inputs -->
     <div class="grid grid-cols-2 gap-2 mb-4">
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Peso actual (kg)</label>
+        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Peso actual (kg)</label>
         <input type="number" id="currentWeight" step="0.1" min="30" max="300" class="field-input" placeholder="75.0">
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Peso meta (kg)</label>
+        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Peso meta (kg)</label>
         <input type="number" id="goalWeight" step="0.1" min="30" max="300" class="field-input" placeholder="68.0">
       </div>
     </div>
     <!-- Ritmo semanal -->
     <div>
-      <label class="block text-[10px] uppercase tracking-wider mb-2" style="color:rgba(247,244,240,0.6)">Ritmo semanal objetivo</label>
+      <label class="block text-[11px] uppercase tracking-wider mb-2" style="color:rgba(247,244,240,0.6)">Ritmo semanal objetivo</label>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px" id="rateButtons">
-        <button class="rate-btn" data-rate="0.25" onclick="selectRate(this)">0.25 kg<br><span style="font-size:9px;font-weight:400">Suave</span></button>
-        <button class="rate-btn" data-rate="0.5" onclick="selectRate(this)">0.5 kg<br><span style="font-size:9px;font-weight:400">Ideal</span></button>
-        <button class="rate-btn" data-rate="0.75" onclick="selectRate(this)">0.75 kg<br><span style="font-size:9px;font-weight:400">Fuerte</span></button>
-        <button class="rate-btn" data-rate="1.0" onclick="selectRate(this)">1.0 kg<br><span style="font-size:9px;font-weight:400">Máximo</span></button>
+        <button class="rate-btn" data-rate="0.25" onclick="selectRate(this)">0.25 kg<br><span style="font-size:10px;font-weight:400">Suave</span></button>
+        <button class="rate-btn" data-rate="0.5" onclick="selectRate(this)">0.5 kg<br><span style="font-size:10px;font-weight:400">Ideal</span></button>
+        <button class="rate-btn" data-rate="0.75" onclick="selectRate(this)">0.75 kg<br><span style="font-size:10px;font-weight:400">Fuerte</span></button>
+        <button class="rate-btn" data-rate="1.0" onclick="selectRate(this)">1.0 kg<br><span style="font-size:10px;font-weight:400">Máximo</span></button>
       </div>
     </div>
   </section>
@@ -152,51 +152,51 @@ textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
         <span class="material-symbols-outlined text-base" style="color:#fb923c;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">nutrition</span>
         <h2 class="text-sm font-bold" style="color:#f7f4f0">Macros diarios</h2>
       </div>
-      <button onclick="calcMacros()" class="flex items-center gap-1 text-[11px] font-bold px-2.5 py-1.5 rounded-full active:scale-95 transition-all" style="background:rgba(255,77,0,0.12);color:#ff4d00;border:1px solid rgba(255,77,0,0.18)">
+      <button onclick="calcMacros()" class="flex items-center gap-1 text-[12px] font-bold px-2.5 py-1.5 rounded-full active:scale-95 transition-all" style="background:rgba(255,77,0,0.12);color:#ff4d00;border:1px solid rgba(255,77,0,0.18)">
         <span class="material-symbols-outlined" style="font-size:13px">calculate</span>
         Auto-calcular
       </button>
     </div>
     <div class="grid grid-cols-2 gap-2 mb-4">
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Calorías / día</label>
+        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Calorías / día</label>
         <input type="number" id="targetCalories" class="field-input" placeholder="1800">
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Proteína (g)</label>
+        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Proteína (g)</label>
         <input type="number" id="targetProtein" class="field-input" placeholder="140">
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Grasa (g)</label>
+        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Grasa (g)</label>
         <input type="number" id="targetFat" class="field-input" placeholder="130">
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Carbos netos (g)</label>
+        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Carbos netos (g)</label>
         <input type="number" id="targetCarbs" class="field-input" placeholder="25">
       </div>
     </div>
     <!-- Distribución calórica -->
     <div class="space-y-2">
       <div class="flex items-center gap-2">
-        <span class="text-[10px] w-14" style="color:rgba(247,244,240,0.5)">Proteína</span>
+        <span class="text-[11px] w-14" style="color:rgba(247,244,240,0.5)">Proteína</span>
         <div class="flex-1 h-1.5 rounded-full overflow-hidden" style="background:rgba(255,240,225,0.08)">
           <div id="barProtein" class="h-full rounded-full" style="background:#fb923c;width:0%;transition:width 0.4s"></div>
         </div>
-        <span id="pctProtein" class="text-[10px] w-7 text-right" style="color:rgba(247,244,240,0.57)">0%</span>
+        <span id="pctProtein" class="text-[11px] w-7 text-right" style="color:rgba(247,244,240,0.57)">0%</span>
       </div>
       <div class="flex items-center gap-2">
-        <span class="text-[10px] w-14" style="color:rgba(247,244,240,0.5)">Grasa</span>
+        <span class="text-[11px] w-14" style="color:rgba(247,244,240,0.5)">Grasa</span>
         <div class="flex-1 h-1.5 rounded-full overflow-hidden" style="background:rgba(255,240,225,0.08)">
           <div id="barFat" class="h-full rounded-full" style="background:#60a5fa;width:0%;transition:width 0.4s"></div>
         </div>
-        <span id="pctFat" class="text-[10px] w-7 text-right" style="color:rgba(247,244,240,0.57)">0%</span>
+        <span id="pctFat" class="text-[11px] w-7 text-right" style="color:rgba(247,244,240,0.57)">0%</span>
       </div>
       <div class="flex items-center gap-2">
-        <span class="text-[10px] w-14" style="color:rgba(247,244,240,0.5)">Carbos</span>
+        <span class="text-[11px] w-14" style="color:rgba(247,244,240,0.5)">Carbos</span>
         <div class="flex-1 h-1.5 rounded-full overflow-hidden" style="background:rgba(255,240,225,0.08)">
           <div id="barCarbs" class="h-full rounded-full" style="background:#4ade80;width:0%;transition:width 0.4s"></div>
         </div>
-        <span id="pctCarbs" class="text-[10px] w-7 text-right" style="color:rgba(247,244,240,0.57)">0%</span>
+        <span id="pctCarbs" class="text-[11px] w-7 text-right" style="color:rgba(247,244,240,0.57)">0%</span>
       </div>
     </div>
   </section>
@@ -209,11 +209,11 @@ textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
     </div>
     <div class="space-y-3">
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">¿Por qué quiero hacer keto?</label>
+        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">¿Por qué quiero hacer keto?</label>
         <textarea id="motivacion" class="field-input" rows="3" placeholder="Ej: Quiero recuperar mi energía, controlar mi peso y vivir mejor..."></textarea>
       </div>
       <div>
-        <label class="block text-[10px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Mi afirmación diaria</label>
+        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Mi afirmación diaria</label>
         <textarea id="afirmacion" class="field-input" rows="2" placeholder="Ej: Cada decisión keto me acerca a mi versión más saludable..."></textarea>
       </div>
     </div>
@@ -245,7 +245,7 @@ textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
       <span class="material-symbols-outlined text-sm" style="color:rgba(247,244,240,0.52)">restart_alt</span>
       <h2 class="text-sm font-bold" style="color:rgba(247,244,240,0.5)">Cambiar de rumbo</h2>
     </div>
-    <p class="text-[11px] mb-3" style="color:rgba(247,244,240,0.52)">¿Evolucionaron tus metas? Puedes redefinir todo en cualquier momento.</p>
+    <p class="text-[12px] mb-3" style="color:rgba(247,244,240,0.52)">¿Evolucionaron tus metas? Puedes redefinir todo en cualquier momento.</p>
     <button onclick="resetObjetivos()" class="kc-btn-ghost w-full">
       Reiniciar objetivos
     </button>
@@ -381,14 +381,14 @@ function updateProjection() {
 
   html += '<div class="rounded-xl p-3 text-center" style="background:rgba(255,77,0,0.06);border:1px solid rgba(255,77,0,0.12)">';
   html += '<span class="material-symbols-outlined" style="color:#ff4d00;font-size:20px;display:block;margin-bottom:4px;font-variation-settings:\'FILL\' 1,\'wght\' 400,\'GRAD\' 0,\'opsz\' 24">event_available</span>';
-  html += '<p style="font-size:11px;color:rgba(247,244,240,0.6);margin-bottom:2px">' + verb + '</p>';
+  html += '<p style="font-size:12px;color:rgba(247,244,240,0.6);margin-bottom:2px">' + verb + '</p>';
   html += '<p style="font-size:15px;font-weight:800;color:#ff4d00">' + dateStr + '</p>';
-  html += '<p style="font-size:10px;color:rgba(247,244,240,0.55);margin-top:3px">A ' + selectedRate + ' kg/semana</p>';
+  html += '<p style="font-size:11px;color:rgba(247,244,240,0.55);margin-top:3px">A ' + selectedRate + ' kg/semana</p>';
   html += '</div>';
 
   // Advertencia si el ritmo es muy agresivo
   if (selectedRate >= 1.0) {
-    html += '<p class="mt-2 text-[10px] text-center" style="color:rgba(251,191,36,0.7)">Ritmo agresivo: asegúrate de mantener suficiente proteína y supervisión médica.</p>';
+    html += '<p class="mt-2 text-[11px] text-center" style="color:rgba(251,191,36,0.7)">Ritmo agresivo: asegúrate de mantener suficiente proteína y supervisión médica.</p>';
   }
 
   content.innerHTML = html;
@@ -397,7 +397,7 @@ function updateProjection() {
 function statBox(value, label, color) {
   return '<div style="background:#111;border:1px solid rgba(255,240,225,0.07);border-radius:12px;padding:10px;text-align:center">'
     + '<p style="font-size:17px;font-weight:800;color:' + color + '">' + value + '</p>'
-    + '<p style="font-size:9px;text-transform:uppercase;letter-spacing:0.05em;color:rgba(247,244,240,0.57);margin-top:2px">' + label + '</p>'
+    + '<p style="font-size:10px;text-transform:uppercase;letter-spacing:0.05em;color:rgba(247,244,240,0.57);margin-top:2px">' + label + '</p>'
     + '</div>';
 }
 
@@ -494,7 +494,7 @@ function updateHitos() {
   if (!container) return;
 
   if (!cw) {
-    container.innerHTML = '<p style="font-size:11px;color:rgba(247,244,240,0.55)">Ingresa tu peso actual para ver tus hitos</p>';
+    container.innerHTML = '<p style="font-size:12px;color:rgba(247,244,240,0.55)">Ingresa tu peso actual para ver tus hitos</p>';
     return;
   }
 
@@ -523,12 +523,12 @@ function updateHitos() {
     html += '<div class="milestone-dot ' + dotClass + '"></div>';
     html += '<div style="flex:1">';
     html += '<span style="font-size:13px;font-weight:700;color:' + lblColor + '">' + h.label + '</span>';
-    html += '<span style="font-size:10px;color:' + subColor + ';margin-left:6px">' + h.sub + '</span>';
+    html += '<span style="font-size:11px;color:' + subColor + ';margin-left:6px">' + h.sub + '</span>';
     html += '</div>';
     if (h.reached) {
       html += '<span class="material-symbols-outlined" style="font-size:15px;color:#22c55e;' + fillIcon + '">check_circle</span>';
     } else if (isNext) {
-      html += '<span style="font-size:9px;font-weight:800;padding:3px 8px;border-radius:999px;background:rgba(255,77,0,0.12);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">SIGUIENTE</span>';
+      html += '<span style="font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px;background:rgba(255,77,0,0.12);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">SIGUIENTE</span>';
     }
     html += '</div>';
   });

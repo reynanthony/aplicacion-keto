@@ -460,7 +460,7 @@ function renderWeeklyChart(){
     }
     html+='</div>';
     html+='</div>';
-    html+='<span class="text-[11px] font-medium '+(isToday?"text-primary":"text-on-surface-variant")+'">'+(isToday?"Hoy":days[(startDay-i+7)%7])+'</span>';
+    html+='<span class="text-[12px] font-medium '+(isToday?"text-primary":"text-on-surface-variant")+'">'+(isToday?"Hoy":days[(startDay-i+7)%7])+'</span>';
     html+='</div>';
   }
   container.innerHTML=html;
@@ -1022,7 +1022,7 @@ function renderSupplementsConfig(){
     html+='<span class="material-symbols-outlined" style="color:'+supp.color+'">'+supp.icon+'</span>';
     html+='<span class="text-sm font-medium text-white">'+supp.name+'</span>';
     html+='</div>';
-    html+='<span class="text-[10px] text-on-surface-variant">'+supp.dose+' '+supp.unit+'</span>';
+    html+='<span class="text-[11px] text-on-surface-variant">'+supp.dose+' '+supp.unit+'</span>';
     html+='</button>';
   });
   html+='</div></div>';
@@ -1035,7 +1035,7 @@ function renderSupplementsConfig(){
     html+='<span class="material-symbols-outlined" style="color:'+supp.color+'">'+supp.icon+'</span>';
     html+='<span class="text-sm font-medium text-white">'+supp.name+'</span>';
     html+='</div>';
-    html+='<span class="text-[10px] text-on-surface-variant">'+supp.dose+' '+supp.unit+'</span>';
+    html+='<span class="text-[11px] text-on-surface-variant">'+supp.dose+' '+supp.unit+'</span>';
     html+='</button>';
   });
   html+='</div></div>';

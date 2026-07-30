@@ -38,7 +38,7 @@ html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-fa
 .suggestion-chip {
   display: inline-flex; align-items: center;
   padding: 6px 14px; border-radius: 100px;
-  font-size: 11px; font-weight: 600; cursor: pointer;
+  font-size:12px; font-weight: 600; cursor: pointer;
   background: #161310; border: 1px solid rgba(255,240,225,0.07);
   color: rgba(247,244,240,0.65); white-space: nowrap;
   transition: all 0.15s;
@@ -75,7 +75,7 @@ html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-fa
       <h1 class="font-black text-base leading-none" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Coach IA</h1>
       <div id="aiStatusBar" class="flex items-center gap-1.5 mt-0.5">
         <span class="status-dot status-offline"></span>
-        <span id="aiStatusLabel" style="font-size:9px;color:rgba(247,244,240,0.57);font-weight:600">Verificando...</span>
+        <span id="aiStatusLabel" style="font-size:10px;color:rgba(247,244,240,0.57);font-weight:600">Verificando...</span>
       </div>
     </div>
   </div>
@@ -256,7 +256,7 @@ function renderContextPanel(ctx) {
   grid.innerHTML = items.map(function (item) {
     return '<div class="text-center">' +
       '<p class="font-black text-base leading-none" style="color:' + item.color + ';font-family:\'Plus Jakarta Sans\',sans-serif">' + item.value + '</p>' +
-      '<p style="font-size:9px;color:rgba(247,244,240,0.55);margin-top:4px">' + item.label + '</p>' +
+      '<p style="font-size:10px;color:rgba(247,244,240,0.55);margin-top:4px">' + item.label + '</p>' +
       '</div>';
   }).join('');
 
@@ -290,7 +290,7 @@ function renderAlerts() {
   section.innerHTML = alerts.slice(0, 3).map(function (alert) {
     var s   = ALERT_STYLES[alert.type] || ALERT_STYLES.info;
     var btn = alert.action === 'ask_coach'
-      ? '<button onclick="prefillAndSend(\'' + escHtml(alert.actionQuery || '') + '\')" class="mt-2 text-[11px] font-bold px-3 py-1.5 rounded-full" style="background:rgba(255,77,0,0.1);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">' + escHtml(alert.actionLabel || 'Consultar') + '</button>'
+      ? '<button onclick="prefillAndSend(\'' + escHtml(alert.actionQuery || '') + '\')" class="mt-2 text-[12px] font-bold px-3 py-1.5 rounded-full" style="background:rgba(255,77,0,0.1);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">' + escHtml(alert.actionLabel || 'Consultar') + '</button>'
       : '';
     return '<div class="alert-card" style="background:' + s.bg + ';border:1px solid ' + s.border + '">' +
       '<div class="flex items-start gap-2.5">' +
@@ -335,7 +335,7 @@ function addMessage(role, html, meta) {
       '</div>';
   } else {
     var metaHtml = meta
-      ? '<p class="text-[10px] mt-2 font-semibold" style="color:rgba(247,244,240,0.52)">' + meta + '</p>'
+      ? '<p class="text-[11px] mt-2 font-semibold" style="color:rgba(247,244,240,0.52)">' + meta + '</p>'
       : '';
     wrap.innerHTML =
       '<div class="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5" ' +

@@ -56,7 +56,7 @@ input,select{background:#161310!important;color:#fff!important;border:1px solid 
 <!-- Header -->
 <header class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-2">
 <div>
-<p style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px">Base de datos</p>
+<p style="font-size:12px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px">Base de datos</p>
 <h1 class="kc-h1">¿Es keto?<br><span style="color:rgba(247,244,240,0.57)">Compruébalo.</span></h1>
 <p class="text-sm text-on-surface-variant mt-3 max-w-lg">Guía completa de alimentos con veredicto keto, calorías y carbos netos.</p>
 </div>
@@ -461,7 +461,7 @@ Buscar
 </div>
 </div>
 <div class="p-3 border-t border-white/5 bg-surface-container-low/50">
-<p class="text-[10px] text-center text-white/60 uppercase tracking-wider">Mas de 8,000 alimentos disponibles</p>
+<p class="text-[11px] text-center text-white/60 uppercase tracking-wider">Mas de 8,000 alimentos disponibles</p>
 </div>
 </div>
 </div>
@@ -597,13 +597,13 @@ Convertir porción
 <span id="ketoScoreStars" class="flex gap-0.5"></span>
 </div>
 <div class="grid grid-cols-3 gap-2 text-center">
-<div><p class="text-[10px] text-on-surface-variant uppercase">Calorías</p><p id="detailCalories" class="text-lg font-bold text-yellow-400"></p></div>
-<div><p class="text-[10px] text-on-surface-variant uppercase">Porción</p><p id="detailPortion" class="text-lg font-bold text-white"></p></div>
-<div><p class="text-[10px] text-on-surface-variant uppercase">Net Carbs</p><p id="detailNetCarbs" class="text-lg font-bold text-green-400"></p></div>
-<div><p class="text-[10px] text-on-surface-variant uppercase">Proteína</p><p id="detailProtein" class="text-lg font-bold text-primary-container"></p></div>
-<div><p class="text-[10px] text-on-surface-variant uppercase">Grasa</p><p id="detailFat" class="text-lg font-bold text-secondary"></p></div>
-<div><p class="text-[10px] text-on-surface-variant uppercase">Carbs Tot.</p><p id="detailCarbs" class="text-lg font-bold text-white/70"></p></div>
-<div><p class="text-[10px] text-on-surface-variant uppercase">Categoría</p><p id="detailCategory" class="text-lg font-bold text-purple-400"></p></div>
+<div><p class="text-[11px] text-on-surface-variant uppercase">Calorías</p><p id="detailCalories" class="text-lg font-bold text-yellow-400"></p></div>
+<div><p class="text-[11px] text-on-surface-variant uppercase">Porción</p><p id="detailPortion" class="text-lg font-bold text-white"></p></div>
+<div><p class="text-[11px] text-on-surface-variant uppercase">Net Carbs</p><p id="detailNetCarbs" class="text-lg font-bold text-green-400"></p></div>
+<div><p class="text-[11px] text-on-surface-variant uppercase">Proteína</p><p id="detailProtein" class="text-lg font-bold text-primary-container"></p></div>
+<div><p class="text-[11px] text-on-surface-variant uppercase">Grasa</p><p id="detailFat" class="text-lg font-bold text-secondary"></p></div>
+<div><p class="text-[11px] text-on-surface-variant uppercase">Carbs Tot.</p><p id="detailCarbs" class="text-lg font-bold text-white/70"></p></div>
+<div><p class="text-[11px] text-on-surface-variant uppercase">Categoría</p><p id="detailCategory" class="text-lg font-bold text-purple-400"></p></div>
 </div>
 </div>
 
@@ -975,15 +975,15 @@ html+='<button onclick="event.stopPropagation();toggleFavoriteFood(\''+f.id+'\')
 html+='<span class="material-symbols-outlined text-base '+(f.favorite?'text-secondary':'text-white/40')+'" style="font-variation-settings:\'FILL '+(f.favorite?1:0)+'\'">star</span></button>';
 html+='</div>';
 html+='<div class="flex items-center gap-1.5 flex-wrap my-1.5">';
-html+='<span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider" style="background:'+color+'/20;color:'+color+'">'+catLabel+'</span>';
-html+='<span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider" style="background:'+ketoScore.color+'/20;color:'+ketoScore.color+'">'+ketoScore.label+'</span>';
-html+='<span class="text-[10px] text-on-surface-variant">'+f.portion+'g porcion</span>';
+html+='<span class="px-1.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider" style="background:'+color+'/20;color:'+color+'">'+catLabel+'</span>';
+html+='<span class="px-1.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider" style="background:'+ketoScore.color+'/20;color:'+ketoScore.color+'">'+ketoScore.label+'</span>';
+html+='<span class="text-[11px] text-on-surface-variant">'+f.portion+'g porcion</span>';
 html+='</div>';
 html+='<div class="flex gap-1.5">';
-html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[9px] text-on-surface-variant uppercase leading-none mb-0.5">Net</p><p class="text-xs font-bold text-green-400 leading-none">'+netCarbs+'g</p></div>';
-html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[9px] text-on-surface-variant uppercase leading-none mb-0.5">Prot</p><p class="text-xs font-bold text-primary-container leading-none">'+f.protein+'g</p></div>';
-html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[9px] text-on-surface-variant uppercase leading-none mb-0.5">Grasa</p><p class="text-xs font-bold text-secondary leading-none">'+f.fat+'g</p></div>';
-html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[9px] text-on-surface-variant uppercase leading-none mb-0.5">Carbs</p><p class="text-xs font-bold text-green-400 leading-none">'+f.carbs+'g</p></div>';
+html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[10px] text-on-surface-variant uppercase leading-none mb-0.5">Net</p><p class="text-xs font-bold text-green-400 leading-none">'+netCarbs+'g</p></div>';
+html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[10px] text-on-surface-variant uppercase leading-none mb-0.5">Prot</p><p class="text-xs font-bold text-primary-container leading-none">'+f.protein+'g</p></div>';
+html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[10px] text-on-surface-variant uppercase leading-none mb-0.5">Grasa</p><p class="text-xs font-bold text-secondary leading-none">'+f.fat+'g</p></div>';
+html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[10px] text-on-surface-variant uppercase leading-none mb-0.5">Carbs</p><p class="text-xs font-bold text-green-400 leading-none">'+f.carbs+'g</p></div>';
 html+='</div>';
 html+='</div>';
 html+='</div>';
@@ -1302,7 +1302,7 @@ showToast("Sin resultados",3000,"info");
 }else{
 container.innerHTML=results.map(function(r){
 var ketoClass=parseFloat(r.carbs)<=5?'border-green-500/30':'border-orange-500/30';
-var ketoBadge=parseFloat(r.carbs)<=5?'<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-green-500/20 text-green-400">Keto</span>':'<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-orange-500/20 text-orange-400">'+(parseFloat(r.carbs)).toFixed(1)+'g</span>';
+var ketoBadge=parseFloat(r.carbs)<=5?'<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-green-500/20 text-green-400">Keto</span>':'<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-orange-500/20 text-orange-400">'+(parseFloat(r.carbs)).toFixed(1)+'g</span>';
 return'<div class="group p-3 bg-surface-container-high/50 hover:bg-surface-container-high rounded-xl border border-transparent hover:border-secondary/30 cursor-pointer transition-all" onclick="addOnlineFood(\''+r.name.replace(/'/g,"\\'")+'\','+r.calories+','+r.protein+','+r.fat+','+r.carbs+')"><div class="flex items-center justify-between"><p class="font-bold text-white group-hover:text-secondary transition-colors">'+r.name+'</p>'+ketoBadge+'</div><div class="flex gap-4 mt-2 text-xs text-on-surface-variant"><span>'+r.calories+' cal</span><span class="text-primary-container">P: '+r.protein+'g</span><span class="text-secondary">F: '+r.fat+'g</span><span class="text-green-400">C: '+r.carbs+'g</span></div></div>';
 }).join('');
 showToast(results.length+" alimentos encontrados",3000,"success");
@@ -1530,7 +1530,7 @@ if(suggestions.length>0){
 container.innerHTML='<div class="col-span-full mb-2"><span class="px-3 py-1 rounded-full text-xs font-bold bg-primary-container/20 text-primary-container">Objetivo: '+goalLabel+'</span></div>'+
 suggestions.map(function(f){
 var ketoScore=getKetoScore(f);
-return'<div class="glass-card rounded-xl p-3 cursor-pointer hover:scale-105 transition-all" onclick="openDetail(\''+f.id+'\')"><div class="aspect-video rounded-lg bg-surface-container-high mb-2 overflow-hidden relative">'+(f.image?'<img src="/app/'+f.image+'" class="w-full h-full object-cover" loading="lazy">':'<div class="w-full h-full flex items-center justify-center"><span class="material-symbols-outlined text-3xl text-white/20">restaurant</span></div>')+'<span class="absolute top-1 right-1 px-1.5 py-0.5 rounded text-[8px] font-bold" style="background:'+ketoScore.color+'/80;color:white">'+ketoScore.label+'</span></div><p class="text-sm font-bold text-white truncate">'+f.name+'</p><div class="flex justify-between text-xs mt-1"><span class="text-primary-container">P:'+f.protein+'g</span><span class="text-secondary">F:'+f.fat+'g</span><span class="text-green-400">'+getNetCarbs(f)+'g</span></div></div>';
+return'<div class="glass-card rounded-xl p-3 cursor-pointer hover:scale-105 transition-all" onclick="openDetail(\''+f.id+'\')"><div class="aspect-video rounded-lg bg-surface-container-high mb-2 overflow-hidden relative">'+(f.image?'<img src="/app/'+f.image+'" class="w-full h-full object-cover" loading="lazy">':'<div class="w-full h-full flex items-center justify-center"><span class="material-symbols-outlined text-3xl text-white/20">restaurant</span></div>')+'<span class="absolute top-1 right-1 px-1.5 py-0.5 rounded text-[9px] font-bold" style="background:'+ketoScore.color+'/80;color:white">'+ketoScore.label+'</span></div><p class="text-sm font-bold text-white truncate">'+f.name+'</p><div class="flex justify-between text-xs mt-1"><span class="text-primary-container">P:'+f.protein+'g</span><span class="text-secondary">F:'+f.fat+'g</span><span class="text-green-400">'+getNetCarbs(f)+'g</span></div></div>';
 }).join('');
 document.getElementById("suggestionsSection").classList.remove("hidden");
 }else{
@@ -1563,7 +1563,7 @@ recipeItems=[];
 document.getElementById("recipeName").value="";
 updateRecipeIngredients();
 document.getElementById("recipeFoodsList").innerHTML=currentFoods.slice(0,20).map(function(f){
-return'<div class="p-2 bg-surface-container-high rounded-lg cursor-pointer hover:bg-surface-container-highest transition-colors" onclick="addToRecipe(\''+f.id+'\')"><p class="text-xs font-bold text-white truncate">'+f.name+'</p><p class="text-[10px] text-on-surface-variant">'+f.calories+' cal</p></div>';
+return'<div class="p-2 bg-surface-container-high rounded-lg cursor-pointer hover:bg-surface-container-highest transition-colors" onclick="addToRecipe(\''+f.id+'\')"><p class="text-xs font-bold text-white truncate">'+f.name+'</p><p class="text-[11px] text-on-surface-variant">'+f.calories+' cal</p></div>';
 }).join('');
 document.getElementById("quickRecipeModal").classList.remove("hidden");
 }
@@ -1611,7 +1611,7 @@ function filterRecipeFoods(){
 var search=document.getElementById("recipeSearchInput").value.toLowerCase();
 var filtered=currentFoods.filter(function(f){return f.name.toLowerCase().includes(search)});
 document.getElementById("recipeFoodsList").innerHTML=filtered.slice(0,20).map(function(f){
-return'<div class="p-2 bg-surface-container-high rounded-lg cursor-pointer hover:bg-surface-container-highest transition-colors" onclick="addToRecipe(\''+f.id+'\')"><p class="text-xs font-bold text-white truncate">'+f.name+'</p><p class="text-[10px] text-on-surface-variant">'+f.calories+' cal</p></div>';
+return'<div class="p-2 bg-surface-container-high rounded-lg cursor-pointer hover:bg-surface-container-highest transition-colors" onclick="addToRecipe(\''+f.id+'\')"><p class="text-xs font-bold text-white truncate">'+f.name+'</p><p class="text-[11px] text-on-surface-variant">'+f.calories+' cal</p></div>';
 }).join('');
 }
 

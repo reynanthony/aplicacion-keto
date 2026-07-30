@@ -67,7 +67,7 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 <div class="space-y-6 kc-page" style="padding-top:12px">
 <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:26px;flex-wrap:wrap;gap:20px">
   <div>
-    <p id="dateDisplay" style="font-size:11px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px"></p>
+    <p id="dateDisplay" style="font-size:12px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px"></p>
     <h1 class="kc-h1">Tu semana,<br>planificada</h1>
   </div>
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
@@ -169,7 +169,7 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
 <div class="bg-surface-container-high rounded-xl p-4 text-center">
 <div class="flex items-center justify-center gap-2 mb-2">
-<span class="text-[10px] text-on-surface-variant uppercase tracking-wider">Calorías</span>
+<span class="text-[11px] text-on-surface-variant uppercase tracking-wider">Calorías</span>
 </div>
 <div class="text-3xl font-black text-yellow-400 mb-1"><span id="currentCal">0</span></div>
 <div class="text-xs text-on-surface-variant">/ <span id="targetCal">1800</span> kcal</div>
@@ -179,7 +179,7 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 </div>
 <div class="bg-surface-container-high rounded-xl p-4 text-center">
 <div class="flex items-center justify-center gap-2 mb-2">
-<span class="text-[10px] text-on-surface-variant uppercase tracking-wider">Proteína</span>
+<span class="text-[11px] text-on-surface-variant uppercase tracking-wider">Proteína</span>
 </div>
 <div class="text-3xl font-black text-orange-400 mb-1"><span id="currentProtein">0</span><span class="text-sm text-on-surface-variant">g</span></div>
 <div class="text-xs text-on-surface-variant">Meta: <span id="targetProtein">160</span>g</div>
@@ -189,7 +189,7 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 </div>
 <div class="bg-surface-container-high rounded-xl p-4 text-center">
 <div class="flex items-center justify-center gap-2 mb-2">
-<span class="text-[10px] text-on-surface-variant uppercase tracking-wider">Grasa</span>
+<span class="text-[11px] text-on-surface-variant uppercase tracking-wider">Grasa</span>
 </div>
 <div class="text-3xl font-black text-yellow-300 mb-1"><span id="currentFat">0</span><span class="text-sm text-on-surface-variant">g</span></div>
 <div class="text-xs text-on-surface-variant">Meta: <span id="targetFat">150</span>g</div>
@@ -199,7 +199,7 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 </div>
 <div class="bg-surface-container-high rounded-xl p-4 text-center">
 <div class="flex items-center justify-center gap-2 mb-2">
-<span class="text-[10px] text-on-surface-variant uppercase tracking-wider">Carbos</span>
+<span class="text-[11px] text-on-surface-variant uppercase tracking-wider">Carbos</span>
 </div>
 <div class="text-3xl font-black text-cyan-400 mb-1"><span id="currentCarbs">0</span><span class="text-sm text-on-surface-variant">g</span></div>
 <div class="text-xs text-on-surface-variant">Meta: <span id="targetCarbs">25</span>g</div>
@@ -534,7 +534,7 @@ var borderColor = isSelected ? 'border-primary-container' : 'border-transparent'
 var dotColor = hasContent ? 'bg-green-500' : 'bg-surface-container-highest';
 
 html += '<button onclick="selectDay(\'' + dateKey + '\')" class="flex flex-col items-center p-2 rounded-xl transition-all ' + bgColor + ' border-2 ' + borderColor + '">';
-html += '<span class="text-[10px] uppercase ' + (isToday ? 'text-primary-container font-bold' : 'text-on-surface-variant') + '">' + weekDays[i] + '</span>';
+html += '<span class="text-[11px] uppercase ' + (isToday ? 'text-primary-container font-bold' : 'text-on-surface-variant') + '">' + weekDays[i] + '</span>';
 html += '<span class="text-lg font-bold ' + (isSelected || isToday ? 'text-white' : 'text-on-surface') + '">' + d.getDate() + '</span>';
 html += '<div class="w-2 h-2 rounded-full mt-1 ' + dotColor + '"></div>';
 html += '</button>';
@@ -641,7 +641,7 @@ function renderEntrenoPanel() {
     { icon: 'local_fire_department', val: streak + ' días', label: 'Racha', color: 'text-yellow-400' },
     { icon: 'monitor_weight', val: Math.round(totalVol / 1000) + ' ton', label: 'Volumen total', color: 'text-green-400' }
   ].map(function(s) {
-    return '<div class="glass-card rounded-xl p-3 text-center"><span class="material-symbols-outlined ' + s.color + ' text-2xl">' + s.icon + '</span><p class="' + s.color + ' text-xl font-black mt-1">' + s.val + '</p><p class="text-on-surface-variant text-[10px] mt-0.5">' + s.label + '</p></div>';
+    return '<div class="glass-card rounded-xl p-3 text-center"><span class="material-symbols-outlined ' + s.color + ' text-2xl">' + s.icon + '</span><p class="' + s.color + ' text-xl font-black mt-1">' + s.val + '</p><p class="text-on-surface-variant text-[11px] mt-0.5">' + s.label + '</p></div>';
   }).join('');
 
   // Today card
@@ -710,7 +710,7 @@ function renderSuplePanel() {
     html += '<div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ' + (isTaken ? 'bg-green-500/20' : 'bg-surface-container-high') + '">';
     html += '<span class="material-symbols-outlined text-[20px] ' + (isTaken ? 'text-green-400' : 'text-primary-container') + '">' + (isTaken ? 'check_circle' : (s.icon || 'medication')) + '</span>';
     html += '</div><div class="flex-1 min-w-0"><p class="text-white text-sm font-medium ' + (isTaken ? 'line-through' : '') + '">' + escapeHtml(s.name) + '</p><p class="text-on-surface-variant text-xs truncate">' + escapeHtml(s.dosage || '') + '</p></div>';
-    html += '<span class="text-[10px] bg-surface-container px-2 py-1 rounded-full text-on-surface-variant whitespace-nowrap">' + escapeHtml(s.timing || '—') + '</span>';
+    html += '<span class="text-[11px] bg-surface-container px-2 py-1 rounded-full text-on-surface-variant whitespace-nowrap">' + escapeHtml(s.timing || '—') + '</span>';
     html += '</div>';
   });
   html += '</div>';
@@ -728,7 +728,7 @@ function toggleSupleTaken(id) {
 </div>
 </main>
 <div id="foodSelectorModal" class="fixed inset-0 z-[60] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeFoodSelector()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-2xl max-h-[85vh] flex flex-col pointer-events-auto"><div class="flex justify-between items-center mb-4"><div><h3 class="text-lg font-headline font-bold text-white">Agregar a <span id="selectedMeal"></span></h3><p class="text-xs text-on-surface-variant mt-1">Desde tu despensa</p></div><button onclick="closeFoodSelector()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div class="relative mb-4"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span><input type="text" id="foodSearch" placeholder="Buscar en despensa..." class="w-full bg-surface-container text-white border border-outline rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-primary-container" oninput="filterFoods()"></div><div id="foodList" class="flex-1 overflow-y-auto"></div></div></div></div>
-<div id="portionModal" class="fixed inset-0 z-[60] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closePortionModal()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-headline font-bold text-white" id="portionFoodName"></h3><button onclick="closePortionModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div class="bg-surface-container-high rounded-xl p-4 mb-4"><div class="grid grid-cols-4 gap-2 text-center"><div><p class="text-[10px] text-on-surface-variant uppercase">Cal</p><p id="portionCalories" class="text-lg font-bold text-yellow-400">0</p></div><div><p class="text-[10px] text-on-surface-variant uppercase">Prot</p><p id="portionProtein" class="text-lg font-bold text-orange-400">0g</p></div><div><p class="text-[10px] text-on-surface-variant uppercase">Gras</p><p id="portionFat" class="text-lg font-bold text-yellow-300">0g</p></div><div><p class="text-[10px] text-on-surface-variant uppercase">Carb</p><p id="portionCarbs" class="text-lg font-bold text-cyan-400">0g</p></div></div></div><div class="mb-3"><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Unidad de medida</label><div id="planUnitSelector" class="flex flex-wrap gap-2"></div></div><div class="mb-4"><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Cantidad</label><div class="flex items-center gap-3"><button onclick="adjustTempQty(-1)" class="w-12 h-12 rounded-xl bg-surface-container-high text-white font-bold text-xl hover:bg-surface-container-highest transition-all">−</button><input type="number" id="tempQty" value="1" min="0.1" step="0.1" class="flex-1 bg-surface-container text-white border border-outline rounded-xl px-4 py-3 text-center text-xl font-bold focus:outline-none focus:border-primary-container"><button onclick="adjustTempQty(1)" class="w-12 h-12 rounded-xl bg-surface-container-high text-white font-bold text-xl hover:bg-surface-container-highest transition-all">+</button></div></div><div class="bg-primary-container/20 rounded-xl p-3 mb-4 border border-primary-container/30"><div class="flex justify-between items-center"><span class="text-sm text-white/70">Total en gramos:</span><span id="portionPreview" class="text-2xl font-bold text-primary-container">0 g</span></div></div><div id="stockWarning" class="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3 mb-4 hidden"><div class="flex items-center gap-2 text-yellow-400 text-sm"><span class="material-symbols-outlined">warning</span><span id="stockWarningText"></span></div></div><input type="hidden" id="selectedFoodId"><input type="hidden" id="selectedMealType"><div class="flex gap-3"><button onclick="closePortionModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="addFoodToMeal()" class="flex-1 py-3 rounded-xl bg-primary-container text-white font-bold hover:bg-primary-container/80 transition-colors">Agregar</button></div></div></div></div>
+<div id="portionModal" class="fixed inset-0 z-[60] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closePortionModal()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-headline font-bold text-white" id="portionFoodName"></h3><button onclick="closePortionModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button></div><div class="bg-surface-container-high rounded-xl p-4 mb-4"><div class="grid grid-cols-4 gap-2 text-center"><div><p class="text-[11px] text-on-surface-variant uppercase">Cal</p><p id="portionCalories" class="text-lg font-bold text-yellow-400">0</p></div><div><p class="text-[11px] text-on-surface-variant uppercase">Prot</p><p id="portionProtein" class="text-lg font-bold text-orange-400">0g</p></div><div><p class="text-[11px] text-on-surface-variant uppercase">Gras</p><p id="portionFat" class="text-lg font-bold text-yellow-300">0g</p></div><div><p class="text-[11px] text-on-surface-variant uppercase">Carb</p><p id="portionCarbs" class="text-lg font-bold text-cyan-400">0g</p></div></div></div><div class="mb-3"><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Unidad de medida</label><div id="planUnitSelector" class="flex flex-wrap gap-2"></div></div><div class="mb-4"><label class="text-xs text-on-surface-variant uppercase tracking-wider block mb-2">Cantidad</label><div class="flex items-center gap-3"><button onclick="adjustTempQty(-1)" class="w-12 h-12 rounded-xl bg-surface-container-high text-white font-bold text-xl hover:bg-surface-container-highest transition-all">−</button><input type="number" id="tempQty" value="1" min="0.1" step="0.1" class="flex-1 bg-surface-container text-white border border-outline rounded-xl px-4 py-3 text-center text-xl font-bold focus:outline-none focus:border-primary-container"><button onclick="adjustTempQty(1)" class="w-12 h-12 rounded-xl bg-surface-container-high text-white font-bold text-xl hover:bg-surface-container-highest transition-all">+</button></div></div><div class="bg-primary-container/20 rounded-xl p-3 mb-4 border border-primary-container/30"><div class="flex justify-between items-center"><span class="text-sm text-white/70">Total en gramos:</span><span id="portionPreview" class="text-2xl font-bold text-primary-container">0 g</span></div></div><div id="stockWarning" class="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3 mb-4 hidden"><div class="flex items-center gap-2 text-yellow-400 text-sm"><span class="material-symbols-outlined">warning</span><span id="stockWarningText"></span></div></div><input type="hidden" id="selectedFoodId"><input type="hidden" id="selectedMealType"><div class="flex gap-3"><button onclick="closePortionModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="addFoodToMeal()" class="flex-1 py-3 rounded-xl bg-primary-container text-white font-bold hover:bg-primary-container/80 transition-colors">Agregar</button></div></div></div></div>
 <div id="stockModal" class="fixed inset-0 z-[70] hidden"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto text-center"><div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-4xl text-yellow-400">warning</span></div><h3 class="text-xl font-headline font-bold text-white mb-2">Stock Insuficiente</h3><p class="text-white/70 mb-2">Solo tienes disponible:</p><p id="availableStock" class="text-3xl font-bold text-yellow-400 mb-4">0 g</p><p class="text-white/50 text-sm mb-6">de <span id="requestedStock" class="text-white">0 g</span></p><div class="flex gap-3"><button onclick="closeStockModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="addAvailableStock()" class="flex-1 py-3 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors">Agregar lo disponible</button></div></div></div></div>
 <div id="weeklyModal" class="fixed inset-0 z-[70] hidden">
   <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeWeeklyModal()"></div>
@@ -1477,14 +1477,14 @@ var bgColor = isSelected?"bg-primary-container/20":(isToday?"bg-surface-containe
 var dotColor = itemCount>0?(calories>0?"bg-green-500":"bg-yellow-500"):"bg-surface-container-highest";
 
 html+='<button data-date="'+dateKey+'" class="day-btn flex-shrink-0 rounded-xl p-3 text-center min-w-[70px] border-2 transition-all duration-200 '+borderColor+'" style="background:'+bgColor+';">';
-html+='<div class="text-[10px] uppercase '+(isToday?"font-bold text-primary-container":"text-on-surface-variant")+'">'+weekDays[i]+'</div>';
+html+='<div class="text-[11px] uppercase '+(isToday?"font-bold text-primary-container":"text-on-surface-variant")+'">'+weekDays[i]+'</div>';
 html+='<div class="text-xl font-bold '+(isSelected||isToday?"text-white":"text-on-surface")+'">'+d.getDate()+'</div>';
 html+='<div class="flex items-center justify-center gap-1 mt-1">';
 html+='<div class="w-2 h-2 rounded-full '+dotColor+'"></div>';
-html+='<span class="text-[10px] '+(itemCount>0?"text-green-400":"text-on-surface-variant")+'">'+(itemCount>0?itemCount:"")+'</span>';
+html+='<span class="text-[11px] '+(itemCount>0?"text-green-400":"text-on-surface-variant")+'">'+(itemCount>0?itemCount:"")+'</span>';
 html+='</div>';
 if(calories>0){
-html+='<div class="text-[9px] text-yellow-400 mt-0.5">'+calories+' kcal</div>';
+html+='<div class="text-[10px] text-yellow-400 mt-0.5">'+calories+' kcal</div>';
 }
 html+='</button>';
 }
@@ -1575,9 +1575,9 @@ totalCal+=KetoMealPlan.itemTotals(item).calories;
 var isToday=dateKey===new Date().toISOString().slice(0,10);
 var bgClass=isToday?"bg-primary-container":"bg-surface-container";
 html+='<div class="'+bgClass+' rounded-lg p-2 text-center">';
-html+='<div class="text-[10px] text-white/50">'+weekDays[i]+'</div>';
+html+='<div class="text-[11px] text-white/50">'+weekDays[i]+'</div>';
 html+='<div class="text-sm font-bold text-white">'+(totalCal>0?totalCal:"-")+'</div>';
-html+='<div class="text-[9px] text-white/60">kcal</div></div>';
+html+='<div class="text-[10px] text-white/60">kcal</div></div>';
 }
 container.innerHTML=html;
 var weeklyOverview=document.getElementById("weeklyOverview");
@@ -2686,7 +2686,7 @@ function getWeeklyPlanPreviewHTML(weekPlan) {
     html += '<div class="bg-surface-container-high rounded-xl overflow-hidden ' + (isToday ? 'ring-2 ring-primary-container' : '') + '">';
     html += '<div class="flex items-center justify-between p-3 bg-surface-container border-b border-white/5">';
     html += '<div class="flex items-center gap-2">';
-    if (isToday) html += '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-primary-container text-white">HOY</span>';
+    if (isToday) html += '<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-primary-container text-white">HOY</span>';
     html += '<span class="font-headline font-bold text-white">' + dayName + '</span>';
     html += '</div>';
     html += '<div class="flex items-center gap-3 text-xs">';
@@ -2708,7 +2708,7 @@ function getWeeklyPlanPreviewHTML(weekPlan) {
         html += '<span class="material-symbols-outlined ' + mealColors[mealType] + ' text-sm">' + mealIcons[mealType] + '</span>';
         html += '<span class="text-xs text-on-surface-variant uppercase">' + mealName + '</span>';
         if (meal.recipe.basePortion && meal.recipe.basePortion !== 100) {
-          html += '<span class="text-[10px] text-secondary bg-secondary/20 px-1.5 py-0.5 rounded">x' + Math.round(meal.recipe.basePortion / 100 * 10) / 10 + '</span>';
+          html += '<span class="text-[11px] text-secondary bg-secondary/20 px-1.5 py-0.5 rounded">x' + Math.round(meal.recipe.basePortion / 100 * 10) / 10 + '</span>';
         }
         html += '</div>';
         html += '<button onclick="openRecipeDetail(\'' + (meal.recipe.id || '') + '\')" class="text-xs text-primary-container hover:text-white flex items-center gap-1">';
@@ -3061,7 +3061,7 @@ function getModifyPlanHTML(weekPlan) {
     html += '<span class="font-medium text-sm ' + (isExcluded ? 'text-white/50 line-through' : 'text-white') + '">' + ing.name + '</span>';
     html += '</div>';
     html += '<p class="text-xs text-on-surface-variant ml-5">' + ing.recipes.slice(0, 2).join(', ') + (ing.recipes.length > 2 ? '...' : '') + '</p>';
-    html += '<p class="text-[10px] text-white/60 ml-5">' + ing.quantity + ' ' + (ing.unit || 'g') + ' x ' + ing.days.length + ' dia(s)</p>';
+    html += '<p class="text-[11px] text-white/60 ml-5">' + ing.quantity + ' ' + (ing.unit || 'g') + ' x ' + ing.days.length + ' dia(s)</p>';
     html += '</div>';
     
     if (isExcluded) {
@@ -3187,10 +3187,10 @@ function openRecipeDetail(recipeId) {
       html += '<div class="bg-surface-container-high rounded-xl p-4">';
       html += '<h4 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-sm">nutrition</span>Informacion Nutricional</h4>';
       html += '<div class="grid grid-cols-4 gap-3 text-center">';
-      html += '<div><p class="text-[10px] text-on-surface-variant uppercase">Calorias</p><p class="font-bold text-yellow-400">' + recipe.calories + '</p></div>';
-      html += '<div><p class="text-[10px] text-on-surface-variant uppercase">Proteina</p><p class="font-bold text-orange-400">' + recipe.protein + 'g</p></div>';
-      html += '<div><p class="text-[10px] text-on-surface-variant uppercase">Grasa</p><p class="font-bold text-yellow-300">' + recipe.fat + 'g</p></div>';
-      html += '<div><p class="text-[10px] text-on-surface-variant uppercase">Carbos Net</p><p class="font-bold text-cyan-400">' + recipe.netCarbs + 'g</p></div>';
+      html += '<div><p class="text-[11px] text-on-surface-variant uppercase">Calorias</p><p class="font-bold text-yellow-400">' + recipe.calories + '</p></div>';
+      html += '<div><p class="text-[11px] text-on-surface-variant uppercase">Proteina</p><p class="font-bold text-orange-400">' + recipe.protein + 'g</p></div>';
+      html += '<div><p class="text-[11px] text-on-surface-variant uppercase">Grasa</p><p class="font-bold text-yellow-300">' + recipe.fat + 'g</p></div>';
+      html += '<div><p class="text-[11px] text-on-surface-variant uppercase">Carbos Net</p><p class="font-bold text-cyan-400">' + recipe.netCarbs + 'g</p></div>';
       html += '</div>';
       html += '</div>';
       
