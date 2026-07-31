@@ -67,7 +67,7 @@ var KETO_RECIPES = {
       "Doblar la tortilla por la mitad y cocinar 1 minuto más."
     ],
     tips: "Esta tortilla puede comerse caliente o a temperatura ambiente. Es perfecta para preparar la noche anterior.",
-    image: "https://images.pexels.com/photos/2286929/pexels-photo-2286929.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/37547474/pexels-photo-37547474.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "desayuno-bacon-huevos": {
@@ -97,7 +97,7 @@ var KETO_RECIPES = {
       "Servir inmediatamente con el bacon crujiente."
     ],
     tips: "Para huevos escalfados: hervir agua con un chorrito de vinagre, crear un remolino y añadir el huevo. Cocinar 3 minutos.",
-    image: "https://images.pexels.com/photos/162967/pexels-photo-162967.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/23784968/pexels-photo-23784968.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "desayuno-omelette-queso": {
@@ -254,7 +254,7 @@ var KETO_RECIPES = {
       "Dejar enfriar 5 minutos antes de servir."
     ],
     tips: "Se pueden preparar en batches y guardar en冰箱 hasta 3 días. Son perfectos para meal prep.",
-    image: "https://images.pexels.com/photos/7699696/pexels-photo-7699696.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/31882545/pexels-photo-31882545.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   // ==================== ALMUERZOS ====================
@@ -287,7 +287,7 @@ var KETO_RECIPES = {
       "Rociar con un poco más de aceite de oliva y sazonar."
     ],
     tips: "Para pollo más jugoso, marinar en aceite de oliva y ajo durante 30 minutos antes de cocinar. Usar termómetro: 74°C interno.",
-    image: "https://images.pexels.com/photos/3771807/pexels-photo-3771807.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/36936952/pexels-photo-36936952.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "almuerzo-ensalada-aguacate": {
@@ -321,7 +321,7 @@ var KETO_RECIPES = {
       "Sazonar con sal y pimienta al gusto."
     ],
     tips: "Añadir pollo a la plancha, atún o huevo duro para aumentar la proteína. El aguacate debe estar maduro.",
-    image: "https://images.pexels.com/photos/5379352/pexels-photo-5379352.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/17580946/pexels-photo-17580946.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "almuerzo-atun-aguacate": {
@@ -355,7 +355,7 @@ var KETO_RECIPES = {
       "Sazonar con sal, pimienta y gotas de limón."
     ],
     tips: "Para una versión más elaborada, agregar olivas, alcaparras y tomates cherry cortados.",
-    image: "https://images.pexels.com/photos/3270893/pexels-photo-3270893.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/20778523/pexels-photo-20778523.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "almuerzo-salmn-aguacate": {
@@ -420,7 +420,7 @@ var KETO_RECIPES = {
       "Servir caliente."
     ],
     tips: "Agregar especias como comino, pimentón o orégano para más sabor. El calabacín puede reemplazarse por berenjena.",
-    image: "https://images.pexels.com/photos/3616966/pexels-photo-3616966.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/17615602/pexels-photo-17615602.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "almuerzo-pavo-aguacate": {
@@ -489,7 +489,7 @@ var KETO_RECIPES = {
       "Servir con queso parmesano rallado por encima."
     ],
     tips: "Esta sopa es muy versátil. Agregar bacon crujiente, queso cheddar o espinacas para variar.",
-    image: "https://images.pexels.com/photos/1188750/pexels-photo-1188750.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/37099928/pexels-photo-37099928.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   // ==================== CENAS ====================
@@ -523,7 +523,7 @@ var KETO_RECIPES = {
       "Cortar el bistec en rodajas diagonales y servir con las espinacas."
     ],
     tips: "No mover el bistec mientras sella. Usar termómetro: 55°C para término medio, 60°C para tres cuartos.",
-    image: "https://images.pexels.com/photos/1251168/pexels-photo-1251168.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/37336824/pexels-photo-37336824.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "cena-salmn-espárragos": {
@@ -556,7 +556,7 @@ var KETO_RECIPES = {
       "Servir inmediatamente con un chorrito de limón."
     ],
     tips: "Para un acabado perfecto, terminar el salmón bajo el grill 2 minutos al final.",
-    image: "https://images.pexels.com/photos/3691028/pexels-photo-3691028.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/7731673/pexels-photo-7731673.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "cena-pollo-ajillo": {
@@ -591,7 +591,7 @@ var KETO_RECIPES = {
       "Cocinar a fuego bajo 5-10 minutos más."
     ],
     tips: "Esta receta es aún mejor al día siguiente cuando los sabores se han mezclado.",
-    image: "https://images.pexels.com/photos/15682894/pexels-photo-15682894.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/31233881/pexels-photo-31233881.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "cena-gambas-pimiento": {
@@ -626,7 +626,7 @@ var KETO_RECIPES = {
       "Servir inmediatamente con pan bajo en carbohidratos si se desea."
     ],
     tips: "Usar vino blanco en lugar de vinagre para una versión más gourmet.",
-    image: "https://images.pexels.com/photos/6999532/pexels-photo-6999532.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/5850335/pexels-photo-5850335.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "cena-burger-calabacin": {
@@ -660,7 +660,7 @@ var KETO_RECIPES = {
       "Servir con pepinillos o cebolla encurtida si se desea."
     ],
     tips: "Mezclar la carne con huevo para que la hamburguesa mantenga su forma mejor.",
-    image: "https://images.pexels.com/photos/2679500/pexels-photo-2679500.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/5112510/pexels-photo-5112510.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "cena-cordero-hongos": {
@@ -693,7 +693,7 @@ var KETO_RECIPES = {
       "Acompañar con una ensalada verde ligera."
     ],
     tips: "El cordero es más tierno si se cocina a término medio. Usar termómetro: 60°C interno.",
-    image: "https://images.pexels.com/photos/2255777/pexels-photo-2255777.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/5638535/pexels-photo-5638535.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "cena-pollo-pesto": {
@@ -725,7 +725,7 @@ var KETO_RECIPES = {
       "Servir con vegetales al vapor o ensalada."
     ],
     tips: "El pesto casero se mantiene hasta 1 semana en el refrigerador. También sirve con calabacín en espiral.",
-    image: "https://images.pexels.com/photos/5409603/pexels-photo-5409603.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/33795555/pexels-photo-33795555.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   // ==================== SNACKS ====================
@@ -753,7 +753,7 @@ var KETO_RECIPES = {
       "Disfrutar como snack entre comidas."
     ],
     tips: "Elegir almendras crudas sin sal para opción más saludable. El queso de colores intensos tiene más sabor.",
-    image: "https://images.pexels.com/photos/4207904/pexels-photo-4207904.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/6004206/pexels-photo-6004206.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "snack-aguacate-huevo": {
@@ -785,7 +785,7 @@ var KETO_RECIPES = {
       "Servir inmediatamente."
     ],
     tips: "Para evitar que el aguacate se vuelque, cortar una pequeña parte de la base.",
-    image: "https://images.pexels.com/photos/557663/pexels-photo-557663.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/1305063/pexels-photo-1305063.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "snack-huevos-cocidos": {
@@ -816,7 +816,7 @@ var KETO_RECIPES = {
       "Opcional: espolvorear con pimentón o cebollino."
     ],
     tips: "Los huevos más frescos son más difíciles de pelar. Usar huevos de al menos 1 semana.",
-    image: "https://images.pexels.com/photos/162967/pexels-photo-162967.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/20859994/pexels-photo-20859994.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "snack-rollitos-jamon": {
@@ -846,7 +846,7 @@ var KETO_RECIPES = {
       "Servir a temperatura ambiente o frío."
     ],
     tips: "Pueden prepararse con anticipación y mantenerse en el refrigerador hasta 2 días.",
-    image: "https://images.pexels.com/photos/4109992/pexels-photo-4109992.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/28584246/pexels-photo-28584246.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "snack-verduras-hummus": {
@@ -875,7 +875,7 @@ var KETO_RECIPES = {
       "Disfrutar inmediatamente."
     ],
     tips: "Preparar los vegetales con anticipación y guardarlos en agua fría crujirán más.",
-    image: "https://images.pexels.com/photos/2470170/pexels-photo-2470170.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/34227783/pexels-photo-34227783.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "snack-bombones-almendra": {
@@ -906,7 +906,7 @@ var KETO_RECIPES = {
       "Guardar en lugar fresco."
     ],
     tips: "Agregar sal marina en escamas encima para contraste de sabor dulce-salado.",
-    image: "https://images.pexels.com/photos/65882/chocolate-dark-coffee-confiserie-65882.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/27850084/pexels-photo-27850084.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "snack-cottage-pina": {
@@ -964,7 +964,7 @@ var KETO_RECIPES = {
       "Opcional: agregar coco rallado o chocolate negro para variar."
     ],
     tips: "Este mix es rico en omega-3 y grasas saludables. Dura hasta 2 semanas en contenedor hermético.",
-    image: "https://images.pexels.com/photos/5946/pexels-photo-5946.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/35339143/pexels-photo-35339143.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   // ==================== DESAYUNOS ADICIONALES ====================
@@ -1124,7 +1124,7 @@ var KETO_RECIPES = {
       "Enfriar antes de desmoldar."
     ],
     tips: "Perfectos para meal prep. Duran hasta 4 días en el refrigerador. Calentar 30 segundos antes de comer.",
-    image: "https://images.pexels.com/photos/7699696/pexels-photo-7699696.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/6529607/pexels-photo-6529607.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   // ==================== ALMUERZOS ADICIONALES ====================
@@ -1257,7 +1257,7 @@ var KETO_RECIPES = {
       "Dejar reposar 5 minutos antes de cortar."
     ],
     tips: "Esta tarta es excelente fría también. Preparar la noche anterior para lunch.",
-    image: "https://images.pexels.com/photos/3270893/pexels-photo-3270893.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/29538424/pexels-photo-29538424.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "almuerzo-kebab-pollo": {
@@ -1324,7 +1324,7 @@ var KETO_RECIPES = {
       "Cortar solomillo y servir con manzana y espinacas."
     ],
     tips: "Las manzanas verdes tienen menos azúcar que las rojas. Usar термометр para punto de cocción: 60°C.",
-    image: "https://images.pexels.com/photos/15440244/pexels-photo-15440244.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/792027/pexels-photo-792027.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "cena-pollo-curry": {
@@ -1426,7 +1426,7 @@ var KETO_RECIPES = {
       "Servir inmediatamente."
     ],
     tips: "Para versión más keto, usar salsa de ostras sin azúcar o salsa de pescado.",
-    image: "https://images.pexels.com/photos/6999532/pexels-photo-6999532.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/7111475/pexels-photo-7111475.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "cena-pechuga-rellena": {
@@ -1460,7 +1460,7 @@ var KETO_RECIPES = {
       "Servir con la salsa que se forme."
     ],
     tips: "Usartermómetro: 74°C interno. El queso mantiene todo junto mientras se cocina.",
-    image: "https://images.pexels.com/photos/3771807/pexels-photo-3771807.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/25390051/pexels-photo-25390051.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   // ==================== SNACKS ADICIONALES ====================
@@ -1492,7 +1492,7 @@ var KETO_RECIPES = {
       "Guardar en fridge hasta 2 semanas."
     ],
     tips: "Estas son excelentes para mantener cetosis. Comer 1-2 como snack cuando se necesite energía.",
-    image: "https://images.pexels.com/photos/65882/chocolate-dark-coffee-confiserie-65882.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/11158836/pexels-photo-11158836.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "snack-queso-horneado": {
@@ -1523,7 +1523,7 @@ var KETO_RECIPES = {
       "Servir caliente con palillos."
     ],
     tips: "Pueden prepararse varios tipos de queso. El gouda y el emmental también funcionan muy bien.",
-    image: "https://images.pexels.com/photos/4109992/pexels-photo-4109992.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/15279743/pexels-photo-15279743.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "snack-gelatina-keto": {
@@ -1552,7 +1552,7 @@ var KETO_RECIPES = {
       "También puede prepararse como gelatina con agar-agar."
     ],
     tips: "El colágeno apoya la salud de articulaciones y piel. Ideal antes de dormir.",
-    image: "https://images.pexels.com/photos/3785451/pexels-photo-3785451.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/6550713/pexels-photo-6550713.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   "snack-aceitunas-queso": {
@@ -1581,7 +1581,7 @@ var KETO_RECIPES = {
       "Servir a temperatura ambiente."
     ],
     tips: "Las aceitunas son ricas en grasas monoinsaturadas. Combinar con queso aumenta la saciedad.",
-    image: "https://images.pexels.com/photos/5946/pexels-photo-5946.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
+    image: "https://images.pexels.com/photos/34293330/pexels-photo-34293330.jpeg?auto=compress&cs=tinysrgb&w=400&h=300"
   },
 
   // ==================== RECETAS NO-KETO AMPLIADAS (para plan basado en macros) ====================
@@ -2566,7 +2566,7 @@ var KETO_RECIPES = {
   "cena-bacalao-gratinado": { title: "Bacalao al Horno con Panela", category: "cena", mealType: "cena", prepTime: "30 min", difficulty: "medio", servings: 1, calories: 420, protein: 38, fat: 20, carbs: 25, netCarbs: 18, fiber: 7, ingredients: [{ id: "f339", name: "Bacalao", quantity: 150, unit: "g" }, { id: "f340", name: "Panela", quantity: 60, unit: "g" }, { id: "f234", name: "Salsa tomate", quantity: 50, unit: "g" }, { id: "f13", name: "Aceite oliva", quantity: 15, unit: "ml" }], instructions: ["Colocar bacalao en bandeja.", "Cubrir con salsa y queso.", "Hornear 20 min."], tips: "Rico en omega-3.", image: "https://images.pexels.com/photos/8351639/pexels-photo-8351639.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" },
   "cena-costillas-barbacoa": { title: "Costillas a la Barbacoa", category: "cena", mealType: "cena", prepTime: "45 min", difficulty: "medio", servings: 2, calories: 550, protein: 40, fat: 28, carbs: 35, netCarbs: 28, fiber: 7, ingredients: [{ id: "f341", name: "Costillas cerdo", quantity: 200, unit: "g" }, { id: "f342", name: "Salsa barbacoa", quantity: 60, unit: "g" }, { id: "f343", name: "Patatas", quantity: 150, unit: "g" }, { id: "f13", name: "Aceite oliva", quantity: 10, unit: "ml" }], instructions: ["Sazonar costillas.", "Cocinar en horno con salsa barbacoa.", "Acompañar con patatas."], tips: "Cena abundante y sabrosa.", image: "https://images.pexels.com/photos/8250702/pexels-photo-8250702.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" },
   "cena-guiso-lentejas": { title: "Guiso de Lentejas con Arroz", category: "cena", mealType: "cena", prepTime: "40 min", difficulty: "fácil", servings: 2, calories: 480, protein: 22, fat: 12, carbs: 70, netCarbs: 50, fiber: 20, ingredients: [{ id: "f238", name: "Lentejas", quantity: 120, unit: "g" }, { id: "f224", name: "Arroz integral", quantity: 100, unit: "g" }, { id: "f239", name: "Cebolla", quantity: 50, unit: "g" }, { id: "f234", name: "Salsa tomate", quantity: 60, unit: "g" }, { id: "f13", name: "Aceite oliva", quantity: 15, unit: "ml" }], instructions: ["Cocinar lentejas.", "Sofreír cebolla y añadir tomate.", "Servir sobre arroz."], tips: "Alto en hierro y fibra.", image: "https://images.pexels.com/photos/8996219/pexels-photo-8996219.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" },
-  "cena-pollo-ajillo": { title: "Pollo al Ajillo", category: "cena", mealType: "cena", prepTime: "25 min", difficulty: "fácil", servings: 1, calories: 420, protein: 40, fat: 18, carbs: 25, netCarbs: 18, fiber: 7, ingredients: [{ id: "f220", name: "Pechuga pollo", quantity: 150, unit: "g" }, { id: "f241", name: "Ajo", quantity: 15, unit: "g" }, { id: "f13", name: "Aceite oliva", quantity: 20, unit: "ml" }, { id: "f344", name: "Perejil", quantity: 10, unit: "g" }], instructions: ["Freír ajo en aceite.", "Agregar pollo en trozos.", "Cocinar hasta dorar y agregar perejil."], tips: "Clásico español.", image: "https://images.pexels.com/photos/1464740/pexels-photo-1464740.jpeg" },
+  "cena-pollo-ajillo": { title: "Pollo al Ajillo", category: "cena", mealType: "cena", prepTime: "25 min", difficulty: "fácil", servings: 1, calories: 420, protein: 40, fat: 18, carbs: 25, netCarbs: 18, fiber: 7, ingredients: [{ id: "f220", name: "Pechuga pollo", quantity: 150, unit: "g" }, { id: "f241", name: "Ajo", quantity: 15, unit: "g" }, { id: "f13", name: "Aceite oliva", quantity: 20, unit: "ml" }, { id: "f344", name: "Perejil", quantity: 10, unit: "g" }], instructions: ["Freír ajo en aceite.", "Agregar pollo en trozos.", "Cocinar hasta dorar y agregar perejil."], tips: "Clásico español.", image: "https://images.pexels.com/photos/31233881/pexels-photo-31233881.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" },
   "cena-merluza-salsa": { title: "Merluza en Salsa Verde", category: "cena", mealType: "cena", prepTime: "25 min", difficulty: "fácil", servings: 1, calories: 380, protein: 35, fat: 18, carbs: 20, netCarbs: 14, fiber: 6, ingredients: [{ id: "f345", name: "Merluza", quantity: 150, unit: "g" }, { id: "f346", name: "Salsa verde", quantity: 80, unit: "g" }, { id: "f239", name: "Cebolleta", quantity: 20, unit: "g" }, { id: "f13", name: "Aceite oliva", quantity: 15, unit: "ml" }], instructions: ["Cocinar merluza.", "Agregar salsa verde.", "Servir con cebolleta."], tips: "Pescado ligero en salsa.", image: "https://images.pexels.com/photos/5192412/pexels-photo-5192412.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" },
   "cena-calamares-rellenos": { title: "Calamares Rellenos", category: "cena", mealType: "cena", prepTime: "40 min", difficulty: "medio", servings: 2, calories: 450, protein: 32, fat: 20, carbs: 35, netCarbs: 25, fiber: 10, ingredients: [{ id: "f347", name: "Calamares", quantity: 200, unit: "g" }, { id: "f261", name: "Carne molida", quantity: 80, unit: "g" }, { id: "f234", name: "Salsa tomate", quantity: 80, unit: "g" }, { id: "f13", name: "Aceite oliva", quantity: 15, unit: "ml" }], instructions: ["Rellenar calamares con carne.", "Hornear con salsa.", "Servir caliente."], tips: "Plato gourmet casero.", image: "https://images.pexels.com/photos/20766563/pexels-photo-20766563.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" },
   "cena-ternera-estroganoff": { title: "Estrofagán de Ternera", category: "cena", mealType: "cena", prepTime: "35 min", difficulty: "medio", servings: 2, calories: 520, protein: 38, fat: 26, carbs: 35, netCarbs: 28, fiber: 7, ingredients: [{ id: "f348", name: "Carne ternera", quantity: 150, unit: "g" }, { id: "f349", name: "Crema leche", quantity: 80, unit: "ml" }, { id: "f350", name: "Champiñones", quantity: 80, unit: "g" }, { id: "f13", name: "Aceite oliva", quantity: 15, unit: "ml" }], instructions: ["Sofreír carne y champiñones.", "Agregar crema y cocinar.", "Servir con arroz."], tips: "Plato ruso clásico.", image: "https://images.pexels.com/photos/29935503/pexels-photo-29935503.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" },
@@ -2659,7 +2659,7 @@ var KETO_RECIPES = {
   "almuerzo-wrap-vegetal": { title: "Wrap Vegetariano", category: "almuerzo", mealType: "almuerzo", prepTime: "15 min", difficulty: "fácil", servings: 1, calories: 380, protein: 14, fat: 18, carbs: 45, netCarbs: 32, fiber: 13, ingredients: [{ id: "f227", name: "Tortilla integral", quantity: 80, unit: "g" }, { id: "f229", name: "Hummus", quantity: 50, unit: "g" }, { id: "f326", name: "Garbanzos", quantity: 60, unit: "g" }, { id: "f221", name: "Lechuga", quantity: 40, unit: "g" }], instructions: ["Extender hummus.", "Agregar garbanzos y lechuga.", "Enrollar."], tips: "Vegano y nutritivo.", image: "https://images.pexels.com/photos/31177729/pexels-photo-31177729.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" },
 
   // CENAS EXTRA
-  "cena-pescado-en papillote": { title: "Pescado en Papillote", category: "cena", mealType: "cena", prepTime: "25 min", difficulty: "fácil", servings: 1, calories: 320, protein: 30, fat: 14, carbs: 20, netCarbs: 14, fiber: 6, ingredients: [{ id: "f397", name: "Filete pescado", quantity: 150, unit: "g" }, { id: "f225", name: "Verduras mixtas", quantity: 80, unit: "g" }, { id: "f13", name: "Aceite oliva", quantity: 15, unit: "ml" }, { id: "f241", name: "Ajo", quantity: 5, unit: "g" }], instructions: ["Colocar pescado con verduras.", "Rociar aceite y ajo.", "Hornear en papel."], tips: "Ligero y sabroso.", image: "https://images.pexels.com/photos/1464740/pexels-photo-1464740.jpeg" },
+  "cena-pescado-en papillote": { title: "Pescado en Papillote", category: "cena", mealType: "cena", prepTime: "25 min", difficulty: "fácil", servings: 1, calories: 320, protein: 30, fat: 14, carbs: 20, netCarbs: 14, fiber: 6, ingredients: [{ id: "f397", name: "Filete pescado", quantity: 150, unit: "g" }, { id: "f225", name: "Verduras mixtas", quantity: 80, unit: "g" }, { id: "f13", name: "Aceite oliva", quantity: 15, unit: "ml" }, { id: "f241", name: "Ajo", quantity: 5, unit: "g" }], instructions: ["Colocar pescado con verduras.", "Rociar aceite y ajo.", "Hornear en papel."], tips: "Ligero y sabroso.", image: "https://images.pexels.com/photos/15869769/pexels-photo-15869769.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" },
   "cena-pollo-manzana": { title: "Pollo con Manzana y Canela", category: "cena", mealType: "cena", prepTime: "30 min", difficulty: "fácil", servings: 2, calories: 420, protein: 36, fat: 16, carbs: 35, netCarbs: 28, fiber: 7, ingredients: [{ id: "f220", name: "Pechuga pollo", quantity: 160, unit: "g" }, { id: "f258", name: "Manzana", quantity: 100, unit: "g" }, { id: "f307", name: "Canela", quantity: 3, unit: "g" }, { id: "f13", name: "Aceite oliva", quantity: 15, unit: "ml" }], instructions: ["Sofreír pollo.", "Agregar manzana y canela.", "Cocinar y servir."], tips: "Dulce-salado.", image: "https://images.pexels.com/photos/24973405/pexels-photo-24973405.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" },
   "cena-cerdo-verduras": { title: "Cerdo con Verduras Salteadas", category: "cena", mealType: "cena", prepTime: "25 min", difficulty: "fácil", servings: 1, calories: 450, protein: 35, fat: 22, carbs: 30, netCarbs: 22, fiber: 8, ingredients: [{ id: "f353", name: "Cerdo paleta", quantity: 140, unit: "g" }, { id: "f387", name: "Brócoli", quantity: 80, unit: "g" }, { id: "f388", name: "Pimientos", quantity: 60, unit: "g" }, { id: "f13", name: "Aceite oliva", quantity: 15, unit: "ml" }], instructions: ["Sofreír cerdo.", "Agregar verduras.", "Saltear juntos."], tips: "Proteico y colorido.", image: "https://images.pexels.com/photos/17216562/pexels-photo-17216562.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" },
   "cena-ensalada-quinoa-vegetal": { title: "Ensalada Templada de Quinoa", category: "cena", mealType: "cena", prepTime: "20 min", difficulty: "fácil", servings: 1, calories: 380, protein: 16, fat: 16, carbs: 45, netCarbs: 32, fiber: 13, ingredients: [{ id: "f219", name: "Quinoa", quantity: 100, unit: "g" }, { id: "f221", name: "Lechuga", quantity: 60, unit: "g" }, { id: "f225", name: "Brócoli", quantity: 60, unit: "g" }, { id: "f13", name: "Aceite oliva", quantity: 15, unit: "ml" }], instructions: ["Cocinar quinoa.", "Mezclar con verduras.", "Aliñar con aceite."], tips: "Vegetariana.", image: "https://images.pexels.com/photos/4768994/pexels-photo-4768994.jpeg?auto=compress&cs=tinysrgb&w=400&h=300" },
