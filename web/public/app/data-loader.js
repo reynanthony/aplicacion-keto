@@ -1,9 +1,9 @@
 // =============================================
 // KetoCore Data Loader - Carga datos de Supabase
+// SUPABASE_URL/SUPABASE_ANON_KEY vienen de supabase-client.js (cargado antes
+// via AppLayout) -- redeclararlos aqui con `const` chocaba con esa
+// declaracion global y rompia la pagina que cargara ambos scripts.
 // =============================================
-
-const SUPABASE_URL = 'https://lmbqzsonujwvqmfhjjgf.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYnF6c29udWp3dnFtZmhqamdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQzMDAsImV4cCI6MjA4ODgzMDMwMH0.SBsTQCh844rtGx0wLNZaEGO8NDmAVZjUj1YiDkRSm1k';
 
 window.KetoCoreData = {
     alimentos: [],

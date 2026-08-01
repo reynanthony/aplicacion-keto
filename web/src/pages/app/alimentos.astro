@@ -1767,17 +1767,15 @@ function updateHeaderAvatar() {
   const mobileHeaderIcon = document.getElementById('mobileHeaderAvatarIcon');
   
   if (avatarUrl) {
-    headerImg.src = avatarUrl;
-    headerImg.classList.remove('hidden');
-    headerIcon.classList.add('hidden');
-    mobileHeaderImg.src = avatarUrl;
-    mobileHeaderImg.classList.remove('hidden');
-    mobileHeaderIcon.classList.add('hidden');
+    if (headerImg) { headerImg.src = avatarUrl; headerImg.classList.remove('hidden'); }
+    if (headerIcon) headerIcon.classList.add('hidden');
+    if (mobileHeaderImg) { mobileHeaderImg.src = avatarUrl; mobileHeaderImg.classList.remove('hidden'); }
+    if (mobileHeaderIcon) mobileHeaderIcon.classList.add('hidden');
   } else {
-    headerImg.classList.add('hidden');
-    headerIcon.classList.remove('hidden');
-    mobileHeaderImg.classList.add('hidden');
-    mobileHeaderIcon.classList.remove('hidden');
+    if (headerImg) headerImg.classList.add('hidden');
+    if (headerIcon) headerIcon.classList.remove('hidden');
+    if (mobileHeaderImg) mobileHeaderImg.classList.add('hidden');
+    if (mobileHeaderIcon) mobileHeaderIcon.classList.remove('hidden');
   }
 }
 

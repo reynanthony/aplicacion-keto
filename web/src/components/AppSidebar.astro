@@ -78,7 +78,7 @@ const drawerSections = [
     label: 'Más',
     links: [
       { href: '/app/guia',  icon: 'help',        color: '#60a5fa', label: 'Guía' },
-      { href: '/app/demo/', icon: 'play_circle', color: '#ff4d00', label: 'Modo Prueba' },
+      { id: 'demo', href: '/app/demo/', icon: 'play_circle', color: '#ff4d00', label: 'Modo Prueba' },
       { href: '/',          icon: 'language',    color: '#22d3ee', label: 'Sitio Web', web: true },
     ],
   },
@@ -117,9 +117,9 @@ const quickAddLinks = [
         ))}
       </>
     ))}
-    <a href="/app/demo/" class="kcs-demo">
+    <a href="/app/demo/" id="kcsDemoLink" class="kcs-demo">
       <span class="material-symbols-outlined icon-filled" style="font-size:16px">play_circle</span>
-      <span>Modo Prueba (Demo)</span>
+      <span data-label>Modo Prueba (Demo)</span>
       <span class="kcs-demo-dot"></span>
     </a>
     <a href="/" class="kcs-demo kc-web-link" style="background:transparent;border-color:rgba(255,240,225,0.1);color:rgba(247,244,240,0.55);margin-top:6px">
@@ -180,9 +180,9 @@ const quickAddLinks = [
           </button>
           <div class="kcd-row kcd-row-collapsed" id={`kcd-section-${i}`}>
             {section.links.map(link => (
-              <a href={link.href} class:list={['kcd-link', { 'kc-web-link': link.web }]}>
+              <a href={link.href} id={link.id === 'demo' ? 'kcdDemoLink' : undefined} class:list={['kcd-link', { 'kc-web-link': link.web }]}>
                 <span class="material-symbols-outlined" style={`font-size:21px;color:${link.color || 'rgba(247,244,240,0.6)'}`}>{link.icon}</span>
-                <span>{link.label}</span>
+                <span data-label>{link.label}</span>
                 {link.badge && <span class="kcd-badge">{link.badge}</span>}
               </a>
             ))}
@@ -516,6 +516,24 @@ function kcLogout() {
       ['sbAvatar', 'kcdAvatar'].forEach(function (i) { var e = document.getElementById(i); if (e) e.textContent = initials; });
       ['sbName', 'kcdName'].forEach(function (i) { var e = document.getElementById(i); if (e) e.textContent = name; });
       ['sbSub', 'kcdSub'].forEach(function (i) { var e = document.getElementById(i); if (e) e.textContent = sub; });
+
+      // Link "Modo Prueba": en modo demo se convierte en CTA de registro
+      // (ya estás en la vista de prueba); para una cuenta real, se oculta
+      // por completo -- no tiene sentido invitar a un usuario real a
+      // "probar" y pisar su propia sesión.
+      var demoMode = localStorage.getItem('ketocore_demo_mode') === '1';
+      var realUser = !!localStorage.getItem('ketocore_user_id') && !demoMode;
+      ['kcsDemoLink', 'kcdDemoLink'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        if (realUser) {
+          el.style.display = 'none';
+        } else if (demoMode) {
+          el.href = '/app/welcome';
+          var label = el.querySelector('[data-label]');
+          if (label) label.textContent = 'Crear cuenta gratis';
+        }
+      });
     } catch (e) { /* storage no disponible */ }
   });
 })();

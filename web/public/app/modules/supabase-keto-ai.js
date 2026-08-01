@@ -11,6 +11,12 @@ var KetoAI = (function() {
     isOnline: false,
 
     init: function() {
+      try {
+        if (localStorage.getItem('ketocore_demo_mode') === '1') {
+          console.log('[KetoAI] Modo demo — omitiendo conexión a Edge Functions');
+          return this;
+        }
+      } catch (e) {}
       if (typeof window.supabase !== 'undefined' && window.supabase) {
         this.supabase = window.supabase;
         var url = this.supabase.supabaseUrl || window.SUPABASE_URL || '';

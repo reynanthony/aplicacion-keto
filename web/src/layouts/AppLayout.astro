@@ -16,8 +16,10 @@ const { title = 'KetoCore', authGuard = true, bodyClass = '' } = Astro.props;
 <head>
   {authGuard && (
     <script is:inline>
-      // Acceso a la app solo con cuenta (modelo suscripción); el demo vive en /app/demo/
-      !function(){var u=localStorage.getItem("ketocore_user_id");if(!u)window.location.replace("/app/welcome");}();
+      // Acceso a la app solo con cuenta o con el id sintetico que siembra
+      // /app/demo/ (modo prueba: misma app real, datos de muestra).
+      !function(){var u=localStorage.getItem("ketocore_user_id");if(!u)window.location.replace("/app/welcome");
+      if(localStorage.getItem("ketocore_demo_mode")==="1")document.documentElement.classList.add("kc-demo");}();
     </script>
   )}
   <meta charset="UTF-8" />
@@ -53,6 +55,39 @@ const { title = 'KetoCore', authGuard = true, bodyClass = '' } = Astro.props;
   @media (max-width: 900px) {
     main { padding-bottom: 96px !important; }
   }
+
+  /* ── Banner "Modo Prueba" (solo cuando html.kc-demo) ──
+     Se desplaza todo en bloque (header/sidebar/main) en vez de recalibrar
+     el padding-top de cada página individualmente. */
+  #kcDemoBanner {
+    display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: 40px; align-items: center; justify-content: space-between;
+    gap: 10px; padding: 0 14px;
+    background: rgba(15,13,10,0.97);
+    backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(255,77,0,0.25);
+    white-space: nowrap;
+  }
+  .kcdb-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .kcdb-dot { width: 7px; height: 7px; border-radius: 50%; background: #ff4d00; flex-shrink: 0; animation: kcDemoPulse 2s infinite; }
+  @keyframes kcDemoPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .kcdb-label { font-size: 10.5px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #ff7a3c; font-family: 'Plus Jakarta Sans', sans-serif; }
+  .kcdb-sub { font-size: 11px; font-weight: 500; color: rgba(247,244,240,0.45); overflow: hidden; text-overflow: ellipsis; }
+  #kcDemoBanner a.kcdb-cta {
+    display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0;
+    height: 27px; padding: 0 13px; border-radius: 100px;
+    background: #ff4d00; color: #fff; text-decoration: none;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 11.5px;
+    box-shadow: 0 3px 10px rgba(255,77,0,0.3);
+    transition: transform .14s, box-shadow .14s;
+  }
+  #kcDemoBanner a.kcdb-cta:hover { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(255,77,0,0.38); }
+  @media (max-width: 420px) { .kcdb-sub { display: none; } }
+
+  html.kc-demo #kcDemoBanner { display: flex; }
+  html.kc-demo header.fixed { top: 40px !important; }
+  html.kc-demo #appSidebar { top: 40px !important; }
+  html.kc-demo main { margin-top: 40px !important; }
   </style>
   <!-- Clear obsolete sidebar state from old nav system -->
   <script is:inline>localStorage.removeItem('sidebarCollapsed');</script>
@@ -101,6 +136,14 @@ const { title = 'KetoCore', authGuard = true, bodyClass = '' } = Astro.props;
   </script>
 </head>
 <body data-theme="app" class={`min-h-screen bg-background text-on-surface font-body overflow-x-hidden${bodyClass ? ' ' + bodyClass : ''}`}>
+  <div id="kcDemoBanner">
+    <div class="kcdb-left">
+      <span class="kcdb-dot"></span>
+      <span class="kcdb-label">Modo prueba</span>
+      <span class="kcdb-sub">· datos de ejemplo de Carlos</span>
+    </div>
+    <a href="/app/welcome" class="kcdb-cta">Crear cuenta<span class="material-symbols-outlined" style="font-size:14px">arrow_forward</span></a>
+  </div>
   <slot />
   <AppSidebar />
 </body>
