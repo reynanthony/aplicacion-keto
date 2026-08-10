@@ -11,7 +11,7 @@ protein: 38
 fat: 31
 netCarbs: 6
 fiber: 3
-image: "https://images.pexels.com/photos/5379352/pexels-photo-5379352.jpeg?auto=compress&cs=tinysrgb&w=800"
+image: "https://images.pexels.com/photos/8251537/pexels-photo-8251537.jpeg?auto=compress&cs=tinysrgb&w=800"
 tags: ["ensalada", "pollo", "almuerzo", "rápido"]
 featured: true
 ---
