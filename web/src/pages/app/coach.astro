@@ -433,6 +433,7 @@ async function sendMessage() {
       if (result && result.answer) {
         answer = result.answer;
         meta   = 'Coach IA · respuesta personalizada';
+        aiConfirmedWorking = true;
       }
     }
 
@@ -461,15 +462,28 @@ async function sendMessage() {
   addMessage('coach', answer, meta);
   chatHistory.push({ role: 'coach', content: answer });
   busy = false;
+  updateStatusBadge();
 }
 
 // ── Status badge ──────────────────────────────────────────────────────
+// aiConfirmedWorking solo pasa a true tras una respuesta real de OpenAI.
+// KetoAI.isOnline solo confirma que el Edge Function de Supabase responde
+// (su 'ping' no llama a OpenAI), así que por sí solo no basta para decir "IA activa".
+var aiConfirmedWorking = false;
 function updateStatusBadge() {
   var dot   = document.querySelector('#aiStatusBar .status-dot');
   var label = document.getElementById('aiStatusLabel');
-  var online = window.KetoAI && KetoAI.isOnline;
+  var reachable = window.KetoAI && KetoAI.isOnline;
+  var text, online;
+  if (aiConfirmedWorking && reachable) {
+    text = 'IA activa'; online = true;
+  } else if (reachable) {
+    text = 'Conectado'; online = true;
+  } else {
+    text = 'Modo offline · KB local'; online = false;
+  }
   if (dot)   { dot.className = 'status-dot ' + (online ? 'status-online' : 'status-offline'); }
-  if (label) { label.textContent = online ? 'IA activa' : 'Modo offline · KB local'; }
+  if (label) { label.textContent = text; }
 }
 
 // ── Desktop padding ───────────────────────────────────────────────────
