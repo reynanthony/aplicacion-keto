@@ -18,9 +18,17 @@ var KetoSupabaseEngine = (function() {
 
     init: function() {
       var self = this;
-      
+
       this.loadLocalData();
-      
+
+      try {
+        if (localStorage.getItem('ketocore_demo_mode') === '1') {
+          console.log('[KetoSupabase] Modo demo — omitiendo conexión a Supabase');
+          this.initialized = true;
+          return this;
+        }
+      } catch (e) {}
+
       if (typeof window.supabase !== 'undefined' && window.supabase) {
         this.supabase = window.supabase;
         this.initialized = true;
