@@ -1373,25 +1373,6 @@ function renderWeekDaysDash(workouts) {
   container.innerHTML = html;
 }
 
-function calculateStreak(workouts) {
-  if (workouts.length === 0) return 0;
-  var sorted = workouts.slice().sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
-  var streak = 0;
-  var today = new Date().toISOString().slice(0, 10);
-  var checkDate = new Date();
-  
-  for (var i = 0; i < 365; i++) {
-    var dateStr = checkDate.toISOString().slice(0, 10);
-    if (sorted.some(function(w) { return w.date === dateStr; })) {
-      streak++;
-    } else if (dateStr !== today) {
-      break;
-    }
-    checkDate.setDate(checkDate.getDate() - 1);
-  }
-  return streak;
-}
-
 function renderVictoriasRecientes() {
   var container = document.getElementById('victoriasRecientesList');
   if (!container) return;
