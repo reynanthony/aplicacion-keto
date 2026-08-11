@@ -875,6 +875,11 @@ async function loadFoodsFromSupabase() {
     loadFoodsLocal();
 }
 
+function imgSrc(path) {
+    if (!path) return '';
+    return /^https?:\/\//.test(path) ? path : '/app/' + path;
+}
+
 function mapCategory(cat) {
     const map = {
         'proteina': 'Proteínas',
@@ -965,7 +970,7 @@ var netCarbs=getNetCarbs(f);
 html+='<div class="group relative glass-card rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.01] hover:shadow-glow cursor-pointer flex gap-3 p-3" onclick="openDetail(\''+f.id+'\')">';
 html+='<div class="w-20 h-20 flex-shrink-0 rounded-xl overflow-hidden relative">';
 if(f.image){
-html+='<img loading="lazy" src="/app/'+f.image+'" alt="'+f.name+'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.style.display=\'none\'; this.parentElement.innerHTML=\'<div class=\\\'w-full h-full flex items-center justify-center bg-surface-container\\\'><span class=\\\'material-symbols-outlined text-2xl text-white/20\\\'>restaurant</span></div>\'" loading="lazy">';
+html+='<img loading="lazy" src="'+imgSrc(f.image)+'" alt="'+f.name+'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.style.display=\'none\'; this.parentElement.innerHTML=\'<div class=\\\'w-full h-full flex items-center justify-center bg-surface-container\\\'><span class=\\\'material-symbols-outlined text-2xl text-white/20\\\'>restaurant</span></div>\'" loading="lazy">';
 }else{
 html+='<div class="w-full h-full flex items-center justify-center bg-surface-container"><span class="material-symbols-outlined text-2xl text-white/20">restaurant</span></div>';
 }
@@ -1401,7 +1406,7 @@ return;
 var data=await response.json();
 if(data.photos&&data.photos.length>0){
 container.innerHTML='<div class="grid grid-cols-2 gap-3">'+
-data.photos.map(function(p){return'<div class="aspect-video rounded-xl overflow-hidden bg-surface-container-high cursor-pointer hover:ring-2 hover:ring-primary-container transition-all" onclick="selectPexelsImage(\''+p.src.large2x.replace(/'/g,"\\'")+'\')"><img src="/app/'+p.src.medium+'" alt="'+p.alt+'" class="w-full h-full object-cover" loading="lazy"></div>'}).join("")+
+data.photos.map(function(p){return'<div class="aspect-video rounded-xl overflow-hidden bg-surface-container-high cursor-pointer hover:ring-2 hover:ring-primary-container transition-all" onclick="selectPexelsImage(\''+p.src.large2x.replace(/'/g,"\\'")+'\')"><img src="'+imgSrc(p.src.medium)+'" alt="'+p.alt+'" class="w-full h-full object-cover" loading="lazy"></div>'}).join("")+
 '</div><p class="text-[13px] text-on-surface-variant text-center mt-3">'+data.total_results+' resultados - Toca una imagen para seleccionarla</p>';
 showToast(data.photos.length+" imagenes encontradas",3000,"success");
 }else{
