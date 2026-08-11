@@ -832,30 +832,32 @@ async function loadFoodsFromSupabase() {
             const supabaseFoods = data.map(r => ({
                 id: r.id,
                 name: r.nombre,
-                // Los valores de Supabase vienen por 100g/100ml (convencion USDA),
-                // no por una porcion especifica -- portion:100 refleja esa base real.
-                portion: 100,
-                units: [{ name: 'gramos', grams: 1 }],
+                portion: r.porcion_base_g || 100,
+                units: [{ name: 'gramos', grams: 1 }].concat(Array.isArray(r.unidades) ? r.unidades : []),
                 calories: parseFloat(r.calorias) || 0,
                 protein: parseFloat(r.proteinas) || 0,
                 fat: parseFloat(r.grasas) || 0,
                 carbs: parseFloat(r.carbos) || 0,
                 fiber: parseFloat(r.fibra) || 0,
                 category: mapCategory(r.categoria),
-                image: '',
+                image: r.imagen_url || '',
                 favorite: false,
                 useCount: 0,
                 source: 'cloud'
             }));
             console.log('✅ Cargados', supabaseFoods.length, 'alimentos de Supabase');
-            
+
             // Combinar con datos locales
             const localFoods = safeParseJSON(localStorage.getItem("ketoFoods"), []) || [];
             const localIds = new Set(localFoods.map(f => f.id));
-            
-            // Agregar solo los que no existen localmente
+            // Los IDs de Supabase (uuid) nunca coinciden con los viejos ids locales
+            // tipo "f1" -- sin este chequeo por nombre, cada alimento que ya
+            // existiera localmente se duplicaria (version vieja sin foto + nueva).
+            const localNames = new Set(localFoods.map(f => (f.name || '').toLowerCase().trim()));
+
+            // Agregar solo los que no existen localmente (ni por id ni por nombre)
             supabaseFoods.forEach(sf => {
-                if (!localIds.has(sf.id)) {
+                if (!localIds.has(sf.id) && !localNames.has(sf.name.toLowerCase().trim())) {
                     localFoods.push(sf);
                 }
             });
