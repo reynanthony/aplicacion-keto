@@ -3,7 +3,6 @@ title: "Reto 7 Días Sin Azúcar"
 description: "Elimina completamente el azúcar añadido durante 7 días. El primer paso para resetear tu metabolismo y romper la adicción al azúcar."
 duration: "7 días"
 difficulty: "Fácil"
-participants: 2847
 category: "Metabolismo"
 benefits:
   - "Reduce los antojos de azúcar drásticamente"

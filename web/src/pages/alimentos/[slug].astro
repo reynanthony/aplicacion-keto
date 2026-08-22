@@ -44,7 +44,7 @@ const related = (await getCollection('foods'))
           <h2 style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;margin-bottom:1rem;color:var(--c-green)">Beneficios</h2>
           <ul style="list-style:none;display:flex;flex-direction:column;gap:0.625rem">
             {food.data.benefits.map(b => (
-              <li style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.9375rem;color:rgba(255,255,255,0.75)">
+              <li style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.9375rem;color:var(--c-text-muted)">
                 <span class="icon icon-fill" style="color:var(--c-green);font-size:18px;flex-shrink:0;margin-top:2px">check_circle</span>
                 {b}
               </li>
@@ -58,7 +58,7 @@ const related = (await getCollection('foods'))
           <h2 style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;margin-bottom:1rem;color:var(--c-gold)">A tener en cuenta</h2>
           <ul style="list-style:none;display:flex;flex-direction:column;gap:0.625rem">
             {food.data.drawbacks.map(d => (
-              <li style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.9375rem;color:rgba(255,255,255,0.75)">
+              <li style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.9375rem;color:var(--c-text-muted)">
                 <span class="icon" style="color:var(--c-gold);font-size:18px;flex-shrink:0;margin-top:2px">info</span>
                 {d}
               </li>

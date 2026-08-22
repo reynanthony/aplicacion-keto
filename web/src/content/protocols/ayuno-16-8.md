@@ -38,20 +38,20 @@ Durante el ayuno:
 
 ## Cómo empezar
 
-**Semana 1**: 12/12 — no es ayuno real, es solo no picar por las noches
-**Semana 2**: 14/10 — salta el desayuno o retrásalo 2 horas
-**Semana 3+**: 16/8 — el cuerpo ya no produce hambre a la hora del desayuno
+- **Semana 1**: 12/12 — no es ayuno real, es solo no picar por las noches
+- **Semana 2**: 14/10 — salta el desayuno o retrásalo 2 horas
+- **Semana 3+**: 16/8 — el cuerpo ya no produce hambre a la hora del desayuno
 
 ## Qué puedes tomar durante el ayuno
 
-✅ Agua (mucha — electrolitos si haces keto)
-✅ Café negro (sin leche, sin azúcar)
-✅ Té sin azúcar
-✅ Caldo de huesos sin proteína añadida
+- ✅ Agua (mucha — electrolitos si haces keto)
+- ✅ Café negro (sin leche, sin azúcar)
+- ✅ Té sin azúcar
+- ✅ Caldo de huesos sin proteína añadida
 
-❌ Leche, crema, mantequilla en café
-❌ Cualquier bebida con calorías
-❌ Suplementos con calorías
+- ❌ Leche, crema, mantequilla en café
+- ❌ Cualquier bebida con calorías
+- ❌ Suplementos con calorías
 
 ## Combinación con keto
 

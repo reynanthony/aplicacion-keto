@@ -3,7 +3,6 @@ title: "Reto 30 Días Keto"
 description: "El reto definitivo para transformar tu metabolismo. 30 días completos en cetosis nutricional con soporte de comunidad y seguimiento diario."
 duration: "30 días"
 difficulty: "Moderado"
-participants: 1243
 category: "Keto"
 benefits:
   - "Fat adaptation completa — el cuerpo usa grasa como combustible principal"

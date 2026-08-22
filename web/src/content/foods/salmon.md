@@ -17,7 +17,7 @@ drawbacks:
   - "Contaminación por mercurio (bajo en salmón, alto en tiburón y pez espada)"
   - "Precio elevado respecto a otras proteínas"
 diets: ["Keto", "Low Carb", "Carnivore", "Paleo", "Mediterránea"]
-image: "https://images.pexels.com/photos/3684/food-plate-salmon.jpg?auto=compress&cs=tinysrgb&w=800"
+image: "https://images.pexels.com/photos/15913466/pexels-photo-15913466.jpeg?auto=compress&cs=tinysrgb&w=800"
 featured: true
 ---
 
