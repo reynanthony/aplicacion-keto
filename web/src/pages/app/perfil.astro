@@ -52,7 +52,7 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
 </header>
 
 <!-- Main -->
-<main id="perfilMain" class="main-content pt-14 pb-20 min-h-screen" style="background:#131315">
+<main id="perfilMain" class="main-content pt-14 pb-20 min-h-screen">
 <div id="perfilGrid" class="space-y-3 kc-page" style="padding-top:12px">
 
   <!-- Header editorial -->
@@ -353,11 +353,11 @@ function loadProfile() {
     document.getElementById('avatarImage').src = p.avatar_url;
     document.getElementById('avatarImage').classList.remove('hidden');
     document.getElementById('avatarInitials').classList.add('hidden');
-  } else if (p.name) {
-    document.getElementById('avatarInitials').textContent = p.name.split(' ').map(function(n){ return n[0]; }).join('').substring(0,2).toUpperCase();
+  } else if (p.nombre || p.name) {
+    document.getElementById('avatarInitials').textContent = (p.nombre || p.name).split(' ').map(function(n){ return n[0]; }).join('').substring(0,2).toUpperCase();
   }
   var sv = function(id, val){ var el=document.getElementById(id); if(el && val != null && val !== '') el.value = val; };
-  sv('userName', p.name); sv('age', p.age); sv('sex', p.sex); sv('height', p.height);
+  sv('userName', p.nombre || p.name); sv('age', p.age); sv('sex', p.sex); sv('height', p.height);
   sv('startWeight', p.startWeight || p.weight); sv('goalWeight', p.goalWeight);
   sv('activity', p.activityLevel); sv('monthsOnKeto', p.monthsOnKeto);
   sv('trainingType', p.trainingType); sv('trainingFreq', p.trainingFreq);
@@ -368,7 +368,7 @@ function loadProfile() {
 
 function saveProfile() {
   var p = safeParseJSON(localStorage.getItem('keto_profile'), {});
-  var name       = document.getElementById('userName').value || p.name || '';
+  var name       = document.getElementById('userName').value || p.nombre || p.name || '';
   var age        = parseInt(document.getElementById('age').value) || p.age || 0;
   var sex        = document.getElementById('sex').value || p.sex || 'male';
   var height     = parseInt(document.getElementById('height').value) || p.height || 0;
@@ -396,7 +396,7 @@ function saveProfile() {
   var calories = Math.round(tdee * (1 + goalFactor));
 
   var profile = {
-    name: name, age: age, sex: sex, height: height,
+    name: name, nombre: name, age: age, sex: sex, height: height,
     weight: currentWeight, startWeight: startWeight, goalWeight: goalWeight,
     activityLevel: activity, monthsOnKeto: months,
     trainingType: tType, trainingFreq: tFreq, trainingGoal: tGoal, experience: exp,
@@ -433,7 +433,7 @@ function updateStats() {
   var lost = startWeight && currentWeight ? Math.max(0, startWeight - currentWeight) : 0;
 
   var ss = function(id, txt){ var el=document.getElementById(id); if(el) el.textContent=txt; };
-  ss('heroName',   p.name || 'Tu Perfil');
+  ss('heroName',   p.nombre || p.name || 'Tu Perfil');
   ss('heroWeight', currentWeight ? currentWeight.toFixed(1) + ' kg' : '-- kg');
   ss('heroGoal',   goalWeight ? 'Meta: ' + goalWeight + ' kg' : 'Meta: --');
   ss('heroLost',   lost > 0 ? '-' + lost.toFixed(1) + ' kg' : '0 kg');
@@ -445,8 +445,8 @@ function updateStats() {
   ss('caloriesValue',m.calories ? m.calories + ' kcal' : '-- kcal');
   ss('proteinValue', m.protein ? m.protein + ' g' : '-- g');
 
-  if (!p.avatar_url && p.name) {
-    ss('avatarInitials', p.name.split(' ').map(function(n){ return n[0]; }).join('').substring(0,2).toUpperCase());
+  if (!p.avatar_url && (p.nombre || p.name)) {
+    ss('avatarInitials', (p.nombre || p.name).split(' ').map(function(n){ return n[0]; }).join('').substring(0,2).toUpperCase());
   }
 }
 

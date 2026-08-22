@@ -17,8 +17,12 @@ input:focus { outline: none; border-color: #ff4d00 !important; box-shadow: 0 0 0
 @media (prefers-reduced-motion: reduce) {
   .fade-in, .animate-pulse-custom { animation: none; opacity: 1; }
 }
-/* Pantalla de entrada: sin sidebar ni bottom-nav */
-#appSidebar, #kcTabbar, #kcDrawer { display: none !important; }
+/* Pantalla de entrada: sin sidebar ni bottom-nav. Selector con especificidad
+   mayor que la regla de AppLayout.astro (#appSidebar{display:flex!important}
+   dentro de @media min-width:901px) — con igual especificidad, ambas
+   !important, gana la ultima en el cascade, que resulto ser AppLayout (el
+   sidebar se colaba encima del login en desktop). */
+html body #appSidebar, html body #kcTabbar, html body #kcDrawer { display: none !important; }
 main { margin-left: 0 !important; padding-bottom: 2rem !important; }
 </style>
 

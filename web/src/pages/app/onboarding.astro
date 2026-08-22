@@ -9,8 +9,10 @@ import AppLayout from '../../layouts/AppLayout.astro';
 .onboarding-card{background:linear-gradient(135deg,rgba(255,77,0,0.15) 0%,rgba(22,19,16,0.7) 100%)}
 .dot-active{background:#ff4d00;transform:scale(1.3)}
 .dot-inactive{background:#484847}
-/* Onboarding: sin sidebar ni bottom-nav */
-#appSidebar, #kcTabbar, #kcDrawer { display: none !important; }
+/* Onboarding: sin sidebar ni bottom-nav. Misma correccion de especificidad
+   que welcome.astro (ver comentario ahi) para ganarle a la regla de
+   AppLayout.astro que activa el sidebar en desktop. */
+html body #appSidebar, html body #kcTabbar, html body #kcDrawer { display: none !important; }
 main { margin-left: 0 !important; }
 </style>
 <div class="flex-1 flex items-center justify-center p-6">

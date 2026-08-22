@@ -54,11 +54,16 @@ html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-fa
 .status-online  { background: #22c55e; animation: pulseGlow 2s infinite; }
 .status-offline { background: #f59e0b; }
 
-/* Desktop: wider chat area */
+/* Desktop: wider chat area. bottom:68px en #coachInputBar (inline style, ver
+   mas abajo) despeja la tabbar movil de 68px de alto -- en desktop esa
+   tabbar no existe, asi que sin este override quedaba un hueco muerto fijo
+   debajo de la barra. El min-height que tenia #chatMessages forzaba casi
+   toda la altura del viewport aunque la conversacion tuviera 1 mensaje,
+   dejando las chips de "Preguntas frecuentes" varadas fuera de pantalla --
+   se quita, #coachMain ya se mantiene "lleno" via min-h-screen. */
 @media (min-width: 768px) {
   #coachMain { max-width: 720px; margin: 0 auto; }
-  #coachInputBar { left: 248px; max-width: none; }
-  #chatMessages  { min-height: calc(100vh - 220px); }
+  #coachInputBar { left: 248px; max-width: none; bottom: 0 !important; }
 }
 </style>
 
