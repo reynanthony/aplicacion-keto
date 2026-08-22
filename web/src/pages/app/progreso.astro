@@ -19,11 +19,15 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
     padding-bottom: 3rem !important;
   }
   #progresoGrid > * { margin-top: 0 !important; }
+  /* wprogress es la tarjeta mas alta (anillo+stats+grafico) -- se empareja
+     con adherencia (la mas corta, solo una fila de puntos) en la misma
+     columna en vez de dejar las 3 restantes apiladas del otro lado, que
+     dejaba un hueco muerto grande bajo wprogress en escritorio. */
   #prog-header     { grid-column: 1 / -1; grid-row: 1; }
   #sect-wprogress  { grid-column: 1; grid-row: 2; }
-  #sect-adherencia { grid-column: 2; grid-row: 2; }
-  #sect-rachas     { grid-column: 2; grid-row: 3; }
-  #sect-health     { grid-column: 2; grid-row: 4; }
+  #sect-adherencia { grid-column: 1; grid-row: 3; }
+  #sect-rachas     { grid-column: 2; grid-row: 2; }
+  #sect-health     { grid-column: 2; grid-row: 3; }
 }
 </style>
 
