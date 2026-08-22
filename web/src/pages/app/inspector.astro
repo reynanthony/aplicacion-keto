@@ -535,7 +535,23 @@ function renderAlerts() {
   var section = document.getElementById('insp-alerts');
   if (!section) return;
   var alerts = window.KetoAutomations ? KetoAutomations.getAlerts() : [];
-  if (!alerts.length) { section.innerHTML = ''; return; }
+  if (!alerts.length) {
+    // Sin esto, la seccion quedaba con innerHTML='' -- 0px de alto, invisible
+    // -- dejando un hueco negro grande junto a "Metricas Clave" (misma fila
+    // del grid) cuando no hay alertas que mostrar (ej. cuenta nueva sin
+    // datos todavia). Un placeholder positivo llena ese espacio en vez de
+    // dejarlo vacio.
+    var s = ALERT_STYLES.success;
+    section.innerHTML = '<div class="ik-card p-3.5" style="background:' + s.bg + ';border-color:' + s.border + '">' +
+      '<div class="flex items-start gap-2.5">' +
+        '<span class="material-symbols-outlined icon-filled flex-shrink-0" style="font-size:18px;color:' + s.icon + ';margin-top:1px">check_circle</span>' +
+        '<div class="flex-1">' +
+          '<p class="text-[13px] font-bold" style="color:#f7f4f0">Todo en orden</p>' +
+          '<p class="text-[13px] mt-0.5 leading-relaxed" style="color:rgba(247,244,240,0.55)">Sin alertas por ahora. Sigue registrando tus comidas y peso para que el Inspector detecte patrones.</p>' +
+        '</div>' +
+      '</div></div>';
+    return;
+  }
 
   section.innerHTML = alerts.slice(0, 4).map(function (a) {
     var s = ALERT_STYLES[a.type] || ALERT_STYLES.info;
