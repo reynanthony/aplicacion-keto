@@ -497,6 +497,13 @@ function kcLogout() {
   document.querySelectorAll('.kcs-link[data-nav]').forEach(function (a) {
     if (a.getAttribute('data-nav') === id) a.classList.add('kcs-active');
   });
+  // El nav del sidebar (.kcs-nav, overflow-y:auto) es mas alto que el
+  // viewport en pantallas de escritorio de poca altura (<=900px) -- sin
+  // esto, el item activo en Comunidad/Progreso/Objetivos/Perfil quedaba
+  // recortado o totalmente fuera del area visible del scroll, y el
+  // usuario no podia saber en que pagina estaba.
+  var activeLink = document.querySelector('.kcs-nav .kcs-active');
+  if (activeLink) activeLink.scrollIntoView({ block: 'nearest' });
   document.querySelectorAll('.kct-item[data-tab]').forEach(function (a) {
     if (a.getAttribute('data-tab') === id) a.classList.add('kct-active');
   });
