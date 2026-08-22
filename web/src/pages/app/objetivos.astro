@@ -25,13 +25,24 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
      (Macros diarios) -- toda la columna derecha quedaba en blanco hasta ahi
      y despues se extendia muy por debajo del resto. Con fila explicita en
      todos los items, las dos columnas se apilan en paralelo de verdad. */
+  /* Emparejado por altura real medida (no solo por orden del DOM):
+     "Compromisos diarios" (8 items con toggle) es la tarjeta mas alta de
+     toda la pantalla -- emparejarla con "Motivacion" (mucho mas corta,
+     como estaba antes) dejaba un hueco grande debajo de esta. Se
+     intercambio con "Objetivo principal" (la mas alta de la columna
+     izquierda, ~332px vs 445px, diferencia minima) y "Motivacion" pasa a
+     la fila de "Meta de peso" (alturas casi iguales). "Proyeccion" e
+     "Hitos" quedan juntas a proposito: ambas depende de que el usuario
+     tenga peso registrado, asi que crecen/achican EN SINCRONIA (vacias
+     ambas cortas, llenas ambas largas) en vez de una fija emparejada con
+     una variable. */
   #obj-header      { grid-column: 1 / -1; grid-row: 1; }
   #obj-objetivo   { grid-column: 1; grid-row: 2; }
   #obj-peso       { grid-column: 1; grid-row: 3; }
   #obj-proyeccion { grid-column: 1; grid-row: 4; }
   #obj-macros     { grid-column: 1; grid-row: 5; }
-  #obj-motivacion  { grid-column: 2; grid-row: 2; }
-  #obj-compromisos { grid-column: 2; grid-row: 3; }
+  #obj-compromisos { grid-column: 2; grid-row: 2; }
+  #obj-motivacion  { grid-column: 2; grid-row: 3; }
   #obj-hitos       { grid-column: 2; grid-row: 4; }
   #obj-reset       { grid-column: 2; grid-row: 5; }
 }
