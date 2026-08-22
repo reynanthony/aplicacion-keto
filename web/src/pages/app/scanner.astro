@@ -29,12 +29,45 @@ import AppLayout from '../../layouts/AppLayout.astro';
 .sc-grid{display:grid;grid-template-columns:1fr;gap:18px}
 @media(min-width:901px){
   .sc-grid{grid-template-columns:1.2fr 1fr;align-items:start}
-  #scPage{padding-top:38px}
+  #scPage{padding-top:16px}
 }
-#scPage{padding-top:22px}
+#scPage{padding-top:12px}
 </style>
+<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(19,19,21,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
+  <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
+    <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
+    <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">KetoCore</span>
+  </a>
+  <div class="flex items-center gap-1.5">
+    <button onclick="toggleMobileUserMenu()" aria-label="Mi cuenta" class="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
+      <img id="mobileHeaderAvatarImg" src="" class="hidden w-full h-full object-cover" alt="Avatar">
+      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined" style="font-size:20px;color:rgba(247,244,240,0.6)">account_circle</span>
+    </button>
+    <button onclick="toggleHamburgerMenu()" aria-label="Abrir menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1a15;color:rgba(247,244,240,0.6)">
+      <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">menu</span>
+    </button>
+  </div>
+</header>
 
-<main class="min-h-screen">
+<!-- Mobile User Dropdown -->
+<div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161310;border:1px solid rgba(255,240,225,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
+  <div class="p-3" style="border-bottom:1px solid rgba(255,240,225,0.06)">
+    <p class="text-sm font-semibold" style="color:#f7f4f0" id="mobileDropdownUserName">Usuario</p>
+    <p class="text-[13px] mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
+  </div>
+  <div class="p-2">
+    <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f7f4f0">
+      <span class="material-symbols-outlined text-lg" style="color:rgba(247,244,240,0.55)">person</span>
+      <span class="text-sm font-medium">Mi Perfil</span>
+    </a>
+    <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-red-50" style="color:#dc2626">
+      <span class="material-symbols-outlined text-lg">logout</span>
+      <span class="text-sm font-medium">Cerrar Sesión</span>
+    </button>
+  </div>
+</div>
+
+<main class="main-content pt-14 pb-20 min-h-screen">
 <div id="scPage" class="kc-page">
 
   <!-- Header -->
@@ -328,6 +361,53 @@ function showToast(msg) {
 }
 
 renderRecentScans();
+
+function toggleMobileUserMenu() {
+  const dropdown = document.getElementById('mobileUserDropdown');
+  dropdown.classList.toggle('hidden');
+  updateDropdownInfo();
+}
+
+function updateDropdownInfo() {
+  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+  const userName = profile.nombre || profile.name || 'Usuario';
+  const userEmail = localStorage.getItem('ketocore_user_email') || 'usuario@ejemplo.com';
+  const mdn = document.getElementById('mobileDropdownUserName');
+  const mde = document.getElementById('mobileDropdownUserEmail');
+  if(mdn) mdn.textContent = userName;
+  if(mde) mde.textContent = userEmail;
+}
+
+function updateHeaderAvatar() {
+  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
+  const avatarUrl = profile.avatar_url;
+  const mhi = document.getElementById('mobileHeaderAvatarImg');
+  const mhi2 = document.getElementById('mobileHeaderAvatarIcon');
+  if (avatarUrl) {
+    if(mhi) { mhi.src = avatarUrl; mhi.classList.remove('hidden'); }
+    if(mhi2) mhi2.classList.add('hidden');
+  } else {
+    if(mhi) mhi.classList.add('hidden');
+    if(mhi2) mhi2.classList.remove('hidden');
+  }
+}
+
+document.addEventListener('click', function(e) {
+  const mdd = document.getElementById('mobileUserDropdown');
+  if (mdd && !e.target.closest('#mobileUserDropdown') && !e.target.closest('button[onclick="toggleMobileUserMenu()"]')) mdd.classList.add('hidden');
+});
+
+async function handleLogout() {
+  if (confirm('¿Cerrar sesión?')) {
+    await window.supabase.auth.signOut();
+    localStorage.removeItem('ketocore_user_id');
+    localStorage.removeItem('ketocore_user_email');
+    localStorage.removeItem('ketocore_onboarding_done');
+    window.location.href = '/app/welcome';
+  }
+}
+
+updateHeaderAvatar();
 </script>
 
 </AppLayout>
