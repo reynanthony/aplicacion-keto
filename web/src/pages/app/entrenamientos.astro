@@ -238,8 +238,12 @@ Intensidad
 </div>
 </div>
 
-<!-- Secondary Grid -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+<!-- Secondary Grid. items-start: sin esto "Victorias Recientes" (poco
+     contenido) se estiraba para igualar la altura de "Progreso Semanal"
+     (grafico de barras + header), dejando un hueco vacio grande debajo del
+     boton "Ver Todos los Records" -- mismo patron ya corregido en
+     Dashboard/Macros. -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8 items-start">
 <!-- Weekly Activity Chart -->
 <div class="lg:col-span-2 bg-surface-container-low rounded-2xl p-8 ghost-border">
 <div class="flex justify-between items-center mb-10">
