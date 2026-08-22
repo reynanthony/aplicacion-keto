@@ -74,6 +74,13 @@ body {
 .db-score-segs > div { flex:1; height:5px; border-radius:100px; background:rgba(26,14,5,0.18); }
 .db-score-foot { position:relative; display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:14px; flex-wrap:wrap; }
 .dash-two, .dash-two2, .dash-lower { display: grid; grid-template-columns: 1fr; gap: 18px; }
+/* Los items de grid tienen min-width:auto por defecto -- sin min-width:0,
+   #sect-achieve (que contiene #recentAchievements, un carrusel horizontal
+   con overflow-x-auto y tarjetas flex-shrink:0) se estiraba al ancho de
+   TODO su contenido en vez de respetar el track del grid, arrastrando la
+   pagina entera mas ancha que el viewport (contenido cortado en toda la
+   pantalla, no solo en ese carrusel). */
+.dash-two > *, .dash-two2 > *, .dash-lower > * { min-width: 0; }
 .macro-band-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
 @media (min-width: 901px) {
   .macro-band-grid { grid-template-columns: repeat(3, 1fr); }
@@ -84,8 +91,12 @@ body {
   .dash-bento { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 150px; gap: 18px; }
   .db-score { grid-column: span 2; grid-row: span 2; }
   .db-cal   { grid-column: span 2; grid-row: auto; }
-  .dash-two  { grid-template-columns: 1.55fr 1fr; }
-  .dash-two2 { grid-template-columns: 1fr 1fr; }
+  /* align-items:start en las 3: sin esto (default stretch) la tarjeta mas
+     corta de cada fila se estira para igualar a la mas alta -- ej. "Coach
+     IA" (poco contenido) se estiraba para igualar "Tendencia de peso" (grafico
+     + stats), dejando un hueco vacio grande entre el mensaje y el boton. */
+  .dash-two  { grid-template-columns: 1.55fr 1fr; align-items: start; }
+  .dash-two2 { grid-template-columns: 1fr 1fr; align-items: start; }
   .dash-lower { grid-template-columns: 1fr 1fr; align-items: start; }
   #dailyPlanList { grid-template-columns: repeat(2, 1fr) !important; }
 }
