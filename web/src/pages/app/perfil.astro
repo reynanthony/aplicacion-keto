@@ -295,8 +295,13 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
 <!-- Weight Modal -->
 <div id="weightModal" class="fixed inset-0 z-[80] hidden">
   <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWeightModal()"></div>
-  <div class="absolute bottom-0 left-0 right-0 rounded-t-3xl p-6 shadow-2xl" style="background:#181818;border:1px solid rgba(255,255,255,0.09)">
-    <div class="w-10 h-1 rounded-full mx-auto mb-5" style="background:rgba(255,255,255,0.2)"></div>
+  <!-- Tarjeta flotante centrada (bottom-20 + max-w-sm + rounded-3xl en las 4
+       esquinas), igual que #waterModal/#quickAddFoodModal en index.astro --
+       antes era bottom-0/left-0/right-0/rounded-t-3xl, una hoja de ancho
+       completo pegada al borde que se veia bien en movil pero quedaba
+       igual de ancha (y sin centrar) en escritorio, inconsistente con el
+       resto de los popups de la app. -->
+  <div class="absolute bottom-20 left-1/2 -translate-x-1/2 w-[90%] max-w-sm rounded-3xl p-6 shadow-2xl" style="background:#181818;border:1px solid rgba(255,255,255,0.09)">
     <h3 class="text-lg font-bold flex items-center gap-2 mb-4" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">
       <span class="material-symbols-outlined" style="color:#ff4d00">monitor_weight</span>
       Registrar Peso

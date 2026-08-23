@@ -253,7 +253,13 @@ Agregar Suplemento
 <h3 id="addSupplementModalTitle" class="text-2xl font-headline font-black text-white">Agregar Suplemento</h3>
 <button onclick="closeAddSupplementModal()" class="w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
 </div>
-<div id="supplementListModal" class="space-y-3 max-h-96 overflow-y-auto custom-scrollbar"></div>
+<!-- Sin max-height propio: antes tenia max-h-96 (384px) fijo, un scroll
+     anidado DENTRO del scroll de la tarjeta (max-h-[90vh] mas abajo) -- con
+     4+ suplementos, el item cortaba a media altura contra ese limite
+     aunque la tarjeta todavia tenia ~140px libres antes de tocar su propio
+     tope. Un solo scroll (el de la tarjeta) usa el espacio real disponible
+     en vez de cortar prematuramente. -->
+<div id="supplementListModal" class="space-y-3"></div>
 <div class="mt-6 pt-6 border-t border-white/10">
 <button onclick="closeAddSupplementModal()" class="w-full py-4 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cerrar</button>
 </div>
