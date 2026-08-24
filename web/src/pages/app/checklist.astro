@@ -27,6 +27,12 @@ import AppLayout from '../../layouts/AppLayout.astro';
   #ck-checklist{grid-column:1;grid-row:3;}
   #ck-supplements{grid-column:2;grid-row:2;}
   #ck-meals{grid-column:2;grid-row:3;}
+  /* Sistema visual "grande y espacioso" de entrenamientos.astro, solo en
+     escritorio -- los headings de tarjeta aqui ya usaban text-xl/extrabold
+     (20px/800, igual al objetivo), solo el h1 (26px) y el padding (22px)
+     se quedaban chicos frente a los 46px/32px de entrenamientos. */
+  #ck-hero h1 { font-size: 46px !important; }
+  #ck-hero, #ck-history, #ck-checklist, #ck-supplements, #ck-meals { padding: 32px !important; }
 }
 </style>
 <!-- Sidebar -->

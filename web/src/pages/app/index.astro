@@ -99,6 +99,11 @@ body {
   .dash-two2 { grid-template-columns: 1fr 1fr; align-items: start; }
   .dash-lower { grid-template-columns: 1fr 1fr; align-items: start; }
   #dailyPlanList { grid-template-columns: repeat(2, 1fr) !important; }
+  /* Sistema visual "grande y espacioso" de entrenamientos.astro, solo en
+     escritorio -- el saludo del Dashboard cumple el mismo rol de "titulo
+     grande de apertura" que el h1 de las demas pantallas (ya llevado a
+     46px), asi que crece igual en vez de quedarse en 26px. */
+  .dash-greeting { font-size: 46px; }
 }
 </style>
 <!-- Header -->

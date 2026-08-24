@@ -14,6 +14,11 @@ import AppLayout from '../../layouts/AppLayout.astro';
   #guia-hero{grid-column:1/-1;grid-row:1;}
   #guia-steps{grid-column:1;grid-row:2;}
   #guia-side{grid-column:2;grid-row:2;}
+  /* Sistema visual "grande y espacioso" de entrenamientos.astro, solo en
+     escritorio (ver mismo cambio en objetivos.astro para el detalle). */
+  #guia-hero h1 { font-size: 46px !important; }
+  #guia-hero, .step-card, #guia-side .kc-tile { padding: 32px !important; }
+  .step-card h3, #guia-side h3 { font-size: 20px !important; }
 }
 </style>
 <header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(19,19,21,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">

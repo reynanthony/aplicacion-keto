@@ -15,6 +15,11 @@ body{background:#131315;color:#fff;font-family:'Inter',sans-serif;min-height:100
 .coming-soon-blur{filter:blur(3px);pointer-events:none;user-select:none}
 .coming-soon-overlay{position:relative}
 .coming-soon-overlay::after{content:"Próximamente";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(19,19,21,0.55);border-radius:inherit;font-weight:800;font-size:13px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.5);backdrop-filter:blur(1px)}
+/* Sistema visual "grande y espacioso" de entrenamientos.astro, solo en
+   escritorio (ver mismo cambio en objetivos.astro para el detalle). */
+@media (min-width: 901px) {
+  h1.kc-h1 { font-size: 46px !important; }
+}
 </style>
 <!-- TopBar -->
 <header class="fixed top-0 left-0 right-0 z-40 h-14 flex items-center justify-between px-4 border-b border-white/5" style="background:rgba(19,19,21,0.95);backdrop-filter:blur(20px)">

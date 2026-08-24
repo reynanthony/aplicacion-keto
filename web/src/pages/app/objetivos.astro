@@ -17,6 +17,15 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
     padding-bottom: 3rem !important;
   }
   #objetivosGrid > * { margin-top: 0 !important; }
+  /* Sistema visual "grande y espacioso" de entrenamientos.astro, llevado a
+     esta pantalla SOLO en escritorio (movil se queda compacto, igual que
+     entrenamientos.astro ya hace con sus propios p-4 md:p-8/md:text-*).
+     Objetivo exacto medido en entrenamientos.astro a 1440px: h1 46px,
+     padding de tarjeta 32px, heading de tarjeta 20px/800/Plus Jakarta Sans
+     (vs los 30px/16px/14px-Inter que tenia esta pantalla). */
+  #obj-header h1 { font-size: 46px; }
+  .glass-card { padding: 32px !important; }
+  .glass-card h2 { font-size: 20px !important; font-weight: 800 !important; font-family: var(--font-headline); }
   /* El header editorial no tenia grid-column/grid-row explicito -- sin eso,
      el auto-placement (sparse) de CSS Grid lo colocaba en fila 1 columna 1
      y luego, como el cursor de auto-placement no retrocede a llenar huecos
