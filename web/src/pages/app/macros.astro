@@ -19,6 +19,10 @@ import AppLayout from '../../layouts/AppLayout.astro';
 .mx-stats { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:18px; align-items:start; }
 .mx-donut-wrap { display:flex; flex-direction:column; align-items:center; gap:24px; }
 @media (min-width:901px){
+  /* entrenamientos.astro (y checklist/suplementos/guia) quitan el limite
+     de 1180px de .kc-page en escritorio -- esta pantalla se habia quedado
+     topada, ~458px mas angosta que las demas en un monitor de 1920px. */
+  #mxPage { max-width: none !important; }
   .mx-row1 { grid-template-columns:1.4fr 1fr; }
   .mx-tiles { grid-template-columns:repeat(3,1fr); }
   .mx-stats { grid-template-columns:repeat(4,1fr); }

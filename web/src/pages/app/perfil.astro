@@ -20,6 +20,10 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
     align-items: start;
     padding-top: 4.5rem;
     padding-bottom: 3rem !important;
+    /* entrenamientos.astro (y checklist/suplementos/guia) quitan el limite
+       de 1180px de .kc-page en escritorio -- esta pantalla se habia quedado
+       topada, ~458px mas angosta que las demas en un monitor de 1920px. */
+    max-width: none !important;
   }
   #perfilGrid > * { margin-top: 0 !important; }
   #pf-header  { grid-column: 1 / -1; grid-row: 1; }

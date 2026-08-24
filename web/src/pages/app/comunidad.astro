@@ -19,6 +19,9 @@ body{background:#131315;color:#fff;font-family:'Inter',sans-serif;min-height:100
    escritorio (ver mismo cambio en objetivos.astro para el detalle). */
 @media (min-width: 901px) {
   h1.kc-h1 { font-size: 46px !important; }
+  /* entrenamientos.astro (y checklist/suplementos/guia) quitan el limite
+     de 1180px de .kc-page -- esta pantalla se habia quedado topada. */
+  .kc-page { max-width: none !important; }
 }
 </style>
 <!-- TopBar -->

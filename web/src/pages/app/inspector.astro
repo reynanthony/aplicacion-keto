@@ -46,6 +46,10 @@ html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-fa
     align-items: start;
     padding-top: 3.5rem;
     padding-bottom: 3rem !important;
+    /* entrenamientos.astro (y checklist/suplementos/guia) quitan el limite
+       de 1180px de .kc-page en escritorio -- esta pantalla se habia quedado
+       topada, ~458px mas angosta que las demas en un monitor de 1920px. */
+    max-width: none !important;
   }
   #inspGrid > * { margin-top: 0 !important; }
   #insp-header    { grid-column: 1/-1; grid-row: 1; }
