@@ -14,7 +14,14 @@ input,select{background:#161310!important;color:#fff!important;border:1px solid 
    el generico de arriba (que pisaba el pl-12 de Tailwind y tapaba el texto). */
 #searchInput,#onlineSearchInput{padding-left:3rem}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}#toast{animation:toastIn 0.3s ease}
-@media(min-width:768px){#ali-wrap{max-width:none!important;padding-top:1rem;}}
+@media(min-width:768px){#ali-wrap{max-width:none!important;padding-top:1rem;}
+/* Sistema visual "grande y espacioso" de entrenamientos.astro, solo en
+   escritorio -- #dailyMacrosBar es la tarjeta de contenido principal
+   ("Tu dia hoy"), equivalente a las tarjetas de objetivos.astro que ya se
+   llevaron a 32px/20px. Las demas tarjetas de esta pantalla (pills de
+   stats, grid de alimentos) son mas chicas por diseno, no por descuido. */
+#dailyMacrosBar{padding:32px!important}
+#dailyMacrosBar h3{font-size:20px!important}}
 </style>
 
 <header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(19,19,21,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
