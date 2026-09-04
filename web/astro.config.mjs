@@ -9,7 +9,7 @@ import sentry from '@sentry/astro';
 const sentryDsn = process.env.SENTRY_DSN;
 
 export default defineConfig({
-  site: 'https://ketocore.app',
+  site: 'https://keto-core.com',
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/app/') && !page.includes('/academia/') && !page.includes('/comunidad/'),

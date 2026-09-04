@@ -2,8 +2,8 @@
  * Post-build script: copies PWA files into dist/app/
  * so both web and app are served from the same origin in production.
  *
- * Web:  ketocore.app/          → dist/
- * App:  ketocore.app/app/      → dist/app/
+ * Web:  keto-core.com/          → dist/
+ * App:  keto-core.com/app/      → dist/app/
  *
  * localStorage auth keys are shared across the same origin,
  * so ketocore_onboarding_done and KetoCore_guest work seamlessly.

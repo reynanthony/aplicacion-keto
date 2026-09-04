@@ -19,7 +19,7 @@ El proyecto de Vercel (`ketocore`, org `reynanthonys-projects`) **no está conec
 npx vercel --prod
 ```
 
-Dominio custom `ketocore.app` pendiente de compra/conexión — hoy vive en `ketocore.vercel.app`.
+Dominio custom `keto-core.com` (comprado en GoDaddy) ya está agregado al proyecto en Vercel. Falta apuntar el DNS en GoDaddy (registro `A @ 76.76.21.21`, o cambiar nameservers a `ns1.vercel-dns.com`/`ns2.vercel-dns.com`) para que quede resuelto. Mientras tanto sigue viviendo en `ketocore.vercel.app`.
 
 ## Variables de entorno
 

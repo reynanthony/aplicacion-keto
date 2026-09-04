@@ -4,7 +4,7 @@ Guía para Claude Code en este repositorio.
 
 ## Arquitectura real (importante)
 
-La app vivía originalmente como HTML/JS vanilla en la raíz del repo (`index.html`, `plan.html`, etc.). **Esa versión fue migrada y eliminada** (`chore: eliminar app vanilla JS — migración a Astro completada`). La app real hoy es el proyecto Astro en `web/`, desplegada en Vercel (project `ketocore`, org `reynanthonys-projects`). El dominio `ketocore.app` **todavía no está comprado/conectado** — hoy solo es accesible vía `ketocore.vercel.app`.
+La app vivía originalmente como HTML/JS vanilla en la raíz del repo (`index.html`, `plan.html`, etc.). **Esa versión fue migrada y eliminada** (`chore: eliminar app vanilla JS — migración a Astro completada`). La app real hoy es el proyecto Astro en `web/`, desplegada en Vercel (project `ketocore`, org `reynanthonys-projects`). Dominio de producción: `keto-core.com` (comprado en GoDaddy, agregado al proyecto en Vercel) — pendiente de apuntar el DNS en GoDaddy para que resuelva; mientras tanto sigue accesible en `ketocore.vercel.app`.
 
 La lógica del app vieja no se perdió: sigue viva en `web/public/app/*` (`supabase-client.js`, `modules/*.js`, `utils.js`) y se carga vía `<script is:inline src="/app/...">` desde `web/src/layouts/AppLayout.astro` y páginas como `web/src/pages/app/plan.astro`. No es código muerto — es la capa de datos/lógica de negocio real del app.
 

@@ -2,4 +2,4 @@ User-agent: *
 Disallow: /app/
 Allow: /
 
-Sitemap: https://ketocore.app/sitemap-index.xml
+Sitemap: https://keto-core.com/sitemap-index.xml
