@@ -146,6 +146,7 @@ html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-fa
 
 
 <!-- ── Scripts ────────────────────────────────────────────────────────── -->
+<script is:inline src="/app/modules/entitlements.js"></script>
 <script is:inline src="/app/modules/supabase-keto-ai.js"></script>
 <script is:inline src="/app/demo/demo-coach-kb.js"></script>
 <script is:inline src="/app/modules/meal-plan.js"></script>
@@ -412,6 +413,13 @@ async function sendMessage() {
   if (!input) return;
   var text = input.value.trim();
   if (!text) return;
+
+  if (window.KetoEntitlements && !(await window.KetoEntitlements.isPremium())) {
+    addMessage('assistant',
+      'El Coach IA es una función Premium. ' +
+      '<a href="/app/perfil" style="color:#ff7a3c;font-weight:700">Suscribite</a> para seguir chateando.');
+    return;
+  }
 
   input.value = '';
   busy = true;
