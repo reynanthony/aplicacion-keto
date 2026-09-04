@@ -785,6 +785,7 @@ function toggleSupleTaken(id) {
 </div>
 <div id="autoPlanWarningModal" class="fixed inset-0 z-[80] hidden"><div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto text-center border-2 border-yellow-500/50"><div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-4xl text-yellow-400">warning</span></div><h3 class="text-xl font-headline font-bold text-yellow-400 mb-2">Advertencia</h3><p class="text-white/80 mb-2">Estás modificando un plan generado automáticamente.</p><p class="text-white/60 text-sm mb-6">Los resultados pueden no ser los indicados para tu objetivo. ¿Deseas continuar?</p><div class="flex gap-3"><button onclick="closeAutoPlanWarning()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button><button onclick="confirmAutoPlanModification()" class="flex-1 py-3 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors">Continuar</button></div></div></div></div>
 <script is:inline src="/app/utils.js"></script>
+<script is:inline src="/app/modules/entitlements.js"></script>
 <script is:inline src="/app/data/recipe-details.js"></script>
 <script is:inline>
 // Crear recipesDB desde KETO_RECIPES para compatibilidad
@@ -1942,8 +1943,24 @@ function setMealPlanMode(mode) {
 
 function generateAndApplyAutoPlan() {
   var summaryDiv = document.getElementById('autoPlanSummary');
+
+  if (window.KetoEntitlements) {
+    window.KetoEntitlements.isPremium().then(function(premium) {
+      if (!premium) {
+        summaryDiv.innerHTML = '<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-primary mb-2">workspace_premium</span><p class="text-white font-medium mt-2">El generador automático es Premium</p><p class="text-on-surface-variant text-sm mt-1"><a href="/app/perfil" style="color:#ff7a3c;font-weight:700">Suscribite</a> para generar tu plan semanal automáticamente.</p></div>';
+        return;
+      }
+      runGenerateAndApplyAutoPlan(summaryDiv);
+    });
+    return;
+  }
+
+  runGenerateAndApplyAutoPlan(summaryDiv);
+}
+
+function runGenerateAndApplyAutoPlan(summaryDiv) {
   summaryDiv.innerHTML = '<div class="flex items-center justify-center py-8"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div><span class="ml-3 text-on-surface-variant">Generando plan desde tu despensa...</span></div>';
-  
+
   setTimeout(function() {
     if (typeof generateAutoMealPlan === 'function') {
       var result = generateAutoMealPlan();

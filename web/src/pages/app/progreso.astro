@@ -221,6 +221,7 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
 
 
 <script is:inline src="/app/utils.js"></script>
+<script is:inline src="/app/modules/entitlements.js"></script>
 <script is:inline src="/app/modules/meal-plan.js"></script>
 <script is:inline src="/app/modules/health-score.js"></script>
 <script is:inline>
@@ -394,7 +395,20 @@ function loadProgressPage(){
   }
 }
 
-document.addEventListener('DOMContentLoaded', loadProgressPage);
+document.addEventListener('DOMContentLoaded', function () {
+  if (!window.KetoEntitlements) { loadProgressPage(); return; }
+  window.KetoEntitlements.isPremium().then(function (premium) {
+    if (premium) { loadProgressPage(); return; }
+    var grid = document.getElementById('progresoGrid');
+    if (grid) {
+      grid.innerHTML = '<div class="glass-card rounded-2xl p-6 text-center" style="margin-top:12px">' +
+        '<span class="material-symbols-outlined text-4xl mb-2" style="color:#ff4d00">workspace_premium</span>' +
+        '<p class="text-white font-medium mt-2">El historial y analytics de progreso es Premium</p>' +
+        '<p class="text-on-surface-variant text-sm mt-1"><a href="/app/perfil" style="color:#ff7a3c;font-weight:700">Suscribite</a> para ver tu evolución de peso, rachas y health score.</p>' +
+        '</div>';
+    }
+  });
+});
 </script>
 
 </AppLayout>
