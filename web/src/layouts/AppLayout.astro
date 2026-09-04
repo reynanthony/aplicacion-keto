@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import AppSidebar from '../components/AppSidebar.astro';
+import Analytics from '@vercel/analytics/astro';
 
 interface Props {
   title?: string;
@@ -23,6 +24,7 @@ const { title = 'KetoCore', authGuard = true, bodyClass = '' } = Astro.props;
     </script>
   )}
   <meta charset="UTF-8" />
+  <meta name="robots" content="noindex,nofollow" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
   <meta name="theme-color" content="#ff4d00" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -146,5 +148,6 @@ const { title = 'KetoCore', authGuard = true, bodyClass = '' } = Astro.props;
   </div>
   <slot />
   <AppSidebar />
+  <Analytics />
 </body>
 </html>

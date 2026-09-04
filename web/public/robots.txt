@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /app/
+Allow: /
+
+Sitemap: https://ketocore.app/sitemap-index.xml
