@@ -1,75 +1,46 @@
-# KetoLab (KetoCore) — Guide
+# AGENTS.md — KetoLab (KetoCore)
 
-## Project
+## Arquitectura real (importante)
 
-Spanish-language vanilla JS PWA for keto diet meal planning. Multi-page, no framework. TailwindCSS via CDN. Supabase + OpenAI (with offline fallback). All text in Spanish.
+La app vivía originalmente como HTML/JS vanilla en la raíz del repo (`index.html`, `plan.html`, etc.). **Esa versión fue migrada y eliminada.** La app real hoy es el proyecto Astro en `web/`, desplegada en Vercel (project `ketocore`, org `reynanthonys-projects`). El dominio `ketocore.app` **todavía no está comprado/conectado** — hoy solo es accesible vía `ketocore.vercel.app`.
 
-## Brand
-- Primary: `#ff4d00` (orange), `#ffb300` (gold)
-- Dark theme (`class="dark"` on `<html>`)
+La lógica del app vieja no se perdió: sigue viva en `web/public/app/*` (`supabase-client.js`, `modules/*.js`, `utils.js`) y se carga vía `<script is:inline src="/app/...">` desde `web/src/layouts/AppLayout.astro` y páginas como `web/src/pages/app/plan.astro`.
 
-## Pages
-
-| Route | File | Purpose |
-|---|---|---|
-| `/` | `index.html` | Dashboard |
-| `/plan.html` | `plan.html` (4427 lines) | Meal planner, inspector |
-| `/compras.html` | `compras.html` | Shopping list |
-| `/recetas.html` | `recetas.html` | Recipe catalog |
-| `/checklist.html` | `checklist.html` | Daily habits |
-
-## Dev server
+## Comandos
 
 ```powershell
-npx http-server -p 3002 -c-1
+cd web
+npm run dev      # localhost:4321
+npm run build    # build de produccion a web/dist/
+
+npx vercel --prod   # deploy manual — el proyecto NO esta conectado por Git a Vercel
+
+npm test   # desde la raiz del repo, Jest sobre web/public/app/modules/*.test.js
+
+npx supabase db push --linked
+npx supabase db advisors --linked --type security
 ```
 
-## Key modules
+## Estructura
 
-- `data/recipe-details.js` — 195 recipes, exposes global `KETO_RECIPES`
-- `modules/weekly-meal-generator.js` — Plan generator, reads `KETO_RECIPES`, has `NON_KETO_INGREDIENTS` filter
-- `modules/keto-inspector.js` — Analyzes ingredients, `CULINARY_KNOWLEDGE` for smart replacements, exposes `window.KetoInspector`
-- `modules/supabase-keto-intelligence.js` — Supabase client with localStorage fallback
-- `modules/supabase-keto-ai.js` — OpenAI via Edge Function with 8 pre-defined fallback recipes
-- `modules/user-learning.js` — localStorage feedback system
-- `modules/keto-score-calculator.js` — 100-point keto scoring
+| Carpeta | Contenido |
+|---|---|
+| `web/src/pages/*.astro` (fuera de `app/`) | Sitio de marketing público |
+| `web/src/pages/app/*.astro` | Pantallas del app, gateadas por `authGuard` en `AppLayout.astro` |
+| `web/src/content/*` | Colecciones de contenido — pocas entradas hoy, pendiente de poblar |
+| `web/public/app/*` | Lógica JS real del app (Supabase, generadores de plan, Keto Inspector) |
+| `supabase/migrations/` | Migraciones vía Supabase CLI — camino disciplinado hacia adelante |
+| `*.sql` en la raíz / `supabase/schema-simple.sql` | Schemas/seeds históricos con RLS inconsistente entre sí — no asumir que reflejan producción, verificar con `supabase db advisors --linked` |
 
-## Architecture
+## Convenciones
 
-```
-Generator → KetoInspector → Modal (review) → Apply changes → Re-analyze → Shopping list
-```
+- Todo el texto de UI en español. Tema oscuro, primario `#ff4d00`, acento `#ffb300`.
+- `escapeHtml()` / `safeParseJSON()` (en `web/public/app/utils.js`) para todo lo derivado de input de usuario.
+- Nunca hacer push a GitHub sin confirmación del usuario. Un push no dispara deploy automático (sin integración Git en Vercel) — hace falta `vercel --prod`.
 
-Flow: `generateWeeklyPlanNormal()` → `analyzePlanWithInspector()` → `openPlanInspectorReviewWithPlan()` → user changes via `selectNewIngredient()` → re-analyzes automatically
+## Pendiente conocido
 
-## Supabase
-
-- URL: `https://lmbqzsonujwvqmfhjjgf.supabase.co`
-- Anon key set in `plan.html:19` as `window.SUPABASE_ANON_KEY`
-- Edge Function `keto-ai` at `/functions/v1/keto-ai`
-- All Supabase modules detect offline and fallback to localStorage
-
-## SQL in Supabase
-
-After schema changes, both files must execute in Supabase SQL Editor:
-1. `keto-inspector-migration.sql` (ingredients table)
-2. `supabase/schema-keto-intelligence.sql` (tables: feedback, planes, perfil, vectors)
-
-## JSON fields use `ingredients` (not `ingredientes`)
-
-Recipe structure: `{ id, title, mealType, calories, protein, fat, carbs, netCarbs, ingredients: [{ name, quantity, unit }] }`
-
-## Conventions
-
-- Chinese characters in source = broken; fix them
-- `saveWeeklyPlan(weekPlan)` persists to localStorage
-- `loadWeeklyPlan()` reads from localStorage
-- Inspector modal auto-opens after generation
-- Use `KetoInspector.getAlternativasInteligentes()` for culinary-aware replacements
-- Never push to GitHub without confirmation
-
-## Dev commands
-
-- `npx http-server -p 3002 -c-1` — start server
-- `npx supabase functions deploy keto-ai` — deploy Edge Function
-- `npx supabase secrets set OPENAI_API_KEY=sk-...` — set OpenAI key
+- Monetización: no implementada, requiere definir tiers/precios antes de programar.
+- `academia/` y `comunidad/` (marketing) sin contenido real — noindex a propósito.
+- Scanner sin base de datos de productos — macros a mano.
+- Colecciones de contenido escasas — trabajo de contenido, no de código.

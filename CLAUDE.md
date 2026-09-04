@@ -1,119 +1,55 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guía para Claude Code en este repositorio.
 
-## Commands
+## Arquitectura real (importante)
+
+La app vivía originalmente como HTML/JS vanilla en la raíz del repo (`index.html`, `plan.html`, etc.). **Esa versión fue migrada y eliminada** (`chore: eliminar app vanilla JS — migración a Astro completada`). La app real hoy es el proyecto Astro en `web/`, desplegada en Vercel (project `ketocore`, org `reynanthonys-projects`). El dominio `ketocore.app` **todavía no está comprado/conectado** — hoy solo es accesible vía `ketocore.vercel.app`.
+
+La lógica del app vieja no se perdió: sigue viva en `web/public/app/*` (`supabase-client.js`, `modules/*.js`, `utils.js`) y se carga vía `<script is:inline src="/app/...">` desde `web/src/layouts/AppLayout.astro` y páginas como `web/src/pages/app/plan.astro`. No es código muerto — es la capa de datos/lógica de negocio real del app.
+
+## Comandos
 
 ```powershell
-# Dev server (no build step)
-npx http-server -p 3002 -c-1
+# Sitio Astro (marketing + /app) — dentro de web/
+cd web
+npm run dev      # localhost:4321
+npm run build    # build de produccion a web/dist/
 
-# Run all tests
+# Deploy — el proyecto NO esta conectado por Git a Vercel, hay que desplegar manual
+npx vercel --prod
+
+# Tests legacy (Jest, sobre modulos en web/public/app/modules/*.test.js) — desde la raiz del repo
 npm test
 
-# Run a single test file
-npx jest modules/keto-score-calculator.test.js
-
-# Deploy Supabase Edge Function
-npx supabase functions deploy keto-ai
-
-# Set OpenAI key for Edge Function
-npx supabase secrets set OPENAI_API_KEY=sk-...
+# Migraciones Supabase (proyecto KetoLab, ref lmbqzsonujwvqmfhjjgf)
+npx supabase db push --linked          # aplicar migraciones nuevas de supabase/migrations/
+npx supabase db advisors --linked --type security   # chequeo de seguridad en vivo (RLS, funciones, etc.)
 ```
 
-## Architecture
+## Estructura
 
-**Stack:** Vanilla JS + HTML5, TailwindCSS via CDN, Supabase (auth + DB + Edge Functions), OpenAI via Edge Function `keto-ai`. No bundler — files are served directly.
-
-**All UI text must be in Spanish.** Brand: dark theme (`class="dark"` on `<html>`), primary `#ff4d00`, accent `#ffb300`.
-
-### Pages
-
-| File | Purpose |
+| Carpeta | Contenido |
 |---|---|
-| `index.html` | Dashboard |
-| `plan.html` | Meal planner + Keto Inspector (~4400 lines) |
-| `recetas.html` | Recipe catalog |
-| `compras.html` | Shopping list |
-| `checklist.html` | Daily habits |
-| `macros.html` | Macro tracking |
-| `entrenamientos.html` | Workout log |
-| `suplementos.html` | Supplement recommendations |
-| `perfil.html` | User profile |
-| `onboarding.html` | First-run setup |
+| `web/src/pages/*.astro` (fuera de `app/`) | Sitio de marketing público: home, aprender, protocolos, recetas, retos, historias, herramientas |
+| `web/src/pages/app/*.astro` | Pantallas de la app (dashboard, coach, inspector, macros, plan, etc.), gateadas por `authGuard` en `AppLayout.astro` |
+| `web/src/content/*` | Colecciones de contenido (articles, recipes, protocols, challenges, stories, foods, supplements) — pocas entradas hoy (1-4 cada una), pendiente de poblar antes de promocionar el sitio |
+| `web/public/app/*` | Lógica JS real del app (Supabase client, generadores de plan, Keto Inspector, etc.), cargada inline desde las páginas `app/*.astro` |
+| `supabase/migrations/` | Migraciones vía Supabase CLI — es el camino disciplinado hacia adelante |
+| `*.sql` en la raíz (`schema-supabase.sql`, `reset-database.sql`, `supabase/schema-simple.sql`, etc.) | Schemas/seeds históricos, algunos con RLS inconsistente entre sí. **No asumir que reflejan lo que está aplicado en producción** — verificar siempre con `supabase db advisors --linked` o `supabase db query --linked` contra el proyecto real antes de tocar RLS/políticas |
 
-### Script load order
+## Convenciones
 
-Pages that use plan/inspector features must load scripts in this order:
-1. Supabase JS SDK (CDN)
-2. `supabase-client.js` — sets `window.supabase`, exposes `window.alimentosAPI`, `window.recetasAPI`, `window.auth`
-3. `utils.js` — shared utilities: `safeParseJSON`, `escapeHtml`, `getLocalData`, `setLocalData`; also patches `localStorage.setItem` with XSS sanitization
-4. `data/recipe-details.js` — exposes global `KETO_RECIPES` (195 recipes)
-5. Feature modules (see below)
+- Todo el texto de UI en español.
+- Marca: tema oscuro (`class="dark"`), primario `#ff4d00`, acento `#ffb300`.
+- `escapeHtml()` antes de insertar strings de usuario en el DOM; `safeParseJSON(value, default)` en vez de `JSON.parse` pelado (ambos en `web/public/app/utils.js`).
+- Caracteres chinos sueltos en el código = encoding roto — corregirlos si aparecen.
+- `web/astro.config.mjs`: sitemap excluye `/app/`, `/academia/`, `/comunidad/` (paginas privadas o sin contenido real). `SENTRY_DSN` como env var activa Sentry automáticamente en el build; sin ella el build sigue igual.
+- Nunca hacer push a GitHub sin confirmación del usuario. El proyecto de Vercel no redeploya solo con el push — hay que correr `vercel --prod` (o conectar Git en Vercel) para que un push dispare deploy automático.
 
-### Key modules
+## Pendiente conocido (ver plan de lanzamiento)
 
-| File | Global | Role |
-|---|---|---|
-| `modules/keto-inspector.js` | `window.KetoInspector` | Analyzes ingredients for ketosis risk; `CULINARY_KNOWLEDGE` for smart replacements; `getAlternativasInteligentes()` |
-| `modules/weekly-meal-generator.js` | functions on `window` | Generates 7-day plans from `KETO_RECIPES`; filters via `NON_KETO_INGREDIENTS`; reads `keto_macros` + `keto_profile` from localStorage |
-| `modules/supabase-keto-intelligence.js` | `KetoSupabaseEngine` | Supabase client with full localStorage fallback; detects online/offline |
-| `modules/supabase-keto-ai.js` | — | OpenAI via Edge Function; 8 built-in fallback recipes for offline |
-| `modules/keto-score-calculator.js` | `KetoScoreCalculator` | 100-point keto compliance score |
-| `modules/user-learning.js` | — | Feedback loop stored in localStorage |
-| `modules/cloudSync.js` | `CloudSyncAdapter` | Syncs localStorage keys to Supabase on reconnect |
-| `storage-manager.js` | `KetoStorageManager` | IndexedDB cache + periodic Supabase sync |
-| `modules/plan-inspector-modal.js` | — | Modal UI for Inspector review after plan generation |
-| `modules/plan-shopping.js` | — | Derives shopping list from weekly plan |
-
-### Core plan generation flow
-
-```
-generateWeeklyPlanNormal()
-  → analyzePlanWithInspector()
-  → openPlanInspectorReviewWithPlan()   ← modal auto-opens
-  → user edits via selectNewIngredient()
-  → re-analyzes automatically
-  → saveWeeklyPlan(weekPlan)            ← persists to localStorage
-```
-
-### Data persistence
-
-Primary store is **localStorage**; Supabase is synced secondarily. Key names:
-
-| Key | Contents |
-|---|---|
-| `keto_profile` | User profile (experience, goal, weight) |
-| `keto_macros` | Daily targets (calories, protein, fat, carbs) |
-| `ketoFoods` | Custom food log |
-| `despensa` | Pantry items |
-| `keto_weight_history` | Weight log array |
-| `mealPlan_YYYY-MM-DD` | Weekly meal plan for that week |
-| `checklist_YYYY-MM-DD` | Daily checklist state |
-| `ketoInspector_ingredientes` | Inspector ingredient DB (version-controlled, key `ketoInspector_version`) |
-
-### Recipe structure
-
-```js
-{ id, title, mealType, calories, protein, fat, carbs, netCarbs,
-  ingredients: [{ name, quantity, unit }] }
-```
-
-Field is `ingredients` (not `ingredientes`). `mealType` values: `desayuno`, `almuerzo`, `cena`, `snacks`.
-
-### Supabase
-
-- Project URL: `https://lmbqzsonujwvqmfhjjgf.supabase.co`
-- Anon key is set as `window.SUPABASE_ANON_KEY` in `plan.html:19`
-- After schema changes, run both SQL files in the Supabase SQL Editor:
-  1. `keto-inspector-migration.sql`
-  2. `supabase/schema-keto-intelligence.sql`
-- Tables: `alimentos`, `recetas`, `usuarios`, `datos_usuario`, `keto_ingredientes_vectors`, `keto_recetas_vectors`
-
-## Conventions
-
-- Chinese characters in source code = broken encoding — fix them.
-- Service worker (`sw.js`) is intentionally disabled; don't re-enable without explicit intent.
-- `escapeHtml()` must be used before inserting any user-derived string into the DOM.
-- `safeParseJSON(value, default)` instead of bare `JSON.parse`.
-- Never push to GitHub without user confirmation.
+- Monetización (Stripe/suscripciones): no implementada, requiere sesión de diseño de producto (tiers/precios) antes de programar.
+- `academia/index.astro` y `comunidad/index.astro` (marketing) sin contenido real — noindex y sin enlaces en nav/footer a propósito.
+- Scanner (`app/scanner.astro`) detecta código de barras real pero no tiene base de datos de productos — macros se cargan a mano.
+- Colecciones de contenido (`web/src/content/`) muy escasas — trabajo de contenido, no de código.
