@@ -115,6 +115,20 @@
 
 .btn-sm { padding: 0.5rem 1.25rem; font-size: 0.8125rem; }
 
+/* Foco de teclado consistente: sin esto, cada boton/link caia al outline
+   por defecto del navegador (o a ninguno con outline:none en algunos casos). */
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+.btn-ghost:focus-visible,
+.kc-btn:focus-visible,
+.kc-btn-ghost:focus-visible,
+.kc-chip:focus-visible,
+.card-link:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 2px;
+}
+
 /* Chip / tag */
 .chip {
   display: inline-flex;

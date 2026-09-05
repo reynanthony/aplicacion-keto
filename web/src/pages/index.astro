@@ -34,8 +34,8 @@ const foodCount = allFoods.length;
         <h1 class="d" style="font-weight:900;font-size:clamp(40px,5.5vw,60px);line-height:0.98;letter-spacing:-0.04em;margin-bottom:22px">Keto que <span style="color:#ff4d00">piensa</span> por ti</h1>
         <p style="font-size:18px;line-height:1.6;color:rgba(26,20,14,0.6);max-width:480px;margin-bottom:34px">Deja de adivinar tus macros. KetoCore calcula tu plan, te dice qué comer hoy y ajusta el rumbo con IA que conoce tu progreso.</p>
         <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px">
-          <a href="/app/demo/" style="display:flex;align-items:center;gap:8px;height:54px;padding:0 28px;border-radius:15px;background:#ff4d00;color:#fff;font-family:var(--font-display);font-weight:700;font-size:16px;box-shadow:0 6px 20px rgba(255,77,0,0.3);text-decoration:none;transition:transform .14s"><span class="icon icon-fill" style="font-size:20px">play_circle</span>Probar el demo gratis</a>
-          <a href="/#precios" style="display:flex;align-items:center;gap:8px;height:54px;padding:0 24px;border-radius:15px;background:transparent;border:1.5px solid rgba(26,20,14,0.14);font-family:var(--font-display);font-weight:700;font-size:15px;color:#1a140e;text-decoration:none">Suscribirse<span class="icon" style="font-size:20px">arrow_forward</span></a>
+          <a href="/app/demo/" class="btn" style="font-size:1rem;padding:1rem 1.75rem"><span class="icon icon-fill" style="font-size:20px">play_circle</span>Probar el demo gratis</a>
+          <a href="/#precios" class="btn-ghost" style="font-size:1rem;padding:1rem 1.5rem">Ver precios<span class="icon" style="font-size:20px">arrow_forward</span></a>
         </div>
         <p style="font-size:0.8125rem;color:var(--c-text-dim)">Demo completo sin registro · {recipeCount} recetas verificadas · Sin publicidad</p>
       </div>
@@ -296,29 +296,30 @@ const foodCount = allFoods.length;
     </div>
     <div id="pricing-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:820px;margin:0 auto">
       <div class="card" style="background:#fff;border:1px solid rgba(26,20,14,0.08);border-radius:26px;padding:34px">
-        <div style="font-family:var(--font-display);font-weight:800;font-size:16px;margin-bottom:6px">Demo</div>
-        <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:8px"><span style="font-family:var(--font-display);font-weight:900;font-size:46px;font-variant-numeric:tabular-nums">$0</span><span style="font-size:14px;color:rgba(26,20,14,0.5)">/ sin registro</span></div>
-        <p style="font-size:13.5px;color:rgba(26,20,14,0.55);margin-bottom:24px;line-height:1.55">Recorre la app completa con datos de ejemplo antes de suscribirte.</p>
+        <div style="font-family:var(--font-display);font-weight:800;font-size:16px;margin-bottom:6px">Gratis</div>
+        <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:8px"><span style="font-family:var(--font-display);font-weight:900;font-size:46px;font-variant-numeric:tabular-nums">$0</span><span style="font-size:14px;color:rgba(26,20,14,0.5)">/ para siempre</span></div>
+        <p style="font-size:13.5px;color:rgba(26,20,14,0.55);margin-bottom:24px;line-height:1.55">Creá tu cuenta y usá el día a día del producto sin pagar nada.</p>
         <div style="display:flex;flex-direction:column;gap:13px;margin-bottom:28px">
-          <div style="display:flex;align-items:center;gap:10px;font-size:14px"><span class="icon icon-fill" style="color:#16a34a;font-size:20px">check_circle</span>Dashboard, plan y recetas de muestra</div>
-          <div style="display:flex;align-items:center;gap:10px;font-size:14px"><span class="icon icon-fill" style="color:#16a34a;font-size:20px">check_circle</span>Sin cuenta ni tarjeta</div>
-          <div style="display:flex;align-items:center;gap:10px;font-size:14px"><span class="icon icon-fill" style="color:#16a34a;font-size:20px">check_circle</span>Contenido web ilimitado</div>
-          <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(26,20,14,0.4)"><span class="icon" style="font-size:20px">remove</span>Datos propios y sincronización</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:14px"><span class="icon icon-fill" style="color:#16a34a;font-size:20px">check_circle</span>Dashboard, macros y checklist diario</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:14px"><span class="icon icon-fill" style="color:#16a34a;font-size:20px">check_circle</span>Plan de comidas manual y catálogo de recetas</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:14px"><span class="icon icon-fill" style="color:#16a34a;font-size:20px">check_circle</span>Registro de entrenamientos y progreso básico</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(26,20,14,0.4)"><span class="icon" style="font-size:20px">remove</span>Coach IA, generador automático y analytics avanzado</div>
         </div>
-        <a href="/app/demo/" style="display:flex;align-items:center;justify-content:center;height:50px;border-radius:14px;background:#f4efe6;border:1.5px solid rgba(26,20,14,0.12);font-family:var(--font-display);font-weight:700;font-size:15px;color:#1a140e;text-decoration:none">Probar el demo</a>
+        <a href="/app/welcome" class="btn-ghost" style="width:100%;justify-content:center;font-size:0.9375rem;padding:1rem 1.75rem">Crear cuenta gratis</a>
+        <p style="text-align:center;font-size:12.5px;color:rgba(26,20,14,0.45);margin-top:12px">¿Preferís mirar primero? <a href="/app/demo/" style="color:#1a140e;font-weight:700;text-decoration:underline">Probar el demo sin cuenta</a></p>
       </div>
       <div class="card" style="background:#1a140e;border-radius:26px;padding:34px;color:#f7f4f0;position:relative;overflow:hidden;border:none">
         <div style="position:absolute;top:24px;right:24px;font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:6px 13px;border-radius:100px;background:#ff4d00;color:#fff">Recomendado</div>
-        <div style="font-family:var(--font-display);font-weight:800;font-size:16px;margin-bottom:6px;color:#ff7a3c">Pro</div>
+        <div style="font-family:var(--font-display);font-weight:800;font-size:16px;margin-bottom:6px;color:#ff7a3c">Premium</div>
         <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:8px"><span style="font-family:var(--font-display);font-weight:900;font-size:46px;font-variant-numeric:tabular-nums">$9</span><span style="font-size:14px;color:rgba(247,244,240,0.5)">/ mes</span></div>
-        <p style="font-size:13.5px;color:rgba(247,244,240,0.6);margin-bottom:24px;line-height:1.55">Coach IA, planes automáticos e inteligencia total.</p>
+        <p style="font-size:13.5px;color:rgba(247,244,240,0.6);margin-bottom:24px;line-height:1.55">Coach IA, generador automático de plan y progreso avanzado.</p>
         <div style="display:flex;flex-direction:column;gap:13px;margin-bottom:28px">
-          <div style="display:flex;align-items:center;gap:10px;font-size:14px"><span class="icon icon-fill" style="color:#ff7a3c;font-size:20px">check_circle</span>Todo lo del plan Free</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:14px"><span class="icon icon-fill" style="color:#ff7a3c;font-size:20px">check_circle</span>Todo lo del plan Gratis</div>
           <div style="display:flex;align-items:center;gap:10px;font-size:14px"><span class="icon icon-fill" style="color:#ff7a3c;font-size:20px">check_circle</span>Coach IA con tu contexto</div>
-          <div style="display:flex;align-items:center;gap:10px;font-size:14px"><span class="icon icon-fill" style="color:#ff7a3c;font-size:20px">check_circle</span>Inspector inteligente</div>
-          <div style="display:flex;align-items:center;gap:10px;font-size:14px"><span class="icon icon-fill" style="color:#ff7a3c;font-size:20px">check_circle</span>Planes automáticos con IA</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:14px"><span class="icon icon-fill" style="color:#ff7a3c;font-size:20px">check_circle</span>Generador automático de plan + Inspector Keto</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:14px"><span class="icon icon-fill" style="color:#ff7a3c;font-size:20px">check_circle</span>Historial y analytics de progreso</div>
         </div>
-        <a href="/app/welcome" style="display:flex;align-items:center;justify-content:center;height:50px;border-radius:14px;background:#ff4d00;font-family:var(--font-display);font-weight:700;font-size:15px;color:#fff;text-decoration:none;box-shadow:0 6px 20px rgba(255,77,0,0.3)">Suscribirse a Pro</a>
+        <a href="/app/welcome" class="btn" style="width:100%;justify-content:center;font-size:0.9375rem;padding:1rem 1.75rem">Crear cuenta y subir a Premium</a>
       </div>
     </div>
   </div>
