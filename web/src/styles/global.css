@@ -124,7 +124,8 @@ button:focus-visible,
 .kc-btn:focus-visible,
 .kc-btn-ghost:focus-visible,
 .kc-chip:focus-visible,
-.card-link:focus-visible {
+.card-link:focus-visible,
+[role="button"]:focus-visible {
   outline: 2px solid var(--c-primary);
   outline-offset: 2px;
 }

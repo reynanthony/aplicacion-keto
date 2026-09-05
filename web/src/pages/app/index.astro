@@ -339,7 +339,7 @@ Exportar Backup
 <span class="material-symbols-outlined">upload</span>
 Importar Backup
 </button>
-<p class="text-[13px] text-center" style="color:rgba(247,244,240,0.42)">Último backup: <span id="lastBackupDate">Nunca</span></p>
+<p class="text-[13px] text-center" style="color:rgba(247,244,240,0.62)">Último backup: <span id="lastBackupDate">Nunca</span></p>
 </div>
 </div>
 </div>
@@ -357,7 +357,7 @@ Importar Backup
       <span style="font-size:13px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(247,244,240,0.57)">Día <span id="streakCount">0</span> en cetosis</span>
     </div>
     <h1 class="dash-greeting"><span id="coachDayPart">Buenos días</span>, <span id="coachUserName">Campeón</span></h1>
-    <p class="dash-subgreeting">Vas ganando la semana.</p>
+    <p class="dash-subgreeting" id="dashSubgreeting">Cargando tu semana...</p>
   </div>
   <div style="display:flex;align-items:center;gap:12px">
     <button onclick="showNotifications()" aria-label="Notificaciones" style="height:46px;width:46px;border-radius:14px;background:#161310;border:1px solid rgba(255,240,225,0.08);cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0">
@@ -613,7 +613,7 @@ Importar Backup
       <p class="font-bold text-sm" style="color:#f7f4f0">Ver mi progreso</p>
       <p class="text-[13px] mt-0.5" style="color:rgba(247,244,240,0.55)">Peso, logros y adherencia</p>
     </div>
-    <span class="material-symbols-outlined" style="color:rgba(247,244,240,0.38)">chevron_right</span>
+    <span class="material-symbols-outlined" style="color:rgba(247,244,240,0.62)">chevron_right</span>
   </a>
 </section>
 </div>
@@ -724,7 +724,7 @@ Añadir Alimento
 </button>
 </div>
 <div class="relative mb-4">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2" style="color:rgba(247,244,240,0.42)">search</span>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2" style="color:rgba(247,244,240,0.62)">search</span>
 <input type="text" id="quickFoodSearch" class="w-full pl-10 pr-4 py-3 rounded-xl transition-all" style="background:#1e1a15;border:1.5px solid rgba(255,240,225,0.06);color:#f7f4f0" placeholder="Buscar alimento..." oninput="filterQuickFoods(this.value)">
 </div>
 <div id="quickFoodList" class="flex-1 overflow-y-auto space-y-2 max-h-64">
@@ -982,7 +982,7 @@ function populateNotifications() {
       '<div class="flex-1 min-w-0">' +
       '<p class="text-sm font-semibold" style="color:#f7f4f0">' + n.title + '</p>' +
       '<p class="text-[13px] mt-0.5" style="color:rgba(247,244,240,0.6)">' + n.text + '</p>' +
-      '<p class="text-[11px] mt-1.5" style="color:rgba(247,244,240,0.38)">' + n.time + '</p>' +
+      '<p class="text-[11px] mt-1.5" style="color:rgba(247,244,240,0.62)">' + n.time + '</p>' +
       '</div>' +
       (n.dot ? '<div class="w-2 h-2 rounded-full flex-shrink-0 mt-2" style="background:#ff4d00"></div>' : '') +
       '</div></div>';
@@ -1518,7 +1518,7 @@ function renderWeightChart() {
 
   // X-axis labels + data dots
   pts.forEach(function(p) {
-    var tc = p.isToday ? '#ff4d00' : 'rgba(247,244,240,0.32)';
+    var tc = p.isToday ? '#ff4d00' : 'rgba(247,244,240,0.62)';
     h += '<text x="' + f1(p.x) + '" y="' + (H-6) + '" text-anchor="middle" fill="' + tc + '" font-size="8.5" font-weight="' + (p.isToday ? '700' : '400') + '" font-family="Inter,sans-serif">' + p.dn + '</text>';
     if (p.y !== null) {
       if (p.isToday) {
@@ -1582,7 +1582,7 @@ function renderTodayMealsSummary(mealPlan) {
       '</div>' +
       '<p class="text-[13px] mb-1" style="color:rgba(247,244,240,0.55)">' + meal.name + '</p>' +
       '<p class="text-lg font-black" style="color:#f7f4f0;font-family:Plus Jakarta Sans,sans-serif">' + fmtNum(totalCal) + '</p>' +
-      '<p class="text-[11px]" style="color:rgba(247,244,240,0.42)">' + fmtNum(items.length) + ' items</p>' +
+      '<p class="text-[11px]" style="color:rgba(247,244,240,0.62)">' + fmtNum(items.length) + ' items</p>' +
     '</a>';
   });
   
@@ -2274,6 +2274,15 @@ function initCoachDashboard() {
   var adh = document.getElementById('coachAdherence');
   if (adh) adh.textContent = plan.adherence + '%';
 
+  var subgreetingEl = document.getElementById('dashSubgreeting');
+  if (subgreetingEl) {
+    subgreetingEl.textContent = plan.adherence >= 70
+      ? 'Vas ganando la semana.'
+      : plan.adherence >= 40
+        ? 'Vas a mitad de camino, seguí así.'
+        : 'Esta semana viene difícil, pero todavía la podés recuperar.';
+  }
+
   // Health Score ring
   var ring   = document.getElementById('coachScoreRing');
   var numEl  = document.getElementById('coachScoreNum');
@@ -2346,8 +2355,9 @@ function renderDailyPlan(plan) {
     var navAttr     = action.href
       ? 'onclick="location.href=\'' + action.href + '\'"'
       : (action.action ? 'onclick="' + action.action + '"' : '');
+    var a11yAttr    = navAttr ? ' role="button" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();this.click();}"' : '';
 
-    return '<div ' + navAttr + ' style="border-radius:18px;padding:14px;background:' + cardBg + ';border:1px solid ' + cardBorder + ';box-shadow:0 2px 10px rgba(0,0,0,0.15);position:relative;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:opacity 0.15s">' +
+    return '<div ' + navAttr + a11yAttr + ' style="border-radius:18px;padding:14px;background:' + cardBg + ';border:1px solid ' + cardBorder + ';box-shadow:0 2px 10px rgba(0,0,0,0.15);position:relative;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:opacity 0.15s">' +
       (isDone
         ? '<div style="position:absolute;top:10px;right:10px;width:20px;height:20px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center">' +
             '<span class="material-symbols-outlined" style="font-size:13px;color:#fff;font-variation-settings:\'FILL\' 1,\'wght\' 400">check</span>' +
@@ -2356,7 +2366,7 @@ function renderDailyPlan(plan) {
       '<div style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;background:' + iconBg + '">' +
         '<span class="material-symbols-outlined" style="font-size:20px;color:' + iconHex + '">' + action.icon + '</span>' +
       '</div>' +
-      '<p style="font-size:14px;font-weight:900;line-height:1;margin-bottom:3px;color:' + (isDone ? 'rgba(247,244,240,0.38)' : '#f7f4f0') + '">' + escapeHtml(action.detail) + '</p>' +
+      '<p style="font-size:14px;font-weight:900;line-height:1;margin-bottom:3px;color:' + (isDone ? 'rgba(247,244,240,0.62)' : '#f7f4f0') + '">' + escapeHtml(action.detail) + '</p>' +
       '<p style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:rgba(247,244,240,0.6);margin-bottom:' + (hasProgress ? '8px' : '0') + '">' + escapeHtml(action.label) + '</p>' +
       (hasProgress
         ? '<div style="height:3px;background:rgba(255,240,225,0.08);border-radius:4px;overflow:hidden">' +
