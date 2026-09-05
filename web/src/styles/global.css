@@ -544,6 +544,14 @@ button, a, [role="button"] { touch-action: manipulation; }
 }
 .kc-tile-cream .kc-eyebrow { color: rgba(26,20,14,0.45); }
 
+/* Section card del dashboard app — antes se retipeaba a mano en 6+ secciones */
+.kc-section-card {
+  background: #161310;
+  border: 1px solid rgba(255,240,225,0.06);
+  border-radius: 26px;
+  padding: 28px;
+}
+
 /* Big metric number */
 .kc-num {
   font-family: var(--font-display);
