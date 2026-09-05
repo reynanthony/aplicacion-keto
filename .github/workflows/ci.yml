@@ -16,13 +16,29 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.x'
+        node-version: '22.x'
 
-    - name: Instalar Dependencias
+    - name: Instalar Dependencias (modulos legacy en web/public/app)
       run: npm ci || npm install
 
     - name: Ejecutar Pruebas Automatizadas (Jest)
       run: npm test
 
-    - name: Comprobación de Performance Híbrido PWA
-      run: bash verify_hibrido.sh || true
+  build-web:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '22.x'
+
+    - name: Instalar Dependencias
+      working-directory: web
+      run: npm ci
+
+    - name: Build del sitio Astro (web/)
+      working-directory: web
+      run: npm run build
