@@ -1546,6 +1546,19 @@ function initI18n() {
   applyTranslations();
 }
 
+// Cierre global con Escape para modales tipo overlay (fixed inset-0 ... hidden/flex).
+// Sin esto, ningun modal del app era cerrable por teclado (hallazgo repetido
+// en varias pantallas). No reemplaza los botones de cierre existentes.
+if (typeof document !== 'undefined') {
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.fixed.inset-0:not(.hidden)').forEach(function (el) {
+      el.classList.add('hidden');
+      el.classList.remove('flex');
+    });
+  });
+}
+
 // Para Node.js (Jest)
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {

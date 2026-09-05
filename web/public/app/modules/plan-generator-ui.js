@@ -102,25 +102,37 @@ function loadProfileSummary() {
 function generateWeeklyPlanAI() {
   closeWeeklyPlanGenerator();
 
+  var usingAI = !!(window.KetoAI && window.KetoSupabase);
+
   var loadingModal = document.getElementById('weeklyPlanLoadingModal');
   if (!loadingModal) {
     loadingModal = document.createElement('div');
     loadingModal.id = 'weeklyPlanLoadingModal';
     loadingModal.className = 'fixed inset-0 z-[90] flex items-center justify-center bg-black/80 backdrop-blur-sm';
-    loadingModal.innerHTML = '<div class="text-center">' +
-      '<div class="w-16 h-16 mx-auto mb-4 rounded-full border-4 border-primary-container border-t-transparent animate-spin"></div>' +
-      '<p class="text-white font-headline font-bold">Generando tu plan semanal...</p>' +
-      '<p class="text-on-surface-variant text-sm mt-1">Creando recetas únicas con IA</p>' +
-    '</div>';
     document.body.appendChild(loadingModal);
   }
+  loadingModal.innerHTML = '<div class="text-center">' +
+    '<div class="w-16 h-16 mx-auto mb-4 rounded-full border-4 border-primary-container border-t-transparent animate-spin"></div>' +
+    '<p class="text-white font-headline font-bold">Generando tu plan semanal...</p>' +
+    '<p class="text-on-surface-variant text-sm mt-1">' + (usingAI ? 'Creando recetas únicas con IA' : 'Armando tu plan') + '</p>' +
+    (usingAI ? '<p id="aiGenProgress" class="text-on-surface-variant text-[13px] mt-2">0/28 comidas</p>' : '') +
+    '<button onclick="cancelWeeklyPlanGeneration()" class="mt-5 text-[13px] text-on-surface-variant hover:text-white underline">Cancelar</button>' +
+  '</div>';
   loadingModal.classList.remove('hidden');
+  window._aiGenCancelled = false;
 
-  if (window.KetoAI && window.KetoSupabase) {
+  if (usingAI) {
     generateWeeklyPlanWithAI(loadingModal);
   } else {
     generateWeeklyPlanNormal(loadingModal);
   }
+}
+
+function cancelWeeklyPlanGeneration() {
+  window._aiGenCancelled = true;
+  var loadingModal = document.getElementById('weeklyPlanLoadingModal');
+  if (loadingModal) loadingModal.classList.add('hidden');
+  window.showToast('Generación cancelada', 2000, 'warning');
 }
 
 async function generateWeeklyPlanWithAI(loadingModal) {
@@ -154,8 +166,16 @@ async function generateWeeklyPlanWithAI(loadingModal) {
     };
 
     var days = getWeekDays();
+    var mealTypeLabels = { desayuno: 'desayuno', almuerzo: 'almuerzo', cena: 'cena', snacks: 'snacks' };
+    var weekDayLabels = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    var totalMeals = days.length * 4;
+    var doneMeals = 0;
+    var failedMeals = [];
+    var progressEl = document.getElementById('aiGenProgress');
 
     for (var d = 0; d < days.length; d++) {
+      if (window._aiGenCancelled) break;
+
       var dateKey = days[d];
       var dayPlan = {
         date: dateKey,
@@ -166,8 +186,14 @@ async function generateWeeklyPlanWithAI(loadingModal) {
       var mealTypes = ['desayuno', 'almuerzo', 'cena', 'snacks'];
 
       for (var m = 0; m < mealTypes.length; m++) {
+        if (window._aiGenCancelled) break;
+
         var mealType = mealTypes[m];
         var target = mealTargets[mealType];
+
+        if (progressEl) {
+          progressEl.textContent = doneMeals + '/' + totalMeals + ' comidas — generando ' + mealTypeLabels[mealType] + ' de ' + weekDayLabels[new Date(dateKey).getDay()];
+        }
 
         try {
           var receta = await window.KetoAI.generarRecetaKeto(mealType, {
@@ -183,8 +209,15 @@ async function generateWeeklyPlanWithAI(loadingModal) {
             dayPlan.dayMacros.protein += receta.macrosPorcion?.protein || 20;
             dayPlan.dayMacros.fat += receta.macrosPorcion?.fat || 30;
             dayPlan.dayMacros.netCarbs += receta.macrosPorcion?.netCarbs || target.netCarbs;
+          } else {
+            failedMeals.push(weekDayLabels[new Date(dateKey).getDay()] + ' ' + mealTypeLabels[mealType]);
           }
-        } catch(e) {}
+        } catch(e) {
+          failedMeals.push(weekDayLabels[new Date(dateKey).getDay()] + ' ' + mealTypeLabels[mealType]);
+        }
+
+        doneMeals++;
+        if (progressEl) progressEl.textContent = doneMeals + '/' + totalMeals + ' comidas';
       }
 
       weekPlan.days[dateKey] = dayPlan;
@@ -194,6 +227,8 @@ async function generateWeeklyPlanWithAI(loadingModal) {
       weekPlan.totalMacros.netCarbs += dayPlan.dayMacros.netCarbs;
     }
 
+    if (window._aiGenCancelled) return;
+
     await window.KetoSupabase.guardarPlanSemanal(weekPlan);
 
     loadingModal.classList.add('hidden');
@@ -201,19 +236,30 @@ async function generateWeeklyPlanWithAI(loadingModal) {
     if (Object.keys(weekPlan.days).length > 0) {
       weekPlan = analyzePlanWithInspector(weekPlan);
       saveWeeklyPlan(weekPlan);
+      if (failedMeals.length > 0) {
+        window.showToast('No se pudieron generar ' + failedMeals.length + ' comidas (' + failedMeals.slice(0, 3).join(', ') + (failedMeals.length > 3 ? '…' : '') + ') — completalas a mano', 4500, 'warning');
+      }
       openPlanInspectorReviewWithPlan(weekPlan);
     } else {
       window.showToast('Error al generar plan con IA', 3000, 'warning');
     }
 
   } catch(e) {
-    loadingModal.classList.add('hidden');
+    if (window._aiGenCancelled) return;
+    window.showToast('La IA no respondió — armando tu plan sin ella', 3000, 'warning');
     generateWeeklyPlanNormal(loadingModal);
   }
 }
 
 function generateWeeklyPlanNormal(loadingModal) {
+  var subtitle = loadingModal && loadingModal.querySelector('p:nth-child(3)');
+  if (subtitle) subtitle.textContent = 'Armando tu plan';
+  var progressEl = document.getElementById('aiGenProgress');
+  if (progressEl) progressEl.remove();
+  loadingModal.classList.remove('hidden');
+
   setTimeout(function() {
+    if (window._aiGenCancelled) return;
     var weekPlan = typeof generateWeeklyPlan === 'function' ? generateWeeklyPlan() : null;
 
     loadingModal.classList.add('hidden');

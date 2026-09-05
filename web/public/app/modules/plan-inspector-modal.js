@@ -120,9 +120,10 @@ function openPlanInspectorReviewWithPlan(weekPlan) {
         var cnTotal = ((ing.carb_netos_estimados || 0) * cantNum / 100).toFixed(1);
         var isChangeable = ing.nivel === 'critico' || ing.nivel === 'moderado';
         var clickAction = isChangeable ? 'onclick="replaceIngredient(' + index + ',' + ingIndex + ')"' : '';
+        var a11yAttrs = isChangeable ? ' role="button" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();this.click();}"' : '';
         var cursorStyle = isChangeable ? 'cursor-pointer hover:bg-white/20' : '';
 
-        html += '<div ' + clickAction + ' class="grid grid-cols-12 gap-1 text-xs py-1 ' + bgRow + ' rounded ' + cursorStyle + '">' +
+        html += '<div ' + clickAction + a11yAttrs + ' class="grid grid-cols-12 gap-1 text-xs py-1 ' + bgRow + ' rounded ' + cursorStyle + '">' +
           '<div class="col-span-4 truncate font-medium flex items-center gap-1">' +
             (isChangeable ? '<span class="material-symbols-outlined text-[12px] ' + ingColor + '">swap_horiz</span>' : '') +
             (ing.nombre || '?') +
@@ -256,7 +257,7 @@ function showIngredientAlternativesModal(recipeIndex, ingIndex, currentName, alt
     html += '<p class="text-on-surface-variant text-center py-4">No hay alternativas en base de datos</p>';
   } else {
     alternativas.forEach(function(alt) {
-      html += '<div onclick="selectNewIngredient(' + recipeIndex + ',' + ingIndex + ',\'' + alt.replace(/'/g, "\\'") + '\')" class="bg-surface-container-high rounded-xl p-3 mb-2 cursor-pointer hover:bg-primary-container/20 transition-all border border-transparent hover:border-primary-container/30">' +
+      html += '<div onclick="selectNewIngredient(' + recipeIndex + ',' + ingIndex + ',\'' + alt.replace(/'/g, "\\'") + '\')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();this.click();}" class="bg-surface-container-high rounded-xl p-3 mb-2 cursor-pointer hover:bg-primary-container/20 transition-all border border-transparent hover:border-primary-container/30">' +
         '<div class="flex items-center justify-between">' +
           '<div class="flex items-center gap-2">' +
             '<span class="material-symbols-outlined text-green-400 text-sm">check_circle</span>' +
@@ -373,7 +374,7 @@ function showAlternativesModal(originalIndex, mealType, alternativas) {
         '<p class="text-sm text-on-surface-variant mb-4">Selecciona una alternativa para ' + mealType + ':</p>';
 
   alternativas.forEach(function(alt, i) {
-    html += '<div onclick="selectAlternative(' + originalIndex + ', \'' + alt.id + '\')" class="bg-surface-container-high rounded-xl p-3 mb-2 cursor-pointer hover:bg-surface-container-highest transition-colors">' +
+    html += '<div onclick="selectAlternative(' + originalIndex + ', \'' + alt.id + '\')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();this.click();}" class="bg-surface-container-high rounded-xl p-3 mb-2 cursor-pointer hover:bg-surface-container-highest transition-colors">' +
       '<div class="flex items-center justify-between">' +
         '<span class="font-medium text-white">' + alt.title + '</span>' +
         '<span class="text-xs text-green-400 bg-green-500/20 px-2 py-0.5 rounded">KETO</span>' +
