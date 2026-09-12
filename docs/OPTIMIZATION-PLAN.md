@@ -78,12 +78,14 @@ Recomiendo empezar por (a) y medir antes de considerar (b).
 ### P6 — Limpieza de repo — HECHO
 Movidos los 21 `.md` de análisis + los 9 `.sql` sueltos de la raíz (y la carpeta `migrations/` suelta, ahora vacía y eliminada) a `docs/archive/` y `docs/archive/sql-legacy/` respectivamente (con `git mv`, historia preservada), cada uno con su propio `README.md` explicando qué es y su vigencia real.
 
-Verificado contra producción con `supabase db query --linked` antes de mover nada: las tablas `alimentos`, `ejercicios`, `recetas`, `suplementos` sí están en uso real por el frontend. **Hallazgo nuevo**: `public.ingredientes` (110 filas) existe en producción pero está huérfana — ningún código la consulta, el motor real usa un archivo JS estático. No se borró la tabla (acción irreversible sobre la BD) — ver pregunta 3 abajo.
+Verificado contra producción con `supabase db query --linked` antes de mover nada: las tablas `alimentos`, `ejercicios`, `recetas`, `suplementos` sí están en uso real por el frontend.
+
+### `public.ingredientes` — HECHO (hardening, sin borrar datos)
+Confirmado que la policy RLS real era `cmd ALL, roles {public}, qual true, with_check null` — es decir, cualquiera con la anon key podía leer, insertar, actualizar y borrar filas sin restricción (peor que "solo lectura pública", que es lo que se sospechaba inicialmente). Verificado también que ninguna Edge Function ni código del frontend consulta esta tabla por nombre. Se aplicó la migración `supabase/migrations/20260912120000_lock_down_ingredientes.sql` (`DROP POLICY ingredientes_all`), vía el camino disciplinado CLI (`supabase db push --linked`) — verificado post-aplicación que ya no hay ninguna policy sobre la tabla, así que con RLS habilitado el acceso queda restringido a `service_role`. **No se borró la tabla ni sus 110 filas** — sigue disponible por si más adelante se decide conectarla de verdad al frontend en vez del JSON estático actual.
 
 ---
 
 ## Qué necesito de ti para avanzar
 
-1. ¿Tienes los datos reales de LemonSqueezy (store URL + variant IDs) para cerrar P1, o seguimos esperando la aprobación de la cuenta?
-2. **`public.ingredientes` en producción (110 filas, sin RLS restrictiva, sin uso)** — ¿la borro, la dejo así, o la conectamos de verdad al frontend en vez de usar el JSON estático? Es la única acción pendiente que toca la base de datos real.
-3. Todo lo de esta sesión (docs nuevos, CLAUDE.md/AGENTS.md, tests, fix del Inspector en `plan.astro`/`recetas.astro`, archivo de docs y SQL viejos) sigue sin commitear — ¿armamos el commit ya?
+1. ¿Tienes los datos reales de LemonSqueezy (store URL + variant IDs) para cerrar P1, o seguimos esperando la aprobación de la cuenta? Esto sigue bloqueado — no hay forma de avanzarlo sin esos datos.
+2. Todo lo de código/DB ya está commiteado y pusheado a `origin/main`. Falta el deploy real: `vercel --prod` (el proyecto no redeploya solo con el push a GitHub). ¿Lo corro?
