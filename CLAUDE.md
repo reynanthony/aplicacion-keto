@@ -49,7 +49,12 @@ npx supabase db advisors --linked --type security   # chequeo de seguridad en vi
 
 ## Pendiente conocido (ver plan de lanzamiento)
 
-- Monetización (Stripe/suscripciones): no implementada, requiere sesión de diseño de producto (tiers/precios) antes de programar.
+- Monetización (LemonSqueezy): schema (`suscripciones`), webhook (`lemonsqueezy-webhook`) y gating de features Premium (Coach IA, generador automático de plan, progreso/analítica) **ya están construidos**. Lo que falta: `web/public/app/modules/entitlements.js` tiene `storeUrl`/`variantMensual`/`variantAnual` como placeholders, y `checkoutUrl()` no está conectado a ningún botón real en la UI (el CTA "Suscribirme" en `perfil.astro` no existe todavía) — nadie puede pagar hasta completar esos datos reales de LemonSqueezy y cablear el botón. Ver `docs/AUDIT-REPORT.md` y `docs/OPTIMIZATION-PLAN.md`.
 - `academia/index.astro` y `comunidad/index.astro` (marketing) sin contenido real — noindex y sin enlaces en nav/footer a propósito.
 - Scanner (`app/scanner.astro`) detecta código de barras real pero no tiene base de datos de productos — macros se cargan a mano.
 - Colecciones de contenido (`web/src/content/`) muy escasas — trabajo de contenido, no de código.
+- `inspectorKeto.js` y `keto-inspector.js` (en `web/public/app/modules/`) tienen nombres casi idénticos y tamaño similar — sin confirmar si uno es remanente muerto. Ver `docs/AUDIT-REPORT.md` §5.
+
+## Workflow del proyecto
+
+Este repo sigue `docs/MASTER-PROJECT-WORKFLOW.md`. Antes de tomar decisiones de producto, negocio o cambios irreversibles, consultar al usuario en vez de asumir (ver §50 de ese documento). `docs/AUDIT-REPORT.md` y `docs/OPTIMIZATION-PLAN.md` son la auditoría vigente (2026-09-12) — más confiable que los ~15 documentos de análisis sueltos en la raíz del repo, varios de los cuales están obsoletos (asumen la app vanilla-JS pre-migración a Astro).

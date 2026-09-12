@@ -40,7 +40,12 @@ npx supabase db advisors --linked --type security
 
 ## Pendiente conocido
 
-- Monetización: no implementada, requiere definir tiers/precios antes de programar.
+- Monetización (LemonSqueezy): schema, webhook y gating de features Premium (Coach IA, generador automático de plan, progreso) **ya están construidos**. Falta: `web/public/app/modules/entitlements.js` tiene `storeUrl`/`variantMensual`/`variantAnual` como placeholders y `checkoutUrl()` no está conectado a ningún botón en la UI — nadie puede pagar hasta completar esos datos reales y cablear el CTA en `perfil.astro`. Ver `docs/AUDIT-REPORT.md`.
 - `academia/` y `comunidad/` (marketing) sin contenido real — noindex a propósito.
 - Scanner sin base de datos de productos — macros a mano.
 - Colecciones de contenido escasas — trabajo de contenido, no de código.
+- `inspectorKeto.js` vs `keto-inspector.js` (mismo dominio, nombres casi idénticos) — sin confirmar si uno es remanente muerto.
+
+## Workflow del proyecto
+
+Este repo sigue `docs/MASTER-PROJECT-WORKFLOW.md`. Consultar al usuario antes de cambios de producto, negocio o irreversibles (§50). `docs/AUDIT-REPORT.md`/`docs/OPTIMIZATION-PLAN.md` (2026-09-12) son la auditoría vigente, más confiable que los documentos de análisis sueltos en la raíz.
