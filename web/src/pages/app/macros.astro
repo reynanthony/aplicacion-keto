@@ -28,6 +28,11 @@ import AppLayout from '../../layouts/AppLayout.astro';
   .mx-stats { grid-template-columns:repeat(4,1fr); }
   .mx-donut-wrap { flex-direction:row; gap:36px; }
   #mxPage { padding-top:72px; }
+  /* "Racha de constancia" es solo icono + 2 lineas de texto -- a todo el
+     ancho de la pagina en escritorio queda con mucho espacio horizontal
+     muerto dentro de la propia tarjeta. La topamos y centramos, igual que
+     un footer/callout, en vez de estirarla como si tuviera mas contenido. */
+  .mx-streak { max-width: 640px; margin-left: auto; margin-right: auto; }
 }
 #mxPage { padding-top:84px; }
 
@@ -116,22 +121,22 @@ import AppLayout from '../../layouts/AppLayout.astro';
       </div>
     </div>
 
-    <!-- Carbos netos — cream (crítico keto) -->
-    <div class="kc-tile-cream" style="border-radius:26px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;gap:18px">
+    <!-- Carbos netos restantes -->
+    <div style="background:#161310;border:1px solid rgba(8,145,178,0.16);border-radius:26px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;gap:18px">
       <div style="display:flex;align-items:center;justify-content:space-between">
-        <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:14px;letter-spacing:0.02em;color:rgba(26,20,14,0.55)">CARBOS NETOS RESTANTES</span>
+        <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:14px;letter-spacing:0.02em;color:rgba(247,244,240,0.55)">CARBOS NETOS RESTANTES</span>
         <span class="material-symbols-outlined icon-filled" style="color:#0891b2;font-size:22px">grain</span>
       </div>
       <div>
-        <div class="kc-num" style="font-weight:900;font-size:72px;line-height:0.82;color:#1a140e"><span id="mxCarbsLeft">--</span><span style="font-size:26px;font-weight:700;color:rgba(26,20,14,0.4)"> g</span></div>
-        <p id="mxCarbsNote" style="font-size:13.5px;color:rgba(26,20,14,0.55);margin-top:10px;line-height:1.5">Configura tus macros en Perfil para ver tu margen diario.</p>
+        <div class="kc-num" style="font-weight:900;font-size:72px;line-height:0.82;color:#f7f4f0"><span id="mxCarbsLeft">--</span><span style="font-size:26px;font-weight:700;color:rgba(247,244,240,0.4)"> g</span></div>
+        <p id="mxCarbsNote" style="font-size:13.5px;color:rgba(247,244,240,0.57);margin-top:10px;line-height:1.5">Configura tus macros en Perfil para ver tu margen diario.</p>
       </div>
       <div id="mxCarbSegs" style="display:flex;gap:5px">
-        <div style="flex:1;height:8px;border-radius:100px;background:rgba(26,20,14,0.12)"></div>
-        <div style="flex:1;height:8px;border-radius:100px;background:rgba(26,20,14,0.12)"></div>
-        <div style="flex:1;height:8px;border-radius:100px;background:rgba(26,20,14,0.12)"></div>
-        <div style="flex:1;height:8px;border-radius:100px;background:rgba(26,20,14,0.12)"></div>
-        <div style="flex:1;height:8px;border-radius:100px;background:rgba(26,20,14,0.12)"></div>
+        <div style="flex:1;height:8px;border-radius:100px;background:rgba(8,145,178,0.14)"></div>
+        <div style="flex:1;height:8px;border-radius:100px;background:rgba(8,145,178,0.14)"></div>
+        <div style="flex:1;height:8px;border-radius:100px;background:rgba(8,145,178,0.14)"></div>
+        <div style="flex:1;height:8px;border-radius:100px;background:rgba(8,145,178,0.14)"></div>
+        <div style="flex:1;height:8px;border-radius:100px;background:rgba(8,145,178,0.14)"></div>
       </div>
     </div>
   </div>
@@ -196,7 +201,7 @@ import AppLayout from '../../layouts/AppLayout.astro';
   </div>
 
   <!-- Racha -->
-  <div class="kc-tile" style="margin-top:18px;display:flex;align-items:center;gap:16px">
+  <div class="kc-tile mx-streak" style="margin-top:18px;display:flex;align-items:center;gap:16px">
     <div style="width:48px;height:48px;border-radius:14px;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
       <span class="material-symbols-outlined icon-filled" style="color:#22c55e;font-size:26px">workspace_premium</span>
     </div>
@@ -281,7 +286,7 @@ function loadMacrosData(){
   var segs=document.querySelectorAll('#mxCarbSegs > div');
   var usedRatio=carbTarget>0?cCarb/carbTarget:0;
   var litSegs=Math.min(5,Math.round(usedRatio*5));
-  segs.forEach(function(s,i){s.style.background=i<litSegs?'#0891b2':'rgba(26,20,14,0.12)';});
+  segs.forEach(function(s,i){s.style.background=i<litSegs?'#0891b2':'rgba(8,145,178,0.14)';});
 
   // ── Tiles de macro ──
   function setMacro(now,target,barId,nowId,targetId,noteId,kcalPerG,unit){

@@ -209,6 +209,7 @@ function daysAgo(n) {
 }
 
 var _period = 7;
+var _lastScore = null;
 
 // ── Data readers ──────────────────────────────────────────────────────
 function getWeightHistory() {
@@ -540,7 +541,7 @@ var ALERT_STYLES = {
   info:    { bg:'rgba(96,165,250,0.08)',border:'rgba(96,165,250,0.2)', icon:'#60a5fa' }
 };
 
-function renderAlerts() {
+function renderAlerts(score) {
   var section = document.getElementById('insp-alerts');
   if (!section) return;
   var alerts = window.KetoAutomations ? KetoAutomations.getAlerts() : [];
@@ -548,15 +549,21 @@ function renderAlerts() {
     // Sin esto, la seccion quedaba con innerHTML='' -- 0px de alto, invisible
     // -- dejando un hueco negro grande junto a "Metricas Clave" (misma fila
     // del grid) cuando no hay alertas que mostrar (ej. cuenta nueva sin
-    // datos todavia). Un placeholder positivo llena ese espacio en vez de
-    // dejarlo vacio.
-    var s = ALERT_STYLES.success;
+    // datos todavia). Un placeholder llena ese espacio en vez de dejarlo
+    // vacio -- pero el placeholder tiene que coincidir con el veredicto de
+    // arriba (data.score en runAnalysis): mostrar "Todo en orden" en verde
+    // mientras el veredicto dice "Accion Recomendada" en rojo es
+    // contradictorio (KetoAutomations.getAlerts() es un motor aparte del
+    // score, y no siempre dispara una alerta puntual solo porque el
+    // puntaje general esta bajo).
+    var bajo = typeof score === 'number' && score < 60;
+    var s = bajo ? ALERT_STYLES.warning : ALERT_STYLES.success;
     section.innerHTML = '<div class="ik-card p-3.5" style="background:' + s.bg + ';border-color:' + s.border + '">' +
       '<div class="flex items-start gap-2.5">' +
-        '<span class="material-symbols-outlined icon-filled flex-shrink-0" style="font-size:18px;color:' + s.icon + ';margin-top:1px">check_circle</span>' +
+        '<span class="material-symbols-outlined icon-filled flex-shrink-0" style="font-size:18px;color:' + s.icon + ';margin-top:1px">' + (bajo ? 'info' : 'check_circle') + '</span>' +
         '<div class="flex-1">' +
-          '<p class="text-[13px] font-bold" style="color:#f7f4f0">Todo en orden</p>' +
-          '<p class="text-[13px] mt-0.5 leading-relaxed" style="color:rgba(247,244,240,0.55)">Sin alertas por ahora. Sigue registrando tus comidas y peso para que el Inspector detecte patrones.</p>' +
+          '<p class="text-[13px] font-bold" style="color:#f7f4f0">' + (bajo ? 'Sin alertas puntuales' : 'Todo en orden') + '</p>' +
+          '<p class="text-[13px] mt-0.5 leading-relaxed" style="color:rgba(247,244,240,0.55)">' + (bajo ? 'El Inspector no detecto un patron especifico, pero tu puntaje general (arriba) indica que hay que ajustar macros o adherencia.' : 'Sin alertas por ahora. Sigue registrando tus comidas y peso para que el Inspector detecte patrones.') + '</p>' +
         '</div>' +
       '</div></div>';
     return;
@@ -582,7 +589,7 @@ function renderAlerts() {
 
 function dismissAlert(id) {
   if (window.KetoAutomations) KetoAutomations.clearAlert(id);
-  renderAlerts();
+  renderAlerts(_lastScore);
 }
 
 // ── Animate bars ──────────────────────────────────────────────────────
@@ -613,6 +620,8 @@ function runAnalysis() {
   renderMacros(data);
   renderWeightTrend(data);
   renderAdherence();
+  _lastScore = data.score;
+  renderAlerts(_lastScore);
 
   var el = document.getElementById('lastAnalyzed');
   if (el) el.textContent = 'Análisis de ' + _period + ' días · ' + new Date().toLocaleTimeString('es', { hour:'2-digit', minute:'2-digit' });
