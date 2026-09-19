@@ -43,8 +43,8 @@ window.KetoEntitlements = {
         return data;
     },
 
-    async isPremium() {
-        const sub = await this.getSuscripcion();
+    async isPremium(forceRefresh = false) {
+        const sub = await this.getSuscripcion(forceRefresh);
         return !!sub && ESTADOS_ACTIVOS.includes(sub.estado);
     },
 
@@ -57,6 +57,7 @@ window.KetoEntitlements = {
             url.searchParams.set('checkout[custom][usuario_id]', user.id);
             if (user.email) url.searchParams.set('checkout[email]', user.email);
         }
+        url.searchParams.set('checkout[redirect_url]', window.location.origin + '/app/perfil?suscripcion=activada');
         return url.toString();
     },
 

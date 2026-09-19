@@ -372,9 +372,14 @@ async function suscribirse(plan) {
 
 function loadSubscriptionStatus() {
   if (!window.KetoEntitlements) return;
-  window.KetoEntitlements.isPremium().then(function (premium) {
+  var volvioDePago = new URLSearchParams(window.location.search).get('suscripcion') === 'activada';
+  window.KetoEntitlements.isPremium(volvioDePago).then(function (premium) {
     document.getElementById('subEstadoFree').classList.toggle('hidden', premium);
     document.getElementById('subEstadoPremium').classList.toggle('hidden', !premium);
+    if (volvioDePago) {
+      showToast(premium ? '✓ Suscripción activada' : 'Pago recibido, confirmando suscripción...');
+      window.history.replaceState({}, '', '/app/perfil');
+    }
   });
 }
 
