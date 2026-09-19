@@ -101,8 +101,7 @@ describe('KetoEntitlements', () => {
       global.auth = makeAuthMock({ id: 'user-1', email: 'a@b.com' });
 
       const url = await ent.checkoutUrl();
-      expect(url).toContain('/checkout/buy/');
-      expect(url).toContain('REEMPLAZAR_VARIANT_ID_MENSUAL');
+      expect(url).toContain('/checkout/buy/fa3bd4fc-b83b-4dbe-9af2-b98859a80bbf');
       expect(decodeURIComponent(url)).toContain('checkout[custom][usuario_id]=user-1');
       expect(decodeURIComponent(url)).toContain('checkout[email]=a@b.com');
     });
@@ -111,7 +110,7 @@ describe('KetoEntitlements', () => {
       global.auth = makeAuthMock({ id: 'user-1' });
 
       const url = await ent.checkoutUrl('anual');
-      expect(url).toContain('REEMPLAZAR_VARIANT_ID_ANUAL');
+      expect(url).toContain('/checkout/buy/386acdbd-9418-4fcb-b9ed-b386bc50007f');
     });
 
     test('omits custom params when there is no logged-in user', async () => {

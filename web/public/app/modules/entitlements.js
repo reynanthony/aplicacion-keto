@@ -5,11 +5,12 @@
 // suscripciones (RLS: cada usuario solo ve su propia fila). Requiere que
 // supabase-client.js ya haya corrido antes (window.supabase, window.auth).
 
-// TODO: completar con los datos reales de LemonSqueezy antes de activar el paywall.
 const LEMONSQUEEZY_CHECKOUT = {
     storeUrl: 'https://ketocore.lemonsqueezy.com',
-    variantMensual: '2146315',
-    variantAnual: '2146329',
+    // LemonSqueezy arma la URL de checkout con el slug UUID de la variante,
+    // no con su ID numerico (ese solo se usa en las respuestas de la API/webhook).
+    variantMensual: 'fa3bd4fc-b83b-4dbe-9af2-b98859a80bbf',
+    variantAnual: '386acdbd-9418-4fcb-b9ed-b386bc50007f',
 };
 
 const ESTADOS_ACTIVOS = ['active', 'on_trial'];
