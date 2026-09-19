@@ -1980,9 +1980,16 @@ function runGenerateAndApplyAutoPlan(summaryDiv) {
             '<p class="text-on-surface-variant text-sm mb-3">' + errorMsg + '</p>' +
             '<p class="text-[13px] text-yellow-300 mb-2">Compras prioritarias sugeridas:</p>' +
             '<ul class="space-y-1">' + (compras || '<li class="text-[13px] text-on-surface-variant">Agrega vegetales de hoja, huevos y grasas saludables.</li>') + '</ul></div>';
-        } else if (result.rejectedByInspector) {
-          var descartadas = Object.keys(result.rejectedByInspector || {}).length;
-          summaryDiv.innerHTML = '<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-yellow-400 mb-2">rule</span><p class="text-white font-medium mt-2">Inspector Keto filtro recetas</p><p class="text-on-surface-variant text-sm mt-1">' + errorMsg + '</p><p class="text-[13px] text-on-surface-variant/70 mt-2">Recetas excluidas: ' + descartadas + ' | Umbral: > ' + (result.ketoThreshold || 70) + '</p></div>';
+        } else if (result.rejectedByInspector && Object.keys(result.rejectedByInspector).length > 0) {
+          var rechazadas = result.rejectedByInspector;
+          var listaHtml = Object.keys(rechazadas).map(function(key) {
+            var r = rechazadas[key];
+            var subs = (r.sugerencias || []).slice(0, 2).map(function(s) {
+              return '<li class="text-[12px] text-on-surface-variant/80">- ' + s.nombre + ': ' + s.sugerencia + '</li>';
+            }).join('');
+            return '<div class="text-left bg-surface-container-low rounded-lg p-3 mt-2"><p class="text-[13px] text-white font-medium">' + r.nombre + ' <span class="text-yellow-400">(' + r.puntaje + '/100)</span></p>' + (subs ? '<ul class="mt-1 space-y-0.5">' + subs + '</ul>' : '') + '</div>';
+          }).join('');
+          summaryDiv.innerHTML = '<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-yellow-400 mb-2">rule</span><p class="text-white font-medium mt-2">Inspector Keto filtro recetas</p><p class="text-on-surface-variant text-sm mt-1">' + errorMsg + '</p><p class="text-[13px] text-on-surface-variant/70 mt-2">Umbral minimo: ' + (result.ketoThreshold || 70) + '/100</p>' + listaHtml + '</div>';
         } else {
           summaryDiv.innerHTML = '<div class="text-center py-8"><span class="material-symbols-outlined text-4xl text-on-surface-variant/70 mb-2">menu_book</span><p class="text-on-surface-variant">' + errorMsg + '</p></div>';
         }

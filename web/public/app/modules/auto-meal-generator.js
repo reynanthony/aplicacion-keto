@@ -126,7 +126,20 @@ var autoMealGenerator = (function() {
       var report = inspectRecipeWithKeto(key, recipe);
       reports[key] = report;
 
-      accepted[key] = recipe;
+      // Sin reporte del Inspector (ingredientes no reconocidos, etc.) se acepta
+      // por defecto para no bloquear el generador; con reporte, se filtra por umbral.
+      if (!report || report.puntaje_keto >= threshold) {
+        accepted[key] = recipe;
+      } else {
+        var sugerencias = (report.ingredientes_analizados || [])
+          .filter(function(ing) { return ing.nivel === 'critico'; })
+          .map(function(ing) { return { nombre: ing.nombre, sugerencia: ing.sugerencia }; });
+        rejected[key] = {
+          nombre: report.nombre_original || recipe.title || recipe.titulo || key,
+          puntaje: report.puntaje_keto,
+          sugerencias: sugerencias
+        };
+      }
     });
 
     return {
@@ -352,7 +365,7 @@ var autoMealGenerator = (function() {
           id: selected.key,
           name: recipe.title,
           portion: portion,
-          basePortion: portion,
+          basePortion: 100,
           baseCalories: recipe.calories,
           baseProtein: recipe.protein,
           baseFat: recipe.fat,
@@ -466,7 +479,7 @@ var autoMealGenerator = (function() {
     console.log('[AutoMealGenerator] Recetas parciales:', Object.keys(availability.partial).length);
 
     var ketoFilter = filterRecipesByKetoScore(availability.available);
-    console.log('[AutoMealGenerator] Recetas evaluadas por Inspector Keto:', Object.keys(ketoFilter.reports).length);
+    console.log('[AutoMealGenerator] Recetas evaluadas por Inspector Keto:', Object.keys(ketoFilter.reports).length, '- Aceptadas:', Object.keys(ketoFilter.accepted).length, '- Rechazadas:', Object.keys(ketoFilter.rejected).length);
 
     if (Object.keys(availability.available).length === 0) {
       return {
@@ -477,8 +490,18 @@ var autoMealGenerator = (function() {
         pantryRisk: pantryRisk
       };
     }
-    
-    var categorized = categorizeRecipes(availability.available);
+
+    if (Object.keys(ketoFilter.accepted).length === 0) {
+      return {
+        success: false,
+        error: 'El Inspector Keto descarto todas las recetas disponibles por bajo puntaje keto.',
+        ketoThreshold: ketoFilter.threshold,
+        rejectedByInspector: ketoFilter.rejected,
+        pantryRisk: pantryRisk
+      };
+    }
+
+    var categorized = categorizeRecipes(ketoFilter.accepted);
     console.log('[AutoMealGenerator] Categorias - Desayuno:', categorized.desayuno.length, 'Almuerzo:', categorized.almuerzo.length, 'Cena:', categorized.cena.length, 'Snacks:', categorized.snacks.length);
     
     var targetMacros = getTargetMacros();
