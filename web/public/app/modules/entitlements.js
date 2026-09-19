@@ -7,9 +7,9 @@
 
 // TODO: completar con los datos reales de LemonSqueezy antes de activar el paywall.
 const LEMONSQUEEZY_CHECKOUT = {
-    storeUrl: 'https://TU-TIENDA.lemonsqueezy.com', // Settings > General en LemonSqueezy
-    variantMensual: 'REEMPLAZAR_VARIANT_ID_MENSUAL',
-    variantAnual: 'REEMPLAZAR_VARIANT_ID_ANUAL',
+    storeUrl: 'https://ketocore.lemonsqueezy.com',
+    variantMensual: '2146315',
+    variantAnual: '2146329',
 };
 
 const ESTADOS_ACTIVOS = ['active', 'on_trial'];

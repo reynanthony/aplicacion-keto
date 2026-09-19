@@ -29,12 +29,13 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
   #pf-header  { grid-column: 1 / -1; grid-row: 1; }
   #pf-hero    { grid-column: 1 / -1; grid-row: 2; }
   #pf-metrics { grid-column: 1 / -1; grid-row: 3; }
-  #pf-datos   { grid-column: 1; grid-row: 4; }
-  #pf-peso    { grid-column: 1; grid-row: 5; }
-  #pf-entreno { grid-column: 1; grid-row: 6; }
-  #pf-macros    { grid-column: 2; grid-row: 4; }
-  #pf-historial { grid-column: 2; grid-row: 5; }
-  #pf-peligro   { grid-column: 2; grid-row: 6; }
+  #pf-suscripcion { grid-column: 1 / -1; grid-row: 4; }
+  #pf-datos   { grid-column: 1; grid-row: 5; }
+  #pf-peso    { grid-column: 1; grid-row: 6; }
+  #pf-entreno { grid-column: 1; grid-row: 7; }
+  #pf-macros    { grid-column: 2; grid-row: 5; }
+  #pf-historial { grid-column: 2; grid-row: 6; }
+  #pf-peligro   { grid-column: 2; grid-row: 7; }
   /* Sistema visual "grande y espacioso" de entrenamientos.astro, solo en
      escritorio (ver mismo cambio en objetivos.astro para el detalle). */
   #pf-header h1 { font-size: 46px; }
@@ -116,6 +117,31 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
       <p style="font-size:10px;color:rgba(247,244,240,0.5);margin-top:3px">Entrenos</p>
     </div>
   </div>
+
+  <!-- Suscripción -->
+  <section id="pf-suscripcion" class="glass-card rounded-2xl p-4">
+    <div class="flex items-center gap-2 mb-3">
+      <span class="material-symbols-outlined text-base" style="color:#ff4d00;font-variation-settings:'FILL' 1">workspace_premium</span>
+      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Suscripción</h2>
+    </div>
+    <div id="subEstadoFree">
+      <p class="text-[13px] mb-3" style="color:rgba(247,244,240,0.6)">Estás en el plan Gratis. Sube a Premium para desbloquear Coach IA, el generador automático de plan y el historial de progreso.</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="suscribirse('mensual')" class="py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);color:#fff">
+          Mensual · $14.99
+        </button>
+        <button onclick="suscribirse('anual')" class="py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95" style="background:rgba(255,77,0,0.1);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">
+          Anual · $149.99
+        </button>
+      </div>
+    </div>
+    <div id="subEstadoPremium" class="hidden">
+      <div class="flex items-center gap-2 px-3 py-2.5 rounded-xl" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2)">
+        <span class="material-symbols-outlined" style="color:#22c55e;font-size:18px">check_circle</span>
+        <span class="text-[13px] font-bold" style="color:#22c55e">Suscripción Premium activa</span>
+      </div>
+    </div>
+  </section>
 
   <!-- Datos Personales -->
   <section id="pf-datos" class="glass-card rounded-2xl p-4">
@@ -336,7 +362,22 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
 
 
 <script is:inline src="/app/utils.js"></script>
+<script is:inline src="/app/modules/entitlements.js"></script>
 <script is:inline>
+async function suscribirse(plan) {
+  if (!window.KetoEntitlements) { showToast('No se pudo iniciar el checkout', true); return; }
+  var url = await window.KetoEntitlements.checkoutUrl(plan);
+  window.location.href = url;
+}
+
+function loadSubscriptionStatus() {
+  if (!window.KetoEntitlements) return;
+  window.KetoEntitlements.isPremium().then(function (premium) {
+    document.getElementById('subEstadoFree').classList.toggle('hidden', premium);
+    document.getElementById('subEstadoPremium').classList.toggle('hidden', !premium);
+  });
+}
+
 function showToast(msg, isError) {
   var t = document.getElementById('toast'), m = document.getElementById('toastMsg');
   if (m) m.textContent = msg;
@@ -554,6 +595,7 @@ function resetAllData() {
 }
 
 document.addEventListener('DOMContentLoaded', loadProfile);
+document.addEventListener('DOMContentLoaded', loadSubscriptionStatus);
 </script>
 
 </AppLayout>
