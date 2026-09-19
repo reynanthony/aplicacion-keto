@@ -15,6 +15,7 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
 @media (min-width: 768px) {
   #objetivosGrid {
     display: flex;
+    flex-wrap: wrap;
     gap: 1.25rem;
     align-items: flex-start;
     padding-top: 3.5rem;
@@ -34,8 +35,13 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
   #obj-header h1 { font-size: 46px; }
   .glass-card { padding: 32px !important; }
   .glass-card h2 { font-size: 20px !important; font-weight: 800 !important; font-family: var(--font-headline); }
-  /* Header editorial fuera de las columnas -- ocupa el ancho completo por si solo. */
-  #obj-header { width: 100%; }
+  /* flex-basis:100% + flex-wrap:wrap en el padre fuerza al header a ocupar
+     toda la primera fila el solo -- sin esto, al ser #objetivosGrid un
+     flex row, el header competia por ancho horizontal con las dos
+     columnas en la MISMA fila en vez de quedar arriba de ellas (bug real
+     encontrado en la primera version de este fix: header y columnas se
+     aplastaban unos a otros, texto envuelto a una palabra por linea). */
+  #obj-header { flex: 0 0 100%; width: 100%; }
   /* Columnas de altura independiente: cada tarjeta apila segun su propio
      contenido en vez de compartir fila con su par de la otra columna.
      Reemplaza el grid con grid-row fijo por seccion, que dejaba huecos
