@@ -1,0 +1,38 @@
+---
+// Donut de reparto de macros (distribución % de kcal del día). Distinto al
+// MacroDial (que muestra progreso hacia meta). path → {kcal, fat/protein/carbs:{pct,g,da,off}}
+import Card from './Card.astro';
+interface Props { path?: string }
+const { path = 'split' } = Astro.props;
+const segs = [
+  { k: 'fat', c: 'amber', n: 'Grasa' },
+  { k: 'protein', c: 'cyan', n: 'Proteína' },
+  { k: 'carbs', c: 'mint', n: 'Carbos' },
+];
+---
+<Card eyebrow="Motor cetogénico" title="Distribución del día">
+  <span slot="chip" class="kc-chip kc-c-mint"><span data-kc-text={`${path}.kcal`} data-kc-fmt="int">—</span> kcal</span>
+  <div class="kc-split">
+    <div class="kc-split__ring">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle cx="60" cy="60" r="54" fill="none" stroke="var(--kc-surface-3)" stroke-width="12" />
+        {segs.map((s) => (
+          <circle cx="60" cy="60" r="54" fill="none" class={`kc-c-${s.c}`} stroke="var(--c)" stroke-width="12"
+            stroke-dasharray="0 339.3" transform="rotate(-90 60 60)"
+            data-kc-attr={`stroke-dasharray:${path}.${s.k}.da; stroke-dashoffset:${path}.${s.k}.off`} />
+        ))}
+      </svg>
+      <div class="kc-split__c"><span class="kc-label">Reparto</span></div>
+    </div>
+    <div class="kc-split__legend">
+      {segs.map((s) => (
+        <div class={`kc-split__row kc-c-${s.c}`}>
+          <span class="kc-split__dot"></span>
+          <span class="kc-split__n">{s.n}</span>
+          <span class="kc-split__pct"><span data-kc-text={`${path}.${s.k}.pct`}>—</span>%</span>
+          <span class="kc-split__g"><span data-kc-text={`${path}.${s.k}.g`}>—</span> g</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</Card>

@@ -38,12 +38,14 @@ html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-fa
 .period-tab.active { background:rgba(255,77,0,0.12);color:#ff4d00;border-color:rgba(255,77,0,0.25); }
 .period-tab:not(.active) { color:rgba(247,244,240,0.6);background:#1a1a1a;border-color:rgba(255,240,225,0.06); }
 
-@media (min-width: 768px) {
+@media (min-width: 901px) {
   #inspGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.25rem;
-    align-items: start;
+    /* stretch: cada par (metrics|alerts, adherence|macros) queda a la misma
+       altura, bordes alineados. Consistente con Progreso. */
+    align-items: stretch;
     padding-top: 3.5rem;
     padding-bottom: 3rem !important;
     /* entrenamientos.astro (y checklist/suplementos/guia) quitan el limite
@@ -104,7 +106,7 @@ html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-fa
   <!-- Header editorial -->
   <div id="insp-header" style="margin:10px 2px 16px">
     <div style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Inteligencia · Análisis</div>
-    <h1 class="kc-h1" style="font-size:30px">El Inspector<br><span style="color:rgba(247,244,240,0.57)">cuida tu cetosis.</span></h1>
+    <h1 class="kc-h1">El Inspector<br><span style="color:rgba(247,244,240,0.57)">cuida tu cetosis.</span></h1>
   </div>
 
   <!-- 1. Verdict card -->

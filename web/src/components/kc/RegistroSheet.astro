@@ -1,0 +1,34 @@
+---
+// Hoja inferior de registro rápido (FAB).  Emite kc:action {action:'log:<tipo>', value}
+import Icon from './Icon.astro';
+const quick = [
+  { a: 'log:food', l: 'Comida', i: 'utensils', c: 'amber' },
+  { a: 'log:scan', l: 'Escanear', i: 'scan', c: 'amber' },
+  { a: 'log:water', l: 'Agua', i: 'drop', c: 'cyan' },
+  { a: 'log:electrolytes', l: 'Electrolitos', i: 'flask', c: 'amber' },
+  { a: 'log:weight', l: 'Peso', i: 'scale', c: 'mint' },
+  { a: 'log:workout', l: 'Entreno', i: 'dumbbell', c: 'red' },
+];
+---
+<div class="kc-sheet" id="kc-registro" role="dialog" aria-modal="true" aria-labelledby="kc-registro-t" aria-hidden="true" inert>
+  <div class="kc-sheet__grab"></div>
+  <div class="kc-card__head" style="margin:0">
+    <div><div class="kc-eyebrow">Registro rápido</div><h2 class="kc-card__title" id="kc-registro-t">¿Qué quieres registrar?</h2></div>
+    <button class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon" type="button" data-kc-sheet-close aria-label="Cerrar"><Icon name="plus" class="kc-rot45" /></button>
+  </div>
+  <div class="kc-quick-grid">
+    {quick.map((q) => (
+      <button class="kc-quick" type="button" data-kc-action={q.a}>
+        <span class={`kc-ico kc-ico--lg kc-c-${q.c}`}><Icon name={q.i as any} /></span>{q.l}
+      </button>
+    ))}
+  </div>
+  <div class="kc-label" style="margin-bottom:8px">Agua rápida</div>
+  <div class="kc-row">
+    <button class="kc-chip kc-c-cyan" style="border:0;height:34px;padding:0 14px;cursor:pointer" type="button" data-kc-action="log:water" data-value="250">+250 ml</button>
+    <button class="kc-chip kc-c-cyan" style="border:0;height:34px;padding:0 14px;cursor:pointer" type="button" data-kc-action="log:water" data-value="500">+500 ml</button>
+    <button class="kc-chip kc-c-amber" style="border:0;height:34px;padding:0 14px;cursor:pointer" type="button" data-kc-action="log:electrolytes" data-value="150">+150 ml electrolitos</button>
+    <button class="kc-chip kc-c-mint" style="border:0;height:34px;padding:0 14px;cursor:pointer" type="button" data-kc-action="log:fiber" data-value="10">+10 g fibra</button>
+  </div>
+</div>
+<div class="kc-scrim" data-kc-scrim="kc-registro"></div>

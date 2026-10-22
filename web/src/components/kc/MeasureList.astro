@@ -1,0 +1,18 @@
+---
+// Medidas corporales.  path → [{name, icon, value, unit, delta, dir:'down'|'up', date}]
+import Card from './Card.astro';
+interface Props { path?: string }
+const { path = 'measures' } = Astro.props;
+---
+<Card eyebrow="Medidas" title="Composición corporal">
+  <button slot="chip" class="kc-btn kc-btn--ghost kc-btn--sm" type="button" data-kc-action="log:measure">Añadir</button>
+  <div class="kc-list" data-kc-list={path}>
+    <template>
+      <div class="kc-li">
+        <span class="kc-ico kc-c-neutral" data-kc-icon="icon"></span>
+        <div class="kc-li__main"><div class="kc-li__t" data-kc-text="name"></div><div class="kc-li__s" data-kc-text="date"></div></div>
+        <div class="kc-li__v"><span data-kc-text="value"></span> <span class="kc-muted" style="font-weight:500" data-kc-text="unit"></span><small data-kc-attr="class:dirClass" data-kc-text="delta"></small></div>
+      </div>
+    </template>
+  </div>
+</Card>

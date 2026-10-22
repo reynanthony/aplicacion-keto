@@ -1,8 +1,12 @@
 ---
-import AppLayout from '../../layouts/AppLayout.astro';
+// Alimentos — UI v2 (HUD). Contenido principal reescrito a kc-* nativo
+// (hero + KPIs + tarjetas del grid); modales y controles heredan el HUD vía
+// puente .app-hud. Lógica intacta (food-api, meal-plan, inspector).
+// Respaldo del diseño anterior: alimentos.astro.bak
+import AppShell from '../../layouts/AppShell.astro';
 ---
 
-<AppLayout title="KetoCore | Alimentos" authGuard={true}>
+<AppShell title="Alimentos" screen="alimentos">
 <style is:global>
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
 .glass-card{background:rgba(22,19,16,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1)}
@@ -14,7 +18,7 @@ input,select{background:#161310!important;color:#fff!important;border:1px solid 
    el generico de arriba (que pisaba el pl-12 de Tailwind y tapaba el texto). */
 #searchInput,#onlineSearchInput{padding-left:3rem}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}#toast{animation:toastIn 0.3s ease}
-@media(min-width:768px){#ali-wrap{max-width:none!important;padding-top:1rem;}
+@media(min-width: 901px){#ali-wrap{max-width:none!important;padding-top:1rem;}
 /* Sistema visual "grande y espacioso" de entrenamientos.astro, solo en
    escritorio -- #dailyMacrosBar es la tarjeta de contenido principal
    ("Tu dia hoy"), equivalente a las tarjetas de objetivos.astro que ya se
@@ -22,84 +26,55 @@ input,select{background:#161310!important;color:#fff!important;border:1px solid 
    stats, grid de alimentos) son mas chicas por diseno, no por descuido. */
 #dailyMacrosBar{padding:32px!important}
 #dailyMacrosBar h3{font-size:20px!important}}
+/* HUD: KPIs y acciones del header */
+.kc .ali-kpis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.kc .ali-kpis .kc-stat__val{font-size:22px;line-height:26px}
+.kc .ali-actions{display:flex;flex-wrap:wrap;gap:8px}
+/* Tarjeta de alimento (grid) */
+.kc .ali-card{display:flex;gap:12px;padding:12px;background:var(--kc-surface-1);border:1px solid var(--kc-line);border-radius:var(--kc-radius-md);cursor:pointer;transition:background .18s}
+.kc .ali-card:active{transform:scale(.995)}
+.kc .ali-card__img{width:72px;height:72px;flex-shrink:0;border-radius:var(--kc-radius-sm);overflow:hidden;background:var(--kc-surface-3);display:grid;place-items:center}
+.kc .ali-card__img img{width:100%;height:100%;object-fit:cover}
+.kc .ali-card__img .material-symbols-outlined{font-size:26px;color:var(--kc-ink-3)}
+.kc .ali-card__main{flex:1;min-width:0}
+.kc .ali-card__top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.kc .ali-card__name{font:600 14px/18px var(--kc-font-sans);color:var(--kc-ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.kc .ali-card__fav{flex-shrink:0;width:28px;height:28px;border:0;background:transparent;cursor:pointer;padding:0}
+.kc .ali-card__tags{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:7px 0}
+.kc .ali-card__port{font:500 11px var(--kc-font-mono);color:var(--kc-ink-3)}
+.kc .ali-card__macros{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.kc .ali-card__cell{background:var(--kc-surface-3);border-radius:var(--kc-radius-sm);padding:5px 4px;text-align:center}
+.kc .ali-card__cell .l{font:600 9px/1 var(--kc-font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--kc-ink-3)}
+.kc .ali-card__cell .v{font:700 12px/1 var(--kc-font-sans);margin-top:3px}
+.kc #foodsGrid{display:flex;flex-direction:column;gap:10px}
 </style>
 
-<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(19,19,21,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
-  <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
-    <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
-    <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">KetoCore</span>
-  </a>
-  <div class="flex items-center gap-1.5">
-    <button onclick="toggleMobileUserMenu()" aria-label="Mi cuenta" class="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
-      <img id="mobileHeaderAvatarImg" src="" class="hidden w-full h-full object-cover" alt="Avatar">
-      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined" style="font-size:20px;color:rgba(247,244,240,0.6)">account_circle</span>
-    </button>
-    <button onclick="toggleHamburgerMenu()" aria-label="Abrir menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1a15;color:rgba(247,244,240,0.6)">
-      <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">menu</span>
-    </button>
-  </div>
-</header>
+<div class="app-hud">
+<div id="ali-wrap" class="space-y-5" style="padding-top:4px">
 
-<!-- Mobile User Dropdown -->
-<div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161310;border:1px solid rgba(255,240,225,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
-  <div class="p-3" style="border-bottom:1px solid rgba(255,240,225,0.06)">
-    <p class="text-sm font-semibold" style="color:#f7f4f0" id="mobileDropdownUserName">Usuario</p>
-    <p class="text-[13px] mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
-  </div>
-  <div class="p-2">
-    <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f7f4f0">
-      <span class="material-symbols-outlined text-lg" style="color:rgba(247,244,240,0.55)">person</span>
-      <span class="text-sm font-medium">Mi Perfil</span>
-    </a>
-    <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-red-50" style="color:#dc2626">
-      <span class="material-symbols-outlined text-lg">logout</span>
-      <span class="text-sm font-medium">Cerrar Sesión</span>
-    </button>
-  </div>
-</div>
-<main class="main-content pt-14 pb-20 min-h-screen">
-<div id="ali-wrap" class="space-y-6 kc-page" style="padding-top:12px">
-
-<!-- Header -->
-<header class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-2">
+<!-- Hero -->
 <div>
-<p style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px">Base de datos</p>
-<h1 class="kc-h1">¿Es keto?<br><span style="color:rgba(247,244,240,0.57)">Compruébalo.</span></h1>
-<p class="text-sm text-on-surface-variant mt-3 max-w-lg">Guía completa de alimentos con veredicto keto, calorías y carbos netos.</p>
+<div class="kc-hero-sub">Base de datos</div>
+<h1 class="kc-hero">¿Es <em>keto</em>? Compruébalo.</h1>
 </div>
-<div id="statsContainer" class="hidden md:flex gap-4">
-<div class="glass-card rounded-xl px-4 py-3 text-center">
-<p class="text-2xl font-black text-white" id="totalFoodsCount">0</p>
-<p class="text-[13px] text-on-surface-variant uppercase">Total</p>
+
+<!-- KPIs -->
+<div id="statsContainer" class="ali-kpis">
+<div class="kc-stat kc-c-cyan"><div class="kc-stat__top"><span class="kc-label">Alimentos</span></div><div class="kc-stat__val" id="totalFoodsCount">0</div></div>
+<div class="kc-stat kc-c-mint"><div class="kc-stat__top"><span class="kc-label">Keto ✓</span></div><div class="kc-stat__val" id="ketoFoodsCount">0</div></div>
+<div class="kc-stat kc-c-amber"><div class="kc-stat__top"><span class="kc-label">Favoritos</span></div><div class="kc-stat__val" id="favoritesCount">0</div></div>
 </div>
-<div class="glass-card rounded-xl px-4 py-3 text-center border-green-500/30">
-<p class="text-2xl font-black text-green-400" id="ketoFoodsCount">0</p>
-<p class="text-[13px] text-on-surface-variant uppercase">Keto ✓</p>
-</div>
-<div class="glass-card rounded-xl px-4 py-3 text-center">
-<p class="text-2xl font-black text-secondary" id="favoritesCount">0</p>
-<p class="text-[13px] text-on-surface-variant uppercase">Favoritos</p>
-</div>
-</div>
-<div class="flex items-center gap-2">
-<button onclick="exportFoods()" class="px-3 py-2 rounded-xl bg-surface-container text-on-surface-variant text-sm flex items-center gap-2 hover:bg-surface-container-high hover:text-white transition-all">
-<span class="material-symbols-outlined text-lg">download</span>
-<span class="hidden md:inline">Exportar</span>
-</button>
+
+<!-- Acciones -->
+<div class="ali-actions">
+<button class="kc-btn kc-btn--primary kc-btn--sm" onclick="openAddFoodModal()"><span class="material-symbols-outlined" style="font-size:18px">add</span>Nuevo</button>
+<button class="kc-btn kc-btn--secondary kc-btn--sm" onclick="exportFoods()"><span class="material-symbols-outlined" style="font-size:18px">download</span>Exportar</button>
 <input type="file" id="importFoodsFile" accept=".json" class="hidden" onchange="importFoods(this)">
-<button onclick="document.getElementById('importFoodsFile').click()" class="px-3 py-2 rounded-xl bg-surface-container text-on-surface-variant text-sm flex items-center gap-2 hover:bg-surface-container-high hover:text-white transition-all">
-<span class="material-symbols-outlined text-lg">upload</span>
-<span class="hidden md:inline">Importar</span>
-</button>
-<button onclick="openAddFoodModal()" class="kc-btn" style="padding:8px 16px;height:auto">
-<span class="material-symbols-outlined">add</span>
-Nuevo
-</button>
+<button class="kc-btn kc-btn--secondary kc-btn--sm" onclick="document.getElementById('importFoodsFile').click()"><span class="material-symbols-outlined" style="font-size:18px">upload</span>Importar</button>
 </div>
-</header>
 
 <!-- Daily Macros Tracker -->
-<section id="dailyMacrosBar" class="mb-6 glass-card rounded-2xl p-4">
+<section id="dailyMacrosBar" class="kc-card" style="margin-bottom:0">
 <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-secondary">today</span>
@@ -123,7 +98,7 @@ Ver macros
 <div id="dailyMacrosContent" class="grid grid-cols-2 md:grid-cols-4 gap-4">
 <div class="text-center">
 <div class="relative w-16 h-16 mx-auto mb-2">
-<svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="#161310" stroke-width="6"/><circle id="calCircle" cx="32" cy="32" r="28" fill="none" stroke="#ffb300" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="140"/></svg>
+<svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="#2b3038" stroke-width="6"/><circle id="calCircle" cx="32" cy="32" r="28" fill="none" stroke="#ffb300" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="140"/></svg>
 <div class="absolute inset-0 flex items-center justify-center"><span id="calProgress" class="text-[13px] font-bold text-yellow-400">20%</span></div>
 </div>
 <p class="text-[13px] text-on-surface-variant">Calorías</p>
@@ -131,7 +106,7 @@ Ver macros
 </div>
 <div class="text-center">
 <div class="relative w-16 h-16 mx-auto mb-2">
-<svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="#161310" stroke-width="6"/><circle id="protCircle" cx="32" cy="32" r="28" fill="none" stroke="#ff4d00" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="88"/></svg>
+<svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="#2b3038" stroke-width="6"/><circle id="protCircle" cx="32" cy="32" r="28" fill="none" stroke="#ff4d00" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="88"/></svg>
 <div class="absolute inset-0 flex items-center justify-center"><span id="protProgress" class="text-[13px] font-bold text-primary-container">50%</span></div>
 </div>
 <p class="text-[13px] text-on-surface-variant">Proteína</p>
@@ -139,7 +114,7 @@ Ver macros
 </div>
 <div class="text-center">
 <div class="relative w-16 h-16 mx-auto mb-2">
-<svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="#161310" stroke-width="6"/><circle id="fatCircle" cx="32" cy="32" r="28" fill="none" stroke="#ffb300" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="132"/></svg>
+<svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="#2b3038" stroke-width="6"/><circle id="fatCircle" cx="32" cy="32" r="28" fill="none" stroke="#ffb300" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="132"/></svg>
 <div class="absolute inset-0 flex items-center justify-center"><span id="fatProgress" class="text-[13px] font-bold text-secondary">25%</span></div>
 </div>
 <p class="text-[13px] text-on-surface-variant">Grasa</p>
@@ -147,7 +122,7 @@ Ver macros
 </div>
 <div class="text-center">
 <div class="relative w-16 h-16 mx-auto mb-2">
-<svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="#161310" stroke-width="6"/><circle id="carbsCircle" cx="32" cy="32" r="28" fill="none" stroke="#22c55e" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="160"/></svg>
+<svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="#2b3038" stroke-width="6"/><circle id="carbsCircle" cx="32" cy="32" r="28" fill="none" stroke="#22c55e" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="160"/></svg>
 <div class="absolute inset-0 flex items-center justify-center"><span id="carbsProgress" class="text-[13px] font-bold text-green-400">9%</span></div>
 </div>
 <p class="text-[13px] text-on-surface-variant">Net Carbs</p>
@@ -428,7 +403,6 @@ Alimentos a Evitar
 </section>
 
 </div>
-</main>
 
 <!-- Online Search Modal -->
 <div id="onlineSearchModal" class="fixed inset-0 hidden" style="z-index: 99999;">
@@ -716,6 +690,9 @@ Nuevo alimento
 </div>
 </div>
 
+</div>
+
+<Fragment slot="scripts">
 <script is:inline src="/app/utils.js"></script>
 <script is:inline src="/app/modules/meal-plan.js"></script>
 <script is:inline src="/app/food-api.js"></script>
@@ -961,6 +938,7 @@ else filtered.sort(function(a,b){return(b[sortBy]||0)-(a[sortBy]||0)});
 var container=document.getElementById("foodsGrid");
 var emptyState=document.getElementById("emptyState");
 if(!container)return;
+updateStats(); // mantiene los KPIs en sync tras cargas async (Supabase/local)
 
 if(filtered.length===0){container.innerHTML="";emptyState.classList.remove("hidden");return}
 emptyState.classList.add("hidden");
@@ -974,33 +952,31 @@ var color=catColors[f.category]||"#ff4d00";
 var catLabel=catLabels[f.category]||f.category;
 var ketoScore=getKetoScore(f);
 var netCarbs=getNetCarbs(f);
-html+='<div class="group relative glass-card rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.01] hover:shadow-glow cursor-pointer flex gap-3 p-3" onclick="openDetail(\''+f.id+'\')">';
-html+='<div class="w-20 h-20 flex-shrink-0 rounded-xl overflow-hidden relative">';
+html+='<div class="ali-card" onclick="openDetail(\''+f.id+'\')">';
+html+='<div class="ali-card__img">';
 if(f.image){
-html+='<img loading="lazy" src="'+imgSrc(f.image)+'" alt="'+f.name+'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.style.display=\'none\'; this.parentElement.innerHTML=\'<div class=\\\'w-full h-full flex items-center justify-center bg-surface-container\\\'><span class=\\\'material-symbols-outlined text-2xl text-white/20\\\'>restaurant</span></div>\'" loading="lazy">';
+html+='<img loading="lazy" src="'+imgSrc(f.image)+'" alt="'+escapeHtml(f.name)+'" onerror="this.parentElement.innerHTML=\'<span class=\\\'material-symbols-outlined\\\'>restaurant</span>\'">';
 }else{
-html+='<div class="w-full h-full flex items-center justify-center bg-surface-container"><span class="material-symbols-outlined text-2xl text-white/20">restaurant</span></div>';
+html+='<span class="material-symbols-outlined">restaurant</span>';
 }
 html+='</div>';
-html+='<div class="flex-1 min-w-0">';
-html+='<div class="flex items-start justify-between gap-2">';
-html+='<h3 class="font-headline text-base font-bold text-white leading-tight line-clamp-2 group-hover:text-primary-container transition-colors">'+f.name+'</h3>';
-html+='<button onclick="event.stopPropagation();toggleFavoriteFood(\''+f.id+'\')" class="flex-shrink-0 w-7 h-7 -mt-1 -mr-1 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">';
-html+='<span class="material-symbols-outlined text-base '+(f.favorite?'text-secondary':'text-white/40')+'" style="font-variation-settings:\'FILL '+(f.favorite?1:0)+'\'">star</span></button>';
+html+='<div class="ali-card__main">';
+html+='<div class="ali-card__top">';
+html+='<div class="ali-card__name">'+f.name+'</div>';
+html+='<button class="ali-card__fav" onclick="event.stopPropagation();toggleFavoriteFood(\''+f.id+'\')" aria-label="Favorito"><span class="material-symbols-outlined" style="font-size:19px;color:'+(f.favorite?'var(--kc-cyan)':'var(--kc-ink-3)')+';font-variation-settings:\'FILL '+(f.favorite?1:0)+'\'">star</span></button>';
 html+='</div>';
-html+='<div class="flex items-center gap-1.5 flex-wrap my-1.5">';
-html+='<span class="px-1.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider" style="background:'+color+'/20;color:'+color+'">'+catLabel+'</span>';
-html+='<span class="px-1.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider" style="background:'+ketoScore.color+'/20;color:'+ketoScore.color+'">'+ketoScore.label+'</span>';
-html+='<span class="text-[11px] text-on-surface-variant">'+f.portion+'g porcion</span>';
+html+='<div class="ali-card__tags">';
+html+='<span class="kc-chip kc-chip--sm" style="--c:'+color+'">'+catLabel+'</span>';
+html+='<span class="kc-chip kc-chip--sm" style="--c:'+ketoScore.color+'">'+ketoScore.label+'</span>';
+html+='<span class="ali-card__port">'+f.portion+'g porción</span>';
 html+='</div>';
-html+='<div class="flex gap-1.5">';
-html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[10px] text-on-surface-variant uppercase leading-none mb-0.5">Net</p><p class="text-[13px] font-bold text-green-400 leading-none">'+netCarbs+'g</p></div>';
-html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[10px] text-on-surface-variant uppercase leading-none mb-0.5">Prot</p><p class="text-[13px] font-bold text-primary-container leading-none">'+f.protein+'g</p></div>';
-html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[10px] text-on-surface-variant uppercase leading-none mb-0.5">Grasa</p><p class="text-[13px] font-bold text-secondary leading-none">'+f.fat+'g</p></div>';
-html+='<div class="flex-1 bg-surface-container-high rounded-md px-1.5 py-1 text-center"><p class="text-[10px] text-on-surface-variant uppercase leading-none mb-0.5">Carbs</p><p class="text-[13px] font-bold text-green-400 leading-none">'+f.carbs+'g</p></div>';
+html+='<div class="ali-card__macros">';
+html+='<div class="ali-card__cell"><div class="l">Net</div><div class="v" style="color:var(--kc-mint)">'+netCarbs+'g</div></div>';
+html+='<div class="ali-card__cell"><div class="l">Prot</div><div class="v" style="color:var(--kc-cyan)">'+f.protein+'g</div></div>';
+html+='<div class="ali-card__cell"><div class="l">Grasa</div><div class="v" style="color:var(--kc-amber)">'+f.fat+'g</div></div>';
+html+='<div class="ali-card__cell"><div class="l">Carbs</div><div class="v" style="color:var(--kc-ink-2)">'+f.carbs+'g</div></div>';
 html+='</div>';
-html+='</div>';
-html+='</div>';
+html+='</div></div>';
 });
 
 container.innerHTML=html;
@@ -1744,81 +1720,5 @@ originalOpenDetail(id);
 
 (function(){var params=new URLSearchParams(window.location.search);var searchQuery=params.get("search");if(searchQuery){document.getElementById("searchInput").value=searchQuery;renderFoods()}})();
 </script>
-
-<script is:inline>
-// User Dropdown Menu (Desktop)
-function toggleUserMenu() {
-  const dropdown = document.getElementById('userDropdown');
-  dropdown.classList.toggle('hidden');
-  updateDropdownInfo();
-}
-
-// Mobile User Dropdown
-function toggleMobileUserMenu() {
-  const dropdown = document.getElementById('mobileUserDropdown');
-  dropdown.classList.toggle('hidden');
-  updateDropdownInfo();
-}
-
-function updateDropdownInfo() {
-  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
-  const userName = profile.nombre || profile.name || 'Usuario';
-  const userEmail = localStorage.getItem('ketocore_user_email') || 'usuario@ejemplo.com';
-  document.getElementById('dropdownUserName').textContent = userName;
-  document.getElementById('dropdownUserEmail').textContent = userEmail;
-  document.getElementById('mobileDropdownUserName').textContent = userName;
-  document.getElementById('mobileDropdownUserEmail').textContent = userEmail;
-}
-
-// Update header avatar
-function updateHeaderAvatar() {
-  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
-  const avatarUrl = profile.avatar_url;
-  
-  const headerImg = document.getElementById('headerAvatarImg');
-  const headerIcon = document.getElementById('headerAvatarIcon');
-  const mobileHeaderImg = document.getElementById('mobileHeaderAvatarImg');
-  const mobileHeaderIcon = document.getElementById('mobileHeaderAvatarIcon');
-  
-  if (avatarUrl) {
-    if (headerImg) { headerImg.src = avatarUrl; headerImg.classList.remove('hidden'); }
-    if (headerIcon) headerIcon.classList.add('hidden');
-    if (mobileHeaderImg) { mobileHeaderImg.src = avatarUrl; mobileHeaderImg.classList.remove('hidden'); }
-    if (mobileHeaderIcon) mobileHeaderIcon.classList.add('hidden');
-  } else {
-    if (headerImg) headerImg.classList.add('hidden');
-    if (headerIcon) headerIcon.classList.remove('hidden');
-    if (mobileHeaderImg) mobileHeaderImg.classList.add('hidden');
-    if (mobileHeaderIcon) mobileHeaderIcon.classList.remove('hidden');
-  }
-}
-
-// Close dropdown when clicking outside
-document.addEventListener('click', function(e) {
-  const dropdown = document.getElementById('userDropdown');
-  const mobileDropdown = document.getElementById('mobileUserDropdown');
-  const btn = document.getElementById('profileBtn');
-  if (dropdown && !dropdown.contains(e.target) && !btn.contains(e.target)) {
-    dropdown.classList.add('hidden');
-  }
-  if (mobileDropdown && !e.target.closest('#mobileUserDropdown') && !e.target.closest('button[onclick="toggleMobileUserMenu()"]')) {
-    mobileDropdown.classList.add('hidden');
-  }
-});
-
-// Logout
-async function handleLogout() {
-  if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-    await window.supabase.auth.signOut();
-    localStorage.removeItem('ketocore_user_id');
-    localStorage.removeItem('ketocore_user_email');
-    localStorage.removeItem('ketocore_onboarding_done');
-    window.location.href = '/app/welcome';
-  }
-}
-
-// Init avatar
-updateHeaderAvatar();
-</script>
-
-</AppLayout>
+</Fragment>
+</AppShell>

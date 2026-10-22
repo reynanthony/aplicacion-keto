@@ -1,0 +1,12 @@
+---
+// Tira de 7 días.  path → [{date, dow, n, l:0-3, selected}]   → kc:change {group:'day', value:date}
+interface Props { path?: string }
+const { path = 'days' } = Astro.props;
+---
+<div class="kc-days" role="group" aria-label="Día" data-kc-group="day" data-kc-list={path}>
+  <template>
+    <button class="kc-day" type="button" data-kc-attr="data-value:date; data-l:l; aria-pressed:pressed">
+      <span data-kc-text="dow"></span><b data-kc-text="n"></b><i></i>
+    </button>
+  </template>
+</div>

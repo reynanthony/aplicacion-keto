@@ -1,0 +1,9 @@
+---
+// <Chip color="mint" live>En vivo</Chip>   · textPath liga el texto a datos
+interface Props { color?: 'amber' | 'cyan' | 'mint' | 'red' | 'neutral'; colorPath?: string; live?: boolean; dot?: boolean; sm?: boolean; textPath?: string; fmt?: string }
+const { color = 'neutral', colorPath, live, dot, sm, textPath, fmt } = Astro.props;
+---
+<span class:list={['kc-chip', `kc-c-${color}`, { 'kc-chip--sm': sm }]} data-kc-color={colorPath}>
+  {(live || dot) && <span class:list={['kc-dot', { 'kc-dot--live': live }]}></span>}
+  <span data-kc-text={textPath} data-kc-fmt={fmt}><slot /></span>
+</span>

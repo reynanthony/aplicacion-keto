@@ -1,0 +1,19 @@
+---
+// Histograma 7 días.  path → {avg, delta, goal, days:[{d, v, level:'full'|'mid'|'low', today}]}
+import Card from './Card.astro';
+interface Props { path?: string; eyebrow?: string }
+const { path = 'adherence', eyebrow = 'Adherencia · 7 días' } = Astro.props;
+---
+<Card eyebrow={eyebrow}>
+  <span slot="chip" class="kc-chip kc-c-neutral">Meta <span data-kc-text={`${path}.goal`} data-kc-fmt="pct">—</span></span>
+  <div class="kc-card__title" style="margin:-10px 0 16px">Media <span data-kc-text={`${path}.avg`} data-kc-fmt="pct">—</span> <span style="color:var(--kc-mint);font-size:14px;font-weight:600">▲ <span data-kc-text={`${path}.delta`} data-kc-fmt="pct"></span></span></div>
+  <div class="kc-week" data-kc-list={`${path}.days`}>
+    <template>
+      <div class="kc-week__col" data-kc-attr="data-level:level; data-today:today">
+        <span class="kc-week__v" data-kc-text="v"></span>
+        <div class="kc-week__bar"><i data-kc-height="v"></i></div>
+        <span class="kc-week__d" data-kc-text="d"></span>
+      </div>
+    </template>
+  </div>
+</Card>

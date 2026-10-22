@@ -1,0 +1,23 @@
+---
+// Tendencia de peso.  path → {title, series:[kg…], goal, start, current, lost, left}
+import Card from './Card.astro';
+interface Props { path?: string; eyebrow?: string; kv?: boolean }
+const { path = 'weight', eyebrow = 'Peso · 30 días', kv = true } = Astro.props;
+---
+<Card eyebrow={eyebrow} titlePath={`${path}.title`}>
+  <span slot="chip" class="kc-chip kc-c-mint"><span class="kc-dot"></span><span data-kc-text={`${path}.status`}>Al día</span></span>
+  <slot name="top" />
+  <div class="kc-trend" data-kc-trend={path}>
+    <svg aria-hidden="true"></svg>
+    <div class="kc-trend__pin" style="top:10px;left:10px"><span class="kc-muted">Inicio</span><span data-kc-text={`${path}.start`} data-kc-fmt="1">—</span></div>
+    <div class="kc-trend__pin" data-kc-pin="end" style="top:60px;right:10px"><span class="kc-muted">Hoy</span><span style="color:var(--kc-amber)" data-kc-text={`${path}.current`} data-kc-fmt="1">—</span></div>
+  </div>
+  {kv && (
+    <div class="kc-kv">
+      <div><span class="kc-label">Actual</span><b data-kc-text={`${path}.current`} data-kc-fmt="1">—</b></div>
+      <div><span class="kc-label">Meta</span><b style="color:var(--kc-amber)" data-kc-text={`${path}.goal`} data-kc-fmt="1">—</b></div>
+      <div><span class="kc-label">Perdido</span><b style="color:var(--kc-mint)" data-kc-text={`${path}.lost`} data-kc-fmt="1">—</b></div>
+      <div><span class="kc-label">Faltan</span><b data-kc-text={`${path}.left`} data-kc-fmt="1">—</b></div>
+    </div>
+  )}
+</Card>

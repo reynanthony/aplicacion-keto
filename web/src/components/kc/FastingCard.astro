@@ -1,0 +1,26 @@
+---
+// Ventana de ayuno.  path → {state, elapsed, target, pct, winStart, winWidth, now, scale:[5 etiquetas], next}
+//   winStart / winWidth / now en % del día (0–100)
+import Card from './Card.astro';
+import Icon from './Icon.astro';
+interface Props { path?: string }
+const { path = 'fasting' } = Astro.props;
+---
+<Card title="Ayuno" sub="Ventana 16:8">
+  <span slot="lead" class="kc-ico kc-c-mint"><Icon name="clock" /></span>
+  <span slot="chip" class="kc-chip kc-c-mint" data-kc-text={`${path}.state`}>—</span>
+  <div style="display:flex;align-items:baseline;justify-content:space-between">
+    <span class="kc-fast__big" data-kc-text={`${path}.elapsed`}>—</span>
+    <span class="kc-label">meta <span data-kc-text={`${path}.target`}></span></span>
+  </div>
+  <div class="kc-fast__track">
+    <span class="kc-fast__win" data-kc-attr={`style:${path}.winStyle`}></span>
+    <span class="kc-fast__now" data-kc-attr={`style:${path}.nowStyle`}></span>
+  </div>
+  <div class="kc-fast__scale" data-kc-list={`${path}.scale`}><template><span data-kc-text="value"></span></template></div>
+  <div class="kc-meta" style="margin-top:12px"><span data-kc-text={`${path}.next`}></span><span style="color:var(--kc-mint)" data-kc-text={`${path}.pctText`}></span></div>
+  <div style="margin-top:14px">
+    <button class="kc-btn kc-btn--primary kc-btn--block" type="button" data-kc-action="fasting:start" data-kc-show={`${path}.idle`}>Iniciar ayuno</button>
+    <button class="kc-btn kc-btn--secondary kc-btn--block" type="button" data-kc-action="fasting:break" data-kc-show={`${path}.active`}>Romper ayuno</button>
+  </div>
+</Card>

@@ -1,0 +1,17 @@
+---
+// Logros.  path → [{name, icon, color, locked}]
+import Card from './Card.astro';
+interface Props { path?: string }
+const { path = 'badges' } = Astro.props;
+---
+<Card eyebrow="Logros" title="Tus insignias">
+  <span slot="chip" class="kc-chip kc-c-amber" data-kc-text="badgesCount">—</span>
+  <div class="kc-badges" data-kc-list={path}>
+    <template>
+      <div class="kc-badge" data-kc-attr="data-locked:locked">
+        <span class="kc-ico" data-kc-color="color" data-kc-icon="icon"></span>
+        <span data-kc-text="name"></span>
+      </div>
+    </template>
+  </div>
+</Card>

@@ -121,12 +121,12 @@ carbs:Math.round((netCarbsPer100*(grams||100))/100*10)/10
 
 function renderRiskPill(level){
 var config={
-critico:{icon:"dangerous",label:"CRITICO",cls:"text-red-400 bg-red-500/15 border border-red-500/30"},
-moderado:{icon:"warning",label:"MODERADO",cls:"text-yellow-400 bg-yellow-500/15 border border-yellow-500/30"},
-seguro:{icon:"verified",label:"SEGURO",cls:"text-green-400 bg-green-500/15 border border-green-500/30"}
+critico:{label:"Crítico",cls:"kc-c-red"},
+moderado:{label:"Moderado",cls:"kc-c-amber"},
+seguro:{label:"Seguro",cls:"kc-c-mint"}
 };
 var meta=config[level]||config.moderado;
-return '<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold uppercase '+meta.cls+'"><span class="material-symbols-outlined text-xs">'+meta.icon+'</span>'+meta.label+'</span>';
+return '<span class="kc-chip kc-chip--sm '+meta.cls+'">'+meta.label+'</span>';
 }
 
 function updateAddRiskInfo(food,grams){
@@ -162,8 +162,8 @@ function renderUnitSelector(){
 var container=document.getElementById("unitSelector");
 var html="";
 addingFoodUnits.forEach(function(unit,index){
-var active=index===addingFoodCurrentUnit?"bg-primary-container text-white":"bg-surface-container text-white/70 hover:bg-surface-container-high";
-html+='<button onclick="selectUnit('+index+')" class="px-3 py-2 rounded-lg text-sm font-medium transition-all '+active+'">'+unit.name+'</button>';
+var active=index===addingFoodCurrentUnit?"kc-btn--primary":"kc-btn--secondary";
+html+='<button onclick="selectUnit('+index+')" class="kc-btn kc-btn--sm '+active+'" style="margin:0 6px 6px 0">'+unit.name+'</button>';
 });
 container.innerHTML=html;
 }
@@ -246,12 +246,9 @@ loadDespensa();
 function showToast(message){
 var toast=document.getElementById("toast");
 document.getElementById("toastMessage").textContent=message;
-toast.classList.remove("hidden","opacity-0","translate-y-4","pointer-events-none");
-toast.classList.add("opacity-100","translate-y-0");
-setTimeout(function(){
-toast.classList.add("opacity-0","translate-y-4","pointer-events-none");
-toast.classList.remove("opacity-100","translate-y-0");
-},2000);
+toast.classList.remove("hidden");
+clearTimeout(window._cmpToastT);
+window._cmpToastT=setTimeout(function(){toast.classList.add("hidden");},2200);
 }
 
 function loadDespensa(){
@@ -289,49 +286,47 @@ totalItems++;
 categories.forEach(function(cat){
 if(catData[cat].items.length>0)activeCats++;
 });
+
+// KPIs del inventario (mismo modelo gauge que "Hoy")
+var stockDisp=totalStock>=1000?fmt(totalStock/1000)+' kg':fmt(totalStock)+' g';
+var setK=function(id,v){var e=document.getElementById(id);if(e)e.textContent=v;};
+setK('kpiKcal',fmt(totalCal));
+setK('kpiItems',totalItems);
+setK('kpiStock',stockDisp);
+setK('kpiCats',activeCats);
+var catsBar=document.getElementById('kpiCatsBar');
+if(catsBar)catsBar.style.width=Math.round(activeCats/6*100)+'%';
+
 if(totalItems===0){
-container.innerHTML='<div style="background:#1e1c1c;border-radius:12px;padding:32px;text-align:center;border:1px solid rgba(255,255,255,0.1);">'
-+'<span class="material-symbols-outlined" style="font-size:48px;color:rgba(255,255,255,0.2)">inventory_2</span>'
-+'<p style="color:rgba(255,255,255,0.6);margin:12px 0 4px">Tu despensa está vacía</p>'
-+'<p style="color:rgba(255,255,255,0.4);font-size:13px">Ve a "Agregar Alimentos" para empezar</p></div>';
+container.innerHTML='<div class="cmp-empty"><span class="material-symbols-outlined">inventory_2</span><p>Tu despensa está vacía</p><p class="sub">Ve a "Agregar" para empezar</p></div>';
 return;
 }
-var html='<div style="background:linear-gradient(135deg,rgba(255,77,0,0.15),rgba(255,179,0,0.1));border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid rgba(255,77,0,0.2);">';
-html+='<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">';
-html+='<div><div style="font-size:11px;color:rgba(255,255,255,0.5);text-transform:uppercase">Total kcal</div>';
-html+='<div style="font-size:28px;font-weight:bold;color:#fff">'+fmt(totalCal)+'</div></div>';
-html+='<div style="display:flex;gap:16px;">';
-html+='<div style="text-align:center"><div style="font-size:16px;font-weight:bold;color:#fff">'+totalItems+'</div><div style="font-size:10px;color:rgba(255,255,255,0.5)">alimentos</div></div>';
-html+='<div style="text-align:center"><div style="font-size:16px;font-weight:bold;color:#fff">'+(totalStock>=1000?fmt(totalStock/1000)+'kg':fmt(totalStock)+'g')+'</div><div style="font-size:10px;color:rgba(255,255,255,0.5)">stock</div></div>';
-html+='<div style="text-align:center"><div style="font-size:16px;font-weight:bold;color:#fff">'+activeCats+'</div><div style="font-size:10px;color:rgba(255,255,255,0.5)">categorías</div></div>';
-html+='</div></div>';
+
+var catAccent={"Proteínas":"kc-c-red","Grasas":"kc-c-amber","Verduras":"kc-c-mint","Lácteos":"kc-c-cyan","Frutos secos":"kc-c-amber","Otros":"kc-c-cyan"};
+var html='';
 categories.forEach(function(cat){
 if(catData[cat].items.length===0)return;
-html+='<div style="background:#1e1c1c;border-radius:10px;padding:12px;margin-bottom:10px;border:1px solid rgba(255,255,255,0.08);">';
-html+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">';
-html+='<div style="display:flex;align-items:center;gap:8px;">';
-html+='<span class="material-symbols-outlined" style="font-size:20px;color:'+catColors[cat]+'">'+catIcons[cat]+'</span>';
-html+='<span style="font-size:14px;font-weight:600;color:#fff">'+cat+'</span>';
-html+='<span style="font-size:11px;color:rgba(255,255,255,0.5)">('+catData[cat].items.length+')</span></div>';
-html+='<div style="font-size:14px;font-weight:bold;color:'+catColors[cat]+'">'+fmt(catData[cat].cal)+' kcal</div></div>';
-html+='<div style="display:flex;flex-direction:column;gap:6px;">';
+var accent=catAccent[cat]||'kc-c-cyan';
+html+='<div class="cmp-cat '+accent+'">';
+html+='<div class="cmp-cat__h">';
+html+='<div class="cmp-cat__name"><span class="material-symbols-outlined" style="color:var(--c)">'+catIcons[cat]+'</span>'+cat+' <span class="cmp-cat__count">('+catData[cat].items.length+')</span></div>';
+html+='<div class="cmp-cat__cal" style="color:var(--c)">'+fmt(catData[cat].cal)+' kcal</div></div>';
 catData[cat].items.forEach(function(d){
 var percent=Math.min((d.stock/1000)*100,100);
 var color=getStockColor(percent);
 var stockDisplay=d.stock>=1000?fmt(d.stock/1000)+'kg':fmt(d.stock)+'g';
-var safeFoodName = escapeHtml(d.food.name);
-html+='<div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.03);border-radius:6px;padding:8px;font-size:12px;">';
-html+='<div style="flex:1;min-width:0;"><div style="color:#fff;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+safeFoodName+'</div>';
-html+='<div style="display:flex;align-items:center;gap:6px;margin-top:2px;">';
-html+='<div style="flex:1;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;">';
-html+='<div style="width:'+percent+'%;height:100%;background:'+color+';border-radius:2px;"></div></div>';
-html+='<span style="color:'+color+';font-size:10px;white-space:nowrap">'+stockDisplay+'</span></div></div>';
-html+='<div style="text-align:right;min-width:40px;"><span style="font-weight:bold;color:#fff;font-size:12px">'+fmt(d.cal)+'</span><span style="font-size:9px;color:rgba(255,255,255,0.4)"> kcal</span></div>';
-html+='<button onclick="updateStock(\''+d.food.id+'\',-100)" style="width:24px;height:24px;border-radius:4px;background:rgba(255,255,255,0.1);border:none;color:#fff;font-size:14px;cursor:pointer;padding:0;line-height:1">−</button>';
-html+='<button onclick="updateStock(\''+d.food.id+'\',100)" style="width:24px;height:24px;border-radius:4px;background:rgba(255,255,255,0.1);border:none;color:#fff;font-size:14px;cursor:pointer;padding:0;line-height:1">+</button>';
-html+='<button onclick="removeFromDespensa(\''+d.food.id+'\')" style="width:24px;height:24px;border-radius:4px;background:rgba(255,100,100,0.15);border:none;color:#ff6464;font-size:14px;cursor:pointer;padding:0;line-height:1">×</button></div>';
+var safeFoodName=escapeHtml(d.food.name);
+html+='<div class="cmp-row">';
+html+='<div class="cmp-row__main"><div class="cmp-row__name">'+safeFoodName+'</div>';
+html+='<div class="cmp-row__meta"><div class="cmp-row__bar"><i style="width:'+percent+'%;background:'+color+'"></i></div>';
+html+='<span class="cmp-row__stock" style="color:'+color+'">'+stockDisplay+'</span></div></div>';
+html+='<div class="cmp-row__cal">'+fmt(d.cal)+'<small> kcal</small></div>';
+html+='<button class="cmp-step" onclick="updateStock(\''+d.food.id+'\',-100)">−</button>';
+html+='<button class="cmp-step" onclick="updateStock(\''+d.food.id+'\',100)">+</button>';
+html+='<button class="cmp-del" onclick="removeFromDespensa(\''+d.food.id+'\')">×</button>';
+html+='</div>';
 });
-html+='</div></div>';
+html+='</div>';
 });
 container.innerHTML=html;
 }
@@ -346,25 +341,20 @@ var html="";
 categories.forEach(function(cat){
 var catFoods=foods.filter(function(f){return f.category===cat&&(!despensa[f.id]||despensa[f.id].stock<=0)});
 if(catFoods.length>0){
-html+='<div class="mb-4">';
-html+='<div class="flex items-center gap-2 mb-2">';
-html+='<div class="w-3 h-3 rounded-full" style="background:'+catColors[cat]+'"></div>';
-html+='<h4 class="text-sm font-medium text-on-surface-variant">'+cat+'</h4></div>';
-html+='<div class="space-y-1">';
+html+='<div class="cmp-groupt"><span class="dot" style="background:'+catColors[cat]+'"></span>'+cat+'</div>';
 catFoods.forEach(function(food){
 var safeFoodName = escapeHtml(food.name);
 var riskInfo=getFoodRiskAnalysis(food.name,food.portion||100);
-html+='<div class="flex items-center gap-2 p-2 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-all" onclick="openAddModal(\''+food.id+'\')">';
-html+='<span class="material-symbols-outlined text-on-surface-variant text-lg">add_circle</span>';
-html+='<span class="text-sm text-white flex-1">'+safeFoodName+'</span>';
+html+='<div class="cmp-food" onclick="openAddModal(\''+food.id+'\')">';
+html+='<span class="material-symbols-outlined" style="color:var(--kc-amber);font-size:19px">add_circle</span>';
+html+='<span class="cmp-food__name">'+safeFoodName+'</span>';
 html+=renderRiskPill(riskInfo.nivel);
-html+='<span class="text-xs text-on-surface-variant">'+food.portion+'g</span></div>';
+html+='<span class="cmp-food__g">'+food.portion+'g</span></div>';
 });
-html+='</div></div>';
 }
 });
 if(html===""){
-html='<p class="text-center text-on-surface-variant py-8">Todos los alimentos ya están en tu despensa</p>';
+html='<p class="kc-label" style="text-align:center;padding:24px 0">Todos los alimentos ya están en tu despensa</p>';
 }
 container.innerHTML=html;
 }
@@ -372,31 +362,21 @@ container.innerHTML=html;
 function switchTab(tab){
 ['tabDespensa','tabAvailable','tabPlan'].forEach(function(id){
   var el=document.getElementById(id);
-  if(el){el.classList.remove('bg-primary-container','bg-primary','text-white');el.classList.add('bg-surface-container','text-on-surface-variant');}
+  if(el) el.classList.remove('is-active');
 });
 ['despensaSection','availableSection','planSection'].forEach(function(id){
   var el=document.getElementById(id);
   if(el) el.classList.add('hidden');
 });
-if(tab==='despensa'){
-  var t=document.getElementById('tabDespensa');
-  if(t){t.classList.remove('bg-surface-container','text-on-surface-variant');t.classList.add('bg-primary-container','text-white');}
-  var s=document.getElementById('despensaSection');
-  if(s) s.classList.remove('hidden');
-  loadDespensa();
-}else if(tab==='plan'){
-  var t=document.getElementById('tabPlan');
-  if(t){t.classList.remove('bg-surface-container','text-on-surface-variant');t.classList.add('bg-secondary/20','text-secondary');}
-  var s=document.getElementById('planSection');
-  if(s) s.classList.remove('hidden');
-  loadPlanShoppingList();
-}else{
-  var t=document.getElementById('tabAvailable');
-  if(t){t.classList.remove('bg-surface-container','text-on-surface-variant');t.classList.add('bg-primary-container','text-white');}
-  var s=document.getElementById('availableSection');
-  if(s) s.classList.remove('hidden');
-  loadAvailable();
-}
+var tabId,secId;
+if(tab==='plan'){tabId='tabPlan';secId='planSection';}
+else if(tab==='available'){tabId='tabAvailable';secId='availableSection';}
+else{tabId='tabDespensa';secId='despensaSection';}
+var t=document.getElementById(tabId); if(t) t.classList.add('is-active');
+var s=document.getElementById(secId); if(s) s.classList.remove('hidden');
+if(tab==='plan') loadPlanShoppingList();
+else if(tab==='available') loadAvailable();
+else loadDespensa();
 }
 
 function loadPlanShoppingList(){
@@ -419,36 +399,30 @@ function loadPlanShoppingList(){
   }
   var items=Object.values(needed);
   if(!items.length){
-    container.innerHTML='<div class="bg-surface-container rounded-2xl p-8 text-center"><span class="material-symbols-outlined text-4xl text-white/20 block mb-3">event_busy</span><p class="text-on-surface-variant">No hay alimentos en el plan de esta semana.</p><a href="plan.html" class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-xl bg-primary-container text-white text-sm font-bold">Ir al plan</a></div>';
+    container.innerHTML='<div class="cmp-empty"><span class="material-symbols-outlined">event_busy</span><p>No hay alimentos en el plan de esta semana.</p><a href="/app/plan" class="kc-btn kc-btn--secondary kc-btn--sm" style="margin-top:14px;text-decoration:none">Ir al plan</a></div>';
     return;
   }
   var despensa=getDespensa();
-  var html='<div class="text-xs text-on-surface-variant uppercase tracking-wider mb-2">'+items.length+' alimento'+(items.length>1?'s':'')+' — próximos 7 días</div>';
-  html+='<div class="space-y-2">';
+  var html='<div class="kc-eyebrow" style="margin-bottom:10px">'+items.length+' alimento'+(items.length>1?'s':'')+' · próximos 7 días</div>';
   items.sort(function(a,b){return b.totalG-a.totalG;}).forEach(function(item){
     var entry=item.id?despensa[item.id]:null;
     var stockG=entry?(parseFloat(entry.stock)||0):0;
     var needed2=Math.round(item.totalG);
     var enough=stockG>=needed2;
-    html+='<div class="bg-surface-container rounded-xl p-4 flex items-center gap-3">';
-    html+='<div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 '+(enough?'bg-green-500/20':'bg-red-500/20')+'">';
-    html+='<span class="material-symbols-outlined text-lg '+(enough?'text-green-400':'text-red-400')+'" style="font-variation-settings:\'FILL\' 1">'+(enough?'check_circle':'shopping_cart')+'</span>';
+    html+='<div class="cmp-plan">';
+    html+='<span class="kc-ico '+(enough?'kc-c-mint':'kc-c-red')+'"><span class="material-symbols-outlined" style="font-variation-settings:\'FILL\' 1">'+(enough?'check_circle':'shopping_cart')+'</span></span>';
+    html+='<div class="cmp-plan__main">';
+    html+='<div class="cmp-plan__name">'+escapeHtml(item.name)+'</div>';
+    html+='<div class="cmp-plan__sub">Necesitas '+needed2+'g · '+item.days+' comida'+(item.days>1?'s':'')+'</div>';
     html+='</div>';
-    html+='<div class="flex-1 min-w-0">';
-    html+='<p class="text-white text-sm font-medium truncate">'+escapeHtml(item.name)+'</p>';
-    html+='<p class="text-on-surface-variant text-xs">Necesitas '+needed2+'g · '+item.days+' comida'+(item.days>1?'s':'')+'</p>';
-    html+='</div>';
-    html+='<div class="text-right">';
     if(enough){
-      html+='<span class="text-green-400 text-xs font-bold">✓ Tienes</span>';
+      html+='<span class="cmp-plan__flag" style="color:var(--kc-mint)">✓ Tienes</span>';
     }else{
       var falta=needed2-Math.round(stockG);
-      html+='<span class="text-red-400 text-xs font-bold">Falta '+falta+'g</span>';
+      html+='<span class="cmp-plan__flag" style="color:var(--kc-red)">Falta '+falta+'g</span>';
     }
     html+='</div>';
-    html+='</div>';
   });
-  html+='</div>';
   container.innerHTML=html;
 }
 

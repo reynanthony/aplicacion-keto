@@ -1,0 +1,15 @@
+---
+// Calendario mensual de adherencia.  path → {month, cells:[{n, l:0-3, today, empty}]}
+import Card from './Card.astro';
+interface Props { path?: string; eyebrow?: string }
+const { path = 'calendar', eyebrow = 'Calendario' } = Astro.props;
+const dows = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
+---
+<Card eyebrow={eyebrow} titlePath={`${path}.month`}>
+  <span slot="chip" class="kc-chip kc-c-mint" data-kc-text={`${path}.summary`}>—</span>
+  <div class="kc-heat" style="margin-bottom:6px">{dows.map((d) => <span class="kc-heat__h">{d}</span>)}</div>
+  <div class="kc-heat" data-kc-list={`${path}.cells`}>
+    <template><span class="kc-heat__c" data-kc-attr="data-l:l; data-today:today; data-empty:empty" data-kc-text="n"></span></template>
+  </div>
+  <div class="kc-legend">Menos <i style="background:var(--kc-surface-2)"></i><i style="background:color-mix(in oklab,var(--kc-amber-fill) 30%,var(--kc-surface-2))"></i><i style="background:color-mix(in oklab,var(--kc-amber-fill) 60%,var(--kc-surface-2))"></i><i style="background:var(--kc-mint)"></i> 100%</div>
+</Card>

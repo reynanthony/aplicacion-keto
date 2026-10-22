@@ -1,5 +1,6 @@
 ---
 import AppLayout from '../../layouts/AppLayout.astro';
+import AppHeaderAction from '../../components/AppHeaderAction.astro';
 ---
 
 <AppLayout title="KetoCore | Mis Objetivos" authGuard={true}>
@@ -12,12 +13,14 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
    padre no las alcanza). En escritorio el media query de arriba sube
    el gap a 1.25rem y activa flex:1 para las dos columnas lado a lado. */
 .obj-col{display:flex;flex-direction:column;gap:0.75rem}
-@media (min-width: 768px) {
+@media (min-width: 901px) {
   #objetivosGrid {
     display: flex;
     flex-wrap: wrap;
     gap: 1.25rem;
-    align-items: flex-start;
+    /* stretch: las dos columnas crecen a la misma altura -> sus fondos quedan
+       alineados (rectangulo limpio) en vez del masonry de bordes disparejos. */
+    align-items: stretch;
     padding-top: 3.5rem;
     padding-bottom: 3rem !important;
     /* entrenamientos.astro (y checklist/suplementos/guia) quitan el limite
@@ -42,14 +45,10 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
      encontrado en la primera version de este fix: header y columnas se
      aplastaban unos a otros, texto envuelto a una palabra por linea). */
   #obj-header { flex: 0 0 100%; width: 100%; }
-  /* Columnas de altura independiente: cada tarjeta apila segun su propio
-     contenido en vez de compartir fila con su par de la otra columna.
-     Reemplaza el grid con grid-row fijo por seccion, que dejaba huecos
-     enormes (hasta ~700px, ej. "Macros diarios" vs "Cambiar de rumbo")
-     cuando el contenido real de un par no coincidia en altura -- CSS Grid
-     siempre estira la fila a la tarjeta mas alta del par, sin forma de
-     evitarlo salvo emparejar por altura medida a mano (fragil, se rompe en
-     cuanto cambia el contenido de cualquiera de las dos). */
+  /* Cada columna apila sus tarjetas por altura natural; como el contenedor es
+     align-items:stretch, ambas columnas terminan a la misma altura. La ultima
+     tarjeta de cada columna crece (flex:1) para absorber el sobrante, así el
+     fondo queda alineado sin dejar un hueco entre tarjetas. */
   .obj-col {
     flex: 1;
     display: flex;
@@ -57,6 +56,7 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
     gap: 1.25rem;
     min-width: 0;
   }
+  .obj-col > section:last-child { flex: 1; }
 }
 .field-input{background:#111;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px 12px;font-size:14px;color:#f7f4f0;width:100%;-webkit-appearance:none;appearance:none;font-family:'Inter',sans-serif}
 .field-input:focus{outline:none;border-color:rgba(255,77,0,0.5)}
@@ -81,21 +81,12 @@ textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
 </style>
 
 <!-- TopBar -->
-<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(19,19,21,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
-  <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
-    <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
-    <h1 class="text-base font-black" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Mis Objetivos</h1>
-  </a>
-  <div class="flex items-center gap-2">
-    <button onclick="saveObjetivos()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-bold transition-all active:scale-95" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);color:#fff">
-      <span class="material-symbols-outlined" style="font-size:15px">save</span>
-      Guardar
-    </button>
-    <button onclick="toggleHamburgerMenu()" aria-label="Menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1a15;color:rgba(247,244,240,0.6);border:1px solid rgba(255,240,225,0.06)">
-      <span class="material-symbols-outlined" style="font-size:20px">menu</span>
-    </button>
-  </div>
-</header>
+<AppHeaderAction title="Mis Objetivos">
+  <button onclick="saveObjetivos()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-bold transition-all active:scale-95" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);color:#fff">
+    <span class="material-symbols-outlined" style="font-size:15px">save</span>
+    Guardar
+  </button>
+</AppHeaderAction>
 
 <main id="objetivosMain" class="main-content pt-14 pb-20 min-h-screen">
 <div id="objetivosGrid" class="space-y-3 kc-page" style="padding-top:12px">
@@ -103,7 +94,7 @@ textarea.field-input{resize:vertical;min-height:68px;line-height:1.5}
   <!-- Header editorial -->
   <div id="obj-header" style="margin:10px 2px 16px">
     <div style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Metas · Camino</div>
-    <h1 class="kc-h1" style="font-size:30px">Tus objetivos,<br><span style="color:rgba(247,244,240,0.57)">hito a hito.</span></h1>
+    <h1 class="kc-h1">Tus objetivos,<br><span style="color:rgba(247,244,240,0.57)">hito a hito.</span></h1>
   </div>
 
   <div class="obj-col" id="obj-col-left">

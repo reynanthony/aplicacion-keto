@@ -44,6 +44,12 @@ window.KetoEntitlements = {
     },
 
     async isPremium(forceRefresh = false) {
+        // Modo demo (Carlos): la app real con datos de muestra. Desbloquea las
+        // pantallas Premium para que el demo muestre el producto completo. No
+        // afecta a usuarios reales (no tienen la bandera) y no genera costo: el
+        // Coach IA en demo usa la KB local (supabase-keto-ai.js fuerza isOnline
+        // = false cuando ketocore_demo_mode === '1'), no la Edge Function.
+        try { if (localStorage.getItem('ketocore_demo_mode') === '1') return true; } catch (e) {}
         const sub = await this.getSuscripcion(forceRefresh);
         return !!sub && ESTADOS_ACTIVOS.includes(sub.estado);
     },

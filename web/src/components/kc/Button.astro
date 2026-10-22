@@ -1,0 +1,12 @@
+---
+// <Button variant="primary" icon="plus" action="log:food">Registrar</Button>
+import Icon from './Icon.astro';
+interface Props { variant?: 'primary' | 'secondary' | 'ghost'; size?: 'md' | 'sm'; icon?: string; block?: boolean; iconOnly?: boolean; href?: string; action?: string; value?: string; label?: string; type?: 'button' | 'submit'; [k: string]: any }
+const { variant = 'primary', size = 'md', icon, block, iconOnly, href, action, value, label, type = 'button', ...rest } = Astro.props;
+const cls = ['kc-btn', `kc-btn--${variant}`, { 'kc-btn--sm': size === 'sm', 'kc-btn--block': block, 'kc-btn--icon': iconOnly }];
+const Tag = href ? 'a' : 'button';
+---
+<Tag class:list={cls} href={href} type={href ? undefined : type} data-kc-action={action} data-value={value} aria-label={label} {...rest}>
+  {icon && <Icon name={icon as any} />}
+  <slot />
+</Tag>

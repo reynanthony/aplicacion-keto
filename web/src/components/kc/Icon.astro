@@ -1,0 +1,7 @@
+---
+// <Icon name="drop" />  — iconos de trazo del sistema (src/lib/kc-icons.js)
+import { KC_ICONS } from '../../lib/kc-icons.js';
+interface Props { name: keyof typeof KC_ICONS; class?: string; label?: string }
+const { name, class: cls, label } = Astro.props;
+---
+<svg viewBox="0 0 24 24" fill="none" class={cls} role={label ? 'img' : undefined} aria-label={label} aria-hidden={label ? undefined : 'true'} set:html={KC_ICONS[name]} />

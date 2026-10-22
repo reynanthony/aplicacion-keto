@@ -1,0 +1,23 @@
+---
+// Tab bar flotante + FAB que abre la hoja de registro rápido
+import Icon from './Icon.astro';
+interface Props { active: string }
+const { active } = Astro.props;
+const tabs = [
+  { id: 'hoy', label: 'Hoy', icon: 'home', href: '/app' },
+  { id: 'macros', label: 'Macros', icon: 'pie', href: '/app/macros' },
+  { id: 'habitos', label: 'Hábitos', icon: 'list', href: '/app/habitos' },
+  { id: 'progreso', label: 'Progreso', icon: 'trend', href: '/app/progreso' },
+];
+---
+<div class="kc-tabbar-wrap">
+  <nav class="kc-tabbar" aria-label="Principal">
+    {tabs.slice(0, 2).map((t) => (
+      <a class="kc-tab" href={t.href} aria-current={active === t.id ? 'page' : undefined}><Icon name={t.icon as any} />{t.label}</a>
+    ))}
+    <button class="kc-fab" type="button" data-kc-sheet-open="kc-registro" aria-controls="kc-registro" aria-expanded="false" aria-label="Registrar"><Icon name="plus" /></button>
+    {tabs.slice(2).map((t) => (
+      <a class="kc-tab" href={t.href} aria-current={active === t.id ? 'page' : undefined}><Icon name={t.icon as any} />{t.label}</a>
+    ))}
+  </nav>
+</div>

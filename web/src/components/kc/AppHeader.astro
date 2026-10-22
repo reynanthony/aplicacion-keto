@@ -1,0 +1,25 @@
+---
+// Cabecera fija de cristal.  Datos: user.initial, date, status:[{text, color, live}]
+import Icon from './Icon.astro';
+---
+<header class="kc-header">
+  <div class="kc-header__in">
+    <div class="kc-head">
+      <a class="kc-brand" href="/app">
+        <span class="kc-logo"><img src="/app/logo.svg" alt="KetoCore" /></span>
+        <b>KetoCore</b>
+      </a>
+      <div class="kc-head__r">
+        <span class="kc-hdate kc-label" data-kc-text="date">&nbsp;</span>
+        <button class="kc-iconbtn" type="button" data-kc-sheet-open="kc-more" aria-controls="kc-more" aria-label="Más secciones"><Icon name="list" /></button>
+        <button class="kc-iconbtn" type="button" data-kc-theme-toggle aria-label="Cambiar tema"><Icon name="theme" /></button>
+        <a class="kc-avatar" href="/app/perfil" aria-label="Perfil" data-kc-text="user.initial">·</a>
+      </div>
+    </div>
+    <div class="kc-strip" data-kc-list="status">
+      <template>
+        <span class="kc-chip kc-c-neutral" data-kc-color="color"><span class="kc-dot" data-kc-show="dot" data-kc-attr="data-live:live"></span><span data-kc-text="text"></span></span>
+      </template>
+    </div>
+  </div>
+</header>

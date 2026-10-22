@@ -1,0 +1,8 @@
+---
+// <Segmented group="range" options={[{value:'30d',label:'30D'}]} selected="30d" />  → kc:change {group, value}
+interface Props { group: string; options: { value: string; label: string }[]; selected?: string; label?: string }
+const { group, options, selected = options[0]?.value, label } = Astro.props;
+---
+<div class="kc-seg-ctl" role="group" aria-label={label ?? group} data-kc-group={group}>
+  {options.map((o) => <button type="button" data-value={o.value} aria-pressed={o.value === selected ? 'true' : 'false'}>{o.label}</button>)}
+</div>

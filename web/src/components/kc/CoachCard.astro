@@ -1,0 +1,20 @@
+---
+// Coach IA (Edge Function keto-ai).  path → {title, insight, action, eta, cta, remindAt}
+// Texto plano: la respuesta del modelo nunca se inyecta como HTML.
+import Card from './Card.astro';
+import Icon from './Icon.astro';
+interface Props { path?: string }
+const { path = 'coach' } = Astro.props;
+---
+<Card class="kc-coach" title="Cortex" sub="Tu coach IA">
+  <span slot="lead" class="kc-ico kc-c-amber"><Icon name="spark" /></span>
+  <span slot="chip" class="kc-chip kc-c-amber"><span class="kc-dot kc-dot--live"></span>Nuevo</span>
+  <p data-kc-text={`${path}.insight`}>—</p>
+  <div class="kc-callout" data-kc-show={`${path}.action`}>
+    <div class="kc-meta" style="margin-bottom:6px"><span style="color:var(--kc-amber)">Acción sugerida</span><span data-kc-text={`${path}.eta`}></span></div>
+    <p data-kc-text={`${path}.action`}></p>
+  </div>
+  <button class="kc-btn kc-btn--primary kc-btn--block" type="button" data-kc-action="coach:remind" data-kc-attr={`data-value:${path}.remindAt`}>
+    <Icon name="bell" /><span data-kc-text={`${path}.cta`}>Programar recordatorio</span>
+  </button>
+</Card>

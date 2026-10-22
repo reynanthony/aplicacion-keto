@@ -1,247 +1,156 @@
 ---
-import AppLayout from '../../layouts/AppLayout.astro';
+// Compras / Despensa — UI v2 (HUD nativo). Reescrito del puente .app-hud a
+// markup kc-* real; los generadores de compras.js emiten ahora tarjetas HUD.
+// Fila de KPIs del inventario (kcal / alimentos / stock / categorías).
+// Lógica y datos intactos (compras.js + inspector keto). Respaldo: compras.astro.bak
+import AppShell from '../../layouts/AppShell.astro';
 ---
-
-<AppLayout title="KetoCore | Lista de Compras" authGuard={true}>
+<AppShell title="Compras" screen="compras">
 <style is:global>
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
-.glass-card{background:rgba(22,19,16,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
-@media(min-width:768px){#cmp-wrap{max-width:none!important;padding-top:1rem;}}
+
+/* Tabs segmentados */
+.kc .cmp-tabs{display:flex;gap:6px;background:var(--kc-surface-2);border:1px solid var(--kc-line);border-radius:var(--kc-radius-md);padding:4px}
+.kc .cmp-tab{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:38px;border:0;background:transparent;color:var(--kc-ink-3);font:600 13px var(--kc-font-sans);border-radius:var(--kc-radius-sm);cursor:pointer;transition:background .18s,color .18s;white-space:nowrap}
+.kc .cmp-tab.is-active{background:var(--kc-amber-fill);color:var(--kc-on-amber);box-shadow:var(--kc-glow-amber)}
+.kc .cmp-tab .material-symbols-outlined{font-size:17px}
+
+/* Tarjeta de categoría (despensa) */
+.kc .cmp-cat{background:var(--kc-surface-1);border:1px solid var(--kc-line);border-radius:var(--kc-radius-md);padding:14px;margin-bottom:10px}
+.kc .cmp-cat__h{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.kc .cmp-cat__name{display:flex;align-items:center;gap:8px;font:600 14px var(--kc-font-sans);color:var(--kc-ink);min-width:0}
+.kc .cmp-cat__name .material-symbols-outlined{font-size:19px}
+.kc .cmp-cat__count{font:500 11px var(--kc-font-mono);color:var(--kc-ink-3)}
+.kc .cmp-cat__cal{font:700 13px var(--kc-font-mono);white-space:nowrap}
+.kc .cmp-row{display:flex;align-items:center;gap:8px;background:var(--kc-surface-2);border-radius:var(--kc-radius-sm);padding:9px 10px}
+.kc .cmp-row+.cmp-row{margin-top:6px}
+.kc .cmp-row__main{flex:1;min-width:0}
+.kc .cmp-row__name{font:600 12.5px var(--kc-font-sans);color:var(--kc-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kc .cmp-row__meta{display:flex;align-items:center;gap:6px;margin-top:3px}
+.kc .cmp-row__bar{flex:1;height:4px;background:var(--kc-surface-1);border-radius:2px;overflow:hidden}
+.kc .cmp-row__bar i{display:block;height:100%;border-radius:2px}
+.kc .cmp-row__stock{font:500 10px var(--kc-font-mono);white-space:nowrap}
+.kc .cmp-row__cal{text-align:right;min-width:44px;font:700 12px var(--kc-font-sans);color:var(--kc-ink)}
+.kc .cmp-row__cal small{font:500 9px var(--kc-font-mono);color:var(--kc-ink-3)}
+.kc .cmp-step{width:26px;height:26px;border-radius:7px;background:var(--kc-surface-1);border:1px solid var(--kc-line-strong);color:var(--kc-ink);font-size:14px;line-height:1;cursor:pointer;padding:0;flex-shrink:0}
+.kc .cmp-del{width:26px;height:26px;border-radius:7px;background:color-mix(in oklab,var(--kc-red) 15%,transparent);border:0;color:var(--kc-red);font-size:14px;line-height:1;cursor:pointer;padding:0;flex-shrink:0}
+
+/* Grupos de "Agregar" */
+.kc .cmp-groupt{display:flex;align-items:center;gap:8px;font:600 11px/14px var(--kc-font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--kc-ink-3);margin:16px 0 8px}
+.kc .cmp-groupt:first-child{margin-top:0}
+.kc .cmp-groupt .dot{width:8px;height:8px;border-radius:3px}
+.kc .cmp-food{display:flex;align-items:center;gap:10px;background:var(--kc-surface-2);border-radius:var(--kc-radius-sm);padding:10px 12px;cursor:pointer;transition:background .18s}
+.kc .cmp-food+.cmp-food{margin-top:6px}
+.kc .cmp-food:active{transform:scale(.99)}
+.kc .cmp-food__name{flex:1;min-width:0;font:600 13px var(--kc-font-sans);color:var(--kc-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kc .cmp-food__g{font:500 11px var(--kc-font-mono);color:var(--kc-ink-3);white-space:nowrap}
+
+/* Lista "Desde plan" */
+.kc .cmp-plan{display:flex;align-items:center;gap:12px;background:var(--kc-surface-2);border-radius:var(--kc-radius-md);padding:12px}
+.kc .cmp-plan+.cmp-plan{margin-top:8px}
+.kc .cmp-plan__main{flex:1;min-width:0}
+.kc .cmp-plan__name{font:600 13px var(--kc-font-sans);color:var(--kc-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kc .cmp-plan__sub{font:500 11.5px var(--kc-font-mono);color:var(--kc-ink-3);margin-top:2px}
+.kc .cmp-plan__flag{font:700 11px var(--kc-font-mono);white-space:nowrap}
+
+/* Estado vacío */
+.kc .cmp-empty{background:var(--kc-surface-1);border:1px solid var(--kc-line);border-radius:var(--kc-radius-md);padding:32px 20px;text-align:center}
+.kc .cmp-empty .material-symbols-outlined{font-size:44px;color:var(--kc-ink-3);opacity:.5}
+.kc .cmp-empty p{font:500 13px var(--kc-font-sans);color:var(--kc-ink-2);margin-top:10px}
+.kc .cmp-empty p.sub{font-size:12px;color:var(--kc-ink-3);margin-top:2px}
+
+/* Modal agregar (hoja inferior) */
+.kc .cmp-modal{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center}
+.kc .cmp-modal.hidden{display:none}
+.kc .cmp-modal__scrim{position:absolute;inset:0;background:rgba(0,0,0,.72);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.kc .cmp-modal__panel{position:relative;width:100%;max-width:480px;max-height:88dvh;overflow-y:auto;background:var(--kc-surface-1);border:1px solid var(--kc-line);border-bottom:0;border-radius:var(--kc-radius-xl) var(--kc-radius-xl) 0 0;box-shadow:var(--kc-shadow-float);padding:18px 18px calc(20px + env(safe-area-inset-bottom))}
+.kc .cmp-block{background:var(--kc-surface-2);border-radius:var(--kc-radius-md);padding:12px 14px;margin-bottom:14px}
+.kc .cmp-qty{display:flex;align-items:center;gap:10px}
+.kc .cmp-qty input{flex:1;height:48px;text-align:center;font:700 19px var(--kc-font-sans);color:var(--kc-ink);background:var(--kc-surface-2);border:1px solid var(--kc-line-strong);border-radius:var(--kc-radius-md);-webkit-appearance:none;appearance:none}
+.kc .cmp-qtybtn{width:48px;height:48px;flex-shrink:0}
+
+/* Toast */
+.kc .cmp-toast{position:fixed;bottom:calc(96px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:70;display:flex;align-items:center;gap:10px;padding:12px 20px;border-radius:var(--kc-radius-pill);background:var(--kc-surface-1);border:1px solid var(--kc-line-strong);box-shadow:var(--kc-shadow-float);font:600 13px var(--kc-font-sans);color:var(--kc-ink)}
+.kc .cmp-toast.hidden{display:none}
 </style>
-<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(19,19,21,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
-  <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
-    <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
-    <span class="text-base font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">KetoCore</span>
-  </a>
-  <div class="flex items-center gap-1.5">
-    <button onclick="toggleMobileUserMenu()" aria-label="Mi cuenta" class="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
-      <img id="mobileHeaderAvatarImg" src="" class="hidden w-full h-full object-cover" alt="Avatar">
-      <span id="mobileHeaderAvatarIcon" class="material-symbols-outlined" style="font-size:20px;color:rgba(247,244,240,0.6)">account_circle</span>
-    </button>
-    <button onclick="toggleHamburgerMenu()" aria-label="Abrir menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1a15;color:rgba(247,244,240,0.6)">
-      <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">menu</span>
-    </button>
-  </div>
-</header>
 
-<!-- Mobile User Dropdown -->
-<div id="mobileUserDropdown" class="md:hidden fixed top-14 right-4 w-56 rounded-2xl overflow-hidden z-[80] hidden" style="background:#161310;border:1px solid rgba(255,240,225,0.07);box-shadow:0 8px 32px rgba(0,0,0,0.35)">
-  <div class="p-3" style="border-bottom:1px solid rgba(255,240,225,0.06)">
-    <p class="text-sm font-semibold" style="color:#f7f4f0" id="mobileDropdownUserName">Usuario</p>
-    <p class="text-[13px] mt-0.5" style="color:rgba(247,244,240,0.55)" id="mobileDropdownUserEmail">email@example.com</p>
-  </div>
-  <div class="p-2">
-    <a href="/app/perfil" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-orange-50" style="color:#f7f4f0">
-      <span class="material-symbols-outlined text-lg" style="color:rgba(247,244,240,0.55)">person</span>
-      <span class="text-sm font-medium">Mi Perfil</span>
-    </a>
-    <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-red-50" style="color:#dc2626">
-      <span class="material-symbols-outlined text-lg">logout</span>
-      <span class="text-sm font-medium">Cerrar Sesión</span>
-    </button>
-  </div>
-</div>
-<main class="main-content pt-14 pb-20 min-h-screen">
-<div id="cmp-wrap" class="space-y-8 kc-page" style="padding-top:12px">
-
-<!-- Hero Header -->
-<div class="relative overflow-hidden bg-surface-container rounded-3xl p-8 md:p-12">
-<div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
-<div class="absolute -bottom-20 -left-20 w-48 h-48 bg-secondary/10 rounded-full blur-3xl"></div>
-<div class="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
+<!-- Hero -->
 <div>
-<span style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00">Control de inventario</span>
-<h1 class="kc-h1" style="margin-top:10px">Mi despensa</h1>
-<p class="text-on-surface-variant mt-3 max-w-lg">Controla tu stock de alimentos y optimiza tus compras semanalmente.</p>
-</div>
-<button onclick="switchTab('available');document.getElementById('tabAvailable').click();" class="kc-btn">
-<span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">add_circle</span>
-Agregar Alimento
-</button>
-</div>
+  <div class="kc-hero-sub">Control de inventario</div>
+  <h1 class="kc-hero">Mi <em>despensa</em></h1>
 </div>
 
-<!-- Tab Navigation -->
-<div class="flex gap-2 flex-wrap">
-<button id="tabDespensa" onclick="switchTab('despensa')" class="px-6 py-3 rounded-2xl text-sm font-bold bg-primary text-white transition-all flex items-center gap-2">
-<span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">inventory_2</span>
-Mi Despensa
-</button>
-<button id="tabAvailable" onclick="switchTab('available')" class="px-6 py-3 rounded-2xl text-sm font-bold bg-surface-container text-on-surface-variant transition-all flex items-center gap-2 hover:bg-surface-container-high">
-<span class="material-symbols-outlined">add_circle</span>
-Agregar Alimentos
-</button>
-<button id="tabPlan" onclick="switchTab('plan')" class="px-6 py-3 rounded-2xl text-sm font-bold bg-surface-container text-on-surface-variant transition-all flex items-center gap-2 hover:bg-surface-container-high">
-<span class="material-symbols-outlined text-secondary">calendar_today</span>
-Desde Plan
-</button>
+<!-- KPIs -->
+<div class="kc-grid">
+  <div class="kc-stat kc-c-amber">
+    <div class="kc-stat__top"><span class="kc-label">Inventario</span></div>
+    <div class="kc-stat__val"><span id="kpiKcal">0</span><small>kcal</small></div>
+  </div>
+  <div class="kc-stat kc-c-cyan">
+    <div class="kc-stat__top"><span class="kc-label">Alimentos</span></div>
+    <div class="kc-stat__val" id="kpiItems">0</div>
+  </div>
+  <div class="kc-stat kc-c-mint">
+    <div class="kc-stat__top"><span class="kc-label">Stock</span></div>
+    <div class="kc-stat__val" id="kpiStock">0</div>
+  </div>
+  <div class="kc-stat kc-c-amber">
+    <div class="kc-stat__top"><span class="kc-label">Categorías</span></div>
+    <div class="kc-stat__val"><span id="kpiCats">0</span><small>/6</small></div>
+    <div class="kc-bar kc-c-amber"><i id="kpiCatsBar"></i></div>
+  </div>
 </div>
 
-<!-- Mi Despensa Section -->
-<section id="despensaSection" class="space-y-6">
-<div id="despensaList" class="space-y-4"></div>
-</section>
+<!-- Tabs -->
+<div class="cmp-tabs">
+  <button id="tabDespensa" class="cmp-tab is-active" onclick="switchTab('despensa')"><span class="material-symbols-outlined">inventory_2</span>Despensa</button>
+  <button id="tabAvailable" class="cmp-tab" onclick="switchTab('available')"><span class="material-symbols-outlined">add_circle</span>Agregar</button>
+  <button id="tabPlan" class="cmp-tab" onclick="switchTab('plan')"><span class="material-symbols-outlined">calendar_today</span>Plan</button>
+</div>
 
-<!-- Desde Plan Section -->
-<section id="planSection" class="space-y-6 hidden">
-  <div class="bg-surface-container rounded-2xl p-6">
-    <div class="flex items-start gap-4">
-      <div class="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center flex-shrink-0">
-        <span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings:'FILL' 1">calendar_today</span>
-      </div>
-      <div>
-        <h4 class="font-headline font-bold text-white">Alimentos de tu plan esta semana</h4>
-        <p class="text-on-surface-variant text-sm mt-1">Generado desde los 7 días del plan de alimentación.</p>
+<section id="despensaSection"><div id="despensaList"></div></section>
+<section id="availableSection" class="hidden"><div id="availableList"></div></section>
+<section id="planSection" class="hidden"><div id="planShoppingList"></div></section>
+
+<!-- Modal agregar -->
+<div id="addModal" class="cmp-modal hidden">
+  <div class="cmp-modal__scrim" onclick="closeAddModal()"></div>
+  <div class="cmp-modal__panel">
+    <header class="kc-card__head" style="margin-bottom:14px">
+      <div style="min-width:0"><div class="kc-eyebrow">Agregar a despensa</div><h3 class="kc-card__title" id="addFoodName" style="margin-top:4px">Alimento</h3><div id="addRiskInfo"></div></div>
+      <button class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon" onclick="closeAddModal()" aria-label="Cerrar"><span class="material-symbols-outlined" style="font-size:18px">close</span></button>
+    </header>
+    <div class="cmp-block"><div class="kc-label" style="margin-bottom:4px">Presentación</div><div id="addFoodPortion" style="font:600 13px var(--kc-font-sans);color:var(--kc-ink)"></div></div>
+    <div style="margin-bottom:14px"><div class="kc-label" style="margin-bottom:8px">Unidad</div><div id="unitSelector"></div></div>
+    <div style="margin-bottom:14px"><div class="kc-label" style="margin-bottom:8px">Cantidad</div>
+      <div class="cmp-qty">
+        <button class="kc-btn kc-btn--secondary kc-btn--icon cmp-qtybtn" onclick="var i=document.getElementById('addQuantity');i.value=Math.max(0.1,(parseFloat(i.value)||0)-1);updateAddPreview()">−</button>
+        <input type="number" id="addQuantity" value="1" min="0.1" max="10000" step="0.1">
+        <button class="kc-btn kc-btn--secondary kc-btn--icon cmp-qtybtn" onclick="var i=document.getElementById('addQuantity');i.value=Math.min(10000,(parseFloat(i.value)||0)+1);updateAddPreview()">+</button>
       </div>
     </div>
+    <div class="cmp-block" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <span class="kc-label">Total en gramos</span><span id="addPreview" style="font:800 22px var(--kc-font-sans);color:var(--kc-amber)">0 g</span>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="kc-btn kc-btn--secondary kc-btn--block" onclick="closeAddModal()">Cancelar</button>
+      <button class="kc-btn kc-btn--primary kc-btn--block" onclick="confirmAdd()">Agregar</button>
+    </div>
   </div>
-  <div id="planShoppingList" class="space-y-3"></div>
-</section>
-
-<!-- Available Foods Section -->
-<section id="availableSection" class="space-y-6 hidden">
-<div class="bg-surface-container rounded-2xl p-6">
-<div class="flex items-start gap-4">
-<div class="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center flex-shrink-0">
-<span class="material-symbols-outlined text-secondary text-2xl">info</span>
-</div>
-<div>
-<h4 class="font-headline font-bold text-white">Selecciona alimentos</h4>
-<p class="text-on-surface-variant text-sm mt-1">Toca un alimento para agregarlo a tu despensa con cantidad personalizada.</p>
-</div>
-</div>
-</div>
-<div id="availableList" class="space-y-4"></div>
-</section>
-
-</div>
-</main>
-
-<!-- Add Modal -->
-<div id="addModal" class="fixed inset-0 z-[60] hidden">
-<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeAddModal()"></div>
-<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-<div class="glass-card rounded-3xl p-8 w-full max-w-md pointer-events-auto border border-primary/20">
-<div class="flex justify-between items-center mb-6">
-<div>
-<h3 class="text-2xl font-headline font-black text-white">Agregar a Despensa</h3>
-<p id="addFoodName" class="text-primary mt-1 font-bold"></p>
-<div id="addRiskInfo" class="mt-3"></div>
-</div>
-<button onclick="closeAddModal()" class="w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
-</div>
-<div class="bg-surface-container-high rounded-2xl p-4 mb-6">
-<p class="text-[13px] text-on-surface-variant uppercase tracking-wider mb-2">Presentacion por unidad</p>
-<p id="addFoodPortion" class="text-white font-bold"></p>
-</div>
-<div class="mb-6">
-<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-3">Unidad de medida</label>
-<div id="unitSelector" class="flex flex-wrap gap-2"></div>
-</div>
-<div class="mb-6">
-<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-3">Cantidad</label>
-<div class="flex items-center gap-3">
-<button onclick="var inp=document.getElementById('addQuantity');inp.value=Math.max(0.1,parseFloat(inp.value)-1);updateAddPreview()" class="w-14 h-14 rounded-2xl bg-surface-container-high text-white font-bold text-2xl hover:bg-surface-container-highest transition-all flex items-center justify-center">-</button>
-<input type="number" id="addQuantity" value="1" min="0.1" max="10000" step="0.1" class="flex-1 bg-surface-container text-white border border-outline rounded-2xl px-4 py-4 text-center text-2xl font-bold focus:outline-none focus:border-primary">
-<button onclick="var inp=document.getElementById('addQuantity');inp.value=Math.min(10000,parseFloat(inp.value)+1);updateAddPreview()" class="w-14 h-14 rounded-2xl bg-surface-container-high text-white font-bold text-2xl hover:bg-surface-container-highest transition-all flex items-center justify-center">+</button>
-</div>
-</div>
-<div class="bg-surface-container-high rounded-2xl p-6 mb-6">
-<div class="flex justify-between items-center">
-<span class="text-on-surface-variant">Total en gramos:</span>
-<span id="addPreview" class="text-3xl font-headline font-black text-primary">0 g</span>
-</div>
-</div>
-<div class="flex gap-3">
-<button onclick="closeAddModal()" class="kc-btn-ghost flex-1" style="height:56px">Cancelar</button>
-<button onclick="confirmAdd()" class="kc-btn flex-1" style="height:56px">Agregar</button>
-</div>
-</div>
-</div>
 </div>
 
 <!-- Toast -->
-<div id="toast" class="fixed bottom-28 left-1/2 -translate-x-1/2 z-[70] hidden">
-<div class="glass-card rounded-full px-6 py-3 flex items-center gap-3 shadow-lg border border-primary/20">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1">check_circle</span>
-<span id="toastMessage" class="text-white font-bold">Guardado!</span>
-</div>
+<div id="toast" class="cmp-toast hidden">
+  <span class="material-symbols-outlined" style="color:var(--kc-mint);font-size:20px;font-variation-settings:'FILL' 1">check_circle</span>
+  <span id="toastMessage">Guardado</span>
 </div>
 
-
-<script is:inline src="/app/utils.js"></script>
-<script is:inline src="/app/data/keto-inspector-ingredientes.js"></script>
-<script is:inline src="/app/modules/inspectorKeto.js"></script>
-<script is:inline src="/app/modules/keto-inspector-api.js"></script>
-<script is:inline src="/app/modules/keto-inspector-ui.js"></script>
-<script is:inline src="/app/compras.js?v=4"></script>
-<script is:inline>
-// User Dropdown Menu
-function toggleUserMenu() {
-  const dropdown = document.getElementById('userDropdown');
-  dropdown.classList.toggle('hidden');
-  updateDropdownInfo();
-}
-
-function toggleMobileUserMenu() {
-  const dropdown = document.getElementById('mobileUserDropdown');
-  dropdown.classList.toggle('hidden');
-  updateDropdownInfo();
-}
-
-function updateDropdownInfo() {
-  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
-  const userName = profile.nombre || profile.name || 'Usuario';
-  const userEmail = localStorage.getItem('ketocore_user_email') || 'usuario@ejemplo.com';
-  const dn = document.getElementById('dropdownUserName');
-  const de = document.getElementById('dropdownUserEmail');
-  const mdn = document.getElementById('mobileDropdownUserName');
-  const mde = document.getElementById('mobileDropdownUserEmail');
-  if(dn) dn.textContent = userName;
-  if(de) de.textContent = userEmail;
-  if(mdn) mdn.textContent = userName;
-  if(mde) mde.textContent = userEmail;
-}
-
-function updateHeaderAvatar() {
-  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
-  const avatarUrl = profile.avatar_url;
-  const hi = document.getElementById('headerAvatarImg');
-  const hi2 = document.getElementById('headerAvatarIcon');
-  const mhi = document.getElementById('mobileHeaderAvatarImg');
-  const mhi2 = document.getElementById('mobileHeaderAvatarIcon');
-  if (avatarUrl) {
-    if(hi) { hi.src = avatarUrl; hi.classList.remove('hidden'); }
-    if(hi2) hi2.classList.add('hidden');
-    if(mhi) { mhi.src = avatarUrl; mhi.classList.remove('hidden'); }
-    if(mhi2) mhi2.classList.add('hidden');
-  } else {
-    if(hi) hi.classList.add('hidden');
-    if(hi2) hi2.classList.remove('hidden');
-    if(mhi) mhi.classList.add('hidden');
-    if(mhi2) mhi2.classList.remove('hidden');
-  }
-}
-
-document.addEventListener('click', function(e) {
-  const dd = document.getElementById('userDropdown');
-  const mdd = document.getElementById('mobileUserDropdown');
-  const btn = document.getElementById('profileBtn');
-  if (dd && !dd.contains(e.target) && !btn.contains(e.target)) dd.classList.add('hidden');
-  if (mdd && !e.target.closest('#mobileUserDropdown') && !e.target.closest('button[onclick="toggleMobileUserMenu()"]')) mdd.classList.add('hidden');
-});
-
-async function handleLogout() {
-  if (confirm('¿Cerrar sesión?')) {
-    await window.supabase.auth.signOut();
-    localStorage.removeItem('ketocore_user_id');
-    localStorage.removeItem('ketocore_user_email');
-    localStorage.removeItem('ketocore_onboarding_done');
-    window.location.href = '/app/welcome';
-  }
-}
-
-updateHeaderAvatar();
-</script>
-
-</AppLayout>
+<Fragment slot="scripts">
+  <script is:inline src="/app/utils.js"></script>
+  <script is:inline src="/app/data/keto-inspector-ingredientes.js"></script>
+  <script is:inline src="/app/modules/inspectorKeto.js"></script>
+  <script is:inline src="/app/modules/keto-inspector-api.js"></script>
+  <script is:inline src="/app/modules/keto-inspector-ui.js"></script>
+  <script is:inline src="/app/compras.js?v=6"></script>
+</Fragment>
+</AppShell>

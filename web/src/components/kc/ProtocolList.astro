@@ -1,0 +1,29 @@
+---
+// Lista de protocolos/hábitos.  path → [{id, name, icon, color, state:'done'|'active'|'pending', meta, note, pct, actionLabel, actionValue}]
+// Emite kc:action {action:'protocol:log', id, value} y {action:'protocol:toggle', id}
+import Card from './Card.astro';
+import Icon from './Icon.astro';
+interface Props { path?: string; eyebrow?: string; title?: string; countPath?: string }
+const { path = 'protocols', eyebrow = 'Protocolos', title = 'Hábitos de hoy', countPath = 'protocolsDone' } = Astro.props;
+---
+<Card eyebrow={eyebrow} title={title}>
+  <span slot="chip" class="kc-chip kc-c-mint" data-kc-text={countPath}>—</span>
+  <div data-kc-list={path}>
+    <template>
+      <div class="kc-proto" data-kc-attr="data-id:id; data-state:state">
+        <span class="kc-ico" data-kc-color="color">
+          <span data-kc-icon="icon" style="display:contents"></span>
+          <span class="kc-check"><Icon name="check" /></span>
+        </span>
+        <div class="kc-proto__main">
+          <div class="kc-proto__name" data-kc-text="name"></div>
+          <div class="kc-meta"><span data-kc-text="meta"></span><span data-kc-text="note"></span></div>
+          <div class="kc-bar" data-kc-color="color"><i data-kc-pct="pct"></i></div>
+        </div>
+        <button class="kc-btn kc-btn--sm kc-btn--secondary kc-proto__act" type="button" data-kc-action="protocol:log" data-kc-attr="data-value:actionValue; data-variant:actionVariant" data-kc-show="actionLabel" data-kc-text="actionLabel"></button>
+        <button class="kc-btn kc-btn--sm kc-btn--secondary kc-btn--icon kc-proto__act" type="button" data-kc-action="protocol:toggle" data-kc-show="canToggle" aria-label="Marcar como hecho"><Icon name="check" /></button>
+      </div>
+    </template>
+  </div>
+  <slot />
+</Card>

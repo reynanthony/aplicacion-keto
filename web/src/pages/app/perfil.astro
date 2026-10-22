@@ -1,5 +1,6 @@
 ---
 import AppLayout from '../../layouts/AppLayout.astro';
+import AppHeaderAction from '../../components/AppHeaderAction.astro';
 ---
 
 <AppLayout title="KetoCore | Mi Perfil" authGuard={true}>
@@ -12,32 +13,28 @@ html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f
 .field-input::placeholder{color:rgba(247,244,240,0.52)}
 select.field-input option{background:#1a1a1a;color:#f7f4f0}
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
-@media (min-width: 768px) {
+/* Movil: .pf-cols y .pf-col apilan; en escritorio .pf-cols pasa a fila. */
+.pf-cols{display:flex;flex-direction:column;gap:0.75rem}
+.pf-col{display:flex;flex-direction:column;gap:0.75rem}
+@media (min-width: 901px) {
   #perfilGrid {
-    display: grid;
-    grid-template-columns: 1fr 360px;
-    gap: 1.25rem;
-    align-items: start;
     padding-top: 4.5rem;
     padding-bottom: 3rem !important;
-    /* entrenamientos.astro (y checklist/suplementos/guia) quitan el limite
-       de 1180px de .kc-page en escritorio -- esta pantalla se habia quedado
-       topada, ~458px mas angosta que las demas en un monitor de 1920px. */
     max-width: none !important;
   }
+  /* Tarjetas de ancho completo (header, hero, metricas, suscripcion) apiladas;
+     abajo, .pf-cols pone las 6 restantes en dos columnas de altura pareja. */
   #perfilGrid > * { margin-top: 0 !important; }
-  #pf-header  { grid-column: 1 / -1; grid-row: 1; }
-  #pf-hero    { grid-column: 1 / -1; grid-row: 2; }
-  #pf-metrics { grid-column: 1 / -1; grid-row: 3; }
-  #pf-suscripcion { grid-column: 1 / -1; grid-row: 4; }
-  #pf-datos   { grid-column: 1; grid-row: 5; }
-  #pf-peso    { grid-column: 1; grid-row: 6; }
-  #pf-entreno { grid-column: 1; grid-row: 7; }
-  #pf-macros    { grid-column: 2; grid-row: 5; }
-  #pf-historial { grid-column: 2; grid-row: 6; }
-  #pf-peligro   { grid-column: 2; grid-row: 7; }
-  /* Sistema visual "grande y espacioso" de entrenamientos.astro, solo en
-     escritorio (ver mismo cambio en objetivos.astro para el detalle). */
+  #perfilGrid > * + * { margin-top: 1.25rem !important; }
+  .pf-cols {
+    flex-direction: row;
+    gap: 1.25rem;
+    align-items: stretch;   /* ambas columnas a la misma altura -> fondos alineados */
+  }
+  .pf-col { gap: 1.25rem; min-width: 0; }
+  .pf-col-left  { flex: 1; }
+  .pf-col-right { flex: 0 0 360px; }        /* conserva el ancho de 360px del lado derecho */
+  .pf-col > section:last-child { flex: 1; } /* la ultima tarjeta absorbe el sobrante */
   #pf-header h1 { font-size: 46px; }
   .glass-card { padding: 32px !important; }
   .glass-card h2 { font-size: 20px !important; font-weight: 800 !important; }
@@ -45,21 +42,12 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
 </style>
 
 <!-- TopBar -->
-<header class="fixed top-0 left-0 right-0 z-40 h-14 px-4 flex items-center justify-between" style="background:rgba(19,19,21,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
-  <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
-    <img src="/app/logo.svg" alt="KetoCore" class="w-7 h-7" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
-    <h1 class="text-base font-black" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Mi Perfil</h1>
-  </a>
-  <div class="flex items-center gap-2">
-    <button onclick="saveProfile()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-bold transition-all active:scale-95" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);color:#fff">
-      <span class="material-symbols-outlined" style="font-size:15px">save</span>
-      Guardar
-    </button>
-    <button onclick="toggleHamburgerMenu()" aria-label="Menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1a15;color:rgba(247,244,240,0.6);border:1px solid rgba(255,240,225,0.06)">
-      <span class="material-symbols-outlined" style="font-size:20px">menu</span>
-    </button>
-  </div>
-</header>
+<AppHeaderAction title="Mi Perfil">
+  <button onclick="saveProfile()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-bold transition-all active:scale-95" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);color:#fff">
+    <span class="material-symbols-outlined" style="font-size:15px">save</span>
+    Guardar
+  </button>
+</AppHeaderAction>
 
 <!-- Main -->
 <main id="perfilMain" class="main-content pt-14 pb-20 min-h-screen">
@@ -68,7 +56,7 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
   <!-- Header editorial -->
   <div id="pf-header" style="margin:10px 2px 16px">
     <div style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Cuenta · Ajustes</div>
-    <h1 class="kc-h1" style="font-size:30px">Tu perfil<br><span style="color:rgba(247,244,240,0.57)">metabólico.</span></h1>
+    <h1 class="kc-h1">Tu perfil<br><span style="color:rgba(247,244,240,0.57)">metabólico.</span></h1>
   </div>
 
   <!-- Hero: avatar + nombre + chips -->
@@ -143,6 +131,8 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
     </div>
   </section>
 
+  <div class="pf-cols">
+  <div class="pf-col pf-col-left">
   <!-- Datos Personales -->
   <section id="pf-datos" class="glass-card rounded-2xl p-4">
     <div class="flex items-center gap-2 mb-3">
@@ -254,6 +244,8 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
     </div>
   </section>
 
+  </div>
+  <div class="pf-col pf-col-right">
   <!-- Resumen Metabólico -->
   <section id="pf-macros" class="glass-card rounded-2xl p-4">
     <div class="flex items-center gap-2 mb-3">
@@ -323,6 +315,8 @@ select.field-input option{background:#1a1a1a;color:#f7f4f0}
       Borrar Todos los Datos
     </button>
   </section>
+  </div>
+  </div>
 
 </div>
 </main>

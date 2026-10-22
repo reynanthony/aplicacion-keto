@@ -1,0 +1,13 @@
+---
+// Celda de gauge: cifra + unidad + chip + barra.  path → objeto {value, goal?, pct, chip}
+interface Props { label: string; path: string; unit?: string; color?: 'amber' | 'cyan' | 'mint' | 'red'; fmt?: string }
+const { label, path, unit = '', color = 'amber', fmt } = Astro.props;
+---
+<div class={`kc-stat kc-c-${color}`}>
+  <div class="kc-stat__top">
+    <span class="kc-label">{label}</span>
+    <span class={`kc-chip kc-chip--sm kc-c-${color}`} data-kc-text={`${path}.chip`} data-kc-show={`${path}.chip`}>—</span>
+  </div>
+  <div class="kc-stat__val"><span data-kc-text={`${path}.value`} data-kc-fmt={fmt}>—</span><small data-kc-text={unit ? undefined : `${path}.unit`}>{unit}</small></div>
+  <div class="kc-bar"><i data-kc-pct={`${path}.pct`}></i></div>
+</div>

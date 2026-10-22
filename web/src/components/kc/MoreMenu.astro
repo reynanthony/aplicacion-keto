@@ -1,0 +1,47 @@
+---
+// Menú "Más": acceso a todas las secciones que no están en el tab bar.
+// Se abre desde el botón del header (data-kc-sheet-open="kc-more").
+import Icon from './Icon.astro';
+const groups = [
+  { label: 'Nutrición', items: [
+    { href: '/app/plan', label: 'Plan', icon: 'calendar', c: 'amber' },
+    { href: '/app/recetas', label: 'Recetas', icon: 'utensils', c: 'amber' },
+    { href: '/app/alimentos', label: 'Alimentos', icon: 'search', c: 'cyan' },
+    { href: '/app/suplementos', label: 'Suplementos', icon: 'flask', c: 'amber' },
+    { href: '/app/compras', label: 'Compras', icon: 'list', c: 'cyan' },
+    { href: '/app/scanner', label: 'Scanner', icon: 'scan', c: 'cyan' },
+  ] },
+  { label: 'Entrenamiento e inteligencia', items: [
+    { href: '/app/entrenamientos', label: 'Entrenamientos', icon: 'dumbbell', c: 'red' },
+    { href: '/app/coach', label: 'Coach IA', icon: 'spark', c: 'amber' },
+    { href: '/app/inspector', label: 'Inspector', icon: 'target', c: 'mint' },
+    { href: '/app/comunidad', label: 'Comunidad', icon: 'trophy', c: 'cyan' },
+  ] },
+  { label: 'Cuenta', items: [
+    { href: '/app/objetivos', label: 'Objetivos', icon: 'flame', c: 'amber' },
+    { href: '/app/perfil', label: 'Mi perfil', icon: 'settings', c: 'neutral' },
+    { href: '/app/guia', label: 'Guía', icon: 'bell', c: 'cyan' },
+    { href: '/', label: 'Sitio web', icon: 'home', c: 'neutral' },
+  ] },
+];
+---
+<div class="kc-sheet kc-sheet--tall" id="kc-more" role="dialog" aria-modal="true" aria-labelledby="kc-more-t" aria-hidden="true" inert>
+  <div class="kc-sheet__grab"></div>
+  <div class="kc-card__head" style="margin:0">
+    <div><div class="kc-eyebrow">Navegación</div><h2 class="kc-card__title" id="kc-more-t">Todas las secciones</h2></div>
+    <button class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon" type="button" data-kc-sheet-close aria-label="Cerrar"><Icon name="plus" class="kc-rot45" /></button>
+  </div>
+  {groups.map((g) => (
+    <div class="kc-more-group">
+      <div class="kc-label" style="margin:4px 0 8px">{g.label}</div>
+      <div class="kc-more-grid">
+        {g.items.map((it) => (
+          <a class="kc-more-item" href={it.href}>
+            <span class={`kc-ico kc-c-${it.c}`}><Icon name={it.icon as any} /></span>{it.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+<div class="kc-scrim" data-kc-scrim="kc-more"></div>

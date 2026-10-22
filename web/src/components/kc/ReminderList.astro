@@ -1,0 +1,18 @@
+---
+// Recordatorios.  path → [{id, name, time, icon, color, on}]   → kc:action {action:'reminder:toggle', id}
+import Card from './Card.astro';
+interface Props { path?: string }
+const { path = 'reminders' } = Astro.props;
+---
+<Card eyebrow="Recordatorios" title="Avisos del día">
+  <button slot="chip" class="kc-btn kc-btn--ghost kc-btn--sm" type="button" data-kc-action="reminder:add">Añadir</button>
+  <div class="kc-list" data-kc-list={path}>
+    <template>
+      <label class="kc-li" data-kc-attr="data-id:id" style="cursor:pointer">
+        <span class="kc-ico" data-kc-color="color" data-kc-icon="icon"></span>
+        <div class="kc-li__main"><div class="kc-li__t" data-kc-text="name"></div><div class="kc-li__s" data-kc-text="time"></div></div>
+        <input class="kc-switch" type="checkbox" role="switch" data-kc-action="reminder:toggle" data-kc-attr="checked:on; aria-label:name" />
+      </label>
+    </template>
+  </div>
+</Card>

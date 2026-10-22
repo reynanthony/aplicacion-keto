@@ -1,0 +1,24 @@
+---
+// Comidas del día.  path → [{id, time, name, items, kcal, macros}]   acciones: meal:open
+import Card from './Card.astro';
+import Icon from './Icon.astro';
+interface Props { path?: string; title?: string; totalPath?: string }
+const { path = 'meals', title = 'Comidas', totalPath = 'mealsTotal' } = Astro.props;
+---
+<Card eyebrow="Cronología" title={title}>
+  <span slot="chip" class="kc-chip kc-c-neutral" data-kc-text={totalPath}>—</span>
+  <div class="kc-list" data-kc-list={path}>
+    <template>
+      <div class="kc-li" data-kc-attr="data-id:id">
+        <span class="kc-ico kc-c-amber" data-kc-color="color"><Icon name="utensils" /></span>
+        <div class="kc-li__main">
+          <div class="kc-li__t" data-kc-text="name"></div>
+          <div class="kc-li__s kc-li__s--clip"><span data-kc-text="time"></span> · <span data-kc-text="items"></span></div>
+          <div class="kc-li__s" data-kc-text="macros"></div>
+        </div>
+        <div class="kc-li__v"><span data-kc-text="kcal" data-kc-fmt="int"></span><small>kcal</small></div>
+      </div>
+    </template>
+  </div>
+  <slot />
+</Card>

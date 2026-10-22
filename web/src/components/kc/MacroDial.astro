@@ -1,0 +1,52 @@
+---
+// Dial de 3 anillos + desglose de macros.  path → {kcal:{value,goal}, balance, fat, protein, carbs}
+import Card from './Card.astro';
+interface Props { path?: string; eyebrow?: string; title?: string; large?: boolean; showMacros?: boolean }
+const { path = 'energy', eyebrow = 'Motor cetogénico', title = 'Balance energético', large = false, showMacros = true } = Astro.props;
+const rings = [
+  { k: 'fat', c: 'amber', r: 94, w: 9 },
+  { k: 'protein', c: 'cyan', r: 80, w: 8 },
+  { k: 'carbs', c: 'mint', r: 67, w: 7 },
+];
+const macros = [
+  { k: 'fat', c: 'amber', n: 'Grasa', foot: 'rest.' },
+  { k: 'protein', c: 'cyan', n: 'Proteína', foot: 'rest.' },
+  { k: 'carbs', c: 'mint', n: 'Carbos netos', foot: 'máx' },
+];
+---
+<Card eyebrow={eyebrow} title={title}>
+  <span slot="chip" class="kc-chip kc-c-amber"><span data-kc-text={`${path}.balance`} data-kc-fmt="signed">—</span>&nbsp;kcal</span>
+  <div class:list={['kc-dial', { 'kc-dial--lg': large }]}>
+    <svg viewBox="0 0 200 200" aria-hidden="true">
+      {rings.map((g) => (
+        <>
+          <circle class="trk" cx="100" cy="100" r={g.r} stroke-width={g.w} />
+          <circle class={`arc kc-c-${g.c}`} cx="100" cy="100" r={g.r} stroke-width={g.w}
+            stroke-dasharray={(2 * Math.PI * g.r).toFixed(1)} stroke-dashoffset={(2 * Math.PI * g.r).toFixed(1)}
+            data-kc-ring={`${path}.${g.k}.pct`} />
+        </>
+      ))}
+    </svg>
+    <div class="kc-dial__c">
+      <span class="kc-label">Ingesta</span>
+      <span class="kc-dial__big" data-kc-text={`${path}.kcal.value`} data-kc-fmt="int">—</span>
+      <span class="kc-label">de <span data-kc-text={`${path}.kcal.goal`} data-kc-fmt="int">—</span> kcal</span>
+    </div>
+  </div>
+  {showMacros && (
+    <div class="kc-macros">
+      {macros.map((m) => (
+        <div class={`kc-macro kc-c-${m.c}`}>
+          <div class="kc-macro__n"><i></i>{m.n}</div>
+          <div class="kc-macro__v"><span data-kc-text={`${path}.${m.k}.value`}>—</span><small>g</small></div>
+          <div class="kc-macro__f">
+            {m.foot === 'máx'
+              ? <>máx <span data-kc-text={`${path}.${m.k}.goal`}>—</span> g</>
+              : <><span data-kc-text={`${path}.${m.k}.pct`} data-kc-fmt="pct">—</span> · <span data-kc-text={`${path}.${m.k}.left`}>—</span> g rest.</>}
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+  <slot />
+</Card>

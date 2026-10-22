@@ -1,0 +1,22 @@
+---
+// Tarjeta bento. Slots: default, "chip" (arriba a la derecha), "lead" (icono antes del título)
+interface Props { eyebrow?: string; title?: string; titlePath?: string; sub?: string; class?: string; span?: boolean; id?: string }
+const { eyebrow, title, titlePath, sub, class: cls = '', span, id } = Astro.props;
+const hasHead = eyebrow || title || titlePath || Astro.slots.has('chip') || Astro.slots.has('lead');
+---
+<section class:list={['kc-card', cls, { 'kc-span2': span }]} id={id}>
+  {hasHead && (
+    <header class="kc-card__head">
+      <div style="display:flex;gap:12px;align-items:center;min-width:0">
+        <slot name="lead" />
+        <div>
+          {eyebrow && <div class="kc-eyebrow">{eyebrow}</div>}
+          {(title || titlePath) && <h3 class="kc-card__title" style="margin-bottom:0" data-kc-text={titlePath}>{title}</h3>}
+          {sub && <div class="kc-card__sub">{sub}</div>}
+        </div>
+      </div>
+      <slot name="chip" />
+    </header>
+  )}
+  <slot />
+</section>

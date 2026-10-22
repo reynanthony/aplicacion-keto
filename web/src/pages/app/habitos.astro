@@ -1,0 +1,53 @@
+---
+// Hábitos — UI v2 (HUD) con datos reales (kc-adapter). Sin ReminderList
+// (KetoCore no tiene recordatorios). /app/checklist queda como legacy.
+import AppShell from '../../layouts/AppShell.astro';
+import Card from '../../components/kc/Card.astro';
+import Heatmap from '../../components/kc/Heatmap.astro';
+import ProtocolList from '../../components/kc/ProtocolList.astro';
+import ReminderList from '../../components/kc/ReminderList.astro';
+import Badges from '../../components/kc/Badges.astro';
+import Icon from '../../components/kc/Icon.astro';
+---
+<AppShell title="Hábitos" screen="habitos">
+  <div>
+    <div class="kc-hero-sub" data-kc-text="subtitle">&nbsp;</div>
+    <h1 class="kc-hero"><em data-kc-text="streak.value">—</em> días sin romper la racha</h1>
+  </div>
+
+  <Card class="kc-coach">
+    <div class="kc-streak">
+      <span class="kc-ico kc-ico--lg kc-c-amber"><Icon name="flame" /></span>
+      <div style="flex:1">
+        <div class="kc-streak__t">Racha activa</div>
+        <div class="kc-label">Récord: <span data-kc-text="streak.best"></span> días · faltan <span data-kc-text="streak.toBest"></span></div>
+      </div>
+      <span class="kc-streak__n" data-kc-text="streak.value">—</span>
+    </div>
+    <div class="kc-bar kc-bar--lg kc-c-amber" style="margin-top:16px"><i data-kc-pct="streak.pct"></i></div>
+  </Card>
+
+  <ProtocolList path="protocols" eyebrow="Protocolos" title="Checklist de hoy" />
+  <Heatmap />
+  <ReminderList />
+  <Badges />
+
+  <div class="kc-sheet" id="kc-reminder" role="dialog" aria-modal="true" aria-hidden="true" inert>
+    <div class="kc-sheet__grab"></div>
+    <div class="kc-card__head" style="margin:0">
+      <div><div class="kc-eyebrow">Recordatorios</div><h2 class="kc-card__title">Nuevo recordatorio</h2></div>
+      <button class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon" type="button" data-kc-sheet-close aria-label="Cerrar"><Icon name="plus" class="kc-rot45" /></button>
+    </div>
+    <label class="kc-field"><span class="kc-label">Nombre</span><input class="kc-input" id="r-name" type="text" placeholder="Ej. Tomar electrolitos" /></label>
+    <label class="kc-field"><span class="kc-label">Hora</span><input class="kc-input" id="r-time" type="time" value="08:00" /></label>
+    <button class="kc-btn kc-btn--primary kc-btn--block" type="button" data-kc-save="reminder" style="margin-top:6px">Guardar recordatorio</button>
+  </div>
+  <div class="kc-scrim" data-kc-scrim="kc-reminder"></div>
+
+  <Fragment slot="scripts">
+    <script is:inline src="/app/utils.js"></script>
+    <script is:inline src="/app/modules/meal-plan.js"></script>
+    <script is:inline src="/app/modules/health-score.js"></script>
+    <script is:inline src="/app/kc-adapter.js"></script>
+  </Fragment>
+</AppShell>

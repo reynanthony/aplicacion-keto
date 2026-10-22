@@ -1,0 +1,18 @@
+---
+// Tile cuadrado. path → {value, goal, unit, pct, chip, foot1, foot2}
+import Icon from './Icon.astro';
+interface Props { label: string; icon: string; color: 'amber' | 'cyan' | 'mint' | 'red'; path: string; fmt?: string }
+const { label, icon, color, path, fmt } = Astro.props;
+---
+<div class={`kc-card kc-tile kc-c-${color}`}>
+  <div class="kc-tile__top">
+    <span class={`kc-ico kc-c-${color}`}><Icon name={icon as any} /></span>
+    <span class={`kc-chip kc-c-${color}`} data-kc-text={`${path}.chip`}>—</span>
+  </div>
+  <div>
+    <div class="kc-tile__lbl">{label}</div>
+    <div class="kc-tile__val"><span data-kc-text={`${path}.value`} data-kc-fmt={fmt}>—</span><small> / <span data-kc-text={`${path}.goal`}>—</span> <span data-kc-text={`${path}.unit`}></span></small></div>
+  </div>
+  <div class="kc-segs" data-kc-segs={`${path}.pct`}>{Array.from({ length: 10 }).map(() => <i></i>)}</div>
+  <div class="kc-meta"><span data-kc-text={`${path}.foot1`}></span><span data-kc-text={`${path}.foot2`}></span></div>
+</div>
