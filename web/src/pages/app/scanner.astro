@@ -1,140 +1,136 @@
 ---
-import AppLayout from '../../layouts/AppLayout.astro';
-import AppHeader from '../../components/AppHeader.astro';
+// Scanner Keto IA — UI v2 (HUD nativo). Visor de cámara + resultado editable
+// + escaneos recientes reescritos a markup kc-* (AppShell). Lógica de
+// cámara/BarcodeDetector/Inspector Keto intacta. Respaldo: scanner.astro.bak
+import AppShell from '../../layouts/AppShell.astro';
 ---
-
-<AppLayout title="KetoCore | Scanner Keto IA" authGuard={true}>
+<AppShell title="Scanner Keto IA" screen="scanner">
 <style is:global>
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
 
-#scanner-view{position:relative;width:100%;height:420px;background:linear-gradient(160deg,#2a2018,#161009);overflow:hidden;border-radius:24px;border:1px solid rgba(255,240,225,0.08)}
-#scanner-video{width:100%;height:100%;object-fit:cover}
-.scanner-overlay{position:absolute;inset:0;pointer-events:none}
-.scanner-frame{position:absolute;top:16%;left:12%;right:12%;bottom:30%;border-radius:20px}
-.sc-corner{position:absolute;width:34px;height:34px}
-.sc-corner.tl{top:0;left:0;border-top:3px solid #ff4d00;border-left:3px solid #ff4d00;border-top-left-radius:16px}
-.sc-corner.tr{top:0;right:0;border-top:3px solid #ff4d00;border-right:3px solid #ff4d00;border-top-right-radius:16px}
-.sc-corner.bl{bottom:0;left:0;border-bottom:3px solid #ff4d00;border-left:3px solid #ff4d00;border-bottom-left-radius:16px}
-.sc-corner.br{bottom:0;right:0;border-bottom:3px solid #ff4d00;border-right:3px solid #ff4d00;border-bottom-right-radius:16px}
-.scan-line{position:absolute;left:6%;right:6%;height:2px;background:linear-gradient(90deg,transparent,#ff4d00,transparent);box-shadow:0 0 12px #ff4d00;animation:scanline 2.4s ease-in-out infinite}
-@keyframes scanline{0%,100%{top:8%}50%{top:92%}}
-#result-section{transition:all 0.3s ease}
+.kc .sca-actions{display:flex;justify-content:flex-end;margin-top:8px}
+.kc .sca-stack{display:flex;flex-direction:column;gap:18px}
 
-/* Panel de riesgo del Inspector (inyectado por keto-inspector-scanner-integration.js) */
-#scanRiskPanel .rounded-xl{border-radius:14px !important}
+/* Visor */
+.kc .sca-view{position:relative;width:100%;height:380px;border-radius:var(--kc-radius-xl);overflow:hidden;background:var(--kc-surface-2);border:1px solid var(--kc-line)}
+.kc .sca-view video{width:100%;height:100%;object-fit:cover}
+.sca-overlay{position:absolute;inset:0;pointer-events:none}
+.sca-frame{position:absolute;top:16%;left:12%;right:12%;bottom:30%;border-radius:20px}
+.sca-corner{position:absolute;width:34px;height:34px}
+.sca-corner.tl{top:0;left:0;border-top:3px solid var(--kc-amber);border-left:3px solid var(--kc-amber);border-top-left-radius:16px}
+.sca-corner.tr{top:0;right:0;border-top:3px solid var(--kc-amber);border-right:3px solid var(--kc-amber);border-top-right-radius:16px}
+.sca-corner.bl{bottom:0;left:0;border-bottom:3px solid var(--kc-amber);border-left:3px solid var(--kc-amber);border-bottom-left-radius:16px}
+.sca-corner.br{bottom:0;right:0;border-bottom:3px solid var(--kc-amber);border-right:3px solid var(--kc-amber);border-bottom-right-radius:16px}
+.sca-scanline{position:absolute;left:6%;right:6%;height:2px;background:linear-gradient(90deg,transparent,var(--kc-amber),transparent);box-shadow:0 0 12px var(--kc-amber);animation:sca-scanline 2.4s ease-in-out infinite}
+@keyframes sca-scanline{0%,100%{top:8%}50%{top:92%}}
+.kc .sca-status{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:5;font:600 13px var(--kc-font-sans);padding:7px 16px;border-radius:var(--kc-radius-pill);background:rgba(0,0,0,.45);backdrop-filter:blur(8px);color:rgba(255,255,255,.85);white-space:nowrap}
+.kc .sca-status[data-state="loading"]{color:var(--kc-amber)}
+.kc .sca-status[data-state="active"]{color:var(--kc-mint)}
+.kc .sca-status[data-state="error"]{color:var(--kc-red)}
+.kc .sca-controls{position:absolute;bottom:0;left:0;right:0;padding:0 0 22px;z-index:5}
+.kc .sca-controls__row{display:flex;align-items:center;justify-content:center;gap:36px;margin-bottom:18px}
+.kc .sca-ctl{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;border:0;cursor:pointer;color:#fff;padding:0}
+.kc .sca-shutter{width:72px;height:72px;border-radius:50%;background:var(--kc-amber-fill);display:flex;align-items:center;justify-content:center;border:4px solid rgba(255,255,255,.25);box-shadow:var(--kc-glow-amber);cursor:pointer;padding:0;color:var(--kc-on-amber)}
+.kc .sca-modes{display:flex;justify-content:center;gap:10px}
+.kc .sca-mode{font:600 11.5px var(--kc-font-sans);padding:7px 15px;border-radius:var(--kc-radius-pill);background:rgba(255,255,255,.12);color:rgba(255,255,255,.85);border:0;cursor:pointer;transition:background .14s}
+.kc .sca-mode.is-active{background:var(--kc-amber-fill);color:var(--kc-on-amber);font-weight:700}
+.kc .sca-hint{text-align:center;margin-top:14px;font:600 12.5px var(--kc-font-sans);letter-spacing:.03em;color:var(--kc-ink-3)}
 
-.sc-mode{font-size:11.5px;font-weight:600;padding:7px 15px;border-radius:100px;background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.85);border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:background .14s}
-.sc-mode.active{background:#ff4d00;color:#fff;font-weight:700}
-.sc-ctl{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,0.12);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer}
+/* Resultado */
+.kc .sca-result__media{height:110px;background:radial-gradient(120% 120% at 50% 0%,color-mix(in oklab,var(--kc-amber) 24%,transparent),transparent 65%),var(--kc-surface-2);display:flex;align-items:center;justify-content:center;position:relative;border-radius:var(--kc-radius-xl) var(--kc-radius-xl) 0 0}
+.kc .sca-result__media .material-symbols-outlined{font-size:52px;color:var(--kc-amber);opacity:.85}
+.kc .sca-result__body{padding:20px}
+.kc .sca-result__name{width:100%;background:var(--kc-surface-2);color:var(--kc-ink);border:1px solid var(--kc-line-strong);border-radius:var(--kc-radius-md);padding:12px 14px;font:700 16px var(--kc-font-sans);outline:0;margin-bottom:4px}
+.kc .sca-mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 16px}
+.kc .sca-mcell{background:var(--kc-surface-2);border-radius:var(--kc-radius-sm);padding:10px 12px}
+.kc .sca-mcell input{width:100%;background:transparent;border:0;outline:0;color:var(--kc-ink);font:800 20px var(--kc-font-sans)}
 
-.sc-grid{display:grid;grid-template-columns:1fr;gap:18px}
-@media(min-width:901px){
-  .sc-grid{grid-template-columns:1.2fr 1fr;align-items:start}
-  #scPage{padding-top:16px;max-width:none!important}
-  /* Sistema visual "grande y espacioso" de entrenamientos.astro, solo en
-     escritorio (ver mismo cambio en objetivos.astro para el detalle). */
-  #scPage h1 { font-size: 46px !important; }
-}
-#scPage{padding-top:12px}
+@media(min-width:901px){ #scPage h1 { font-size: 40px !important; } }
 </style>
-<AppHeader dropdownMobileOnly={true} />
 
-<main class="main-content pt-14 pb-20 min-h-screen">
-<div id="scPage" class="kc-page">
+<div id="scPage">
 
-  <!-- Header -->
-  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:26px;flex-wrap:wrap">
-    <div>
-      <div style="display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:100px;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.2);margin-bottom:14px"><span class="material-symbols-outlined icon-filled" style="color:#ff4d00;font-size:18px">auto_awesome</span><span style="font-size:12.5px;font-weight:700;color:#ff7a3c;letter-spacing:0.02em">Nueva función</span></div>
-      <h1 class="kc-h1" style="font-size:34px">Scanner Keto IA</h1>
-      <p style="font-size:15px;color:rgba(247,244,240,0.5);margin-top:8px;max-width:440px">Escanea el código de barras del producto o escribe su nombre y el Inspector Keto te da el veredicto al instante. Los macros se completan a mano — todavía no tenemos una base de datos de productos.</p>
+<!-- Hero -->
+<div>
+  <div class="kc-hero-sub"><span class="kc-chip kc-chip--sm kc-c-amber"><span class="material-symbols-outlined" style="font-size:14px">auto_awesome</span>Nueva función</span></div>
+  <h1 class="kc-hero">Scanner <em>Keto IA</em></h1>
+  <p class="kc-muted" style="font:400 14px/1.5 var(--kc-font-sans);margin-top:6px;max-width:440px">Escanea el código de barras del producto o escribe su nombre y el Inspector Keto te da el veredicto al instante. Los macros se completan a mano — todavía no tenemos una base de datos de productos.</p>
+</div>
+<div class="sca-actions">
+  <a href="/app/alimentos" class="kc-btn kc-btn--secondary kc-btn--sm"><span class="material-symbols-outlined" style="font-size:16px">arrow_back</span>Alimentos</a>
+</div>
+
+<div class="sca-stack" style="margin-top:18px">
+
+  <!-- Visor -->
+  <div>
+    <div class="sca-view">
+      <video id="scanner-video" autoplay playsinline muted></video>
+      <div class="sca-overlay">
+        <div class="sca-frame">
+          <div class="sca-corner tl"></div>
+          <div class="sca-corner tr"></div>
+          <div class="sca-corner bl"></div>
+          <div class="sca-corner br"></div>
+          <div class="sca-scanline"></div>
+        </div>
+      </div>
+      <span id="scanner-status" class="sca-status" data-state="idle">Toca el botón para iniciar la cámara</span>
+      <div class="sca-controls">
+        <div class="sca-controls__row">
+          <button class="sca-ctl" onclick="document.getElementById('galleryInput').click()" aria-label="Abrir galería"><span class="material-symbols-outlined" style="font-size:24px">photo_library</span></button>
+          <button class="sca-shutter" onclick="toggleCamera()" id="toggleBtn" aria-label="Iniciar o detener cámara"><span class="material-symbols-outlined" id="cameraIcon" style="font-size:32px;font-variation-settings:'FILL' 1">center_focus_strong</span></button>
+          <button class="sca-ctl" onclick="setScanMode('codigo')" aria-label="Modo código de barras"><span class="material-symbols-outlined" style="font-size:24px">qr_code_scanner</span></button>
+        </div>
+        <div class="sca-modes">
+          <button class="sca-mode" data-mode="alimento" onclick="setScanMode('alimento')">Alimento</button>
+          <button class="sca-mode" data-mode="etiqueta" onclick="setScanMode('etiqueta')">Etiqueta</button>
+          <button class="sca-mode is-active" data-mode="codigo" onclick="setScanMode('codigo')">Código</button>
+        </div>
+      </div>
     </div>
-    <a href="/app/alimentos" class="kc-btn-ghost" style="height:44px;padding:0 16px;font-size:14px"><span class="material-symbols-outlined" style="font-size:18px">arrow_back</span>Alimentos</a>
+    <input type="file" id="galleryInput" accept="image/*" class="hidden" onchange="scanFromImage(this)">
+    <p class="sca-hint">Apunta y captura · el veredicto llega al instante</p>
   </div>
 
-  <div class="sc-grid">
+  <!-- Resultado + recientes -->
+  <div class="kc-stack">
 
-    <!-- Visor -->
-    <div>
-      <div id="scanner-view">
-        <video id="scanner-video" autoplay playsinline muted></video>
-        <div class="scanner-overlay">
-          <div class="scanner-frame">
-            <div class="sc-corner tl"></div>
-            <div class="sc-corner tr"></div>
-            <div class="sc-corner bl"></div>
-            <div class="sc-corner br"></div>
-            <div class="scan-line"></div>
-          </div>
-        </div>
-        <!-- hint -->
-        <div id="scanner-status" style="position:absolute;top:6%;left:0;right:0;text-align:center;z-index:5">
-          <span style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.85);padding:7px 16px;border-radius:100px;background:rgba(0,0,0,0.4);backdrop-filter:blur(8px)">Toca el botón para iniciar la cámara</span>
-        </div>
-        <!-- controles -->
-        <div style="position:absolute;bottom:0;left:0;right:0;padding:0 0 22px;z-index:5">
-          <div style="display:flex;align-items:center;justify-content:center;gap:36px;margin-bottom:18px">
-            <button class="sc-ctl" onclick="document.getElementById('galleryInput').click()" aria-label="Abrir galería"><span class="material-symbols-outlined" style="color:#fff;font-size:24px">photo_library</span></button>
-            <button onclick="toggleCamera()" id="toggleBtn" aria-label="Iniciar o detener cámara" style="width:72px;height:72px;border-radius:50%;background:#ff4d00;display:flex;align-items:center;justify-content:center;border:4px solid rgba(255,255,255,0.25);box-shadow:0 0 24px rgba(255,77,0,0.5);cursor:pointer">
-              <span class="material-symbols-outlined icon-filled" id="cameraIcon" style="color:#fff;font-size:32px">center_focus_strong</span>
-            </button>
-            <button class="sc-ctl" onclick="setScanMode('codigo')" aria-label="Modo código de barras"><span class="material-symbols-outlined" style="color:#fff;font-size:24px">qr_code_scanner</span></button>
-          </div>
-          <div style="display:flex;justify-content:center;gap:10px">
-            <button class="sc-mode" data-mode="alimento" onclick="setScanMode('alimento')">Alimento</button>
-            <button class="sc-mode" data-mode="etiqueta" onclick="setScanMode('etiqueta')">Etiqueta</button>
-            <button class="sc-mode active" data-mode="codigo" onclick="setScanMode('codigo')">Código</button>
-          </div>
-        </div>
+    <div id="result-section" class="kc-card kc-card--flush hidden">
+      <div class="sca-result__media">
+        <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">eco</span>
+        <span class="kc-chip kc-chip--sm kc-c-neutral" style="position:absolute;top:12px;left:12px">Código detectado · <span id="barcode-value" class="kc-mono"></span></span>
       </div>
-      <input type="file" id="galleryInput" accept="image/*" class="hidden" onchange="scanFromImage(this)">
-      <p style="text-align:center;margin-top:14px;font-size:12.5px;font-weight:600;color:rgba(247,244,240,0.57);letter-spacing:0.03em">Apunta y captura · el veredicto llega al instante</p>
+      <div class="sca-result__body">
+        <input type="text" id="product-name" class="sca-result__name" placeholder="Nombre del producto">
+        <div class="kc-label" style="margin:2px 0 4px">Porción · 100 g</div>
+
+        <div class="sca-mgrid">
+          <div class="sca-mcell"><span class="kc-label">Calorías</span><input type="number" id="product-calories" placeholder="0"></div>
+          <div class="sca-mcell"><span class="kc-label">Carbos (g)</span><input type="number" id="product-carbs" placeholder="0"></div>
+          <div class="sca-mcell"><span class="kc-label">Grasas (g)</span><input type="number" id="product-fat" placeholder="0"></div>
+          <div class="sca-mcell"><span class="kc-label">Proteína (g)</span><input type="number" id="product-protein" placeholder="0"></div>
+        </div>
+
+        <button onclick="addToDespensa()" class="kc-btn kc-btn--primary kc-btn--block"><span class="material-symbols-outlined" style="font-size:20px">add</span>Añadir a mi registro</button>
+      </div>
     </div>
 
-    <!-- Resultado + recientes -->
-    <div style="display:flex;flex-direction:column;gap:18px">
-
-      <div id="result-section" class="hidden">
-        <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:24px;overflow:hidden">
-          <div style="height:110px;background:linear-gradient(135deg,#3a2410,#1e1509);display:flex;align-items:center;justify-content:center;position:relative">
-            <span class="material-symbols-outlined icon-filled" style="color:#ff4d00;font-size:52px;opacity:0.85">eco</span>
-            <span style="position:absolute;top:12px;left:12px;font-size:11px;font-weight:600;padding:5px 11px;border-radius:100px;background:rgba(0,0,0,0.45);color:#fff">Código detectado · <span id="barcode-value" class="nums"></span></span>
-          </div>
-          <div style="padding:20px">
-            <input type="text" id="product-name" placeholder="Nombre del producto" style="width:100%;background:#1e1a15;color:#f7f4f0;border:1px solid rgba(255,240,225,0.1);border-radius:14px;padding:12px 14px;font-size:16px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;outline:none;margin-bottom:4px">
-            <div style="font-size:12.5px;color:rgba(247,244,240,0.57);margin:6px 0 14px">Porción · 100 g</div>
-
-            <!-- macros editables -->
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
-              <div style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06);border-radius:14px;padding:12px 14px"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:rgba(247,244,240,0.57);margin-bottom:5px">Calorías</div><input type="number" id="product-calories" placeholder="0" style="width:100%;background:transparent;border:none;outline:none;color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:22px"></div>
-              <div style="background:#1e1a15;border:1px solid rgba(8,145,178,0.18);border-radius:14px;padding:12px 14px"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:rgba(247,244,240,0.57);margin-bottom:5px">Carbos (g)</div><input type="number" id="product-carbs" placeholder="0" style="width:100%;background:transparent;border:none;outline:none;color:#22d3ee;font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:22px"></div>
-              <div style="background:#1e1a15;border:1px solid rgba(217,119,6,0.18);border-radius:14px;padding:12px 14px"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:rgba(247,244,240,0.57);margin-bottom:5px">Grasas (g)</div><input type="number" id="product-fat" placeholder="0" style="width:100%;background:transparent;border:none;outline:none;color:#d97706;font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:22px"></div>
-              <div style="background:#1e1a15;border:1px solid rgba(234,88,12,0.18);border-radius:14px;padding:12px 14px"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:rgba(247,244,240,0.57);margin-bottom:5px">Proteína (g)</div><input type="number" id="product-protein" placeholder="0" style="width:100%;background:transparent;border:none;outline:none;color:#ea580c;font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:22px"></div>
-            </div>
-
-            <button onclick="addToDespensa()" class="kc-btn" style="width:100%;height:50px;font-size:15px">
-              <span class="material-symbols-outlined" style="font-size:20px">add</span>Añadir a mi registro
-            </button>
-          </div>
-        </div>
+    <!-- Escaneos recientes -->
+    <div class="kc-card">
+      <div class="kc-card__head" style="margin-bottom:10px">
+        <h3 class="kc-card__title" style="font-size:15px;margin-top:0;display:flex;align-items:center;gap:8px"><span class="material-symbols-outlined" style="color:var(--kc-amber);font-size:19px">history</span>Escaneos recientes</h3>
       </div>
-
-      <!-- Escaneos recientes -->
-      <div style="background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:24px;padding:22px">
-        <h3 style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:16px;margin-bottom:14px;display:flex;align-items:center;gap:8px">
-          <span class="material-symbols-outlined" style="color:#ff4d00;font-size:20px">history</span>
-          Escaneos recientes
-        </h3>
-        <div id="recent-scans" class="space-y-2">
-          <p style="color:rgba(247,244,240,0.6);font-size:14px;text-align:center;padding:16px 0">No hay escaneos recientes</p>
-        </div>
+      <div id="recent-scans" class="kc-list">
+        <p class="kc-muted" style="text-align:center;padding:16px 0;font-size:13px">No hay escaneos recientes</p>
       </div>
-
     </div>
+
   </div>
 </div>
-</main>
+</div>
 
+<Fragment slot="scripts">
 <script is:inline src="/app/utils.js"></script>
 <script is:inline src="/app/data/keto-inspector-ingredientes.js"></script>
 <script is:inline src="/app/modules/inspectorKeto.js"></script>
@@ -147,22 +143,22 @@ var stream = null;
 var detector = null;
 var scanMode = 'codigo';
 
-function setStatus(msg, color) {
+function setStatus(msg, state) {
   var statusEl = document.getElementById('scanner-status');
   if (!statusEl) return;
-  statusEl.innerHTML = '<span style="font-size:14px;font-weight:600;color:' + (color || 'rgba(255,255,255,0.85)') + ';padding:7px 16px;border-radius:100px;background:rgba(0,0,0,0.4);backdrop-filter:blur(8px)">' + msg + '</span>';
+  statusEl.textContent = msg;
+  statusEl.dataset.state = state || 'idle';
 }
 
 function setScanMode(mode) {
   scanMode = mode;
-  document.querySelectorAll('.sc-mode').forEach(function (b) {
-    b.classList.toggle('active', b.getAttribute('data-mode') === mode);
+  document.querySelectorAll('.sca-mode').forEach(function (b) {
+    b.classList.toggle('is-active', b.getAttribute('data-mode') === mode);
   });
   if (mode === 'codigo') {
-    setStatus(cameraActive ? 'Apunta al código de barras' : 'Toca el botón para iniciar la cámara');
+    setStatus(cameraActive ? 'Apunta al código de barras' : 'Toca el botón para iniciar la cámara', 'idle');
   } else {
-    // Alimento / Etiqueta: análisis por nombre con el Inspector Keto
-    setStatus('Escribe el nombre del producto abajo y el Inspector lo analiza');
+    setStatus('Escribe el nombre del producto abajo y el Inspector lo analiza', 'idle');
     document.getElementById('result-section').classList.remove('hidden');
     var input = document.getElementById('product-name');
     if (input) input.focus();
@@ -172,7 +168,7 @@ function setScanMode(mode) {
 async function initScanner() {
   var video = document.getElementById('scanner-video');
   try {
-    setStatus('Solicitando acceso a cámara…', '#fbbf24');
+    setStatus('Solicitando acceso a cámara…', 'loading');
     stream = await navigator.mediaDevices.getUserMedia({
       video: {
         facingMode: 'environment',
@@ -183,7 +179,7 @@ async function initScanner() {
     video.srcObject = stream;
     await video.play();
     cameraActive = true;
-    setStatus('Cámara activa — apunta al código de barras', '#4ade80');
+    setStatus('Cámara activa — apunta al código de barras', 'active');
     document.getElementById('cameraIcon').textContent = 'stop';
 
     if ('BarcodeDetector' in window) {
@@ -192,11 +188,11 @@ async function initScanner() {
       });
       scanWithDetector();
     } else {
-      setStatus('Cámara activa — códigos no soportados en este navegador', '#fbbf24');
+      setStatus('Cámara activa — códigos no soportados en este navegador', 'loading');
     }
   } catch (err) {
     console.error('Camera error:', err);
-    setStatus('Error: ' + err.message, '#f87171');
+    setStatus('Error: ' + err.message, 'error');
     window.showToast('No se pudo acceder a la cámara: ' + err.message, 3000, "warning");
   }
 }
@@ -230,7 +226,7 @@ async function scanFromImage(input) {
     if (barcodes.length > 0) {
       onBarcodeDetected(barcodes[0].rawValue);
     } else {
-      setStatus('No se detectó código en la imagen', '#fbbf24');
+      setStatus('No se detectó código en la imagen', 'loading');
     }
   } catch (e) {
     window.showToast('No se pudo analizar la imagen', 3000, "warning");
@@ -245,7 +241,7 @@ function onBarcodeDetected(code) {
   document.getElementById('barcode-value').textContent = code;
   document.getElementById('result-section').classList.remove('hidden');
   document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
-  setStatus('Código detectado · rellena los macros', '#4ade80');
+  setStatus('Código detectado · rellena los macros', 'active');
   saveRecentScan(code);
   setTimeout(function () { lastScannedCode = null; }, 3000);
 }
@@ -272,7 +268,7 @@ function toggleCamera() {
     cameraActive = false;
     video.srcObject = null;
     document.getElementById('cameraIcon').textContent = 'center_focus_strong';
-    setStatus('Cámara apagada — toca para reiniciar', '#fbbf24');
+    setStatus('Cámara apagada — toca para reiniciar', 'loading');
   } else {
     initScanner();
   }
@@ -316,70 +312,23 @@ function saveRecentScan(code) {
 function renderRecentScans() {
   var scans = safeParseJSON(localStorage.getItem('recentScans'), []);
   var container = document.getElementById('recent-scans');
-  if (!scans.length) { container.innerHTML = '<p style="color:rgba(247,244,240,0.6);font-size:14px;text-align:center;padding:16px 0">No hay escaneos recientes</p>'; return; }
+  if (!scans.length) { container.innerHTML = '<p class="kc-muted" style="text-align:center;padding:16px 0;font-size:13px">No hay escaneos recientes</p>'; return; }
 
   container.innerHTML = scans.map(function (s) {
     var t = new Date(s.time).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#1e1a15;border-radius:14px"><div style="display:flex;align-items:center;gap:12px"><span class="material-symbols-outlined" style="color:rgba(247,244,240,0.57);font-size:20px">qr_code</span><div><p style="color:#f7f4f0;font-size:14px;font-family:monospace">' + s.code + '</p><p style="color:rgba(247,244,240,0.57);font-size:13px">' + t + '</p></div></div></div>';
+    return '<div class="kc-li"><span class="material-symbols-outlined" style="color:var(--kc-ink-3);font-size:20px">qr_code</span><div class="kc-li__main"><div class="kc-li__t kc-mono" style="font-size:14px">' + s.code + '</div><div class="kc-li__s">' + t + '</div></div></div>';
   }).join('');
 }
 
 function showToast(msg) {
   var t = document.createElement('div');
-  t.style.cssText = 'position:fixed;bottom:88px;left:16px;right:16px;background:#26211a;color:#f7f4f0;padding:12px 16px;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,0.45);z-index:9999;text-align:center;font-size:14px;font-weight:600';
+  t.style.cssText = 'position:fixed;bottom:88px;left:16px;right:16px;background:var(--kc-surface-2);color:var(--kc-ink);padding:12px 16px;border-radius:14px;box-shadow:var(--kc-shadow-float);z-index:9999;text-align:center;font-size:14px;font-weight:600';
   t.textContent = msg;
   document.body.appendChild(t);
   setTimeout(function () { t.remove(); }, 3000);
 }
 
 renderRecentScans();
-
-function toggleMobileUserMenu() {
-  const dropdown = document.getElementById('mobileUserDropdown');
-  dropdown.classList.toggle('hidden');
-  updateDropdownInfo();
-}
-
-function updateDropdownInfo() {
-  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
-  const userName = profile.nombre || profile.name || 'Usuario';
-  const userEmail = localStorage.getItem('ketocore_user_email') || 'usuario@ejemplo.com';
-  const mdn = document.getElementById('mobileDropdownUserName');
-  const mde = document.getElementById('mobileDropdownUserEmail');
-  if(mdn) mdn.textContent = userName;
-  if(mde) mde.textContent = userEmail;
-}
-
-function updateHeaderAvatar() {
-  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
-  const avatarUrl = profile.avatar_url;
-  const mhi = document.getElementById('mobileHeaderAvatarImg');
-  const mhi2 = document.getElementById('mobileHeaderAvatarIcon');
-  if (avatarUrl) {
-    if(mhi) { mhi.src = avatarUrl; mhi.classList.remove('hidden'); }
-    if(mhi2) mhi2.classList.add('hidden');
-  } else {
-    if(mhi) mhi.classList.add('hidden');
-    if(mhi2) mhi2.classList.remove('hidden');
-  }
-}
-
-document.addEventListener('click', function(e) {
-  const mdd = document.getElementById('mobileUserDropdown');
-  if (mdd && !e.target.closest('#mobileUserDropdown') && !e.target.closest('button[onclick="toggleMobileUserMenu()"]')) mdd.classList.add('hidden');
-});
-
-async function handleLogout() {
-  if (confirm('¿Cerrar sesión?')) {
-    await window.supabase.auth.signOut();
-    localStorage.removeItem('ketocore_user_id');
-    localStorage.removeItem('ketocore_user_email');
-    localStorage.removeItem('ketocore_onboarding_done');
-    window.location.href = '/app/welcome';
-  }
-}
-
-updateHeaderAvatar();
 </script>
-
-</AppLayout>
+</Fragment>
+</AppShell>

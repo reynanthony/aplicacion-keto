@@ -618,6 +618,31 @@ button, a, [role="button"] { touch-action: manipulation; }
 .kc .kc-chip.kc-c-neutral { background: var(--kc-surface-2); box-shadow: inset 0 0 0 1px var(--kc-line); }
 .kc .kc-chip:hover { border: 0; }
 
+/* Mismo gotcha que .kc-chip, pero para .kc-btn/.kc-grid/.kc-head/.kc-eyebrow:
+   estas 4 clases también existen en ambos sistemas de diseño con reglas
+   distintas. Bajo pantallas HUD (body.kc) reimponemos la versión HUD. */
+.kc .kc-btn {
+  appearance: none; border: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 44px; padding: 0 18px; border-radius: var(--kc-radius-md);
+  font: 600 14px/1 var(--kc-font-sans); letter-spacing: -.005em; text-decoration: none; white-space: nowrap;
+  transition: transform .18s var(--kc-ease), background .18s, opacity .18s; -webkit-tap-highlight-color: transparent;
+  box-shadow: none;
+}
+.kc .kc-btn:hover { transform: none; }
+.kc .kc-btn:active { transform: scale(.97); }
+.kc .kc-btn:disabled { opacity: .45; cursor: default; }
+.kc .kc-btn svg { width: 18px; height: 18px; }
+.kc .kc-btn--primary { background: var(--kc-amber-fill); color: var(--kc-on-amber); box-shadow: var(--kc-glow-amber); }
+.kc .kc-btn--secondary { background: var(--kc-surface-3); color: var(--kc-ink); box-shadow: inset 0 0 0 1px var(--kc-line-strong); }
+.kc .kc-btn--ghost { background: transparent; color: var(--kc-amber); }
+.kc .kc-btn--sm { height: 34px; padding: 0 12px; border-radius: var(--kc-radius-sm); font-size: 13px; }
+.kc .kc-btn--block { width: 100%; }
+.kc .kc-btn--icon { width: 44px; padding: 0; }
+.kc .kc-btn--sm.kc-btn--icon { width: 34px; }
+.kc .kc-grid { grid-template-columns: 1fr 1fr; gap: var(--kc-space-3); }
+.kc .kc-eyebrow { font: 600 11px/14px var(--kc-font-mono); letter-spacing: .1em; color: var(--kc-ink-3); }
+.kc .kc-head { margin-bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+
 /* Semantic badges (Keto / Moderar / Evitar) */
 .kc-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 11px; border-radius: 100px; font-size: 12px; font-weight: 700; }
 .kc-badge-green { background: rgba(34,197,94,0.12); color: #22c55e; }

@@ -1,360 +1,220 @@
 ---
-import AppLayout from '../../layouts/AppLayout.astro';
-import AppHeaderAction from '../../components/AppHeaderAction.astro';
+// Perfil — UI v2 (HUD nativo). Reescrito a markup kc-* real: hero, chips,
+// métricas, suscripción, datos editables, historial de peso y zona
+// peligrosa (incluye el único botón de cerrar sesión visible, ya que el
+// dropdown de header viejo no existe en AppShell). Lógica intacta
+// (localStorage, entitlements, supabase). Respaldo: perfil.astro.bak
+import AppShell from '../../layouts/AppShell.astro';
 ---
-
-<AppLayout title="KetoCore | Mi Perfil" authGuard={true}>
+<AppShell title="Mi Perfil" screen="perfil">
 <style is:global>
-html,body{margin:0;padding:0;box-sizing:border-box;background:#131315;color:#f7f4f0;font-family:'Inter',sans-serif}
-*,*::before,*::after{box-sizing:border-box}
-.glass-card{background:#181818;border:1px solid rgba(255,255,255,0.09);box-shadow:0 2px 16px rgba(0,0,0,0.4)}
-.field-input{background:#111;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px 12px;font-size:14px;color:#f7f4f0;width:100%;-webkit-appearance:none;appearance:none;font-family:'Inter',sans-serif}
-.field-input:focus{outline:none;border-color:rgba(255,77,0,0.5)}
-.field-input::placeholder{color:rgba(247,244,240,0.52)}
-select.field-input option{background:#1a1a1a;color:#f7f4f0}
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
-/* Movil: .pf-cols y .pf-col apilan; en escritorio .pf-cols pasa a fila. */
-.pf-cols{display:flex;flex-direction:column;gap:0.75rem}
-.pf-col{display:flex;flex-direction:column;gap:0.75rem}
-@media (min-width: 901px) {
-  #perfilGrid {
-    padding-top: 4.5rem;
-    padding-bottom: 3rem !important;
-    max-width: none !important;
-  }
-  /* Tarjetas de ancho completo (header, hero, metricas, suscripcion) apiladas;
-     abajo, .pf-cols pone las 6 restantes en dos columnas de altura pareja. */
-  #perfilGrid > * { margin-top: 0 !important; }
-  #perfilGrid > * + * { margin-top: 1.25rem !important; }
-  .pf-cols {
-    flex-direction: row;
-    gap: 1.25rem;
-    align-items: stretch;   /* ambas columnas a la misma altura -> fondos alineados */
-  }
-  .pf-col { gap: 1.25rem; min-width: 0; }
-  .pf-col-left  { flex: 1; }
-  .pf-col-right { flex: 0 0 360px; }        /* conserva el ancho de 360px del lado derecho */
-  .pf-col > section:last-child { flex: 1; } /* la ultima tarjeta absorbe el sobrante */
-  #pf-header h1 { font-size: 46px; }
-  .glass-card { padding: 32px !important; }
-  .glass-card h2 { font-size: 20px !important; font-weight: 800 !important; }
-}
+
+.kc .prf-actions{display:flex;justify-content:flex-end}
+
+.kc .prf-hero{display:flex;align-items:center;gap:14px}
+.kc .prf-avatar{position:relative;flex-shrink:0;width:68px;height:68px;border-radius:var(--kc-radius-md);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;background:color-mix(in oklab,var(--kc-amber) 14%,transparent);border:2px solid color-mix(in oklab,var(--kc-amber) 24%,transparent)}
+.kc .prf-avatar img{width:100%;height:100%;object-fit:cover}
+.kc .prf-avatar__initials{font:800 24px var(--kc-font-sans);color:var(--kc-amber)}
+.kc .prf-avatar__cam{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:center;padding:3px 0;background:rgba(0,0,0,.45)}
+.kc .prf-avatar__cam .material-symbols-outlined{font-size:13px;color:rgba(255,255,255,.75)}
+.kc .prf-hero__name{font:800 16px var(--kc-font-sans);color:var(--kc-ink);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kc .prf-hero__chips{display:flex;flex-wrap:wrap;gap:6px}
+
+.kc .prf-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kc .prf-metric{background:var(--kc-surface-1);border:1px solid var(--kc-line);border-radius:var(--kc-radius-md);padding:12px;text-align:center}
+.kc .prf-metric .kc-ico{margin:0 auto 6px}
+.kc .prf-metric b{display:block;font:800 18px var(--kc-font-sans);color:var(--kc-ink)}
+.kc .prf-metric span{font:500 10px var(--kc-font-sans);color:var(--kc-ink-3)}
+
+.kc .prf-sub-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+.kc .prf-kv{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--kc-radius-sm);background:var(--kc-surface-2)}
+.kc .prf-kv+.prf-kv{margin-top:6px}
+.kc .prf-kv span{font:500 13px var(--kc-font-sans);color:var(--kc-ink-3)}
+.kc .prf-kv b{font:700 14px var(--kc-font-sans);color:var(--kc-ink)}
+.kc .prf-kv--hi{background:color-mix(in oklab,var(--kc-amber) 10%,transparent)}
+.kc .prf-kv--hi span{color:var(--kc-amber);font-weight:600}
+.kc .prf-kv--hi b{color:var(--kc-amber);font-weight:800}
+
+.kc .prf-danger{border-color:color-mix(in oklab,var(--kc-red) 30%,var(--kc-line))}
+.kc .prf-danger-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:var(--kc-radius-md);font:700 14px var(--kc-font-sans);cursor:pointer;border:1px solid color-mix(in oklab,var(--kc-red) 20%,transparent);background:color-mix(in oklab,var(--kc-red) 8%,transparent);color:var(--kc-red)}
+.kc .prf-danger-btn+.prf-danger-btn{margin-top:8px}
+.kc .prf-danger-btn--soft{opacity:.75}
+.kc .prf-danger-btn--softer{opacity:.55}
+
+.kc .prf-modal{position:fixed;inset:0;z-index:70;align-items:center;justify-content:center;padding:16px}
+.kc .prf-modal.hidden{display:none}
+.kc .prf-modal.flex{display:flex}
+.kc .prf-modal__scrim{position:absolute;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(4px)}
+.kc .prf-modal__panel{position:relative;width:100%;max-width:360px;background:var(--kc-surface-1);border:1px solid var(--kc-line);border-radius:var(--kc-radius-xl);box-shadow:var(--kc-shadow-float);padding:22px}
 </style>
 
-<!-- TopBar -->
-<AppHeaderAction title="Mi Perfil">
-  <button onclick="saveProfile()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-bold transition-all active:scale-95" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);color:#fff">
-    <span class="material-symbols-outlined" style="font-size:15px">save</span>
-    Guardar
-  </button>
-</AppHeaderAction>
-
-<!-- Main -->
-<main id="perfilMain" class="main-content pt-14 pb-20 min-h-screen">
-<div id="perfilGrid" class="space-y-3 kc-page" style="padding-top:12px">
-
-  <!-- Header editorial -->
-  <div id="pf-header" style="margin:10px 2px 16px">
-    <div style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Cuenta · Ajustes</div>
-    <h1 class="kc-h1">Tu perfil<br><span style="color:rgba(247,244,240,0.57)">metabólico.</span></h1>
-  </div>
-
-  <!-- Hero: avatar + nombre + chips -->
-  <section id="pf-hero" class="glass-card rounded-2xl p-4">
-    <div class="flex items-center gap-4">
-      <div onclick="document.getElementById('avatarInput').click()" class="relative flex-shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center cursor-pointer active:opacity-70 overflow-hidden" style="background:rgba(255,77,0,0.12);border:2px solid rgba(255,77,0,0.2)">
-        <img id="avatarImage" src="" class="hidden w-full h-full object-cover" alt="Avatar">
-        <span id="avatarInitials" class="text-2xl font-black" style="color:#ff4d00;font-family:'Plus Jakarta Sans',sans-serif">KL</span>
-        <div class="absolute bottom-0 left-0 right-0 flex justify-center py-1" style="background:rgba(0,0,0,0.45)">
-          <span class="material-symbols-outlined" style="font-size:13px;color:rgba(255,255,255,0.7)">photo_camera</span>
-        </div>
-      </div>
-      <input type="file" id="avatarInput" accept="image/*" class="hidden" onchange="handleAvatarChange(event)">
-      <div class="flex-1 min-w-0">
-        <p id="heroName" class="text-base font-black truncate mb-1" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Tu Perfil</p>
-        <div class="flex flex-wrap gap-1.5">
-          <span id="heroWeight" class="text-[13px] font-bold px-2 py-1 rounded-lg" style="background:#1e1a15;color:#ff4d00">-- kg</span>
-          <span id="heroGoal" class="text-[13px] font-bold px-2 py-1 rounded-lg" style="background:#1e1a15;color:rgba(247,244,240,0.55)">Meta: --</span>
-          <span id="heroLost" class="text-[13px] font-bold px-2 py-1 rounded-lg" style="background:rgba(34,197,94,0.1);color:#22c55e">0 kg</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Métricas rápidas -->
-  <div id="pf-metrics" class="grid grid-cols-3 gap-2">
-    <div class="glass-card rounded-xl p-3 text-center">
-      <div class="w-8 h-8 rounded-xl flex items-center justify-center mx-auto mb-1.5" style="background:rgba(255,77,0,0.12)">
-        <span class="material-symbols-outlined" style="color:#ff4d00;font-size:16px;font-variation-settings:'FILL' 1">bolt</span>
-      </div>
-      <p id="statStreak" class="text-lg font-black leading-none" style="color:#ff4d00;font-family:'Plus Jakarta Sans',sans-serif">0</p>
-      <p style="font-size:10px;color:rgba(247,244,240,0.5);margin-top:3px">Racha</p>
-    </div>
-    <div class="glass-card rounded-xl p-3 text-center">
-      <div class="w-8 h-8 rounded-xl flex items-center justify-center mx-auto mb-1.5" style="background:rgba(34,197,94,0.12)">
-        <span class="material-symbols-outlined" style="color:#22c55e;font-size:16px;font-variation-settings:'FILL' 1">trending_down</span>
-      </div>
-      <p id="statLost" class="text-lg font-black leading-none" style="color:#22c55e;font-family:'Plus Jakarta Sans',sans-serif">0</p>
-      <p style="font-size:10px;color:rgba(247,244,240,0.5);margin-top:3px">kg perdidos</p>
-    </div>
-    <div class="glass-card rounded-xl p-3 text-center">
-      <div class="w-8 h-8 rounded-xl flex items-center justify-center mx-auto mb-1.5" style="background:rgba(96,165,250,0.12)">
-        <span class="material-symbols-outlined" style="color:#60a5fa;font-size:16px;font-variation-settings:'FILL' 1">fitness_center</span>
-      </div>
-      <p id="statWorkouts" class="text-lg font-black leading-none" style="color:#60a5fa;font-family:'Plus Jakarta Sans',sans-serif">0</p>
-      <p style="font-size:10px;color:rgba(247,244,240,0.5);margin-top:3px">Entrenos</p>
-    </div>
-  </div>
-
-  <!-- Suscripción -->
-  <section id="pf-suscripcion" class="glass-card rounded-2xl p-4">
-    <div class="flex items-center gap-2 mb-3">
-      <span class="material-symbols-outlined text-base" style="color:#ff4d00;font-variation-settings:'FILL' 1">workspace_premium</span>
-      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Suscripción</h2>
-    </div>
-    <div id="subEstadoFree">
-      <p class="text-[13px] mb-3" style="color:rgba(247,244,240,0.6)">Estás en el plan Gratis. Sube a Premium para desbloquear Coach IA, el generador automático de plan y el historial de progreso.</p>
-      <div class="grid grid-cols-2 gap-2">
-        <button onclick="suscribirse('mensual')" class="py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);color:#fff">
-          Mensual · $14.99
-        </button>
-        <button onclick="suscribirse('anual')" class="py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95" style="background:rgba(255,77,0,0.1);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">
-          Anual · $149.99
-        </button>
-      </div>
-    </div>
-    <div id="subEstadoPremium" class="hidden">
-      <div class="flex items-center gap-2 px-3 py-2.5 rounded-xl" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2)">
-        <span class="material-symbols-outlined" style="color:#22c55e;font-size:18px">check_circle</span>
-        <span class="text-[13px] font-bold" style="color:#22c55e">Suscripción Premium activa</span>
-      </div>
-    </div>
-  </section>
-
-  <div class="pf-cols">
-  <div class="pf-col pf-col-left">
-  <!-- Datos Personales -->
-  <section id="pf-datos" class="glass-card rounded-2xl p-4">
-    <div class="flex items-center gap-2 mb-3">
-      <span class="material-symbols-outlined text-base" style="color:#ff4d00;font-variation-settings:'FILL' 1">person</span>
-      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Datos Personales</h2>
-    </div>
-    <div class="grid grid-cols-2 gap-3">
-      <div class="col-span-2">
-        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Nombre</label>
-        <input type="text" id="userName" class="field-input" placeholder="Tu nombre">
-      </div>
-      <div>
-        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Edad</label>
-        <input type="number" id="age" class="field-input" placeholder="30">
-      </div>
-      <div>
-        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Sexo</label>
-        <select id="sex" class="field-input">
-          <option value="">Seleccionar</option>
-          <option value="male">Masculino</option>
-          <option value="female">Femenino</option>
-        </select>
-      </div>
-      <div>
-        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Altura (cm)</label>
-        <input type="number" id="height" class="field-input" placeholder="170">
-      </div>
-      <div>
-        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Meses Keto</label>
-        <input type="number" id="monthsOnKeto" class="field-input" placeholder="1">
-      </div>
-    </div>
-  </section>
-
-  <!-- Peso & Objetivo -->
-  <section id="pf-peso" class="glass-card rounded-2xl p-4">
-    <div class="flex items-center gap-2 mb-3">
-      <span class="material-symbols-outlined text-base" style="color:#ff4d00;font-variation-settings:'FILL' 1">monitor_weight</span>
-      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Peso & Objetivo</h2>
-    </div>
-    <div class="grid grid-cols-2 gap-3">
-      <div>
-        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Peso Inicial (kg)</label>
-        <input type="number" id="startWeight" step="0.1" class="field-input" placeholder="85.0">
-      </div>
-      <div>
-        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Peso Meta (kg)</label>
-        <input type="number" id="goalWeight" step="0.1" class="field-input" placeholder="70.0">
-      </div>
-      <div>
-        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Objetivo</label>
-        <select id="trainingGoal" class="field-input">
-          <option value="lose">Perder Grasa</option>
-          <option value="maintain">Mantener</option>
-          <option value="gain">Ganar Músculo</option>
-          <option value="strength">Fuerza</option>
-        </select>
-      </div>
-      <div>
-        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Nivel de Actividad</label>
-        <select id="activity" class="field-input">
-          <option value="1.2">Sedentario</option>
-          <option value="1.375">Ligero</option>
-          <option value="1.55">Moderado</option>
-          <option value="1.725">Activo</option>
-          <option value="1.9">Muy Activo</option>
-        </select>
-      </div>
-    </div>
-  </section>
-
-  <!-- Entrenamiento -->
-  <section id="pf-entreno" class="glass-card rounded-2xl p-4">
-    <div class="flex items-center gap-2 mb-3">
-      <span class="material-symbols-outlined text-base" style="color:#4ade80;font-variation-settings:'FILL' 1">fitness_center</span>
-      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Entrenamiento</h2>
-    </div>
-    <div class="grid grid-cols-2 gap-3">
-      <div>
-        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Tipo</label>
-        <select id="trainingType" class="field-input">
-          <option value="bodyweight">Peso Corporal</option>
-          <option value="dumbbells">Mancuernas</option>
-          <option value="weights">Pesas / Barra</option>
-          <option value="both">Ambos</option>
-          <option value="machines">Máquinas</option>
-        </select>
-      </div>
-      <div>
-        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Frecuencia</label>
-        <select id="trainingFreq" class="field-input">
-          <option value="1">1 día / sem</option>
-          <option value="2">2 días / sem</option>
-          <option value="3">3 días / sem</option>
-          <option value="4">4 días / sem</option>
-          <option value="5">5 días / sem</option>
-          <option value="6">6 días / sem</option>
-          <option value="7">7 días / sem</option>
-        </select>
-      </div>
-      <div class="col-span-2">
-        <label class="block text-[11px] uppercase tracking-wider mb-1.5" style="color:rgba(247,244,240,0.6)">Experiencia</label>
-        <select id="experience" class="field-input">
-          <option value="beginner">Principiante</option>
-          <option value="intermediate">Intermedio</option>
-          <option value="advanced">Avanzado</option>
-        </select>
-      </div>
-    </div>
-  </section>
-
-  </div>
-  <div class="pf-col pf-col-right">
-  <!-- Resumen Metabólico -->
-  <section id="pf-macros" class="glass-card rounded-2xl p-4">
-    <div class="flex items-center gap-2 mb-3">
-      <span class="material-symbols-outlined text-base" style="color:#fbbf24;font-variation-settings:'FILL' 1">insights</span>
-      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Resumen Metabólico</h2>
-    </div>
-    <div class="space-y-2">
-      <div class="flex items-center justify-between px-3 py-2.5 rounded-xl" style="background:#111;border:1px solid rgba(255,240,225,0.07)">
-        <span class="text-[13px]" style="color:rgba(247,244,240,0.5)">TMB (BMR)</span>
-        <span id="bmrValue" class="text-sm font-bold" style="color:#f7f4f0">-- kcal</span>
-      </div>
-      <div class="flex items-center justify-between px-3 py-2.5 rounded-xl" style="background:#111;border:1px solid rgba(255,240,225,0.07)">
-        <span class="text-[13px]" style="color:rgba(247,244,240,0.5)">TDEE</span>
-        <span id="tdeeValue" class="text-sm font-bold" style="color:#f7f4f0">-- kcal</span>
-      </div>
-      <div class="flex items-center justify-between px-3 py-2.5 rounded-xl" style="background:rgba(255,77,0,0.07);border:1px solid rgba(255,77,0,0.15)">
-        <span class="text-[13px] font-semibold" style="color:rgba(255,77,0,0.7)">Meta calórica</span>
-        <span id="caloriesValue" class="text-sm font-black" style="color:#ff4d00">-- kcal</span>
-      </div>
-      <div class="flex items-center justify-between px-3 py-2.5 rounded-xl" style="background:#111;border:1px solid rgba(255,240,225,0.07)">
-        <span class="text-[13px]" style="color:rgba(247,244,240,0.5)">Proteína diaria</span>
-        <span id="proteinValue" class="text-sm font-bold" style="color:#fb923c">-- g</span>
-      </div>
-    </div>
-    <p class="text-[11px] mt-2 text-center" style="color:rgba(247,244,240,0.5)">Calculado con Mifflin-St Jeor · se actualiza al guardar</p>
-  </section>
-
-  <!-- Historial de Peso -->
-  <section id="pf-historial" class="glass-card rounded-2xl p-4">
-    <div class="flex items-center justify-between mb-3">
-      <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-base" style="color:#ff4d00;font-variation-settings:'FILL' 1">history</span>
-        <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Historial de Peso</h2>
-      </div>
-      <a href="/app/progreso" class="text-[11px] font-bold px-2 py-1 rounded-full" style="background:rgba(255,77,0,0.12);color:#ff4d00;text-decoration:none">Ver gráfica →</a>
-    </div>
-    <div id="weightHistoryList" class="space-y-1.5 mb-3"></div>
-    <button onclick="showWeightModal()" class="w-full py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 flex items-center justify-center gap-2" style="background:rgba(255,77,0,0.1);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">
-      <span class="material-symbols-outlined" style="font-size:16px">add</span>
-      Registrar Peso
-    </button>
-  </section>
-
-  <!-- Zona Peligrosa -->
-  <section id="pf-peligro" class="glass-card rounded-2xl p-4" style="border-color:rgba(220,38,38,0.2)">
-    <div class="flex items-center gap-2 mb-1">
-      <span class="material-symbols-outlined text-base" style="color:#dc2626;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">warning</span>
-      <h2 class="text-sm font-bold" style="color:#f7f4f0">Zona Peligrosa</h2>
-    </div>
-    <p class="text-[12px] mb-4" style="color:rgba(247,244,240,0.55)">Estas acciones son irreversibles. Asegúrate de saber lo que estás haciendo.</p>
-
-    <!-- Cerrar sesión -->
-    <button onclick="handleLogout()" class="w-full py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 flex items-center justify-center gap-2 mb-2" style="background:rgba(220,38,38,0.07);color:#dc2626;border:1px solid rgba(220,38,38,0.18)">
-      <span class="material-symbols-outlined" style="font-size:16px">logout</span>
-      Cerrar Sesión
-    </button>
-
-    <!-- Reiniciar progreso -->
-    <button onclick="resetProgressData()" class="w-full py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 flex items-center justify-center gap-2 mb-2" style="background:rgba(220,38,38,0.04);color:rgba(220,38,38,0.65);border:1px solid rgba(220,38,38,0.12)">
-      <span class="material-symbols-outlined" style="font-size:16px">restart_alt</span>
-      Reiniciar solo el progreso
-    </button>
-
-    <!-- Borrar todo -->
-    <button onclick="resetAllData()" class="w-full py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 flex items-center justify-center gap-2" style="background:rgba(220,38,38,0.04);color:rgba(220,38,38,0.4);border:1px solid rgba(220,38,38,0.08)">
-      <span class="material-symbols-outlined" style="font-size:16px">delete_forever</span>
-      Borrar Todos los Datos
-    </button>
-  </section>
-  </div>
-  </div>
-
+<!-- Hero -->
+<div>
+  <div class="kc-hero-sub">Cuenta · Ajustes</div>
+  <h1 class="kc-hero">Tu perfil<br><em>metabólico</em></h1>
 </div>
-</main>
 
-<!-- Weight Modal -->
-<div id="weightModal" class="fixed inset-0 z-[80] hidden">
-  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWeightModal()"></div>
-  <!-- Tarjeta flotante centrada (bottom-20 + max-w-sm + rounded-3xl en las 4
-       esquinas), igual que #waterModal/#quickAddFoodModal en index.astro --
-       antes era bottom-0/left-0/right-0/rounded-t-3xl, una hoja de ancho
-       completo pegada al borde que se veia bien en movil pero quedaba
-       igual de ancha (y sin centrar) en escritorio, inconsistente con el
-       resto de los popups de la app. -->
-  <div class="absolute bottom-20 left-1/2 -translate-x-1/2 w-[90%] max-w-sm rounded-3xl p-6 shadow-2xl" style="background:#181818;border:1px solid rgba(255,255,255,0.09)">
-    <h3 class="text-lg font-bold flex items-center gap-2 mb-4" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">
-      <span class="material-symbols-outlined" style="color:#ff4d00">monitor_weight</span>
-      Registrar Peso
-    </h3>
-    <input type="number" id="newWeightInput" step="0.1" min="20" max="300"
-      class="w-full py-4 px-4 rounded-2xl text-2xl font-bold text-center focus:outline-none mb-4"
-      style="background:#111;border:1.5px solid rgba(255,255,255,0.12);color:#f7f4f0" placeholder="0.0">
-    <button onclick="saveWeight()" class="w-full py-4 rounded-2xl font-bold text-base transition-all active:scale-95 mb-2"
-      style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);color:#fff">
-      Guardar
-    </button>
-    <button onclick="closeWeightModal()" class="w-full py-3 rounded-2xl font-bold text-sm transition-all active:scale-95"
-      style="background:rgba(255,240,225,0.05);color:rgba(247,244,240,0.5)">
-      Cancelar
-    </button>
+<div class="prf-actions">
+  <button class="kc-btn kc-btn--primary kc-btn--sm" onclick="saveProfile()"><span class="material-symbols-outlined" style="font-size:16px">save</span>Guardar</button>
+</div>
+
+<!-- Hero: avatar + nombre + chips -->
+<section class="kc-card">
+  <div class="prf-hero">
+    <div class="prf-avatar" onclick="document.getElementById('avatarInput').click()">
+      <img id="avatarImage" src="" class="hidden" alt="Avatar">
+      <span id="avatarInitials" class="prf-avatar__initials">KL</span>
+      <div class="prf-avatar__cam"><span class="material-symbols-outlined">photo_camera</span></div>
+    </div>
+    <input type="file" id="avatarInput" accept="image/*" class="hidden" onchange="handleAvatarChange(event)">
+    <div style="flex:1;min-width:0">
+      <p id="heroName" class="prf-hero__name">Tu Perfil</p>
+      <div class="prf-hero__chips">
+        <span id="heroWeight" class="kc-chip kc-c-amber">-- kg</span>
+        <span id="heroGoal" class="kc-chip kc-c-neutral">Meta: --</span>
+        <span id="heroLost" class="kc-chip kc-c-mint">0 kg</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Métricas rápidas -->
+<div class="prf-metrics">
+  <div class="prf-metric"><span class="kc-ico kc-c-amber"><span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">bolt</span></span><b id="statStreak">0</b><span>Racha</span></div>
+  <div class="prf-metric"><span class="kc-ico kc-c-mint"><span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">trending_down</span></span><b id="statLost">0</b><span>kg perdidos</span></div>
+  <div class="prf-metric"><span class="kc-ico kc-c-cyan"><span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1">fitness_center</span></span><b id="statWorkouts">0</b><span>Entrenos</span></div>
+</div>
+
+<!-- Suscripción -->
+<section class="kc-card">
+  <div class="kc-card__head" style="margin-bottom:12px">
+    <h2 class="kc-card__title" style="margin-top:0"><span class="material-symbols-outlined" style="font-size:18px;vertical-align:-3px;color:var(--kc-amber);font-variation-settings:'FILL' 1">workspace_premium</span> Suscripción</h2>
+  </div>
+  <div id="subEstadoFree">
+    <p class="kc-card__sub" style="margin-bottom:14px">Estás en el plan Gratis. Sube a Premium para desbloquear Coach IA, el generador automático de plan y el historial de progreso.</p>
+    <div class="prf-sub-btns">
+      <button class="kc-btn kc-btn--primary" onclick="suscribirse('mensual')">Mensual · $14.99</button>
+      <button class="kc-btn kc-btn--secondary" onclick="suscribirse('anual')">Anual · $149.99</button>
+    </div>
+  </div>
+  <div id="subEstadoPremium" class="hidden">
+    <div class="kc-chip kc-c-mint" style="height:auto;padding:10px 14px"><span class="material-symbols-outlined" style="font-size:18px">check_circle</span>Suscripción Premium activa</div>
+  </div>
+</section>
+
+<!-- Datos Personales -->
+<section class="kc-card">
+  <div class="kc-card__head" style="margin-bottom:12px">
+    <h2 class="kc-card__title" style="margin-top:0"><span class="material-symbols-outlined" style="font-size:18px;vertical-align:-3px;color:var(--kc-amber);font-variation-settings:'FILL' 1">person</span> Datos Personales</h2>
+  </div>
+  <div class="kc-field">
+    <label class="kc-label">Nombre</label>
+    <input type="text" id="userName" class="kc-input" placeholder="Tu nombre">
+  </div>
+  <div class="kc-field-2">
+    <div class="kc-field"><label class="kc-label">Edad</label><input type="number" id="age" class="kc-input" placeholder="30"></div>
+    <div class="kc-field">
+      <label class="kc-label">Sexo</label>
+      <select id="sex" class="kc-input"><option value="">Seleccionar</option><option value="male">Masculino</option><option value="female">Femenino</option></select>
+    </div>
+    <div class="kc-field"><label class="kc-label">Altura (cm)</label><input type="number" id="height" class="kc-input" placeholder="170"></div>
+    <div class="kc-field" style="margin-bottom:0"><label class="kc-label">Meses Keto</label><input type="number" id="monthsOnKeto" class="kc-input" placeholder="1"></div>
+  </div>
+</section>
+
+<!-- Peso & Objetivo -->
+<section class="kc-card">
+  <div class="kc-card__head" style="margin-bottom:12px">
+    <h2 class="kc-card__title" style="margin-top:0"><span class="material-symbols-outlined" style="font-size:18px;vertical-align:-3px;color:var(--kc-amber);font-variation-settings:'FILL' 1">monitor_weight</span> Peso &amp; Objetivo</h2>
+  </div>
+  <div class="kc-field-2">
+    <div class="kc-field"><label class="kc-label">Peso Inicial (kg)</label><input type="number" id="startWeight" step="0.1" class="kc-input" placeholder="85.0"></div>
+    <div class="kc-field"><label class="kc-label">Peso Meta (kg)</label><input type="number" id="goalWeight" step="0.1" class="kc-input" placeholder="70.0"></div>
+    <div class="kc-field">
+      <label class="kc-label">Objetivo</label>
+      <select id="trainingGoal" class="kc-input"><option value="lose">Perder Grasa</option><option value="maintain">Mantener</option><option value="gain">Ganar Músculo</option><option value="strength">Fuerza</option></select>
+    </div>
+    <div class="kc-field" style="margin-bottom:0">
+      <label class="kc-label">Nivel de Actividad</label>
+      <select id="activity" class="kc-input"><option value="1.2">Sedentario</option><option value="1.375">Ligero</option><option value="1.55">Moderado</option><option value="1.725">Activo</option><option value="1.9">Muy Activo</option></select>
+    </div>
+  </div>
+</section>
+
+<!-- Entrenamiento -->
+<section class="kc-card">
+  <div class="kc-card__head" style="margin-bottom:12px">
+    <h2 class="kc-card__title" style="margin-top:0"><span class="material-symbols-outlined" style="font-size:18px;vertical-align:-3px;color:var(--kc-mint);font-variation-settings:'FILL' 1">fitness_center</span> Entrenamiento</h2>
+  </div>
+  <div class="kc-field-2">
+    <div class="kc-field">
+      <label class="kc-label">Tipo</label>
+      <select id="trainingType" class="kc-input"><option value="bodyweight">Peso Corporal</option><option value="dumbbells">Mancuernas</option><option value="weights">Pesas / Barra</option><option value="both">Ambos</option><option value="machines">Máquinas</option></select>
+    </div>
+    <div class="kc-field">
+      <label class="kc-label">Frecuencia</label>
+      <select id="trainingFreq" class="kc-input"><option value="1">1 día / sem</option><option value="2">2 días / sem</option><option value="3">3 días / sem</option><option value="4">4 días / sem</option><option value="5">5 días / sem</option><option value="6">6 días / sem</option><option value="7">7 días / sem</option></select>
+    </div>
+  </div>
+  <div class="kc-field" style="margin-bottom:0">
+    <label class="kc-label">Experiencia</label>
+    <select id="experience" class="kc-input"><option value="beginner">Principiante</option><option value="intermediate">Intermedio</option><option value="advanced">Avanzado</option></select>
+  </div>
+</section>
+
+<!-- Resumen Metabólico -->
+<section class="kc-card">
+  <div class="kc-card__head" style="margin-bottom:12px">
+    <h2 class="kc-card__title" style="margin-top:0"><span class="material-symbols-outlined" style="font-size:18px;vertical-align:-3px;color:var(--kc-amber);font-variation-settings:'FILL' 1">insights</span> Resumen Metabólico</h2>
+  </div>
+  <div class="prf-kv"><span>TMB (BMR)</span><b id="bmrValue">-- kcal</b></div>
+  <div class="prf-kv"><span>TDEE</span><b id="tdeeValue">-- kcal</b></div>
+  <div class="prf-kv prf-kv--hi"><span>Meta calórica</span><b id="caloriesValue">-- kcal</b></div>
+  <div class="prf-kv"><span>Proteína diaria</span><b id="proteinValue">-- g</b></div>
+  <p class="kc-label" style="text-align:center;margin-top:10px">Calculado con Mifflin-St Jeor · se actualiza al guardar</p>
+</section>
+
+<!-- Historial de Peso -->
+<section class="kc-card">
+  <div class="kc-card__head" style="margin-bottom:12px">
+    <h2 class="kc-card__title" style="margin-top:0"><span class="material-symbols-outlined" style="font-size:18px;vertical-align:-3px;color:var(--kc-amber);font-variation-settings:'FILL' 1">history</span> Historial de Peso</h2>
+    <a href="/app/progreso" class="kc-link" style="font-size:12px">Ver gráfica →</a>
+  </div>
+  <div id="weightHistoryList" class="kc-list" style="margin-bottom:12px"></div>
+  <button class="kc-btn kc-btn--secondary kc-btn--block" onclick="showWeightModal()"><span class="material-symbols-outlined" style="font-size:16px">add</span>Registrar Peso</button>
+</section>
+
+<!-- Zona Peligrosa -->
+<section class="kc-card prf-danger">
+  <div class="kc-card__head" style="margin-bottom:4px">
+    <h2 class="kc-card__title" style="margin-top:0"><span class="material-symbols-outlined" style="font-size:18px;vertical-align:-3px;color:var(--kc-red)">warning</span> Zona Peligrosa</h2>
+  </div>
+  <p class="kc-card__sub" style="margin-bottom:16px">Estas acciones son irreversibles. Asegúrate de saber lo que estás haciendo.</p>
+
+  <button class="prf-danger-btn" onclick="handleLogout()"><span class="material-symbols-outlined" style="font-size:16px">logout</span>Cerrar Sesión</button>
+  <button class="prf-danger-btn prf-danger-btn--soft" onclick="resetProgressData()"><span class="material-symbols-outlined" style="font-size:16px">restart_alt</span>Reiniciar solo el progreso</button>
+  <button class="prf-danger-btn prf-danger-btn--softer" onclick="resetAllData()"><span class="material-symbols-outlined" style="font-size:16px">delete_forever</span>Borrar Todos los Datos</button>
+</section>
+
+<!-- Modal registrar peso -->
+<div id="weightModal" class="prf-modal hidden">
+  <div class="prf-modal__scrim" onclick="closeWeightModal()"></div>
+  <div class="prf-modal__panel">
+    <h3 class="kc-card__title" style="margin-top:0;margin-bottom:16px"><span class="material-symbols-outlined" style="color:var(--kc-amber);vertical-align:-3px">monitor_weight</span> Registrar Peso</h3>
+    <input type="number" id="newWeightInput" step="0.1" min="20" max="300" class="kc-input" style="height:60px;font-size:22px;font-weight:700;text-align:center;margin-bottom:14px" placeholder="0.0">
+    <button class="kc-btn kc-btn--primary kc-btn--block" style="margin-bottom:8px" onclick="saveWeight()">Guardar</button>
+    <button class="kc-btn kc-btn--secondary kc-btn--block" onclick="closeWeightModal()">Cancelar</button>
   </div>
 </div>
 
 <!-- Toast -->
-<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 px-5 py-3 rounded-xl shadow-lg z-[9999] font-medium hidden opacity-0 transition-all duration-300" style="color:#fff">
+<div id="toast" class="hidden" style="position:fixed;top:calc(16px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);padding:10px 18px;border-radius:var(--kc-radius-pill);box-shadow:var(--kc-shadow-float);z-index:9999;font:600 13px var(--kc-font-sans);color:#fff;opacity:0;transition:opacity .3s">
   <span id="toastMsg">✓ Guardado</span>
 </div>
 
-
+<Fragment slot="scripts">
 <script is:inline src="/app/utils.js"></script>
 <script is:inline src="/app/modules/entitlements.js"></script>
 <script is:inline>
@@ -380,9 +240,9 @@ function loadSubscriptionStatus() {
 function showToast(msg, isError) {
   var t = document.getElementById('toast'), m = document.getElementById('toastMsg');
   if (m) m.textContent = msg;
-  t.style.background = isError ? '#dc2626' : '#22c55e';
-  t.classList.remove('hidden','opacity-0'); t.classList.add('opacity-100');
-  setTimeout(function(){ t.classList.add('opacity-0'); setTimeout(function(){ t.classList.add('hidden'); }, 300); }, 2500);
+  t.style.background = isError ? 'var(--kc-red)' : 'var(--kc-mint)';
+  t.classList.remove('hidden'); t.style.opacity = '1';
+  setTimeout(function(){ t.style.opacity = '0'; setTimeout(function(){ t.classList.add('hidden'); }, 300); }, 2500);
 }
 
 function handleAvatarChange(event) {
@@ -509,28 +369,28 @@ function loadWeightHistoryList() {
   var history = safeParseJSON(localStorage.getItem('keto_weight_history'), []);
   var recent = history.slice().sort(function(a,b){ return new Date(b.date)-new Date(a.date); }).slice(0, 5);
   if (!recent.length) {
-    container.innerHTML = '<p style="font-size:13px;color:rgba(247,244,240,0.55);text-align:center;padding:10px 0">Sin registros aún</p>';
+    container.innerHTML = '<p class="kc-label" style="text-align:center;padding:10px 0">Sin registros aún</p>';
     return;
   }
   container.innerHTML = recent.map(function(h, i) {
     var prev = recent[i+1];
     var diff = prev ? (h.weight - prev.weight) : null;
-    var diffColor = diff === null ? '' : diff < 0 ? '#22c55e' : diff > 0 ? '#ff7351' : 'rgba(247,244,240,0.57)';
+    var diffClass = diff === null ? '' : diff < 0 ? 'kc-delta-down' : diff > 0 ? 'kc-delta-up' : '';
     var diffText  = diff !== null ? (diff > 0 ? '+' : '') + diff.toFixed(1) + ' kg' : '';
-    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:10px;background:#111;border:1px solid rgba(255,240,225,0.07)">' +
-      '<span style="font-size:13px;color:rgba(247,244,240,0.5)">' + h.date.slice(5).replace('-','/') + '</span>' +
-      '<div style="display:flex;align-items:center;gap:8px">' +
-        (diffText ? '<span style="font-size:13px;color:' + diffColor + '">' + diffText + '</span>' : '') +
-        '<span style="font-size:14px;font-weight:700;color:#f7f4f0">' + h.weight + ' kg</span>' +
-      '</div></div>';
+    return '<div class="kc-li"><div class="kc-li__main"><div class="kc-li__s">' + h.date.slice(5).replace('-','/') + '</div></div>' +
+      '<div class="kc-li__v">' + h.weight + ' kg' + (diffText ? '<small class="' + diffClass + '">' + diffText + '</small>' : '') + '</div></div>';
   }).join('');
 }
 
 function showWeightModal() {
   document.getElementById('weightModal').classList.remove('hidden');
+  document.getElementById('weightModal').classList.add('flex');
   var inp = document.getElementById('newWeightInput'); if (inp) { inp.value=''; inp.focus(); }
 }
-function closeWeightModal() { document.getElementById('weightModal').classList.add('hidden'); }
+function closeWeightModal() {
+  document.getElementById('weightModal').classList.add('hidden');
+  document.getElementById('weightModal').classList.remove('flex');
+}
 
 function saveWeight() {
   var inp = document.getElementById('newWeightInput');
@@ -596,5 +456,5 @@ function resetAllData() {
 document.addEventListener('DOMContentLoaded', loadProfile);
 document.addEventListener('DOMContentLoaded', loadSubscriptionStatus);
 </script>
-
-</AppLayout>
+</Fragment>
+</AppShell>

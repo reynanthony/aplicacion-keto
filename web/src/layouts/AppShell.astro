@@ -43,6 +43,38 @@ const { title, screen, demo = false } = Astro.props;
     <script is:inline src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0"></script>
     <script is:inline src="/app/supabase-client.js"></script>
     <script is:inline src="/app/storage-manager.js"></script>
+    <!-- Service Worker: mismo registro único que AppLayout.astro (ver su
+         comentario) — faltaba aquí, dejando sin actualizar las pantallas
+         migradas al HUD. -->
+    <script is:inline>
+    (function () {
+      if (!('serviceWorker' in navigator)) return;
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/app/sw.js').then(function (registration) {
+          registration.update();
+          registration.addEventListener('updatefound', function () {
+            var newWorker = registration.installing;
+            if (!newWorker) return;
+            newWorker.addEventListener('statechange', function () {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                newWorker.postMessage('SKIP_WAITING');
+              }
+            });
+          });
+        }).catch(function () {});
+        navigator.serviceWorker.addEventListener('controllerchange', function () {
+          var alreadyReloading = false;
+          try { alreadyReloading = sessionStorage.getItem('kc_sw_reloading') === '1'; } catch (e) {}
+          if (alreadyReloading) return;
+          try {
+            sessionStorage.setItem('kc_sw_reloading', '1');
+            setTimeout(function () { try { sessionStorage.removeItem('kc_sw_reloading'); } catch (e) {} }, 5000);
+          } catch (e) {}
+          window.location.reload();
+        });
+      });
+    })();
+    </script>
   </head>
   <body class="kc kc-app" data-kc-screen={screen} data-kc-loading>
     <AppHeader />

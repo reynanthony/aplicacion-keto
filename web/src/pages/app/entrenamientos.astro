@@ -1,11 +1,18 @@
 ---
-import AppLayout from '../../layouts/AppLayout.astro';
-import AppHeader from '../../components/AppHeader.astro';
+import AppShell from '../../layouts/AppShell.astro';
 ---
 
-<AppLayout title="KetoCore | Entrenamientos" authGuard={true}>
+<AppShell title="Entrenamientos" screen="entrenamientos">
 <style is:global>
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+/* Fila de KPIs del dashboard y "quick stats" nativizadas a kc-stat; el resto
+   de la pantalla (selector de tipo, sesión activa, historial, records,
+   modales) se queda en Tailwind/legacy, retemizado por el puente .app-hud
+   (ver ketocore.css) -- demasiada lógica de timers/estado para reescribir
+   de forma segura en una sola pasada. */
+.kc .ent-kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kc .ent-kpis .kc-stat__val{font-size:26px;line-height:30px}
+.kc .ent-quick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .glass-card{background:rgba(22,19,16,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,77,0,0.15)}
 .keto-glass{background:rgba(22,19,16,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 .timer-glow{text-shadow:0 0 30px rgba(255,77,0,0.4)}
@@ -33,12 +40,9 @@ button:active{transform:scale(0.97)}
 .custom-scrollbar::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.2)}
 .scrollbar-hide::-webkit-scrollbar{display:none}
 .scrollbar-hide{-ms-overflow-style:none;scrollbar-width:none}
-@media(min-width: 901px){#gym-wrap{max-width:none!important;padding-top:1rem;}}
 </style>
-<!-- Sidebar -->
-<AppHeader dropdownMobileOnly={true} />
-<main class="main-content pt-14 pb-20 min-h-screen">
-<div id="gym-wrap" class="kc-page" style="padding-top:12px">
+<div class="app-hud">
+<div id="gym-wrap">
 
 <!-- ==================== DASHBOARD VIEW ==================== -->
 <div id="dashboardView">
@@ -49,8 +53,8 @@ button:active{transform:scale(0.97)}
 <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djJoLTJ2LTJoMnptLTItNHYyaC0ydi0yaDJ6bTQtOGgydjJoLTJ2LTJ6bS04LTR2MmgtMnYtMmgydjJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-30"></div>
 <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-background to-transparent"></div>
 <div class="relative h-full flex flex-col justify-end p-4 md:p-10">
-<span style="display:inline-block;font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Entrenamiento · Hoy</span>
-<h2 class="kc-h1" style="font-size:clamp(26px,5vw,46px);margin-bottom:10px">Muévete keto,<br><span style="color:rgba(247,244,240,0.55)">sin quemarte.</span></h2>
+<span class="kc-hero-sub" style="margin-top:0">Entrenamiento · Hoy</span>
+<h2 class="kc-hero" style="font-size:clamp(26px,5vw,46px)">Muévete keto,<br>sin <em>quemarte</em>.</h2>
 <p class="text-on-surface-variant text-[13px] md:text-base max-w-md hidden md:block mb-4 md:mb-6">Tu sesión optimizada por IA está lista. Mantén la consistencia para alcanzar tus metas.</p>
 <div class="flex flex-wrap gap-2 md:gap-4">
 <button onclick="startNewWorkout()" class="primary-gradient px-4 py-2.5 md:px-8 md:py-4 text-on-primary font-black uppercase tracking-wider text-[13px] md:text-sm rounded-xl flex items-center gap-2 hover:scale-105 transition-all shadow-[0_0_25px_rgba(255,144,109,0.5)]">
@@ -145,64 +149,37 @@ Intensidad
 </div>
 
 <!-- Stats Bento Grid -->
-<div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-6 md:mb-8">
+<div class="ent-kpis" style="margin-bottom:24px">
 <!-- Monthly Goal -->
-<div class="bg-surface-container-low rounded-xl md:rounded-2xl p-3 md:p-5 ghost-border group relative">
-<div class="flex justify-between items-start mb-2 md:mb-3 relative">
-<span class="material-symbols-outlined text-primary text-base md:text-xl" style="font-variation-settings:'FILL' 1">flag</span>
-</div>
-<div class="flex items-baseline gap-1 md:gap-2">
-<h3 class="text-2xl md:text-4xl font-headline font-extrabold text-white"><span id="monthWorkoutsDash">0</span><span class="text-on-surface-variant text-sm md:text-xl">/20</span></h3>
-</div>
-<div class="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden mt-2 md:mt-3">
-<div id="monthProgressBarDash" class="h-full bg-primary rounded-full transition-all duration-1000" style="width:0%"></div>
-</div>
-<p class="text-[9px] md:text-[11px] text-on-surface-variant mt-1 md:mt-3 hidden md:block">¡Uno más para la recompensa!</p>
+<div class="kc-stat kc-c-amber">
+<div class="kc-stat__top"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">flag</span></div>
+<div class="kc-stat__val"><span id="monthWorkoutsDash">0</span><small>/20</small></div>
+<div class="kc-bar kc-c-amber"><i id="monthProgressBarDash" style="width:0%"></i></div>
+<p class="kc-label" style="margin-top:8px">¡Uno más para la recompensa!</p>
 </div>
 
 <!-- Calories -->
-<div class="bg-surface-container-low rounded-xl md:rounded-2xl p-3 md:p-5 ghost-border group relative">
-<div class="flex justify-between items-start mb-2 md:mb-3 relative">
-<span class="material-symbols-outlined text-secondary text-base md:text-xl" style="font-variation-settings:'FILL' 1">local_fire_department</span>
-</div>
-<div class="flex items-baseline gap-1 md:gap-2">
-<h3 class="text-2xl md:text-4xl font-headline font-extrabold text-secondary"><span id="monthCaloriesDash">0</span></h3>
-<span class="text-on-surface-variant text-[11px] md:text-[13px] font-bold">KCAL</span>
-</div>
-<div class="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden mt-2 md:mt-3">
-<div id="caloriesProgressBarDash" class="h-full bg-secondary rounded-full transition-all duration-1000" style="width:0%"></div>
-</div>
+<div class="kc-stat kc-c-cyan">
+<div class="kc-stat__top"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">local_fire_department</span></div>
+<div class="kc-stat__val"><span id="monthCaloriesDash">0</span><small>kcal</small></div>
+<div class="kc-bar kc-c-cyan"><i id="caloriesProgressBarDash" style="width:0%"></i></div>
 </div>
 
 <!-- Minutes -->
-<div class="bg-surface-container-low rounded-xl md:rounded-2xl p-3 md:p-5 ghost-border group relative">
-<div class="flex justify-between items-start mb-2 md:mb-3 relative">
-<span class="material-symbols-outlined text-blue-400 text-base md:text-xl" style="font-variation-settings:'FILL' 1">timer</span>
-</div>
-<div class="flex items-baseline gap-1 md:gap-2">
-<h3 class="text-2xl md:text-4xl font-headline font-extrabold text-blue-400"><span id="monthMinutesDash">0</span></h3>
-<span class="text-on-surface-variant text-[11px] md:text-[13px] font-bold">MIN</span>
-</div>
-<p class="text-[9px] md:text-[11px] text-on-surface-variant mt-1 md:mt-3 hidden md:block">Minutos activos</p>
+<div class="kc-stat kc-c-cyan">
+<div class="kc-stat__top"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">timer</span></div>
+<div class="kc-stat__val"><span id="monthMinutesDash">0</span><small>min</small></div>
+<p class="kc-label" style="margin-top:8px">Minutos activos</p>
 </div>
 
 <!-- Streak -->
-<div class="bg-surface-container-low rounded-xl md:rounded-2xl p-3 md:p-5 ghost-border group relative bg-gradient-to-br from-surface-container-low to-primary/5">
-<div class="flex justify-between items-start mb-2 md:mb-3 relative">
-<span class="material-symbols-outlined text-green-400 text-base md:text-xl" style="font-variation-settings:'FILL' 1">bolt</span>
+<div class="kc-stat kc-c-mint">
+<div class="kc-stat__top"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">bolt</span></div>
+<div class="kc-segs" style="margin:10px 0">
+<i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i>
 </div>
-<div class="flex gap-1 md:gap-1.5 mt-1 md:mt-2">
-<div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.6)]"></div>
-<div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.6)]"></div>
-<div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.6)]"></div>
-<div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.6)]"></div>
-<div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-surface-container-highest"></div>
-<div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-surface-container-highest"></div>
-<div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-surface-container-highest"></div>
-</div>
-<p class="text-[11px] md:text-[13px] text-green-400 mt-2 md:mt-3 font-bold flex items-center gap-1">
-<span class="material-symbols-outlined text-sm">auto_awesome</span>
-<span class="hidden md:inline">¡Nuevo Récord!</span><span class="md:hidden">Récord</span>
+<p class="kc-label" style="color:var(--kc-mint);display:flex;align-items:center;gap:4px">
+<span class="material-symbols-outlined" style="font-size:14px">auto_awesome</span>¡Nuevo récord!
 </p>
 </div>
 </div>
@@ -235,18 +212,18 @@ Ver Todos los Récords
 </div>
 
 <!-- Quick Stats -->
-<div class="grid grid-cols-3 gap-4">
-<div class="bg-surface-container-low rounded-2xl p-5 text-center ghost-border hover:bg-surface-container transition-colors cursor-pointer">
-<p id="totalWorkoutsDash" class="text-3xl font-extrabold text-white">0</p>
-<p class="text-[11px] text-on-surface-variant uppercase tracking-widest font-bold">Entrenos Totales</p>
+<div class="ent-quick">
+<div class="kc-stat kc-c-neutral" style="text-align:center">
+<div class="kc-stat__val" id="totalWorkoutsDash">0</div>
+<p class="kc-label">Entrenos</p>
 </div>
-<div class="bg-surface-container-low rounded-2xl p-5 text-center ghost-border hover:bg-surface-container transition-colors cursor-pointer">
-<p id="totalCaloriesDash" class="text-3xl font-extrabold text-white">0</p>
-<p class="text-[11px] text-on-surface-variant uppercase tracking-widest font-bold">Kcal Totales</p>
+<div class="kc-stat kc-c-neutral" style="text-align:center">
+<div class="kc-stat__val" id="totalCaloriesDash">0</div>
+<p class="kc-label">Kcal</p>
 </div>
-<div class="bg-surface-container-low rounded-2xl p-5 text-center ghost-border hover:bg-surface-container transition-colors cursor-pointer">
-<p id="totalMinutesDash" class="text-3xl font-extrabold text-white">0</p>
-<p class="text-[11px] text-on-surface-variant uppercase tracking-widest font-bold">Min Totales</p>
+<div class="kc-stat kc-c-neutral" style="text-align:center">
+<div class="kc-stat__val" id="totalMinutesDash">0</div>
+<p class="kc-label">Min</p>
 </div>
 </div>
 
@@ -471,8 +448,7 @@ Iniciar
 </div>
 
 </div>
-</main>
-
+</div>
 
 <script is:inline src="/app/utils.js"></script>
 <script is:inline src="/app/modules/auto-workout-generator.js"></script>
@@ -3160,73 +3136,5 @@ function showToast(message, type) {
   }, 3500);
 }
 </script>
-<script is:inline>
-// User Dropdown Menu
-function toggleUserMenu() {
-  const dropdown = document.getElementById('userDropdown');
-  dropdown.classList.toggle('hidden');
-  updateDropdownInfo();
-}
 
-function toggleMobileUserMenu() {
-  const dropdown = document.getElementById('mobileUserDropdown');
-  dropdown.classList.toggle('hidden');
-  updateDropdownInfo();
-}
-
-function updateDropdownInfo() {
-  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
-  const userName = profile.nombre || profile.name || 'Usuario';
-  const userEmail = localStorage.getItem('ketocore_user_email') || 'usuario@ejemplo.com';
-  const dn = document.getElementById('dropdownUserName');
-  const de = document.getElementById('dropdownUserEmail');
-  const mdn = document.getElementById('mobileDropdownUserName');
-  const mde = document.getElementById('mobileDropdownUserEmail');
-  if(dn) dn.textContent = userName;
-  if(de) de.textContent = userEmail;
-  if(mdn) mdn.textContent = userName;
-  if(mde) mde.textContent = userEmail;
-}
-
-function updateHeaderAvatar() {
-  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
-  const avatarUrl = profile.avatar_url;
-  const hi = document.getElementById('headerAvatarImg');
-  const hi2 = document.getElementById('headerAvatarIcon');
-  const mhi = document.getElementById('mobileHeaderAvatarImg');
-  const mhi2 = document.getElementById('mobileHeaderAvatarIcon');
-  if (avatarUrl) {
-    if(hi) { hi.src = avatarUrl; hi.classList.remove('hidden'); }
-    if(hi2) hi2.classList.add('hidden');
-    if(mhi) { mhi.src = avatarUrl; mhi.classList.remove('hidden'); }
-    if(mhi2) mhi2.classList.add('hidden');
-  } else {
-    if(hi) hi.classList.add('hidden');
-    if(hi2) hi2.classList.remove('hidden');
-    if(mhi) mhi.classList.add('hidden');
-    if(mhi2) mhi2.classList.remove('hidden');
-  }
-}
-
-document.addEventListener('click', function(e) {
-  const dd = document.getElementById('userDropdown');
-  const mdd = document.getElementById('mobileUserDropdown');
-  const btn = document.getElementById('profileBtn');
-  if (dd && !dd.contains(e.target) && !btn.contains(e.target)) dd.classList.add('hidden');
-  if (mdd && !e.target.closest('#mobileUserDropdown') && !e.target.closest('button[onclick="toggleMobileUserMenu()"]')) mdd.classList.add('hidden');
-});
-
-async function handleLogout() {
-  if (confirm('¿Cerrar sesión?')) {
-    await window.supabase.auth.signOut();
-    localStorage.removeItem('ketocore_user_id');
-    localStorage.removeItem('ketocore_user_email');
-    localStorage.removeItem('ketocore_onboarding_done');
-    window.location.href = '/app/welcome';
-  }
-}
-
-updateHeaderAvatar();
-</script>
-
-</AppLayout>
+</AppShell>

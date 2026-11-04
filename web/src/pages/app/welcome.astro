@@ -1,15 +1,14 @@
 ---
+// Bienvenido (login/registro) — pre-login, sin AppShell (no hay tab bar ni
+// sesión aún). Retokenizado a tokens --kc-* del HUD, sobre AppLayout.
 import AppLayout from '../../layouts/AppLayout.astro';
 ---
 
 <AppLayout title="KetoCore | Bienvenido" authGuard={false} bodyClass="flex flex-col">
 <style is:global>
-body { font-family: 'Inter', sans-serif; background: #131315; color: #f7f4f0; }
+body { font-family: 'Inter', sans-serif; background: var(--kc-bg); color: var(--kc-ink); }
 h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
 .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-input { font-family: 'Inter', sans-serif; font-size: 1rem; }
-input:focus { outline: none; border-color: #ff4d00 !important; box-shadow: 0 0 0 3px rgba(255,77,0,0.18); }
-#loadingOverlay { background: rgba(19,19,21,0.95) !important; backdrop-filter: blur(12px); }
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 .fade-in { animation: fadeInUp 0.4s ease-out forwards; }
 @keyframes kpulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
@@ -24,172 +23,118 @@ input:focus { outline: none; border-color: #ff4d00 !important; box-shadow: 0 0 0
    sidebar se colaba encima del login en desktop). */
 html body #appSidebar, html body #kcTabbar, html body #kcDrawer { display: none !important; }
 main { margin-left: 0 !important; padding-bottom: 2rem !important; }
+
+.wel-logo { width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; background: var(--kc-amber-fill); box-shadow: var(--kc-glow-amber); flex-shrink: 0; }
+.wel-logo img { width: 20px; height: 20px; filter: brightness(0) invert(1); }
+.wel-divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
+.wel-divider i { flex: 1; height: 1px; background: var(--kc-line); }
+.wel-cta-demo { background: color-mix(in oklab, var(--kc-amber) 14%, transparent); color: var(--kc-amber); box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--kc-amber) 35%, transparent); }
+.wel-benefit { display: flex; align-items: center; gap: 12px; color: var(--kc-ink-2); font-size: 14px; }
+.wel-benefit + .wel-benefit { margin-top: 10px; }
+#loginError, #registerError { color: var(--kc-red); font-size: 13px; margin-top: 12px; }
+#loadingOverlay { background: color-mix(in oklab, var(--kc-bg) 92%, transparent); backdrop-filter: blur(12px); }
+#toast { background: var(--kc-surface-1); color: var(--kc-ink); border: 1px solid var(--kc-line-strong); box-shadow: var(--kc-shadow-float); }
 </style>
 
+<div class="kc kc-app" style="min-height:100dvh;display:flex;flex-direction:column">
+
 <!-- Header -->
-<header class="px-5 pt-5 pb-3 flex items-center gap-3">
-  <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#ff4d00,#ea580c)">
-    <img src="/app/logo.svg" alt="KetoCore" class="w-5 h-5" style="filter:brightness(0) invert(1)">
-  </div>
-  <span class="text-xl font-black tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;color:#f7f4f0">KetoCore</span>
+<header class="px-5 pt-5 pb-3" style="display:flex;align-items:center;gap:12px">
+  <span class="wel-logo"><img src="/app/logo.svg" alt="KetoCore"></span>
+  <span style="font:700 20px 'Plus Jakarta Sans',sans-serif;color:var(--kc-ink)">KetoCore</span>
 </header>
 
 <!-- Main -->
-<main class="flex-1 flex items-center justify-center px-5 py-6">
+<main class="flex-1" style="display:flex;align-items:center;justify-content:center;padding:24px 20px">
   <div class="w-full max-w-sm">
 
     <!-- Hero -->
-    <div class="text-center mb-7 fade-in">
-      <h1 class="text-3xl font-black tracking-tight mb-2" style="color:#f7f4f0">
-        Transforma tu <span style="background:linear-gradient(135deg,#ff4d00,#ea580c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">salud</span>
-      </h1>
-      <p style="color:rgba(247,244,240,0.6);font-size:0.9375rem">La app cetogénica más completa en español</p>
+    <div class="text-center fade-in" style="margin-bottom:28px">
+      <h1 class="kc-hero" style="font-size:32px;text-align:center">Transforma tu <em>salud</em></h1>
+      <p class="kc-label" style="font-size:15px;color:var(--kc-ink-3)">La app cetogénica más completa en español</p>
     </div>
 
     <!-- Feature pills -->
-    <div class="flex flex-wrap justify-center gap-2 mb-7 fade-in" style="animation-delay:.08s">
-      <span class="px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5" style="background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.25)">
-        <span class="material-symbols-outlined" style="font-size:14px;color:#16a34a">check_circle</span>
-        Offline
-      </span>
-      <span class="px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5" style="background:rgba(255,77,0,0.1);color:#fb923c;border:1px solid rgba(255,77,0,0.25)">
-        <span class="material-symbols-outlined" style="font-size:14px;color:#ea580c">language</span>
-        100% Español
-      </span>
-      <span class="px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5" style="background:rgba(251,191,36,0.1);color:#fbbf24;border:1px solid rgba(251,191,36,0.25)">
-        <span class="material-symbols-outlined" style="font-size:14px;color:#d97706">star</span>
-        Gratis
-      </span>
+    <div class="fade-in" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:28px;animation-delay:.08s">
+      <span class="kc-chip kc-c-mint"><span class="material-symbols-outlined" style="font-size:14px">check_circle</span>Offline</span>
+      <span class="kc-chip kc-c-cyan"><span class="material-symbols-outlined" style="font-size:14px">language</span>100% Español</span>
+      <span class="kc-chip kc-c-amber"><span class="material-symbols-outlined" style="font-size:14px">star</span>Gratis</span>
     </div>
 
     <!-- Auth Card -->
-    <div class="rounded-3xl p-6 fade-in" style="animation-delay:.16s;background:#161310;border:1px solid rgba(255,240,225,0.07);box-shadow:0 4px 16px rgba(0,0,0,0.4),0 1px 4px rgba(0,0,0,0.2)">
+    <div class="kc-card fade-in" style="animation-delay:.16s">
 
       <!-- Tabs -->
-      <div class="flex rounded-xl p-1 mb-6" style="background:#1e1a15">
-        <button id="tabLogin" onclick="switchTab('login')"
-          class="flex-1 py-2.5 rounded-lg text-sm font-bold transition-all"
-          style="background:#ff4d00;color:#ffffff;box-shadow:0 1px 4px rgba(255,77,0,0.25)">
-          Iniciar Sesión
-        </button>
-        <button id="tabRegister" onclick="switchTab('register')"
-          class="flex-1 py-2.5 rounded-lg text-sm font-bold transition-all"
-          style="background:transparent;color:rgba(247,244,240,0.55)">
-          Registrarse
-        </button>
+      <div class="kc-seg-ctl" style="margin-bottom:20px">
+        <button id="tabLogin" type="button" onclick="switchTab('login')" aria-pressed="true">Iniciar Sesión</button>
+        <button id="tabRegister" type="button" onclick="switchTab('register')" aria-pressed="false">Registrarse</button>
       </div>
 
       <!-- Login Form -->
       <div id="formLogin">
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-semibold mb-1.5" style="color:#f7f4f0">Email</label>
-            <input type="email" id="loginEmail" placeholder="tu@email.com"
-              autocomplete="email" spellcheck="false"
-              class="w-full px-4 py-3.5 rounded-xl transition-all"
-              style="background:#1e1a15;border:1.5px solid rgba(255,255,255,0.12);color:#f7f4f0">
-          </div>
-          <div>
-            <label class="block text-sm font-semibold mb-1.5" style="color:#f7f4f0">Contraseña</label>
-            <input type="password" id="loginPassword" placeholder="Tu contraseña"
-              autocomplete="current-password"
-              class="w-full px-4 py-3.5 rounded-xl transition-all"
-              style="background:#1e1a15;border:1.5px solid rgba(255,255,255,0.12);color:#f7f4f0">
-          </div>
-          <button onclick="handleLogin()" id="loginBtn"
-            class="w-full py-4 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2"
-            style="background:linear-gradient(135deg,#ff4d00,#ea580c);box-shadow:0 2px 8px rgba(255,77,0,0.25)">
-            <span class="material-symbols-outlined" style="font-size:20px">login</span>
-            <span>Iniciar Sesión</span>
-          </button>
+        <div class="kc-field">
+          <label class="kc-label">Email</label>
+          <input type="email" id="loginEmail" placeholder="tu@email.com" autocomplete="email" spellcheck="false" class="kc-input">
         </div>
-        <p id="loginError" class="text-red-600 text-sm mt-4" style="display:none"></p>
+        <div class="kc-field" style="margin-bottom:0">
+          <label class="kc-label">Contraseña</label>
+          <input type="password" id="loginPassword" placeholder="Tu contraseña" autocomplete="current-password" class="kc-input">
+        </div>
+        <button onclick="handleLogin()" id="loginBtn" class="kc-btn kc-btn--primary kc-btn--block" style="margin-top:16px">
+          <span class="material-symbols-outlined" style="font-size:20px">login</span>
+          <span>Iniciar Sesión</span>
+        </button>
+        <p id="loginError" style="display:none"></p>
       </div>
 
       <!-- Register Form -->
       <div id="formRegister" style="display:none">
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-semibold mb-1.5" style="color:#f7f4f0">Nombre</label>
-            <input type="text" id="registerName" placeholder="Tu nombre"
-              autocomplete="given-name"
-              class="w-full px-4 py-3.5 rounded-xl transition-all"
-              style="background:#1e1a15;border:1.5px solid rgba(255,255,255,0.12);color:#f7f4f0">
-          </div>
-          <div>
-            <label class="block text-sm font-semibold mb-1.5" style="color:#f7f4f0">Email</label>
-            <input type="email" id="registerEmail" placeholder="tu@email.com"
-              autocomplete="email" spellcheck="false"
-              class="w-full px-4 py-3.5 rounded-xl transition-all"
-              style="background:#1e1a15;border:1.5px solid rgba(255,255,255,0.12);color:#f7f4f0">
-          </div>
-          <div>
-            <label class="block text-sm font-semibold mb-1.5" style="color:#f7f4f0">Contraseña</label>
-            <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres"
-              autocomplete="new-password"
-              class="w-full px-4 py-3.5 rounded-xl transition-all"
-              style="background:#1e1a15;border:1.5px solid rgba(255,255,255,0.12);color:#f7f4f0">
-          </div>
-          <button onclick="handleRegister()" id="registerBtn"
-            class="w-full py-4 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2"
-            style="background:linear-gradient(135deg,#ff4d00,#ea580c);box-shadow:0 2px 8px rgba(255,77,0,0.25)">
-            <span class="material-symbols-outlined" style="font-size:20px">person_add</span>
-            <span>Crear Cuenta</span>
-          </button>
+        <div class="kc-field">
+          <label class="kc-label">Nombre</label>
+          <input type="text" id="registerName" placeholder="Tu nombre" autocomplete="given-name" class="kc-input">
         </div>
-        <p id="registerError" class="text-red-600 text-sm mt-4" style="display:none"></p>
+        <div class="kc-field">
+          <label class="kc-label">Email</label>
+          <input type="email" id="registerEmail" placeholder="tu@email.com" autocomplete="email" spellcheck="false" class="kc-input">
+        </div>
+        <div class="kc-field" style="margin-bottom:0">
+          <label class="kc-label">Contraseña</label>
+          <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres" autocomplete="new-password" class="kc-input">
+        </div>
+        <button onclick="handleRegister()" id="registerBtn" class="kc-btn kc-btn--primary kc-btn--block" style="margin-top:16px">
+          <span class="material-symbols-outlined" style="font-size:20px">person_add</span>
+          <span>Crear Cuenta</span>
+        </button>
+        <p id="registerError" style="display:none"></p>
       </div>
 
       <!-- Divider -->
-      <div class="flex items-center gap-3 my-5">
-        <div class="flex-1 h-px" style="background:rgba(255,240,225,0.08)"></div>
-        <span class="text-sm" style="color:rgba(247,244,240,0.42)">o</span>
-        <div class="flex-1 h-px" style="background:rgba(255,240,225,0.08)"></div>
-      </div>
+      <div class="wel-divider"><i></i><span class="kc-label">o</span><i></i></div>
 
       <!-- Demo CTA (modo prueba: recorre la app sin cuenta) -->
-      <a href="/app/demo/"
-        class="w-full py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2 mb-3"
-        style="font-size:15px;background:rgba(255,77,0,0.1);color:#ff7a3c;border:1.5px solid rgba(255,77,0,0.28)">
+      <a href="/app/demo/" class="kc-btn kc-btn--block wel-cta-demo" style="margin-bottom:10px;text-decoration:none">
         <span class="material-symbols-outlined icon-filled" style="font-size:20px">play_circle</span>
         Modo prueba — explora la app sin cuenta
       </a>
 
       <!-- Suscripción -->
-      <a href="/#precios"
-        class="w-full py-3 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 text-sm mb-3"
-        style="background:#1e1a15;color:rgba(247,244,240,0.7);border:1.5px solid rgba(255,240,225,0.08);text-decoration:none">
-        <span class="material-symbols-outlined" style="font-size:18px;color:#fbbf24">workspace_premium</span>
+      <a href="/#precios" class="kc-btn kc-btn--secondary kc-btn--block" style="margin-bottom:10px;text-decoration:none">
+        <span class="material-symbols-outlined" style="font-size:18px;color:var(--kc-amber)">workspace_premium</span>
         Ver planes y suscribirse
       </a>
-      <p class="text-center" style="font-size:11.5px;color:rgba(247,244,240,0.55)">El acceso completo a la app requiere suscripción. Explora todo con el modo prueba.</p>
+      <p class="kc-label" style="text-align:center;font-size:11.5px">El acceso completo a la app requiere suscripción. Explora todo con el modo prueba.</p>
     </div>
 
     <!-- Benefits -->
-    <div class="mt-6 space-y-3 fade-in" style="animation-delay:.24s">
-      <div class="flex items-center gap-3" style="color:rgba(247,244,240,0.6)">
-        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(255,77,0,0.08)">
-          <span class="material-symbols-outlined" style="font-size:16px;color:#ff4d00">cloud_sync</span>
-        </div>
-        <span class="text-sm">Sincronización en la nube</span>
-      </div>
-      <div class="flex items-center gap-3" style="color:rgba(247,244,240,0.6)">
-        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(255,77,0,0.08)">
-          <span class="material-symbols-outlined" style="font-size:16px;color:#ff4d00">install_mobile</span>
-        </div>
-        <span class="text-sm">Instala como app en tu móvil</span>
-      </div>
-      <div class="flex items-center gap-3" style="color:rgba(247,244,240,0.6)">
-        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(255,77,0,0.08)">
-          <span class="material-symbols-outlined" style="font-size:16px;color:#ff4d00">lock</span>
-        </div>
-        <span class="text-sm">Tus datos siempre seguros</span>
-      </div>
+    <div class="fade-in" style="margin-top:24px;animation-delay:.24s">
+      <div class="wel-benefit"><span class="kc-ico kc-c-amber"><span class="material-symbols-outlined" style="font-size:16px">cloud_sync</span></span>Sincronización en la nube</div>
+      <div class="wel-benefit"><span class="kc-ico kc-c-amber"><span class="material-symbols-outlined" style="font-size:16px">install_mobile</span></span>Instala como app en tu móvil</div>
+      <div class="wel-benefit"><span class="kc-ico kc-c-amber"><span class="material-symbols-outlined" style="font-size:16px">lock</span></span>Tus datos siempre seguros</div>
     </div>
 
     <!-- Volver al sitio -->
-    <div class="text-center mt-6 fade-in" style="animation-delay:.3s">
-      <a href="/" class="kc-web-link inline-flex items-center gap-1.5 text-sm font-semibold" style="color:rgba(247,244,240,0.6);text-decoration:none">
+    <div class="text-center fade-in" style="margin-top:24px;animation-delay:.3s">
+      <a href="/" class="kc-link" style="color:var(--kc-ink-3);display:inline-flex;align-items:center;gap:6px">
         <span class="material-symbols-outlined" style="font-size:16px">arrow_back</span>
         Volver al sitio web
       </a>
@@ -198,19 +143,21 @@ main { margin-left: 0 !important; padding-bottom: 2rem !important; }
   </div>
 </main>
 
+</div>
+
 <!-- Loading Overlay -->
-<div id="loadingOverlay" class="fixed inset-0 bg-white/90 backdrop-blur-sm z-50 flex items-center justify-center" style="display:none">
+<div id="loadingOverlay" class="fixed inset-0 z-50 flex items-center justify-center" style="display:none">
   <div class="text-center">
-    <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse-custom" style="background:linear-gradient(135deg,#ff4d00,#ea580c)">
-      <span class="material-symbols-outlined text-white text-3xl" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">local_fire_department</span>
+    <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse-custom" style="background:var(--kc-amber-fill);box-shadow:var(--kc-glow-amber)">
+      <span class="material-symbols-outlined text-3xl" style="color:var(--kc-on-amber);font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">local_fire_department</span>
     </div>
-    <p id="loadingText" class="font-semibold" style="color:#f7f4f0">Cargando...</p>
+    <p id="loadingText" class="font-semibold" style="color:var(--kc-ink)">Cargando...</p>
   </div>
 </div>
 
 <!-- Toast -->
-<div id="toast" aria-live="polite" aria-atomic="true" class="fixed bottom-8 left-1/2 -translate-x-1/2 px-5 py-3 rounded-xl font-medium shadow-lg transition-all duration-300 pointer-events-none z-50"
-  style="background:#f7f4f0;color:#0b0a08;opacity:0;transform:translateX(-50%) translateY(12px)">
+<div id="toast" aria-live="polite" aria-atomic="true" class="fixed bottom-8 left-1/2 -translate-x-1/2 px-5 py-3 rounded-xl font-medium transition-all duration-300 pointer-events-none z-50"
+  style="opacity:0;transform:translateX(-50%) translateY(12px)">
   <span id="toastText"></span>
 </div>
 
@@ -221,13 +168,13 @@ main { margin-left: 0 !important; padding-bottom: 2rem !important; }
     const loginForm = document.getElementById('formLogin');
     const registerForm = document.getElementById('formRegister');
     if (tab === 'login') {
-      loginTab.style.cssText = 'background:#ff4d00;color:#ffffff;box-shadow:0 1px 4px rgba(255,77,0,0.25)';
-      registerTab.style.cssText = 'background:transparent;color:rgba(247,244,240,0.55)';
+      loginTab.setAttribute('aria-pressed', 'true');
+      registerTab.setAttribute('aria-pressed', 'false');
       loginForm.style.display = '';
       registerForm.style.display = 'none';
     } else {
-      registerTab.style.cssText = 'background:#ff4d00;color:#ffffff;box-shadow:0 1px 4px rgba(255,77,0,0.25)';
-      loginTab.style.cssText = 'background:transparent;color:rgba(247,244,240,0.55)';
+      registerTab.setAttribute('aria-pressed', 'true');
+      loginTab.setAttribute('aria-pressed', 'false');
       registerForm.style.display = '';
       loginForm.style.display = 'none';
     }
@@ -241,9 +188,11 @@ main { margin-left: 0 !important; padding-bottom: 2rem !important; }
   function showToast(message, duration) {
     const toast = document.getElementById('toast');
     document.getElementById('toastText').textContent = message;
-    toast.style.cssText = 'background:#1a1714;color:#ffffff;opacity:1;transform:translateX(-50%) translateY(0);pointer-events:none';
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
     setTimeout(() => {
-      toast.style.cssText = 'background:#1a1714;color:#ffffff;opacity:0;transform:translateX(-50%) translateY(12px);pointer-events:none';
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(-50%) translateY(12px)';
     }, duration || 3000);
   }
 

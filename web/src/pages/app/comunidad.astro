@@ -1,121 +1,99 @@
 ---
-import AppLayout from '../../layouts/AppLayout.astro';
+// Comunidad — UI v2 (HUD nativo). Reescrito a markup kc-* (hero, tarjeta de
+// perfil, ranking, feed mock, CTA de waitlist). Lógica y datos mock
+// intactos. Respaldo: comunidad.astro.bak
+import AppShell from '../../layouts/AppShell.astro';
 ---
-
-<AppLayout title="KetoCore | Comunidad" authGuard={true}>
+<AppShell title="Comunidad" screen="comunidad">
 <style is:global>
-*{box-sizing:border-box}
-body{background:#131315;color:#fff;font-family:'Inter',sans-serif;min-height:100vh;}
-.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px)}
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
-.glass{background:rgba(22,19,16,0.85);border:1px solid rgba(255,240,225,0.07);backdrop-filter:blur(16px)}
-.feed-card{background:#161310;border:1px solid rgba(255,240,225,0.06);border-radius:1rem}
-.avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0}
-@keyframes shimmer{0%{opacity:0.4}50%{opacity:0.7}100%{opacity:0.4}}
-.coming-soon-blur{filter:blur(3px);pointer-events:none;user-select:none}
-.coming-soon-overlay{position:relative}
-.coming-soon-overlay::after{content:"Próximamente";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(19,19,21,0.55);border-radius:inherit;font-weight:800;font-size:13px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.5);backdrop-filter:blur(1px)}
-/* Sistema visual "grande y espacioso" de entrenamientos.astro, solo en
-   escritorio (ver mismo cambio en objetivos.astro para el detalle). */
-@media (min-width: 901px) {
-  h1.kc-h1 { font-size: 46px !important; }
-  /* entrenamientos.astro (y checklist/suplementos/guia) quitan el limite
-     de 1180px de .kc-page -- esta pantalla se habia quedado topada. */
-  .kc-page { max-width: none !important; }
-}
+
+.kc .com-badge{display:inline-flex;align-items:center;font:700 11px var(--kc-font-mono);letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:var(--kc-radius-pill);background:color-mix(in oklab,var(--kc-amber) 18%,transparent);color:var(--kc-amber);margin-top:10px}
+.kc .com-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 14px var(--kc-font-sans);color:#fff;flex-shrink:0}
+.kc .com-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.kc .com-stat{background:var(--kc-surface-2);border-radius:var(--kc-radius-sm);padding:10px;text-align:center}
+.kc .com-stat b{display:block;font:700 19px var(--kc-font-sans);color:var(--kc-ink)}
+.kc .com-stat span{font:500 10px var(--kc-font-mono);letter-spacing:.04em;text-transform:uppercase;color:var(--kc-ink-3)}
+.kc .com-chip-preview{font:700 11px var(--kc-font-mono);padding:3px 9px;border-radius:var(--kc-radius-pill);background:color-mix(in oklab,var(--kc-amber) 14%,transparent);color:var(--kc-amber)}
+.kc .com-soon{position:relative}
+.kc .com-soon::after{content:"Próximamente";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:color-mix(in oklab,var(--kc-bg) 55%,transparent);border-radius:inherit;font:800 13px var(--kc-font-sans);letter-spacing:.15em;text-transform:uppercase;color:var(--kc-ink-2);backdrop-filter:blur(1px)}
+.kc .com-soon-blur{filter:blur(3px);pointer-events:none;user-select:none}
+.kc .com-row{display:flex;align-items:center;gap:10px;border-radius:var(--kc-radius-md);padding:9px 12px;background:var(--kc-surface-2)}
+.kc .com-row+.com-row{margin-top:6px}
+.kc .com-row.is-me{background:color-mix(in oklab,var(--kc-amber) 10%,var(--kc-surface-2));box-shadow:inset 0 0 0 1px color-mix(in oklab,var(--kc-amber) 30%,transparent)}
+.kc .com-row__rank{width:22px;text-align:center;font:600 13px var(--kc-font-sans);color:var(--kc-ink-3)}
+.kc .com-row__name{flex:1;min-width:0;font:600 13px var(--kc-font-sans);color:var(--kc-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kc .com-row__streak{font:700 12px var(--kc-font-mono);color:var(--kc-ink-3)}
+.kc .com-row.is-me .com-row__streak{color:var(--kc-amber)}
+.kc .com-feed{background:var(--kc-surface-1);border:1px solid var(--kc-line);border-radius:var(--kc-radius-lg);padding:14px}
+.kc .com-feed+.com-feed{margin-top:10px}
+.kc .com-feed__head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.kc .com-feed__name{font:600 13px var(--kc-font-sans);color:var(--kc-ink)}
+.kc .com-feed__meta{font:500 11px var(--kc-font-mono);color:var(--kc-ink-3)}
+.kc .com-feed__text{font:400 13px/1.55 var(--kc-font-sans);color:var(--kc-ink-2);margin-bottom:10px}
+.kc .com-feed__actions{display:flex;align-items:center;gap:16px;padding-top:10px;border-top:1px solid var(--kc-line)}
+.kc .com-feed__action{display:flex;align-items:center;gap:5px;font:500 12px var(--kc-font-sans);color:var(--kc-ink-3);background:none;border:0;cursor:pointer;padding:0}
+.kc .com-feed__action .material-symbols-outlined{font-size:16px}
+.kc .com-toast{position:fixed;top:calc(16px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:90;padding:12px 20px;border-radius:var(--kc-radius-pill);background:var(--kc-surface-1);border:1px solid var(--kc-line-strong);box-shadow:var(--kc-shadow-float);font:600 13px var(--kc-font-sans)}
+.kc .com-toast.hidden{display:none}
 </style>
-<!-- TopBar -->
-<header class="fixed top-0 left-0 right-0 z-40 h-14 flex items-center justify-between px-4 border-b border-white/5" style="background:rgba(19,19,21,0.95);backdrop-filter:blur(20px)">
-  <a href="/app/" class="flex items-center gap-3" style="text-decoration:none">
-    <img src="/app/logo.svg" alt="KetoCore" class="w-8 h-8" style="filter:drop-shadow(0 0 6px rgba(255,77,0,0.4))">
-    <h1 class="text-base font-headline font-black text-white">Comunidad</h1>
-  </a>
-  <div class="flex items-center gap-2">
-    <span class="text-[11px] font-bold px-2 py-1 rounded-full" style="background:rgba(255,77,0,0.15);color:#ff4d00">BETA PRONTO</span>
-    <button onclick="toggleHamburgerMenu()" aria-label="Menú" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:rgba(255,240,225,0.05);color:rgba(247,244,240,0.6);border:1px solid rgba(255,240,225,0.06)">
-      <span class="material-symbols-outlined" style="font-size:20px">menu</span>
-    </button>
-  </div>
-</header>
 
-<main class="main-content pt-14 pb-20 min-h-screen">
-<div class="space-y-4 kc-page" style="padding-top:12px">
-
-  <!-- Header editorial -->
-  <div style="margin:10px 2px 16px">
-    <div style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Comunidad · Juntos</div>
-    <h1 class="kc-h1" style="font-size:30px">No estás<br><span style="color:rgba(247,244,240,0.57)">haciendo esto solo.</span></h1>
-  </div>
-
-  <!-- Mi tarjeta de comunidad -->
-  <section class="glass rounded-2xl p-4 mt-2">
-    <div class="flex items-center gap-3 mb-3">
-      <div id="myAvatar" class="avatar text-white" style="background:linear-gradient(135deg,#ff4d00,#ffb300)">?</div>
-      <div class="flex-1 min-w-0">
-        <p id="myName" class="font-bold text-white text-sm">Tu perfil</p>
-        <p class="text-on-surface-variant text-[13px]">Así te verán en la comunidad</p>
-      </div>
-      <span id="myBadge" class="text-[12px] font-bold px-2.5 py-1 rounded-full hidden" style="background:rgba(255,179,0,0.15);color:#ffb300"></span>
-    </div>
-    <div class="grid grid-cols-3 gap-2" id="myStats">
-      <div class="bg-surface-container-highest rounded-xl p-3 text-center">
-        <p id="statStreak" class="text-xl font-headline font-black text-primary-container">--</p>
-        <p class="text-[10px] text-on-surface-variant uppercase tracking-wider mt-0.5">Racha</p>
-      </div>
-      <div class="bg-surface-container-highest rounded-xl p-3 text-center">
-        <p id="statLost" class="text-xl font-headline font-black text-green-400">--</p>
-        <p class="text-[10px] text-on-surface-variant uppercase tracking-wider mt-0.5">kg logrados</p>
-      </div>
-      <div class="bg-surface-container-highest rounded-xl p-3 text-center">
-        <p id="statDays" class="text-xl font-headline font-black text-secondary">--</p>
-        <p class="text-[10px] text-on-surface-variant uppercase tracking-wider mt-0.5">Días keto</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Leaderboard semanal -->
-  <section class="glass rounded-2xl p-4">
-    <div class="flex items-center justify-between mb-3">
-      <h2 class="text-sm font-headline font-bold text-white flex items-center gap-2">
-        <span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings:'FILL' 1">leaderboard</span>
-        Ranking semanal
-      </h2>
-      <span class="text-[11px] font-bold px-2 py-0.5 rounded-full" style="background:rgba(255,77,0,0.12);color:#ff4d00">Vista previa</span>
-    </div>
-    <div class="space-y-2 coming-soon-overlay rounded-2xl" id="leaderboard"></div>
-  </section>
-
-  <!-- Feed preview -->
-  <section>
-    <div class="flex items-center justify-between mb-3">
-      <h2 class="text-sm font-headline font-bold text-white flex items-center gap-2">
-        <span class="material-symbols-outlined text-base text-primary-container" style="font-variation-settings:'FILL' 1">dynamic_feed</span>
-        Feed de la comunidad
-      </h2>
-      <span class="text-[11px] font-bold px-2 py-0.5 rounded-full" style="background:rgba(255,77,0,0.12);color:#ff4d00">Vista previa</span>
-    </div>
-    <div class="space-y-3 coming-soon-overlay rounded-2xl" id="feedContainer"></div>
-  </section>
-
-  <!-- CTA notificación -->
-  <section class="glass rounded-2xl p-5 text-center">
-    <span class="material-symbols-outlined text-3xl text-primary-container block mb-2" style="font-variation-settings:'FILL' 1">notifications_active</span>
-    <h3 class="font-headline font-bold text-white mb-1">Sé el primero en entrar</h3>
-    <p class="text-on-surface-variant text-[13px] mb-4 max-w-xs mx-auto">Lanzamos cuando tengamos 50 usuarios activos. Actualmente <span id="waitlistCount" class="text-white font-bold">--</span> personas esperan.</p>
-    <button onclick="joinWaitlist()" id="waitlistBtn" class="px-7 py-3 rounded-xl text-white font-bold text-sm transition-all active:scale-95" style="background:linear-gradient(135deg,#ff4d00,#ff6b2c);box-shadow:0 4px 16px rgba(255,77,0,0.3)">
-      Unirme a la lista de espera
-    </button>
-  </section>
-
+<!-- Hero -->
+<div>
+  <div class="kc-hero-sub">Comunidad · Juntos</div>
+  <h1 class="kc-hero">No estás<br>haciendo esto <em>solo</em></h1>
+  <span class="com-badge">Beta pronto</span>
 </div>
-</main>
+
+<!-- Mi tarjeta de comunidad -->
+<section class="kc-card">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div id="myAvatar" class="com-avatar" style="background:linear-gradient(135deg,var(--kc-amber),var(--kc-amber-fill))">?</div>
+    <div style="flex:1;min-width:0">
+      <p id="myName" class="kc-card__title" style="margin-top:0;font-size:14px">Tu perfil</p>
+      <p class="kc-label" style="margin-top:2px">Así te verán en la comunidad</p>
+    </div>
+    <span id="myBadge" class="com-chip-preview hidden"></span>
+  </div>
+  <div class="com-stats" id="myStats">
+    <div class="com-stat"><b id="statStreak">--</b><span>Racha</span></div>
+    <div class="com-stat"><b id="statLost">--</b><span>kg logrados</span></div>
+    <div class="com-stat"><b id="statDays">--</b><span>Días keto</span></div>
+  </div>
+</section>
+
+<!-- Leaderboard semanal -->
+<section class="kc-card">
+  <div class="kc-card__head" style="margin-bottom:12px">
+    <h2 class="kc-card__title" style="margin-top:0;font-size:15px;display:flex;align-items:center;gap:8px"><span class="material-symbols-outlined" style="color:var(--kc-cyan);font-size:18px;font-variation-settings:'FILL' 1">leaderboard</span>Ranking semanal</h2>
+    <span class="com-chip-preview">Vista previa</span>
+  </div>
+  <div class="com-soon" id="leaderboard"></div>
+</section>
+
+<!-- Feed preview -->
+<section>
+  <div class="kc-section" style="margin:0 0 10px">
+    <h2 style="display:flex;align-items:center;gap:8px"><span class="material-symbols-outlined" style="color:var(--kc-amber);font-size:18px;font-variation-settings:'FILL' 1">dynamic_feed</span>Feed de la comunidad</h2>
+    <span class="com-chip-preview">Vista previa</span>
+  </div>
+  <div class="com-soon" id="feedContainer"></div>
+</section>
+
+<!-- CTA notificación -->
+<section class="kc-card" style="text-align:center">
+  <span class="material-symbols-outlined" style="color:var(--kc-amber);font-size:30px;font-variation-settings:'FILL' 1">notifications_active</span>
+  <h3 class="kc-card__title" style="margin-top:10px">Sé el primero en entrar</h3>
+  <p class="kc-label" style="margin:6px auto 16px;max-width:260px">Lanzamos cuando tengamos 50 usuarios activos. Actualmente <span id="waitlistCount" style="color:var(--kc-ink);font-weight:700">--</span> personas esperan.</p>
+  <button onclick="joinWaitlist()" id="waitlistBtn" class="kc-btn kc-btn--primary">Unirme a la lista de espera</button>
+</section>
 
 <!-- Toast -->
-<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 px-5 py-3 rounded-xl shadow-lg z-[9999] font-medium hidden text-white text-sm" style="background:#22c55e;min-width:200px;text-align:center">
+<div id="toast" class="com-toast hidden">
   <span id="toastMsg">✓</span>
 </div>
 
-
+<Fragment slot="scripts">
 <script is:inline src="/app/utils.js"></script>
 <script is:inline>
 var MOCK_USERS = [
@@ -129,7 +107,7 @@ function showToast(msg, color) {
   var t = document.getElementById('toast');
   var m = document.getElementById('toastMsg');
   if(m) m.textContent = msg;
-  t.style.background = color || '#22c55e';
+  t.style.color = color || 'var(--kc-mint)';
   t.classList.remove('hidden');
   setTimeout(function(){ t.classList.add('hidden'); }, 2500);
 }
@@ -170,17 +148,17 @@ function loadLeaderboard() {
   var myName   = profile.nombre || profile.name || 'Tú';
 
   var board = MOCK_USERS.map(function(u){ return { name:u.name, initials:u.initials, color:u.color, streak:u.streak, isMe:false }; });
-  board.push({ name: myName + ' (tú)', initials: (myName[0]||'T').toUpperCase(), color:'#ff4d00', streak: myStreak, isMe:true });
+  board.push({ name: myName + ' (tú)', initials: (myName[0]||'T').toUpperCase(), color:'var(--kc-amber)', streak: myStreak, isMe:true });
   board.sort(function(a,b){ return b.streak - a.streak; });
 
   var html = '';
   board.forEach(function(u, i) {
     var medal = i===0 ? '🥇' : i===1 ? '🥈' : i===2 ? '🥉' : (i+1)+'.';
-    html += '<div class="flex items-center gap-3 rounded-xl px-3 py-2.5 ' + (u.isMe ? '' : '') + '" style="' + (u.isMe ? 'background:rgba(255,77,0,0.08);border:1px solid rgba(255,77,0,0.2)' : 'background:#131315') + '">';
-    html += '<span class="text-sm w-6 text-center">' + medal + '</span>';
-    html += '<div class="avatar text-white text-[13px]" style="background:' + u.color + '">' + u.initials + '</div>';
-    html += '<p class="flex-1 text-sm ' + (u.isMe ? 'text-white font-bold' : 'text-white/80') + '">' + escapeHtml(u.name) + '</p>';
-    html += '<span class="text-[12px] font-bold ' + (u.isMe ? 'text-primary-container' : 'text-on-surface-variant') + '">' + u.streak + 'd</span>';
+    html += '<div class="com-row' + (u.isMe ? ' is-me' : '') + '">';
+    html += '<span class="com-row__rank">' + medal + '</span>';
+    html += '<div class="com-avatar" style="width:30px;height:30px;font-size:11px;background:' + u.color + '">' + u.initials + '</div>';
+    html += '<p class="com-row__name">' + escapeHtml(u.name) + '</p>';
+    html += '<span class="com-row__streak">' + u.streak + 'd</span>';
     html += '</div>';
   });
   document.getElementById('leaderboard').innerHTML = html;
@@ -189,17 +167,17 @@ function loadLeaderboard() {
 function loadFeed() {
   var html = '';
   MOCK_USERS.slice(0, 3).forEach(function(u) {
-    html += '<div class="feed-card p-4">';
-    html += '<div class="flex items-center gap-3 mb-3">';
-    html += '<div class="avatar text-white text-[13px]" style="background:' + u.color + '">' + u.initials + '</div>';
-    html += '<div class="flex-1"><p class="text-white font-bold text-sm">' + escapeHtml(u.name) + '</p><p class="text-on-surface-variant text-[11px]">' + u.streak + ' días keto · ' + u.time + '</p></div>';
-    html += '<span class="text-lg">' + u.emoji + '</span>';
+    html += '<div class="com-feed">';
+    html += '<div class="com-feed__head">';
+    html += '<div class="com-avatar" style="width:34px;height:34px;font-size:12px;background:' + u.color + '">' + u.initials + '</div>';
+    html += '<div style="flex:1"><p class="com-feed__name">' + escapeHtml(u.name) + '</p><p class="com-feed__meta">' + u.streak + ' días keto · ' + u.time + '</p></div>';
+    html += '<span style="font-size:18px">' + u.emoji + '</span>';
     html += '</div>';
-    html += '<p class="text-white/80 text-sm leading-relaxed mb-3">' + escapeHtml(u.post) + '</p>';
-    html += '<div class="flex items-center gap-4 pt-2 border-t border-white/5">';
-    html += '<button class="flex items-center gap-1.5 text-white/40 text-[13px]"><span class="material-symbols-outlined text-base">favorite_border</span>' + u.likes + '</button>';
-    html += '<button class="flex items-center gap-1.5 text-white/40 text-[13px]"><span class="material-symbols-outlined text-base">chat_bubble_outline</span>Comentar</button>';
-    html += '<button class="flex items-center gap-1.5 text-white/40 text-[13px] ml-auto"><span class="material-symbols-outlined text-base">share</span>Compartir</button>';
+    html += '<p class="com-feed__text">' + escapeHtml(u.post) + '</p>';
+    html += '<div class="com-feed__actions">';
+    html += '<button class="com-feed__action"><span class="material-symbols-outlined">favorite_border</span>' + u.likes + '</button>';
+    html += '<button class="com-feed__action"><span class="material-symbols-outlined">chat_bubble_outline</span>Comentar</button>';
+    html += '<button class="com-feed__action" style="margin-left:auto"><span class="material-symbols-outlined">share</span>Compartir</button>';
     html += '</div></div>';
   });
   document.getElementById('feedContainer').innerHTML = html;
@@ -208,7 +186,7 @@ function loadFeed() {
 function joinWaitlist() {
   var saved = localStorage.getItem('comunidad_waitlist');
   if (saved) {
-    showToast('Ya estás en la lista ✓', '#ff4d00');
+    showToast('Ya estás en la lista ✓', 'var(--kc-amber)');
     return;
   }
   localStorage.setItem('comunidad_waitlist', '1');
@@ -218,7 +196,7 @@ function joinWaitlist() {
   document.getElementById('waitlistBtn').textContent = '¡Ya estás en la lista! 🎉';
   document.getElementById('waitlistBtn').disabled = true;
   document.getElementById('waitlistBtn').style.opacity = '0.7';
-  showToast('¡Listo! Te avisamos cuando lancemos 🚀', '#22c55e');
+  showToast('¡Listo! Te avisamos cuando lancemos 🚀', 'var(--kc-mint)');
 }
 
 function loadWaitlistState() {
@@ -239,5 +217,5 @@ document.addEventListener('DOMContentLoaded', function() {
   loadWaitlistState();
 });
 </script>
-
-</AppLayout>
+</Fragment>
+</AppShell>

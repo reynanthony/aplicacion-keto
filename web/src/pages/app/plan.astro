@@ -1,9 +1,17 @@
 ﻿---
-import AppLayout from '../../layouts/AppLayout.astro';
-import AppHeader from '../../components/AppHeader.astro';
+// Plan — migrado a AppShell (HUD). Por el tamaño y riesgo de este archivo
+// (generador automatico ya parchado varias veces), solo se reescribieron a
+// kc-* nativo el hero y el resumen de macros del dia; el resto del contenido
+// (sub-tabs, tarjetas de comidas, modales, generador IA) sigue con las
+// clases Tailwind legacy, retematizadas via el puente .app-hud aplicado a
+// <body> por script (asi tambien cubre los modales que el JS inyecta
+// directo en document.body, no solo los que estan dentro de este archivo).
+// Logica JS intacta al 100%. Respaldo: plan.astro.bak
+import AppShell from '../../layouts/AppShell.astro';
 ---
 
-<AppLayout title="KetoCore | Mi Plan" authGuard={true}>
+<AppShell title="Mi Plan" screen="plan">
+<script is:inline>document.body.classList.add('app-hud');</script>
 <style is:global>
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
 .glass-card{background:#161310;backdrop-filter:none;border:1px solid rgba(255,240,225,0.06);border-radius:24px}
@@ -30,25 +38,19 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 .ingredient-item{transition:background 0.15s}.ingredient-item:hover{background:rgba(255,255,255,0.05)}
 @keyframes pulse-green{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.4)}50%{box-shadow:0 0 0 15px rgba(34,197,94,0)}}
 .animate-pulse-green{animation:pulse-green 2s infinite}
-/* entrenamientos.astro (y checklist/suplementos/guia) quitan el limite de
-   1180px de .kc-page en escritorio -- esta pantalla se habia quedado
-   topada, ~458px mas angosta que las demas en un monitor de 1920px. */
-@media (min-width: 901px) {
-  .kc-page { max-width: none !important; }
-}
+.kc .pln-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+.kc .pln-macros{grid-template-columns:repeat(2,1fr)}
+@media (min-width:420px){.kc .pln-macros{grid-template-columns:repeat(4,1fr)}}
+.kc .pln-foot{display:flex;align-items:center;justify-content:space-between;margin-top:14px;flex-wrap:wrap;gap:8px}
 </style>
-<AppHeader dropdownMobileOnly={true} />
-<main class="main-content pt-14 pb-20 min-h-screen">
-<div class="space-y-6 kc-page" style="padding-top:12px">
-<div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:26px;flex-wrap:wrap;gap:20px">
-  <div>
-    <p id="dateDisplay" style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px"></p>
-    <h1 class="kc-h1">Tu semana,<br>planificada</h1>
-  </div>
-  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+<div class="space-y-6" style="padding-top:4px">
+<div>
+  <div class="kc-hero-sub" id="dateDisplay"></div>
+  <h1 class="kc-hero">Tu semana,<br><em>planificada</em></h1>
+  <div class="pln-actions">
     <span id="planStatusBadge" class="hidden px-3 py-1.5 rounded-full text-[13px] font-bold flex items-center gap-1"></span>
-    <button onclick="openWeeklyModal()" class="kc-btn-ghost" style="height:46px;padding:0 18px;font-size:14px"><span class="material-symbols-outlined" style="font-size:18px">calendar_month</span>Semana</button>
-    <button onclick="openWeeklyPlanGenerator()" class="kc-btn" style="height:46px"><span class="material-symbols-outlined" style="font-size:20px">auto_awesome</span>Generar plan con IA</button>
+    <button onclick="openWeeklyModal()" class="kc-btn kc-btn--secondary kc-btn--sm"><span class="material-symbols-outlined" style="font-size:16px">calendar_month</span>Semana</button>
+    <button onclick="openWeeklyPlanGenerator()" class="kc-btn kc-btn--primary kc-btn--sm"><span class="material-symbols-outlined" style="font-size:16px">auto_awesome</span>Generar plan con IA</button>
   </div>
 </div>
 
@@ -135,60 +137,24 @@ main .glass-card, main .rounded-2xl { border-radius: 24px; }
 
 
 
-<!-- Resumen (se mantiene igual) -->
-<div class="glass-card rounded-2xl p-5 mb-6">
-<div class="flex items-center justify-between mb-4">
-<span class="text-[13px] text-on-surface-variant uppercase tracking-wider">Macros del día</span>
-<span id="dayDateLabel" class="text-[13px] text-primary-container"></span>
+<!-- Resumen -->
+<div class="kc-card">
+<div class="kc-card__head" style="margin-bottom:12px">
+<span class="kc-eyebrow">Macros del día</span>
+<span id="dayDateLabel" class="kc-label"></span>
 </div>
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-<div class="bg-surface-container-high rounded-xl p-4 text-center">
-<div class="flex items-center justify-center gap-2 mb-2">
-<span class="text-[11px] text-on-surface-variant uppercase tracking-wider">Calorías</span>
+<div class="kc-grid pln-macros">
+<div class="kc-stat kc-c-amber"><div class="kc-stat__top"><span class="kc-label">Calorías</span></div><div class="kc-stat__val"><span id="currentCal">0</span><small>/<span id="targetCal">1800</span></small></div><div class="kc-bar kc-c-amber"><i id="calorieBar"></i></div></div>
+<div class="kc-stat kc-c-amber"><div class="kc-stat__top"><span class="kc-label">Proteína</span></div><div class="kc-stat__val"><span id="currentProtein">0</span><small>g /<span id="targetProtein">160</span>g</small></div><div class="kc-bar kc-c-amber"><i id="proteinBar"></i></div></div>
+<div class="kc-stat kc-c-amber"><div class="kc-stat__top"><span class="kc-label">Grasa</span></div><div class="kc-stat__val"><span id="currentFat">0</span><small>g /<span id="targetFat">150</span>g</small></div><div class="kc-bar kc-c-amber"><i id="fatBar"></i></div></div>
+<div class="kc-stat kc-c-cyan"><div class="kc-stat__top"><span class="kc-label">Carbos</span></div><div class="kc-stat__val"><span id="currentCarbs">0</span><small>g /<span id="targetCarbs">25</span>g</small></div><div class="kc-bar kc-c-cyan"><i id="carbsBar"></i></div></div>
 </div>
-<div class="text-3xl font-black text-yellow-400 mb-1"><span id="currentCal">0</span></div>
-<div class="text-[13px] text-on-surface-variant">/ <span id="targetCal">1800</span> kcal</div>
-<div class="h-2 bg-surface rounded-lg mt-2 overflow-hidden">
-<div id="calorieBar" class="h-full bg-yellow-400 rounded-lg transition-all" style="width:0%"></div>
-</div>
-</div>
-<div class="bg-surface-container-high rounded-xl p-4 text-center">
-<div class="flex items-center justify-center gap-2 mb-2">
-<span class="text-[11px] text-on-surface-variant uppercase tracking-wider">Proteína</span>
-</div>
-<div class="text-3xl font-black text-orange-400 mb-1"><span id="currentProtein">0</span><span class="text-sm text-on-surface-variant">g</span></div>
-<div class="text-[13px] text-on-surface-variant">Meta: <span id="targetProtein">160</span>g</div>
-<div class="h-2 bg-surface rounded-lg mt-2 overflow-hidden">
-<div id="proteinBar" class="h-full bg-orange-400 rounded-lg transition-all" style="width:0%"></div>
-</div>
-</div>
-<div class="bg-surface-container-high rounded-xl p-4 text-center">
-<div class="flex items-center justify-center gap-2 mb-2">
-<span class="text-[11px] text-on-surface-variant uppercase tracking-wider">Grasa</span>
-</div>
-<div class="text-3xl font-black text-yellow-300 mb-1"><span id="currentFat">0</span><span class="text-sm text-on-surface-variant">g</span></div>
-<div class="text-[13px] text-on-surface-variant">Meta: <span id="targetFat">150</span>g</div>
-<div class="h-2 bg-surface rounded-lg mt-2 overflow-hidden">
-<div id="fatBar" class="h-full bg-yellow-300 rounded-lg transition-all" style="width:0%"></div>
-</div>
-</div>
-<div class="bg-surface-container-high rounded-xl p-4 text-center">
-<div class="flex items-center justify-center gap-2 mb-2">
-<span class="text-[11px] text-on-surface-variant uppercase tracking-wider">Carbos</span>
-</div>
-<div class="text-3xl font-black text-cyan-400 mb-1"><span id="currentCarbs">0</span><span class="text-sm text-on-surface-variant">g</span></div>
-<div class="text-[13px] text-on-surface-variant">Meta: <span id="targetCarbs">25</span>g</div>
-<div class="h-2 bg-surface rounded-lg mt-2 overflow-hidden">
-<div id="carbsBar" class="h-full bg-cyan-400 rounded-lg transition-all" style="width:0%"></div>
-</div>
-</div>
-</div>
-<div class="flex items-center justify-between mt-4 pt-4 border-t border-white/10">
-<span class="text-[13px] text-on-surface-variant"><span id="mealCount">0</span> alimentos</span>
-<div class="flex gap-2">
-<button onclick="copyPlan()" class="text-[13px] text-primary-container hover:underline">Copiar ayer</button>
-<span class="text-white/20">|</span>
-<button onclick="resetPlan()" class="text-[13px] text-error hover:underline">Reiniciar</button>
+<div class="pln-foot">
+<span class="kc-label"><span id="mealCount">0</span> alimentos</span>
+<div style="display:flex;gap:10px;align-items:center">
+<button onclick="copyPlan()" class="kc-link">Copiar ayer</button>
+<span class="kc-muted">|</span>
+<button onclick="resetPlan()" class="kc-link" style="color:var(--kc-red)">Reiniciar</button>
 </div>
 </div>
 </div>
@@ -3436,4 +3402,4 @@ setMealPlanMode('manual');
 
 <!-- (FAB de escáner eliminado: el acceso vive en el botón central de la bottom-nav) -->
 
-</AppLayout>
+</AppShell>

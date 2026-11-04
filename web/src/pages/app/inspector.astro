@@ -1,201 +1,133 @@
 ---
-import AppLayout from '../../layouts/AppLayout.astro';
+// Inspector Keto — UI v2 (HUD nativo). Reescrito a AppShell + tokens kc-*;
+// el motor de analisis (analyze/render*) es 100% JS y generaba HTML con hex
+// inline por color semantico (bueno/alerta/error/info) -- se preservo la
+// logica intacta y solo se cambiaron los strings de color por var(--kc-*).
+// El grid de 2 columnas de escritorio (viejo .kc-page) se quito: ninguna
+// pantalla HUD nativa hasta ahora anchea mas alla de los 480px de .kc-main.
+// Respaldo: inspector.astro.bak
+import AppShell from '../../layouts/AppShell.astro';
 ---
-
-<AppLayout title="KetoCore | Inspector Inteligente" authGuard={true}>
+<AppShell title="Inspector Inteligente" screen="inspector">
 <style is:global>
-html, body { margin: 0; padding: 0; background: #131315; color: #f7f4f0; font-family: 'Inter', sans-serif; }
-.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-.icon-filled { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.icon-filled{font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 24}
 
-@keyframes scanLine {
-  0%   { transform: translateY(-100%); opacity: 0; }
-  20%  { opacity: 0.6; }
-  80%  { opacity: 0.6; }
-  100% { transform: translateY(100%); opacity: 0; }
-}
-@keyframes barGrow {
-  from { width: 0 !important; }
-  to   { width: var(--bar-w); }
-}
-@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
-@keyframes pulseGreen { 0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.3)} 50%{box-shadow:0 0 16px 4px rgba(34,197,94,0.15)} }
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseGreen{0%,100%{box-shadow:0 0 0 0 color-mix(in oklab,var(--kc-mint) 30%,transparent)}50%{box-shadow:0 0 16px 4px color-mix(in oklab,var(--kc-mint) 15%,transparent)}}
+.fade-up{animation:fadeUp .4s ease-out forwards}
 
-.fade-up { animation: fadeUp 0.4s ease-out forwards; }
-.ik-card {
-  background: #161310;
-  border: 1px solid rgba(255,240,225,0.07);
-  border-radius: 20px;
-}
-.metric-bar-bg { background: rgba(255,240,225,0.05); border-radius: 100px; height: 6px; overflow: hidden; }
-.metric-bar    { height: 6px; border-radius: 100px; transition: width 1s cubic-bezier(.4,0,.2,1); }
+.kc .ik-card{background:var(--kc-surface-1);border:1px solid var(--kc-line);border-radius:var(--kc-radius-lg)}
+.kc .metric-bar-bg{background:var(--kc-surface-3);border-radius:100px;height:6px;overflow:hidden}
+.kc .metric-bar{height:6px;border-radius:100px;transition:width 1s cubic-bezier(.4,0,.2,1)}
 
-.verdict-good    { background: rgba(34,197,94,0.06);  border-color: rgba(34,197,94,0.2)  !important; animation: pulseGreen 3s infinite; }
-.verdict-warning { background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.2) !important; }
-.verdict-info    { background: rgba(96,165,250,0.06); border-color: rgba(96,165,250,0.2) !important; }
+.kc .verdict-good{background:color-mix(in oklab,var(--kc-mint) 6%,transparent);border-color:color-mix(in oklab,var(--kc-mint) 22%,transparent) !important;animation:pulseGreen 3s infinite}
+.kc .verdict-warning{background:color-mix(in oklab,var(--kc-amber) 6%,transparent);border-color:color-mix(in oklab,var(--kc-amber) 22%,transparent) !important}
+.kc .verdict-info{background:color-mix(in oklab,var(--kc-cyan) 6%,transparent);border-color:color-mix(in oklab,var(--kc-cyan) 22%,transparent) !important}
 
-.period-tab { display:inline-flex;align-items:center;padding:5px 12px;border-radius:100px;font-size:13px;font-weight:700;cursor:pointer;border:1px solid transparent;transition:all 0.15s; }
-.period-tab.active { background:rgba(255,77,0,0.12);color:#ff4d00;border-color:rgba(255,77,0,0.25); }
-.period-tab:not(.active) { color:rgba(247,244,240,0.6);background:#1a1a1a;border-color:rgba(255,240,225,0.06); }
-
-@media (min-width: 901px) {
-  #inspGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-    /* stretch: cada par (metrics|alerts, adherence|macros) queda a la misma
-       altura, bordes alineados. Consistente con Progreso. */
-    align-items: stretch;
-    padding-top: 3.5rem;
-    padding-bottom: 3rem !important;
-    /* entrenamientos.astro (y checklist/suplementos/guia) quitan el limite
-       de 1180px de .kc-page en escritorio -- esta pantalla se habia quedado
-       topada, ~458px mas angosta que las demas en un monitor de 1920px. */
-    max-width: none !important;
-  }
-  #inspGrid > * { margin-top: 0 !important; }
-  #insp-header    { grid-column: 1/-1; grid-row: 1; }
-  #insp-verdict   { grid-column: 1/-1; grid-row: 2; }
-  #insp-alerts    { grid-column: 2; grid-row: 3; }
-  #insp-metrics   { grid-column: 1; grid-row: 3; }
-  #insp-adherence { grid-column: 1; grid-row: 4; }
-  #insp-macros    { grid-column: 2; grid-row: 4; }
-  #insp-weight    { grid-column: 1/-1; grid-row: 5; }
-  /* Sistema visual "grande y espacioso" de entrenamientos.astro, solo en
-     escritorio (ver mismo cambio en objetivos.astro para el detalle). */
-  #insp-header h1 { font-size: 46px; }
-  .ik-card { padding: 32px !important; }
-  .ik-card h2 { font-size: 20px !important; font-weight: 800 !important; }
-}
+.kc .ins-actions{display:flex;justify-content:flex-end}
+.kc .ins-week{display:flex;gap:6px;align-items:flex-end;height:48px}
+.kc .ins-week__bar{flex:1;background:var(--kc-line);border-radius:4px 4px 0 0;min-height:4px;transition:height .6s ease}
+.kc .ins-week__bar.is-logged{background:var(--kc-mint)}
+.kc .ins-week__bar.is-today{background:var(--kc-amber)}
+.kc .ins-week__lbl{flex:1;text-align:center;font:600 9px var(--kc-font-mono);color:var(--kc-ink-3)}
+.kc .ins-week__lbl.is-today{color:var(--kc-amber);font-weight:700}
 </style>
 
-<!-- ── Header ─────────────────────────────────────────────────────────── -->
-<header class="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4"
-  style="height:56px;background:rgba(19,19,21,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,240,225,0.06)">
-
-  <div class="flex items-center gap-3">
-    <div class="relative w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-      style="background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.2);overflow:hidden">
-      <span class="material-symbols-outlined icon-filled" style="color:#ff4d00;font-size:20px">analytics</span>
-      <div style="position:absolute;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(255,77,0,0.8),transparent);animation:scanLine 2.5s ease-in-out infinite"></div>
-    </div>
-    <div>
-      <h1 class="font-black text-base leading-none" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Inspector Keto</h1>
-      <p id="lastAnalyzed" style="font-size:10px;color:rgba(247,244,240,0.55);font-weight:600;margin-top:1px">Analizando...</p>
-    </div>
-  </div>
-
-  <div class="flex items-center gap-2">
-    <button onclick="refreshAnalysis()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-bold transition-all active:scale-95"
-      style="background:rgba(255,77,0,0.12);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)">
-      <span class="material-symbols-outlined" style="font-size:14px">refresh</span>
-      Analizar
-    </button>
-    <button onclick="toggleHamburgerMenu()" aria-label="Menú"
-      class="w-9 h-9 rounded-full flex items-center justify-center"
-      style="background:#161310;color:rgba(247,244,240,0.5);border:1px solid rgba(255,240,225,0.06)">
-      <span class="material-symbols-outlined" style="font-size:20px">menu</span>
-    </button>
-  </div>
-</header>
-
-<!-- ── Main ───────────────────────────────────────────────────────────── -->
-<main id="inspMain" class="main-content pt-14 pb-20 min-h-screen">
-<div id="inspGrid" class="space-y-3 kc-page" style="padding-top:12px">
-
-  <!-- Header editorial -->
-  <div id="insp-header" style="margin:10px 2px 16px">
-    <div style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:10px">Inteligencia · Análisis</div>
-    <h1 class="kc-h1">El Inspector<br><span style="color:rgba(247,244,240,0.57)">cuida tu cetosis.</span></h1>
-  </div>
-
-  <!-- 1. Verdict card -->
-  <section id="insp-verdict" class="ik-card p-4 fade-up">
-    <div class="flex items-start gap-3">
-      <div id="verdictIcon" class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-        style="background:rgba(247,244,240,0.06)">
-        <span class="material-symbols-outlined icon-filled" style="color:#f7f4f0;font-size:22px">monitoring</span>
-      </div>
-      <div class="flex-1">
-        <p id="verdictTitle" class="font-black text-lg leading-tight" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Analizando tus datos...</p>
-        <p id="verdictSub" class="text-[13px] mt-0.5 leading-relaxed" style="color:rgba(247,244,240,0.5)">El inspector está revisando tu progreso reciente.</p>
-      </div>
-      <div id="verdictScore" class="text-right flex-shrink-0">
-        <p class="font-black text-2xl leading-none" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">—</p>
-        <p class="text-[11px] font-bold mt-0.5" style="color:rgba(247,244,240,0.55)">puntos</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 2. Alerts from automation engine -->
-  <section id="insp-alerts" class="space-y-2">
-    <!-- Injected by JS -->
-  </section>
-
-  <!-- 3. Key metrics with animated bars -->
-  <section id="insp-metrics" class="ik-card p-4 fade-up" style="animation-delay:0.07s">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Métricas Clave</h2>
-      <div class="flex gap-1" id="periodTabs">
-        <button class="period-tab active" onclick="setPeriod(7,this)">7d</button>
-        <button class="period-tab"        onclick="setPeriod(14,this)">14d</button>
-        <button class="period-tab"        onclick="setPeriod(30,this)">30d</button>
-      </div>
-    </div>
-    <div id="metricsRows" class="space-y-3"></div>
-  </section>
-
-  <!-- 4. Adherence by period -->
-  <section id="insp-adherence" class="ik-card p-4 fade-up" style="animation-delay:0.12s">
-    <h2 class="text-sm font-bold mb-4" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Adherencia al Plan</h2>
-    <div id="adherenceGrid" class="grid grid-cols-3 gap-3 mb-4"></div>
-    <!-- Weekly bar chart -->
-    <div>
-      <p class="text-[13px] mb-2 font-semibold" style="color:rgba(247,244,240,0.55)">Últimos 7 días</p>
-      <div id="weekBars" class="flex gap-1.5 items-end" style="height:48px"></div>
-      <div id="weekLabels" class="flex gap-1.5 mt-1"></div>
-    </div>
-  </section>
-
-  <!-- 5. Macro compliance -->
-  <section id="insp-macros" class="ik-card p-4 fade-up" style="animation-delay:0.17s">
-    <h2 class="text-sm font-bold mb-3" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Macros — Promedio <span id="macrosPeriodLabel">7 días</span></h2>
-    <div id="macroRows" class="space-y-3"></div>
-  </section>
-
-  <!-- 6. Weight trend -->
-  <section id="insp-weight" class="ik-card p-4 fade-up" style="animation-delay:0.22s">
-    <div class="flex items-center justify-between mb-3">
-      <h2 class="text-sm font-bold" style="color:#f7f4f0;font-family:'Plus Jakarta Sans',sans-serif">Tendencia de Peso</h2>
-      <div id="weightTrendBadge" class="flex items-center gap-1 px-3 py-1 rounded-full" style="background:#1e1a15;border:1px solid rgba(255,240,225,0.06)">
-        <span class="material-symbols-outlined" id="trendIcon" style="font-size:14px;color:rgba(247,244,240,0.57)">remove</span>
-        <span id="trendLabel" style="font-size:11px;font-weight:700;color:rgba(247,244,240,0.57)">Sin datos</span>
-      </div>
-    </div>
-    <!-- Mini SVG chart -->
-    <div class="relative rounded-xl overflow-hidden" style="background:#111;height:80px">
-      <svg id="weightChart" width="100%" height="80" viewBox="0 0 300 80" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id="wGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stop-color="#ff4d00" stop-opacity="0.25"/>
-            <stop offset="100%" stop-color="#ff4d00" stop-opacity="0"/>
-          </linearGradient>
-        </defs>
-        <path id="weightFill" d="" fill="url(#wGrad)"/>
-        <path id="weightLine" d="" fill="none" stroke="#ff4d00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <p id="noWeightData" class="absolute inset-0 flex items-center justify-center text-[13px]" style="color:rgba(247,244,240,0.52)">
-        Registra tu peso para ver la tendencia
-      </p>
-    </div>
-    <div class="flex justify-between mt-2" id="weightStats"></div>
-  </section>
-
+<!-- Hero -->
+<div>
+  <div class="kc-hero-sub">Inteligencia · Análisis</div>
+  <h1 class="kc-hero">El Inspector<br>cuida tu <em>cetosis</em></h1>
 </div>
-</main>
+<p class="kc-label" id="lastAnalyzed" style="margin-top:-6px">Analizando...</p>
 
+<!-- Acción -->
+<div class="ins-actions">
+  <button class="kc-btn kc-btn--secondary kc-btn--sm" onclick="refreshAnalysis()"><span class="material-symbols-outlined" style="font-size:16px">refresh</span>Analizar</button>
+</div>
 
-<!-- ── Scripts ────────────────────────────────────────────────────────── -->
+<!-- 1. Verdict card -->
+<section id="insp-verdict" class="ik-card p-4 fade-up">
+  <div class="flex items-start gap-3">
+    <div id="verdictIcon" class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:var(--kc-surface-2)">
+      <span class="material-symbols-outlined icon-filled" style="color:var(--kc-ink);font-size:22px">monitoring</span>
+    </div>
+    <div class="flex-1">
+      <p id="verdictTitle" class="font-black text-lg leading-tight" style="color:var(--kc-ink)">Analizando tus datos...</p>
+      <p id="verdictSub" class="text-[13px] mt-0.5 leading-relaxed" style="color:var(--kc-ink-3)">El inspector está revisando tu progreso reciente.</p>
+    </div>
+    <div id="verdictScore" class="text-right flex-shrink-0">
+      <p class="font-black text-2xl leading-none" style="color:var(--kc-ink)">—</p>
+      <p class="text-[11px] font-bold mt-0.5" style="color:var(--kc-ink-3)">puntos</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Alerts from automation engine -->
+<section id="insp-alerts" class="space-y-2">
+  <!-- Injected by JS -->
+</section>
+
+<!-- 3. Key metrics with animated bars -->
+<section id="insp-metrics" class="ik-card p-4 fade-up" style="animation-delay:0.07s">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-sm font-bold" style="color:var(--kc-ink)">Métricas Clave</h2>
+    <div class="kc-seg-ctl" id="periodTabs" style="width:auto">
+      <button type="button" aria-pressed="true" onclick="setPeriod(7,this)">7d</button>
+      <button type="button" aria-pressed="false" onclick="setPeriod(14,this)">14d</button>
+      <button type="button" aria-pressed="false" onclick="setPeriod(30,this)">30d</button>
+    </div>
+  </div>
+  <div id="metricsRows" class="space-y-3"></div>
+</section>
+
+<!-- 4. Adherence by period -->
+<section id="insp-adherence" class="ik-card p-4 fade-up" style="animation-delay:0.12s">
+  <h2 class="text-sm font-bold mb-4" style="color:var(--kc-ink)">Adherencia al Plan</h2>
+  <div id="adherenceGrid" class="grid grid-cols-3 gap-3 mb-4"></div>
+  <!-- Weekly bar chart -->
+  <div>
+    <p class="text-[13px] mb-2 font-semibold" style="color:var(--kc-ink-3)">Últimos 7 días</p>
+    <div id="weekBars" class="ins-week"></div>
+    <div id="weekLabels" class="flex gap-1.5 mt-1"></div>
+  </div>
+</section>
+
+<!-- 5. Macro compliance -->
+<section id="insp-macros" class="ik-card p-4 fade-up" style="animation-delay:0.17s">
+  <h2 class="text-sm font-bold mb-3" style="color:var(--kc-ink)">Macros — Promedio <span id="macrosPeriodLabel">7 días</span></h2>
+  <div id="macroRows" class="space-y-3"></div>
+</section>
+
+<!-- 6. Weight trend -->
+<section id="insp-weight" class="ik-card p-4 fade-up" style="animation-delay:0.22s">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="text-sm font-bold" style="color:var(--kc-ink)">Tendencia de Peso</h2>
+    <div id="weightTrendBadge" class="flex items-center gap-1 px-3 py-1 rounded-full" style="background:var(--kc-surface-2);border:1px solid var(--kc-line)">
+      <span class="material-symbols-outlined" id="trendIcon" style="font-size:14px;color:var(--kc-ink-3)">remove</span>
+      <span id="trendLabel" style="font-size:11px;font-weight:700;color:var(--kc-ink-3)">Sin datos</span>
+    </div>
+  </div>
+  <!-- Mini SVG chart -->
+  <div class="relative rounded-xl overflow-hidden" style="background:var(--kc-surface-2);height:80px">
+    <svg id="weightChart" width="100%" height="80" viewBox="0 0 300 80" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="wGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" style="stop-color:var(--kc-amber);stop-opacity:0.25"/>
+          <stop offset="100%" style="stop-color:var(--kc-amber);stop-opacity:0"/>
+        </linearGradient>
+      </defs>
+      <path id="weightFill" d="" fill="url(#wGrad)"/>
+      <path id="weightLine" d="" fill="none" style="stroke:var(--kc-amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <p id="noWeightData" class="absolute inset-0 flex items-center justify-center text-[13px]" style="color:var(--kc-ink-3)">
+      Registra tu peso para ver la tendencia
+    </p>
+  </div>
+  <div class="flex justify-between mt-2" id="weightStats"></div>
+</section>
+
+<Fragment slot="scripts">
 <script is:inline src="/app/modules/meal-plan.js"></script>
 <script is:inline src="/app/modules/automation-engine.js"></script>
 <script is:inline>
@@ -318,11 +250,11 @@ function metricRow(label, value, unit, pct, color, subtitle) {
   var barPct = Math.min(100, pct);
   return '<div>' +
     '<div class="flex items-center justify-between mb-1">' +
-      '<p class="text-[13px] font-semibold" style="color:rgba(247,244,240,0.7)">' + label + '</p>' +
-      '<p class="text-[13px] font-bold" style="color:' + color + '">' + value + '<span style="font-size:11px;color:rgba(247,244,240,0.55);font-weight:400"> ' + unit + '</span></p>' +
+      '<p class="text-[13px] font-semibold" style="color:var(--kc-ink-2)">' + label + '</p>' +
+      '<p class="text-[13px] font-bold" style="color:' + color + '">' + value + '<span style="font-size:11px;color:var(--kc-ink-3);font-weight:400"> ' + unit + '</span></p>' +
     '</div>' +
     '<div class="metric-bar-bg"><div class="metric-bar" style="width:0;--bar-w:' + barPct + '%;background:' + color + '" data-pct="' + barPct + '"></div></div>' +
-    (subtitle ? '<p style="font-size:10px;color:rgba(247,244,240,0.52);margin-top:3px">' + subtitle + '</p>' : '') +
+    (subtitle ? '<p style="font-size:10px;color:var(--kc-ink-3);margin-top:3px">' + subtitle + '</p>' : '') +
   '</div>';
 }
 
@@ -338,28 +270,28 @@ function renderVerdict(data) {
   var cfg;
   if (data.score >= 80) {
     cfg = {
-      iconName: 'verified', iconColor: '#22c55e', titleColor: '#22c55e',
+      iconName: 'verified', iconColor: 'var(--kc-mint)', titleColor: 'var(--kc-mint)',
       t: 'Progreso Excelente',
       s: 'Tus métricas están en rango óptimo. Mantén esta consistencia para maximizar la pérdida de grasa.',
       cls: 'verdict-good'
     };
   } else if (data.score >= 60) {
     cfg = {
-      iconName: 'trending_up', iconColor: '#60a5fa', titleColor: '#60a5fa',
+      iconName: 'trending_up', iconColor: 'var(--kc-cyan)', titleColor: 'var(--kc-cyan)',
       t: 'Buen Progreso',
       s: 'Vas por buen camino. Hay algunas áreas donde puedes mejorar para acelerar tus resultados.',
       cls: 'verdict-info'
     };
   } else if (data.score >= 40) {
     cfg = {
-      iconName: 'warning', iconColor: '#f59e0b', titleColor: '#f59e0b',
+      iconName: 'warning', iconColor: 'var(--kc-amber)', titleColor: 'var(--kc-amber)',
       t: 'Requiere Atención',
       s: 'Detecté oportunidades de mejora en tu adherencia o macros. Consulta al Coach para un plan correctivo.',
       cls: 'verdict-warning'
     };
   } else {
     cfg = {
-      iconName: 'error', iconColor: '#f87171', titleColor: '#f87171',
+      iconName: 'error', iconColor: 'var(--kc-red)', titleColor: 'var(--kc-red)',
       t: 'Acción Recomendada',
       s: 'Tu adherencia o macros necesitan ajuste. El Coach IA puede ayudarte a retomar el rumbo.',
       cls: 'verdict-warning'
@@ -372,7 +304,7 @@ function renderVerdict(data) {
   title.style.color = cfg.titleColor;
   title.textContent = cfg.t;
   sub.textContent   = cfg.s;
-  scoreEl.innerHTML = '<p class="font-black text-2xl leading-none" style="color:' + cfg.iconColor + ';font-family:\'Plus Jakarta Sans\',sans-serif">' + data.score + '</p><p class="text-[11px] font-bold mt-0.5" style="color:rgba(247,244,240,0.55)">/ 100</p>';
+  scoreEl.innerHTML = '<p class="font-black text-2xl leading-none" style="color:' + cfg.iconColor + '">' + data.score + '</p><p class="text-[11px] font-bold mt-0.5" style="color:var(--kc-ink-3)">/ 100</p>';
 }
 
 // ── Render metrics ────────────────────────────────────────────────────
@@ -383,16 +315,16 @@ function renderMetrics(data) {
   var t = data.target;
   rows.innerHTML = [
     metricRow('Calorías promedio', data.avgCal, 'kcal',
-      pct(data.avgCal, t.calories || 1800), '#60a5fa',
+      pct(data.avgCal, t.calories || 1800), 'var(--kc-cyan)',
       'Meta: ' + (t.calories || 1800) + ' kcal · ' + data.calPct + '% del objetivo'),
     metricRow('Carbohidratos promedio', data.avgCarbs, 'g',
-      pct(data.avgCarbs, (t.carbs || 25) * 1.5), data.carbPct <= 100 ? '#22c55e' : '#f59e0b',
+      pct(data.avgCarbs, (t.carbs || 25) * 1.5), data.carbPct <= 100 ? 'var(--kc-mint)' : 'var(--kc-amber)',
       'Meta: ' + (t.carbs || 25) + 'g · ' + (data.carbPct <= 100 ? 'Dentro del límite' : data.carbPct + '% del objetivo')),
     metricRow('Proteína promedio', data.avgProt, 'g',
-      pct(data.avgProt, t.protein || 150), '#a78bfa',
+      pct(data.avgProt, t.protein || 150), 'var(--kc-mint)',
       'Meta: ' + (t.protein || 150) + 'g · ' + data.protPct + '% del objetivo'),
     metricRow('Adherencia al plan', data.adherence, '%',
-      data.adherence, '#ff4d00',
+      data.adherence, 'var(--kc-amber)',
       data.loggedDays + ' de ' + data.days + ' días registrados'),
   ].join('');
 
@@ -409,11 +341,11 @@ function renderAdherence() {
     var daily = getDailyMacros(d);
     var logged = daily.filter(function (x) { return x.logged; }).length;
     var pctVal = Math.round((logged / d) * 100);
-    var color = pctVal >= 80 ? '#22c55e' : pctVal >= 60 ? '#f59e0b' : '#f87171';
+    var color = pctVal >= 80 ? 'var(--kc-mint)' : pctVal >= 60 ? 'var(--kc-amber)' : 'var(--kc-red)';
     return '<div class="text-center">' +
-      '<p class="font-black text-xl leading-none" style="color:' + color + ';font-family:\'Plus Jakarta Sans\',sans-serif">' + pctVal + '%</p>' +
-      '<p style="font-size:10px;color:rgba(247,244,240,0.55);margin-top:4px;font-weight:600">Últimos ' + d + 'd</p>' +
-      '<p style="font-size:9px;color:rgba(247,244,240,0.22);margin-top:2px">' + logged + '/' + d + ' días</p>' +
+      '<p class="font-black text-xl leading-none" style="color:' + color + '">' + pctVal + '%</p>' +
+      '<p style="font-size:10px;color:var(--kc-ink-3);margin-top:4px;font-weight:600">Últimos ' + d + 'd</p>' +
+      '<p style="font-size:9px;color:var(--kc-ink-3);opacity:.6;margin-top:2px">' + logged + '/' + d + ' días</p>' +
     '</div>';
   }).join('');
 
@@ -435,17 +367,16 @@ function renderWeekBars() {
 
   daily.forEach(function (d, i) {
     var isToday = i === daily.length - 1;
-    var color   = d.logged ? (isToday ? '#ff4d00' : '#22c55e') : 'rgba(255,240,225,0.07)';
     var h       = d.logged ? Math.max(12, Math.min(48, Math.round((d.cal / 2000) * 48))) : 12;
 
     var bar = document.createElement('div');
-    bar.style.cssText = 'flex:1;background:' + color + ';border-radius:4px 4px 0 0;height:' + h + 'px;min-height:4px;transition:height 0.6s ease';
+    bar.className = 'ins-week__bar' + (d.logged ? (isToday ? ' is-today' : ' is-logged') : '');
+    bar.style.height = h + 'px';
     bar.title = d.date + (d.logged ? ' · ' + d.cal + ' kcal' : ' · Sin registro');
     container.appendChild(bar);
 
     var label = document.createElement('div');
-    label.style.cssText = 'flex:1;text-align:center;font-size:9px;font-weight:600;color:' +
-      (isToday ? '#ff4d00' : 'rgba(247,244,240,0.52)');
+    label.className = 'ins-week__lbl' + (isToday ? ' is-today' : '');
     var dateObj = new Date(d.date + 'T12:00:00');
     label.textContent = days[dateObj.getDay()];
     labels.appendChild(label);
@@ -463,16 +394,16 @@ function renderMacros(data) {
   rows.innerHTML = [
     metricRow('Calorías', data.avgCal + ' / ' + (t.calories || 1800), 'kcal',
       pct(data.avgCal, t.calories || 1800),
-      Math.abs(data.calPct - 100) <= 15 ? '#22c55e' : '#f59e0b', null),
+      Math.abs(data.calPct - 100) <= 15 ? 'var(--kc-mint)' : 'var(--kc-amber)', null),
     metricRow('Carbohidratos', data.avgCarbs + ' / ' + (t.carbs || 25), 'g',
       pct(data.avgCarbs, (t.carbs || 25) * 1.5),
-      data.avgCarbs <= (t.carbs || 25) ? '#22c55e' : '#f59e0b', null),
+      data.avgCarbs <= (t.carbs || 25) ? 'var(--kc-mint)' : 'var(--kc-amber)', null),
     metricRow('Proteína', data.avgProt + ' / ' + (t.protein || 150), 'g',
       pct(data.avgProt, t.protein || 150),
-      data.protPct >= 80 ? '#a78bfa' : '#f59e0b', null),
+      data.protPct >= 80 ? 'var(--kc-mint)' : 'var(--kc-amber)', null),
     metricRow('Grasa', data.avgFat + ' / ' + (t.fat || 140), 'g',
       pct(data.avgFat, t.fat || 140),
-      '#60a5fa', null),
+      'var(--kc-cyan)', null),
   ].join('');
 
   animateBars(rows);
@@ -493,12 +424,12 @@ function renderWeightTrend(data) {
   if (noData) noData.style.display = 'none';
 
   var cfg = {
-    losing:  { icon: 'trending_down', color: '#22c55e', label: 'Bajando',  bg: 'rgba(34,197,94,0.1)',   border: 'rgba(34,197,94,0.2)' },
-    gaining: { icon: 'trending_up',   color: '#f87171', label: 'Subiendo', bg: 'rgba(248,113,113,0.1)', border: 'rgba(248,113,113,0.2)' },
-    stable:  { icon: 'remove',        color: '#f59e0b', label: 'Estable',  bg: 'rgba(245,158,11,0.1)',  border: 'rgba(245,158,11,0.2)' }
+    losing:  { icon: 'trending_down', color: 'var(--kc-mint)', label: 'Bajando' },
+    gaining: { icon: 'trending_up',   color: 'var(--kc-red)',  label: 'Subiendo' },
+    stable:  { icon: 'remove',        color: 'var(--kc-amber)', label: 'Estable' }
   }[data.weightTrend];
 
-  if (badge) badge.style.cssText = 'display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:100px;background:' + cfg.bg + ';border:1px solid ' + cfg.border;
+  if (badge) badge.style.cssText = 'display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:100px;background:color-mix(in oklab,' + cfg.color + ' 10%,transparent);border:1px solid color-mix(in oklab,' + cfg.color + ' 20%,transparent)';
   if (icon)  { icon.textContent = cfg.icon; icon.style.color = cfg.color; }
   if (label) { label.textContent = cfg.label; label.style.color = cfg.color; }
 
@@ -529,18 +460,18 @@ function renderWeightTrend(data) {
     var first = weights[0], last = weights[weights.length - 1];
     var delta = Math.round((last - first) * 10) / 10;
     stats.innerHTML =
-      '<div class="text-center"><p class="font-bold text-sm" style="color:#f7f4f0">' + first + 'kg</p><p style="font-size:10px;color:rgba(247,244,240,0.55)">Inicio</p></div>' +
-      '<div class="text-center"><p class="font-bold text-sm" style="color:' + cfg.color + '">' + (delta > 0 ? '+' : '') + delta + 'kg</p><p style="font-size:10px;color:rgba(247,244,240,0.55)">Cambio</p></div>' +
-      '<div class="text-center"><p class="font-bold text-sm" style="color:#f7f4f0">' + last + 'kg</p><p style="font-size:10px;color:rgba(247,244,240,0.55)">Actual</p></div>';
+      '<div class="text-center"><p class="font-bold text-sm" style="color:var(--kc-ink)">' + first + 'kg</p><p style="font-size:10px;color:var(--kc-ink-3)">Inicio</p></div>' +
+      '<div class="text-center"><p class="font-bold text-sm" style="color:' + cfg.color + '">' + (delta > 0 ? '+' : '') + delta + 'kg</p><p style="font-size:10px;color:var(--kc-ink-3)">Cambio</p></div>' +
+      '<div class="text-center"><p class="font-bold text-sm" style="color:var(--kc-ink)">' + last + 'kg</p><p style="font-size:10px;color:var(--kc-ink-3)">Actual</p></div>';
   }
 }
 
 // ── Render alerts ─────────────────────────────────────────────────────
 var ALERT_STYLES = {
-  warning: { bg:'rgba(245,158,11,0.08)',border:'rgba(245,158,11,0.2)', icon:'#f59e0b' },
-  error:   { bg:'rgba(239,68,68,0.08)', border:'rgba(239,68,68,0.22)', icon:'#ef4444' },
-  success: { bg:'rgba(34,197,94,0.08)', border:'rgba(34,197,94,0.2)',  icon:'#22c55e' },
-  info:    { bg:'rgba(96,165,250,0.08)',border:'rgba(96,165,250,0.2)', icon:'#60a5fa' }
+  warning: { bg:'color-mix(in oklab,var(--kc-amber) 8%,transparent)', border:'color-mix(in oklab,var(--kc-amber) 20%,transparent)', icon:'var(--kc-amber)' },
+  error:   { bg:'color-mix(in oklab,var(--kc-red) 8%,transparent)',   border:'color-mix(in oklab,var(--kc-red) 22%,transparent)',   icon:'var(--kc-red)' },
+  success: { bg:'color-mix(in oklab,var(--kc-mint) 8%,transparent)',  border:'color-mix(in oklab,var(--kc-mint) 20%,transparent)',  icon:'var(--kc-mint)' },
+  info:    { bg:'color-mix(in oklab,var(--kc-cyan) 8%,transparent)',  border:'color-mix(in oklab,var(--kc-cyan) 20%,transparent)',  icon:'var(--kc-cyan)' }
 };
 
 function renderAlerts(score) {
@@ -564,8 +495,8 @@ function renderAlerts(score) {
       '<div class="flex items-start gap-2.5">' +
         '<span class="material-symbols-outlined icon-filled flex-shrink-0" style="font-size:18px;color:' + s.icon + ';margin-top:1px">' + (bajo ? 'info' : 'check_circle') + '</span>' +
         '<div class="flex-1">' +
-          '<p class="text-[13px] font-bold" style="color:#f7f4f0">' + (bajo ? 'Sin alertas puntuales' : 'Todo en orden') + '</p>' +
-          '<p class="text-[13px] mt-0.5 leading-relaxed" style="color:rgba(247,244,240,0.55)">' + (bajo ? 'El Inspector no detecto un patron especifico, pero tu puntaje general (arriba) indica que hay que ajustar macros o adherencia.' : 'Sin alertas por ahora. Sigue registrando tus comidas y peso para que el Inspector detecte patrones.') + '</p>' +
+          '<p class="text-[13px] font-bold" style="color:var(--kc-ink)">' + (bajo ? 'Sin alertas puntuales' : 'Todo en orden') + '</p>' +
+          '<p class="text-[13px] mt-0.5 leading-relaxed" style="color:var(--kc-ink-3)">' + (bajo ? 'El Inspector no detecto un patron especifico, pero tu puntaje general (arriba) indica que hay que ajustar macros o adherencia.' : 'Sin alertas por ahora. Sigue registrando tus comidas y peso para que el Inspector detecte patrones.') + '</p>' +
         '</div>' +
       '</div></div>';
     return;
@@ -574,17 +505,17 @@ function renderAlerts(score) {
   section.innerHTML = alerts.slice(0, 4).map(function (a) {
     var s = ALERT_STYLES[a.type] || ALERT_STYLES.info;
     var btn = a.action === 'ask_coach'
-      ? '<a href="/app/coach" class="mt-2 inline-flex items-center gap-1 text-[12px] font-bold px-3 py-1.5 rounded-full" style="background:rgba(255,77,0,0.1);color:#ff4d00;border:1px solid rgba(255,77,0,0.2)"><span class="material-symbols-outlined icon-filled" style="font-size:14px">psychology</span>' + (a.actionLabel || 'Coach') + '</a>'
+      ? '<a href="/app/coach" class="mt-2 inline-flex items-center gap-1 text-[12px] font-bold px-3 py-1.5 rounded-full" style="background:color-mix(in oklab,var(--kc-amber) 12%,transparent);color:var(--kc-amber);border:1px solid color-mix(in oklab,var(--kc-amber) 25%,transparent)"><span class="material-symbols-outlined icon-filled" style="font-size:14px">psychology</span>' + (a.actionLabel || 'Coach') + '</a>'
       : '';
     return '<div class="ik-card p-3.5" style="background:' + s.bg + ';border-color:' + s.border + '">' +
       '<div class="flex items-start gap-2.5">' +
         '<span class="material-symbols-outlined icon-filled flex-shrink-0" style="font-size:18px;color:' + s.icon + ';margin-top:1px">' + (a.icon||'info') + '</span>' +
         '<div class="flex-1">' +
-          '<p class="text-[13px] font-bold" style="color:#f7f4f0">' + (a.title||'') + '</p>' +
-          '<p class="text-[13px] mt-0.5 leading-relaxed" style="color:rgba(247,244,240,0.55)">' + (a.message||'') + '</p>' +
+          '<p class="text-[13px] font-bold" style="color:var(--kc-ink)">' + (a.title||'') + '</p>' +
+          '<p class="text-[13px] mt-0.5 leading-relaxed" style="color:var(--kc-ink-3)">' + (a.message||'') + '</p>' +
           btn +
         '</div>' +
-        '<button onclick="dismissAlert(\'' + (a.id||'') + '\')" class="material-symbols-outlined flex-shrink-0" style="color:rgba(247,244,240,0.5);font-size:16px">close</button>' +
+        '<button onclick="dismissAlert(\'' + (a.id||'') + '\')" class="material-symbols-outlined flex-shrink-0" style="color:var(--kc-ink-3);font-size:16px">close</button>' +
       '</div></div>';
   }).join('');
 }
@@ -609,8 +540,8 @@ function animateBars(container) {
 // ── Period switch ─────────────────────────────────────────────────────
 function setPeriod(days, btn) {
   _period = days;
-  document.querySelectorAll('.period-tab').forEach(function (t) { t.classList.remove('active'); });
-  if (btn) btn.classList.add('active');
+  document.querySelectorAll('#periodTabs button').forEach(function (t) { t.setAttribute('aria-pressed', 'false'); });
+  if (btn) btn.setAttribute('aria-pressed', 'true');
   runAnalysis();
 }
 
@@ -644,5 +575,5 @@ document.addEventListener('DOMContentLoaded', function () {
   runAnalysis();
 });
 </script>
-
-</AppLayout>
+</Fragment>
+</AppShell>

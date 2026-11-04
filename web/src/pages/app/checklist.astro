@@ -1,366 +1,267 @@
 ---
-import AppLayout from '../../layouts/AppLayout.astro';
-import AppHeader from '../../components/AppHeader.astro';
+// Checklist diario — UI v2 (HUD nativo). Pantalla reemplazada funcionalmente
+// por habitos.astro pero sigue enlazada desde guia.astro, así que se migra
+// igual. Reescrito a markup kc-* real reusando componentes canónicos
+// (kc-dial, kc-week, kc-stat, kc-proto-like). Lógica y datos intactos
+// (checklist/suplementos/comidas/notificaciones/racha). Respaldo: checklist.astro.bak
+import AppShell from '../../layouts/AppShell.astro';
 ---
-
-<AppLayout title="KetoCore | Checklist" authGuard={true}>
+<AppShell title="Checklist" screen="checklist">
 <style is:global>
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
-.glass-card{background:rgba(22,19,16,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
-.ghost-border{border:1px solid rgba(73,72,71,0.15)}
-.progress-ring-glow{filter:drop-shadow(0 2px 8px rgba(255,77,0,0.22))}
-.primary-gradient{background:linear-gradient(135deg,#ff4d00 0%,#ff7346 100%)}
-.secondary-gradient{background:linear-gradient(135deg,#ffb300 0%,#ffc94f 100%)}
-.custom-scrollbar::-webkit-scrollbar{width:4px}
-.custom-scrollbar::-webkit-scrollbar-track{background:#131315}
-.custom-scrollbar::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:10px}
-@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-.animate-shimmer{animation:shimmer 2s infinite}
-@keyframes progressGlow{0%,100%{box-shadow:0 0 10px currentColor}50%{box-shadow:0 0 25px currentColor}}
-.progress-glow{animation:progressGlow 2s ease-in-out infinite}
-@keyframes toastIn{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}
-#toast{animation:toastIn 0.3s ease}
-@media(min-width: 901px){
-  #ck-grid{display:grid;grid-template-columns:1fr 360px;gap:1.25rem;align-items:start;padding-top:1rem;max-width:none!important;}
-  #ck-grid>*{margin-top:0!important;}
-  #ck-hero{grid-column:1/-1;grid-row:1;}
-  #ck-history{grid-column:1;grid-row:2;}
-  #ck-checklist{grid-column:1;grid-row:3;}
-  #ck-supplements{grid-column:2;grid-row:2;}
-  #ck-meals{grid-column:2;grid-row:3;}
-  /* Sistema visual "grande y espacioso" de entrenamientos.astro, solo en
-     escritorio -- los headings de tarjeta aqui ya usaban text-xl/extrabold
-     (20px/800, igual al objetivo), solo el h1 (26px) y el padding (22px)
-     se quedaban chicos frente a los 46px/32px de entrenamientos. */
-  #ck-hero h1 { font-size: 46px !important; }
-  #ck-hero, #ck-history, #ck-checklist, #ck-supplements, #ck-meals { padding: 32px !important; }
-}
-/* Hero "resumen de hoy": anillo + tiles de datos reales (agua, electrolitos,
-   entrenamiento, sueño) que antes estaban solo enterrados en el checklist. */
-.ck-hero-body{display:flex;flex-direction:column;align-items:center;gap:22px;width:100%}
-.ck-hero-ring{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
-.ck-hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
-.ck-stat{background:var(--c-surface-2,#202024);border:1px solid rgba(255,240,225,0.06);border-radius:16px;padding:14px 16px}
-.ck-stat-top{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:rgba(247,244,240,0.6);margin-bottom:9px}
-.ck-stat-val{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:22px;color:#f7f4f0;line-height:1}
-.ck-stat-unit{font-size:13px;font-weight:600;color:rgba(247,244,240,0.45)}
-.ck-stat-bar{height:6px;border-radius:100px;background:rgba(255,240,225,0.08);overflow:hidden;margin-top:11px}
-.ck-stat-bar>div{height:100%;border-radius:100px;transition:width .5s}
-@media(min-width:640px){
-  .ck-hero-body{flex-direction:row;align-items:center;gap:34px}
-  .ck-hero-stats{flex:1}
-}
-/* Fila de hábito refinada — reemplaza las tarjetas con glow/shimmer/barra
-   gruesa gradiente (tells de amateur) por craft limpio: icono, valor tabular,
-   barra fina de 6px, una sola elevación. */
-.ck-item{display:flex;align-items:center;gap:15px;padding:14px 16px;border-radius:14px;background:#1c1916;border:1px solid rgba(255,240,225,0.05);cursor:pointer;transition:background .16s,border-color .16s}
-.ck-item:hover{background:#232019;border-color:rgba(255,240,225,0.11)}
-.ck-item-icon{position:relative;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ck-item-check{position:absolute;bottom:-5px;right:-5px;width:19px;height:19px;border-radius:50%;background:#22c55e;color:#0b0b0c;font-size:13px;display:flex;align-items:center;justify-content:center;border:2px solid #161310}
-.ck-item-body{flex:1;min-width:0}
-.ck-item-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
-.ck-item-label{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14.5px;color:#f7f4f0}
-.ck-item-label.done{color:rgba(247,244,240,0.45)}
-.ck-item-val{font-size:13px;color:rgba(247,244,240,0.5);font-variant-numeric:tabular-nums;white-space:nowrap}
-.ck-item-val b{color:#f7f4f0;font-weight:700}
-.ck-bar{height:6px;border-radius:100px;background:rgba(255,240,225,0.07);overflow:hidden}
-.ck-bar-fill{height:100%;border-radius:100px;transition:width .5s cubic-bezier(.4,0,.2,1)}
-/* Gráfico semanal limpio — barras sólidas por tier, sin glow ni gradiente,
-   historial a full opacidad (antes el pasado se atenuaba al 20%). */
-.wk-col{display:flex;flex-direction:column;align-items:center;gap:10px;flex:1}
-.wk-pct{font-size:12px;font-weight:700;color:rgba(247,244,240,0.5);font-variant-numeric:tabular-nums}
-.wk-pct.today{color:#ff4d00}
-.wk-track{width:26px;height:118px;border-radius:8px;background:rgba(255,240,225,0.05);display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
-.wk-fill{width:100%;border-radius:8px 8px 0 0;transition:height .6s cubic-bezier(.4,0,.2,1)}
-.wk-day{font-size:12px;font-weight:600;color:rgba(247,244,240,0.5)}
-.wk-day.today{color:#ff4d00;font-weight:700}
-</style>
-<!-- Sidebar -->
-<AppHeader dropdownMobileOnly={true} />
-<main class="main-content pt-14 pb-20 min-h-screen">
-<div id="ck-grid" class="space-y-4 kc-page" style="padding-top:12px">
+.kc input[type="range"]{accent-color:var(--kc-amber);width:100%}
 
-<!-- Progreso de hoy -->
-<div id="ck-hero" class="bg-surface-container-low rounded-2xl p-[22px] flex flex-col relative overflow-hidden">
-<div class="flex items-center justify-between w-full mb-6">
-  <h1 class="kc-h1" style="font-size:26px">Tu progreso de hoy</h1>
-  <div class="flex items-center gap-2">
-    <button onclick="openNotificationModal()" class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-surface-container-highest transition-colors">
-      <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
-    </button>
-    <div class="flex items-center gap-1 px-3 py-1.5 bg-orange-500/20 rounded-full">
-      <span class="material-symbols-outlined text-orange-500 animate-pulse" style="font-variation-settings:'FILL' 1">local_fire_department</span>
-      <span id="streakCount" class="font-headline font-black text-orange-500">0</span>
+.kc .chk-actions{display:flex;justify-content:flex-end;gap:8px}
+.kc .chk-ring-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.kc .chk-ring-sub{text-align:center;color:var(--kc-ink-3);font:500 13px var(--kc-font-sans);margin-top:10px}
+
+/* Fila de suplemento/hábito con icono, barra y acción — mismo lenguaje que
+   .cmp-row de compras.astro. */
+.kc .chk-row{display:flex;align-items:center;gap:12px;background:var(--kc-surface-2);border-radius:var(--kc-radius-md);padding:12px}
+.kc .chk-row+.chk-row{margin-top:8px}
+.kc .chk-row__main{flex:1;min-width:0}
+.kc .chk-row__top{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:7px}
+.kc .chk-row__name{font:600 13.5px var(--kc-font-sans);color:var(--kc-ink)}
+.kc .chk-row__name.done{color:var(--kc-ink-3)}
+.kc .chk-row__val{font:600 12px var(--kc-font-mono);color:var(--kc-ink-3);white-space:nowrap}
+.kc .chk-row__val b{color:var(--kc-ink);font-weight:700}
+.kc .chk-check{width:30px;height:30px;border-radius:50%;border:0;flex-shrink:0;display:grid;place-items:center;cursor:pointer}
+
+.kc .chk-meal{display:flex;align-items:center;gap:12px;background:var(--kc-surface-2);border-radius:var(--kc-radius-md);padding:12px;cursor:pointer;box-shadow:inset 0 0 0 1px var(--kc-line)}
+.kc .chk-meal[data-done="1"]{box-shadow:inset 0 0 0 1.5px var(--kc-amber)}
+.kc .chk-meal+.chk-meal{margin-top:8px}
+.kc .chk-meal__main{flex:1;min-width:0}
+.kc .chk-meal__name{font:600 14px var(--kc-font-sans);color:var(--kc-ink)}
+.kc .chk-meal__sub{font:500 12px var(--kc-font-mono);color:var(--kc-ink-3);margin-top:2px}
+
+.kc .chk-empty{text-align:center;padding:36px 16px;color:var(--kc-ink-3)}
+.kc .chk-empty .material-symbols-outlined{font-size:48px;opacity:.5}
+.kc .chk-empty p{font:500 13px var(--kc-font-sans);margin-top:10px}
+
+/* Modales (patrón compartido por todas las pantallas HUD migradas) */
+.kc .chk-modal{position:fixed;inset:0;z-index:60;align-items:center;justify-content:center;padding:16px}
+.kc .chk-modal.hidden{display:none}
+.kc .chk-modal.flex{display:flex}
+.kc .chk-modal__scrim{position:absolute;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(4px)}
+.kc .chk-modal__panel{position:relative;width:100%;max-width:420px;max-height:88dvh;overflow-y:auto;background:var(--kc-surface-1);border:1px solid var(--kc-line);border-radius:var(--kc-radius-xl);box-shadow:var(--kc-shadow-float);padding:22px}
+
+.kc .chk-icon-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.kc .chk-icon-opt{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:var(--kc-radius-sm);background:var(--kc-surface-2);box-shadow:inset 0 0 0 1px transparent;text-align:left;border:0;cursor:pointer}
+.kc .chk-icon-opt.is-selected{box-shadow:inset 0 0 0 1.5px var(--kc-amber)}
+.kc .chk-icon-opt .material-symbols-outlined{font-size:18px}
+.kc .chk-toggle{width:40px;height:24px;border-radius:999px;background:var(--kc-surface-3);border:0;cursor:pointer;position:relative;flex-shrink:0;padding:0}
+.kc .chk-toggle i{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--kc-ink);transition:transform .18s var(--kc-ease)}
+.kc .chk-toggle[data-on="1"]{background:var(--kc-amber-fill)}
+.kc .chk-toggle[data-on="1"] i{transform:translateX(16px);background:var(--kc-on-amber)}
+</style>
+
+<!-- Hero -->
+<div>
+  <div class="kc-hero-sub">Checklist · racha de <span id="streakCount">0</span> días</div>
+  <h1 class="kc-hero">Tu progreso,<br>bajo <em>control</em></h1>
+</div>
+<div class="chk-actions">
+  <button class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon" onclick="openNotificationModal()" aria-label="Recordatorios"><span class="material-symbols-outlined">notifications</span></button>
+</div>
+
+<!-- Progreso de hoy (ring) -->
+<div class="kc-card">
+  <div class="chk-ring-head">
+    <div class="kc-eyebrow">Hoy</div>
+  </div>
+  <div class="kc-dial kc-c-amber">
+    <svg viewBox="0 0 100 100">
+      <circle class="trk" cx="50" cy="50" r="44" stroke-width="8"></circle>
+      <circle id="progressCircle" class="arc" cx="50" cy="50" r="44" stroke-width="8" stroke-linecap="round" stroke-dasharray="276.46" stroke-dashoffset="276.46"></circle>
+    </svg>
+    <div class="kc-dial__c">
+      <span id="progressPercent" class="kc-dial__big">0%</span>
+    </div>
+  </div>
+  <p id="progressText" class="chk-ring-sub">0 de 6 tareas completadas</p>
+</div>
+
+<!-- Resumen (agua/electrolitos/entrenamiento/sueño) -->
+<div class="kc-grid">
+  <div class="kc-stat kc-c-cyan">
+    <div class="kc-stat__top"><span class="kc-label"><span class="material-symbols-outlined" style="font-size:15px">water_drop</span> Agua</span></div>
+    <div class="kc-stat__val"><span id="heroWater">0</span><small>/ 3 L</small></div>
+    <div class="kc-bar kc-c-cyan"><i id="heroWaterBar"></i></div>
+  </div>
+  <div class="kc-stat kc-c-amber">
+    <div class="kc-stat__top"><span class="kc-label"><span class="material-symbols-outlined" style="font-size:15px">science</span> Electrolitos</span></div>
+    <div class="kc-stat__val"><span id="heroElectro">0</span><small>/ 500 ml</small></div>
+    <div class="kc-bar kc-c-amber"><i id="heroElectroBar"></i></div>
+  </div>
+  <div class="kc-stat kc-c-red">
+    <div class="kc-stat__top"><span class="kc-label"><span class="material-symbols-outlined" style="font-size:15px">fitness_center</span> Entreno</span></div>
+    <div class="kc-stat__val"><span id="heroWorkout">0</span><small>/ 60 min</small></div>
+    <div class="kc-bar kc-c-red"><i id="heroWorkoutBar"></i></div>
+  </div>
+  <div class="kc-stat kc-c-neutral">
+    <div class="kc-stat__top"><span class="kc-label"><span class="material-symbols-outlined" style="font-size:15px">bedtime</span> Sueño</span></div>
+    <div class="kc-stat__val"><span id="heroSleep">0</span><small>/ 8 hrs</small></div>
+    <div class="kc-bar kc-c-neutral"><i id="heroSleepBar"></i></div>
+  </div>
+</div>
+
+<!-- Suplementos -->
+<div class="kc-card">
+  <div class="kc-card__head">
+    <div><div class="kc-card__title">Suplementos</div><div class="kc-card__sub">Controla tu suplementación diaria</div></div>
+    <button class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon" onclick="openSupplementsModal()" aria-label="Agregar suplemento"><span class="material-symbols-outlined">add</span></button>
+  </div>
+  <div id="supplementsGrid"></div>
+</div>
+
+<!-- Historial semanal -->
+<div class="kc-card">
+  <div class="kc-card__head">
+    <div class="kc-card__title">Historial semanal</div>
+    <span class="material-symbols-outlined" style="color:var(--kc-amber)">bar_chart</span>
+  </div>
+  <div class="kc-week" id="weeklyChart"></div>
+</div>
+
+<!-- Checklist diario -->
+<div class="kc-card">
+  <div class="kc-card__head">
+    <div><div class="kc-card__title">Checklist diario</div><div class="kc-card__sub">Sigue tus hábitos y metas de cada día</div></div>
+    <button class="kc-btn kc-btn--secondary kc-btn--sm" onclick="openCrudModal()"><span class="material-symbols-outlined" style="font-size:18px">add</span>Agregar</button>
+  </div>
+  <div id="dailyChecklist"></div>
+</div>
+
+<!-- Comidas del día -->
+<div class="kc-card">
+  <div class="kc-card__head">
+    <div><div class="kc-card__title">Comidas del día</div><div class="kc-card__sub">Registra lo que comiste hoy</div></div>
+  </div>
+  <div id="mealsContainer"></div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-28 left-1/2 -translate-x-1/2 z-[70] hidden" style="background:var(--kc-surface-1);border:1px solid var(--kc-line-strong);border-radius:var(--kc-radius-pill);padding:12px 20px;box-shadow:var(--kc-shadow-float);display:flex;align-items:center;gap:10px">
+  <span class="material-symbols-outlined" style="color:var(--kc-mint);font-variation-settings:'FILL' 1">check_circle</span>
+  <span id="toastMessage" style="font:600 13px var(--kc-font-sans);color:var(--kc-ink)">Guardado!</span>
+</div>
+
+<!-- Input Modal (ajustar valor de un item) -->
+<div id="inputModal" class="chk-modal hidden">
+  <div class="chk-modal__scrim" onclick="closeInputModal()"></div>
+  <div class="chk-modal__panel">
+    <div class="kc-card__head"><h3 id="modalTitle" class="kc-card__title"></h3><button class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon" onclick="closeInputModal()" aria-label="Cerrar"><span class="material-symbols-outlined" style="font-size:18px">close</span></button></div>
+    <div id="modalContent"></div>
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="kc-btn kc-btn--secondary kc-btn--block" onclick="closeInputModal()">Cancelar</button>
+      <button class="kc-btn kc-btn--primary kc-btn--block" onclick="saveInputValue()">Guardar</button>
     </div>
   </div>
 </div>
-<div class="ck-hero-body">
-<div class="ck-hero-ring">
-<div class="relative w-56 h-56">
-<svg class="w-full h-full transform -rotate-90" viewbox="0 0 100 100">
-<defs>
-<lineargradient id="primaryGradient" x1="0%" x2="100%" y1="0%" y2="0%">
-<stop offset="0%" stop-color="#ff4d00"></stop>
-<stop offset="100%" stop-color="#ff7346"></stop>
-</lineargradient>
-</defs>
-<circle cx="50" cy="50" fill="transparent" r="44" stroke="#1e1a15" stroke-width="8"></circle>
-<circle id="progressCircle" class="progress-ring-glow" cx="50" cy="50" fill="transparent" r="44" stroke="url(#primaryGradient)" stroke-width="8" stroke-linecap="round" stroke-dasharray="276.46" stroke-dashoffset="276.46"></circle>
-</svg>
-<div class="absolute inset-0 flex flex-col items-center justify-center">
-<span id="progressPercent" class="font-headline text-5xl font-black tracking-tighter">0%</span>
-<span class="text-on-surface-variant text-sm font-medium uppercase tracking-widest">Completado</span>
-</div>
-</div>
-<p id="progressText" class="mt-6 text-on-surface-variant font-medium text-sm">0 de 6 tareas completadas</p>
-</div>
-<div class="ck-hero-stats">
-<div class="ck-stat">
-<div class="ck-stat-top"><span class="material-symbols-outlined" style="color:#00bcd4;font-size:19px">water_drop</span>Agua</div>
-<div class="ck-stat-val"><span id="heroWater">0</span><span class="ck-stat-unit"> / 3 L</span></div>
-<div class="ck-stat-bar"><div id="heroWaterBar" style="width:0%;background:#00bcd4"></div></div>
-</div>
-<div class="ck-stat">
-<div class="ck-stat-top"><span class="material-symbols-outlined" style="color:#ffb300;font-size:19px">science</span>Electrolitos</div>
-<div class="ck-stat-val"><span id="heroElectro">0</span><span class="ck-stat-unit"> / 500 ml</span></div>
-<div class="ck-stat-bar"><div id="heroElectroBar" style="width:0%;background:#ffb300"></div></div>
-</div>
-<div class="ck-stat">
-<div class="ck-stat-top"><span class="material-symbols-outlined" style="color:#ff4d00;font-size:19px">fitness_center</span>Entrenamiento</div>
-<div class="ck-stat-val"><span id="heroWorkout">0</span><span class="ck-stat-unit"> / 60 min</span></div>
-<div class="ck-stat-bar"><div id="heroWorkoutBar" style="width:0%;background:#ff4d00"></div></div>
-</div>
-<div class="ck-stat">
-<div class="ck-stat-top"><span class="material-symbols-outlined" style="color:#9e9e9e;font-size:19px">bedtime</span>Sueño</div>
-<div class="ck-stat-val"><span id="heroSleep">0</span><span class="ck-stat-unit"> / 8 hrs</span></div>
-<div class="ck-stat-bar"><div id="heroSleepBar" style="width:0%;background:#9e9e9e"></div></div>
-</div>
-</div>
-</div>
-</div>
-
-<!-- Supplements Section -->
-<div id="ck-supplements" class="bg-surface-container rounded-2xl p-[22px]">
-<div class="flex items-center justify-between mb-6">
-<div>
-<h2 class="font-headline text-xl font-extrabold tracking-tight">Suplementos</h2>
-<p class="text-on-surface-variant text-sm">Controla tu suplementación diaria</p>
-</div>
-<button onclick="openSupplementsModal()" class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center hover:bg-primary/30 transition-colors">
-<span class="material-symbols-outlined text-primary">add</span>
-</button>
-</div>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="supplementsGrid"></div>
-</div>
-
-<!-- Weekly History Chart -->
-<div id="ck-history" class="bg-surface-container rounded-2xl p-[22px]">
-<div class="flex items-center justify-between mb-6">
-<h2 class="font-headline text-xl font-extrabold tracking-tight">Historial Semanal</h2>
-<span class="material-symbols-outlined text-primary">bar_chart</span>
-</div>
-<div class="flex items-end justify-between gap-2" id="weeklyChart"></div>
-</div>
-
-<!-- Checklist Section -->
-<div id="ck-checklist" class="bg-surface-container rounded-2xl p-[22px] relative overflow-hidden">
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-<div>
-<h2 class="font-headline text-2xl font-extrabold tracking-tight mb-1">Checklist diario</h2>
-<p class="text-on-surface-variant font-medium">Sigue tus hábitos y metas de cada día.</p>
-</div>
-<button onclick="openCrudModal()" class="kc-btn">
-<span class="material-symbols-outlined">add</span>
-Agregar
-</button>
-</div>
-
-<!-- Checklist Items -->
-<div class="space-y-4" id="dailyChecklist"></div>
-</div>
-
-<!-- Meals Section -->
-<div id="ck-meals" class="bg-surface-container rounded-2xl p-[22px] relative overflow-hidden">
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-<div>
-<h2 class="font-headline text-2xl font-extrabold tracking-tight mb-1">Comidas del día</h2>
-<p class="text-on-surface-variant font-medium">Registra lo que comiste hoy.</p>
-</div>
-</div>
-
-<!-- Meals Container -->
-<div id="mealsContainer" class="space-y-4"></div>
-
-<div class="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-tl from-primary/5 to-transparent pointer-events-none"></div>
-</div>
-
-</div>
-</main>
-
-<!-- Toast -->
-<div id="toast" class="fixed bottom-28 left-1/2 -translate-x-1/2 z-[70] hidden">
-<div class="glass-card rounded-full px-6 py-3 flex items-center gap-3 shadow-lg border border-primary/20">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1">check_circle</span>
-<span id="toastMessage" class="text-white font-bold">Guardado!</span>
-</div>
-</div>
-
-<!-- Input Modal -->
-<div id="inputModal" class="fixed inset-0 z-[60] hidden">
-<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeInputModal()"></div>
-<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-<div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto border border-primary/20">
-<div class="flex justify-between items-center mb-6">
-<h3 id="modalTitle" class="text-xl font-headline font-bold text-white"></h3>
-<button onclick="closeInputModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
-</div>
-<div id="modalContent" class="space-y-4"></div>
-<div class="flex gap-3 mt-6">
-<button onclick="closeInputModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>
-<button onclick="saveInputValue()" class="kc-btn flex-1">Guardar</button>
-</div>
-</div>
-</div>
-</div>
 
 <!-- Electrolito Modal -->
-<div id="electrolitoModal" class="fixed inset-0 z-[60] hidden">
-<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeElectrolitoModal()"></div>
-<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-<div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto border border-primary/20">
-<div class="flex justify-between items-center mb-6">
-<h3 id="electrolitoTitle" class="text-xl font-headline font-bold text-white"></h3>
-<button onclick="closeElectrolitoModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
-</div>
-<div class="space-y-4">
-<p id="electrolitoCurrent" class="text-center text-4xl font-headline font-bold text-primary"></p>
-<input type="range" id="electrolitoSlider" class="w-full accent-primary" min="0" max="100" value="0">
-<p id="electrolitoTarget" class="text-center text-sm text-on-surface-variant"></p>
-</div>
-<div class="flex gap-3 mt-6">
-<button onclick="closeElectrolitoModal()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>
-<button onclick="saveElectrolito()" class="kc-btn flex-1">Guardar</button>
-</div>
-</div>
-</div>
+<div id="electrolitoModal" class="chk-modal hidden">
+  <div class="chk-modal__scrim" onclick="closeElectrolitoModal()"></div>
+  <div class="chk-modal__panel">
+    <div class="kc-card__head"><h3 id="electrolitoTitle" class="kc-card__title"></h3><button class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon" onclick="closeElectrolitoModal()" aria-label="Cerrar"><span class="material-symbols-outlined" style="font-size:18px">close</span></button></div>
+    <p id="electrolitoCurrent" style="text-align:center;font:800 32px var(--kc-font-sans);color:var(--kc-amber);margin:8px 0"></p>
+    <input type="range" id="electrolitoSlider" min="0" max="100" value="0">
+    <p id="electrolitoTarget" class="kc-label" style="text-align:center;margin-top:8px"></p>
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="kc-btn kc-btn--secondary kc-btn--block" onclick="closeElectrolitoModal()">Cancelar</button>
+      <button class="kc-btn kc-btn--primary kc-btn--block" onclick="saveElectrolito()">Guardar</button>
+    </div>
+  </div>
 </div>
 
 <!-- CRUD Modal -->
-<div id="crudModal" class="fixed inset-0 z-[70] hidden">
-<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeCrudModal()"></div>
-<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-<div class="glass-card rounded-2xl p-6 w-full max-w-md max-h-[80vh] overflow-y-auto pointer-events-auto border border-primary/20">
-<div class="flex justify-between items-center mb-6">
-<h3 class="text-xl font-headline font-bold text-white">Configurar Checklist</h3>
-<button onclick="closeCrudModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
-</div>
-<div id="crudContent"></div>
-</div>
-</div>
+<div id="crudModal" class="chk-modal hidden">
+  <div class="chk-modal__scrim" onclick="closeCrudModal()"></div>
+  <div class="chk-modal__panel">
+    <div class="kc-card__head"><h3 class="kc-card__title">Configurar checklist</h3><button class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon" onclick="closeCrudModal()" aria-label="Cerrar"><span class="material-symbols-outlined" style="font-size:18px">close</span></button></div>
+    <div id="crudContent"></div>
+  </div>
 </div>
 
 <!-- Item Form Modal -->
-<div id="itemFormModal" class="fixed inset-0 z-[80] hidden">
-<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeItemForm()"></div>
-<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-<div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto border border-primary/20">
-<div class="flex justify-between items-center mb-4">
-<h3 id="formTitle" class="text-xl font-headline font-bold text-white">Nuevo Item</h3>
-<button onclick="closeItemForm()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
-</div>
-<div class="space-y-4">
-<div>
-<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Nombre</label>
-<input type="text" id="itemName" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary" placeholder="Ej: Meditacion">
-</div>
-<div>
-<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Icono</label>
-<select id="itemIcon" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary">
-<option value="water_drop">Agua</option>
-<option value="science">Ciencia/Electrolitos</option>
-<option value="fitness_center">Gimnasio</option>
-<option value="directions_walk">Caminar</option>
-<option value="egg_alt">Proteina</option>
-<option value="bedtime">Dormir</option>
-<option value="self_improvement">Meditacion</option>
-<option value="menu_book">Leer</option>
-<option value="favorite">Salud</option>
-<option value="restaurant">Comida</option>
-</select>
-</div>
-<div class="grid grid-cols-2 gap-4">
-<div>
-<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Meta</label>
-<input type="number" id="itemTarget" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary" value="1" min="1">
-</div>
-<div>
-<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Unidad</label>
-<input type="text" id="itemUnit" class="w-full bg-surface-container text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary" value="min" placeholder="min, g, hrs...">
-</div>
-</div>
-</div>
-<div class="flex gap-3 mt-6">
-<button onclick="closeItemForm()" class="flex-1 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>
-<button onclick="saveItem()" class="kc-btn flex-1">Guardar</button>
-</div>
-</div>
-</div>
+<div id="itemFormModal" class="chk-modal hidden">
+  <div class="chk-modal__scrim" onclick="closeItemForm()"></div>
+  <div class="chk-modal__panel">
+    <div class="kc-card__head"><h3 id="formTitle" class="kc-card__title">Nuevo item</h3><button class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon" onclick="closeItemForm()" aria-label="Cerrar"><span class="material-symbols-outlined" style="font-size:18px">close</span></button></div>
+    <div class="kc-field">
+      <label class="kc-label">Nombre</label>
+      <input type="text" id="itemName" class="kc-input" placeholder="Ej: Meditación">
+    </div>
+    <div class="kc-field">
+      <label class="kc-label">Icono</label>
+      <select id="itemIcon" class="kc-input">
+        <option value="water_drop">Agua</option>
+        <option value="science">Ciencia/Electrolitos</option>
+        <option value="fitness_center">Gimnasio</option>
+        <option value="directions_walk">Caminar</option>
+        <option value="egg_alt">Proteína</option>
+        <option value="bedtime">Dormir</option>
+        <option value="self_improvement">Meditación</option>
+        <option value="menu_book">Leer</option>
+        <option value="favorite">Salud</option>
+        <option value="restaurant">Comida</option>
+      </select>
+    </div>
+    <div class="kc-field-2">
+      <div class="kc-field" style="margin-bottom:0">
+        <label class="kc-label">Meta</label>
+        <input type="number" id="itemTarget" class="kc-input" value="1" min="1">
+      </div>
+      <div class="kc-field" style="margin-bottom:0">
+        <label class="kc-label">Unidad</label>
+        <input type="text" id="itemUnit" class="kc-input" value="min" placeholder="min, g, hrs...">
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="kc-btn kc-btn--secondary kc-btn--block" onclick="closeItemForm()">Cancelar</button>
+      <button class="kc-btn kc-btn--primary kc-btn--block" onclick="saveItem()">Guardar</button>
+    </div>
+  </div>
 </div>
 
 <!-- Notification Modal -->
-<div id="notificationModal" class="fixed inset-0 z-[80] hidden">
-<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeNotificationModal()"></div>
-<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-<div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto border border-primary/20">
-<div class="flex justify-between items-center mb-6">
-<h3 class="text-xl font-headline font-bold text-white">Recordatorios</h3>
-<button onclick="closeNotificationModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
-</div>
-<div class="space-y-4" id="notificationList"></div>
-<div class="flex gap-3 mt-6">
-<button onclick="requestNotificationPermission()" class="kc-btn flex-1">Activar Notificaciones</button>
-</div>
-</div>
-</div>
+<div id="notificationModal" class="chk-modal hidden">
+  <div class="chk-modal__scrim" onclick="closeNotificationModal()"></div>
+  <div class="chk-modal__panel">
+    <div class="kc-card__head"><h3 class="kc-card__title">Recordatorios</h3><button class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon" onclick="closeNotificationModal()" aria-label="Cerrar"><span class="material-symbols-outlined" style="font-size:18px">close</span></button></div>
+    <div id="notificationList" style="display:flex;flex-direction:column;gap:8px"></div>
+    <button class="kc-btn kc-btn--primary kc-btn--block" style="margin-top:16px" onclick="requestNotificationPermission()">Activar notificaciones</button>
+  </div>
 </div>
 
 <!-- Supplements Modal -->
-<div id="supplementsModal" class="fixed inset-0 z-[80] hidden">
-<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeSupplementsModal()"></div>
-<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-<div class="glass-card rounded-2xl p-6 w-full max-w-md max-h-[80vh] overflow-y-auto pointer-events-auto border border-primary/20">
-<div class="flex justify-between items-center mb-6">
-<h3 class="text-xl font-headline font-bold text-white">Mis Suplementos</h3>
-<button onclick="closeSupplementsModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
-</div>
-<div class="space-y-3 mb-4" id="supplementsConfigList"></div>
-<div class="text-center">
-<button onclick="closeSupplementsModal()" class="px-6 py-3 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">
-Cerrar
-</button>
-</div>
-</div>
-</div>
+<div id="supplementsModal" class="chk-modal hidden">
+  <div class="chk-modal__scrim" onclick="closeSupplementsModal()"></div>
+  <div class="chk-modal__panel" style="max-width:480px">
+    <div class="kc-card__head"><h3 class="kc-card__title">Mis suplementos</h3><button class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon" onclick="closeSupplementsModal()" aria-label="Cerrar"><span class="material-symbols-outlined" style="font-size:18px">close</span></button></div>
+    <div id="supplementsConfigList"></div>
+    <button class="kc-btn kc-btn--secondary kc-btn--block" style="margin-top:16px" onclick="closeSupplementsModal()">Cerrar</button>
+  </div>
 </div>
 
-
+<Fragment slot="scripts">
 <script is:inline src="/app/utils.js"></script>
 <script is:inline src="/app/modules/meal-plan.js"></script>
 <script is:inline>
 var defaultChecklistConfig=[
-{id:"water",icon:"water_drop",iconColor:"#00bcd4",bg:"bg-cyan-500/20",label:"Agua",unit:"L",target:3,step:0.25},
-{id:"electrolitos",icon:"science",iconColor:"#ffb300",bg:"bg-yellow-500/20",label:"Electrolitos",unit:"ml",target:500,step:50},
-{id:"workout",icon:"fitness_center",iconColor:"#ff4d00",bg:"bg-orange-500/20",label:"Entrenamiento",unit:"min",target:60,step:5},
-{id:"walk",icon:"directions_walk",iconColor:"#4caf50",bg:"bg-green-500/20",label:"Caminata",unit:"min",target:60,step:5},
-{id:"protein",icon:"egg_alt",iconColor:"#ff9800",bg:"bg-amber-500/20",label:"Proteína",unit:"g",target:159,step:10},
-{id:"sleep",icon:"bedtime",iconColor:"#9e9e9e",bg:"bg-gray-500/20",label:"Sueño",unit:"hrs",target:8,step:0.5}
+{id:"water",icon:"water_drop",iconColor:"var(--kc-cyan)",bg:"bg-cyan-500/20",label:"Agua",unit:"L",target:3,step:0.25},
+{id:"electrolitos",icon:"science",iconColor:"var(--kc-amber)",bg:"bg-yellow-500/20",label:"Electrolitos",unit:"ml",target:500,step:50},
+{id:"workout",icon:"fitness_center",iconColor:"var(--kc-red)",bg:"bg-orange-500/20",label:"Entrenamiento",unit:"min",target:60,step:5},
+{id:"walk",icon:"directions_walk",iconColor:"var(--kc-mint)",bg:"bg-green-500/20",label:"Caminata",unit:"min",target:60,step:5},
+{id:"protein",icon:"egg_alt",iconColor:"var(--kc-amber)",bg:"bg-amber-500/20",label:"Proteína",unit:"g",target:159,step:10},
+{id:"sleep",icon:"bedtime",iconColor:"var(--kc-ink-3)",bg:"bg-gray-500/20",label:"Sueño",unit:"hrs",target:8,step:0.5}
 ];
 var checklistConfig=[].concat(defaultChecklistConfig);
 
 var currentInputItem=null;
 var currentElectrolito=null;
 var editingItemIndex=null;
-var iconColors={'water_drop':'#00bcd4','science':'#ffb300','fitness_center':'#ff4d00','directions_walk':'#4caf50','egg_alt':'#ff9800','bedtime':'#9e9e9e','self_improvement':'#9c27b0','menu_book':'#795548','favorite':'#e91e63'};
+var iconColors={'water_drop':'var(--kc-cyan)','science':'var(--kc-amber)','fitness_center':'var(--kc-red)','directions_walk':'var(--kc-mint)','egg_alt':'var(--kc-amber)','bedtime':'var(--kc-ink-3)','self_improvement':'var(--kc-cyan)','menu_book':'var(--kc-ink-2)','favorite':'var(--kc-red)'};
 
 function loadChecklist(){
 var todayKey=new Date().toISOString().slice(0,10);
@@ -381,24 +282,22 @@ var percent=Math.min(Math.round((value/item.target)*100),100);
 totalPercent+=percent;
 
 var displayValue=item.step<1?value.toFixed(1).replace('.0',''):value;
-var color=item.iconColor||'#ff4d00';
+var color=item.iconColor||'var(--kc-amber)';
 
-// Fila de hábito — craft limpio: icono refinado, valor tabular, barra fina,
-// una sola elevación. Sin glow/shimmer/pulse (tells de amateur).
-var barColor = isCompleted ? '#4ade80' : color;
-cardHtml ='<div class="ck-item" onclick="openInputModal(\''+item.id+'\')">';
-cardHtml+='<div class="ck-item-icon" style="background:'+color+'14;color:'+color+'">';
-cardHtml+='<span class="material-symbols-outlined" style="font-size:22px;font-variation-settings:\'FILL\' 1">'+item.icon+'</span>';
+var barColor = isCompleted ? 'var(--kc-mint)' : color;
+var cardHtml ='<div class="chk-row" onclick="openInputModal(\''+item.id+'\')">';
+cardHtml+='<div class="kc-ico" style="--c:'+color+'">';
+cardHtml+='<span class="material-symbols-outlined" style="font-size:20px;font-variation-settings:\'FILL\' 1">'+item.icon+'</span>';
 if(isCompleted){
-cardHtml+='<span class="ck-item-check material-symbols-outlined" style="font-variation-settings:\'FILL\' 1">check</span>';
+cardHtml+='<span class="kc-check" style="display:grid"><span class="material-symbols-outlined" style="font-size:11px">check</span></span>';
 }
 cardHtml+='</div>';
-cardHtml+='<div class="ck-item-body">';
-cardHtml+='<div class="ck-item-row">';
-cardHtml+='<span class="ck-item-label'+(isCompleted?' done':'')+'">'+item.label+'</span>';
-cardHtml+='<span class="ck-item-val"><b>'+displayValue+'</b> / '+item.target+' '+item.unit+'</span>';
+cardHtml+='<div class="chk-row__main">';
+cardHtml+='<div class="chk-row__top">';
+cardHtml+='<span class="chk-row__name'+(isCompleted?' done':'')+'">'+item.label+'</span>';
+cardHtml+='<span class="chk-row__val"><b>'+displayValue+'</b> / '+item.target+' '+item.unit+'</span>';
 cardHtml+='</div>';
-cardHtml+='<div class="ck-bar"><div class="ck-bar-fill" style="width:'+percent+'%;background:'+barColor+'"></div></div>';
+cardHtml+='<div class="kc-bar"><i style="width:'+percent+'%;background:'+barColor+'"></i></div>';
 cardHtml+='</div></div>';
 container.innerHTML+=cardHtml;
 });
@@ -409,8 +308,6 @@ document.getElementById("progressPercent").textContent=overallPercent+"%";
 document.getElementById("progressText").textContent=completedCount+" de "+total+" tareas completadas";
 document.getElementById("progressCircle").style.strokeDashoffset=276.46-(276.46*overallPercent/100);
 
-// Hero "resumen de hoy": surface los valores reales de agua/electrolitos/
-// entrenamiento/sueño (usa las metas estándar para que barra y texto coincidan).
 (function(){
   function setHero(id, elId, target, decimals){
     var val = checklistData[id] || 0;
@@ -432,7 +329,7 @@ function calculateStreak(){
   var streak=0;
   var today=new Date();
   var threshold=0.8;
-  
+
   for(var i=0;i<365;i++){
     var d=new Date(today);
     d.setDate(d.getDate()-i);
@@ -442,12 +339,12 @@ function calculateStreak(){
     var items=getEffectiveItems();
     var completed=0;
     var total=items.length;
-    
+
     items.forEach(function(item){
       var val=data[item.id]||0;
       if(val>=item.target)completed++;
     });
-    
+
     var percent=total>0?completed/total:0;
     if(percent>=threshold){
       streak++;
@@ -455,7 +352,7 @@ function calculateStreak(){
       break;
     }
   }
-  
+
   return streak;
 }
 
@@ -471,7 +368,7 @@ function renderWeeklyChart(){
   var today=new Date();
   var dayOfWeek=today.getDay();
   var startDay=dayOfWeek===0?6:dayOfWeek-1;
-  
+
   var html="";
   for(var i=6;i>=0;i--){
     var d=new Date(today);
@@ -482,23 +379,22 @@ function renderWeeklyChart(){
     var items=getEffectiveItems();
     var completed=0;
     var total=items.length;
-    
+
     items.forEach(function(item){
       var val=data[item.id]||0;
       if(val>=item.target)completed++;
     });
-    
+
     var percent=total>0?Math.round((completed/total)*100):0;
     var isToday=i===0;
-    var isFuture=i>0;
-    var barColor=percent>=80?"#ff4d00":percent>=50?"#ffb300":percent>0?"#7a746c":"rgba(255,240,225,0.10)";
+    var level=percent>=80?"full":percent>=50?"mid":percent>0?"low":"";
     var h=percent>0?Math.max(percent,6):3;
     var dayLabel=isToday?"Hoy":days[(startDay-i+7)%7];
 
-    html+='<div class="wk-col">';
-    html+='<span class="wk-pct'+(isToday?" today":"")+'">'+(percent>0?percent+"%":"–")+'</span>';
-    html+='<div class="wk-track"><div class="wk-fill" style="height:'+h+'%;background:'+barColor+'"></div></div>';
-    html+='<span class="wk-day'+(isToday?" today":"")+'">'+dayLabel+'</span>';
+    html+='<div class="kc-week__col"'+(level?' data-level="'+level+'"':'')+(isToday?' data-today':'')+'>';
+    html+='<span class="kc-week__v">'+(percent>0?percent+"%":"–")+'</span>';
+    html+='<div class="kc-week__bar"><i style="height:'+h+'%"></i></div>';
+    html+='<span class="kc-week__d">'+dayLabel+'</span>';
     html+='</div>';
   }
   container.innerHTML=html;
@@ -512,7 +408,7 @@ var checklistData=safeParseJSON(rawData, {});
 var value=checklistData[itemId]||0;
 var displayValue=currentInputItem.step<1?value.toFixed(1).replace('.0',''):value;
 document.getElementById("modalTitle").textContent=currentInputItem.label;
-document.getElementById("modalContent").innerHTML='<p class="text-center text-4xl font-headline font-bold text-primary mb-4">'+displayValue+' '+currentInputItem.unit+'</p><input type="range" id="itemSlider" class="w-full accent-primary" min="0" max="'+currentInputItem.target+'" step="'+currentInputItem.step+'" value="'+value+'">';
+document.getElementById("modalContent").innerHTML='<p style="text-align:center;font:800 32px var(--kc-font-sans);color:var(--kc-amber);margin-bottom:16px">'+displayValue+' '+currentInputItem.unit+'</p><input type="range" id="itemSlider" min="0" max="'+currentInputItem.target+'" step="'+currentInputItem.step+'" value="'+value+'">';
 document.getElementById("itemSlider").addEventListener("input",function(){
 var val=parseFloat(this.value);
 var disp=currentInputItem.step<1?val.toFixed(1).replace('.0',''):val;
@@ -604,19 +500,18 @@ function saveCustomItems(){
 
 function getEffectiveItems(){
   loadCustomItems();
-  
-  // Update protein target from keto_macros if available
+
   try {
     var macros = JSON.parse(localStorage.getItem('keto_macros') || '{}');
     if (macros.protein) {
       checklistConfig.forEach(function(item) {
         if (item.id === 'protein') {
-          item.target = Math.round(macros.protein / 3); // Divide into 3 meals
+          item.target = Math.round(macros.protein / 3);
         }
       });
     }
   } catch(e) {}
-  
+
   return checklistConfig;
 }
 
@@ -634,37 +529,35 @@ document.getElementById("crudModal").classList.remove("flex");
 
 function renderCrudList(){
   var container=document.getElementById("crudContent");
-  var html='<div class="space-y-3 mb-6">';
+  var html='<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">';
   checklistConfig.forEach(function(item,index){
-var isDefault=index<checklistConfig.length;
-var color=iconColors[item.icon]||'#ff4d00';
-html+='<div class="flex items-center gap-3 bg-surface-container-high rounded-xl p-3">';
-html+='<div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:'+color+'20">';
-html+='<span class="material-symbols-outlined" style="color:'+color+'">'+item.icon+'</span></div>';
-html+='<div class="flex-1">';
-html+='<p class="font-medium text-white">'+item.label+'</p>';
-html+='<p class="text-[13px] text-on-surface-variant">Meta: '+item.target+' '+item.unit+'</p></div>';
-html+='<button onclick="editItem('+index+')" class="w-11 h-11 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-white/10 hover:text-white transition-all"><span class="material-symbols-outlined text-sm">edit</span></button>';
-html+='<button onclick="deleteItem('+index+')" class="w-11 h-11 rounded-lg flex items-center justify-center text-error hover:bg-error/20 transition-all"><span class="material-symbols-outlined text-sm">delete</span></button>';
+var color=iconColors[item.icon]||'var(--kc-amber)';
+html+='<div class="chk-row" style="cursor:default">';
+html+='<div class="kc-ico" style="--c:'+color+'"><span class="material-symbols-outlined" style="font-size:18px">'+item.icon+'</span></div>';
+html+='<div class="chk-row__main">';
+html+='<span class="chk-row__name">'+item.label+'</span>';
+html+='<div class="kc-label" style="margin-top:2px">Meta: '+item.target+' '+item.unit+'</div></div>';
+html+='<button onclick="editItem('+index+')" class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon"><span class="material-symbols-outlined" style="font-size:16px">edit</span></button>';
+html+='<button onclick="deleteItem('+index+')" class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon" style="color:var(--kc-red)"><span class="material-symbols-outlined" style="font-size:16px">delete</span></button>';
 html+='</div>';
 });
 html+='</div>';
-html+='<button onclick="openItemForm(-1)" class="kc-btn w-full" style="justify-content:center">';
-html+='<span class="material-symbols-outlined">add</span>Agregar Nuevo Item</button>';
+html+='<button onclick="openItemForm(-1)" class="kc-btn kc-btn--primary kc-btn--block">';
+html+='<span class="material-symbols-outlined" style="font-size:18px">add</span>Agregar nuevo item</button>';
 container.innerHTML=html;
 }
 
 function openItemForm(index){
 editingItemIndex=index;
 if(index===-1){
-document.getElementById("formTitle").textContent="Nuevo Item";
+document.getElementById("formTitle").textContent="Nuevo item";
 document.getElementById("itemName").value="";
 document.getElementById("itemTarget").value="1";
 document.getElementById("itemUnit").value="min";
 document.getElementById("itemIcon").value="fitness_center";
 }else{
   var item=checklistConfig[index];
-  document.getElementById("formTitle").textContent="Editar Item";
+  document.getElementById("formTitle").textContent="Editar item";
   document.getElementById("itemName").value=item.label;
   document.getElementById("itemTarget").value=item.target;
   document.getElementById("itemUnit").value=item.unit;
@@ -692,7 +585,7 @@ if(!name||!target||!unit){
 showToast("Completa todos los campos");
 return;
 }
-var color=iconColors[icon]||'#ff4d00';
+var color=iconColors[icon]||'var(--kc-amber)';
 if(editingItemIndex===-1){
   checklistConfig.push({id:"custom_"+Date.now(),icon:icon,iconColor:color,label:name,unit:unit,target:target,step:1,custom:true});
   showToast("Item agregado");
@@ -743,9 +636,8 @@ toast.classList.add("hidden");
 },3000);
 }
 
-// Meal functions
 var mealIcons={desayuno:"sunny",almuerzo:"wb_sunny",cena:"nights_stay",snacks:"cookie"};
-var mealColors={desayuno:"bg-amber-500/20",almuerzo:"bg-orange-500/20",cena:"bg-indigo-500/20",snacks:"bg-pink-500/20"};
+var mealColors={desayuno:"var(--kc-amber)",almuerzo:"var(--kc-amber)",cena:"var(--kc-cyan)",snacks:"var(--kc-red)"};
 var mealLabels={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snacks"};
 
 function getToday(){return new Date().toISOString().slice(0,10)}
@@ -760,18 +652,17 @@ var html="";
 var hasAnyMeal=Object.keys(plan).some(function(m){return(plan[m]||[]).length>0});
 
 if(!hasAnyMeal){
-html='<div class="flex flex-col items-center justify-center text-center py-12 px-6"><div class="w-32 h-32 bg-surface-container-highest rounded-full flex items-center justify-center opacity-40 mb-8"><span class="material-symbols-outlined text-6xl text-on-surface-variant">restaurant_menu</span></div><h3 class="font-headline text-xl font-bold text-on-surface mb-2">Todavía no hay comidas</h3><p class="text-on-surface-variant max-w-sm mb-8">Agrega tu primera comida o elige un plan de nutrición para empezar a seguir tus macros.</p></div>';
+html='<div class="chk-empty"><span class="material-symbols-outlined">restaurant_menu</span><p>Todavía no hay comidas. Agrega tu primera comida o elige un plan de nutrición para empezar a seguir tus macros.</p></div>';
 }else{
 Object.keys(mealLabels).forEach(function(meal){
 var items=plan[meal]||[];
 var isConsumed=consumed[meal]||false;
 var icon=mealIcons[meal]||"restaurant";
-var colorClass=mealColors[meal]||"bg-surface-container-high";
-var borderClass=isConsumed?"border-primary":"border-surface-container-high";
-html+='<div class="flex items-center gap-4 p-4 rounded-2xl border-2 '+borderClass+' bg-surface-container-low cursor-pointer hover:bg-surface-container transition-all" onclick="toggleMealConsumed(\''+meal+'\')">';
-html+='<div class="w-12 h-12 rounded-xl '+colorClass+' flex items-center justify-center"><span class="material-symbols-outlined text-xl text-white">'+icon+'</span></div>';
-html+='<div class="flex-1"><p class="font-bold text-white">'+mealLabels[meal]+'</p><p class="text-[13px] text-on-surface-variant">'+(items.length>0?items.length+" items":"Sin alimentos")+'</p></div>';
-html+='<span class="material-symbols-outlined '+(isConsumed?"text-primary":"text-on-surface-variant/70")+'" style="font-variation-settings:'+(isConsumed?"'FILL' 1":"0")+'">'+(isConsumed?"check_circle":"radio_button_unchecked")+'</span>';
+var color=mealColors[meal]||"var(--kc-ink-3)";
+html+='<div class="chk-meal" data-done="'+(isConsumed?"1":"0")+'" onclick="toggleMealConsumed(\''+meal+'\')">';
+html+='<div class="kc-ico" style="--c:'+color+'"><span class="material-symbols-outlined">'+icon+'</span></div>';
+html+='<div class="chk-meal__main"><div class="chk-meal__name">'+mealLabels[meal]+'</div><div class="chk-meal__sub">'+(items.length>0?items.length+" items":"Sin alimentos")+'</div></div>';
+html+='<span class="material-symbols-outlined" style="color:'+(isConsumed?"var(--kc-amber)":"var(--kc-ink-3)")+'" style="font-variation-settings:'+(isConsumed?"'FILL' 1":"0")+'">'+(isConsumed?"check_circle":"radio_button_unchecked")+'</span>';
 html+='</div>';
 });
 }
@@ -817,23 +708,17 @@ function renderNotificationList(){
   var items=getEffectiveItems();
   var reminders=JSON.parse(localStorage.getItem("checklistReminders")||"{}");
   var html="";
-  
+
   items.forEach(function(item){
     var reminder=reminders[item.id]||{enabled:false,time:"08:00"};
-    html+='<div class="flex items-center justify-between p-3 bg-surface-container-high rounded-xl">';
-    html+='<div class="flex items-center gap-3">';
-    html+='<span class="material-symbols-outlined" style="color:'+item.iconColor+'">'+item.icon+'</span>';
-    html+='<span class="text-white font-medium">'+item.label+'</span>';
-    html+='</div>';
-    html+='<div class="flex items-center gap-2">';
-    html+='<input type="time" id="time_'+item.id+'" class="bg-surface-container-low text-white text-sm rounded-lg px-2 py-1 border border-outline" value="'+reminder.time+'">';
-    html+='<button onclick="toggleReminder(\''+item.id+'\')" class="w-10 h-6 rounded-full transition-colors '+(reminder.enabled?'bg-primary':'bg-surface-variant')+'">';
-    html+='<div class="w-5 h-5 rounded-full bg-white shadow-md transform transition-transform '+(reminder.enabled?'translate-x-4':'translate-x-0.5')+'"></div>';
-    html+='</button>';
-    html+='</div>';
+    html+='<div class="chk-row" style="cursor:default">';
+    html+='<div class="kc-ico" style="--c:'+(item.iconColor||'var(--kc-amber)')+'"><span class="material-symbols-outlined" style="font-size:18px">'+item.icon+'</span></div>';
+    html+='<div class="chk-row__main"><span class="chk-row__name">'+item.label+'</span></div>';
+    html+='<input type="time" id="time_'+item.id+'" class="kc-input" style="width:100px;height:36px;padding:0 10px" value="'+reminder.time+'">';
+    html+='<button class="chk-toggle" data-on="'+(reminder.enabled?"1":"0")+'" onclick="toggleReminder(\''+item.id+'\')"><i></i></button>';
     html+='</div>';
   });
-  
+
   container.innerHTML=html;
 }
 
@@ -881,17 +766,17 @@ function scheduleNotification(itemId,time){
   var items=getEffectiveItems();
   var item=items.find(function(i){return i.id===itemId});
   if(!item)return;
-  
+
   var now=new Date();
   var parts=time.split(":");
   var scheduledTime=new Date(now.getFullYear(),now.getMonth(),now.getDate(),parts[0],parts[1],0,0);
-  
+
   if(scheduledTime<=now){
     scheduledTime.setDate(scheduledTime.getDate()+1);
   }
-  
+
   var delay=scheduledTime.getTime()-now.getTime();
-  
+
   setTimeout(function(){
     new Notification("KetoCore - Recordatorio",{
       body:"Es hora de "+item.label+"!",
@@ -903,39 +788,39 @@ function scheduleNotification(itemId,time){
 }
 
 var supplementIconOptions=[
-  {icon:"medication",color:"#ff4d00"},
-  {icon:"science",color:"#ffb300"},
-  {icon:"egg_alt",color:"#4caf50"},
-  {icon:"spa",color:"#9c27b0"},
-  {icon:"favorite",color:"#e91e63"},
-  {icon:"water_drop",color:"#00bcd4"},
-  {icon:"bolt",color:"#ffc107"},
-  {icon:"psychiatry",color:"#3f51b5"}
+  {icon:"medication",color:"var(--kc-amber)"},
+  {icon:"science",color:"var(--kc-amber)"},
+  {icon:"egg_alt",color:"var(--kc-mint)"},
+  {icon:"spa",color:"var(--kc-cyan)"},
+  {icon:"favorite",color:"var(--kc-red)"},
+  {icon:"water_drop",color:"var(--kc-cyan)"},
+  {icon:"bolt",color:"var(--kc-amber)"},
+  {icon:"psychiatry",color:"var(--kc-cyan)"}
 ];
 
 var availableSupplements=[
-  {id:"creatina",name:"Creatina",category:"deportivo",dose:5,unit:"g",icon:"bolt",color:"#ff4d00"},
-  {id:"beta_alanina",name:"Beta Alanina",category:"deportivo",dose:3,unit:"g",icon:"flash_on",color:"#ff5722"},
-  {id:"bcaa",name:"BCAAs",category:"deportivo",dose:10,unit:"g",icon:"fitness_center",color:"#e91e63"},
-  {id:"proteina_whey",name:"Whey Protein",category:"deportivo",dose:30,unit:"g",icon:"egg_alt",color:"#9c27b0"},
-  {id:"caseina",name:"Caseína",category:"deportivo",dose:30,unit:"g",icon:"breakfast_dining",color:"#673ab7"},
-  {id:"pre_entreno",name:"Pre-Entreno",category:"deportivo",dose:1,unit:"dosis",icon:"play_arrow",color:"#ff9800"},
-  {id:"glutamina",name:"Glutamina",category:"deportivo",dose:5,unit:"g",icon:"healing",color:"#4caf50"},
-  {id:"zma",name:"ZMA (Zinc+Magnesio)",category:"deportivo",dose:1,unit:"capsula",icon:"nightlight",color:"#3f51b5"},
-  {id:"cafeina",name:"Cafeína",category:"deportivo",dose:200,unit:"mg",icon:"coffee",color:"#795548"},
-  {id:"hmb",name:"HMB",category:"deportivo",dose:3,unit:"g",icon:"shield",color:"#607d8b"},
-  {id:"magnesio",name:"Magnesio",category:"vitaminas",dose:400,unit:"mg",icon:"medication",color:"#9c27b0"},
-  {id:"vitd",name:"Vitamina D3",category:"vitaminas",dose:4000,unit:"UI",icon:"wb_sunny",color:"#ffc107"},
-  {id:"vitc",name:"Vitamina C",category:"vitaminas",dose:1000,unit:"mg",icon:"spa",color:"#4caf50"},
-  {id:"zinc",name:"Zinc",category:"vitaminas",dose:30,unit:"mg",icon:"hexagon",color:"#9e9e9e"},
-  {id:"omega3",name:"Omega-3 (EPA/DHA)",category:"vitaminas",dose:2,unit:"capsula",icon:"water_drop",color:"#00bcd4"},
-  {id:"multivitaminico",name:"Multivitamínico",category:"vitaminas",dose:1,unit:"capsula",icon:"medication",color:"#ffb300"},
-  {id:"b12",name:"Vitamina B12",category:"vitaminas",dose:1000,unit:"mcg",icon:"psychiatry",color:"#e91e63"},
-  {id:"vitk2",name:"Vitamina K2",category:"vitaminas",dose:100,unit:"mcg",icon:"favorite",color:"#f44336"},
-  {id:"b complex",name:"Vitamina B-Complex",category:"vitaminas",dose:1,unit:"capsula",icon:"group_work",color:"#8bc34a"},
-  {id:"ashwagandha",name:"Ashwagandha",category:"vitaminas",dose:600,unit:"mg",icon:"self_improvement",color:"#4db6ac"},
-  {id:"electrolitos",name:"Electrolitos",category:"vitaminas",dose:500,unit:"ml",icon:"science",color:"#03a9f4"},
-  {id:"colageno",name:"Colágeno",category:"vitaminas",dose:10,unit:"g",icon:"healing",color:"#ff7043"}
+  {id:"creatina",name:"Creatina",category:"deportivo",dose:5,unit:"g",icon:"bolt",color:"var(--kc-amber)"},
+  {id:"beta_alanina",name:"Beta Alanina",category:"deportivo",dose:3,unit:"g",icon:"flash_on",color:"var(--kc-amber)"},
+  {id:"bcaa",name:"BCAAs",category:"deportivo",dose:10,unit:"g",icon:"fitness_center",color:"var(--kc-red)"},
+  {id:"proteina_whey",name:"Whey Protein",category:"deportivo",dose:30,unit:"g",icon:"egg_alt",color:"var(--kc-cyan)"},
+  {id:"caseina",name:"Caseína",category:"deportivo",dose:30,unit:"g",icon:"breakfast_dining",color:"var(--kc-cyan)"},
+  {id:"pre_entreno",name:"Pre-Entreno",category:"deportivo",dose:1,unit:"dosis",icon:"play_arrow",color:"var(--kc-amber)"},
+  {id:"glutamina",name:"Glutamina",category:"deportivo",dose:5,unit:"g",icon:"healing",color:"var(--kc-mint)"},
+  {id:"zma",name:"ZMA (Zinc+Magnesio)",category:"deportivo",dose:1,unit:"capsula",icon:"nightlight",color:"var(--kc-cyan)"},
+  {id:"cafeina",name:"Cafeína",category:"deportivo",dose:200,unit:"mg",icon:"coffee",color:"var(--kc-ink-2)"},
+  {id:"hmb",name:"HMB",category:"deportivo",dose:3,unit:"g",icon:"shield",color:"var(--kc-ink-2)"},
+  {id:"magnesio",name:"Magnesio",category:"vitaminas",dose:400,unit:"mg",icon:"medication",color:"var(--kc-cyan)"},
+  {id:"vitd",name:"Vitamina D3",category:"vitaminas",dose:4000,unit:"UI",icon:"wb_sunny",color:"var(--kc-amber)"},
+  {id:"vitc",name:"Vitamina C",category:"vitaminas",dose:1000,unit:"mg",icon:"spa",color:"var(--kc-mint)"},
+  {id:"zinc",name:"Zinc",category:"vitaminas",dose:30,unit:"mg",icon:"hexagon",color:"var(--kc-ink-3)"},
+  {id:"omega3",name:"Omega-3 (EPA/DHA)",category:"vitaminas",dose:2,unit:"capsula",icon:"water_drop",color:"var(--kc-cyan)"},
+  {id:"multivitaminico",name:"Multivitamínico",category:"vitaminas",dose:1,unit:"capsula",icon:"medication",color:"var(--kc-amber)"},
+  {id:"b12",name:"Vitamina B12",category:"vitaminas",dose:1000,unit:"mcg",icon:"psychiatry",color:"var(--kc-red)"},
+  {id:"vitk2",name:"Vitamina K2",category:"vitaminas",dose:100,unit:"mcg",icon:"favorite",color:"var(--kc-red)"},
+  {id:"b complex",name:"Vitamina B-Complex",category:"vitaminas",dose:1,unit:"capsula",icon:"group_work",color:"var(--kc-mint)"},
+  {id:"ashwagandha",name:"Ashwagandha",category:"vitaminas",dose:600,unit:"mg",icon:"self_improvement",color:"var(--kc-cyan)"},
+  {id:"electrolitos",name:"Electrolitos",category:"vitaminas",dose:500,unit:"ml",icon:"science",color:"var(--kc-cyan)"},
+  {id:"colageno",name:"Colágeno",category:"vitaminas",dose:10,unit:"g",icon:"healing",color:"var(--kc-amber)"}
 ];
 
 function getSelectedSupplements(){
@@ -958,51 +843,48 @@ function renderSupplements(){
   var todayKey=new Date().toISOString().slice(0,10);
   var takenData=JSON.parse(localStorage.getItem("supplements_"+todayKey)||"{}");
   var supps=window.availableSupplements||[
-    {id:"creatina",name:"Creatina",category:"deportivo",dose:5,unit:"g",icon:"bolt",color:"#ff4d00"},
-    {id:"magnesio",name:"Magnesio",category:"vitaminas",dose:400,unit:"mg",icon:"medication",color:"#9c27b0"}
+    {id:"creatina",name:"Creatina",category:"deportivo",dose:5,unit:"g",icon:"bolt",color:"var(--kc-amber)"},
+    {id:"magnesio",name:"Magnesio",category:"vitaminas",dose:400,unit:"mg",icon:"medication",color:"var(--kc-cyan)"}
   ];
-  
+
   var html="";
   selected.forEach(function(suppId){
     var supp=supps.find(function(s){return s.id===suppId});
     if(!supp)return;
     var taken=takenData[suppId]||0;
     var isComplete=taken>=supp.dose;
-    html+='<div class="bg-surface-container-low p-4 rounded-2xl flex items-center gap-4">';
-    html+='<div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:'+supp.color+'20">';
-    html+='<span class="material-symbols-outlined text-2xl" style="color:'+supp.color+'">'+supp.icon+'</span></div>';
-    html+='<div class="flex-1">';
-    html+='<p class="font-bold text-white">'+supp.name+'</p>';
-    html+='<p class="text-[13px] text-on-surface-variant">'+taken+' / '+supp.dose+' '+supp.unit+'</p>';
-    html+='<div class="w-full h-1.5 bg-surface-container-highest rounded-full mt-2 overflow-hidden">';
-    html+='<div class="h-full rounded-full transition-all" style="width:'+Math.min((taken/supp.dose)*100,100)+'%;background:'+supp.color+'"></div></div>';
+    html+='<div class="chk-row">';
+    html+='<div class="kc-ico" style="--c:'+supp.color+'"><span class="material-symbols-outlined" style="font-size:20px">'+supp.icon+'</span></div>';
+    html+='<div class="chk-row__main">';
+    html+='<div class="chk-row__top"><span class="chk-row__name">'+supp.name+'</span><span class="chk-row__val">'+taken+' / '+supp.dose+' '+supp.unit+'</span></div>';
+    html+='<div class="kc-bar"><i style="width:'+Math.min((taken/supp.dose)*100,100)+'%;background:'+supp.color+'"></i></div>';
     html+='</div>';
-    html+='<button onclick="takeSupplement(\''+supp.id+'\')" class="w-10 h-10 rounded-full '+((taken>=supp.dose)?'bg-primary/20':'bg-surface-variant')+' flex items-center justify-center hover:bg-surface-container-highest transition-colors">';
-    html+='<span class="material-symbols-outlined '+(taken>=supp.dose?'text-primary':'text-on-surface-variant')+'" style="font-variation-settings:\'FILL '+(taken>=supp.dose?'1':'0')+'\'">check</span></button>';
+    html+='<button onclick="takeSupplement(\''+supp.id+'\')" class="chk-check" style="background:'+(isComplete?'color-mix(in oklab, var(--kc-mint) 18%, transparent)':'var(--kc-surface-3)')+';color:'+(isComplete?'var(--kc-mint)':'var(--kc-ink-3)')+'">';
+    html+='<span class="material-symbols-outlined" style="font-size:16px;font-variation-settings:\'FILL '+(isComplete?'1':'0')+'\'">check</span></button>';
     html+='</div>';
   });
-  
+
   if(selected.length===0){
-    html='<div class="col-span-full text-center py-8 text-on-surface-variant">No hay suplementos seleccionados. ¡Agrega los tuyos!</div>';
+    html='<div class="chk-empty"><p>No hay suplementos seleccionados. ¡Agrega los tuyos!</p></div>';
   }
-  
+
   container.innerHTML=html;
 }
 
 function takeSupplement(suppId){
   var supps=window.availableSupplements||[
-    {id:"creatina",name:"Creatina",category:"deportivo",dose:5,unit:"g",icon:"bolt",color:"#ff4d00"},
-    {id:"magnesio",name:"Magnesio",category:"vitaminas",dose:400,unit:"mg",icon:"medication",color:"#9c27b0"}
+    {id:"creatina",name:"Creatina",category:"deportivo",dose:5,unit:"g",icon:"bolt",color:"var(--kc-amber)"},
+    {id:"magnesio",name:"Magnesio",category:"vitaminas",dose:400,unit:"mg",icon:"medication",color:"var(--kc-cyan)"}
   ];
   var supp=supps.find(function(s){return s.id===suppId});
   if(!supp)return;
-  
+
   var todayKey=new Date().toISOString().slice(0,10);
   var takenData=JSON.parse(localStorage.getItem("supplements_"+todayKey)||"{}");
-  
+
   var current=takenData[suppId]||0;
   var increment=supp.unit==="capsula"||supp.unit==="UI"||supp.unit==="dosis"?1:supp.dose/10;
-  
+
   if(current<supp.dose){
     takenData[suppId]=Math.min(current+increment,supp.dose);
     localStorage.setItem("supplements_"+todayKey,JSON.stringify(takenData));
@@ -1031,53 +913,47 @@ function closeSupplementsModal(){
 function renderSupplementsConfig(){
   var container=document.getElementById("supplementsConfigList");
   var selected=getSelectedSupplements();
-  
+
   var supps=window.availableSupplements||[
-    {id:"creatina",name:"Creatina",category:"deportivo",dose:5,unit:"g",icon:"bolt",color:"#ff4d00"},
-    {id:"beta_alanina",name:"Beta Alanina",category:"deportivo",dose:3,unit:"g",icon:"flash_on",color:"#ff5722"},
-    {id:"bcaa",name:"BCAAs",category:"deportivo",dose:10,unit:"g",icon:"fitness_center",color:"#e91e63"},
-    {id:"proteina_whey",name:"Whey Protein",category:"deportivo",dose:30,unit:"g",icon:"egg_alt",color:"#9c27b0"},
-    {id:"caseina",name:"Caseína",category:"deportivo",dose:30,unit:"g",icon:"breakfast_dining",color:"#673ab7"},
-    {id:"pre_entreno",name:"Pre-Entreno",category:"deportivo",dose:1,unit:"dosis",icon:"play_arrow",color:"#ff9800"},
-    {id:"magnesio",name:"Magnesio",category:"vitaminas",dose:400,unit:"mg",icon:"medication",color:"#9c27b0"},
-    {id:"vitd",name:"Vitamina D3",category:"vitaminas",dose:4000,unit:"UI",icon:"wb_sunny",color:"#ffc107"},
-    {id:"omega3",name:"Omega-3",category:"vitaminas",dose:2,unit:"capsula",icon:"water_drop",color:"#00bcd4"}
+    {id:"creatina",name:"Creatina",category:"deportivo",dose:5,unit:"g",icon:"bolt",color:"var(--kc-amber)"},
+    {id:"beta_alanina",name:"Beta Alanina",category:"deportivo",dose:3,unit:"g",icon:"flash_on",color:"var(--kc-amber)"},
+    {id:"bcaa",name:"BCAAs",category:"deportivo",dose:10,unit:"g",icon:"fitness_center",color:"var(--kc-red)"},
+    {id:"proteina_whey",name:"Whey Protein",category:"deportivo",dose:30,unit:"g",icon:"egg_alt",color:"var(--kc-cyan)"},
+    {id:"caseina",name:"Caseína",category:"deportivo",dose:30,unit:"g",icon:"breakfast_dining",color:"var(--kc-cyan)"},
+    {id:"pre_entreno",name:"Pre-Entreno",category:"deportivo",dose:1,unit:"dosis",icon:"play_arrow",color:"var(--kc-amber)"},
+    {id:"magnesio",name:"Magnesio",category:"vitaminas",dose:400,unit:"mg",icon:"medication",color:"var(--kc-cyan)"},
+    {id:"vitd",name:"Vitamina D3",category:"vitaminas",dose:4000,unit:"UI",icon:"wb_sunny",color:"var(--kc-amber)"},
+    {id:"omega3",name:"Omega-3",category:"vitaminas",dose:2,unit:"capsula",icon:"water_drop",color:"var(--kc-cyan)"}
   ];
-  
+
   if(!supps||!supps.filter){
-    container.innerHTML='<p class="text-center text-on-surface-variant py-4">Error cargando suplementos</p>';
+    container.innerHTML='<p class="chk-empty">Error cargando suplementos</p>';
     return;
   }
-  
+
   var sportsSupps=supps.filter(function(s){return s.category==="deportivo"});
   var vitaminSupps=supps.filter(function(s){return s.category==="vitaminas"});
-  
-  var html='<div class="mb-4"><h4 class="text-[13px] font-bold text-on-surface-variant uppercase tracking-wider mb-3">Suplementos Deportivos</h4><div class="grid grid-cols-2 gap-2">';
+
+  var html='<div style="margin-bottom:16px"><div class="kc-eyebrow" style="margin-bottom:10px">Suplementos deportivos</div><div class="chk-icon-grid">';
   sportsSupps.forEach(function(supp){
     var isSelected=selected.indexOf(supp.id)!==-1;
-    html+='<button onclick="toggleSupplement(\''+supp.id+'\')" class="p-3 rounded-xl text-left transition-all '+(isSelected?'bg-primary/20 border border-primary':'bg-surface-container-high border border-transparent hover:border-primary/30')+'">';
-    html+='<div class="flex items-center gap-2">';
+    html+='<button onclick="toggleSupplement(\''+supp.id+'\')" class="chk-icon-opt'+(isSelected?' is-selected':'')+'">';
     html+='<span class="material-symbols-outlined" style="color:'+supp.color+'">'+supp.icon+'</span>';
-    html+='<span class="text-sm font-medium text-white">'+supp.name+'</span>';
-    html+='</div>';
-    html+='<span class="text-[11px] text-on-surface-variant">'+supp.dose+' '+supp.unit+'</span>';
+    html+='<span><span style="display:block;font:600 12.5px var(--kc-font-sans);color:var(--kc-ink)">'+supp.name+'</span><span class="kc-label">'+supp.dose+' '+supp.unit+'</span></span>';
     html+='</button>';
   });
   html+='</div></div>';
-  
-  html+='<div><h4 class="text-[13px] font-bold text-on-surface-variant uppercase tracking-wider mb-3">Vitaminas y Minerales</h4><div class="grid grid-cols-2 gap-2">';
+
+  html+='<div><div class="kc-eyebrow" style="margin-bottom:10px">Vitaminas y minerales</div><div class="chk-icon-grid">';
   vitaminSupps.forEach(function(supp){
     var isSelected=selected.indexOf(supp.id)!==-1;
-    html+='<button onclick="toggleSupplement(\''+supp.id+'\')" class="p-3 rounded-xl text-left transition-all '+(isSelected?'bg-primary/20 border border-primary':'bg-surface-container-high border border-transparent hover:border-primary/30')+'">';
-    html+='<div class="flex items-center gap-2">';
+    html+='<button onclick="toggleSupplement(\''+supp.id+'\')" class="chk-icon-opt'+(isSelected?' is-selected':'')+'">';
     html+='<span class="material-symbols-outlined" style="color:'+supp.color+'">'+supp.icon+'</span>';
-    html+='<span class="text-sm font-medium text-white">'+supp.name+'</span>';
-    html+='</div>';
-    html+='<span class="text-[11px] text-on-surface-variant">'+supp.dose+' '+supp.unit+'</span>';
+    html+='<span><span style="display:block;font:600 12.5px var(--kc-font-sans);color:var(--kc-ink)">'+supp.name+'</span><span class="kc-label">'+supp.dose+' '+supp.unit+'</span></span>';
     html+='</button>';
   });
   html+='</div></div>';
-  
+
   container.innerHTML=html;
 }
 
@@ -1093,100 +969,6 @@ function toggleSupplement(suppId){
   renderSupplementsConfig();
   renderSupplements();
 }
-
-if(localStorage.getItem("sidebarCollapsed")==="true"){document.body.classList.add("sidebar-collapsed");var s=document.getElementById("sidebarNav");var p=document.querySelector(".topbar-pl");var m=document.querySelector(".main-content");var t=document.getElementById("sidebarToggle");s.style.width="72px";s.style.overflow="hidden";if(p)p.style.paddingLeft="88px";if(m)m.style.marginLeft="72px";if(t)t.style.left="72px"}
-var currentPage=window.location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".sidebar-link").forEach(function(link){if(link.getAttribute("href")===currentPage){link.classList.add("active")}});
 </script>
-<script is:inline>
-var _cp=window.location.pathname.split("/").pop()||"index.html";
-document.querySelectorAll(".sidebar-link").forEach(function(l){
-  if(l.getAttribute("href")===_cp){
-    l.classList.add("active");
-    l.style.background="rgba(22,19,16,1)";
-    l.style.color="white";
-    var ic=l.querySelector(".material-symbols-outlined");
-    if(ic)ic.style.color="#ff4d00";
-  }
-});
-if(localStorage.getItem("sidebarCollapsed")==="true"){
-  document.body.classList.add("sidebar-collapsed");
-  var _sn=document.getElementById("sidebarNav");
-  if(_sn){_sn.style.width="72px";_sn.style.overflow="hidden";}
-  var _tp=document.querySelector(".topbar-pl");
-  if(_tp)_tp.style.paddingLeft="88px";
-  var _mc=document.querySelector(".main-content");
-  if(_mc)_mc.style.marginLeft="72px";
-  var _st=document.getElementById("sidebarToggle");
-  if(_st)_st.style.left="72px";
-}
-</script>
-<script is:inline>
-// User Dropdown Menu
-function toggleUserMenu() {
-  const dropdown = document.getElementById('userDropdown');
-  dropdown.classList.toggle('hidden');
-  updateDropdownInfo();
-}
-
-function toggleMobileUserMenu() {
-  const dropdown = document.getElementById('mobileUserDropdown');
-  dropdown.classList.toggle('hidden');
-  updateDropdownInfo();
-}
-
-function updateDropdownInfo() {
-  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
-  const userName = profile.nombre || profile.name || 'Usuario';
-  const userEmail = localStorage.getItem('ketocore_user_email') || 'usuario@ejemplo.com';
-  const dn = document.getElementById('dropdownUserName');
-  const de = document.getElementById('dropdownUserEmail');
-  const mdn = document.getElementById('mobileDropdownUserName');
-  const mde = document.getElementById('mobileDropdownUserEmail');
-  if(dn) dn.textContent = userName;
-  if(de) de.textContent = userEmail;
-  if(mdn) mdn.textContent = userName;
-  if(mde) mde.textContent = userEmail;
-}
-
-function updateHeaderAvatar() {
-  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
-  const avatarUrl = profile.avatar_url;
-  const hi = document.getElementById('headerAvatarImg');
-  const hi2 = document.getElementById('headerAvatarIcon');
-  const mhi = document.getElementById('mobileHeaderAvatarImg');
-  const mhi2 = document.getElementById('mobileHeaderAvatarIcon');
-  if (avatarUrl) {
-    if(hi) { hi.src = avatarUrl; hi.classList.remove('hidden'); }
-    if(hi2) hi2.classList.add('hidden');
-    if(mhi) { mhi.src = avatarUrl; mhi.classList.remove('hidden'); }
-    if(mhi2) mhi2.classList.add('hidden');
-  } else {
-    if(hi) hi.classList.add('hidden');
-    if(hi2) hi2.classList.remove('hidden');
-    if(mhi) mhi.classList.add('hidden');
-    if(mhi2) mhi2.classList.remove('hidden');
-  }
-}
-
-document.addEventListener('click', function(e) {
-  const dd = document.getElementById('userDropdown');
-  const mdd = document.getElementById('mobileUserDropdown');
-  const btn = document.getElementById('profileBtn');
-  if (dd && !dd.contains(e.target) && !btn.contains(e.target)) dd.classList.add('hidden');
-  if (mdd && !e.target.closest('#mobileUserDropdown') && !e.target.closest('button[onclick="toggleMobileUserMenu()"]')) mdd.classList.add('hidden');
-});
-
-async function handleLogout() {
-  if (confirm('¿Cerrar sesión?')) {
-    await window.supabase.auth.signOut();
-    localStorage.removeItem('ketocore_user_id');
-    localStorage.removeItem('ketocore_user_email');
-    localStorage.removeItem('ketocore_onboarding_done');
-    window.location.href = '/app/welcome';
-  }
-}
-
-updateHeaderAvatar();
-</script>
-
-</AppLayout>
+</Fragment>
+</AppShell>

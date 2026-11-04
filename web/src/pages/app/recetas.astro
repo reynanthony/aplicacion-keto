@@ -1,189 +1,246 @@
-﻿---
-import AppLayout from '../../layouts/AppLayout.astro';
-import AppHeader from '../../components/AppHeader.astro';
 ---
-
-<AppLayout title="KetoCore | Recetas" authGuard={true}>
+// Recetas — UI v2 (HUD nativo). Reescrito a markup kc-* real: hero, fila de
+// KPIs (total / favoritas / para hoy / categorías) y grid de tarjetas con
+// imagen. Modales (detalle, crear, plan, porciones) con panel kc-* propio.
+// Lógica y datos intactos (recipe-details.js + inspector keto). Respaldo:
+// recetas.astro.bak
+import AppShell from '../../layouts/AppShell.astro';
+---
+<AppShell title="Recetas" screen="recetas">
 <style is:global>
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
-.glass-card{background:rgba(22,19,16,0.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1)}
-::-webkit-scrollbar{width:8px}
-::-webkit-scrollbar-track{background:#131315}
-::-webkit-scrollbar-thumb{background:#1e1a15;border-radius:4px}
-::-webkit-scrollbar-thumb:hover{background:#2a2a2a}
-.shadow-glow{box-shadow:0 0 20px rgba(255,77,0,0.3)}
-.shadow-glow-strong{box-shadow:0 0 30px rgba(255,77,0,0.5)}
-/* Chips de categoría — rediseño */
-.category-btn{border-radius:100px !important;padding:8px 16px !important;font-size:14px !important;font-weight:600 !important;background:#161310;border:1px solid rgba(255,240,225,0.08) !important;color:rgba(247,244,240,0.6);text-transform:none !important;letter-spacing:normal !important;transition:all .14s}
-.category-btn:hover{color:#f7f4f0;border-color:rgba(255,240,225,0.18) !important}
-.category-btn.active{background:#ff4d00 !important;border-color:#ff4d00 !important;color:#fff !important;font-weight:700 !important}
-/* entrenamientos.astro (y checklist/suplementos/guia) quitan el limite de
-   1180px de .kc-page en escritorio -- esta pantalla se habia quedado
-   topada, ~458px mas angosta que las demas en un monitor de 1920px. */
-@media (min-width: 901px) {
-  .kc-page { max-width: none !important; }
-}
+
+/* KPIs */
+.kc .rec-kpis .kc-stat__val{font-size:22px;line-height:26px}
+
+/* Acciones */
+.kc .rec-actions{display:flex;justify-content:flex-end}
+
+/* Filtros */
+.kc .rec-filters{display:flex;flex-wrap:wrap;gap:8px}
+.kc .rec-chip{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:var(--kc-radius-pill);background:var(--kc-surface-2);border:1px solid var(--kc-line);color:var(--kc-ink-2);font:600 13px var(--kc-font-sans);cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+.kc .rec-chip .material-symbols-outlined{font-size:16px}
+.kc .rec-chip.is-active{background:var(--kc-amber-fill);color:var(--kc-on-amber);border-color:transparent}
+.kc .rec-chip.is-fav.is-active{background:var(--kc-red);color:#fff}
+.kc .rec-chip.is-fit.is-active{background:var(--kc-mint);color:var(--kc-bg)}
+
+/* Grid de recetas */
+.kc .rec-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.kc .rec-card{position:relative;background:var(--kc-surface-1);border:1px solid var(--kc-line);border-radius:var(--kc-radius-lg);overflow:hidden;cursor:pointer;transition:transform .18s var(--kc-ease)}
+.kc .rec-card:active{transform:scale(.98)}
+.kc .rec-card__media{position:relative;height:148px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.kc .rec-card__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.kc .rec-card__media .material-symbols-outlined{position:relative;z-index:1;font-size:60px;opacity:.9}
+.kc .rec-card__media[data-cat="desayuno"]{background:radial-gradient(120% 120% at 50% 0%,color-mix(in oklab,var(--kc-amber) 24%,transparent),transparent 65%),var(--kc-surface-2)}
+.kc .rec-card__media[data-cat="desayuno"] .material-symbols-outlined{color:var(--kc-amber)}
+.kc .rec-card__media[data-cat="almuerzo"]{background:radial-gradient(120% 120% at 50% 0%,color-mix(in oklab,var(--kc-mint) 24%,transparent),transparent 65%),var(--kc-surface-2)}
+.kc .rec-card__media[data-cat="almuerzo"] .material-symbols-outlined{color:var(--kc-mint)}
+.kc .rec-card__media[data-cat="cena"]{background:radial-gradient(120% 120% at 50% 0%,color-mix(in oklab,var(--kc-cyan) 24%,transparent),transparent 65%),var(--kc-surface-2)}
+.kc .rec-card__media[data-cat="cena"] .material-symbols-outlined{color:var(--kc-cyan)}
+.kc .rec-card__media[data-cat="snacks"]{background:radial-gradient(120% 120% at 50% 0%,color-mix(in oklab,var(--kc-red) 24%,transparent),transparent 65%),var(--kc-surface-2)}
+.kc .rec-card__media[data-cat="snacks"] .material-symbols-outlined{color:var(--kc-red)}
+.kc .rec-card__badges{position:absolute;top:8px;right:8px;z-index:2;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.kc .rec-card__pill{font:700 10px/1 var(--kc-font-mono);color:#fff;background:rgba(0,0,0,.45);backdrop-filter:blur(6px);padding:4px 8px;border-radius:var(--kc-radius-pill);display:flex;align-items:center;gap:4px;white-space:nowrap}
+.kc .rec-card__pill .material-symbols-outlined{font-size:12px}
+.kc .rec-card__fav{position:absolute;top:8px;left:8px;z-index:2;width:30px;height:30px;border:0;border-radius:50%;background:rgba(0,0,0,.45);backdrop-filter:blur(6px);display:grid;place-items:center;color:rgba(255,255,255,.7);cursor:pointer;padding:0}
+.kc .rec-card__fav .material-symbols-outlined{font-size:17px}
+.kc .rec-card__fav[data-fav="1"]{color:var(--kc-red)}
+.kc .rec-card__body{padding:12px}
+.kc .rec-card__title{font:700 14px/18px var(--kc-font-sans);color:var(--kc-ink);margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.kc .rec-card__macros{display:flex;align-items:center;gap:10px}
+.kc .rec-card__macros div{display:flex;flex-direction:column}
+.kc .rec-card__macros b{font:700 14px var(--kc-font-sans);color:var(--kc-ink)}
+.kc .rec-card__macros span{font:600 9px/1.3 var(--kc-font-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--kc-ink-3)}
+.kc .rec-card__div{width:1px;height:22px;background:var(--kc-line-strong)}
+
+/* Tarjeta destacada (primer resultado) */
+.kc .rec-card--feat{grid-column:span 2}
+.kc .rec-card--feat .rec-card__media{height:190px}
+
+/* Estado vacío */
+.kc .rec-empty{background:var(--kc-surface-1);border:1px solid var(--kc-line);border-radius:var(--kc-radius-md);padding:40px 20px;text-align:center}
+.kc .rec-empty .material-symbols-outlined{font-size:44px;color:var(--kc-ink-3);opacity:.5}
+.kc .rec-empty p{font:500 13px var(--kc-font-sans);color:var(--kc-ink-2);margin-top:10px}
+
+/* Modales */
+.kc .rec-modal{position:fixed;inset:0;z-index:60;align-items:center;justify-content:center;padding:16px}
+.kc .rec-modal.hidden{display:none}
+.kc .rec-modal.flex{display:flex}
+.kc .rec-modal__scrim{position:absolute;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(4px)}
+.kc .rec-modal__panel{position:relative;width:100%;max-width:560px;max-height:90dvh;overflow-y:auto;background:var(--kc-surface-1);border:1px solid var(--kc-line);border-radius:var(--kc-radius-xl);box-shadow:var(--kc-shadow-float)}
+.kc .rec-modal__panel--sm{max-width:380px}
+.kc .rec-modal__close{position:absolute;top:14px;right:14px;z-index:2;width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.45);backdrop-filter:blur(6px);border:0;color:#fff;display:grid;place-items:center;cursor:pointer;padding:0}
+.kc .rec-modal__fav{position:absolute;top:14px;left:14px;z-index:2;width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.45);backdrop-filter:blur(6px);border:0;color:#fff;display:grid;place-items:center;cursor:pointer;padding:0}
+.kc .rec-modal__media{height:210px;display:flex;align-items:center;justify-content:center;position:relative;border-radius:var(--kc-radius-xl) var(--kc-radius-xl) 0 0;overflow:hidden}
+.kc .rec-modal__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.kc .rec-modal__media .material-symbols-outlined{position:relative;z-index:1;font-size:80px;opacity:.9}
+.kc .rec-modal__body{padding:22px}
+.kc .rec-mrow{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:18px}
+.kc .rec-mrow .kc-label{display:flex;align-items:center;gap:6px}
+.kc .rec-mrow .material-symbols-outlined{font-size:17px}
+.kc .rec-macros{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
+.kc .rec-mcell{background:var(--kc-surface-2);border-radius:var(--kc-radius-sm);padding:10px 6px;text-align:center}
+.kc .rec-mcell b{display:block;font:700 18px var(--kc-font-sans);color:var(--kc-ink)}
+.kc .rec-mcell span{font:600 10px var(--kc-font-mono);letter-spacing:.04em;text-transform:uppercase;color:var(--kc-ink-3)}
+
+/* Stepper de porciones */
+.kc .rec-stepper{display:flex;align-items:center;justify-content:center;gap:22px;margin:18px 0}
+.kc .rec-stepper b{font:700 36px var(--kc-font-sans);color:var(--kc-amber);min-width:40px;text-align:center}
 </style>
-<AppHeader dropdownMobileOnly={true} />
-<main class="main-content pt-14 pb-20 min-h-screen">
-<div class="space-y-8 kc-page" style="padding-top:12px">
 
-<header style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:20px">
-  <div>
-    <div style="font-size:13px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#ff4d00;margin-bottom:12px">Recetas · <span id="totalRecipesCount">--</span> verificadas</div>
-    <h1 class="kc-h1">Cocina keto,<br>sin adivinar</h1>
+<div id="rec-wrap">
+
+<!-- Hero -->
+<div>
+  <div class="kc-hero-sub">Recetas · <span id="totalRecipesCount">--</span> verificadas</div>
+  <h1 class="kc-hero">Cocina keto,<br>sin <em>adivinar</em></h1>
+</div>
+
+<!-- KPIs -->
+<div class="kc-grid rec-kpis">
+  <div class="kc-stat kc-c-cyan"><div class="kc-stat__top"><span class="kc-label">Recetas</span></div><div class="kc-stat__val" id="kpiTotal">0</div></div>
+  <div class="kc-stat kc-c-amber"><div class="kc-stat__top"><span class="kc-label">Favoritas</span></div><div class="kc-stat__val" id="kpiFavs">0</div></div>
+  <div class="kc-stat kc-c-mint"><div class="kc-stat__top"><span class="kc-label">Para hoy</span></div><div class="kc-stat__val" id="kpiFit">0</div></div>
+  <div class="kc-stat kc-c-amber">
+    <div class="kc-stat__top"><span class="kc-label">Categorías</span></div>
+    <div class="kc-stat__val"><span id="kpiCats">0</span><small>/4</small></div>
+    <div class="kc-bar kc-c-amber"><i id="kpiCatsBar"></i></div>
   </div>
-  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-    <button onclick="openCreateRecipeModal()" class="kc-btn" style="height:46px"><span class="material-symbols-outlined" style="font-size:20px">add</span>Nueva receta</button>
+</div>
+
+<!-- Acción -->
+<div class="rec-actions">
+  <button class="kc-btn kc-btn--primary kc-btn--sm" onclick="openCreateRecipeModal()"><span class="material-symbols-outlined" style="font-size:18px">add</span>Nueva receta</button>
+</div>
+
+<!-- Buscador -->
+<div class="kc-search">
+  <span class="material-symbols-outlined">search</span>
+  <input id="searchInput" oninput="filterRecipes()" placeholder="Buscar receta o ingrediente…" type="text">
+</div>
+
+<!-- Filtros -->
+<div class="rec-filters" id="categoryFilters">
+  <button type="button" class="rec-chip is-active" onclick="setCategory('all')" data-category="all">Todas</button>
+  <button type="button" class="rec-chip" onclick="setCategory('desayuno')" data-category="desayuno"><span class="material-symbols-outlined">egg</span>Desayuno</button>
+  <button type="button" class="rec-chip" onclick="setCategory('almuerzo')" data-category="almuerzo"><span class="material-symbols-outlined">restaurant</span>Almuerzo</button>
+  <button type="button" class="rec-chip" onclick="setCategory('cena')" data-category="cena"><span class="material-symbols-outlined">dinner_dining</span>Cena</button>
+  <button type="button" class="rec-chip" onclick="setCategory('snacks')" data-category="snacks"><span class="material-symbols-outlined">cookie</span>Snacks</button>
+  <button type="button" class="rec-chip is-fav" onclick="showFavorites()" data-category="favorites"><span class="material-symbols-outlined">favorite</span>Favoritos</button>
+  <button type="button" class="rec-chip is-fit" onclick="showMacroFit()" id="btnParaHoy" data-category="macrofit"><span class="material-symbols-outlined">target</span>Para hoy</button>
+</div>
+
+<!-- Grid -->
+<div id="recipesGrid" class="rec-grid"></div>
+
+<!-- Vacío -->
+<div id="noRecipes" class="rec-empty hidden">
+  <span class="material-symbols-outlined">search_off</span>
+  <p>No se encontraron recetas</p>
+</div>
+
+</div>
+
+<!-- Modal detalle receta -->
+<div id="recipeModal" class="rec-modal hidden">
+  <div class="rec-modal__scrim" onclick="closeRecipeModal()"></div>
+  <div class="rec-modal__panel">
+    <div id="recipeModalContent"></div>
   </div>
-</header>
-
-<section class="mb-8 flex flex-col gap-4">
-<div class="relative" style="max-width:340px">
-<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2" style="color:rgba(247,244,240,0.57);font-size:20px">search</span>
-<input id="searchInput" oninput="filterRecipes()" style="width:100%;height:46px;padding:0 16px 0 46px;border-radius:14px;background:#161310;border:1px solid rgba(255,240,225,0.08);color:#f7f4f0;font-size:14px;outline:none" placeholder="Buscar receta o ingrediente…" type="text"/>
-</div>
-<div class="flex flex-wrap gap-2.5" id="categoryFilters">
-<button onclick="setCategory('all')" class="category-btn active bg-primary-container text-white py-3 px-6 rounded-xl text-sm font-bold border border-transparent transition-colors" data-category="all">Todas</button>
-<button onclick="setCategory('desayuno')" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors" data-category="desayuno">Desayuno</button>
-<button onclick="setCategory('almuerzo')" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors" data-category="almuerzo">Almuerzo</button>
-<button onclick="setCategory('cena')" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors" data-category="cena">Cena</button>
-<button onclick="setCategory('snacks')" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors" data-category="snacks">Snacks</button>
-<button onclick="showFavorites()" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors" data-category="favorites">
-<span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1">favorite</span>
-Favoritos
-</button>
-<button onclick="showMacroFit()" id="btnParaHoy" class="category-btn bg-surface-container-high py-3 px-6 rounded-xl text-sm font-bold border border-outline-variant/20 hover:border-primary-container/50 transition-colors flex items-center gap-2" data-category="macrofit">
-<span class="material-symbols-outlined text-green-400 text-base" style="font-variation-settings:'FILL' 1">target</span>
-Para hoy
-</button>
-</div>
-</section>
-
-<div id="recipesGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4"></div>
-
-<div id="noRecipes" class="hidden text-center py-20">
-<span class="material-symbols-outlined text-6xl text-on-surface-variant/70 mb-4 block">search_off</span>
-<p class="text-on-surface-variant text-lg">No se encontraron recetas</p>
 </div>
 
-</div>
-</main>
-
-<div id="recipeModal" class="fixed inset-0 z-[60] hidden">
-<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeRecipeModal()"></div>
-<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none overflow-y-auto">
-<div class="bg-surface-container-low rounded-[2rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto pointer-events-auto">
-<div id="recipeModalContent"></div>
-</div>
-</div>
-</div>
-
-<div id="createRecipeModal" class="fixed inset-0 z-[80] hidden">
-<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeCreateRecipeModal()"></div>
-<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none overflow-y-auto">
-<div class="glass-card rounded-3xl p-8 w-full max-w-lg max-h-[90vh] overflow-y-auto pointer-events-auto border border-primary-container/20">
-<div class="flex justify-between items-center mb-6">
-<h3 class="text-2xl font-headline font-black text-white">Crear Nueva Receta</h3>
-<button onclick="closeCreateRecipeModal()" class="w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
-</div>
-<div class="space-y-6">
-<div>
-<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Nombre de la receta</label>
-<input type="text" id="newRecipeName" class="w-full bg-surface-container-high text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary" placeholder="Ej: Desayuno Keto">
-</div>
-<div>
-<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Categoría</label>
-<select id="newRecipeCategory" class="w-full bg-surface-container-high text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary">
-<option value="desayuno">Desayuno</option>
-<option value="almuerzo">Almuerzo</option>
-<option value="cena">Cena</option>
-<option value="snacks">Snacks</option>
-</select>
-</div>
-<div>
-<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Tiempo de preparación (min)</label>
-<input type="number" id="newRecipeTime" class="w-full bg-surface-container-high text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary" value="15" min="1">
-</div>
-<div>
-<label class="text-[13px] text-on-surface-variant uppercase tracking-wider block mb-2">Instrucciones</label>
-<textarea id="newRecipeInstructions" class="w-full bg-surface-container-high text-white border border-outline rounded-xl px-4 py-3 focus:outline-none focus:border-primary h-32" placeholder="Describe la preparación..."></textarea>
-</div>
-<div class="bg-surface-container-high rounded-xl p-4">
-<p class="text-[13px] text-primary-container uppercase tracking-wider mb-3">Macros por porción</p>
-<div class="grid grid-cols-4 gap-4">
-<div><label class="text-[11px] text-on-surface-variant block mb-1">kcal</label><input type="number" id="newRecipeCalories" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
-<div><label class="text-[11px] text-on-surface-variant block mb-1">Proteína</label><input type="number" id="newRecipeProtein" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
-<div><label class="text-[11px] text-on-surface-variant block mb-1">Grasa</label><input type="number" id="newRecipeFat" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
-<div><label class="text-[11px] text-on-surface-variant block mb-1">Carbs</label><input type="number" id="newRecipeCarbs" class="w-full bg-surface-container-low text-white border border-outline rounded-lg px-2 py-2 text-center" value="0" min="0"></div>
-</div>
-</div>
-</div>
-<div class="flex gap-3 mt-6">
-<button onclick="closeCreateRecipeModal()" class="flex-1 py-4 rounded-xl bg-surface-container-high text-white font-medium hover:bg-surface-container-highest transition-colors">Cancelar</button>
-<button onclick="saveRecipe()" class="flex-1 py-4 rounded-xl bg-primary-container text-white font-bold hover:opacity-90 transition-colors">Guardar</button>
-</div>
-</div>
-</div>
+<!-- Modal crear receta -->
+<div id="createRecipeModal" class="rec-modal hidden">
+  <div class="rec-modal__scrim" onclick="closeCreateRecipeModal()"></div>
+  <div class="rec-modal__panel">
+    <div class="kc-card__head" style="padding:22px 22px 0">
+      <h3 class="kc-card__title">Crear nueva receta</h3>
+      <button class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon" onclick="closeCreateRecipeModal()" aria-label="Cerrar"><span class="material-symbols-outlined" style="font-size:18px">close</span></button>
+    </div>
+    <div style="padding:16px 22px 22px">
+      <div class="kc-field">
+        <label class="kc-label">Nombre de la receta</label>
+        <input type="text" id="newRecipeName" class="kc-input" placeholder="Ej: Desayuno Keto">
+      </div>
+      <div class="kc-field-2" style="margin-bottom:12px">
+        <div class="kc-field" style="margin-bottom:0">
+          <label class="kc-label">Categoría</label>
+          <select id="newRecipeCategory" class="kc-input">
+            <option value="desayuno">Desayuno</option>
+            <option value="almuerzo">Almuerzo</option>
+            <option value="cena">Cena</option>
+            <option value="snacks">Snacks</option>
+          </select>
+        </div>
+        <div class="kc-field" style="margin-bottom:0">
+          <label class="kc-label">Prep. (min)</label>
+          <input type="number" id="newRecipeTime" class="kc-input" value="15" min="1">
+        </div>
+      </div>
+      <div class="kc-field">
+        <label class="kc-label">Instrucciones</label>
+        <textarea id="newRecipeInstructions" class="kc-input" style="height:90px;padding-top:10px;resize:vertical" placeholder="Describe la preparación…"></textarea>
+      </div>
+      <div class="kc-label" style="margin-bottom:8px">Macros por porción</div>
+      <div class="rec-macros" style="margin-bottom:18px">
+        <div class="rec-mcell"><input type="number" id="newRecipeCalories" class="kc-input" style="height:40px;padding:0;text-align:center" value="0" min="0"><span>kcal</span></div>
+        <div class="rec-mcell"><input type="number" id="newRecipeProtein" class="kc-input" style="height:40px;padding:0;text-align:center" value="0" min="0"><span>Prot</span></div>
+        <div class="rec-mcell"><input type="number" id="newRecipeFat" class="kc-input" style="height:40px;padding:0;text-align:center" value="0" min="0"><span>Grasa</span></div>
+        <div class="rec-mcell"><input type="number" id="newRecipeCarbs" class="kc-input" style="height:40px;padding:0;text-align:center" value="0" min="0"><span>Carbs</span></div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="kc-btn kc-btn--secondary kc-btn--block" onclick="closeCreateRecipeModal()">Cancelar</button>
+        <button class="kc-btn kc-btn--primary kc-btn--block" onclick="saveRecipe()">Guardar</button>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div id="mealPlanModal" class="fixed inset-0 z-[70] hidden">
-<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeMealPlanModal()"></div>
-<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-<div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto border border-primary-container/20">
-<div class="flex justify-between items-center mb-6">
-<h3 class="text-xl font-headline font-bold text-white">Agregar al Plan</h3>
-<button onclick="closeMealPlanModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
-</div>
-<p id="mealPlanRecipeName" class="text-primary-container mb-4"></p>
-<div class="space-y-3">
-<button onclick="addToMealPlan('desayuno')" class="w-full py-4 rounded-xl bg-yellow-500/20 text-yellow-400 font-bold hover:bg-yellow-500/30 transition-colors flex items-center justify-center gap-2">
-<span class="material-symbols-outlined">wb_sunny</span> Desayuno
-</button>
-<button onclick="addToMealPlan('almuerzo')" class="w-full py-4 rounded-xl bg-orange-500/20 text-orange-400 font-bold hover:bg-orange-500/30 transition-colors flex items-center justify-center gap-2">
-<span class="material-symbols-outlined">light_mode</span> Almuerzo
-</button>
-<button onclick="addToMealPlan('cena')" class="w-full py-4 rounded-xl bg-purple-500/20 text-purple-400 font-bold hover:bg-purple-500/30 transition-colors flex items-center justify-center gap-2">
-<span class="material-symbols-outlined">nightlight</span> Cena
-</button>
-<button onclick="addToMealPlan('snacks')" class="w-full py-4 rounded-xl bg-pink-500/20 text-pink-400 font-bold hover:bg-pink-500/30 transition-colors flex items-center justify-center gap-2">
-<span class="material-symbols-outlined">cookie</span> Snacks
-</button>
-</div>
-</div>
-</div>
+<!-- Modal agregar al plan -->
+<div id="mealPlanModal" class="rec-modal hidden">
+  <div class="rec-modal__scrim" onclick="closeMealPlanModal()"></div>
+  <div class="rec-modal__panel rec-modal__panel--sm">
+    <div class="kc-card__head" style="padding:20px 20px 0">
+      <h3 class="kc-card__title">Agregar al plan</h3>
+      <button class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon" onclick="closeMealPlanModal()" aria-label="Cerrar"><span class="material-symbols-outlined" style="font-size:18px">close</span></button>
+    </div>
+    <p id="mealPlanRecipeName" class="kc-label" style="padding:6px 20px 0;font-size:13px"></p>
+    <div style="padding:16px 20px 20px;display:flex;flex-direction:column;gap:8px">
+      <button class="kc-btn kc-btn--secondary kc-btn--block" style="justify-content:flex-start" onclick="addToMealPlan('desayuno')"><span class="material-symbols-outlined" style="color:var(--kc-amber)">wb_sunny</span>Desayuno</button>
+      <button class="kc-btn kc-btn--secondary kc-btn--block" style="justify-content:flex-start" onclick="addToMealPlan('almuerzo')"><span class="material-symbols-outlined" style="color:var(--kc-mint)">light_mode</span>Almuerzo</button>
+      <button class="kc-btn kc-btn--secondary kc-btn--block" style="justify-content:flex-start" onclick="addToMealPlan('cena')"><span class="material-symbols-outlined" style="color:var(--kc-cyan)">nightlight</span>Cena</button>
+      <button class="kc-btn kc-btn--secondary kc-btn--block" style="justify-content:flex-start" onclick="addToMealPlan('snacks')"><span class="material-symbols-outlined" style="color:var(--kc-red)">cookie</span>Snacks</button>
+    </div>
+  </div>
 </div>
 
-<div id="servingsModal" class="fixed inset-0 z-[75] hidden">
-<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeServingsModal()"></div>
-<div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-<div class="glass-card rounded-2xl p-6 w-full max-w-sm pointer-events-auto border border-primary-container/20">
-<div class="flex justify-between items-center mb-6">
-<h3 class="text-xl font-headline font-bold text-white">Ajustar Porciones</h3>
-<button onclick="closeServingsModal()" class="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">close</span></button>
-</div>
-<div class="text-center">
-<p id="servingsRecipeName" class="text-white font-bold mb-4"></p>
-<div class="flex items-center justify-center gap-6 mb-6">
-<button onclick="changeServings(-1)" class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-white text-2xl hover:bg-primary-container transition-colors">-</button>
-<span id="servingsCount" class="text-4xl font-black text-primary-container">1</span>
-<button onclick="changeServings(1)" class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-white text-2xl hover:bg-primary-container transition-colors">+</button>
-</div>
-<div class="bg-surface-container-high rounded-xl p-4 mb-6">
-<p class="text-[13px] text-on-surface-variant uppercase tracking-wider mb-2">Macros ajustados</p>
-<div class="grid grid-cols-4 gap-4 text-center">
-<div><span id="adjustedCalories" class="text-xl font-bold text-yellow-400">0</span><span class="text-[11px] text-on-surface-variant block">kcal</span></div>
-<div><span id="adjustedProtein" class="text-xl font-bold text-orange-400">0g</span><span class="text-[11px] text-on-surface-variant block">Prot</span></div>
-<div><span id="adjustedFat" class="text-xl font-bold text-yellow-300">0g</span><span class="text-[11px] text-on-surface-variant block">Grasa</span></div>
-<div><span id="adjustedCarbs" class="text-xl font-bold text-cyan-400">0g</span><span class="text-[11px] text-on-surface-variant block">Carbs</span></div>
-</div>
-</div>
-<button onclick="confirmServings()" class="w-full py-4 rounded-xl kinetic-gradient text-white font-black hover:opacity-90 transition-colors">Aplicar</button>
-</div>
-</div>
-</div>
+<!-- Modal porciones -->
+<div id="servingsModal" class="rec-modal hidden">
+  <div class="rec-modal__scrim" onclick="closeServingsModal()"></div>
+  <div class="rec-modal__panel rec-modal__panel--sm">
+    <div class="kc-card__head" style="padding:20px 20px 0">
+      <h3 class="kc-card__title">Ajustar porciones</h3>
+      <button class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon" onclick="closeServingsModal()" aria-label="Cerrar"><span class="material-symbols-outlined" style="font-size:18px">close</span></button>
+    </div>
+    <div style="padding:6px 20px 20px;text-align:center">
+      <p id="servingsRecipeName" class="kc-card__title" style="font-size:15px;margin-top:0"></p>
+      <div class="rec-stepper">
+        <button class="kc-btn kc-btn--secondary kc-btn--icon" onclick="changeServings(-1)" aria-label="Menos">−</button>
+        <b id="servingsCount">1</b>
+        <button class="kc-btn kc-btn--secondary kc-btn--icon" onclick="changeServings(1)" aria-label="Más">+</button>
+      </div>
+      <div class="rec-macros" style="margin-bottom:16px">
+        <div class="rec-mcell"><b id="adjustedCalories">0</b><span>kcal</span></div>
+        <div class="rec-mcell"><b id="adjustedProtein">0g</b><span>Prot</span></div>
+        <div class="rec-mcell"><b id="adjustedFat">0g</b><span>Grasa</span></div>
+        <div class="rec-mcell"><b id="adjustedCarbs">0g</b><span>Carbs</span></div>
+      </div>
+      <button class="kc-btn kc-btn--primary kc-btn--block" onclick="confirmServings()">Aplicar</button>
+    </div>
+  </div>
 </div>
 
+<Fragment slot="scripts">
 <script is:inline src="/app/utils.js"></script>
 <script is:inline src="/app/data-loader.js"></script>
 <script is:inline src="/app/data/recipe-details.js"></script>
@@ -196,7 +253,6 @@ Para hoy
 var recipesDB = [];
 
 function loadRecipes() {
-    console.log('[loadRecipes] Ejecutando, KETO_RECIPES existe:', typeof KETO_RECIPES !== 'undefined');
     if (typeof KETO_RECIPES !== 'undefined') {
         recipesDB = Object.keys(KETO_RECIPES).map(function(key) {
             var r = KETO_RECIPES[key];
@@ -218,7 +274,6 @@ function loadRecipes() {
                 source: 'local'
             };
         });
-        console.log('✅ Cargadas', recipesDB.length, 'recetas de recipe-details.js');
         renderRecipes();
         return true;
     }
@@ -226,12 +281,14 @@ function loadRecipes() {
     return false;
 }
 
-// Ejecutar carga de recetas al iniciar
 loadRecipes();
 
 var currentCategory="all";
 var showFavoritesOnly=false;
 var showMacroFitOnly=false;
+var CAT_CLASS={desayuno:"kc-c-amber",almuerzo:"kc-c-mint",cena:"kc-c-cyan",snacks:"kc-c-red"};
+var CAT_ICON={desayuno:"egg",almuerzo:"restaurant",cena:"dinner_dining",snacks:"cookie"};
+var CAT_LABEL={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snacks"};
 
 function getRemainingMacros(){
   var macros=safeParseJSON(localStorage.getItem('keto_macros'),{});
@@ -254,18 +311,20 @@ function getRemainingMacros(){
   };
 }
 
+function setActiveChip(category){
+  document.querySelectorAll("#categoryFilters .rec-chip").forEach(function(btn){
+    btn.classList.toggle("is-active", btn.dataset.category===category);
+  });
+}
+
 function showMacroFit(){
   showMacroFitOnly=true;
   showFavoritesOnly=false;
   currentCategory='all';
-  document.querySelectorAll('.category-btn').forEach(function(btn){
-    btn.classList.remove('bg-primary','bg-primary-container','text-white','active');
-    btn.classList.add('bg-surface-container-high');
-  });
-  var btn=document.getElementById('btnParaHoy');
-  if(btn){ btn.classList.add('bg-green-500/20','text-green-400','active'); btn.classList.remove('bg-surface-container-high'); }
+  setActiveChip('macrofit');
   renderRecipes();
 }
+
 var currentRecipeId=null;
 var currentServings=1;
 var currentRecipeMacros={};
@@ -288,11 +347,7 @@ function setCategory(cat){
 currentCategory=cat;
 showFavoritesOnly=false;
 showMacroFitOnly=false;
-document.querySelectorAll(".category-btn").forEach(function(btn){
-btn.classList.remove("bg-primary","text-white","active");
-btn.classList.add("bg-surface-container");
-});
-event.target.closest(".category-btn").classList.add("bg-primary","text-white","active");
+setActiveChip(cat);
 renderRecipes();
 }
 
@@ -300,15 +355,24 @@ function showFavorites(){
 showFavoritesOnly=true;
 showMacroFitOnly=false;
 currentCategory="all";
-document.querySelectorAll(".category-btn").forEach(function(btn){
-btn.classList.remove("bg-primary","text-white","active");
-btn.classList.add("bg-surface-container");
-});
+setActiveChip('favorites');
 renderRecipes();
 }
 
 function filterRecipes(){
 renderRecipes();
+}
+
+function updateKpis(all,favorites,remaining){
+document.getElementById("kpiTotal").textContent=all.length;
+document.getElementById("kpiFavs").textContent=favorites.length;
+var fit=all.filter(function(r){return (r.carbs||0)<=remaining.carbs+2&&(r.calories||0)<=remaining.cal+50}).length;
+document.getElementById("kpiFit").textContent=fit;
+var cats={};
+all.forEach(function(r){if(r.category)cats[r.category]=true});
+var catCount=Object.keys(cats).length;
+document.getElementById("kpiCats").textContent=catCount;
+document.getElementById("kpiCatsBar").style.width=(catCount/4*100)+"%";
 }
 
 function renderRecipes(){
@@ -317,12 +381,14 @@ var noRecipes=document.getElementById("noRecipes");
 var search=document.getElementById("searchInput").value.toLowerCase();
 var favorites=getFavorites();
 var all=recipesDB.concat(JSON.parse(localStorage.getItem("customRecipes")||"[]"));
-var remaining=showMacroFitOnly?getRemainingMacros():null;
+var remaining=getRemainingMacros();
+updateKpis(all,favorites,remaining);
+
 var filtered=all.filter(function(r){
 if(showFavoritesOnly&&favorites.indexOf(r.id)===-1)return false;
 if(currentCategory!=="all"&&r.category!==currentCategory)return false;
 if(search&&!r.title.toLowerCase().includes(search))return false;
-if(showMacroFitOnly&&remaining){
+if(showMacroFitOnly){
   if((r.carbs||0)>remaining.carbs+2)return false;
   if((r.calories||0)>remaining.cal+50)return false;
 }
@@ -339,46 +405,36 @@ noRecipes.classList.add("hidden");
 var html="";
 filtered.forEach(function(recipe,i){
 var isFavorite=favorites.indexOf(recipe.id)!==-1;
-var isFirst=i===0&&!search&&!showFavoritesOnly&&currentCategory==="all";
-var catColors={desayuno:"bg-yellow-500/20 text-yellow-400",almuerzo:"bg-orange-500/20 text-orange-400",cena:"bg-purple-500/20 text-purple-400",snacks:"bg-pink-500/20 text-pink-400"};
-var catLabels={desayuno:"Desayuno",almuerzo:"Almuerzo",cena:"Cena",snacks:"Snacks"};
-var catGradients={desayuno:"linear-gradient(135deg, #3a2410, #1e1509)",almuerzo:"linear-gradient(135deg, #0f2818, #0a1a10)",cena:"linear-gradient(135deg, #3a1810, #1e0d09)",snacks:"linear-gradient(135deg, #38162a, #200c17)"};
-var catIconColors={desayuno:"#ff4d00",almuerzo:"#22c55e",cena:"#fb923c",snacks:"#f472b6"};
-var catIcons={desayuno:"egg",almuerzo:"restaurant",cena:"dinner_dining",snacks:"cookie"};
+var isFeat=i===0&&!search&&!showFavoritesOnly&&!showMacroFitOnly&&currentCategory==="all";
+var fitsToday=(recipe.carbs||0)<=remaining.carbs+2&&(recipe.calories||0)<=remaining.cal+50;
 
-html+='<article class="group relative overflow-hidden rounded-[2rem] '+(isFirst?"md:col-span-2 lg:col-span-2 xl:col-span-2":"")+' bg-surface-container transition-all duration-500 hover:shadow-[0_0_40px_rgba(255,144,105,0.1)] cursor-pointer" onclick="openRecipeModal(\''+recipe.id+'\')">';
-html+='<div class="h-48 md:h-64 w-full overflow-hidden relative flex items-center justify-center" style="background:'+catGradients[recipe.category]+';">';
+html+='<article class="rec-card'+(isFeat?" rec-card--feat":"")+'" onclick="openRecipeModal(\''+recipe.id+'\')">';
+html+='<div class="rec-card__media" data-cat="'+recipe.category+'">';
 if(recipe.image){
-html+='<img loading="lazy" src="'+recipe.image+'" alt="'+recipe.title+'" class="w-full h-full object-cover" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
-html+='<span class="material-symbols-outlined icon-filled" style="display:none;font-size:100px;opacity:0.85;color:'+catIconColors[recipe.category]+'">'+catIcons[recipe.category]+'</span>';
-}else{
-html+='<span class="material-symbols-outlined icon-filled" style="font-size:100px;opacity:0.85;color:'+catIconColors[recipe.category]+'">'+catIcons[recipe.category]+'</span>';
+html+='<img loading="lazy" src="'+recipe.image+'" alt="'+recipe.title+'" onerror="this.style.display=\'none\'">';
 }
-html+='<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>';
-html+='<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>';
-html+='<div class="absolute top-4 right-4 flex gap-2">';
-html+='<span class="'+catColors[recipe.category]+' px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest">'+catLabels[recipe.category]+'</span>';
-if(remaining&&(recipe.carbs||0)<=remaining.carbs+2&&(recipe.calories||0)<=remaining.cal+50){html+='<span class="bg-green-500/30 text-green-300 px-2 py-1 rounded-full text-[11px] font-bold flex items-center gap-0.5"><span class="material-symbols-outlined text-[13px]" style="font-size:13px">check_circle</span>Cabe hoy</span>';};
-html+='<span class="bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full text-[11px] font-bold text-white flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">schedule</span>'+recipe.prepTime+' min</span>';
+html+='<span class="material-symbols-outlined">'+CAT_ICON[recipe.category]+'</span>';
+html+='<div class="rec-card__badges">';
+html+='<span class="rec-card__pill">'+CAT_LABEL[recipe.category]+'</span>';
+if(fitsToday){html+='<span class="rec-card__pill" style="color:var(--kc-mint)"><span class="material-symbols-outlined">check_circle</span>Cabe hoy</span>';}
+html+='<span class="rec-card__pill"><span class="material-symbols-outlined">schedule</span>'+recipe.prepTime+' min</span>';
 html+='</div>';
-html+='<button onclick="event.stopPropagation();toggleFavorite(\''+recipe.id+'\')" class="absolute top-4 left-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center hover:bg-primary-container transition-colors">';
-html+='<span class="material-symbols-outlined '+(isFavorite?"text-secondary":"text-white/60")+'" style="font-variation-settings:\'FILL '+(isFavorite?'1':'0')+'\'">'+(isFavorite?"favorite":"favorite_border")+'</span></button>';
+html+='<button class="rec-card__fav" data-fav="'+(isFavorite?"1":"0")+'" onclick="event.stopPropagation();toggleFavorite(\''+recipe.id+'\')" aria-label="Favorito"><span class="material-symbols-outlined" style="font-variation-settings:\'FILL '+(isFavorite?"1":"0")+'\'">'+(isFavorite?"favorite":"favorite_border")+'</span></button>';
 html+='</div>';
-html+='<div class="p-6">';
-html+='<h3 class="font-headline text-xl md:text-2xl font-black tracking-tight mb-4 group-hover:text-primary-container transition-colors">'+recipe.title+'</h3>';
-html+='<div class="flex items-center gap-6">';
-html+='<div class="flex flex-col"><span class="text-primary-container font-bold text-lg">'+recipe.carbs+'g</span><span class="text-[10px] uppercase font-bold text-on-surface-variant">Carbs</span></div>';
-html+='<div class="w-px h-8 bg-outline-variant/30"></div>';
-html+='<div class="flex flex-col"><span class="text-secondary font-bold text-lg">'+recipe.protein+'g</span><span class="text-[10px] uppercase font-bold text-on-surface-variant">Prot</span></div>';
-html+='<div class="w-px h-8 bg-outline-variant/30"></div>';
-html+='<div class="flex flex-col"><span class="text-tertiary font-bold text-lg">'+recipe.fat+'g</span><span class="text-[10px] uppercase font-bold text-on-surface-variant">Grasa</span></div>';
+html+='<div class="rec-card__body">';
+html+='<h3 class="rec-card__title">'+recipe.title+'</h3>';
+html+='<div class="rec-card__macros">';
+html+='<div><b>'+recipe.carbs+'g</b><span>Carbs</span></div>';
+html+='<div class="rec-card__div"></div>';
+html+='<div><b>'+recipe.protein+'g</b><span>Prot</span></div>';
+html+='<div class="rec-card__div"></div>';
+html+='<div><b>'+recipe.fat+'g</b><span>Grasa</span></div>';
 html+='</div>';
 html+='</div>';
 html+='</article>';
 });
 
 container.innerHTML=html;
-document.getElementById("totalRecipesCount").textContent=all.length;
 }
 
 function openRecipeModal(id){
@@ -388,46 +444,35 @@ var recipe=all.find(function(r){return r.id===id});
 if(!recipe)return;
 currentServings=1;
 currentRecipeMacros={calories:recipe.calories,protein:recipe.protein,fat:recipe.fat,carbs:recipe.carbs};
+var isFavorite=getFavorites().indexOf(recipe.id)!==-1;
 
-var catGradients={desayuno:"linear-gradient(135deg, #3a2410, #1e1509)",almuerzo:"linear-gradient(135deg, #0f2818, #0a1a10)",cena:"linear-gradient(135deg, #3a1810, #1e0d09)",snacks:"linear-gradient(135deg, #38162a, #200c17)"};
-var catIconColors={desayuno:"#ff4d00",almuerzo:"#22c55e",cena:"#fb923c",snacks:"#f472b6"};
-var catIcons={desayuno:"egg",almuerzo:"restaurant",cena:"dinner_dining",snacks:"cookie"};
-
-var html='<div class="relative">';
-html+='<div class="h-64 md:h-80 w-full flex items-center justify-center rounded-t-[2rem] overflow-hidden" style="background:'+catGradients[recipe.category]+';">';
+var html='<div class="rec-modal__media" data-cat="'+recipe.category+'" style="border-radius:0">';
 if(recipe.image){
-html+='<img loading="lazy" src="'+recipe.image+'" alt="'+recipe.title+'" class="w-full h-full object-cover" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
-html+='<span class="material-symbols-outlined icon-filled" style="display:none;font-size:120px;opacity:0.85;color:'+catIconColors[recipe.category]+'">'+catIcons[recipe.category]+'</span>';
-}else{
-html+='<span class="material-symbols-outlined icon-filled" style="font-size:120px;opacity:0.85;color:'+catIconColors[recipe.category]+'">'+catIcons[recipe.category]+'</span>';
+html+='<img loading="lazy" src="'+recipe.image+'" alt="'+recipe.title+'" onerror="this.style.display=\'none\'">';
 }
-html+='<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>';
+html+='<span class="material-symbols-outlined">'+CAT_ICON[recipe.category]+'</span>';
 html+='</div>';
-html+='<button onclick="closeRecipeModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary-container transition-colors"><span class="material-symbols-outlined">close</span></button>';
-html+='<button onclick="toggleFavorite(\''+recipe.id+'\')" class="absolute top-4 left-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary-container transition-colors"><span class="material-symbols-outlined" style="font-variation-settings:\'FILL 1\'">favorite</span></button>';
+html+='<button class="rec-modal__close" onclick="closeRecipeModal()" aria-label="Cerrar"><span class="material-symbols-outlined">close</span></button>';
+html+='<button class="rec-modal__fav" onclick="toggleFavorite(\''+recipe.id+'\')" aria-label="Favorito"><span class="material-symbols-outlined" style="font-variation-settings:\'FILL '+(isFavorite?"1":"0")+'\'">'+(isFavorite?"favorite":"favorite_border")+'</span></button>';
+html+='<div class="rec-modal__body">';
+html+='<h2 class="kc-card__title" style="font-size:24px;margin-top:0">'+recipe.title+'</h2>';
+html+='<div class="rec-mrow">';
+html+='<span class="kc-label"><span class="material-symbols-outlined">schedule</span>'+recipe.prepTime+' min</span>';
+html+='<span class="kc-label"><span class="material-symbols-outlined">fitness_center</span>'+recipe.difficulty+'</span>';
 html+='</div>';
-html+='<div class="p-8">';
-html+='<h2 class="font-headline text-3xl md:text-4xl font-black tracking-tight mb-4">'+recipe.title+'</h2>';
-html+='<div class="flex flex-wrap gap-4 mb-8">';
-html+='<div class="flex items-center gap-2 text-on-surface-variant"><span class="material-symbols-outlined">schedule</span><span>'+recipe.prepTime+' min</span></div>';
-html+='<div class="flex items-center gap-2 text-on-surface-variant"><span class="material-symbols-outlined">fitness_center</span><span class="capitalize">'+recipe.difficulty+'</span></div>';
+html+='<div class="rec-macros">';
+html+='<div class="rec-mcell"><b>'+recipe.calories+'</b><span>kcal</span></div>';
+html+='<div class="rec-mcell"><b>'+recipe.protein+'g</b><span>Proteína</span></div>';
+html+='<div class="rec-mcell"><b>'+recipe.fat+'g</b><span>Grasa</span></div>';
+html+='<div class="rec-mcell"><b>'+recipe.carbs+'g</b><span>Carbs</span></div>';
 html+='</div>';
-
-html+='<div class="grid grid-cols-4 gap-4 mb-8">';
-html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-yellow-400">'+recipe.calories+'</span><span class="text-[11px] uppercase text-on-surface-variant">kcal</span></div>';
-html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-orange-400">'+recipe.protein+'g</span><span class="text-[11px] uppercase text-on-surface-variant">Proteína</span></div>';
-html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-yellow-300">'+recipe.fat+'g</span><span class="text-[11px] uppercase text-on-surface-variant">Grasa</span></div>';
-html+='<div class="bg-surface-container-high rounded-xl p-4 text-center"><span class="block text-2xl font-black text-cyan-400">'+recipe.carbs+'g</span><span class="text-[11px] uppercase text-on-surface-variant">Carbs</span></div>';
+html+='<div style="margin-bottom:20px">';
+html+='<div class="kc-eyebrow" style="margin-bottom:8px">Instrucciones</div>';
+html+='<p style="font:400 14px/1.6 var(--kc-font-sans);color:var(--kc-ink-2)">'+recipe.instructions+'</p>';
 html+='</div>';
-
-html+='<div class="mb-8">';
-html+='<h4 class="text-[13px] text-primary-container uppercase tracking-wider font-bold mb-3">Instrucciones</h4>';
-html+='<p class="text-on-surface-variant leading-relaxed">'+recipe.instructions+'</p>';
-html+='</div>';
-
-html+='<div class="flex gap-3">';
-html+='<button onclick="openServingsModal(\''+recipe.id+'\')" class="flex-1 py-4 rounded-xl bg-surface-container-high text-white font-bold hover:bg-surface-container-highest transition-colors flex items-center justify-center gap-2"><span class="material-symbols-outlined">tune</span>Porciones</button>';
-html+='<button onclick="openMealPlanModal(\''+recipe.id+'\')" class="flex-1 py-4 rounded-xl kinetic-gradient text-white font-black hover:opacity-90 transition-colors flex items-center justify-center gap-2"><span class="material-symbols-outlined" style="font-variation-settings:\'FILL 1\'">add_circle</span>Agregar al Plan</button>';
+html+='<div style="display:flex;gap:10px">';
+html+='<button class="kc-btn kc-btn--secondary kc-btn--block" onclick="openServingsModal(\''+recipe.id+'\')"><span class="material-symbols-outlined">tune</span>Porciones</button>';
+html+='<button class="kc-btn kc-btn--primary kc-btn--block" onclick="openMealPlanModal(\''+recipe.id+'\')"><span class="material-symbols-outlined" style="font-variation-settings:\'FILL 1\'">add_circle</span>Agregar al plan</button>';
 html+='</div>';
 html+='</div>';
 
@@ -593,8 +638,8 @@ var toast=document.getElementById("toast");
 if(!toast){
 toast=document.createElement("div");
 toast.id="toast";
-toast.className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[100] glass-card rounded-full px-6 py-3 flex items-center gap-3 shadow-lg transition-all duration-300";
-toast.innerHTML='<span class="material-symbols-outlined text-primary">check_circle</span><span class="text-white font-medium"></span>';
+toast.style.cssText="position:fixed;bottom:calc(96px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%) translateY(20px);z-index:100;display:flex;align-items:center;gap:10px;padding:12px 20px;border-radius:var(--kc-radius-pill);background:var(--kc-surface-1);border:1px solid var(--kc-line-strong);box-shadow:var(--kc-shadow-float);font:600 13px var(--kc-font-sans);color:var(--kc-ink);opacity:0;transition:opacity .3s,transform .3s";
+toast.innerHTML='<span class="material-symbols-outlined" style="color:var(--kc-mint)">check_circle</span><span></span>';
 document.body.appendChild(toast);
 }
 toast.querySelector("span:last-child").textContent=msg;
@@ -608,74 +653,5 @@ toast.style.transform="translateX(-50%) translateY(20px)";
 
 renderRecipes();
 </script>
-
-<script is:inline>
-// User Dropdown Menu
-function toggleUserMenu() {
-  const dropdown = document.getElementById('userDropdown');
-  dropdown.classList.toggle('hidden');
-  updateDropdownInfo();
-}
-
-function toggleMobileUserMenu() {
-  const dropdown = document.getElementById('mobileUserDropdown');
-  dropdown.classList.toggle('hidden');
-  updateDropdownInfo();
-}
-
-function updateDropdownInfo() {
-  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
-  const userName = profile.nombre || profile.name || 'Usuario';
-  const userEmail = localStorage.getItem('ketocore_user_email') || 'usuario@ejemplo.com';
-  const dn = document.getElementById('dropdownUserName');
-  const de = document.getElementById('dropdownUserEmail');
-  const mdn = document.getElementById('mobileDropdownUserName');
-  const mde = document.getElementById('mobileDropdownUserEmail');
-  if(dn) dn.textContent = userName;
-  if(de) de.textContent = userEmail;
-  if(mdn) mdn.textContent = userName;
-  if(mde) mde.textContent = userEmail;
-}
-
-function updateHeaderAvatar() {
-  const profile = JSON.parse(localStorage.getItem('keto_profile') || '{}');
-  const avatarUrl = profile.avatar_url;
-  const hi = document.getElementById('headerAvatarImg');
-  const hi2 = document.getElementById('headerAvatarIcon');
-  const mhi = document.getElementById('mobileHeaderAvatarImg');
-  const mhi2 = document.getElementById('mobileHeaderAvatarIcon');
-  if (avatarUrl) {
-    if(hi) { hi.src = avatarUrl; hi.classList.remove('hidden'); }
-    if(hi2) hi2.classList.add('hidden');
-    if(mhi) { mhi.src = avatarUrl; mhi.classList.remove('hidden'); }
-    if(mhi2) mhi2.classList.add('hidden');
-  } else {
-    if(hi) hi.classList.add('hidden');
-    if(hi2) hi2.classList.remove('hidden');
-    if(mhi) mhi.classList.add('hidden');
-    if(mhi2) mhi2.classList.remove('hidden');
-  }
-}
-
-document.addEventListener('click', function(e) {
-  const dd = document.getElementById('userDropdown');
-  const mdd = document.getElementById('mobileUserDropdown');
-  const btn = document.getElementById('profileBtn');
-  if (dd && !dd.contains(e.target) && !btn.contains(e.target)) dd.classList.add('hidden');
-  if (mdd && !e.target.closest('#mobileUserDropdown') && !e.target.closest('button[onclick="toggleMobileUserMenu()"]')) mdd.classList.add('hidden');
-});
-
-async function handleLogout() {
-  if (confirm('¿Cerrar sesión?')) {
-    await window.supabase.auth.signOut();
-    localStorage.removeItem('ketocore_user_id');
-    localStorage.removeItem('ketocore_user_email');
-    localStorage.removeItem('ketocore_onboarding_done');
-    window.location.href = '/app/welcome';
-  }
-}
-
-updateHeaderAvatar();
-</script>
-
-</AppLayout>
+</Fragment>
+</AppShell>
