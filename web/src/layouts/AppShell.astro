@@ -75,6 +75,41 @@ const { title, screen, demo = false } = Astro.props;
       });
     })();
     </script>
+    <!-- Instalación de PWA: misma lógica que AppSidebar.astro (sitio legacy),
+         que AppShell no heredaba — ninguna pantalla HUD tenía botón de
+         instalar. kcInstallApp() + .kc-install-btn quedan disponibles para
+         cualquier botón que los use (ver MoreMenu.astro). -->
+    <script is:inline>
+      window.kcInstallPrompt = window.kcInstallPrompt || null;
+      window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault();
+        window.kcInstallPrompt = e;
+      });
+      function kcInstallApp() {
+        var standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        if (standalone) {
+          if (typeof window.showToast === 'function') window.showToast('La app ya está instalada ✓');
+          else alert('La app ya está instalada.');
+          return;
+        }
+        if (window.kcInstallPrompt) {
+          window.kcInstallPrompt.prompt();
+          window.kcInstallPrompt.userChoice.then(function () { window.kcInstallPrompt = null; });
+          return;
+        }
+        var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+        alert(isIOS
+          ? 'En iPhone/iPad: toca el botón Compartir de Safari y elige "Añadir a pantalla de inicio".'
+          : 'Abre el menú de tu navegador (⋮) y elige "Instalar aplicación" o "Añadir a pantalla de inicio".');
+      }
+      (function () {
+        var standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        if (!standalone) return;
+        document.addEventListener('DOMContentLoaded', function () {
+          document.querySelectorAll('.kc-install-btn').forEach(function (b) { b.style.display = 'none'; });
+        });
+      })();
+    </script>
   </head>
   <body class="kc kc-app" data-kc-screen={screen} data-kc-loading>
     <AppHeader />

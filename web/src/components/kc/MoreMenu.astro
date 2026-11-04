@@ -31,6 +31,10 @@ const groups = [
     <div><div class="kc-eyebrow">Navegación</div><h2 class="kc-card__title" id="kc-more-t">Todas las secciones</h2></div>
     <button class="kc-btn kc-btn--secondary kc-btn--sm kc-btn--icon" type="button" data-kc-sheet-close aria-label="Cerrar"><Icon name="plus" class="kc-rot45" /></button>
   </div>
+  <button class="kc-btn kc-btn--secondary kc-btn--block kc-install-btn" type="button" onclick="kcInstallApp()" style="margin-bottom:16px">
+    <span class="material-symbols-outlined" style="font-size:19px">install_mobile</span>
+    Instalar app
+  </button>
   {groups.map((g) => (
     <div class="kc-more-group">
       <div class="kc-label" style="margin:4px 0 8px">{g.label}</div>
