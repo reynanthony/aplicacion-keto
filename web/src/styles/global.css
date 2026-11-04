@@ -639,6 +639,10 @@ button, a, [role="button"] { touch-action: manipulation; }
 .kc .kc-btn--block { width: 100%; }
 .kc .kc-btn--icon { width: 44px; padding: 0; }
 .kc .kc-btn--sm.kc-btn--icon { width: 34px; }
+/* La utilidad Tailwind .hidden (@layer utilities) pierde contra el fix de
+   arriba cuando coincide con .kc-btn (ambos ponen `display`) -- un botón
+   kc-btn con .hidden se quedaba visible. Reforzamos que ocultar siempre gane. */
+.kc .kc-btn.hidden { display: none; }
 .kc .kc-grid { grid-template-columns: 1fr 1fr; gap: var(--kc-space-3); }
 .kc .kc-eyebrow { font: 600 11px/14px var(--kc-font-mono); letter-spacing: .1em; color: var(--kc-ink-3); }
 .kc .kc-head { margin-bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
