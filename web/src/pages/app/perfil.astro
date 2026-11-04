@@ -409,6 +409,9 @@ function saveWeight() {
 
 async function handleLogout() {
   if (confirm('¿Cerrar sesión?')) {
+    var isDemo = false;
+    try { isDemo = localStorage.getItem('ketocore_demo_mode') === '1'; } catch (e) {}
+    if (isDemo) { exitDemoMode(); return; }
     if (window.supabase) await window.supabase.auth.signOut();
     ['ketocore_user_id','ketocore_user_email','ketocore_onboarding_done'].forEach(function(k){ localStorage.removeItem(k); });
     window.location.href = '/app/welcome';

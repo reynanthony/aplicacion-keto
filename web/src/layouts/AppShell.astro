@@ -110,8 +110,45 @@ const { title, screen, demo = false } = Astro.props;
         });
       })();
     </script>
+    <!-- Salida del modo demo: borra el usuario falso "demo-carlos" y TODOS
+         los datos de muestra sembrados por demo-seed.js, para que /app/
+         vuelva a mandar a Welcome en la siguiente visita (y no se quede
+         "pegado" al demo). Disponible globalmente (ver banner en <body> y
+         handleLogout() de perfil.astro). -->
+    <script is:inline>
+      function exitDemoMode() {
+        ['ketocore_user_id', 'ketocore_user_email', 'ketocore_onboarding_done', 'ketocore_demo_mode',
+         'keto_profile', 'keto_macros', 'keto_weight_history', 'ketoStreak', 'mealsLoggedTotal'
+        ].forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} });
+        try {
+          Object.keys(localStorage).forEach(function (k) {
+            if (k.indexOf('checklist_') === 0 || k.indexOf('mealPlan_') === 0) localStorage.removeItem(k);
+          });
+        } catch (e) {}
+        window.location.href = '/app/welcome';
+      }
+    </script>
+    <style is:global>
+      /* Banner "Modo Prueba": oculto salvo que authGuard marque html.kc-demo
+         (ver script de arriba). Empuja el header sticky hacia abajo al
+         quedar antes en el flujo normal (no fixed, se va con el scroll). */
+      .kc-demo-banner { display: none; align-items: center; gap: 8px; height: 36px; padding: 0 14px; background: color-mix(in oklab, var(--kc-amber) 14%, var(--kc-surface-1)); border-bottom: 1px solid var(--kc-line-strong); white-space: nowrap; overflow: hidden; }
+      html.kc-demo .kc-demo-banner { display: flex; }
+      .kc-demo-banner__dot { width: 6px; height: 6px; border-radius: 50%; background: var(--kc-amber); flex-shrink: 0; animation: kc-demo-pulse 2s infinite; }
+      @keyframes kc-demo-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+      .kc-demo-banner__label { font: 800 10.5px var(--kc-font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--kc-amber); flex-shrink: 0; }
+      .kc-demo-banner__sub { font: 500 11px var(--kc-font-sans); color: var(--kc-ink-3); overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
+      .kc-demo-banner__cta { flex-shrink: 0; height: 25px; padding: 0 12px; border: 0; border-radius: var(--kc-radius-pill); background: var(--kc-amber-fill); color: var(--kc-on-amber); font: 700 11px var(--kc-font-sans); cursor: pointer; }
+      @media (max-width: 420px) { .kc-demo-banner__sub { display: none; } }
+    </style>
   </head>
   <body class="kc kc-app" data-kc-screen={screen} data-kc-loading>
+    <div class="kc-demo-banner">
+      <span class="kc-demo-banner__dot"></span>
+      <span class="kc-demo-banner__label">Modo prueba</span>
+      <span class="kc-demo-banner__sub">datos de ejemplo, no se guardan</span>
+      <button type="button" class="kc-demo-banner__cta" onclick="exitDemoMode()">Salir y crear cuenta</button>
+    </div>
     <AppHeader />
     <main class="kc-main">
       <slot />
