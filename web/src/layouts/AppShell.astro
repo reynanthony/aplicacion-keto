@@ -8,6 +8,7 @@ import AppHeader from '../components/kc/AppHeader.astro';
 import TabBar from '../components/kc/TabBar.astro';
 import RegistroSheet from '../components/kc/RegistroSheet.astro';
 import MoreMenu from '../components/kc/MoreMenu.astro';
+import Analytics from '@vercel/analytics/astro';
 interface Props { title: string; screen: string; demo?: boolean }
 const { title, screen, demo = false } = Astro.props;
 ---
@@ -162,5 +163,6 @@ const { title, screen, demo = false } = Astro.props;
     {demo && <script is:inline src="/app/kc-demo.js"></script>}
     <script is:inline src="/app/kc-ui.js"></script>
     <slot name="scripts" />
+    <Analytics />
   </body>
 </html>
